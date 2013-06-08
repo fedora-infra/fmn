@@ -2,7 +2,7 @@ fedmsg-notifications
 ====================
 
 ``fedmsg-notifications`` is a family of systems to manage end-user
-notifications triggered by the `fedmsg, the Fedora FEDerated MESsage bus
+notifications triggered by `fedmsg, the Fedora FEDerated MESsage bus
 <http://fedmsg.com>`_.
 
 The "wins" here are:
