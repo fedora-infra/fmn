@@ -7,24 +7,24 @@ notifications triggered by the `fedmsg, the Fedora FEDerated MESsage bus
 
 The "wins" here are:
 
-    - A single place for email code to live, instead of being duplicated in
-      every application that we write and deploy.  This will ostensibly reduce
-      the amount of code we have to maintain.
-    - Diverse kinds of notifications.  Some users don't want email.
-    - A single place for end-users to manage notification preferences.
-      Instead of having to tweak preferences in bodhi, koji, pkgdb, etc..
-      they can choose what they do and don't want to receive at
-      (hypothetically) https://apps.fedoraproject.org/notifications/
+- A single place for email code to live, instead of being duplicated in
+  every application that we write and deploy.  This will ostensibly reduce
+  the amount of code we have to maintain.
+- Diverse kinds of notifications.  Some users don't want email.
+- A single place for end-users to manage notification preferences.
+  Instead of having to tweak preferences in bodhi, koji, pkgdb, etc..
+  they can choose what they do and don't want to receive at
+  (hypothetically) https://apps.fedoraproject.org/notifications/
 
 We would like to be able to serve notifications via these means,
 listed in order by priority:
 
-    - Email.
-    - IRC private messages directed at users.
-    - Desktop popups.
-    - Android notifications via Google Cloud Messaging.
-    - Websocket notifications on webapps.
-    - User-specific RSS feeds
+- Email.
+- IRC private messages directed at users.
+- Desktop popups.
+- Android notifications via Google Cloud Messaging.
+- Websocket notifications on webapps.
+- User-specific RSS feeds
 
 For terminology's sake, refer to these as the ``N`` notification ``contexts``.
 
