@@ -96,9 +96,36 @@ Hopefully not.  Hopefully caching will obviate this.
 Specification of a Profile
 --------------------------
 
-TODO -- elaborate on what is in a profile.
+Here's a proposal:
 
-- Filtering information like we have elsewhere now
+A user's profile consists of a series of whitelists for a series of contexts.
+
+For a single ``context``, the profile looks something like a `datagrepper
+<https://apps.fedoraproject.org/datagrepper/>`_ query (it looks *kind* of like
+conjunctive normal form):
+
+- If nothing is specified, all messages get through.
+- If any category is specified, all messages get through for that category and
+  no others.
+- If multiple categories are specified, all messages get through if the
+  message is in *any* of those categories.
+- Same goes for "topics" as for "categories".
+- If a user (or multiple users) are specified, messages that match *any* of
+  those users and *also* match any argued categories are allowed through.
+- If a package (or multiple packages) are specified, messages that match *any*
+  of those packages and *also* match any other argued parameter types are
+  allowed through.
+
+The `datagrepper <https://apps.fedoraproject.org/datagrepper/>`_ docs explain
+it a bit better than here.
+
+The above schema is probably insufficient to cover all our scenarios.  Let's
+try brainstorming some, see what we need, then come up with something that
+meets those needs.
+
+Context-specific Delivery Metadata
+----------------------------------
+
 - context-specific delivery data?
 
   - For instance, my FAS username is ralph but
