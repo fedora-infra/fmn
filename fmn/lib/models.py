@@ -91,6 +91,13 @@ class Context(Base):
         else:
             return None
 
+    def recipients(self, session, message):
+        """ Returns the list of recipients for a message. """
+        for user in User.all_users(session):
+            preference = Preference.load(session, user, context)
+            if preference.prefers(session, message):
+                yield {user.name: preference.detail}
+
 
 class User(Base):
     __tablename__ = 'users'
@@ -109,6 +116,10 @@ class User(Base):
 class Preference(BASE):
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
+
+    # This is the important piece, a JSON string.
+    _delivery_detail = sa.Column(sa.String(1024))
+
     user_name = sa.Column(
         sa.String(50),
         sa.ForeignKey('users.name', ondelete='CASCADE', onupdate='CASCADE'),
@@ -125,5 +136,25 @@ class Preference(BASE):
         sa.UniqueConstraint('user_name', 'context_name')
     )
 
+    @hybrid_property
+    def delivery_detail(self):
+        return json.loads(self._delivery_detail)
+
+    @delivery_detail.setter
+    def delivery_detail(self, delivery_detail):
+        self._delivery_detail = json.dumps(delivery_detail)
+
+    @classmethod
+    def load(cls, session, user, context):
+        return session.query(cls)\
+            .filter_by(user_name=user.name)\
+            .filter_by(context_name=context.name)\
+            .one()
+
     # TODO -- how to represent a preference?
     # A series of filters?  Of whitelists?
+    def prefers(self, session, message):
+        """ Return true or not if this preference "prefers" this message. """
+        # TODO -- actually implement this.
+        # for now, return True for every user in the db.
+        return True
