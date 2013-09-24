@@ -9,6 +9,10 @@ config = {
     # Backend stuff
     "fmn.email.mailserver": "127.0.0.1:25",
     "fmn.email.from_address": "fedmsg-notifications@fedoraproject.org",
+    "fmn.irc.network": "irc.freenode.net",
+    "fmn.irc.nickname": "threebot",
+    "fmn.irc.port": 6667,
+    "fmn.irc.timeout": 120,
 
     # Generic stuff
     "endpoints": {

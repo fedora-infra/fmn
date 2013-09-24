@@ -28,6 +28,7 @@ if '--with-dev-data' in sys.argv:
         context=context1,
         delivery_detail=dict(
             ircnick="threebean",
+            method="msg",  # Alternatively, this could be "notice"
         )
     )
     prefs2 = fmn.lib.models.Preference.create(
