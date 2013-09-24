@@ -28,6 +28,33 @@ listed in order by priority:
 
 For terminology's sake, refer to these as the ``N`` notification ``contexts``.
 
+Hacking
+-------
+
+- Clone the repo, cd into it.
+
+- Set up a virtualenv:
+
+  - ``$ mkvirtualenv fmn``
+
+- The project is split into multiple sub packages, so run:
+
+  - ``$ python setup-lib.py develop``
+  - ``$ python setup-consumer.py develop``
+
+- Do the tests pass out of the box?
+
+  - ``$ python setup-lib.py test``
+
+- Edit the dev data to use your ``ircnick`` and email:
+
+  - ``$ vim fedmsg.d/fmn.py``
+
+- Run the consumer to give it a try:
+
+  - ``$ fedmsg-hub``
+
+
 Architecture
 ------------
 
