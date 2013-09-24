@@ -1,6 +1,6 @@
 Easy
 
-- [ ] Write unit tests to test the basics of the skeleton
+- [x] Write unit tests to test the basics of the skeleton
 - [ ] Write a simple email service that uses the stubbed skeleton
 
 Hard

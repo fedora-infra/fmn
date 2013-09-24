@@ -26,11 +26,14 @@ Mapping of python classes to Database Tables.
 __requires__ = ['SQLAlchemy >= 0.7']
 import pkg_resources
 
+import datetime
 import logging
+import json
 
 import sqlalchemy as sa
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import relation
@@ -59,10 +62,12 @@ def create_tables(db_url, alembic_ini=None, debug=False):
     engine = create_engine(db_url, echo=debug)
     BASE.metadata.create_all(engine)
     #engine.execute(collection_package_create_view(driver=engine.driver))
-    if db_url.startswith('sqlite:'):
-        def _fk_pragma_on_connect(dbapi_con, con_record):
-            dbapi_con.execute('pragma foreign_keys=ON')
-        sa.event.listen(engine, 'connect', _fk_pragma_on_connect)
+
+    # This... "causes problems"
+    #if db_url.startswith('sqlite:'):
+    #    def _fk_pragma_on_connect(dbapi_con, con_record):
+    #        dbapi_con.execute('pragma foreign_keys=ON')
+    #    sa.event.listen(engine, 'connect', _fk_pragma_on_connect)
 
     if alembic_ini is not None:  # pragma: no cover
         # then, load the Alembic configuration and generate the
@@ -73,11 +78,10 @@ def create_tables(db_url, alembic_ini=None, debug=False):
         command.stamp(alembic_cfg, "head")
 
     scopedsession = scoped_session(sessionmaker(bind=engine))
-    create_status(scopedsession)
     return scopedsession
 
 
-class Context(Base):
+class Context(BASE):
     __tablename__ = 'contexts'
     name = sa.Column(sa.String(50), primary_key=True)
     description = sa.Column(sa.String(1024), primary_key=True)
@@ -91,16 +95,31 @@ class Context(Base):
         else:
             return None
 
+    get = by_name
+
+    @classmethod
+    def all(cls, session):
+        return session.query(cls).all()
+
+    @classmethod
+    def create(cls, session, name, description):
+        context = cls(name=name, description=description)
+        session.add(context)
+        session.flush()
+        session.commit()
+        return context
+
     def recipients(self, session, message):
         """ Returns the list of recipients for a message. """
-        for user in User.all_users(session):
-            preference = Preference.load(session, user, context)
-            if preference.prefers(session, message):
-                yield {user.name: preference.detail}
+        for user in User.all(session):
+            preference = Preference.load(session, user, self)
+            if preference and preference.prefers(session, message):
+                yield {user.username: preference.delivery_detail}
 
 
-class User(Base):
+class User(BASE):
     __tablename__ = 'users'
+
     username = sa.Column(sa.String(50), primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
@@ -112,8 +131,24 @@ class User(Base):
         else:
             return None
 
+    get = by_username
+
+    @classmethod
+    def all(cls, session):
+        return session.query(cls).all()
+
+    @classmethod
+    def get_or_create(cls, session, username):
+        user = cls.by_username(session, username)
+        if not user:
+            user = cls(username=username)
+            session.add(user)
+            session.flush()
+        return user
+
 
 class Preference(BASE):
+    __tablename__ = 'preferences'
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
@@ -122,18 +157,18 @@ class Preference(BASE):
 
     user_name = sa.Column(
         sa.String(50),
-        sa.ForeignKey('users.name', ondelete='CASCADE', onupdate='CASCADE'),
+        sa.ForeignKey('users.username'),
         nullable=False)
     context_name = sa.Column(
         sa.String(50),
-        sa.ForeignKey('contexts.name', ondelete='CASCADE', onupdate='CASCADE'),
+        sa.ForeignKey('contexts.name'),
         nullable=False)
 
     user = relation('User', backref=backref('preferences'))
     context = relation('Context', backref=backref('preferences'))
 
     __table_args__ = (
-        sa.UniqueConstraint('user_name', 'context_name')
+        sa.UniqueConstraint('user_name'),#, 'context_name'),
     )
 
     @hybrid_property
@@ -145,11 +180,25 @@ class Preference(BASE):
         self._delivery_detail = json.dumps(delivery_detail)
 
     @classmethod
+    def create(cls, session, user, context, delivery_detail):
+        pref = cls()
+        pref.user = user
+        pref.context = context
+        pref.delivery_detail = delivery_detail
+        session.add(pref)
+        session.flush()
+        return pref
+
+    @classmethod
     def load(cls, session, user, context):
-        return session.query(cls)\
-            .filter_by(user_name=user.name)\
-            .filter_by(context_name=context.name)\
-            .one()
+        query = session.query(cls)\
+            .filter_by(user_name=user.username)\
+            .filter_by(context_name=context.name)
+        count = query.count()
+        if count == 0:
+            return None
+        else:
+            return query.one()
 
     # TODO -- how to represent a preference?
     # A series of filters?  Of whitelists?
