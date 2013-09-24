@@ -13,15 +13,9 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
     topic = 'org.fedoraproject.prod.*'
     config_key = 'fmn.consumer.enabled'
 
-    backends = {
-        'email': fmn_backends.EmailBackend,
-        'irc': fmn_backends.IRCBackend,
-        'gcm': fmn_backends.GCMBackend,
-        #'rss': fmn_backends.RSSBackend,
-    }
 
     def __init__(self, *args, **kwargs):
-        log.debug("Trying to set up FMNConsumer")
+        log.debug("FMNConsumer initializing")
         super(FMNConsumer, self).__init__(*args, **kwargs)
 
         uri = self.hub.config.get('fmn.sqlalchemy.uri', None)
@@ -29,7 +23,16 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         if not uri:
             raise ValueError('fmn.sqlalchemy.uri must be present')
 
+        log.debug("Setting up DB session")
         self.session = fmn.lib.models.init(uri)
+
+        log.debug("Instantiating FMN backends")
+        self.backends = {
+            'email': fmn_backends.EmailBackend(config=self.hub.config),
+            'irc': fmn_backends.IRCBackend(config=self.hub.config),
+            'gcm': fmn_backends.GCMBackend(config=self.hub.config),
+            #'rss': fmn_backends.RSSBackend,
+        }
         log.debug("FMNConsumer initialized")
 
 
@@ -37,10 +40,9 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         topic, msg = raw_msg['topic'], raw_msg['body']
         log.debug("Received topic %r" % topic)
         results = fmn.lib.recipients(self.session, msg)
-        log.debug("Found %i results" % len(results))
         for context, recipients in results.items():
-            log.debug("Considering %r with %i recips" % (context, len(list(recipients))))
+            log.debug("  Considering %r with %i recips" % (context, len(list(recipients))))
             backend = self.backends[context]
             for recipient in recipients:
-                backend.handle(recipient, message)
-
+                log.debug("    Calling backend %r with %r" % (backend, recipient))
+                backend.handle(recipient, msg)

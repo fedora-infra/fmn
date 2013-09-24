@@ -38,5 +38,4 @@ if '--with-dev-data' in sys.argv:
             address="ralph@fedoraproject.org",
         )
     )
-
-
+    session.commit()
