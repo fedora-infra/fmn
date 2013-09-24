@@ -6,13 +6,22 @@ config = {
     "fmn.consumer.enabled": True,
     "fmn.sqlalchemy.uri": "sqlite:////var/tmp/fmn-dev-db.sqlite",
 
-    # Backend stuff
+
+    ## Backend stuff ##
+    # Email
     "fmn.email.mailserver": "127.0.0.1:25",
     "fmn.email.from_address": "fedmsg-notifications@fedoraproject.org",
+
+    # IRC
     "fmn.irc.network": "irc.freenode.net",
     "fmn.irc.nickname": "threebot",
     "fmn.irc.port": 6667,
     "fmn.irc.timeout": 120,
+
+    # GCM
+    "fmn.gcm.post_url": "wat",
+    "fmn.gcm.api_key": "wat",
+
 
     # Generic stuff
     "endpoints": {

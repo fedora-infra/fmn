@@ -22,6 +22,7 @@ def get_description():
 requires = [
     'fmn.lib',
     'fedmsg',
+    'requests',
 ]
 
 tests_require = [
