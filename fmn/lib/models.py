@@ -115,7 +115,9 @@ class Context(BASE):
         for user in User.all(session):
             preference = Preference.load(session, user, self)
             if preference and preference.prefers(session, message):
-                yield {user.username: preference.delivery_detail}
+                result = dict(user=user.username)
+                result.update(preference.delivery_detail)
+                yield result
 
     def recipients(self, session, message):
         return list(self._recipients(session, message))
