@@ -44,7 +44,7 @@ BASE = declarative_base()
 log = logging.getLogger(__name__)
 
 
-def create_tables(db_url, alembic_ini=None, debug=False):
+def init(db_url, alembic_ini=None, debug=False, create=False):
     """ Create the tables in the database using the information from the
     url obtained.
 
@@ -60,8 +60,9 @@ def create_tables(db_url, alembic_ini=None, debug=False):
 
     """
     engine = create_engine(db_url, echo=debug)
-    BASE.metadata.create_all(engine)
-    #engine.execute(collection_package_create_view(driver=engine.driver))
+
+    if create:
+        BASE.metadata.create_all(engine)
 
     # This... "causes problems"
     #if db_url.startswith('sqlite:'):
@@ -168,7 +169,7 @@ class Preference(BASE):
     context = relation('Context', backref=backref('preferences'))
 
     __table_args__ = (
-        sa.UniqueConstraint('user_name'),#, 'context_name'),
+        sa.UniqueConstraint('user_name', 'context_name'),
     )
 
     @hybrid_property
