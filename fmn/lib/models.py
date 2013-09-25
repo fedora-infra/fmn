@@ -90,11 +90,7 @@ class Context(BASE):
 
     @classmethod
     def by_name(cls, session, name):
-        query = session.query(cls).filter_by(name=name)
-        if query.count():
-            return query.first()
-        else:
-            return None
+        return session.query(cls).filter_by(name=name).first()
 
     get = by_name
 
@@ -131,11 +127,7 @@ class User(BASE):
 
     @classmethod
     def by_username(cls, session, username):
-        query = session.query(cls).filter_by(username=username)
-        if query.count():
-            return query.first()
-        else:
-            return None
+        return session.query(cls).filter_by(username=username).first()
 
     get = by_username
 
@@ -197,14 +189,10 @@ class Preference(BASE):
 
     @classmethod
     def load(cls, session, user, context):
-        query = session.query(cls)\
+        return session.query(cls)\
             .filter_by(user_name=user.username)\
-            .filter_by(context_name=context.name)
-        count = query.count()
-        if count == 0:
-            return None
-        else:
-            return query.one()
+            .filter_by(context_name=context.name)\
+            .first()
 
     # TODO -- how to represent a preference?
     # A series of filters?  Of whitelists?
