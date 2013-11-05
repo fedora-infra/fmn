@@ -83,30 +83,50 @@ Specification of a Profile
 
 Here's a proposal:
 
-A user's profile consists of a series of whitelists for a series of contexts.
+A user's account has a series of messaging contexts.  A messaging context is
+one of 'Email', 'IRC', 'Android', etc..
 
-For a single ``context``, the profile looks something like a `datagrepper
-<https://apps.fedoraproject.org/datagrepper/>`_ query (it looks *kind* of like
-conjunctive normal form):
+For each context, a user has an unlimited number of chains.
 
-- If nothing is specified, all messages get through.
-- If any category is specified, all messages get through for that category and
-  no others.
-- If multiple categories are specified, all messages get through if the
-  message is in *any* of those categories.
-- Same goes for "topics" as for "categories".
-- If a user (or multiple users) are specified, messages that match *any* of
-  those users and *also* match any argued categories are allowed through.
-- If a package (or multiple packages) are specified, messages that match *any*
-  of those packages and *also* match any other argued parameter types are
-  allowed through.
+Each chain has an unlimited number of filters.
 
-The `datagrepper <https://apps.fedoraproject.org/datagrepper/>`_ docs explain
-it a bit better than here.
+A filter is something like: "is a bodhi message" or "pertains to a package
+owned by me."
 
-The above schema is probably insufficient to cover all our scenarios.  Let's
-try brainstorming some, see what we need, then come up with something that
-meets those needs.
+::
+
+  User ---+-------------------------+------------------+
+          |                         |                  |
+          V                         V                  V
+         Email                     IRC               Android
+          |                         |                  |
+          +--->Chain1               +--->Chain1        +----->Chain1
+          |       |                        |                    |
+          |       +-> is a koji build      +-> pertains to a    +-> pertains
+          |       |   completed message        package owned        to the
+          |       |                            by me                package
+          |       +-> pertains to a package                         'nethack'
+          |       |   owned by me
+          |       |
+          |       +-> does not pertain to
+          |           package 'nethack'
+          |
+          +--->Chain2
+                  |
+                  +-> is a bodhi message
+                  |
+                  +-> pertains to a package
+                      owned by 'lmacken'
+
+If *all* the filters match for *any* chain in a given context, a notification
+is deployed for that context.  If multiple contexts have a chain that succeeds,
+notifications are deployed for all of those contexts.
+
+The filters are actually python functions.  The database model will refer to
+them in some form like ``fmn.rules:pertains_to_me`` or
+``fmn.rules:is_a_bodhi_message``.  They can optionally take arguments, which
+will be tricky.  For instance, ``fmn.rules:pertains_to_a_package_owned_by``
+needs a username for it to make any sense.
 
 Context-specific Delivery Metadata
 ----------------------------------
