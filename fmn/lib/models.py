@@ -145,6 +145,55 @@ class User(BASE):
         return user
 
 
+class Filter(BASE):
+    __tablename__ = 'filters'
+    id = sa.Column(sa.Integer, primary_key=True)
+    created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
+
+    chain_id = sa.Column(
+        sa.Integer,
+        sa.ForeignKey('chains.id'),
+        nullable=False)
+    chain = relation('Chain', backref=('filters'))
+
+    # This is something of the form 'fmn.filters:some_function'
+    # We need to do major validation to make sure only *our* code_paths
+    # make it in the database.
+    code_path = sa.Column(sa.String(50), nullable=False)
+    # JSON-encoded kwargs
+    arguments = sa.Column(sa.String(256))
+
+
+class Chain(BASE):
+    __tablename__ = 'chains'
+    id = sa.Column(sa.Integer, primary_key=True)
+    created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
+
+    preference_id = sa.Column(
+        sa.Integer,
+        sa.ForeignKey('preferences.id'),
+        nullable=False)
+    preference = relation('Preference', backref=backref('chains'))
+
+    def matches(self, session, config, message):
+        """ Return true if this chain matches the given message.
+
+        This is the case if *all* of the associated filters match.
+
+        ...with one exception.  If no filters are defined, the chain does not
+        match (even though technically, all of its zero filters match).
+        """
+
+        if not self.filters:
+            return False
+
+        for filt in self.filters:
+            if not filt.function(session, config, message):
+                return False
+
+        return True
+
+
 class Preference(BASE):
     __tablename__ = 'preferences'
     id = sa.Column(sa.Integer, primary_key=True)
@@ -194,10 +243,14 @@ class Preference(BASE):
             .filter_by(context_name=context.name)\
             .first()
 
-    # TODO -- how to represent a preference?
-    # A series of filters?  Of whitelists?
-    def prefers(self, session, message):
-        """ Return true or not if this preference "prefers" this message. """
-        # TODO -- actually implement this.
-        # for now, return True for every user in the db.
-        return True
+    def prefers(self, session, config, message):
+        """ Return true or not if this preference "prefers" this message.
+
+        That is the case if *any* of the associated chains match.
+        """
+
+        for chain in self.chains:
+            if chain.matches(session, config, message):
+                return True
+
+        return False
