@@ -91,7 +91,11 @@ For each context, a user has an unlimited number of chains.
 Each chain has an unlimited number of filters.
 
 A filter is something like: "is a bodhi message" or "pertains to a package
-owned by me."
+owned by me." They will be implemented as python functions.  The database model
+will refer to them in some form like ``fmn.rules:pertains_to_me`` or
+``fmn.rules:is_a_bodhi_message``.  They can optionally take arguments, which
+will be tricky.  For instance, ``fmn.rules:pertains_to_a_package_owned_by``
+needs a username for it to make any sense.
 
 ::
 
@@ -119,14 +123,9 @@ owned by me."
                       owned by 'lmacken'
 
 If *all* the filters match for *any* chain in a given context, a notification
-is deployed for that context.  If multiple contexts have a chain that succeeds,
-notifications are deployed for all of those contexts.
-
-The filters are actually python functions.  The database model will refer to
-them in some form like ``fmn.rules:pertains_to_me`` or
-``fmn.rules:is_a_bodhi_message``.  They can optionally take arguments, which
-will be tricky.  For instance, ``fmn.rules:pertains_to_a_package_owned_by``
-needs a username for it to make any sense.
+is deployed for that context.  In other words, the chains are OR'd together and
+the filters that make up a chain are AND'd together.  If multiple contexts have
+a chain that succeeds, notifications are deployed for all of those contexts.
 
 Context-specific Delivery Metadata
 ----------------------------------
