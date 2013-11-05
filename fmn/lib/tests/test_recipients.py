@@ -31,7 +31,8 @@ class TestRecipients(fmn.lib.tests.Base):
         incoming_message = {
             "wat": "blah",
         }
-        recipients = fmn.lib.recipients(self.sess, incoming_message)
+        recipients = fmn.lib.recipients(
+            self.sess, self.config, incoming_message)
         expected_keys = set(['irc', 'gcm'])
         eq_(set(recipients.keys()), expected_keys)
         eq_(list(recipients['irc']), [])
@@ -43,7 +44,8 @@ class TestRecipients(fmn.lib.tests.Base):
         msg = {
             "wat": "blah",
         }
-        recipients = fmn.lib.recipients_for_context(self.sess, 'irc', msg)
+        recipients = fmn.lib.recipients_for_context(
+            self.sess, self.config, 'irc', msg)
         eq_(list(recipients), [dict(ircnick="threebean", user="ralph")])
 
     def test_miss_recipients_list(self):
@@ -52,5 +54,6 @@ class TestRecipients(fmn.lib.tests.Base):
         msg = {
             "wat": "blah",
         }
-        recipients = fmn.lib.recipients_for_context(self.sess, 'gcm', msg)
+        recipients = fmn.lib.recipients_for_context(
+            self.sess, self.config, 'gcm', msg)
         eq_(list(recipients), [])

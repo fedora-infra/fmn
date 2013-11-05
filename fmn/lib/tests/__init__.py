@@ -10,6 +10,9 @@ class Base(object):
             os.unlink(dbfile)
         self.sess = fmn.lib.models.init(DB_PATH, debug=False, create=True)
 
+        # TODO -- fill this in with a fedmsg config.
+        self.config = {}
+
     def tearDown(self):
         """ Remove the test.db database if there is one. """
         dbfile = DB_PATH.split('///')[1]

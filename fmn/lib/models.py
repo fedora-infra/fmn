@@ -106,17 +106,17 @@ class Context(BASE):
         session.commit()
         return context
 
-    def _recipients(self, session, message):
+    def _recipients(self, session, config, message):
         """ Returns the list of recipients for a message. """
         for user in User.all(session):
             preference = Preference.load(session, user, self)
-            if preference and preference.prefers(session, message):
+            if preference and preference.prefers(session, config, message):
                 result = dict(user=user.username)
                 result.update(preference.delivery_detail)
                 yield result
 
-    def recipients(self, session, message):
-        return list(self._recipients(session, message))
+    def recipients(self, session, config, message):
+        return list(self._recipients(session, config, message))
 
 
 class User(BASE):
