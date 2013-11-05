@@ -44,7 +44,7 @@ class TestRecipients(fmn.lib.tests.Base):
             "wat": "blah",
         }
         recipients = fmn.lib.recipients_for_context(self.sess, 'irc', msg)
-        eq_(list(recipients), [dict(ralph=dict(ircnick="threebean"))])
+        eq_(list(recipients), [dict(ircnick="threebean", user="ralph")])
 
     def test_miss_recipients_list(self):
         self.create_user_and_context_data()
