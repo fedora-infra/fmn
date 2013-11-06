@@ -1,5 +1,5 @@
 <%inherit file="master.mak"/>
 <div class="jumbotron">
-  <h1>OH SNAP</h1>
-  <p>placeholder placeholder...</p>
+  <h1>${current.name} preferences</h1>
+  <p>${current.description}</p>
 </div>
