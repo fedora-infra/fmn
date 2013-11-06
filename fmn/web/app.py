@@ -50,6 +50,12 @@ def template_arguments(**kwargs):
     return arguments
 
 
+@app.route('/_heartbeat')
+def heartbeat():
+    """ An endpoint so haproxy can know we're alive. """
+    return "Lub-Dub"
+
+
 @app.route('/')
 def index():
     d = template_arguments(current='index')
