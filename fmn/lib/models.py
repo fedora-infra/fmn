@@ -186,9 +186,9 @@ class Filter(BASE):
         """ Raise an exception if code_path is not one of our
         whitelisted code_paths in the fedmsg config.
         """
-        # TODO -- gotta write this.
-        # This should raise an exception if invalid
-        return True
+
+        if code_path not in config['fmn.valid_code_paths']:
+            raise ValueError("%r is not a valid code_path" % code_path)
 
     @classmethod
     def create_from_code_path(cls, session, config, code_path, **kw):
@@ -205,6 +205,16 @@ class Filter(BASE):
         return filt
 
     def execute(self, session, config, message):
+        """ Load our callable and execute it.
+
+        Note, we validate the code_path again here for the second time.  Once
+        before it is inserted into the db, and once again before we execute it.
+        This is mitigation in case other code is vulnerable to injecting
+        arbitrary data into the db.
+        """
+
+        Filter.validate_code_path(config, self.code_path, **self.arguments)
+
         fn = self._instantiate_callable()
         try:
             return fn(config, message)
