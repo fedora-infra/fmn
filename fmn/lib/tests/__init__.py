@@ -3,6 +3,7 @@ import fmn.lib.models
 
 DB_PATH = 'sqlite:////var/tmp/test-fmn-lib.sqlite'
 
+
 class Base(object):
     def setUp(self):
         dbfile = DB_PATH.split('///')[1]
