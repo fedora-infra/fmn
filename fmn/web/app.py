@@ -78,6 +78,7 @@ def profile(username):
 
 
 @app.route('/<username>/<context>')
+@app.route('/<username>/<context>/')
 def context(username, context):
     if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
         flask.abort(403)
