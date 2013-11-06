@@ -29,7 +29,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Fedora Notifications</a>
+          <a class="navbar-brand" href="${url_for('index')}">Fedora Notifications</a>
         </div>
 
         <div class="navbar-collapse collapse">
