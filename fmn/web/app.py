@@ -65,7 +65,11 @@ def index():
 @app.route('/<username>')
 @app.route('/<username>/')
 def profile(username):
-    if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
+
+    if (not flask.g.fas_user or (
+        flask.g.fas_user.username != username and
+        not admin(flask.g.fas_user))):
+
         flask.abort(403)
 
     d = template_arguments(username=username, current='profile')
