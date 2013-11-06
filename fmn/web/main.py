@@ -5,8 +5,8 @@
 __requires__ = ['SQLAlchemy >= 0.7', 'jinja2 >= 2.4']
 import pkg_resources
 
-from fmn.web.app import APP
+from fmn.web.app import app
 
 if __name__ == '__main__':
-    APP.debug = True
-    APP.run()
+    app.debug = True
+    app.run()
