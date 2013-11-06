@@ -1,12 +1,77 @@
 <%namespace name="functions" file="functions.mak" inheritable="True" />
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1,
-                                   maximum-scale=1" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="management of fedmsg end user notifications">
+    <meta name="author" content="Ralph Bean">
+
+    <link rel="shortcut icon" href="/static/ico/favicon.png">
+
+    <title>fedmsg notifications</title>
+
+    <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/navbar.css" rel="stylesheet">
   </head>
+
   <body>
-  ${self.body()}
+
+    <div class="container">
+
+      <!-- Static navbar -->
+      <div class="navbar navbar-default">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Fedora Notifications</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+
+            % if fas_user:
+              % if 'profile' == current:
+              <li class="active">
+              % else:
+              <li>
+              % endif
+              <a href="${url_for('profile', username=fas_user.username)}">Profile</a>
+              </li>
+
+              % for ctx in contexts:
+                % if ctx.name == current:
+                <li class="active">
+                % else:
+                <li>
+                % endif
+                <a href="${url_for('context', username=username, context=ctx.name)}">${ctx.name}</a>
+                </li>
+              % endfor
+            % endif
+
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            % if fas_user:
+            <li><a href="${url_for('logout')}">Logout</a></li>
+            % else:
+            <li><a href="${url_for('login')}">Login</a></li>
+            % endif
+          </ul>
+
+        </div><!--/.nav-collapse -->
+      </div>
+
+      ${self.body()}
+
+    </div> <!-- /container -->
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery-1.10.2.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
   </body>
 </html>

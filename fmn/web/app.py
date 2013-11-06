@@ -5,6 +5,8 @@ from flask_fas_openid import FAS
 from flask.ext.mako import MakoTemplates
 from flask.ext.mako import render_template
 
+import fedmsg.config
+
 import fmn.lib
 import fmn.lib.models
 
@@ -18,7 +20,13 @@ if 'FMN_WEB_CONFIG' in os.environ:  # pragma: no cover
 
 FAS = FAS(app)
 mako = MakoTemplates(app)
-SESSION = fmn.lib.models.init(app.config['DB_URL'], debug=False, create=False)
+
+fedmsg_config = fedmsg.config.load_config()
+db_url = fedmsg_config.get('fmn.sqlalchemy.uri')
+if not db_url:
+    raise ValueError("fmn.sqlalchemy.uri must be present")
+
+SESSION = fmn.lib.models.init(db_url, debug=False, create=False)
 
 
 @app.teardown_request
@@ -27,30 +35,47 @@ def shutdown_session(exception=None):
     SESSION.remove()
 
 
-@app.route('/')
-def index():
-    if flask.g.fas_user:
-        url = flask.url_for('profile', username=flask.g.fas_user.username)
-        return flask.redirect(url)
-
-    return "hello world"
-
-
-def is_admin(user):
+def admin(user):
     return any([team.name in app.config.get('ADMIN_GROUPS', [])
                 for team in user.approved_memberships])
+
+
+def template_arguments(**kwargs):
+    arguments = dict(
+        fas_user=flask.g.fas_user,
+        url_for=flask.url_for,
+        contexts=fmn.lib.models.Context.all(SESSION),
+    )
+    arguments.update(kwargs)
+    return arguments
+
+
+@app.route('/')
+def index():
+    d = template_arguments(current='index')
+    return render_template('index.mak', **d)
 
 
 @app.route('/<username>')
 @app.route('/<username>/')
 def profile(username):
-    if flask.g.fas_user.username != username and not is_admin(flask.g.fas_user):
+    if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
         flask.abort(403)
-    return render_template('profile.mak')
+
+    d = template_arguments(username=username, current='profile')
+    return render_template('profile.mak', **d)
+
+
+@app.route('/<username>/<context>')
+def context(username, context):
+    if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
+        flask.abort(403)
+    d = template_arguments(username=username, current=context)
+    return render_template('context.mak', **d)
 
 
 @app.route('/login/', methods=('GET', 'POST'))
-def auth_login():
+def login():
     """ Method to log into the application. """
 
     default = flask.url_for('index')
@@ -64,7 +89,7 @@ def auth_login():
 
 
 @app.route('/logout/', methods=('GET', 'POST'))
-def auth_logout():
+def logout():
     """ Method to log out of the application. """
     next_url = flask.request.args.get('next', flask.url_for('index'))
 
