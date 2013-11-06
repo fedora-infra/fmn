@@ -82,6 +82,11 @@ def profile(username):
 def context(username, context):
     if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
         flask.abort(403)
+
+    context = fmn.lib.models.Context.by_name(SESSION, context)
+    if not context:
+        flask.abort(404)
+
     d = template_arguments(username=username, current=context)
     return render_template('context.mak', **d)
 
