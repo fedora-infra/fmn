@@ -83,3 +83,63 @@ class TestRecipients(fmn.lib.tests.Base):
         recipients = fmn.lib.recipients_for_context(
             self.sess, self.config, 'irc', msg)
         eq_(list(recipients), [])
+
+    def test_multiple_identical_chains_miss(self):
+        self.create_user_and_context_data()
+        self.create_preference_data_empty()
+
+        # Tack two identical chains onto the preferenced
+        code_path = "fmn.lib.tests.example_filters:not_wat_filter"
+        self.create_preference_data_basic(code_path)
+        code_path = "fmn.lib.tests.example_filters:not_wat_filter"
+        self.create_preference_data_basic(code_path)
+
+        preference = fmn.lib.models.Preference.load(self.sess, "ralph", "irc")
+        eq_(len(preference.chains), 2)
+
+        msg = {
+            "wat": "blah",
+        }
+        recipients = fmn.lib.recipients_for_context(
+            self.sess, self.config, 'irc', msg)
+        eq_(list(recipients), [])
+
+    def test_multiple_identical_chains_hit(self):
+        self.create_user_and_context_data()
+        self.create_preference_data_empty()
+
+        # Tack two identical chains onto the preferenced
+        code_path = "fmn.lib.tests.example_filters:wat_filter"
+        self.create_preference_data_basic(code_path)
+        code_path = "fmn.lib.tests.example_filters:wat_filter"
+        self.create_preference_data_basic(code_path)
+
+        preference = fmn.lib.models.Preference.load(self.sess, "ralph", "irc")
+        eq_(len(preference.chains), 2)
+
+        msg = {
+            "wat": "blah",
+        }
+        recipients = fmn.lib.recipients_for_context(
+            self.sess, self.config, 'irc', msg)
+        eq_(list(recipients), [dict(ircnick="threebean", user="ralph")])
+
+    def test_multiple_different_chains_hit(self):
+        self.create_user_and_context_data()
+        self.create_preference_data_empty()
+
+        # Tack two identical chains onto the preferenced
+        code_path = "fmn.lib.tests.example_filters:wat_filter"
+        self.create_preference_data_basic(code_path)
+        code_path = "fmn.lib.tests.example_filters:not_wat_filter"
+        self.create_preference_data_basic(code_path)
+
+        preference = fmn.lib.models.Preference.load(self.sess, "ralph", "irc")
+        eq_(len(preference.chains), 2)
+
+        msg = {
+            "wat": "blah",
+        }
+        recipients = fmn.lib.recipients_for_context(
+            self.sess, self.config, 'irc', msg)
+        eq_(list(recipients), [dict(ircnick="threebean", user="ralph")])
