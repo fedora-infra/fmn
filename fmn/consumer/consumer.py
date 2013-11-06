@@ -9,10 +9,10 @@ from pprint import pprint
 import logging
 log = logging.getLogger("fmn")
 
+
 class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
     topic = 'org.fedoraproject.prod.*'
     config_key = 'fmn.consumer.enabled'
-
 
     def __init__(self, *args, **kwargs):
         log.debug("FMNConsumer initializing")
@@ -35,14 +35,15 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         }
         log.debug("FMNConsumer initialized")
 
-
     def consume(self, raw_msg):
         topic, msg = raw_msg['topic'], raw_msg['body']
         log.debug("Received topic %r" % topic)
         results = fmn.lib.recipients(self.session, msg)
         for context, recipients in results.items():
-            log.debug("  Considering %r with %i recips" % (context, len(list(recipients))))
+            log.debug("  Considering %r with %i recips" % (
+                context, len(list(recipients))))
             backend = self.backends[context]
             for recipient in recipients:
-                log.debug("    Calling backend %r with %r" % (backend, recipient))
+                log.debug("    Calling backend %r with %r" % (
+                    backend, recipient))
                 backend.handle(recipient, msg)
