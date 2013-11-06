@@ -14,7 +14,7 @@ class TestRecipients(fmn.lib.tests.Base):
         context2 = fmn.lib.models.Context.create(
             self.sess, name="gcm", description="Google Cloud Messaging")
 
-    def create_preference_data_basic(self):
+    def create_preference_data_empty(self):
         user = fmn.lib.models.User.get(self.sess, username="ralph")
         context = fmn.lib.models.Context.get(self.sess, name="irc")
         preference = fmn.lib.models.Preference.create(
@@ -25,6 +25,14 @@ class TestRecipients(fmn.lib.tests.Base):
                 ircnick="threebean",
             )
         )
+
+    def create_preference_data_basic(self, code_path):
+        user = fmn.lib.models.User.get(self.sess, username="ralph")
+        context = fmn.lib.models.Context.get(self.sess, name="irc")
+        preference = fmn.lib.models.Preference.load(self.sess, user, context)
+        chain = fmn.lib.models.Chain.create(self.sess, name="test chain")
+        chain.add_filter(self.sess, self.config, code_path)
+        preference.add_chain(self.sess, chain)
 
     def test_empty_recipients_list(self):
         self.create_user_and_context_data()
@@ -38,9 +46,23 @@ class TestRecipients(fmn.lib.tests.Base):
         eq_(list(recipients['irc']), [])
         eq_(list(recipients['gcm']), [])
 
+    def test_empty_recipients_list(self):
+        self.create_user_and_context_data()
+        self.create_preference_data_empty()
+        msg = {
+            "wat": "blah",
+        }
+        recipients = fmn.lib.recipients_for_context(
+            self.sess, self.config, 'gcm', msg)
+        eq_(list(recipients), [])
+
     def test_basic_recipients_list(self):
         self.create_user_and_context_data()
-        self.create_preference_data_basic()
+        self.create_preference_data_empty()
+
+        code_path = "fmn.lib.tests.example_filters:wat_filter"
+        self.create_preference_data_basic(code_path)
+
         msg = {
             "wat": "blah",
         }
@@ -50,10 +72,14 @@ class TestRecipients(fmn.lib.tests.Base):
 
     def test_miss_recipients_list(self):
         self.create_user_and_context_data()
-        self.create_preference_data_basic()
+        self.create_preference_data_empty()
+
+        code_path = "fmn.lib.tests.example_filters:not_wat_filter"
+        self.create_preference_data_basic(code_path)
+
         msg = {
             "wat": "blah",
         }
         recipients = fmn.lib.recipients_for_context(
-            self.sess, self.config, 'gcm', msg)
+            self.sess, self.config, 'irc', msg)
         eq_(list(recipients), [])
