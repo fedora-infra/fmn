@@ -5,6 +5,7 @@ from flask_fas_openid import FAS
 from flask.ext.mako import MakoTemplates
 from flask.ext.mako import render_template
 
+import fedora.client
 import fedmsg.config
 
 import fmn.lib
@@ -73,7 +74,11 @@ def profile(username):
 
         flask.abort(403)
 
-    d = template_arguments(username=username, current='profile')
+    fas = fedora.client.AccountSystem()
+    avatar = fas.avatar_url(
+        username, lookup_email=False, service='libravatar', size=140)
+
+    d = template_arguments(username=username, current='profile', avatar=avatar)
     return render_template('profile.mak', **d)
 
 

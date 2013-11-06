@@ -15,6 +15,7 @@
     <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="/static/css/navbar.css" rel="stylesheet">
     <link href="/static/css/footer.css" rel="stylesheet">
+    <link href="/static/css/avatars.css" rel="stylesheet">
   </head>
 
   <body>
@@ -41,7 +42,7 @@
               % else:
               <li>
               % endif
-              <a href="${url_for('profile', username=fas_user.username)}">Profile</a>
+              <a href="${url_for('profile', username=fas_user.username)}">profile</a>
               </li>
 
               % for ctx in contexts:
