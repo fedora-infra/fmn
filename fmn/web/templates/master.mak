@@ -14,11 +14,12 @@
 
     <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="/static/css/navbar.css" rel="stylesheet">
+    <link href="/static/css/footer.css" rel="stylesheet">
   </head>
 
   <body>
 
-    <div class="container">
+    <div id="wrap" class="container">
 
       <!-- Static navbar -->
       <div class="navbar navbar-default">
@@ -69,6 +70,20 @@
       ${self.body()}
 
     </div> <!-- /container -->
+
+    <div id="footer">
+      <div class="container">
+        <p class="text-muted credit">
+        Fedora Notifications is powered by
+        <a href="http://fedmsg.com">fedmsg</a>.  The
+        <a href="https://github.com/fedora-infra/fedmsg-notifications">source</a>
+        and
+        <a href="https://github.com/fedora-infra/fedmsg-notifications/issues">issue tracker</a>
+        are available on github.
+        ©2013 Red Hat, Inc., <a href="http://threebean.org">Ralph Bean</a>.
+        </p>
+      </div>
+    </div>
 
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="/static/js/jquery-1.10.2.min.js"></script>
