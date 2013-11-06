@@ -58,7 +58,8 @@ def heartbeat():
 
 @app.route('/')
 def index():
-    d = template_arguments(current='index')
+    username = getattr(flask.g.fas_user, 'username', None)
+    d = template_arguments(username=username, current='index')
     return render_template('index.mak', **d)
 
 
