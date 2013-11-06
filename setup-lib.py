@@ -40,7 +40,7 @@ setup(
     install_requires=requires,
     tests_require=tests_require,
     test_suite='nose.collector',
-    packages=['fmn', 'fmn.lib'],
+    packages=['fmn', 'fmn.lib', 'fmn.filters'],
     namespace_packages=['fmn'],
     include_package_data=True,
     zip_safe=False,
