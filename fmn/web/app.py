@@ -211,6 +211,56 @@ def new_chain():
     return dict(message="ok", url=next_url)
 
 
+@app.route('/api/filter/new', methods=['POST'])
+@api_method
+def new_filter():
+    form = fmn.web.forms.NewFilterForm(flask.request.form)
+
+    if not form.validate():
+        raise APIError(400, form.errors)
+
+    username = form.username.data
+    context = form.context.data
+    chain_name = form.chain_name.data
+    filter_name = form.filter_name.data
+    # TODO -- how to extract arguments to filters
+
+    if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
+        raise APIError(403, dict(reason="%r is not %r" % (
+            flask.g.fas_user.username, username
+        )))
+
+    user = fmn.lib.models.User.by_username(SESSION, username)
+    if not user:
+        raise APIError(403, dict(reason="%r is not a user" % username))
+
+    ctx = fmn.lib.models.Context.by_name(SESSION, context)
+    if not ctx:
+        raise APIError(403, dict(reason="%r is not a context" % context))
+
+    pref = fmn.lib.models.Preference.get_or_create(SESSION, username, ctx)
+
+    if not pref.has_chain(SESSION, chain_name):
+        raise APIError(403, dict(reason="%r is not a chain" % chain_name))
+
+    chain = pref.get_chain(SESSION, chain_name)
+
+    code_path = "fmn.filters:" + filter_name
+    try:
+        chain.add_filter(SESSION, fedmsg_config, code_path)# ,**arguments)
+    except ValueError as e:
+        raise APIError(403, dict(reason=str(e)))
+
+    next_url = flask.url_for(
+        'chain',
+        username=username,
+        context=context,
+        chain_name=chain_name,
+    )
+
+    return dict(message="ok", url=next_url)
+
+
 @app.route('/login/', methods=('GET', 'POST'))
 def login():
     """ Method to log into the application. """

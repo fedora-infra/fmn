@@ -4,7 +4,7 @@
   <p>for the ${current.name} messaging context</p>
 </div>
 <div class="row">
-  <form class="form-inline" role="form" action="/api/chain/filter/add" method="post">
+  <form class="form-inline" role="form" action="/api/filter/new" method="post">
     <div class="form-group">
       <input type="text" class="form-control" name="filter_name" id="filter_name" placeholder="Filter Name">
     </div>
