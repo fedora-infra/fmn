@@ -347,6 +347,20 @@ class Preference(BASE):
         session.flush()
         session.commit()
 
+    def has_chain(self, session, chain_name):
+        for chain in self.chains:
+            if chain.name == chain_name:
+                return True
+
+        return False
+
+    def get_chain(self, session, chain_name):
+        for chain in self.chains:
+            if chain.name == chain_name:
+                return chain
+
+        raise ValueError("No such chain %r" % chain_name)
+
     def prefers(self, session, config, message):
         """ Return true or not if this preference "prefers" this message.
 
