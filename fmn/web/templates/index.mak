@@ -32,8 +32,10 @@
       </dl>
     </p>
 
+    % if not fas_user:
     <p><a href="${url_for('login')}">Log in</a> to check it out and set up your
       profile</p>
+    % endif
 
   </div>
   <div class="col-md-8">
