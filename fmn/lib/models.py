@@ -306,6 +306,10 @@ class Preference(BASE):
 
     @classmethod
     def create(cls, session, user, context, delivery_detail):
+        if not isinstance(user, User):
+            user = User.by_username(session, user)
+        if not isinstance(context, Context):
+            context = Context.by_name(session, context)
         pref = cls()
         pref.user = user
         pref.context = context
