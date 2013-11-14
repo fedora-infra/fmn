@@ -340,6 +340,8 @@ class Preference(BASE):
 
     def add_chain(self, session, chain):
         self.chains.append(chain)
+        session.flush()
+        session.commit()
 
     def prefers(self, session, config, message):
         """ Return true or not if this preference "prefers" this message.
