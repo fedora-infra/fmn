@@ -158,8 +158,10 @@ def chain(username, context, chain_name):
             chain = _chain
             break
 
-    if not chain:
+    if not pref.has_chain(SESSION, chain_name):
         flask.abort(404)
+
+    chain = pref.get_chain(SESSION, chain_name)
 
     d = template_arguments(username=username, current=context, chain=chain)
     return render_template('chain.mak', **d)
@@ -193,10 +195,8 @@ def new_chain():
     pref = fmn.lib.models.Preference.get_or_create(SESSION, username, ctx)
 
     # Ensure that a chain with this name doesn't already exist.
-    chain = None
-    for _chain in pref.chains:
-        if _chain.name == chain_name:
-            raise APIError(404, dict(reason="%r already exists" % chain_name))
+    if pref.has_chain(SESSION, chain_name):
+        raise APIError(404, dict(reason="%r already exists" % chain_name))
 
     chain = fmn.lib.models.Chain.create(SESSION, chain_name)
     pref.add_chain(SESSION, chain)
