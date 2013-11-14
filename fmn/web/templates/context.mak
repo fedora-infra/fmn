@@ -24,7 +24,7 @@
   <div class="md-col-6">
     <ul>
       % for chn in preference.chains:
-      <li>${chn.name}</li>
+      <li><a href="${chn.name}">${chn.name}</a></li>
       %endfor
     </ul>
   </div>
