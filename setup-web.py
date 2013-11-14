@@ -28,6 +28,7 @@ requires = [
     'python-fedora',
     'Flask-Mako',
     'Flask<0.10',  # Because of that openid json bug.
+    "wtforms",
 
     # These three are needed to enable libravatar support in python-fedora
     'urllib3',

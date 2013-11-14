@@ -11,6 +11,7 @@ import fedmsg.config
 import fmn.lib
 import fmn.lib.models
 import fmn.web.converters
+import fmn.web.forms
 
 # Create the application.
 app = flask.Flask(__name__)
@@ -52,6 +53,45 @@ def template_arguments(**kwargs):
     )
     arguments.update(kwargs)
     return arguments
+
+
+class APIError(Exception):
+    def __init__(self, status_code, errors):
+        self.status_code = status_code
+        self.errors = errors
+
+def api_method(fn):
+    """ A decorator to handle common API output stuff. """
+
+    def wrapper(*args, **kwargs):
+        try:
+            result = fn(*args, **kwargs)
+        except APIError as e:
+            response = flask.jsonify(e.errors)
+            response.status_code = e.status_code
+        else:
+            # Redirect browsers to the object.
+            # otherwise, return json response to api clients.
+            if 'url' in result and request_wants_html():
+                response = flask.redirect(result['url'])
+            else:
+                response = flask.jsonify(result)
+                response.status_code = 200
+        return response
+
+    return wrapper
+
+def request_wants_html():
+    """ accept header returns json type content only
+    http://flask.pocoo.org/snippets/45/
+    """
+    best = flask.request.accept_mimetypes \
+        .best_match(['application/json', 'text/html', 'text/plain'])
+    return best == 'text/html' and \
+        flask.request.accept_mimetypes[best] > \
+        (flask.request.accept_mimetypes['application/json'] or \
+        flask.request.accept_mimetypes['text/plain'])
+
 
 
 @app.route('/_heartbeat')
@@ -110,15 +150,65 @@ def chain(username, context, chain_name):
     if not context:
         flask.abort(404)
 
-    pref = fmn.lib.models.Preference.get_or_create(user, context)
+    pref = fmn.lib.models.Preference.get_or_create(SESSION, username, context)
+
     chain = None
     for _chain in pref.chains:
         if _chain.name == chain_name:
             chain = _chain
             break
 
+    if not chain:
+        flask.abort(404)
+
     d = template_arguments(username=username, current=context, chain=chain)
     return render_template('chain.mak', **d)
+
+
+@app.route('/api/chain/new', methods=['POST'])
+@api_method
+def new_chain():
+    form = fmn.web.forms.NewChainForm(flask.request.form)
+
+    if not form.validate():
+        raise APIError(400, form.errors)
+
+    username = form.username.data
+    context = form.context.data
+    chain_name = form.chain_name.data
+
+    if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
+        raise APIError(403, dict(reason="%r is not %r" % (
+            flask.g.fas_user.username, username
+        )))
+
+    user = fmn.lib.models.User.by_username(SESSION, username)
+    if not user:
+        raise APIError(403, dict(reason="%r is not a user" % username))
+
+    ctx = fmn.lib.models.Context.by_name(SESSION, context)
+    if not ctx:
+        raise APIError(403, dict(reason="%r is not a context" % context))
+
+    pref = fmn.lib.models.Preference.get_or_create(SESSION, username, ctx)
+
+    # Ensure that a chain with this name doesn't already exist.
+    chain = None
+    for _chain in pref.chains:
+        if _chain.name == chain_name:
+            raise APIError(404, dict(reason="%r already exists" % chain_name))
+
+    chain = fmn.lib.models.Chain.create(SESSION, chain_name)
+    pref.add_chain(SESSION, chain)
+
+    next_url = flask.url_for(
+        'chain',
+        username=username,
+        context=context,
+        chain_name=chain_name,
+    )
+
+    return dict(message="ok", url=next_url)
 
 
 @app.route('/login/', methods=('GET', 'POST'))
