@@ -315,6 +315,16 @@ class Preference(BASE):
         return pref
 
     @classmethod
+    def get_or_create(cls, session, user, context):
+        result = cls.load(session, user, context)
+
+        if not result:
+            cls.create(session, user, context, {})
+            result = cls.load(session, user, context)
+
+        return result
+
+    @classmethod
     def load(cls, session, user, context):
 
         if hasattr(user, 'username'):

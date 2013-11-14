@@ -95,7 +95,8 @@ def context(username, context):
     if not context:
         flask.abort(404)
 
-    d = template_arguments(username=username, current=context)
+    pref = fmn.lib.models.Preference.get_or_create(SESSION, username, context)
+    d = template_arguments(username=username, current=context, preference=pref)
     return render_template('context.mak', **d)
 
 
@@ -109,7 +110,7 @@ def chain(username, context, chain_name):
     if not context:
         flask.abort(404)
 
-    pref = fmn.lib.models.Preference.load(user, context)
+    pref = fmn.lib.models.Preference.get_or_create(user, context)
     chain = None
     for _chain in pref.chains:
         if _chain.name == chain_name:
