@@ -22,7 +22,11 @@
     <p>We can currently serve notifications via these means:
       <dl class="dl-horizontal">
       % for ctx in contexts:
-        <dt><a href="${ctx.name}">${ctx.name}</a></dt>
+        % if fas_user:
+        <dt><a href="${username}/${ctx.name}">${ctx.name}</a></dt>
+        % else:
+        <dt>${ctx.name}</dt>
+        % endif
         <dd>${ctx.description}</dd>
       % endfor
       </dl>
