@@ -3,7 +3,7 @@ Starting as of November 15th.
 
 - [x] UI and API to add filters with no arguments.
 - [ ] UI and API to add filters with arguments.
-- [ ] UI and API to delete filters from a chain.
+- [x] UI and API to delete filters from a chain.
 - [ ] UI and API to update delivery_details for a preference.
 - [ ] Write filters for all the topics at http://fedmsg.com/en/latest/topics/
 - [ ] Email footer should contain a URL to the *chain* responsible for
