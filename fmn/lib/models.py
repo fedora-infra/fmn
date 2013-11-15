@@ -102,6 +102,7 @@ class Context(BASE):
         return session.query(
             cls
         ).join(
+            Preference,
             User
         ).filter(
             User.username == username
