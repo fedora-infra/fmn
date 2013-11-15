@@ -98,6 +98,17 @@ class Context(BASE):
     get = by_name
 
     @classmethod
+    def by_user(cls, session, username):
+        return session.query(
+            cls
+        ).join(
+            Preference,
+            User
+        ).filter(
+            User.username == username
+        ).all()
+
+    @classmethod
     def all(cls, session):
         return session.query(cls).all()
 
