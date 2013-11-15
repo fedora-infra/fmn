@@ -233,6 +233,47 @@ def new_chain():
     return dict(message="ok", url=next_url)
 
 
+@app.route('/api/details', methods=['POST'])
+@api_method
+def handle_details():
+    form = fmn.web.forms.DetailsForm(flask.request.form)
+
+    if not form.validate():
+        raise APIError(400, form.errors)
+
+    username = form.username.data
+    context = form.context.data
+    detail_value = form.detail_value.data
+
+    if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
+        raise APIError(403, dict(reason="%r is not %r" % (
+            flask.g.fas_user.username, username
+        )))
+
+    user = fmn.lib.models.User.by_username(SESSION, username)
+    if not user:
+        raise APIError(403, dict(reason="%r is not a user" % username))
+
+    ctx = fmn.lib.models.Context.by_name(SESSION, context)
+    if not ctx:
+        raise APIError(403, dict(reason="%r is not a context" % context))
+
+    pref = fmn.lib.models.Preference.get_or_create(SESSION, username, ctx)
+
+    # TODO -- we need to *VERIFY* that they really have this delivery detail
+    # before we start doing stuff.  Otherwise, ralph could put in pingou's
+    # email address and spam the crap out of him.
+    pref.update_details(SESSION, detail_value)
+
+    next_url = flask.url_for(
+        'context',
+        username=username,
+        context=context,
+    )
+
+    return dict(message="ok", url=next_url)
+
+
 @app.route('/api/filter', methods=['POST'])
 @api_method
 def handle_filter():

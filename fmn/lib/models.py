@@ -379,6 +379,11 @@ class Preference(BASE):
             .filter_by(context_name=context)\
             .first()
 
+    def update_details(self, session, value):
+        self.detail_value = value
+        session.flush()
+        session.commit()
+
     def add_chain(self, session, chain):
         self.chains.append(chain)
         session.flush()

@@ -7,6 +7,12 @@ class NewChainForm(Form):
     chain_name = TextField('chain_name', [validators.Required()])
 
 
+class DetailsForm(Form):
+    username = TextField('username', [validators.Required()])
+    context = TextField('context', [validators.Required()])
+    detail_value = TextField('detail_value', [validators.Required()])
+
+
 class NewFilterForm(Form):
     username = TextField('username', [validators.Required()])
     context = TextField('context', [validators.Required()])

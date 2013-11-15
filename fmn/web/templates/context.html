@@ -52,12 +52,12 @@
 
     <div class="panel panel-default">
       <div class="panel-body">
-        <form class="form-inline" role="form" action="{{url_for('new_chain')}}"
+        <form class="form-inline" role="form" action="{{url_for('handle_details')}}"
               method="post">
           <div class="form-group">
-            <label class="sr-only" for="delivery_details">{{context.detail_name.title()}}</label>
-            <input type="text" class="form-control" name="delivery_details"
-                   id="delivery_details"
+            <label class="sr-only" for="detail_value">{{context.detail_name.title()}}</label>
+            <input type="text" class="form-control" name="detail_value"
+                   id="detail_value"
                    placeholder="{{preference.detail_value or context.placeholder}}">
           </div>
           <input name="username" id="username" value="{{username}}" type="hidden">
