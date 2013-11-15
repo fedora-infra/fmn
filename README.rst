@@ -47,7 +47,11 @@ Hacking
 
   - ``$ python setup-lib.py test``
 
-- Start the webapp..
+- Create some dev data for the webapp:
+
+  - ``$ python createdb.py --with-dev-data``
+
+- Start the webapp:
 
   - ``$ python fmn/web/main.py``
 
