@@ -12,3 +12,4 @@ class NewFilterForm(Form):
     context = TextField('context', [validators.Required()])
     chain_name = TextField('chain_name', [validators.Required()])
     filter_name = TextField('filter_name', [validators.Required()])
+    method = TextField('method')

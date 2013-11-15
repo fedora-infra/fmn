@@ -233,9 +233,9 @@ def new_chain():
     return dict(message="ok", url=next_url)
 
 
-@app.route('/api/filter/new', methods=['POST'])
+@app.route('/api/filter', methods=['POST'])
 @api_method
-def new_filter():
+def handle_filter():
     form = fmn.web.forms.NewFilterForm(flask.request.form)
 
     if not form.validate():
@@ -244,13 +244,17 @@ def new_filter():
     username = form.username.data
     context = form.context.data
     chain_name = form.chain_name.data
-    filter_name = form.filter_name.data
+    code_path = form.filter_name.data
+    method = (form.method.data or flask.request.method).upper()
     # TODO -- how to extract arguments to filters
 
     if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
         raise APIError(403, dict(reason="%r is not %r" % (
             flask.g.fas_user.username, username
         )))
+
+    if method not in ['POST', 'DELETE']:
+        raise APIError(405, dict(reason="Only POST and DELETE accepted"))
 
     user = fmn.lib.models.User.by_username(SESSION, username)
     if not user:
@@ -267,9 +271,13 @@ def new_filter():
 
     chain = pref.get_chain(SESSION, chain_name)
 
-    code_path = "fmn.filters:" + filter_name
     try:
-        chain.add_filter(SESSION, valid_paths, code_path)# ,**arguments)
+        if method == 'POST':
+            chain.add_filter(SESSION, valid_paths, code_path)# ,**arguments)
+        elif method == 'DELETE':
+            chain.remove_filter(SESSION, code_path)#, **arguments)
+        else:
+            raise NotImplementedError("This is impossible.")
     except (ValueError, KeyError) as e:
         raise APIError(403, dict(reason=str(e)))
 

@@ -15,9 +15,16 @@
       <span class="list-group-item">
         <h4 class="list-group-item-heading">{{flt.title(valid_paths)}}</h4>
         <p class="list-group-item-text">{{flt.doc(valid_paths)}}
-        <span class="pull-right">
-            <button type="button" class="btn btn-danger">&times; Delete</button>
-        </span>
+          <form role="form" action="{{url_for('handle_filter')}}" method="post">
+            <input name="filter_name" id="filter_name" value="{{flt.code_path}}" type="hidden">
+            <input name="username" id="username" value="{{username}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <input name="chain_name" id="chain_name" value="{{chain.name}}" type="hidden">
+            <input name="method" id="method" value="delete" type="hidden">
+            <span class="pull-right">
+                <button type="submit" class="btn btn-danger">&times; Delete</button>
+            </span>
+          </form>
         <div class="clearfix"></div>
         </p>
       </span>
@@ -43,13 +50,13 @@
         <div id="collapse{{path}}" class="panel-collapse collapse">
           <div class="panel-body">
               {{ valid_paths[root][path]['doc'] }}
-              <form class="form-inline" role="form" action="{{url_for('new_filter')}}" method="post">
+              <form class="form-inline" role="form" action="{{url_for('handle_filter')}}" method="post">
                   {% for arg in valid_paths[root][path]['args'] %}
                     {% if arg not in ['config', 'message'] %}
                       <input name="{{arg}}" id="arg_{{arg}}" type="text" />
                     {% endif %}
                   {% endfor %}
-                <input name="filter_name" id="filter_name" value="{{path}}" type="hidden">
+                <input name="filter_name" id="filter_name" value="{{root}}:{{path}}" type="hidden">
                 <input name="username" id="username" value="{{username}}" type="hidden">
                 <input name="context" id="context" value="{{current}}" type="hidden">
                 <input name="chain_name" id="chain_name" value="{{chain.name}}" type="hidden">

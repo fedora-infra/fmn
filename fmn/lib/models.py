@@ -278,6 +278,15 @@ class Chain(BASE):
         session.commit()
         return filt
 
+    def remove_filter(self, session, code_path, **kw):
+        for f in self.filters:
+            if f.code_path == code_path:
+                session.delete(f)
+                session.commit()
+                return
+
+        raise ValueError("No such filter found: %r" % code_path)
+
     def matches(self, session, config, paths, message):
         """ Return true if this chain matches the given message.
 
