@@ -2,11 +2,15 @@
 
 {% block body %}
 <div class="row">
+
   <div class="col-md-4">
-    <img class="img-circle centered" src="{{avatar}}"
-         alt="{{username}}'s avatar"/>
-    <h3 class="text-center">{{username}}<small>@fedoraproject.org</small></h3>
+    <form method="POST" action="https://www.libravatar.org/openid/login/">
+      <input type="hidden" name="openid_identifier" value="{{username}}.id.fedoraproject.org"/>
+      <input type="image" class="img-circle centered" src="{{avatar}}" style="outline: none;"
+             alt="{{username}}'s avatar"/>
+    </form>
   </div>
+
   <div class="col-md-7">
     <p>From your profile here, you can manage different notification
     preferences for <a href="https://apps.fedoraproject.org">Fedora Apps</a>.
@@ -21,6 +25,7 @@
     {% endfor %}
     </dl>
   </div>
+
 </div>
 
 {% endblock %}
