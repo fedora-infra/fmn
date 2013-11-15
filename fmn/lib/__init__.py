@@ -50,6 +50,13 @@ def load_filters(root='fmn.filters'):
             continue
         log.info("Found filter %r %r" % (name, obj))
 
-        filters[name] = {'func': obj, 'args': inspect.getargspec(obj)[0]}
+        doc = inspect.getdoc(obj)
+        title, doc = doc.split('\n', 1)
+
+        filters[name] = {
+            'func': obj,
+            'title': title.strip(),
+            'doc': doc.strip(),
+            'args': inspect.getargspec(obj)[0],}
 
     return {root: filters}
