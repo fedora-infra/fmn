@@ -4,8 +4,11 @@ Starting as of November 15th.
 - [x] UI and API to add filters with no arguments.
 - [ ] UI and API to add filters with arguments.
 - [x] UI and API to delete filters from a chain.
+- [x] UI and API to delete chains.
 - [x] Add icons for the different notification contexts.
-- [ ] UI and API to update delivery_details for a preference.
+- [x] UI and API to update delivery_details for a preference.
+- [ ] Confirmation logic for updating delivery details.  We need to avoid
+      letting one user spam another.
 - [ ] Write filters for all the topics at http://fedmsg.com/en/latest/topics/
 - [ ] Email footer should contain a URL to the *chain* responsible for
       OK'ing the message.  "You received this email because of your preferences
