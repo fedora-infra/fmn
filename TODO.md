@@ -6,6 +6,9 @@ Starting as of November 15th.
 - [ ] UI and API to delete filters from a chain.
 - [ ] UI and API to update delivery_details for a preference.
 - [ ] Write filters for all the topics at http://fedmsg.com/en/latest/topics/
+- [ ] Email footer should contain a URL to the *chain* responsible for
+      OK'ing the message.  "You received this email because of your preferences
+      https://apps.fp.org/notifications/FAS_USERNAME/email/blah_blah"
 - [ ] Deploy to cloud node for testing with irc and email.
 - [ ] Coordinate with relrod for testing with GCM+android.
 - [ ] Fedora theme for bootstrap.  Bonus points to make this modular so we can
