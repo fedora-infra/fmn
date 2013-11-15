@@ -128,7 +128,7 @@ def profile(username):
     avatar = fas.avatar_url(
         username, lookup_email=False, service='libravatar', size=140)
 
-    contexts = fmn.lib.models.Context.by_user(SESSION, username)
+    contexts = fmn.lib.models.Context.all(SESSION)
 
     return flask.render_template(
         'profile.html',
