@@ -32,15 +32,19 @@
         <div class="panel-heading">
           <h4 class="panel-title">
               <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{path}}">
-                {{ path }}
+                {{ valid_paths[root][path]['title'] }}
             </a>
           </h4>
         </div>
         <div id="collapse{{path}}" class="panel-collapse collapse">
           <div class="panel-body">
-              TODO -- docstring goes here
+              {{ valid_paths[root][path]['doc'] }}
               <form class="form-inline" role="form" action="{{url_for('new_filter')}}" method="post">
-                TODO -- argument setup goes here if required
+                  {% for arg in valid_paths[root][path]['args'] %}
+                    {% if arg not in ['config', 'message'] %}
+                      <input name="{{arg}}" id="arg_{{arg}}" type="text" />
+                    {% endif %}
+                  {% endfor %}
                 <input name="filter_name" id="filter_name" value="{{path}}" type="hidden">
                 <input name="username" id="username" value="{{username}}" type="hidden">
                 <input name="context" id="context" value="{{current}}" type="hidden">
