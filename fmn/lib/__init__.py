@@ -6,7 +6,7 @@ import logging
 log = logging.getLogger(__name__)
 
 
-def recipients(session, config, message):
+def recipients(session, config, valid_paths, message):
     """ The main API function.
 
     Accepts a fedmsg message as an argument.
@@ -18,12 +18,12 @@ def recipients(session, config, message):
 
     for context in session.query(fmn.lib.models.Context).all():
         res[context.name] = recipients_for_context(
-            session, config, context, message)
+            session, config, valid_paths, context, message)
 
     return res
 
 
-def recipients_for_context(session, config, context, message):
+def recipients_for_context(session, config, valid_paths, context, message):
     """ Returns the recipients for a given fedmsg message and stated context.
 
     Context may be either the name of a context or an instance of
@@ -34,7 +34,7 @@ def recipients_for_context(session, config, context, message):
         context = session.query(fmn.lib.models.Context)\
             .filter_by(name=context).one()
 
-    return context.recipients(session, config, message)
+    return context.recipients(session, config, valid_paths, message)
 
 
 def load_filters(root='fmn.filters'):

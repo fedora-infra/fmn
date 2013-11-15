@@ -31,7 +31,7 @@ class TestRecipients(fmn.lib.tests.Base):
         context = fmn.lib.models.Context.get(self.sess, name="irc")
         preference = fmn.lib.models.Preference.load(self.sess, user, context)
         chain = fmn.lib.models.Chain.create(self.sess, name="test chain")
-        chain.add_filter(self.sess, self.config, code_path)
+        chain.add_filter(self.sess, self.valid_paths, code_path)
         preference.add_chain(self.sess, chain)
 
     def test_empty_recipients_list(self):
@@ -53,7 +53,7 @@ class TestRecipients(fmn.lib.tests.Base):
             "wat": "blah",
         }
         recipients = fmn.lib.recipients_for_context(
-            self.sess, self.config, 'gcm', msg)
+            self.sess, self.config, self.valid_paths, 'gcm', msg)
         eq_(list(recipients), [])
 
     def test_basic_recipients_list(self):
@@ -67,7 +67,7 @@ class TestRecipients(fmn.lib.tests.Base):
             "wat": "blah",
         }
         recipients = fmn.lib.recipients_for_context(
-            self.sess, self.config, 'irc', msg)
+            self.sess, self.config, self.valid_paths, 'irc', msg)
         eq_(list(recipients), [dict(ircnick="threebean", user="ralph")])
 
     def test_miss_recipients_list(self):
@@ -81,7 +81,7 @@ class TestRecipients(fmn.lib.tests.Base):
             "wat": "blah",
         }
         recipients = fmn.lib.recipients_for_context(
-            self.sess, self.config, 'irc', msg)
+            self.sess, self.config, self.valid_paths, 'irc', msg)
         eq_(list(recipients), [])
 
     def test_multiple_identical_chains_miss(self):
@@ -101,7 +101,7 @@ class TestRecipients(fmn.lib.tests.Base):
             "wat": "blah",
         }
         recipients = fmn.lib.recipients_for_context(
-            self.sess, self.config, 'irc', msg)
+            self.sess, self.config, self.valid_paths, 'irc', msg)
         eq_(list(recipients), [])
 
     def test_multiple_identical_chains_hit(self):
@@ -121,7 +121,7 @@ class TestRecipients(fmn.lib.tests.Base):
             "wat": "blah",
         }
         recipients = fmn.lib.recipients_for_context(
-            self.sess, self.config, 'irc', msg)
+            self.sess, self.config, self.valid_paths, 'irc', msg)
         eq_(list(recipients), [dict(ircnick="threebean", user="ralph")])
 
     def test_multiple_different_chains_hit(self):
@@ -141,5 +141,5 @@ class TestRecipients(fmn.lib.tests.Base):
             "wat": "blah",
         }
         recipients = fmn.lib.recipients_for_context(
-            self.sess, self.config, 'irc', msg)
+            self.sess, self.config, self.valid_paths, 'irc', msg)
         eq_(list(recipients), [dict(ircnick="threebean", user="ralph")])

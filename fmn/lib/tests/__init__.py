@@ -11,12 +11,9 @@ class Base(object):
             os.unlink(dbfile)
         self.sess = fmn.lib.models.init(DB_PATH, debug=False, create=True)
 
-        self.config = {
-            'fmn.valid_code_paths': [
-                'fmn.lib.tests.example_filters:wat_filter',
-                'fmn.lib.tests.example_filters:not_wat_filter',
-            ]
-        }
+        self.config = {}
+        self.valid_paths = fmn.lib.load_filters(
+            root='fmn.lib.tests.example_filters')
 
     def tearDown(self):
         """ Remove the test.db database if there is one. """

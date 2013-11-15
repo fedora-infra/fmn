@@ -120,17 +120,19 @@ class Context(BASE):
         session.commit()
         return context
 
-    def _recipients(self, session, config, message):
+    def _recipients(self, session, config, valid_paths, message):
         """ Returns the list of recipients for a message. """
         for user in User.all(session):
             preference = Preference.load(session, user, self)
-            if preference and preference.prefers(session, config, message):
+            if preference and preference.prefers(
+                session, config, valid_paths, message):
+
                 result = dict(user=user.username)
                 result.update(preference.delivery_detail)
                 yield result
 
-    def recipients(self, session, config, message):
-        return list(self._recipients(session, config, message))
+    def recipients(self, session, config, valid_paths, message):
+        return list(self._recipients(session, config, valid_paths, message))
 
 
 class User(BASE):
@@ -193,19 +195,20 @@ class Filter(BASE):
         return fn
 
     @staticmethod
-    def validate_code_path(config, code_path, **kw):
+    def validate_code_path(valid_paths, code_path, **kw):
         """ Raise an exception if code_path is not one of our
-        whitelisted code_paths in the fedmsg config.
+        whitelisted valid_paths.
         """
 
-        if code_path not in config['fmn.valid_code_paths']:
+        root, name = code_path.split(':', 1)
+        if name not in valid_paths[root]:
             raise ValueError("%r is not a valid code_path" % code_path)
 
     @classmethod
-    def create_from_code_path(cls, session, config, code_path, **kw):
+    def create_from_code_path(cls, session, valid_paths, code_path, **kw):
 
         # This will raise an exception if invalid
-        Filter.validate_code_path(config, code_path, **kw)
+        Filter.validate_code_path(valid_paths, code_path, **kw)
 
         filt = cls(code_path=code_path)
         filt.arguments = kw
@@ -215,7 +218,7 @@ class Filter(BASE):
         session.commit()
         return filt
 
-    def execute(self, session, config, message):
+    def execute(self, session, config, valid_paths, message):
         """ Load our callable and execute it.
 
         Note, we validate the code_path again here for the second time.  Once
@@ -224,7 +227,8 @@ class Filter(BASE):
         arbitrary data into the db.
         """
 
-        Filter.validate_code_path(config, self.code_path, **self.arguments)
+        Filter.validate_code_path(
+            valid_paths, self.code_path, **self.arguments)
 
         fn = self._instantiate_callable()
         try:
@@ -255,16 +259,16 @@ class Chain(BASE):
         session.commit()
         return chain
 
-    def add_filter(self, session, config, filt, **kw):
+    def add_filter(self, session, paths, filt, **kw):
         if isinstance(filt, basestring):
-            filt = Filter.create_from_code_path(session, config, filt, **kw)
+            filt = Filter.create_from_code_path(session, paths, filt, **kw)
         elif kw:
             raise ValueError("Cannot handle filter with non-empty kw")
 
         self.filters.append(filt)
         return filt
 
-    def matches(self, session, config, message):
+    def matches(self, session, config, paths, message):
         """ Return true if this chain matches the given message.
 
         This is the case if *all* of the associated filters match.
@@ -277,7 +281,7 @@ class Chain(BASE):
             return False
 
         for filt in self.filters:
-            if not filt.execute(session, config, message):
+            if not filt.execute(session, config, paths, message):
                 return False
 
         return True
@@ -372,14 +376,14 @@ class Preference(BASE):
 
         raise ValueError("No such chain %r" % chain_name)
 
-    def prefers(self, session, config, message):
+    def prefers(self, session, config, valid_paths, message):
         """ Return true or not if this preference "prefers" this message.
 
         That is the case if *any* of the associated chains match.
         """
 
         for chain in self.chains:
-            if chain.matches(session, config, message):
+            if chain.matches(session, config, valid_paths, message):
                 return True
 
         return False
