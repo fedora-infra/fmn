@@ -6,11 +6,29 @@
   <p>{{current.description}}</p>
 </div>
 <div class="row">
-  <div class="md-col-6">
+  <div class="col-md-6">
     <p>You have {{preference.chains|length}} filter chains
     defined for this messaging context.</p>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="list-group">
+    {% for chn in preference.chains %}
+      <a href="{{chn.name}}" class="list-group-item">
+        <h4 class="list-group-item-heading">{{chn.name}}</h4>
+        {% if chn.filters %}
+        <p class="list-group-item-text">TODO -- list the filters here</p>
+        {% else %}
+        <p class="list-group-item-text">This chain has zero filters</p>
+        {% endif %}
+      </a>
+    {% endfor %}
+    </div>
+  </div>
+</div>
+
 <div class="row">
   <form class="form-inline" role="form" action="/api/chain/new" method="post">
     <div class="form-group">
@@ -21,15 +39,6 @@
     <input name="context" id="context" value="{{current.name}}" type="hidden">
     <button type="submit" class="btn btn-success">&#43; Create New Chain</button>
   </form>
-</div>
-<div class="row">
-  <div class="md-col-6">
-    <ul>
-      {% for chn in preference.chains %}
-      <li><a href="{{chn.name}}">{{chn.name}}</a></li>
-      {% endfor %}
-    </ul>
-  </div>
 </div>
 
 {% endblock %}
