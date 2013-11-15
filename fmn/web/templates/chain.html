@@ -22,7 +22,9 @@
             <input name="chain_name" id="chain_name" value="{{chain.name}}" type="hidden">
             <input name="method" id="method" value="delete" type="hidden">
             <span class="pull-right">
-                <button type="submit" class="btn btn-danger">&times; Delete</button>
+                <button type="submit" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Delete</button>
             </span>
           </form>
         <div class="clearfix"></div>
@@ -60,7 +62,9 @@
                 <input name="username" id="username" value="{{username}}" type="hidden">
                 <input name="context" id="context" value="{{current}}" type="hidden">
                 <input name="chain_name" id="chain_name" value="{{chain.name}}" type="hidden">
-                <button type="submit" class="btn btn-success">&#43; Add this filter</button>
+                <button type="submit" class="btn btn-success">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Add this filter</button>
               </form>
           </div>
         </div>
