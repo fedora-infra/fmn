@@ -24,7 +24,7 @@
     <p>We can currently serve notifications via these means:
       <dl class="dl-horizontal">
       {% for ctx in contexts %}
-        {% if fas_user %}
+        {% if g.fas_user %}
         <dt><a href="{{username}}/{{ctx.name}}">{{ctx.name}}</a></dt>
         {% else %}
         <dt>{{ctx.name}}</dt>
@@ -34,7 +34,7 @@
       </dl>
     </p>
 
-    {% if not fas_user %}
+    {% if not g.fas_user %}
     <p><a href="{{url_for('login')}}">Log in</a> to check it out and set up your
       profile</p>
     {% endif %}

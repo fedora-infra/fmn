@@ -13,6 +13,9 @@ import fmn.lib.models
 import fmn.web.converters
 import fmn.web.forms
 
+
+__version__ = '0.1.0'
+
 # Create the application.
 app = flask.Flask(__name__)
 
@@ -42,16 +45,6 @@ def shutdown_session(exception=None):
 def admin(user):
     return any([team.name in app.config.get('ADMIN_GROUPS', [])
                 for team in user.approved_memberships])
-
-
-def template_arguments(**kwargs):
-    arguments = dict(
-        fas_user=flask.g.fas_user,
-        url_for=flask.url_for,
-        contexts=fmn.lib.models.Context.all(SESSION),
-    )
-    arguments.update(kwargs)
-    return arguments
 
 
 class APIError(Exception):
@@ -95,6 +88,17 @@ def request_wants_html():
         flask.request.accept_mimetypes['text/plain'])
 
 
+@app.context_processor
+def inject_variable():
+    """ Inject into all templates variables that we would like to have all
+    the time.
+    """
+    username = None
+    if flask.g.fas_user and flask.g.fas_user.username:
+        username = flask.g.fas_user.username
+    return dict(username=username,
+                version=__version__)
+
 
 @app.route('/_heartbeat')
 def heartbeat():
@@ -105,8 +109,9 @@ def heartbeat():
 @app.route('/')
 def index():
     username = getattr(flask.g.fas_user, 'username', None)
-    d = template_arguments(username=username, current='index')
-    return flask.render_template('index.html', **d)
+    return flask.render_template(
+        'index.html',
+        current='index')
 
 
 @app.route('/<not_reserved:username>')
@@ -123,8 +128,13 @@ def profile(username):
     avatar = fas.avatar_url(
         username, lookup_email=False, service='libravatar', size=140)
 
-    d = template_arguments(username=username, current='profile', avatar=avatar)
-    return flask.render_template('profile.html', **d)
+    contexts = fmn.lib.models.Context.by_user(SESSION, username)
+
+    return flask.render_template(
+        'profile.html',
+        current='profile',
+        avatar=avatar,
+        contexts=contexts)
 
 
 @app.route('/<not_reserved:username>/<context>')
@@ -138,8 +148,10 @@ def context(username, context):
         flask.abort(404)
 
     pref = fmn.lib.models.Preference.get_or_create(SESSION, username, context)
-    d = template_arguments(username=username, current=context, preference=pref)
-    return flask.render_template('context.html', **d)
+    return flask.render_template(
+        'context.html',
+        current=context,
+        preference=pref)
 
 
 @app.route('/<not_reserved:username>/<context>/<chain_name>')
@@ -165,8 +177,10 @@ def chain(username, context, chain_name):
 
     chain = pref.get_chain(SESSION, chain_name)
 
-    d = template_arguments(username=username, current=context, chain=chain)
-    return flask.render_template('chain.html', **d)
+    return flask.render_template(
+        'chain.html',
+        current=context,
+        chain=chain)
 
 
 @app.route('/api/chain/new', methods=['POST'])

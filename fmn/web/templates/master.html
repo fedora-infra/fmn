@@ -37,13 +37,13 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
 
-            {% if fas_user %}
+            {% if g.fas_user %}
               {% if 'profile' == current %}
               <li class="active">
               {% else %}
               <li>
               {% endif %}
-              <a href="{{url_for('profile', username=fas_user.username)}}">
+              <a href="{{url_for('profile', username=username)}}">
                 profile
               </a>
               </li>
@@ -62,7 +62,7 @@
 
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            {% if fas_user %}
+            {% if g.fas_user %}
             <li><a href="{{url_for('logout')}}">Logout</a></li>
             {% else %}
             <li><a href="{{url_for('login')}}">Login</a></li>
