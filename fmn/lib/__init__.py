@@ -2,6 +2,7 @@
 
 import fmn.lib.models
 
+import inspect
 import logging
 log = logging.getLogger(__name__)
 
@@ -48,6 +49,7 @@ def load_filters(root='fmn.filters'):
         if not callable(obj):
             continue
         log.info("Found filter %r %r" % (name, obj))
-        filters[name] = obj
+
+        filters[name] = {'func': obj, 'args': inspect.getargspec(obj)[0]}
 
     return {root: filters}
