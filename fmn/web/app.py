@@ -154,7 +154,7 @@ def context(username, context):
     pref = fmn.lib.models.Preference.get_or_create(SESSION, username, context)
     return flask.render_template(
         'context.html',
-        current=context,
+        current=context.name,
         preference=pref)
 
 
@@ -183,10 +183,9 @@ def chain(username, context, chain_name):
 
     return flask.render_template(
         'chain.html',
-        current=context,
+        current=context.name,
         chain=chain,
-        valid_paths=valid_paths,
-    )
+        valid_paths=valid_paths)
 
 
 @app.route('/api/chain/new', methods=['POST'])
