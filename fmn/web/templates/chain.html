@@ -12,8 +12,8 @@
     <div class="list-group">
     {% for flt in chain.filters %}
       <a href="#" class="list-group-item">
-        <h4 class="list-group-item-heading">{{flt.code_path}}</h4>
-        <p class="list-group-item-text">Put the docstring here</p>
+        <h4 class="list-group-item-heading">{{flt.title(valid_paths)}}</h4>
+        <p class="list-group-item-text">{{flt.doc(valid_paths)}}</p>
       </a>
     {% endfor %}
     </div>
