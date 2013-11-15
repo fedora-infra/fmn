@@ -184,7 +184,9 @@ def chain(username, context, chain_name):
     return flask.render_template(
         'chain.html',
         current=context,
-        chain=chain)
+        chain=chain,
+        valid_paths=valid_paths,
+    )
 
 
 @app.route('/api/chain/new', methods=['POST'])

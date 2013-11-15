@@ -21,16 +21,39 @@
 </div>
 
 <div class="row">
-  <form class="form-inline" role="form" action="{{url_for('new_filter')}}"
-        method="post">
-    <div class="form-group">
-      <input type="text" class="form-control" name="filter_name" id="filter_name" placeholder="Filter Name">
+  <div class="col-md-6">
+    <p> You can add a new filter to this chain by selecting one from this
+    pre-defined list.  Click on any filter to check it out.</p>
+
+    <div class="panel-group" id="accordion">
+      {% for root in valid_paths %}
+      {% for path in valid_paths[root] %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{path}}">
+                {{ path }}
+            </a>
+          </h4>
+        </div>
+        <div id="collapse{{path}}" class="panel-collapse collapse">
+          <div class="panel-body">
+              TODO -- docstring goes here
+              <form class="form-inline" role="form" action="{{url_for('new_filter')}}" method="post">
+                TODO -- argument setup goes here if required
+                <input name="filter_name" id="filter_name" value="{{path}}" type="hidden">
+                <input name="username" id="username" value="{{username}}" type="hidden">
+                <input name="context" id="context" value="{{current.name}}" type="hidden">
+                <input name="chain_name" id="chain_name" value="{{chain.name}}" type="hidden">
+                <button type="submit" class="btn btn-success">&#43; Add this filter</button>
+              </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% endfor %}
     </div>
-    <input name="username" id="username" value="{{username}}" type="hidden">
-    <input name="context" id="context" value="{{current.name}}" type="hidden">
-    <input name="chain_name" id="chain_name" value="{{chain.name}}" type="hidden">
-    <button type="submit" class="btn btn-success">&#43; Add a filter to this chain</button>
-  </form>
+  </div>
 </div>
 
 {% endblock %}
