@@ -3,6 +3,8 @@ import os
 import flask
 from flask_fas_openid import FAS
 
+from functools import wraps
+
 import fedora.client
 import fedmsg.config
 
@@ -58,9 +60,10 @@ class APIError(Exception):
         self.errors = errors
 
 
-def api_method(fn):
+def api_method(function):
     """ A decorator to handle common API output stuff. """
 
+    @wraps(function)
     def wrapper(*args, **kwargs):
         try:
             result = fn(*args, **kwargs)
