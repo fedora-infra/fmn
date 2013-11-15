@@ -1,12 +1,8 @@
 import socket
 hostname = socket.gethostname().split('.')[-1]
 
-import fmn.lib
 
 config = {
-    # General stuff
-    "fmn.valid_code_paths": fmn.lib.load_filters(),
-
     # Consumer stuff
     "fmn.consumer.enabled": True,
     "fmn.sqlalchemy.uri": "sqlite:////var/tmp/fmn-dev-db.sqlite",
