@@ -1,4 +1,6 @@
-<%inherit file="master.mak"/>
+{% extends "master.html" %}
+
+{% block body %}
 <div class="row">
   <div class="col-md-4">
     <p>Fedora Notifications is a family of systems built to manage end-user
@@ -21,24 +23,26 @@
 
     <p>We can currently serve notifications via these means:
       <dl class="dl-horizontal">
-      % for ctx in contexts:
-        % if fas_user:
-        <dt><a href="${username}/${ctx.name}">${ctx.name}</a></dt>
-        % else:
-        <dt>${ctx.name}</dt>
-        % endif
-        <dd>${ctx.description}</dd>
-      % endfor
+      {% for ctx in contexts %}
+        {% if fas_user %}
+        <dt><a href="{{username}}/{{ctx.name}}">{{ctx.name}}</a></dt>
+        {% else %}
+        <dt>{{ctx.name}}</dt>
+        {% endif %}
+        <dd>{{ctx.description}}</dd>
+      {% endfor %}
       </dl>
     </p>
 
-    % if not fas_user:
-    <p><a href="${url_for('login')}">Log in</a> to check it out and set up your
+    {% if not fas_user %}
+    <p><a href="{{url_for('login')}}">Log in</a> to check it out and set up your
       profile</p>
-    % endif
+    {% endif %}
 
   </div>
   <div class="col-md-8">
     <img class="centered" src="/static/img/logo.png" />
   </div>
 </div>
+
+{% endblock %}
