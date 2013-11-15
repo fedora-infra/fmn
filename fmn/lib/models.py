@@ -218,6 +218,14 @@ class Filter(BASE):
         session.commit()
         return filt
 
+    def title(self, valid_paths):
+        root, name = self.code_path.split(':', 1)
+        return valid_paths[root][name]['title']
+
+    def doc(self, valid_paths):
+        root, name = self.code_path.split(':', 1)
+        return valid_paths[root][name]['doc']
+
     def execute(self, session, config, valid_paths, message):
         """ Load our callable and execute it.
 

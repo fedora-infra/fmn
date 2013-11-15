@@ -102,6 +102,7 @@ def inject_variable():
         contexts = fmn.lib.models.Context.all(SESSION)
     return dict(username=username,
                 contexts=contexts,
+                valid_paths=valid_paths,
                 version=__version__)
 
 
@@ -155,6 +156,7 @@ def context(username, context):
     return flask.render_template(
         'context.html',
         current=context.name,
+        context_description=context.description,
         preference=pref)
 
 
@@ -184,8 +186,7 @@ def chain(username, context, chain_name):
     return flask.render_template(
         'chain.html',
         current=context.name,
-        chain=chain,
-        valid_paths=valid_paths)
+        chain=chain)
 
 
 @app.route('/api/chain/new', methods=['POST'])

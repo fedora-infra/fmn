@@ -2,8 +2,8 @@
 
 {% block body %}
 <div class="jumbotron">
-  <h1>{{current.name}} preferences</h1>
-  <p>{{current.description}}</p>
+  <h1>{{current}} preferences</h1>
+  <p>{{context_description}}</p>
 </div>
 <div class="row">
   <div class="col-md-6">
@@ -19,7 +19,12 @@
       <a href="{{chn.name}}" class="list-group-item">
         <h4 class="list-group-item-heading">{{chn.name}}</h4>
         {% if chn.filters %}
-        <p class="list-group-item-text">TODO -- list the filters here</p>
+        <dl class="list-group-item-text dl-horizontal">
+            {% for flt in chn.filters %}
+            <dt>{{flt.title(valid_paths)}}</dt>
+            <dd>{{flt.doc(valid_paths)}}</dd>
+            {% endfor %}
+        </dl>
         {% else %}
         <p class="list-group-item-text">This chain has zero filters</p>
         {% endif %}
