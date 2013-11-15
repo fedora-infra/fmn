@@ -30,7 +30,8 @@
 </div>
 
 <div class="row">
-  <form class="form-inline" role="form" action="/api/chain/new" method="post">
+  <form class="form-inline" role="form" action="{{url_for('new_chain')}}"
+        method="post">
     <div class="form-group">
       <label class="sr-only" for="chain_name">Email address</label>
       <input type="text" class="form-control" name="chain_name" id="chain_name" placeholder="New Chain Name">

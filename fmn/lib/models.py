@@ -343,6 +343,7 @@ class Preference(BASE):
         if not result:
             cls.create(session, user, context, {})
             result = cls.load(session, user, context)
+            session.commit()
 
         return result
 
