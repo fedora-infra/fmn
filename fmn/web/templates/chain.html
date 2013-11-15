@@ -5,6 +5,21 @@
   <h1>Filters for {{username}}'s' <em>{{chain.name}}</em> chain</h1>
   <p>for the {{current.name}} messaging context</p>
 </div>
+
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="list-group">
+    {% for flt in chain.filters %}
+      <a href="#" class="list-group-item">
+        <h4 class="list-group-item-heading">{{flt.code_path}}</h4>
+        <p class="list-group-item-text">Put the docstring here</p>
+      </a>
+    {% endfor %}
+    </div>
+  </div>
+</div>
+
 <div class="row">
   <form class="form-inline" role="form" action="{{url_for('new_filter')}}"
         method="post">
@@ -14,20 +29,8 @@
     <input name="username" id="username" value="{{username}}" type="hidden">
     <input name="context" id="context" value="{{current.name}}" type="hidden">
     <input name="chain_name" id="chain_name" value="{{chain.name}}" type="hidden">
-    <button type="submit" class="btn btn-success">&#43; Add Filter</button>
+    <button type="submit" class="btn btn-success">&#43; Add a filter to this chain</button>
   </form>
 </div>
-{% if chain.filters %}
-<div class="row">
-  <div class="md-col-6">
-    <p>Current filters</p>
-    <ul>
-      {% for flt in chain.filters %}
-      <li>{{flt.code_path}}</li>
-      {% endfor %}
-    </ul>
-  </div>
-</div>
-{% endif %}
 
 {% endblock %}
