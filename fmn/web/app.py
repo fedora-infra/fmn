@@ -96,9 +96,12 @@ def inject_variable():
     the time.
     """
     username = None
+    contexts = []
     if flask.g.fas_user and flask.g.fas_user.username:
         username = flask.g.fas_user.username
+        contexts = fmn.lib.models.Context.all(SESSION)
     return dict(username=username,
+                contexts=contexts,
                 version=__version__)
 
 
@@ -111,6 +114,8 @@ def heartbeat():
 @app.route('/')
 def index():
     username = getattr(flask.g.fas_user, 'username', None)
+    contexts = fmn.lib.models.Context.all(SESSION)
+
     return flask.render_template(
         'index.html',
         current='index')
@@ -130,13 +135,10 @@ def profile(username):
     avatar = fas.avatar_url(
         username, lookup_email=False, service='libravatar', size=140)
 
-    contexts = fmn.lib.models.Context.by_user(SESSION, username)
-
     return flask.render_template(
         'profile.html',
         current='profile',
-        avatar=avatar,
-        contexts=contexts)
+        avatar=avatar)
 
 
 @app.route('/<not_reserved:username>/<context>')
