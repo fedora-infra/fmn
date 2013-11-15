@@ -13,6 +13,9 @@ import fmn.lib.models
 import fmn.web.converters
 import fmn.web.forms
 
+
+__version__ = '0.1.0'
+
 # Create the application.
 app = flask.Flask(__name__)
 
@@ -103,7 +106,8 @@ def inject_variable():
     username = None
     if flask.g.fas_user and flask.g.fas_user.username:
         username = flask.g.fas_user.username
-    return dict(username=username)
+    return dict(username=username,
+                version=__version__)
 
 
 @app.route('/_heartbeat')
