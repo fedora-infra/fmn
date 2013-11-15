@@ -1,14 +1,14 @@
-Easy
 
-- [x] Write unit tests to test the basics of the skeleton
-- [x] Write a simple email service that uses the stubbed skeleton
+Starting as of November 15th.
 
-Hard
-
-- [ ] Actually manage real preference scenarios
-
-Later
-
-- [ ] Build web API for managing preferences
-- [ ] Build web ui for managing preferences
-
+- [x] UI and API to add filters with no arguments.
+- [ ] UI and API to add filters with arguments.
+- [ ] UI and API to delete filters from a chain.
+- [ ] UI and API to update delivery_details for a preference.
+- [ ] Write filters for all the topics at http://fedmsg.com/en/latest/topics/
+- [ ] Deploy to cloud node for testing with irc and email.
+- [ ] Coordinate with relrod for testing with GCM+android.
+- [ ] Fedora theme for bootstrap.  Bonus points to make this modular so we can
+      re-use it on future apps.
+- [ ] Use d3.js to make a super fancy frontpage logo.
+      Fallback to the png if js not supported.
