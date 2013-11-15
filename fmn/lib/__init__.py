@@ -51,7 +51,11 @@ def load_filters(root='fmn.filters'):
         log.info("Found filter %r %r" % (name, obj))
 
         doc = inspect.getdoc(obj)
-        title, doc = doc.split('\n', 1)
+        if doc:
+            title, doc = doc.split('\n', 1)
+        else:
+            title = "UNDOCUMENTED"
+            doc = "No docs for %s:%s %r" % (root, name, obj)
 
         filters[name] = {
             'func': obj,
