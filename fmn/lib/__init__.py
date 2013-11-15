@@ -42,12 +42,12 @@ def load_filters(root='fmn.filters'):
 
     module = __import__(root, fromlist=[root.split('.')[0]])
 
-    filters = []
+    filters = {}
     for name in dir(module):
         obj = getattr(module, name)
         if not callable(obj):
             continue
         log.info("Found filter %r %r" % (name, obj))
-        filters.append(obj)
+        filters[name] = obj
 
-    return filters
+    return {root: filters}
