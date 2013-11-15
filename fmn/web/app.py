@@ -47,16 +47,6 @@ def admin(user):
                 for team in user.approved_memberships])
 
 
-def template_arguments(**kwargs):
-    arguments = dict(
-        fas_user=flask.g.fas_user,
-        url_for=flask.url_for,
-        contexts=fmn.lib.models.Context.all(SESSION),
-    )
-    arguments.update(kwargs)
-    return arguments
-
-
 class APIError(Exception):
     def __init__(self, status_code, errors):
         self.status_code = status_code
