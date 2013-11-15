@@ -33,6 +33,8 @@ db_url = fedmsg_config.get('fmn.sqlalchemy.uri')
 if not db_url:
     raise ValueError("fmn.sqlalchemy.uri must be present")
 
+valid_paths = fmn.lib.load_filters(root="fmn.filters")
+
 SESSION = fmn.lib.models.init(db_url, debug=False, create=False)
 
 
@@ -263,8 +265,8 @@ def new_filter():
 
     code_path = "fmn.filters:" + filter_name
     try:
-        chain.add_filter(SESSION, fedmsg_config, code_path)# ,**arguments)
-    except ValueError as e:
+        chain.add_filter(SESSION, valid_paths, code_path)# ,**arguments)
+    except (ValueError, KeyError) as e:
         raise APIError(403, dict(reason=str(e)))
 
     next_url = flask.url_for(

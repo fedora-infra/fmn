@@ -266,6 +266,8 @@ class Chain(BASE):
             raise ValueError("Cannot handle filter with non-empty kw")
 
         self.filters.append(filt)
+        session.flush()
+        session.commit()
         return filt
 
     def matches(self, session, config, paths, message):
