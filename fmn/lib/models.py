@@ -306,6 +306,10 @@ class Preference(BASE):
 
     @classmethod
     def create(cls, session, user, context, delivery_detail):
+        if not isinstance(user, User):
+            user = User.by_username(session, user)
+        if not isinstance(context, Context):
+            context = Context.by_name(session, context)
         pref = cls()
         pref.user = user
         pref.context = context
@@ -313,6 +317,16 @@ class Preference(BASE):
         session.add(pref)
         session.flush()
         return pref
+
+    @classmethod
+    def get_or_create(cls, session, user, context):
+        result = cls.load(session, user, context)
+
+        if not result:
+            cls.create(session, user, context, {})
+            result = cls.load(session, user, context)
+
+        return result
 
     @classmethod
     def load(cls, session, user, context):
@@ -330,6 +344,22 @@ class Preference(BASE):
 
     def add_chain(self, session, chain):
         self.chains.append(chain)
+        session.flush()
+        session.commit()
+
+    def has_chain(self, session, chain_name):
+        for chain in self.chains:
+            if chain.name == chain_name:
+                return True
+
+        return False
+
+    def get_chain(self, session, chain_name):
+        for chain in self.chains:
+            if chain.name == chain_name:
+                return chain
+
+        raise ValueError("No such chain %r" % chain_name)
 
     def prefers(self, session, config, message):
         """ Return true or not if this preference "prefers" this message.

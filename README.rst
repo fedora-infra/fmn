@@ -41,10 +41,15 @@ Hacking
 
   - ``$ python setup-lib.py develop``
   - ``$ python setup-consumer.py develop``
+  - ``$ python setup-web.py develop``
 
 - Do the tests pass out of the box?
 
   - ``$ python setup-lib.py test``
+
+- Start the webapp..
+
+  - ``$ python fmn/web/main.py``
 
 - Edit the dev data to use your ``ircnick`` and email:
 
