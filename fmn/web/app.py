@@ -66,7 +66,7 @@ def api_method(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
         try:
-            result = fn(*args, **kwargs)
+            result = function(*args, **kwargs)
         except APIError as e:
             response = flask.jsonify(e.errors)
             response.status_code = e.status_code
