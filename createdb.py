@@ -28,7 +28,7 @@ if '--with-dev-data' in sys.argv:
     )
     context3 = fmn.lib.models.Context.create(
         session, name="gcm", description="Google Cloud Messaging",
-        detail_name="device address", icon="phone",
+        detail_name="registration id", icon="phone",
         placeholder="laksdjfasdlfkj183097falkfj109f"
     )
 

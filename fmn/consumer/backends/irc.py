@@ -31,11 +31,16 @@ class IRCBackend(BaseBackend):
             return
 
         self.log.debug("Notifying via irc %r" % recipient)
+
+        if 'irc nick' not in recipient:
+            self.log.warning("No irc nick found.  Bailing.")
+            return
+
         message = fedmsg.meta.msg2repr(msg, **self.config)
 
         for client in self.clients:
-            getattr(client, recipient['method'])(
-                recipient['ircnick'].encode('utf-8'),
+            getattr(client, recipient.get('method', 'msg'))(
+                recipient['irc nick'].encode('utf-8'),
                 message.encode('utf-8'),
             )
 

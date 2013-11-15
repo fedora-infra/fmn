@@ -11,12 +11,17 @@ class GCMBackend(BaseBackend):
 
     def handle(self, recipient, msg):
         self.log.debug("Notifying via gcm/android %r" % recipient)
+
+        if 'registration id' not in recipient:
+            self.log.warning("No registration id found.  Bailing.")
+            return
+
         headers = {
             'Authorization': 'key=%s' % self.api_key,
             'content-type': 'application/json',
         }
         body = {
-            'registration_ids': [recipient['registration_id']],
+            'registration_ids': [recipient['registration id']],
             'data': msg,
         }
         response = requests.post(

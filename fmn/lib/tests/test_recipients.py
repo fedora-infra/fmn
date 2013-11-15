@@ -15,7 +15,7 @@ class TestRecipients(fmn.lib.tests.Base):
         )
         context2 = fmn.lib.models.Context.create(
             self.sess, name="gcm", description="Google Cloud Messaging",
-            detail_name="device address", icon="phone",
+            detail_name="registration id", icon="phone",
         )
 
     def create_preference_data_empty(self):

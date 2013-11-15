@@ -15,9 +15,13 @@ class EmailBackend(BaseBackend):
 
     def handle(self, recipient, msg):
         self.log.debug("Sending email")
-        email_message = email.Message.Message()
 
-        email_message.add_header('To', recipient['address'])
+        if 'email address' not in recipient:
+            self.log.warning("No email address found.  Bailing.")
+            return
+
+        email_message = email.Message.Message()
+        email_message.add_header('To', recipient['email address'])
         email_message.add_header('From', self.from_address)
 
         subject = fedmsg.meta.msg2subtitle(msg, **self.config)
@@ -35,6 +39,6 @@ class EmailBackend(BaseBackend):
 
         self.server.sendmail(
             self.from_address,
-            [recipient['address']],
+            [recipient['email address']],
             email_message.as_string(),
         )
