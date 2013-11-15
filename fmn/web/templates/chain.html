@@ -27,7 +27,7 @@
 
     <div class="panel-group" id="accordion">
       {% for root in valid_paths %}
-      {% for path in valid_paths[root] %}
+      {% for path in valid_paths[root] | sort(attribute='title', reverse=True) %}
       <div class="panel panel-default">
         <div class="panel-heading">
           <h4 class="panel-title">
