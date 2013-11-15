@@ -54,8 +54,10 @@
                 {% else %}
                 <li>
                 {% endif %}
-                <a href="{{url_for('context', username=username,
-                                   context=ctx.name)}}">{{ctx.name}}</a>
+                <a href="{{url_for('context', username=username, context=ctx.name)}}">
+                    <span class="glyphicon glyphicon-{{ctx.icon}}"></span>
+                    {{ctx.name}}
+                </a>
                 </li>
               {% endfor %}
             {% endif %}

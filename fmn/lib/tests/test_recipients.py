@@ -10,9 +10,13 @@ class TestRecipients(fmn.lib.tests.Base):
         user1 = fmn.lib.models.User.get_or_create(self.sess, username="ralph")
         user2 = fmn.lib.models.User.get_or_create(self.sess, username="toshio")
         context1 = fmn.lib.models.Context.create(
-            self.sess, name="irc", description="Internet Relay Chat")
+            self.sess, name="irc", description="Internet Relay Chat",
+            detail_name="irc nick", icon="user",
+        )
         context2 = fmn.lib.models.Context.create(
-            self.sess, name="gcm", description="Google Cloud Messaging")
+            self.sess, name="gcm", description="Google Cloud Messaging",
+            detail_name="device address", icon="phone",
+        )
 
     def create_preference_data_empty(self):
         user = fmn.lib.models.User.get(self.sess, username="ralph")
@@ -21,9 +25,7 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess,
             user=user,
             context=context,
-            delivery_detail=dict(
-                ircnick="threebean",
-            )
+            detail_value="threebean",
         )
 
     def create_preference_data_basic(self, code_path):
@@ -68,7 +70,7 @@ class TestRecipients(fmn.lib.tests.Base):
         }
         recipients = fmn.lib.recipients_for_context(
             self.sess, self.config, self.valid_paths, 'irc', msg)
-        eq_(list(recipients), [dict(ircnick="threebean", user="ralph")])
+        eq_(list(recipients), [{'irc nick': 'threebean', 'user': 'ralph'}])
 
     def test_miss_recipients_list(self):
         self.create_user_and_context_data()
@@ -122,7 +124,7 @@ class TestRecipients(fmn.lib.tests.Base):
         }
         recipients = fmn.lib.recipients_for_context(
             self.sess, self.config, self.valid_paths, 'irc', msg)
-        eq_(list(recipients), [dict(ircnick="threebean", user="ralph")])
+        eq_(list(recipients), [{'irc nick': 'threebean', 'user': 'ralph'}])
 
     def test_multiple_different_chains_hit(self):
         self.create_user_and_context_data()
@@ -142,4 +144,4 @@ class TestRecipients(fmn.lib.tests.Base):
         }
         recipients = fmn.lib.recipients_for_context(
             self.sess, self.config, self.valid_paths, 'irc', msg)
-        eq_(list(recipients), [dict(ircnick="threebean", user="ralph")])
+        eq_(list(recipients), [{'irc nick': 'threebean', 'user': 'ralph'}])

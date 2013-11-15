@@ -90,6 +90,9 @@ class Context(BASE):
     name = sa.Column(sa.String(50), primary_key=True)
     description = sa.Column(sa.String(1024), primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
+    detail_name = sa.Column(sa.String(64), nullable=False)
+    icon = sa.Column(sa.String(32), nullable=False)
+    placeholder = sa.Column(sa.String(256))
 
     @classmethod
     def by_name(cls, session, name):
@@ -113,8 +116,12 @@ class Context(BASE):
         return session.query(cls).all()
 
     @classmethod
-    def create(cls, session, name, description):
-        context = cls(name=name, description=description)
+    def create(cls, session, name, description,
+               detail_name, icon, placeholder=None):
+
+        context = cls(name=name, description=description,
+                      detail_name=detail_name, icon=icon,
+                      placeholder=placeholder)
         session.add(context)
         session.flush()
         session.commit()
@@ -123,13 +130,14 @@ class Context(BASE):
     def _recipients(self, session, config, valid_paths, message):
         """ Returns the list of recipients for a message. """
         for user in User.all(session):
-            preference = Preference.load(session, user, self)
-            if preference and preference.prefers(
+            pref = Preference.load(session, user, self)
+            if pref and pref.prefers(
                 session, config, valid_paths, message):
 
-                result = dict(user=user.username)
-                result.update(preference.delivery_detail)
-                yield result
+                yield {
+                    'user': user.username,
+                    pref.context.detail_name: pref.detail_value,
+                }
 
     def recipients(self, session, config, valid_paths, message):
         return list(self._recipients(session, config, valid_paths, message))
@@ -311,8 +319,7 @@ class Preference(BASE):
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
-    # This is the important piece, a JSON string.
-    _delivery_detail = sa.Column(sa.String(1024))
+    detail_value = sa.Column(sa.String(1024))
 
     user_name = sa.Column(
         sa.String(50),
@@ -330,16 +337,8 @@ class Preference(BASE):
         sa.UniqueConstraint('user_name', 'context_name'),
     )
 
-    @hybrid_property
-    def delivery_detail(self):
-        return json.loads(self._delivery_detail)
-
-    @delivery_detail.setter
-    def delivery_detail(self, delivery_detail):
-        self._delivery_detail = json.dumps(delivery_detail)
-
     @classmethod
-    def create(cls, session, user, context, delivery_detail):
+    def create(cls, session, user, context, detail_value=None):
         if not isinstance(user, User):
             user = User.by_username(session, user)
         if not isinstance(context, Context):
@@ -347,7 +346,9 @@ class Preference(BASE):
         pref = cls()
         pref.user = user
         pref.context = context
-        pref.delivery_detail = delivery_detail
+
+        pref.detail_value = detail_value
+
         session.add(pref)
         session.flush()
         return pref
@@ -358,7 +359,7 @@ class Preference(BASE):
         result = cls.load(session, user, context)
 
         if not result:
-            cls.create(session, user, context, {})
+            cls.create(session, user, context)
             result = cls.load(session, user, context)
             session.commit()
 

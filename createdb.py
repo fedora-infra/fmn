@@ -17,27 +17,31 @@ if '--with-dev-data' in sys.argv:
     user3 = fmn.lib.models.User.get_or_create(session, username="toshio")
 
     context1 = fmn.lib.models.Context.create(
-        session, name="irc", description="Internet Relay Chat")
+        session, name="irc", description="Internet Relay Chat",
+        detail_name="irc nick", icon="user",
+        placeholder="z3r0_c00l",
+    )
     context2 = fmn.lib.models.Context.create(
-        session, name="email", description="Electronic Mail")
+        session, name="email", description="Electronic Mail",
+        detail_name="email address", icon="envelope",
+        placeholder="jane@fedoraproject.org",
+    )
     context3 = fmn.lib.models.Context.create(
-        session, name="gcm", description="Google Cloud Messaging")
+        session, name="gcm", description="Google Cloud Messaging",
+        detail_name="device address", icon="phone",
+        placeholder="laksdjfasdlfkj183097falkfj109f"
+    )
 
     prefs1 = fmn.lib.models.Preference.create(
         session,
         user=user1,
         context=context1,
-        delivery_detail=dict(
-            ircnick="threebean",
-            method="msg",  # Alternatively, this could be "notice"
-        )
+        detail_value="threebean",
     )
     prefs2 = fmn.lib.models.Preference.create(
         session,
         user=user1,
         context=context2,
-        delivery_detail=dict(
-            address="ralph@fedoraproject.org",
-        )
+        detail_value="ralph@fedoraproject.org",
     )
     session.commit()

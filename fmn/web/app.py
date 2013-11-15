@@ -156,7 +156,7 @@ def context(username, context):
     return flask.render_template(
         'context.html',
         current=context.name,
-        context_description=context.description,
+        context=context,
         preference=pref)
 
 
