@@ -192,7 +192,7 @@ def chain(username, context, chain_name):
 @app.route('/api/chain/new', methods=['POST'])
 @api_method
 def new_chain():
-    form = fmn.web.forms.NewChainForm(flask.request.form)
+    form = fmn.web.forms.ChainForm(flask.request.form)
 
     if not form.validate():
         raise APIError(400, form.errors)
@@ -277,7 +277,7 @@ def handle_details():
 @app.route('/api/filter', methods=['POST'])
 @api_method
 def handle_filter():
-    form = fmn.web.forms.NewFilterForm(flask.request.form)
+    form = fmn.web.forms.FilterForm(flask.request.form)
 
     if not form.validate():
         raise APIError(400, form.errors)
