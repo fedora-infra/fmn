@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class="page-header">
-  <h1>Filters for {{username}}'s' <em>{{chain.name}}</em> chain
+  <h1>Filters for {{username}}'s <em>{{chain.name}}</em> chain
       <small>for the {{current}} messaging context</small></h1>
 </div>
 
@@ -12,10 +12,15 @@
     <p> You have these filters currently defined for this chain.</p>
     <div class="list-group">
     {% for flt in chain.filters %}
-      <a href="#" class="list-group-item">
+      <span class="list-group-item">
         <h4 class="list-group-item-heading">{{flt.title(valid_paths)}}</h4>
-        <p class="list-group-item-text">{{flt.doc(valid_paths)}}</p>
-      </a>
+        <p class="list-group-item-text">{{flt.doc(valid_paths)}}
+        <span class="pull-right">
+            <button type="button" class="btn btn-danger">&times; Delete</button>
+        </span>
+        <div class="clearfix"></div>
+        </p>
+      </span>
     {% endfor %}
     </div>
   </div>
