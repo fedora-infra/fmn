@@ -27,6 +27,18 @@
         {% else %}
         <p class="list-group-item-text">This chain has zero filters</p>
         {% endif %}
+          <form role="form" action="{{url_for('handle_chain')}}" method="post">
+            <input name="username" id="username" value="{{username}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <input name="chain_name" id="chain_name" value="{{chn.name}}" type="hidden">
+            <input name="method" id="method" value="delete" type="hidden">
+            <span class="pull-right">
+                <button type="submit" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Delete this chain</button>
+            </span>
+          </form>
+          <div class="clearfix"></div>
       </a>
     {% endfor %}
     </div>
@@ -35,7 +47,7 @@
   <div class="col-md-6">
     <div class="panel panel-default">
       <div class="panel-body">
-        <form class="form-inline" role="form" action="{{url_for('new_chain')}}"
+        <form class="form-inline" role="form" action="{{url_for('handle_chain')}}"
               method="post">
           <div class="form-group">
             <label class="sr-only" for="chain_name">Chain Name</label>

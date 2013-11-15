@@ -5,6 +5,7 @@ class ChainForm(Form):
     username = TextField('username', [validators.Required()])
     context = TextField('context', [validators.Required()])
     chain_name = TextField('chain_name', [validators.Required()])
+    method = TextField('method')
 
 
 class DetailsForm(Form):

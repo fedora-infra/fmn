@@ -63,6 +63,7 @@ def api_method(function):
         try:
             result = function(*args, **kwargs)
         except APIError as e:
+            app.logger.exception(e)
             response = flask.jsonify(e.errors)
             response.status_code = e.status_code
         else:
@@ -189,9 +190,9 @@ def chain(username, context, chain_name):
         chain=chain)
 
 
-@app.route('/api/chain/new', methods=['POST'])
+@app.route('/api/chain', methods=['POST', 'DELETE'])
 @api_method
-def new_chain():
+def handle_chain():
     form = fmn.web.forms.ChainForm(flask.request.form)
 
     if not form.validate():
@@ -200,11 +201,15 @@ def new_chain():
     username = form.username.data
     context = form.context.data
     chain_name = form.chain_name.data
+    method = (form.method.data or flask.request.method).upper()
 
     if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
         raise APIError(403, dict(reason="%r is not %r" % (
             flask.g.fas_user.username, username
         )))
+
+    if method not in ['POST', 'DELETE']:
+        raise APIError(405, dict(reason="Only POST and DELETE accepted"))
 
     user = fmn.lib.models.User.by_username(SESSION, username)
     if not user:
@@ -216,19 +221,36 @@ def new_chain():
 
     pref = fmn.lib.models.Preference.get_or_create(SESSION, username, ctx)
 
-    # Ensure that a chain with this name doesn't already exist.
-    if pref.has_chain(SESSION, chain_name):
-        raise APIError(404, dict(reason="%r already exists" % chain_name))
+    try:
+        if method == 'POST':
+            # Ensure that a chain with this name doesn't already exist.
+            if pref.has_chain(SESSION, chain_name):
+                raise APIError(404, dict(
+                    reason="%r already exists" % chain_name))
 
-    chain = fmn.lib.models.Chain.create(SESSION, chain_name)
-    pref.add_chain(SESSION, chain)
+            chain = fmn.lib.models.Chain.create(SESSION, chain_name)
+            pref.add_chain(SESSION, chain)
+            next_url = flask.url_for(
+                'chain',
+                username=username,
+                context=context,
+                chain_name=chain_name,
+            )
+        elif method == 'DELETE':
+            chain = pref.get_chain(SESSION, chain_name)
+            SESSION.delete(chain)
+            SESSION.commit()
+            next_url = flask.url_for(
+                'context',
+                username=username,
+                context=context,
+            )
+        else:
+            raise NotImplementedError("This is impossible.")
+    except (ValueError, KeyError) as e:
+        app.logger.exception(e)
+        raise APIError(403, dict(reason=str(e)))
 
-    next_url = flask.url_for(
-        'chain',
-        username=username,
-        context=context,
-        chain_name=chain_name,
-    )
 
     return dict(message="ok", url=next_url)
 
@@ -320,6 +342,7 @@ def handle_filter():
         else:
             raise NotImplementedError("This is impossible.")
     except (ValueError, KeyError) as e:
+        app.logger.exception(e)
         raise APIError(403, dict(reason=str(e)))
 
     next_url = flask.url_for(
