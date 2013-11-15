@@ -3,7 +3,8 @@
 {% block body %}
 <div class="row">
   <div class="col-md-4">
-    <img class="img-circle centered" src="{{avatar}}"/>
+    <img class="img-circle centered" src="{{avatar}}"
+         alt="{{username}}'s avatar"/>
     <h3 class="text-center">{{username}}<small>@fedoraproject.org</small></h3>
   </div>
   <div class="col-md-7">
@@ -13,14 +14,12 @@
     more in time.
     </p>
 
-    <p>
-      <dl class="dl-horizontal">
-      {% for ctx in contexts %}
-        <dt><a href="{{ctx.name}}">{{ctx.name}}</a></dt>
-        <dd>{{ctx.description}}</dd>
-      {% endfor %}
-      </dl>
-    </p>
+    <dl class="dl-horizontal">
+    {% for ctx in contexts %}
+      <dt><a href="{{ctx.name}}">{{ctx.name}}</a></dt>
+      <dd>{{ctx.description}}</dd>
+    {% endfor %}
+    </dl>
   </div>
 </div>
 

@@ -335,6 +335,7 @@ class Preference(BASE):
 
     @classmethod
     def get_or_create(cls, session, user, context):
+        user = User.get_or_create(session, user)
         result = cls.load(session, user, context)
 
         if not result:

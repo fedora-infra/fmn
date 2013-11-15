@@ -21,18 +21,17 @@
     </ul>
     </p>
 
-    <p>We can currently serve notifications via these means:
-      <dl class="dl-horizontal">
-      {% for ctx in contexts %}
-        {% if g.fas_user %}
-        <dt><a href="{{username}}/{{ctx.name}}">{{ctx.name}}</a></dt>
-        {% else %}
-        <dt>{{ctx.name}}</dt>
-        {% endif %}
-        <dd>{{ctx.description}}</dd>
-      {% endfor %}
-      </dl>
-    </p>
+    <p>We can currently serve notifications via these means:</p>
+    <dl class="dl-horizontal">
+    {% for ctx in contexts %}
+      {% if g.fas_user %}
+      <dt><a href="{{username}}/{{ctx.name}}">{{ctx.name}}</a></dt>
+      {% else %}
+      <dt>{{ctx.name}}</dt>
+      {% endif %}
+      <dd>{{ctx.description}}</dd>
+    {% endfor %}
+    </dl>
 
     {% if not g.fas_user %}
     <p><a href="{{url_for('login')}}">Log in</a> to check it out and set up your
@@ -41,7 +40,8 @@
 
   </div>
   <div class="col-md-8">
-    <img class="centered" src="/static/img/logo.png" />
+    <img class="centered" alt=''
+         src="{{url_for('static', filename='img/logo.png')}}" />
   </div>
 </div>
 
