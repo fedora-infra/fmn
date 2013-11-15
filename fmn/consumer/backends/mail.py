@@ -24,10 +24,14 @@ class EmailBackend(BaseBackend):
         email_message.add_header('Subject', subject)
 
         content = fedmsg.meta.msg2repr(msg, **self.config)
-        email_message.set_payload(content)
 
-        # TODO -- add a customizable footer indicating where the user can go to
-        # change their preferences/unsubscribe.
+        # Since we do simple text email, adding the footer to the content
+        # before setting the payload.
+        footer = self.config.get('fmn.email.footer', None)
+        if footer:
+            content += '/n--/n {0}'.format(footer)
+
+        email_message.set_payload(content)
 
         self.server.sendmail(
             self.from_address,
