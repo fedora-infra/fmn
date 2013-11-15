@@ -2,8 +2,6 @@ import os
 
 import flask
 from flask_fas_openid import FAS
-from flask.ext.mako import MakoTemplates
-from flask.ext.mako import render_template
 
 import fedora.client
 import fedmsg.config
@@ -24,7 +22,6 @@ if 'FMN_WEB_CONFIG' in os.environ:  # pragma: no cover
     app.config.from_envvar('FMN_WEB_CONFIG')
 
 FAS = FAS(app)
-mako = MakoTemplates(app)
 
 fedmsg_config = fedmsg.config.load_config()
 db_url = fedmsg_config.get('fmn.sqlalchemy.uri')
@@ -60,6 +57,7 @@ class APIError(Exception):
         self.status_code = status_code
         self.errors = errors
 
+
 def api_method(fn):
     """ A decorator to handle common API output stuff. """
 
@@ -80,6 +78,7 @@ def api_method(fn):
         return response
 
     return wrapper
+
 
 def request_wants_html():
     """ accept header returns json type content only
@@ -104,7 +103,7 @@ def heartbeat():
 def index():
     username = getattr(flask.g.fas_user, 'username', None)
     d = template_arguments(username=username, current='index')
-    return render_template('index.mak', **d)
+    return flask.render_template('index.html', **d)
 
 
 @app.route('/<not_reserved:username>')
@@ -122,7 +121,7 @@ def profile(username):
         username, lookup_email=False, service='libravatar', size=140)
 
     d = template_arguments(username=username, current='profile', avatar=avatar)
-    return render_template('profile.mak', **d)
+    return flask.render_template('profile.html', **d)
 
 
 @app.route('/<not_reserved:username>/<context>')
@@ -137,7 +136,7 @@ def context(username, context):
 
     pref = fmn.lib.models.Preference.get_or_create(SESSION, username, context)
     d = template_arguments(username=username, current=context, preference=pref)
-    return render_template('context.mak', **d)
+    return flask.render_template('context.html', **d)
 
 
 @app.route('/<not_reserved:username>/<context>/<chain_name>')
@@ -164,7 +163,7 @@ def chain(username, context, chain_name):
     chain = pref.get_chain(SESSION, chain_name)
 
     d = template_arguments(username=username, current=context, chain=chain)
-    return render_template('chain.mak', **d)
+    return flask.render_template('chain.html', **d)
 
 
 @app.route('/api/chain/new', methods=['POST'])
