@@ -12,6 +12,9 @@ Starting as of November 15th.
 - [ ] Better error pages for html (keep the JSON versions to CLI/API).
 - [ ] Confirmation logic for updating delivery details.  We need to avoid
       letting one user spam another.
+      For IRC, we can query "NickServ ACC <nickname>" first to make sure they
+      are logged in and authenticated.  THEN we can query the user with the
+      confirmation link.
 - [ ] Write filters for all the topics at http://fedmsg.com/en/latest/topics/
 - [ ] Email footer should contain a URL to the *chain* responsible for
       OK'ing the message.  "You received this email because of your preferences
