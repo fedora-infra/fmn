@@ -7,6 +7,8 @@ Starting as of November 15th.
 - [x] UI and API to delete chains.
 - [x] Add icons for the different notification contexts.
 - [x] UI and API to update delivery_details for a preference.
+- [ ] Better explanation of chains and rules in the UI.
+- [ ] Better error pages for html (keep the JSON versions to CLI/API).
 - [ ] Confirmation logic for updating delivery details.  We need to avoid
       letting one user spam another.
 - [ ] Write filters for all the topics at http://fedmsg.com/en/latest/topics/
