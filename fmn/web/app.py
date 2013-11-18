@@ -305,7 +305,7 @@ def handle_details():
 
 @app.route('/confirm/<action>/<secret>')
 @app.route('/confirm/<action>/<secret>/')
-def handle_details(action, secret):
+def handle_confirmation(action, secret):
 
     if action not in ['accept', 'reject']:
         flask.abort(404)
