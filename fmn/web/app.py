@@ -318,7 +318,10 @@ def handle_confirmation(action, secret):
     if flask.g.fas_user.username != confirmation.user_name:
         flask.abort(403)
 
-    confirmation.set_status(SESSION, 'accepted')
+    if action == 'accept':
+        confirmation.set_status(SESSION, 'accepted')
+    else:
+        confirmation.set_status(SESSION, 'rejected')
 
     return flask.redirect(flask.url_for(
         'context',
