@@ -27,10 +27,11 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         self.session = fmn.lib.models.init(uri)
 
         log.debug("Instantiating FMN backends")
+        backend_kwargs = dict(config=self.hub.config, session=self.session)
         self.backends = {
-            'email': fmn_backends.EmailBackend(config=self.hub.config),
-            'irc': fmn_backends.IRCBackend(config=self.hub.config),
-            'gcm': fmn_backends.GCMBackend(config=self.hub.config),
+            'email': fmn_backends.EmailBackend(**backend_kwargs),
+            'irc': fmn_backends.IRCBackend(**backend_kwargs),
+            'gcm': fmn_backends.GCMBackend(**backend_kwargs),
             #'rss': fmn_backends.RSSBackend,
         }
 

@@ -35,7 +35,7 @@ class ConfirmationProducer(moksha.hub.api.PollingProducer):
         for confirmation in pending:
             log.info("Processing confirmation %r" % confirmation)
             backend = self.sister.backends[confirmation.context.name]
-            backend.handle_confirmation(self.sister.session, confirmation)
+            backend.handle_confirmation(confirmation)
 
         # 3) clean up any old ones that need to be deleted.
         fmn.lib.models.Confirmation.delete_expired(self.sister.session)

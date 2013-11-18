@@ -433,7 +433,7 @@ class Confirmation(BASE):
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
-    STATUSES = ['pending', 'accepted', 'rejected', 'invalid']
+    STATUSES = ['pending', 'valid', 'accepted', 'rejected', 'invalid']
     status = sa.Column(sa.String(16), default="pending")
     secret = sa.Column(sa.String(32), default=hash_producer)
     detail_value = sa.Column(sa.String(1024))
@@ -501,6 +501,15 @@ class Confirmation(BASE):
             .first()
 
     @classmethod
+    def by_detail(cls, session, context, value):
+        if hasattr(context, 'name'):
+            context = context.name
+        return session.query(cls)\
+            .filter_by(context_name=context)\
+            .filter_by(detail_value=value)\
+            .all()
+
+    @classmethod
     def list_pending(cls, session):
         return session.query(cls).filter_by(status='pending').all()
 
@@ -522,6 +531,13 @@ class Confirmation(BASE):
 
     def set_status(self, session, status):
         assert status in self.STATUSES
+        log.info("Setting %r status to %r" % (self, status))
         self.status = status
+
+        # Propagate back to the Preference if everything is good.
+        if self.status == 'accepted':
+            pref = Preference.load(session, self.user_name, self.context_name)
+            pref.detail_value = self.detail_value
+
         session.flush()
         session.commit()

@@ -65,7 +65,7 @@
     <div class="panel panel-default">
       <div class="panel-body">
         {% if confirmation %}
-        <div class="alert alert-{{ {'pending': 'info', 'accepted': 'success', 'rejected': 'warning', 'invalid': 'danger'}[confirmation.status] }}">
+        <div class="alert alert-{{ {'pending': 'info', 'valid': 'info', 'accepted': 'success', 'rejected': 'warning', 'invalid': 'danger'}[confirmation.status] }}">
             <p><strong>{{confirmation.status}}</strong> Your confirmation for
             {{confirmation.detail_value}} is {{confirmation.status}}</p>
         </div>
