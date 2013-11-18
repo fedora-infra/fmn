@@ -28,8 +28,10 @@ import pkg_resources
 
 import datetime
 import functools
-import logging
+import hashlib
 import json
+import logging
+import uuid
 
 import sqlalchemy as sa
 from sqlalchemy import create_engine
@@ -93,6 +95,13 @@ class Context(BASE):
     detail_name = sa.Column(sa.String(64), nullable=False)
     icon = sa.Column(sa.String(32), nullable=False)
     placeholder = sa.Column(sa.String(256))
+
+    def get_confirmation(self, username):
+        for confirmation in self.confirmations:
+            if confirmation.user_name == username:
+                return confirmation
+
+        return None
 
     @classmethod
     def by_name(cls, session, name):
@@ -195,7 +204,7 @@ class Filter(BASE):
 
     def _instantiate_callable(self):
         # This is a bit of a misnomer, load_class can load anything.
-        fn = fedmsg.utils.load_class(self.code_path)
+        fn = fedmsg.utils.load_class(str(self.code_path))
         # Now, partially apply our keyword arguments.
         fn = functools.partial(fn, **self.arguments)
         return fn
@@ -412,3 +421,127 @@ class Preference(BASE):
                 return True
 
         return False
+
+
+def hash_producer(*args, **kwargs):
+    """ Returns a random hash for a confirmation secret. """
+    return hashlib.md5(str(uuid.uuid4())).hexdigest()
+
+
+class Confirmation(BASE):
+    __tablename__ = 'confirmations'
+    id = sa.Column(sa.Integer, primary_key=True)
+    created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
+
+    STATUSES = ['pending', 'valid', 'accepted', 'rejected', 'invalid']
+    status = sa.Column(sa.String(16), default="pending")
+    secret = sa.Column(sa.String(32), default=hash_producer)
+    detail_value = sa.Column(sa.String(1024))
+
+    user_name = sa.Column(
+        sa.String(50),
+        sa.ForeignKey('users.username'),
+        nullable=False)
+    context_name = sa.Column(
+        sa.String(50),
+        sa.ForeignKey('contexts.name'),
+        nullable=False)
+
+    user = relation('User', backref=backref('confirmations'))
+    context = relation('Context', backref=backref('confirmations'))
+
+    __table_args__ = (
+        sa.UniqueConstraint('user_name', 'context_name'),
+    )
+
+    def repr(self):
+        return "<Confirmation user:%s, context:%s, status:%s>" % (
+            self.user_name, self.context_name, self.status)
+
+    @classmethod
+    def create(cls, session, user, context, detail_value=None):
+        if not isinstance(user, User):
+            user = User.by_username(session, user)
+        if not isinstance(context, Context):
+            context = Context.by_name(session, context)
+        confirmation = cls()
+        confirmation.user = user
+        confirmation.context = context
+
+        confirmation.detail_value = detail_value
+
+        session.add(confirmation)
+        session.flush()
+        return confirmation
+
+    @classmethod
+    def get_or_create(cls, session, user, context):
+        user = User.get_or_create(session, user)
+        result = cls.load(session, user, context)
+
+        if not result:
+            cls.create(session, user, context)
+            result = cls.load(session, user, context)
+            session.commit()
+
+        return result
+
+    @classmethod
+    def load(cls, session, user, context):
+
+        if hasattr(user, 'username'):
+            user = user.username
+
+        if hasattr(context, 'name'):
+            context = context.name
+
+        return session.query(cls)\
+            .filter_by(user_name=user)\
+            .filter_by(context_name=context)\
+            .first()
+
+    @classmethod
+    def by_detail(cls, session, context, value):
+        if hasattr(context, 'name'):
+            context = context.name
+        return session.query(cls)\
+            .filter_by(context_name=context)\
+            .filter_by(detail_value=value)\
+            .all()
+
+    @classmethod
+    def by_secret(cls, session, secret):
+        return session.query(cls).filter_by(secret=secret).first()
+
+    @classmethod
+    def list_pending(cls, session):
+        return session.query(cls).filter_by(status='pending').all()
+
+    @classmethod
+    def delete_expired(cls, session):
+        too_old = datetime.datetime.utcnow() - datetime.timedelta(days=14)
+        expired = session.query(cls).filter(cls.created_on < too_old).all()
+        if expired:
+            log.info("Deleting %i expired confirmations" % len(expired))
+            for confirmation in expired:
+                session.delete(confirmation)
+            session.flush()
+            session.commit()
+
+    def set_value(self, session, value):
+        self.detail_value = value
+        session.flush()
+        session.commit()
+
+    def set_status(self, session, status):
+        assert status in self.STATUSES
+        log.info("Setting %r status to %r" % (self, status))
+        self.status = status
+
+        # Propagate back to the Preference if everything is good.
+        if self.status == 'accepted':
+            pref = Preference.load(session, self.user_name, self.context_name)
+            pref.detail_value = self.detail_value
+
+        session.flush()
+        session.commit()

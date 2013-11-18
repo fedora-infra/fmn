@@ -7,7 +7,6 @@ config = {
     "fmn.consumer.enabled": True,
     "fmn.sqlalchemy.uri": "sqlite:////var/tmp/fmn-dev-db.sqlite",
 
-
     ## Backend stuff ##
     # Email
     "fmn.email.mailserver": "127.0.0.1:25",
@@ -23,6 +22,10 @@ config = {
     "fmn.gcm.post_url": "wat",
     "fmn.gcm.api_key": "wat",
 
+    # Confirmation urls:
+    "fmn.acceptance_url": "http://localhost:5000/confirm/accept/{secret}",
+    "fmn.rejection_url": "http://localhost:5000/confirm/reject/{secret}",
+    "fmn.support_email": "fedmsg-notifications@fedoraproject.org",
 
     # Generic stuff
     "endpoints": {

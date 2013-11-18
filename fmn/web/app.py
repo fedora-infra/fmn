@@ -158,6 +158,7 @@ def context(username, context):
         'context.html',
         current=context.name,
         context=context,
+        confirmation=context.get_confirmation(username),
         preference=pref)
 
 
@@ -280,12 +281,18 @@ def handle_details():
     if not ctx:
         raise APIError(403, dict(reason="%r is not a context" % context))
 
-    pref = fmn.lib.models.Preference.get_or_create(SESSION, username, ctx)
 
-    # TODO -- we need to *VERIFY* that they really have this delivery detail
+    # We need to *VERIFY* that they really have this delivery detail
     # before we start doing stuff.  Otherwise, ralph could put in pingou's
     # email address and spam the crap out of him.
-    pref.update_details(SESSION, detail_value)
+    if fedmsg_config.get('fmn.verify_delivery_details', True):
+        con = fmn.lib.models.Confirmation.get_or_create(SESSION, username, ctx)
+        con.set_value(SESSION, detail_value)
+        con.set_status(SESSION, 'pending')
+    else:
+        # Otherwise, just change the details right away.  Never do this.
+        pref = fmn.lib.models.Preference.get_or_create(SESSION, username, ctx)
+        pref.update_details(SESSION, detail_value)
 
     next_url = flask.url_for(
         'context',
@@ -294,6 +301,32 @@ def handle_details():
     )
 
     return dict(message="ok", url=next_url)
+
+
+@app.route('/confirm/<action>/<secret>')
+@app.route('/confirm/<action>/<secret>/')
+def handle_confirmation(action, secret):
+
+    if action not in ['accept', 'reject']:
+        flask.abort(404)
+
+    confirmation = fmn.lib.models.Confirmation.by_secret(SESSION, secret)
+
+    if not confirmation:
+        flask.abort(404)
+
+    if flask.g.fas_user.username != confirmation.user_name:
+        flask.abort(403)
+
+    if action == 'accept':
+        confirmation.set_status(SESSION, 'accepted')
+    else:
+        confirmation.set_status(SESSION, 'rejected')
+
+    return flask.redirect(flask.url_for(
+        'context',
+        username=confirmation.user_name,
+        context=confirmation.context_name))
 
 
 @app.route('/api/filter', methods=['POST'])
