@@ -8,6 +8,6 @@ __main__.__requires__ = ['SQLAlchemy >= 0.7', 'jinja2 >= 2.4']
 import pkg_resources
 
 # The most import line to make the wsgi working
-from fmn.web import app as application
+from fmn.web.app import app as application
 # Dangerous.. only use when testing.
 #application.debug = True
