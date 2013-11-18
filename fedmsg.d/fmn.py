@@ -25,6 +25,7 @@ config = {
     # Confirmation urls:
     "fmn.acceptance_url": "http://localhost:5000/confirm/accept/{secret}",
     "fmn.rejection_url": "http://localhost:5000/confirm/reject/{secret}",
+    "fmn.support_email": "fedmsg-notifications@fedoraproject.org",
 
     # Generic stuff
     "endpoints": {

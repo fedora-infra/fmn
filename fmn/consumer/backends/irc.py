@@ -7,6 +7,15 @@ import twisted.words.protocols.irc
 
 from twisted.internet import reactor
 
+confirmation_template = """
+{username} has requested that notifications be sent to this nick
+* To accept, visit this address:
+  {acceptance_url}
+* Or, to reject you can visit this address:
+  {rejection_url}
+Alternatively, you can ignore this.  This is an automated message, please
+email {support_email} if you have any concerns/issues/abuse.
+"""
 
 class IRCBackend(BaseBackend):
     def __init__(self, *args, **kwargs):
@@ -65,18 +74,17 @@ class IRCBackend(BaseBackend):
                 secret=confirmation.secret)
             rejection_url = self.config['fmn.rejection_url'].format(
                 secret=confirmation.secret)
-            strings = [
-                "%s has requested that notifications be sent to this nick" % (
-                    confirmation.user_name),
-                "* To accept, visit this address:",
-                acceptance_url,
-                "* Or, to reject you can visit this address:",
-                rejection_url,
-                "Alternatively, you can ignore this.",
-            ]
-            for string in strings:
+
+            lines = confirmation_template.format(
+                acceptance_url=acceptance_url,
+                rejection_url=rejection_url,
+                support_email=self.config['fmn.support_email'],
+                username=confirmation.user_name,
+            ).strip().split('\n')
+
+            for line in lines:
                 for client in self.clients:
-                    client.msg(nick.encode('utf-8'), string.encode('utf-8'))
+                    client.msg(nick.encode('utf-8'), line.encode('utf-8'))
 
     def handle_confirmation_invalid_nick(self, nick):
         confirmations = fmn.lib.models.Confirmation.by_detail(
