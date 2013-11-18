@@ -303,6 +303,29 @@ def handle_details():
     return dict(message="ok", url=next_url)
 
 
+@app.route('/confirm/<action>/<secret>')
+@app.route('/confirm/<action>/<secret>/')
+def handle_details(action, secret):
+
+    if action not in ['accept', 'reject']:
+        flask.abort(404)
+
+    confirmation = fmn.lib.models.Confirmation.by_secret(SESSION, secret)
+
+    if not confirmation:
+        flask.abort(404)
+
+    if flask.g.fas_user.username != confirmation.user_name:
+        flask.abort(403)
+
+    confirmation.set_status(SESSION, 'accepted')
+
+    return flask.redirect(flask.url_for(
+        'context',
+        username=confirmation.user_name,
+        context=confirmation.context_name))
+
+
 @app.route('/api/filter', methods=['POST'])
 @api_method
 def handle_filter():

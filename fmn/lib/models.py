@@ -510,6 +510,10 @@ class Confirmation(BASE):
             .all()
 
     @classmethod
+    def by_secret(cls, session, secret):
+        return session.query(cls).filter_by(secret=secret).first()
+
+    @classmethod
     def list_pending(cls, session):
         return session.query(cls).filter_by(status='pending').all()
 

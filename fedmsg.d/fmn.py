@@ -23,8 +23,8 @@ config = {
     "fmn.gcm.api_key": "wat",
 
     # Confirmation urls:
-    "fmn.acceptance_url": "http://localhost:5000/confirmation/accept/{secret}",
-    "fmn.rejection_url": "http://localhost:5000/confirmation/reject/{secret}",
+    "fmn.acceptance_url": "http://localhost:5000/confirm/accept/{secret}",
+    "fmn.rejection_url": "http://localhost:5000/confirm/reject/{secret}",
 
     # Generic stuff
     "endpoints": {
