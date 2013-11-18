@@ -115,12 +115,11 @@ def heartbeat():
 
 @app.route('/')
 def index():
-    username = getattr(flask.g.fas_user, 'username', None)
-    contexts = fmn.lib.models.Context.all(SESSION)
-
     return flask.render_template(
         'index.html',
-        current='index')
+        current='index',
+        contexts = fmn.lib.models.Context.all(SESSION),
+    )
 
 
 @app.route('/<not_reserved:username>')
