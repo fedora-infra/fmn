@@ -158,6 +158,7 @@ def context(username, context):
         'context.html',
         current=context.name,
         context=context,
+        confirmation=context.get_confirmation(username),
         preference=pref)
 
 
@@ -280,12 +281,18 @@ def handle_details():
     if not ctx:
         raise APIError(403, dict(reason="%r is not a context" % context))
 
-    pref = fmn.lib.models.Preference.get_or_create(SESSION, username, ctx)
 
-    # TODO -- we need to *VERIFY* that they really have this delivery detail
+    # We need to *VERIFY* that they really have this delivery detail
     # before we start doing stuff.  Otherwise, ralph could put in pingou's
     # email address and spam the crap out of him.
-    pref.update_details(SESSION, detail_value)
+    if fedmsg_config.get('fmn.verify_delivery_details', True):
+        con = fmn.lib.models.Confirmation.get_or_create(SESSION, username, ctx)
+        con.set_value(SESSION, detail_value)
+        con.set_status(SESSION, 'pending')
+    else:
+        # Otherwise, just change the details right away.  Never do this.
+        pref = fmn.lib.models.Preference.get_or_create(SESSION, username, ctx)
+        pref.update_details(SESSION, detail_value)
 
     next_url = flask.url_for(
         'context',

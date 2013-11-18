@@ -28,8 +28,10 @@ import pkg_resources
 
 import datetime
 import functools
-import logging
+import hashlib
 import json
+import logging
+import uuid
 
 import sqlalchemy as sa
 from sqlalchemy import create_engine
@@ -93,6 +95,13 @@ class Context(BASE):
     detail_name = sa.Column(sa.String(64), nullable=False)
     icon = sa.Column(sa.String(32), nullable=False)
     placeholder = sa.Column(sa.String(256))
+
+    def get_confirmation(self, username):
+        for confirmation in self.confirmations:
+            if confirmation.user_name == username:
+                return confirmation
+
+        return None
 
     @classmethod
     def by_name(cls, session, name):
@@ -450,6 +459,34 @@ class Confirmation(BASE):
             self.user_name, self.context_name, self.status)
 
     @classmethod
+    def create(cls, session, user, context, detail_value=None):
+        if not isinstance(user, User):
+            user = User.by_username(session, user)
+        if not isinstance(context, Context):
+            context = Context.by_name(session, context)
+        confirmation = cls()
+        confirmation.user = user
+        confirmation.context = context
+
+        confirmation.detail_value = detail_value
+
+        session.add(confirmation)
+        session.flush()
+        return confirmation
+
+    @classmethod
+    def get_or_create(cls, session, user, context):
+        user = User.get_or_create(session, user)
+        result = cls.load(session, user, context)
+
+        if not result:
+            cls.create(session, user, context)
+            result = cls.load(session, user, context)
+            session.commit()
+
+        return result
+
+    @classmethod
     def load(cls, session, user, context):
 
         if hasattr(user, 'username'):
@@ -477,6 +514,11 @@ class Confirmation(BASE):
                 session.delete(confirmation)
             session.flush()
             session.commit()
+
+    def set_value(self, session, value):
+        self.detail_value = value
+        session.flush()
+        session.commit()
 
     def set_status(self, session, status):
         assert status in self.STATUSES

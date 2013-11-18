@@ -64,6 +64,12 @@
 
     <div class="panel panel-default">
       <div class="panel-body">
+        {% if confirmation %}
+        <div class="alert alert-{{ {'pending': 'info', 'accepted': 'success', 'rejected': 'warning', 'invalid': 'danger'}[confirmation.status] }}">
+            <p><strong>{{confirmation.status}}</strong> Your confirmation for
+            {{confirmation.detail_value}} is {{confirmation.status}}</p>
+        </div>
+        {% endif %}
         <form class="form-inline" role="form" action="{{url_for('handle_details')}}"
               method="post">
           <div class="form-group">
@@ -80,6 +86,7 @@
         </form>
       </div>
     </div>
+
 
   </div>
 </div>
