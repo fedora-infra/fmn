@@ -117,7 +117,7 @@ class IRCBackendProtocol(twisted.words.protocols.irc.IRCClient):
         if user != "NickServ!NickServ@services.":
             return
 
-        nickname, commands, result = message.split(None, 3)
+        nickname, commands, result = message.split(None, 2)
         if result.strip() == '3':
             # Then all is good.
             # 1) the nickname is registered
