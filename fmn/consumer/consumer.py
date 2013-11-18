@@ -33,12 +33,20 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
             'gcm': fmn_backends.GCMBackend(config=self.hub.config),
             #'rss': fmn_backends.RSSBackend,
         }
+
+        log.debug("Loading filters from fmn.filters")
+        self.valid_paths = fmn.lib.load_filters(root="fmn.filters")
+
         log.debug("FMNConsumer initialized")
 
     def consume(self, raw_msg):
         topic, msg = raw_msg['topic'], raw_msg['body']
+
         log.debug("Received topic %r" % topic)
-        results = fmn.lib.recipients(self.session, msg)
+
+        results = fmn.lib.recipients(self.session, self.hub.config,
+                                     self.valid_paths, msg)
+
         for context, recipients in results.items():
             log.debug("  Considering %r with %i recips" % (
                 context, len(list(recipients))))
