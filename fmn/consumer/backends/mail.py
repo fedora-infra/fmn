@@ -21,7 +21,6 @@ class EmailBackend(BaseBackend):
         super(EmailBackend, self).__init__(*args, **kwargs)
         self.mailserver = self.config['fmn.email.mailserver']
         self.from_address = self.config['fmn.email.from_address']
-        self.server = smtplib.SMTP(self.mailserver)
 
     def send_mail(self, recipient, subject, content):
         self.log.debug("Sending email")
@@ -44,11 +43,14 @@ class EmailBackend(BaseBackend):
 
         email_message.set_payload(content)
 
-        self.server.sendmail(
+        server = smtplib.SMTP(self.mailserver)
+        server.sendmail(
             self.from_address.encode('utf-8'),
             [recipient['email address'].encode('utf-8')],
             email_message.as_string().encode('utf-8'),
         )
+        server.quit()
+        self.log.debug("Email sent")
 
     def handle(self, recipient, msg):
         content = fedmsg.meta.msg2repr(msg, **self.config)
