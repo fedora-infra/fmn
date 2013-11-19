@@ -356,8 +356,10 @@ class Preference(BASE):
         ).order_by(
             cls.context_name
         )
+
         if not allow_none:
-            query = query.filter(cls.detail_value is not None)
+            query = query.filter(sa.not_(cls.detail_value == None))
+
         return query.all()
 
     @classmethod
