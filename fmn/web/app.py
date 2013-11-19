@@ -363,7 +363,12 @@ def handle_filter():
     chain_name = form.chain_name.data
     code_path = form.filter_name.data
     method = (form.method.data or flask.request.method).upper()
-    # TODO -- how to extract arguments to filters
+    # Extract arguments to filters using the extra information provided
+    known_args = ['username', 'chain_name', 'context', 'filter_name']
+    arguments = {}
+    for args in flask.request.form:
+        if args not in known_args:
+            arguments[args] = flask.request.form[args]
 
     if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
         raise APIError(403, dict(reason="%r is not %r" % (
@@ -390,7 +395,7 @@ def handle_filter():
 
     try:
         if method == 'POST':
-            chain.add_filter(SESSION, valid_paths, code_path)# ,**arguments)
+            chain.add_filter(SESSION, valid_paths, code_path, **arguments)
         elif method == 'DELETE':
             chain.remove_filter(SESSION, code_path)#, **arguments)
         else:
