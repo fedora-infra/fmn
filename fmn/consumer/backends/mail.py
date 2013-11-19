@@ -58,24 +58,20 @@ class EmailBackend(BaseBackend):
         self.send_mail(recipient, content)
 
     def handle_confirmation(self, session, confirmation):
-        confirmations = fmn.lib.models.Confirmation.by_detail(
-            self.session, context="email", recipient['email address'])
+        confirmation.set_status(self.session, 'valid')
+        acceptance_url = self.config['fmn.acceptance_url'].format(
+            secret=confirmation.secret)
+        rejection_url = self.config['fmn.rejection_url'].format(
+            secret=confirmation.secret)
 
-        for confirmation in confirmations:
-            confirmation.set_status(self.session, 'valid')
-            acceptance_url = self.config['fmn.acceptance_url'].format(
-                secret=confirmation.secret)
-            rejection_url = self.config['fmn.rejection_url'].format(
-                secret=confirmation.secret)
+        lines = confirmation_template.format(
+            acceptance_url=acceptance_url,
+            rejection_url=rejection_url,
+            support_email=self.config['fmn.support_email'],
+            username=confirmation.user_name,
+        ).strip()
 
-            lines = confirmation_template.format(
-                acceptance_url=acceptance_url,
-                rejection_url=rejection_url,
-                support_email=self.config['fmn.support_email'],
-                username=confirmation.user_name,
-            ).strip()
+        recipient = {'email address' : confirmation.detail_value}
 
-            recipient = {'email address' : }
-
-            print lines
-            self.send_mail(recipient, lines)
+        print lines
+        self.send_mail(recipient, lines)
