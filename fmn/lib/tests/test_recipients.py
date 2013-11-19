@@ -70,7 +70,11 @@ class TestRecipients(fmn.lib.tests.Base):
         }
         recipients = fmn.lib.recipients_for_context(
             self.sess, self.config, self.valid_paths, 'irc', msg)
-        eq_(list(recipients), [{'irc nick': 'threebean', 'user': 'ralph'}])
+        eq_(list(recipients), [{
+            'irc nick': 'threebean',
+            'user': 'ralph',
+            'chain': 'test chain',
+        }])
 
     def test_miss_recipients_list(self):
         self.create_user_and_context_data()
@@ -124,7 +128,11 @@ class TestRecipients(fmn.lib.tests.Base):
         }
         recipients = fmn.lib.recipients_for_context(
             self.sess, self.config, self.valid_paths, 'irc', msg)
-        eq_(list(recipients), [{'irc nick': 'threebean', 'user': 'ralph'}])
+        eq_(list(recipients), [{
+            'irc nick': 'threebean',
+            'user': 'ralph',
+            'chain': 'test chain',
+        }])
 
     def test_multiple_different_chains_hit(self):
         self.create_user_and_context_data()
@@ -144,4 +152,8 @@ class TestRecipients(fmn.lib.tests.Base):
         }
         recipients = fmn.lib.recipients_for_context(
             self.sess, self.config, self.valid_paths, 'irc', msg)
-        eq_(list(recipients), [{'irc nick': 'threebean', 'user': 'ralph'}])
+        eq_(list(recipients), [{
+            'irc nick': 'threebean',
+            'user': 'ralph',
+            'chain': 'test chain',
+        }])
