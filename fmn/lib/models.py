@@ -541,7 +541,7 @@ class Confirmation(BASE):
 
     @classmethod
     def delete_expired(cls, session):
-        too_old = datetime.datetime.utcnow() - datetime.timedelta(days=14)
+        too_old = datetime.datetime.utcnow() - datetime.timedelta(days=1)
         expired = session.query(cls).filter(cls.created_on < too_old).all()
         if expired:
             log.info("Deleting %i expired confirmations" % len(expired))
