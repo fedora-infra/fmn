@@ -14,7 +14,7 @@ config = {
 
     # IRC
     "fmn.irc.network": "irc.freenode.net",
-    "fmn.irc.nickname": "threebot",
+    "fmn.irc.nickname": "pingoubot",
     "fmn.irc.port": 6667,
     "fmn.irc.timeout": 120,
 
@@ -23,6 +23,7 @@ config = {
     "fmn.gcm.api_key": "wat",
 
     # Confirmation urls:
+    "fmn.base_url": "http://localhost:5000/",
     "fmn.acceptance_url": "http://localhost:5000/confirm/accept/{secret}",
     "fmn.rejection_url": "http://localhost:5000/confirm/reject/{secret}",
     "fmn.support_email": "fedmsg-notifications@fedoraproject.org",
