@@ -136,7 +136,8 @@ def profile(username):
     avatar = fas.avatar_url(
         username, lookup_email=False, service='libravatar', size=140)
 
-    prefs = fmn.lib.models.Preference.by_user(SESSION, username)
+    prefs = fmn.lib.models.Preference.by_user(
+        SESSION, username, allow_none=False)
 
     icons = {}
     for context in fmn.lib.models.Context.all(SESSION):
