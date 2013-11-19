@@ -325,6 +325,7 @@ def handle_details():
 
 @app.route('/confirm/<action>/<secret>')
 @app.route('/confirm/<action>/<secret>/')
+@login_required
 def handle_confirmation(action, secret):
 
     if action not in ['accept', 'reject']:
