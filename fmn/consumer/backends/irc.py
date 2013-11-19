@@ -17,6 +17,16 @@ Alternatively, you can ignore this.  This is an automated message, please
 email {support_email} if you have any concerns/issues/abuse.
 """
 
+help_template = """
+I am a notifications bot run by Fedora Infrastructure.  My commands are:
+  'stop'  -- stops all messages
+  'start' -- starts sending messages again
+  'help'  -- produces this help message
+You can update your preferences at {base_url}
+You can contact {support_email} if you have any concerns/issues/abuse.
+"""
+
+
 class IRCBackend(BaseBackend):
     def __init__(self, *args, **kwargs):
         super(IRCBackend, self).__init__(*args, **kwargs)
@@ -28,12 +38,64 @@ class IRCBackend(BaseBackend):
         self.clients = []
         factory = IRCClientFactory(self)
 
+        # These are callbacks we use when people try to message us.
+        self.commands = {
+            'start': self.cmd_start,
+            'stop': self.cmd_stop,
+            'help': self.cmd_help,
+            'default': self.cmd_default,
+        }
+
+        # Keep a list of people who have messages 'stopped' in memory.
+        # Don't persist it for now.
+        self.stopped = []
+
         reactor.connectTCP(
             self.network,
             self.port,
             factory,
             timeout=self.timeout,
         )
+
+    def send(self, nick, line):
+        for client in self.clients:
+            client.msg(nick.encode('utf-8'), line.encode('utf-8'))
+
+    def cmd_start(self, nick, message):
+        self.log.info("CMD start: %r sent us %r" % (nick, message))
+        if nick in self.stopped:
+            self.stopped.pop(self.stopped.index(nick))
+            self.send(nick, "OK")
+        else:
+            self.send(nick, "Messages not currently stopped.  Nothing to do.")
+
+    def cmd_stop(self, nick, message):
+        self.log.info("CMD stop:  %r sent us %r" % (nick, message))
+        if nick in self.stopped:
+            self.send(nick, "Messages already stopped.  Nothing to do.")
+        else:
+            self.stopped.append(nick)
+            self.send(nick, "OK")
+
+    def cmd_help(self, nick, message):
+        self.log.info("CMD help:  %r sent us %r" % (nick, message))
+
+        lines = help_template.format(
+            support_email=self.config['fmn.support_email'],
+            base_url=self.config['fmn.base_url'],
+        ).strip().split('\n')
+
+        for line in lines:
+            self.send(nick, line)
+
+    def cmd_default(self, nick, message):
+
+        # Ignore notices from freenode services
+        if message.startswith('***'):
+            return
+
+        self.log.info("CMD unk:   %r sent us %r" % (nick, message))
+        self.send(nick, "say 'help' for help or 'stop' to stop messages")
 
     def handle(self, recipient, msg):
         if not self.clients:
@@ -48,9 +110,15 @@ class IRCBackend(BaseBackend):
 
         message = fedmsg.meta.msg2repr(msg, **self.config)
 
+        nickname = recipient['irc nick']
+
+        if nickname in self.stopped:
+            self.log.debug("Messages stopped for %r, not sending." % nickname)
+            return
+
         for client in self.clients:
             getattr(client, recipient.get('method', 'msg'))(
-                recipient['irc nick'].encode('utf-8'),
+                nickname.encode('utf-8'),
                 message.encode('utf-8'),
             )
 
@@ -116,30 +184,42 @@ class IRCBackendProtocol(twisted.words.protocols.irc.IRCClient):
     def log(self):
         return self.factory.parent.log
 
+    @property
+    def commands(self):
+        return self.factory.parent.commands
+
     def signedOn(self):
         self.log.info("Signed on as %r." % self.nickname)
         # Attach ourselves back on the consumer to be used.
         self.factory.parent.add_client(self)
 
-    def noticed(self, user, channel, message):
+    def privmsg(self, user, channel, msg):
+        """ Called when a user privmsgs me. """
+        return self.noticed(user, channel, msg)
+
+    def noticed(self, user, channel, msg):
         """ Called when I have a notice from a user. """
         self.factory.parent.log.debug(
-            "Received notice %r %r %r" % (user, channel, message))
+            "Received notice %r %r %r" % (user, channel, msg))
 
-        # We are only interested in notices from NickServ
-        if user != "NickServ!NickServ@services.":
-            return
-
-        nickname, commands, result = message.split(None, 2)
-        if result.strip() == '3':
-            # Then all is good.
-            # 1) the nickname is registered
-            # 2) the person is currently logged in and identified.
-            self.factory.parent.handle_confirmation_valid_nick(nickname)
+        # We query NickServ off the bat.  This is probably her responding.
+        # We check NickServ before doing confirmations, so, let's do that now.
+        if user == "NickServ!NickServ@services.":
+            nickname, commands, result = msg.split(None, 2)
+            if result.strip() == '3':
+                # Then all is good.
+                # 1) the nickname is registered
+                # 2) the person is currently logged in and identified.
+                self.factory.parent.handle_confirmation_valid_nick(nickname)
+            else:
+                # Something is off.  There are a number of possible scenarios,
+                # but we'll just report back "invalid"
+                self.factory.parent.handle_confirmation_invalid_nick(nickname)
         else:
-            # Something is off.  There are a number of possible scenarios, but
-            # we'll just report back "invalid"
-            self.factory.parent.handle_confirmation_invalid_nick(nickname)
+            # If it's not NickServ, then it might be a user asking for help
+            nick = user.split("!")[0]
+            cmd_string = msg.split(None, 1)[0].lower()
+            self.commands.get(cmd_string, self.commands['default'])(nick, msg)
 
 
 class IRCClientFactory(twisted.internet.protocol.ClientFactory):
