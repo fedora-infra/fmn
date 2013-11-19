@@ -10,19 +10,19 @@ Starting as of November 15th.
 - [ ] Rename GCM to Android in the web ui.  People don't know what GCM is.
 - [ ] Better explanation of chains and rules in the UI.
 - [ ] Better error pages for html (keep the JSON versions to CLI/API).
-- [ ] Confirmation logic for updating delivery details.  We need to avoid
+- [x] Confirmation logic for updating delivery details.  We need to avoid
       letting one user spam another.
       For IRC, we can query "NickServ ACC <nickname>" first to make sure they
       are logged in and authenticated.  THEN we can query the user with the
       confirmation link.
-      IRC is done now, we just need email.
-- [ ] Implement "say 'help' for help, or 'stop' to stop messages" feature
+      IRC is done now, we just need email.  Email works now; thanks @pypingou!
+- [x] Implement "say 'help' for help, or 'stop' to stop messages" feature
       for the IRC backend.
 - [ ] Write filters for all the topics at http://fedmsg.com/en/latest/topics/
 - [ ] Email footer should contain a URL to the *chain* responsible for
       OK'ing the message.  "You received this email because of your preferences
       https://apps.fp.org/notifications/FAS_USERNAME/email/blah_blah"
-- [ ] Deploy to cloud node for testing with irc and email.
+- [x] Deploy to cloud node for testing with irc and email.
 - [ ] Coordinate with relrod for testing with GCM+android.
 - [ ] Fedora theme for bootstrap.  Bonus points to make this modular so we can
       re-use it on future apps.
