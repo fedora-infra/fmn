@@ -78,7 +78,7 @@ multiple users, you would need to create distinct chains for each one.
 - My bodhi lmacken chain
 
   - "is a bodhi message"
-  - "relates to the user lmacken"
+  - "relates to the user **lmacken**"
 
 - My bodhi toshio chain
 
