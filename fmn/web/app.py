@@ -136,10 +136,18 @@ def profile(username):
     avatar = fas.avatar_url(
         username, lookup_email=False, service='libravatar', size=140)
 
+    prefs = fmn.lib.models.Preference.by_user(SESSION, username)
+
+    icons = {}
+    for context in fmn.lib.models.Context.all(SESSION):
+        icons[context.name] = context.icon
+
     return flask.render_template(
         'profile.html',
         current='profile',
-        avatar=avatar)
+        avatar=avatar,
+        prefs=prefs,
+        icons=icons)
 
 
 @app.route('/<not_reserved:username>/<context>')

@@ -26,6 +26,29 @@
     </dl>
   </div>
 
+  <div class="clearfix"></div>
+
+  <h3>Current settings</h3>
+  <div class="list-group">
+      {% for pref in prefs %}
+      <span class="list-group-item">
+        <h4 class="list-group-item-heading">{{pref.context_name}}</h4>
+        <p class="list-group-item-text">{{pref.detail_value}}
+        <span class="pull-right">
+          <a href="{{url_for('context',
+                             username=username,
+                             context=pref.context_name)}}">
+            <button type="submit" class="btn btn-success">
+              <span class="glyphicon glyphicon-{{icons[pref.context_name]}}"></span>
+              Update</button>
+          </a>
+        </span>
+        <div class="clearfix"></div>
+        </p>
+      </span>
+    {% endfor %}
+  </div>
+
 </div>
 
 {% endblock %}
