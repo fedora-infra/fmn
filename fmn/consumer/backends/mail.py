@@ -50,6 +50,7 @@ class EmailBackend(BaseBackend):
             [recipient['email address']],
             email_message.as_string(),
         )
+        self.server.quit()
 
     def handle(self, recipient, msg):
         content = fedmsg.meta.msg2repr(msg, **self.config)
