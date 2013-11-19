@@ -55,6 +55,18 @@ class APIError(Exception):
         self.errors = errors
 
 
+def login_required(function):
+    """ Flask decorator to retrict access to logged-in users. """
+    @wraps(function)
+    def decorated_function(*args, **kwargs):
+        """ Decorated function, actually does the work. """
+        if flask.g.fas_user is None:
+            flask.flash('Login required', 'errors')
+            return flask.redirect(flask.url_for('login',
+                                                next=flask.request.url))
+        return function(*args, **kwargs)
+    return decorated_function
+
 def api_method(function):
     """ A decorator to handle common API output stuff. """
 
