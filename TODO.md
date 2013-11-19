@@ -9,6 +9,9 @@ Starting as of November 15th.
 - [x] UI and API to update delivery_details for a preference.
 - [x] Rename GCM to Android in the web ui.  People don't know what GCM is.
 - [ ] Better explanation of chains and rules in the UI.
+      UPDATE -> added a /about page that helps with this, but it needs to be
+      improved.  We can probably add better help/instruction throughout the UI
+      too.  Call in mizmo?
 - [x] Better error pages for html (keep the JSON versions to CLI/API).
       The HTML5 validators obviated this.
 - [x] Confirmation logic for updating delivery details.  We need to avoid
