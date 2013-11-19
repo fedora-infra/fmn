@@ -19,7 +19,7 @@ Starting as of November 15th.
 - [x] Implement "say 'help' for help, or 'stop' to stop messages" feature
       for the IRC backend.
 - [ ] Write filters for all the topics at http://fedmsg.com/en/latest/topics/
-- [ ] Email footer should contain a URL to the *chain* responsible for
+- [x] Email footer should contain a URL to the *chain* responsible for
       OK'ing the message.  "You received this email because of your preferences
       https://apps.fp.org/notifications/FAS_USERNAME/email/blah_blah"
 - [x] Deploy to cloud node for testing with irc and email.
