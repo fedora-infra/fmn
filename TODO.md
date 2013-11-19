@@ -9,7 +9,8 @@ Starting as of November 15th.
 - [x] UI and API to update delivery_details for a preference.
 - [x] Rename GCM to Android in the web ui.  People don't know what GCM is.
 - [ ] Better explanation of chains and rules in the UI.
-- [ ] Better error pages for html (keep the JSON versions to CLI/API).
+- [x] Better error pages for html (keep the JSON versions to CLI/API).
+      The HTML5 validators obviated this.
 - [x] Confirmation logic for updating delivery details.  We need to avoid
       letting one user spam another.
       For IRC, we can query "NickServ ACC <nickname>" first to make sure they
