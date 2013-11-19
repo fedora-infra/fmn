@@ -345,6 +345,16 @@ class Preference(BASE):
     )
 
     @classmethod
+    def by_user(cls, session, username):
+        return session.query(
+            cls
+        ).filter(
+            cls.user_name == username
+        ).order_by(
+            cls.context_name
+        ).all()
+
+    @classmethod
     def create(cls, session, user, context, detail_value=None):
         if not isinstance(user, User):
             user = User.by_username(session, user)
