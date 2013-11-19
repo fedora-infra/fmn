@@ -66,8 +66,13 @@ class IRCBackend(BaseBackend):
             client.msg((u'NickServ').encode('utf-8'), query.encode('utf-8'))
 
     def handle_confirmation_valid_nick(self, nick):
+        if not self.clients:
+            self.log.warning("IRCBackend has no clients to work with.")
+            return
+
         confirmations = fmn.lib.models.Confirmation.by_detail(
             self.session, context="irc", value=nick)
+
         for confirmation in confirmations:
             confirmation.set_status(self.session, 'valid')
             acceptance_url = self.config['fmn.acceptance_url'].format(
