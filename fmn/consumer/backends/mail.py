@@ -50,7 +50,7 @@ class EmailBackend(BaseBackend):
             footer = reason.format(base_url=base_url, **recipient) + footer
 
         if footer:
-            content += '/n--/n {0}'.format(footer)
+            content += '\n\n--\n{0}'.format(footer)
 
         email_message.set_payload(content)
 
