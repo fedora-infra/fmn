@@ -28,6 +28,7 @@
 
   <div class="clearfix"></div>
 
+  {% if prefs %}
   <h3>Current settings</h3>
   <div class="list-group">
       {% for pref in prefs %}
@@ -48,6 +49,7 @@
       </span>
     {% endfor %}
   </div>
+  {% endif %}
 
 </div>
 
