@@ -36,6 +36,13 @@
 
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
+              {% if 'about' == current %}
+              <li class="active">
+              {% else %}
+              <li>
+              {% endif %}
+              <a href="{{url_for('about')}}">about</a>
+              <li>
 
             {% if g.fas_user %}
               {% if 'profile' == current %}
