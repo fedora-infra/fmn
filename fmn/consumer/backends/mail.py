@@ -23,7 +23,7 @@ class EmailBackend(BaseBackend):
         self.from_address = self.config['fmn.email.from_address']
         self.server = smtplib.SMTP(self.mailserver)
 
-    def send_mail(self, recipient, content):
+    def send_mail(self, recipient, subject, content):
         self.log.debug("Sending email")
 
         if 'email address' not in recipient:
@@ -34,7 +34,6 @@ class EmailBackend(BaseBackend):
         email_message.add_header('To', recipient['email address'])
         email_message.add_header('From', self.from_address)
 
-        subject = fedmsg.meta.msg2subtitle(msg, **self.config)
         email_message.add_header('Subject', subject)
 
         # Since we do simple text email, adding the footer to the content
@@ -54,24 +53,26 @@ class EmailBackend(BaseBackend):
 
     def handle(self, recipient, msg):
         content = fedmsg.meta.msg2repr(msg, **self.config)
+        subject = fedmsg.meta.msg2subtitle(msg, **self.config)
 
-        self.send_mail(recipient, content)
+        self.send_mail(recipient, subject, content)
 
-    def handle_confirmation(self, session, confirmation):
+    def handle_confirmation(self, confirmation):
         confirmation.set_status(self.session, 'valid')
         acceptance_url = self.config['fmn.acceptance_url'].format(
             secret=confirmation.secret)
         rejection_url = self.config['fmn.rejection_url'].format(
             secret=confirmation.secret)
 
-        lines = confirmation_template.format(
+        content = confirmation_template.format(
             acceptance_url=acceptance_url,
             rejection_url=rejection_url,
             support_email=self.config['fmn.support_email'],
             username=confirmation.user_name,
         ).strip()
+        subject = '[FMN] Confirm notification email'
 
         recipient = {'email address' : confirmation.detail_value}
 
         print lines
-        self.send_mail(recipient, lines)
+        self.send_mail(recipient, subject, content)
