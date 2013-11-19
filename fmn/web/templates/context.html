@@ -51,7 +51,7 @@
               method="post">
           <div class="form-group">
             <label class="sr-only" for="chain_name">Chain Name</label>
-            <input type="text" class="form-control" name="chain_name" id="chain_name" placeholder="New Chain Name">
+            <input type="text" class="form-control" name="chain_name" id="chain_name" required=required placeholder="New Chain Name">
           </div>
           <input name="username" id="username" value="{{username}}" type="hidden">
           <input name="context" id="context" value="{{current}}" type="hidden">
@@ -75,7 +75,7 @@
           <div class="form-group">
             <label class="sr-only" for="detail_value">{{context.detail_name.title()}}</label>
             <input type="text" class="form-control" name="detail_value"
-                   id="detail_value"
+                   id="detail_value" required=required
                    placeholder="{{preference.detail_value or context.placeholder}}">
           </div>
           <input name="username" id="username" value="{{username}}" type="hidden">
