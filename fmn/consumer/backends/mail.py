@@ -45,11 +45,10 @@ class EmailBackend(BaseBackend):
         email_message.set_payload(content)
 
         self.server.sendmail(
-            self.from_address,
-            [recipient['email address']],
-            email_message.as_string(),
+            self.from_address.encode('utf-8'),
+            [recipient['email address'].encode('utf-8')],
+            email_message.as_string().encode('utf-8'),
         )
-        self.server.quit()
 
     def handle(self, recipient, msg):
         content = fedmsg.meta.msg2repr(msg, **self.config)
