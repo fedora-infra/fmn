@@ -55,6 +55,7 @@
               <form class="form-inline" role="form" action="{{url_for('handle_filter')}}" method="post">
                   {% for arg in valid_paths[root][path]['args'] %}
                     {% if arg not in ['config', 'message'] %}
+                      {{arg}}
                       <input name="{{arg}}" id="arg_{{arg}}" type="text" />
                     {% endif %}
                   {% endfor %}
