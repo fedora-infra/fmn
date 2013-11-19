@@ -74,5 +74,4 @@ class EmailBackend(BaseBackend):
 
         recipient = {'email address' : confirmation.detail_value}
 
-        print lines
         self.send_mail(recipient, subject, content)
