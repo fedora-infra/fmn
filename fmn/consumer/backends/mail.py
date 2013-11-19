@@ -15,6 +15,12 @@ Alternatively, you can ignore this.  This is an automated message, please
 email {support_email} if you have any concerns/issues/abuse.
 """
 
+reason = """
+You received this message due to your preference settings at
+{base_url}/{user}/email/{chain}
+"""
+
+
 class EmailBackend(BaseBackend):
 
     def __init__(self, *args, **kwargs):
@@ -37,7 +43,12 @@ class EmailBackend(BaseBackend):
 
         # Since we do simple text email, adding the footer to the content
         # before setting the payload.
-        footer = self.config.get('fmn.email.footer', None)
+        footer = self.config.get('fmn.email.footer', '')
+
+        if 'chain' in recipient and 'user' in recipient:
+            base_url = self.config['fmn.base_url']
+            footer = reason.format(base_url=base_url, **recipient) + footer
+
         if footer:
             content += '/n--/n {0}'.format(footer)
 
