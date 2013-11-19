@@ -1,12 +1,16 @@
+import codecs
+import functools
 import os
+
+import docutils
+import docutils.examples
+import fedora.client
+import fedmsg.config
+import jinja2
+import markupsafe
 
 import flask
 from flask_fas_openid import FAS
-
-from functools import wraps
-
-import fedora.client
-import fedmsg.config
 
 import fmn.lib
 import fmn.lib.models
@@ -57,7 +61,7 @@ class APIError(Exception):
 
 def login_required(function):
     """ Flask decorator to retrict access to logged-in users. """
-    @wraps(function)
+    @functools.wraps(function)
     def decorated_function(*args, **kwargs):
         """ Decorated function, actually does the work. """
         if flask.g.fas_user is None:
@@ -71,7 +75,7 @@ def login_required(function):
 def api_method(function):
     """ A decorator to handle common API output stuff. """
 
-    @wraps(function)
+    @functools.wraps(function)
     def wrapper(*args, **kwargs):
         try:
             result = function(*args, **kwargs)
@@ -132,6 +136,15 @@ def index():
         'index.html',
         current='index',
         contexts=fmn.lib.models.Context.all(SESSION),
+    )
+
+
+@app.route('/about')
+def about():
+    return flask.render_template(
+        'docs.html',
+        current='about',
+        docs=load_docs(flask.request),
     )
 
 
@@ -441,3 +454,69 @@ def logout():
 
     FAS.logout()
     return flask.redirect(next_url)
+
+
+def modify_rst(rst):
+    """ Downgrade some of our rst directives if docutils is too old. """
+
+    try:
+        # The rst features we need were introduced in this version
+        minimum = [0, 9]
+        version = map(int, docutils.__version__.split('.'))
+
+        # If we're at or later than that version, no need to downgrade
+        if version >= minimum:
+            return rst
+    except Exception:
+        # If there was some error parsing or comparing versions, run the
+        # substitutions just to be safe.
+        pass
+
+    # Otherwise, make code-blocks into just literal blocks.
+    substitutions = {
+        '.. code-block:: javascript': '::',
+    }
+    for old, new in substitutions.items():
+        rst = rst.replace(old, new)
+
+    return rst
+
+
+def modify_html(html):
+    """ Perform style substitutions where docutils doesn't do what we want.
+    """
+
+    substitutions = {
+        '<tt class="docutils literal">': '<code>',
+        '</tt>': '</code>',
+    }
+    for old, new in substitutions.items():
+        html = html.replace(old, new)
+
+    return html
+
+
+def preload_docs(endpoint):
+    """ Utility to load an RST file and turn it into fancy HTML. """
+
+    here = os.path.dirname(os.path.abspath(__file__))
+    fname = os.path.join(here, 'docs', endpoint + '.rst')
+    with codecs.open(fname, 'r', 'utf-8') as f:
+        rst = f.read()
+
+    rst = modify_rst(rst)
+    api_docs = docutils.examples.html_body(rst)
+    api_docs = modify_html(api_docs)
+    api_docs = markupsafe.Markup(api_docs)
+    return api_docs
+
+htmldocs = dict.fromkeys(['about'])
+for key in htmldocs:
+    htmldocs[key] = preload_docs(key)
+
+
+def load_docs(request):
+    URL = fedmsg_config.get('fmn.base_url', request.url_root)
+    docs = htmldocs[request.endpoint]
+    docs = jinja2.Template(docs).render(URL=URL)
+    return markupsafe.Markup(docs)
