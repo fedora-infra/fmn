@@ -137,6 +137,7 @@ def index():
 
 @app.route('/<not_reserved:username>')
 @app.route('/<not_reserved:username>/')
+@login_required
 def profile(username):
 
     if (not flask.g.fas_user or (
@@ -166,6 +167,7 @@ def profile(username):
 
 @app.route('/<not_reserved:username>/<context>')
 @app.route('/<not_reserved:username>/<context>/')
+@login_required
 def context(username, context):
     if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
         flask.abort(403)
@@ -185,6 +187,7 @@ def context(username, context):
 
 @app.route('/<not_reserved:username>/<context>/<chain_name>')
 @app.route('/<not_reserved:username>/<context>/<chain_name>/')
+@login_required
 def chain(username, context, chain_name):
     if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
         flask.abort(403)
