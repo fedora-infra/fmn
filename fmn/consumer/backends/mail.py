@@ -61,6 +61,12 @@ class EmailBackend(BaseBackend):
             self.session, context="email", recipient['email address'])
 
         for confirmation in confirmations:
+            confirmation.set_status(self.session, 'valid')
+            acceptance_url = self.config['fmn.acceptance_url'].format(
+                secret=confirmation.secret)
+            rejection_url = self.config['fmn.rejection_url'].format(
+                secret=confirmation.secret)
+
             lines = confirmation_template.format(
                 acceptance_url=acceptance_url,
                 rejection_url=rejection_url,
@@ -70,4 +76,5 @@ class EmailBackend(BaseBackend):
 
             recipient = {'email address' : }
 
+            print lines
             self.send_mail(recipient, lines)
