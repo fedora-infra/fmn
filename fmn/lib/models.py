@@ -345,14 +345,17 @@ class Preference(BASE):
     )
 
     @classmethod
-    def by_user(cls, session, username):
-        return session.query(
+    def by_user(cls, session, username, allow_none=False):
+        query = session.query(
             cls
         ).filter(
             cls.user_name == username
         ).order_by(
             cls.context_name
-        ).all()
+        )
+        if not allow_none:
+            query = query.filter(cls.detail_value != None)
+        return query.all()
 
     @classmethod
     def create(cls, session, user, context, detail_value=None):
