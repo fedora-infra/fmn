@@ -14,7 +14,7 @@ class TestRecipients(fmn.lib.tests.Base):
             detail_name="irc nick", icon="user",
         )
         context2 = fmn.lib.models.Context.create(
-            self.sess, name="gcm", description="Google Cloud Messaging",
+            self.sess, name="android", description="Google Cloud Messaging",
             detail_name="registration id", icon="phone",
         )
 
@@ -43,10 +43,10 @@ class TestRecipients(fmn.lib.tests.Base):
         }
         recipients = fmn.lib.recipients(
             self.sess, self.config, incoming_message)
-        expected_keys = set(['irc', 'gcm'])
+        expected_keys = set(['irc', 'android'])
         eq_(set(recipients.keys()), expected_keys)
         eq_(list(recipients['irc']), [])
-        eq_(list(recipients['gcm']), [])
+        eq_(list(recipients['android']), [])
 
     def test_empty_recipients_list(self):
         self.create_user_and_context_data()
@@ -55,7 +55,7 @@ class TestRecipients(fmn.lib.tests.Base):
             "wat": "blah",
         }
         recipients = fmn.lib.recipients_for_context(
-            self.sess, self.config, self.valid_paths, 'gcm', msg)
+            self.sess, self.config, self.valid_paths, 'android', msg)
         eq_(list(recipients), [])
 
     def test_basic_recipients_list(self):

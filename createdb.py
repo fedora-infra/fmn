@@ -31,7 +31,7 @@ if '--with-dev-data' in sys.argv:
         placeholder="jane@fedoraproject.org",
     )
     context3 = fmn.lib.models.Context.create(
-        session, name="gcm", description="Google Cloud Messaging",
+        session, name="android", description="Google Cloud Messaging",
         detail_name="registration id", icon="phone",
         placeholder="laksdjfasdlfkj183097falkfj109f"
     )

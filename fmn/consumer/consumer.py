@@ -31,7 +31,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         self.backends = {
             'email': fmn_backends.EmailBackend(**backend_kwargs),
             'irc': fmn_backends.IRCBackend(**backend_kwargs),
-            'gcm': fmn_backends.GCMBackend(**backend_kwargs),
+            'android': fmn_backends.GCMBackend(**backend_kwargs),
             #'rss': fmn_backends.RSSBackend,
         }
 

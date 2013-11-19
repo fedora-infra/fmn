@@ -22,7 +22,7 @@ class TestBasics(fmn.lib.tests.Base):
             detail_name="irc nick", icon="user")
         context2 = fmn.lib.models.Context.get(self.sess, name="irc")
         context3 = fmn.lib.models.Context.create(
-            self.sess, name="gcm", description="Google Cloud Messaging",
+            self.sess, name="android", description="Google Cloud Messaging",
             detail_name="registration id", icon="phone")
         eq_(context1, context2)
         assert_not_equals(context1, context3)
@@ -38,6 +38,6 @@ class TestBasics(fmn.lib.tests.Base):
             self.sess, name="irc", description="Internet Relay Chat",
             detail_name="irc nick", icon="user")
         context2 = fmn.lib.models.Context.create(
-            self.sess, name="gcm", description="Google Cloud Messaging",
+            self.sess, name="android", description="Google Cloud Messaging",
             detail_name="registration id", icon="phone")
         eq_(len(fmn.lib.models.Context.all(self.sess)), 2)

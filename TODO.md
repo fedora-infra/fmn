@@ -7,7 +7,7 @@ Starting as of November 15th.
 - [x] UI and API to delete chains.
 - [x] Add icons for the different notification contexts.
 - [x] UI and API to update delivery_details for a preference.
-- [ ] Rename GCM to Android in the web ui.  People don't know what GCM is.
+- [x] Rename GCM to Android in the web ui.  People don't know what GCM is.
 - [ ] Better explanation of chains and rules in the UI.
 - [ ] Better error pages for html (keep the JSON versions to CLI/API).
 - [x] Confirmation logic for updating delivery details.  We need to avoid
