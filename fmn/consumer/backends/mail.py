@@ -5,6 +5,16 @@ import smtplib
 import email
 
 
+confirmation_template = """
+{username} has requested that notifications be sent to this email address
+* To accept, visit this address:
+  {acceptance_url}
+* Or, to reject you can visit this address:
+  {rejection_url}
+Alternatively, you can ignore this.  This is an automated message, please
+email {support_email} if you have any concerns/issues/abuse.
+"""
+
 class EmailBackend(BaseBackend):
 
     def __init__(self, *args, **kwargs):
@@ -13,7 +23,7 @@ class EmailBackend(BaseBackend):
         self.from_address = self.config['fmn.email.from_address']
         self.server = smtplib.SMTP(self.mailserver)
 
-    def handle(self, recipient, msg):
+    def send_mail(self, recipient, content):
         self.log.debug("Sending email")
 
         if 'email address' not in recipient:
@@ -26,8 +36,6 @@ class EmailBackend(BaseBackend):
 
         subject = fedmsg.meta.msg2subtitle(msg, **self.config)
         email_message.add_header('Subject', subject)
-
-        content = fedmsg.meta.msg2repr(msg, **self.config)
 
         # Since we do simple text email, adding the footer to the content
         # before setting the payload.
@@ -42,3 +50,24 @@ class EmailBackend(BaseBackend):
             [recipient['email address']],
             email_message.as_string(),
         )
+
+    def handle(self, recipient, msg):
+        content = fedmsg.meta.msg2repr(msg, **self.config)
+
+        self.send_mail(recipient, content)
+
+    def handle_confirmation(self, session, confirmation):
+        confirmations = fmn.lib.models.Confirmation.by_detail(
+            self.session, context="email", recipient['email address'])
+
+        for confirmation in confirmations:
+            lines = confirmation_template.format(
+                acceptance_url=acceptance_url,
+                rejection_url=rejection_url,
+                support_email=self.config['fmn.support_email'],
+                username=confirmation.user_name,
+            ).strip()
+
+            recipient = {'email address' : }
+
+            self.send_mail(recipient, lines)
