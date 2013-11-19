@@ -67,6 +67,7 @@ def login_required(function):
         return function(*args, **kwargs)
     return decorated_function
 
+
 def api_method(function):
     """ A decorator to handle common API output stuff. """
 
@@ -98,9 +99,9 @@ def request_wants_html():
     best = flask.request.accept_mimetypes \
         .best_match(['application/json', 'text/html', 'text/plain'])
     return best == 'text/html' and \
-        flask.request.accept_mimetypes[best] > \
-        (flask.request.accept_mimetypes['application/json'] or \
-        flask.request.accept_mimetypes['text/plain'])
+        flask.request.accept_mimetypes[best] > (
+            flask.request.accept_mimetypes['application/json'] or
+            flask.request.accept_mimetypes['text/plain'])
 
 
 @app.context_processor
@@ -130,7 +131,7 @@ def index():
     return flask.render_template(
         'index.html',
         current='index',
-        contexts = fmn.lib.models.Context.all(SESSION),
+        contexts=fmn.lib.models.Context.all(SESSION),
     )
 
 
@@ -140,7 +141,7 @@ def profile(username):
 
     if (not flask.g.fas_user or (
         flask.g.fas_user.username != username and
-        not admin(flask.g.fas_user))):
+            not admin(flask.g.fas_user))):
 
         flask.abort(403)
 
@@ -272,7 +273,6 @@ def handle_chain():
         app.logger.exception(e)
         raise APIError(403, dict(reason=str(e)))
 
-
     return dict(message="ok", url=next_url)
 
 
@@ -300,7 +300,6 @@ def handle_details():
     ctx = fmn.lib.models.Context.by_name(SESSION, context)
     if not ctx:
         raise APIError(403, dict(reason="%r is not a context" % context))
-
 
     # We need to *VERIFY* that they really have this delivery detail
     # before we start doing stuff.  Otherwise, ralph could put in pingou's
@@ -397,7 +396,7 @@ def handle_filter():
         if method == 'POST':
             chain.add_filter(SESSION, valid_paths, code_path, **arguments)
         elif method == 'DELETE':
-            chain.remove_filter(SESSION, code_path)#, **arguments)
+            chain.remove_filter(SESSION, code_path)  # , **arguments)
         else:
             raise NotImplementedError("This is impossible.")
     except (ValueError, KeyError) as e:

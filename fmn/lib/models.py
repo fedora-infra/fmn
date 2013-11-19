@@ -357,7 +357,7 @@ class Preference(BASE):
             cls.context_name
         )
         if not allow_none:
-            query = query.filter(cls.detail_value != None)
+            query = query.filter(cls.detail_value is not None)
         return query.all()
 
     @classmethod

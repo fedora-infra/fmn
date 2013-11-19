@@ -74,7 +74,7 @@ class TestRecipients(fmn.lib.tests.Base):
             'irc nick': 'threebean',
             'user': 'ralph',
             'chain': 'test chain',
-        }])
+            }])
 
     def test_miss_recipients_list(self):
         self.create_user_and_context_data()
@@ -132,7 +132,7 @@ class TestRecipients(fmn.lib.tests.Base):
             'irc nick': 'threebean',
             'user': 'ralph',
             'chain': 'test chain',
-        }])
+            }])
 
     def test_multiple_different_chains_hit(self):
         self.create_user_and_context_data()
@@ -156,4 +156,4 @@ class TestRecipients(fmn.lib.tests.Base):
             'irc nick': 'threebean',
             'user': 'ralph',
             'chain': 'test chain',
-        }])
+            }])

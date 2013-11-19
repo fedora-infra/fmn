@@ -61,6 +61,7 @@ def load_filters(root='fmn.filters'):
             'func': obj,
             'title': title.strip(),
             'doc': doc.strip(),
-            'args': inspect.getargspec(obj)[0],}
+            'args': inspect.getargspec(obj)[0],
+        }
 
     return {root: filters}

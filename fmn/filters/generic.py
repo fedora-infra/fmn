@@ -1,6 +1,7 @@
 # Generic filters for FMN
 import fedmsg
 
+
 def user_filter(config, message, fasnick=None, *args, **kw):
     """ Filters the messages by the user that performed the action.
 

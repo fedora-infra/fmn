@@ -84,6 +84,6 @@ class EmailBackend(BaseBackend):
         ).strip()
         subject = '[FMN] Confirm notification email'
 
-        recipient = {'email address' : confirmation.detail_value}
+        recipient = {'email address': confirmation.detail_value}
 
         self.send_mail(recipient, subject, content)

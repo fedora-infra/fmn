@@ -22,7 +22,6 @@ def pkgdb_branch_clone(config, message):
     return message['topic'].endswith('pkgdb.branch.clone')
 
 
-
 def pkgdb_branch_complete(config, message):
     """ Pkgdb: finished the branching process
 
