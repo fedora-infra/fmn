@@ -27,6 +27,7 @@ requires = [
     'python-openid-teams',
     'python-fedora',
     'Flask<0.10',  # Because of that openid json bug.
+    'Flask-openid',
     'wtforms',
     'docutils',
     'markupsafe',
