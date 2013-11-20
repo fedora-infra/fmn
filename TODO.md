@@ -30,7 +30,7 @@ Starting as of November 15th.
 - [ ] Coordinate with relrod for testing with GCM+android.
 - [ ] Fedora theme for bootstrap.  Bonus points to make this modular so we can
       re-use it on future apps.
-- [ ] Use d3.js to make a super fancy frontpage logo.
+- [x] Use d3.js to make a super fancy frontpage logo.
       Fallback to the png if js not supported.
 - [ ] Batching/digests.  -- queue notifications in a db table.
       If a message for user comes in: wait 20 minutes or 50 more
