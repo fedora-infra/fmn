@@ -44,7 +44,7 @@
               <a href="{{url_for('about')}}">about</a>
               <li>
 
-            {% if g.fas_user %}
+            {% if g.auth.logged_in %}
               {% if 'profile' == current %}
               <li class="active">
               {% else %}
@@ -71,7 +71,7 @@
 
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            {% if g.fas_user %}
+            {% if g.auth.logged_in %}
             <li><a href="{{url_for('logout')}}">Logout</a></li>
             {% else %}
             <li><a href="{{url_for('login')}}">Login</a></li>

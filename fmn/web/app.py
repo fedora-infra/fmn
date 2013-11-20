@@ -1,6 +1,7 @@
 import codecs
 import functools
 import os
+from bunch import Bunch
 
 import docutils
 import docutils.examples
@@ -10,7 +11,7 @@ import jinja2
 import markupsafe
 
 import flask
-from flask_fas_openid import FAS
+from flask.ext.openid import OpenID
 
 import fmn.lib
 import fmn.lib.models
@@ -30,7 +31,8 @@ app.config.from_object('fmn.web.default_config')
 if 'FMN_WEB_CONFIG' in os.environ:  # pragma: no cover
     app.config.from_envvar('FMN_WEB_CONFIG')
 
-FAS = FAS(app)
+# Set up OpenID
+oid = OpenID(app)
 
 fedmsg_config = fedmsg.config.load_config()
 db_url = fedmsg_config.get('fmn.sqlalchemy.uri')
@@ -40,6 +42,36 @@ if not db_url:
 valid_paths = fmn.lib.load_filters(root="fmn.filters")
 
 SESSION = fmn.lib.models.init(db_url, debug=False, create=False)
+
+
+@app.before_request
+def check_auth():
+    flask.g.auth = Bunch(
+        logged_in=False,
+        method=None,
+        id=None,
+    )
+    if 'openid' in flask.session:
+        flask.g.auth.logged_in = True
+        flask.g.auth.method = u'openid'
+        flask.g.auth.id = flask.session.get('openid', None)
+        flask.g.auth.fullname = flask.session.get('fullname', None)
+        flask.g.auth.nickname = flask.session.get('nickname', None)
+        flask.g.auth.email = flask.session.get('email', None)
+
+
+@oid.after_login
+def after_openid_login(resp):
+    default = flask.url_for('index')
+    if resp.identity_url:
+        flask.session['openid'] = resp.identity_url
+        flask.session['fullname'] = resp.fullname
+        flask.session['nickname'] = resp.nickname
+        flask.session['email'] = resp.email
+        next_url = flask.request.args.get('next', default)
+        return flask.redirect(next_url)
+    else:
+        return flask.redirect(default)
 
 
 @app.teardown_request
@@ -64,10 +96,10 @@ def login_required(function):
     @functools.wraps(function)
     def decorated_function(*args, **kwargs):
         """ Decorated function, actually does the work. """
-        if flask.g.fas_user is None:
+        if not flask.g.auth.logged_in:
             flask.flash('Login required', 'errors')
-            return flask.redirect(flask.url_for('login',
-                                                next=flask.request.url))
+            return flask.redirect(
+                flask.url_for('login', next=flask.request.url))
         return function(*args, **kwargs)
     return decorated_function
 
@@ -115,8 +147,8 @@ def inject_variable():
     """
     username = None
     contexts = []
-    if flask.g.fas_user and flask.g.fas_user.username:
-        username = flask.g.fas_user.username
+    if flask.g.auth.logged_in:
+        username = flask.g.auth.nickname
         contexts = fmn.lib.models.Context.all(SESSION)
     return dict(username=username,
                 contexts=contexts,
@@ -153,9 +185,9 @@ def about():
 @login_required
 def profile(username):
 
-    if (not flask.g.fas_user or (
-        flask.g.fas_user.username != username and
-            not admin(flask.g.fas_user))):
+    if (not flask.g.auth.logged_in or (
+        flask.g.auth.nickname != username and
+            not admin(lask.g.auth.nickname))):
 
         flask.abort(403)
 
@@ -182,7 +214,7 @@ def profile(username):
 @app.route('/<not_reserved:username>/<context>/')
 @login_required
 def context(username, context):
-    if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
+    if flask.g.auth.nickname != username and not admin(flask.g.auth.nickname):
         flask.abort(403)
 
     context = fmn.lib.models.Context.by_name(SESSION, context)
@@ -202,7 +234,7 @@ def context(username, context):
 @app.route('/<not_reserved:username>/<context>/<chain_name>/')
 @login_required
 def chain(username, context, chain_name):
-    if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
+    if flask.g.auth.nickname != username and not admin(flask.g.auth.nickname):
         flask.abort(403)
 
     context = fmn.lib.models.Context.by_name(SESSION, context)
@@ -241,7 +273,7 @@ def handle_confirmation(action, secret):
     if not confirmation:
         flask.abort(404)
 
-    if flask.g.fas_user.username != confirmation.user_name:
+    if flask.g.auth.nickname != confirmation.user_name:
         flask.abort(403)
 
     if action == 'accept':
@@ -268,9 +300,9 @@ def handle_chain():
     chain_name = form.chain_name.data
     method = (form.method.data or flask.request.method).upper()
 
-    if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
+    if flask.g.auth.nickname != username and not admin(flask.g.auth.nickname):
         raise APIError(403, dict(reason="%r is not %r" % (
-            flask.g.fas_user.username, username
+            flask.g.auth.nickname, username
         )))
 
     if method not in ['POST', 'DELETE']:
@@ -331,9 +363,9 @@ def handle_details():
     context = form.context.data
     detail_value = form.detail_value.data
 
-    if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
+    if flask.g.auth.nickname != username and not admin(flask.g.auth.nickname):
         raise APIError(403, dict(reason="%r is not %r" % (
-            flask.g.fas_user.username, username
+            flask.g.auth.nickname, username
         )))
 
     user = fmn.lib.models.User.by_username(SESSION, username)
@@ -385,9 +417,9 @@ def handle_filter():
         if args not in known_args:
             arguments[args] = flask.request.form[args]
 
-    if flask.g.fas_user.username != username and not admin(flask.g.fas_user):
+    if flask.g.auth.nickname != username and not admin(flask.g.auth.nickname):
         raise APIError(403, dict(reason="%r is not %r" % (
-            flask.g.fas_user.username, username
+            flask.g.auth.nickname, username
         )))
 
     if method not in ['POST', 'DELETE']:
@@ -429,31 +461,24 @@ def handle_filter():
     return dict(message="ok", url=next_url)
 
 
-@app.route('/login/', methods=('GET', 'POST'))
+@app.route('/login/')
+@app.route('/login')
+@oid.loginhandler
 def login():
-    """ Method to log into the application. """
-
     default = flask.url_for('index')
     next_url = flask.request.args.get('next', default)
-
-    # If user is already logged in, return them to where they were last
-    if flask.g.fas_user:
+    if flask.g.auth.logged_in:
         return flask.redirect(next_url)
+    #app.config['FMN_OPENID_ENDPOINT']
+    return oid.try_login('https://id.fedoraproject.org',
+                         ask_for=['email', 'fullname', 'nickname'])
 
-    return FAS.login(return_url=next_url)
 
-
-@app.route('/logout/', methods=('GET', 'POST'))
+@app.route('/logout/')
+@app.route('/logout')
 def logout():
-    """ Method to log out of the application. """
-    next_url = flask.request.args.get('next', flask.url_for('index'))
-
-    # If user is already logged out, return them to where they were last
-    if not flask.g.fas_user:
-        return flask.redirect(next_url)
-
-    FAS.logout()
-    return flask.redirect(next_url)
+    flask.session.pop('openid')
+    return flask.redirect(flask.url_for('index'))
 
 
 def modify_rst(rst):
