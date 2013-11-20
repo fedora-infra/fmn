@@ -2,9 +2,14 @@
 
 import fmn.lib.models
 
-import collections
 import inspect
 import logging
+
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
+
 log = logging.getLogger(__name__)
 
 
@@ -65,7 +70,7 @@ def load_filters(root='fmn.filters'):
             'args': inspect.getargspec(obj)[0],
         }
 
-    filters = collections.OrderedDict(
+    filters = OrderedDict(
         sorted(filters.items(), key=lambda x: x[1]['title'])
     )
 
