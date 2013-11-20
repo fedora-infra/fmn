@@ -3,7 +3,7 @@ import fedmsg
 
 
 def user_filter(config, message, fasnick=None, *args, **kw):
-    """ Filters the messages by the user that performed the action.
+    """ All messages of user
 
     Use this filter to filter out messages that are associated with a
     specified user.
