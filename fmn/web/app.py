@@ -81,8 +81,7 @@ def shutdown_session(exception=None):
 
 
 def admin(user):
-    return any([team.name in app.config.get('ADMIN_GROUPS', [])
-                for team in user.approved_memberships])
+    return user in config.get('FMN_ADMINS', [])
 
 
 class APIError(Exception):
