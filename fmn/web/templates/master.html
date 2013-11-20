@@ -74,8 +74,10 @@
             {% if g.auth.logged_in %}
             <li><a href="{{url_for('logout')}}">Logout</a></li>
             {% else %}
+            {% if config['FMN_ALLOW_GENERIC_OPENID'] %}
             <li><a href="{{url_for('login')}}">Login</a></li>
-            {% if config['FMN_FEDORA_OPENID'] %}
+            {% endif %}
+            {% if config['FMN_FEDORA_OPENID'] and config['FMN_ALLOW_FAS_OPENID'] %}
             <li><a href="{{url_for('fedora_login')}}">Fedora Login</a></li>
             {% endif %}
             {% endif %}
