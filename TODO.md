@@ -2,7 +2,7 @@
 Starting as of November 15th.
 
 - [x] UI and API to add filters with no arguments.
-- [ ] UI and API to add filters with arguments.
+- [x] UI and API to add filters with arguments.
 - [x] UI and API to delete filters from a chain.
 - [x] UI and API to delete chains.
 - [x] Add icons for the different notification contexts.
