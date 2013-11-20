@@ -35,3 +35,4 @@ Starting as of November 15th.
 - [ ] Batching/digests.  -- queue notifications in a db table.
       If a message for user comes in: wait 20 minutes or 50 more
       messages, then send a batch
+- [ ] Debug the /favicon.ico/ thing on first login.
