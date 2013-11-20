@@ -4,3 +4,5 @@ SECRET_KEY = 'changeme please'
 FAS_OPENID_CHECK_CERT = False
 
 #ADMIN_GROUPS = ['sysadmin-web']
+
+FMN_FEDORA_OPENID = 'https://id.fedoraproject.org'
