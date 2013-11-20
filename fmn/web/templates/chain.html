@@ -16,6 +16,11 @@
       <span class="list-group-item">
         <h4 class="list-group-item-heading">{{flt.title(valid_paths)}}</h4>
         <p class="list-group-item-text">{{flt.doc(valid_paths)}}
+          <dl class="dl-horizontal">
+              {% for key, value in flt.arguments.iteritems() %}
+              <dt>{{key}}</dt><dd>{{value}}</dd>
+              {% endfor %}
+          </dl>
           <form role="form" action="{{url_for('handle_filter')}}" method="post">
             <input name="filter_name" id="filter_name" value="{{flt.code_path}}" type="hidden">
             <input name="username" id="username" value="{{username}}" type="hidden">

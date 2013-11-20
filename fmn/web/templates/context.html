@@ -21,7 +21,13 @@
         <dl class="list-group-item-text dl-horizontal">
             {% for flt in chn.filters %}
             <dt>{{flt.title(valid_paths)}}</dt>
-            <dd>{{flt.doc(valid_paths)}}</dd>
+            <dd>{{flt.doc(valid_paths)}}
+                <dl class="dl-horizontal">
+                    {% for key, value in flt.arguments.iteritems() %}
+                    <dt>{{key}}</dt><dd>{{value}}</dd>
+                    {% endfor %}
+                </dl>
+            </dd>
             {% endfor %}
         </dl>
         {% else %}
