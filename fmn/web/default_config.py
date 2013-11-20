@@ -6,3 +6,8 @@ FAS_OPENID_CHECK_CERT = False
 #ADMIN_GROUPS = ['sysadmin-web']
 
 FMN_FEDORA_OPENID = 'https://id.fedoraproject.org'
+
+FMN_ALLOW_FAS_OPENID = True
+FMN_ALLOW_GOOGLE_OPENID = True
+FMN_ALLOW_YAHOO_OPENID = True
+FMN_ALLOW_GENERIC_OPENID = True
