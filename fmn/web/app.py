@@ -66,7 +66,7 @@ def after_openid_login(resp):
     if resp.identity_url:
         flask.session['openid'] = resp.identity_url
         flask.session['fullname'] = resp.fullname
-        flask.session['nickname'] = resp.nickname
+        flask.session['nickname'] = resp.nickname or resp.fullname
         flask.session['email'] = resp.email
         next_url = flask.request.args.get('next', default)
         return flask.redirect(next_url)
@@ -148,7 +148,7 @@ def inject_variable():
     username = None
     contexts = []
     if flask.g.auth.logged_in:
-        username = flask.g.auth.nickname
+        username = flask.g.auth.nickname or flask.g.auth.fullname
         contexts = fmn.lib.models.Context.all(SESSION)
     return dict(username=username,
                 contexts=contexts,
@@ -187,7 +187,7 @@ def profile(username):
 
     if (not flask.g.auth.logged_in or (
         flask.g.auth.nickname != username and
-            not admin(lask.g.auth.nickname))):
+            not admin(flask.g.auth.nickname))):
 
         flask.abort(403)
 
@@ -487,6 +487,7 @@ def fedora_login():
     return oid.try_login(
         app.config['FMN_FEDORA_OPENID'],
         ask_for=['email', 'fullname', 'nickname'])
+
 
 @app.route('/logout/')
 @app.route('/logout')
