@@ -25,5 +25,5 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
 
     fasnick = kw.get('fasnick', fasnick)
     if fasnick:
-        packages = fmn.lib.pkgdb.get_package_of_user(fasnick)
+        packages = fmn.lib.pkgdb.get_packages_of_user(fasnick)
         return packages.intersection(fedmsg.meta.msg2packages(message))
