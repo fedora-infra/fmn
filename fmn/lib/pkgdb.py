@@ -5,8 +5,12 @@ import logging
 import requests
 log = logging.getLogger(__name__)
 
+## TODO: Move this variable into a configuration file
 PKGDB_API_URL = 'http://209.132.184.188/api/'
 
+## TODO: cache the results of this method
+# This might mean removing the acl and branch argument
+# Can be done using dogpile.cache
 def get_package_of_user(username, acl='commit', branch=None):
     """ Retrieve the list of packages where the specified user has the
     specified acl on the specified branch.
