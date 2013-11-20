@@ -1,0 +1,37 @@
+path.link {
+  fill: none;
+  stroke:  #294172;
+  stroke-width: 1.5px;
+}
+
+marker#output {
+  fill:   #3c6eb4;
+}
+
+path.link.output {
+  stroke:   #3c6eb4;
+  stroke-dasharray: 5,5;
+}
+
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+
+text.shadow {
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-opacity: .8;
+}
+
+.node image {
+    // Can we make the images circular?  Not with css apparently.
+}
+
+// It would be cool to somehow differentiate these things
+.group-1 {
+}
+.group-2 {
+}
+.group-3 {
+}
