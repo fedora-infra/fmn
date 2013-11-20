@@ -2,6 +2,7 @@
 
 import fmn.lib.models
 
+import collections
 import inspect
 import logging
 log = logging.getLogger(__name__)
@@ -63,5 +64,9 @@ def load_filters(root='fmn.filters'):
             'doc': doc.strip(),
             'args': inspect.getargspec(obj)[0],
         }
+
+    filters = collections.OrderedDict(
+        sorted(filters.items(), key=lambda x: x[1]['title'])
+    )
 
     return {root: filters}
