@@ -36,3 +36,4 @@ Starting as of November 15th.
       If a message for user comes in: wait 20 minutes or 50 more
       messages, then send a batch
 - [ ] Debug the /favicon.ico/ thing on first login.
+      Weird.  I couldn't duplicate it locally.  Try again on the cloud node?
