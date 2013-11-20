@@ -24,6 +24,7 @@
           <form role="form" action="{{url_for('login')}}" method="post">
             <input name="openid" value="https://www.google.com/accounts/o8/id"
                 type="hidden">
+            <img src="{{ url_for('static', filename='google_logo.png') }}" />
             <span class="pull-right">
                 <button type="submit" class="btn btn-success">
                     <span class="glyphicon glyphicon-plus"></span>
@@ -39,6 +40,7 @@
           <form role="form" action="{{url_for('login')}}" method="post">
             <input name="openid" value="https://me.yahoo.com/"
                 type="hidden">
+            <img src="{{ url_for('static', filename='yahoo_logo.png') }}" />
             <span class="pull-right">
                 <button type="submit" class="btn btn-success">
                     <span class="glyphicon glyphicon-plus"></span>
