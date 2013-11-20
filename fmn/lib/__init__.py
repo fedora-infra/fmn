@@ -5,6 +5,9 @@ import fmn.lib.models
 import inspect
 import logging
 
+import docutils.examples
+import markupsafe
+
 try:
     from collections import OrderedDict
 except ImportError:
@@ -57,8 +60,14 @@ def load_filters(root='fmn.filters'):
         log.info("Found filter %r %r" % (name, obj))
 
         doc = inspect.getdoc(obj)
+
+        # It's crazy, but inspect (stdlib!) doesn't return unicode objs.
+        doc = doc.decode('utf-8')
+
         if doc:
-            title, doc = doc.split('\n', 1)
+            title, doc_as_rst = doc.split('\n', 1)
+            doc = docutils.examples.html_parts(doc_as_rst)['body']
+            doc = markupsafe.Markup(doc)
         else:
             title = "UNDOCUMENTED"
             doc = "No docs for %s:%s %r" % (root, name, obj)
