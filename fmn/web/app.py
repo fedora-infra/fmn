@@ -461,18 +461,32 @@ def handle_filter():
     return dict(message="ok", url=next_url)
 
 
-@app.route('/login/')
-@app.route('/login')
+@app.route('/login/', methods=('GET', 'POST'))
+@app.route('/login', methods=('GET', 'POST'))
 @oid.loginhandler
 def login():
     default = flask.url_for('index')
     next_url = flask.request.args.get('next', default)
     if flask.g.auth.logged_in:
         return flask.redirect(next_url)
-    #app.config['FMN_OPENID_ENDPOINT']
-    return oid.try_login('https://id.fedoraproject.org',
-                         ask_for=['email', 'fullname', 'nickname'])
 
+    openid_server = flask.request.form.get('openid', None)
+    if openid_server:
+        return oid.try_login(
+            openid_server, ask_for=['email', 'fullname', 'nickname'])
+    return flask.render_template(
+        'login.html', next=oid.get_next_url(), error=oid.fetch_error())
+
+
+@app.route('/login/fedora/')
+@app.route('/login/fedora')
+@oid.loginhandler
+def fedora_login():
+    default = flask.url_for('index')
+    next_url = flask.request.args.get('next', default)
+    return oid.try_login(
+        app.config['FMN_FEDORA_OPENID'],
+        ask_for=['email', 'fullname', 'nickname'])
 
 @app.route('/logout/')
 @app.route('/logout')

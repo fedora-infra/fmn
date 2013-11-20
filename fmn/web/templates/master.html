@@ -75,6 +75,9 @@
             <li><a href="{{url_for('logout')}}">Logout</a></li>
             {% else %}
             <li><a href="{{url_for('login')}}">Login</a></li>
+            {% if config['FMN_FEDORA_OPENID'] %}
+            <li><a href="{{url_for('fedora_login')}}">Fedora Login</a></li>
+            {% endif %}
             {% endif %}
           </ul>
 
