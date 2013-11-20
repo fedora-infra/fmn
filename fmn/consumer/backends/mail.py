@@ -39,6 +39,11 @@ class EmailBackend(BaseBackend):
         email_message.add_header('To', recipient['email address'])
         email_message.add_header('From', self.from_address)
 
+        subject_prefix = self.config.get('fmn.email.subject_prefix', '')
+        if subject_prefix:
+            subject = '{0} {1}'.format(
+                subject_prefix.strip(), subject.strip())
+
         email_message.add_header('Subject', subject)
 
         # Since we do simple text email, adding the footer to the content
@@ -82,7 +87,7 @@ class EmailBackend(BaseBackend):
             support_email=self.config['fmn.support_email'],
             username=confirmation.user_name,
         ).strip()
-        subject = '[FMN] Confirm notification email'
+        subject = 'Confirm notification email'
 
         recipient = {'email address': confirmation.detail_value}
 
