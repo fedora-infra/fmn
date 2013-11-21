@@ -10,5 +10,9 @@ class BaseBackend(object):
     def handle(self, recipient, msg):
         raise NotImplementedError("BaseBackend must be extended")
 
+    def handle_batch(self, session, queued_messages):
+        raise NotImplementedError("BaseBackend must be extended")
+
     def handle_confirmation(self, session, confirmation):
         raise NotImplementedError("BaseBackend must be extended")
+
