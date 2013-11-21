@@ -483,7 +483,7 @@ class Confirmation(BASE):
 
     def repr(self):
         return "<Confirmation user:%s, context:%s, status:%s>" % (
-            self.user_name, self.context_name, self.status)
+            self.openid, self.context_name, self.status)
 
     @classmethod
     def create(cls, session, openid, context, detail_value=None):
