@@ -1,0 +1,276 @@
+{
+  "nodes": [
+    {
+      "group": 1,
+      "name": "Email",
+      "icon": "static/logo/icons/icon-envelope.png"
+    },
+    {
+      "group": 1,
+      "name": "IRC",
+      "icon": "static/logo/icons/icon-user.png"
+    },
+    {
+      "group": 1,
+      "name": "Android",
+      "icon": "static/logo/icons/icon-phone.png"
+    },
+    {
+      "group": 1,
+      "name": "Desktop",
+      "icon": "static/logo/icons/icon-desktop.png"
+    },
+    {
+      "group": 1,
+      "name": "Websockets",
+      "icon": "static/logo/icons/icon-websockets.png"
+    },
+    {
+      "group": 2,
+      "name": "remi",
+      "icon": "http://cdn.libravatar.org/avatar/33ddfefecc66c71eb7d6eb60503cf7f665d3bceb22e2f8e3af2704260a995ab2?s=16"
+    },
+    {
+      "group": 2,
+      "name": "spot",
+      "icon": "http://cdn.libravatar.org/avatar/1e232310ef80ec8b34b0bc216864efd0d837f419e6988997cda8e98a28be48dd?s=16"
+    },
+    {
+      "group": 2,
+      "name": "puiterwijk",
+      "icon": "http://cdn.libravatar.org/avatar/983782d075ab4e1fb02a7e7c7ca4d7096f6769bc9fe51b50e80eb012ddebc9ce?s=16"
+    },
+    {
+      "group": 2,
+      "name": "vicodan",
+      "icon": "http://cdn.libravatar.org/avatar/d16e1a49a16998d190f6bea5d0c36357d6e8bddc1427edb5ee277afabff16aee?s=16"
+    },
+    {
+      "group": 2,
+      "name": "pingou",
+      "icon": "http://cdn.libravatar.org/avatar/01fe73d687f4db328da1183f2a1b5b22962ca9d9c50f0728aafeac974856311c?s=16"
+    },
+    {
+      "group": 2,
+      "name": "mrunge",
+      "icon": "http://cdn.libravatar.org/avatar/c626775cb5584b1a49ea4a5cabb248e54e49c09185ebbf4fbce72265255956f0?s=16"
+    },
+    {
+      "group": 2,
+      "name": "orion",
+      "icon": "http://cdn.libravatar.org/avatar/b6fd449fcea49e2de27dacf226d46a01a0c8a44918672843e45bf5ac0bd0060b?s=16"
+    },
+    {
+      "group": 2,
+      "name": "cicku",
+      "icon": "http://cdn.libravatar.org/avatar/e04beb63c279ac05f99dd5ea1252e8d45b15611d1a9226bc42bda9fb31f24c75?s=16"
+    },
+    {
+      "group": 2,
+      "name": "rdieter",
+      "icon": "http://cdn.libravatar.org/avatar/f93140003949ff349627b7799edd42b927b057236ddd677b71257e0b974e6cb1?s=16"
+    },
+    {
+      "group": 2,
+      "name": "ralph",
+      "icon": "http://cdn.libravatar.org/avatar/9c9f7784935381befc302fe3c814f9136e7a33953d0318761669b8643f4df55c?s=16"
+    },
+    {
+      "group": 2,
+      "name": "pbrobinson",
+      "icon": "http://cdn.libravatar.org/avatar/861506b8dba9fe9ee12a83ce2cd7c6fff15091298f9f1a4e6149876490c53e9b?s=16"
+    },
+    {
+      "group": 2,
+      "name": "sgallagh",
+      "icon": "http://cdn.libravatar.org/avatar/0929fed032bd0a481ef74c46023fefe443f3d1b72dbe3efd293b25ed4fc843fd?s=16"
+    },
+    {
+      "group": 3,
+      "name": "Package Commits",
+      "icon": "https://apps.fedoraproject.org/img/icons/git-logo.png"
+    },
+    {
+      "group": 3,
+      "name": "Wiki Edits",
+      "icon": "https://fedoraproject.org/w/skins/common/images/mediawiki.png"
+    },
+    {
+      "group": 3,
+      "name": "Mailing List Messages",
+      "icon": "http://cloud.ohloh.net/attachments/37686/mailman_med.png"
+    },
+    {
+      "group": 3,
+      "name": "Fedora Hosted Events",
+      "icon": "http://www.edgewall.org/gfx/trac_bullet.png"
+    },
+    {
+      "group": 3,
+      "name": "Account Changes",
+      "icon": "https://admin.fedoraproject.org/accounts/static/theme/fas/images/account.png"
+    },
+    {
+      "group": 3,
+      "name": "Koji Builds",
+      "icon": "http://fedoraproject.org/w/uploads/2/20/Artwork_DesignService_koji-icon-48.png"
+    },
+    {
+      "group": 3,
+      "name": "Package Updates",
+      "icon": "https://admin.fedoraproject.org/updates/static/images/bodhi-icon-48.png"
+    },
+    {
+      "group": 3,
+      "name": "Package ACL Updates",
+      "icon": "https://apps.fedoraproject.org/packages/images/icons/package_128x128.png"
+    },
+    {
+      "group": 3,
+      "name": "Calendar Events",
+      "icon": "https://apps.fedoraproject.org/calendar/static/calendar.png"
+    }
+  ],
+  "links": [
+    {
+      "source": 1,
+      "type": "output",
+      "target": 11
+    },
+    {
+      "source": 2,
+      "type": "output",
+      "target": 14
+    },
+    {
+      "source": 3,
+      "type": "output",
+      "target": 10
+    },
+    {
+      "source": 4,
+      "type": "output",
+      "target": 13
+    },
+    {
+      "source": 0,
+      "type": "output",
+      "target": 9
+    },
+    {
+      "source": 1,
+      "type": "output",
+      "target": 16
+    },
+    {
+      "source": 2,
+      "type": "output",
+      "target": 7
+    },
+    {
+      "source": 3,
+      "type": "output",
+      "target": 15
+    },
+    {
+      "source": 4,
+      "type": "output",
+      "target": 6
+    },
+    {
+      "source": 0,
+      "type": "output",
+      "target": 5
+    },
+    {
+      "source": 1,
+      "type": "output",
+      "target": 8
+    },
+    {
+      "source": 2,
+      "type": "output",
+      "target": 12
+    },
+    {
+      "source": 3,
+      "type": "output",
+      "target": 11
+    },
+    {
+      "source": 4,
+      "type": "output",
+      "target": 14
+    },
+    {
+      "source": 0,
+      "type": "output",
+      "target": 10
+    },
+    {
+      "source": 19,
+      "type": "input",
+      "target": 0
+    },
+    {
+      "source": 25,
+      "type": "input",
+      "target": 1
+    },
+    {
+      "source": 23,
+      "type": "input",
+      "target": 4
+    },
+    {
+      "source": 22,
+      "type": "input",
+      "target": 3
+    },
+    {
+      "source": 21,
+      "type": "input",
+      "target": 2
+    },
+    {
+      "source": 24,
+      "type": "input",
+      "target": 0
+    },
+    {
+      "source": 18,
+      "type": "input",
+      "target": 1
+    },
+    {
+      "source": 20,
+      "type": "input",
+      "target": 4
+    },
+    {
+      "source": 17,
+      "type": "input",
+      "target": 3
+    },
+    {
+      "source": 19,
+      "type": "input",
+      "target": 2
+    },
+    {
+      "source": 25,
+      "type": "input",
+      "target": 0
+    },
+    {
+      "source": 23,
+      "type": "input",
+      "target": 1
+    },
+    {
+      "source": 22,
+      "type": "input",
+      "target": 4
+    }
+  ]
+}
