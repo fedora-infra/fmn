@@ -324,7 +324,7 @@ def handle_chain():
     if method not in ['POST', 'DELETE']:
         raise APIError(405, dict(reason="Only POST and DELETE accepted"))
 
-    user = fmn.lib.models.User.by_openid_provider(SESSION, openid)
+    user = fmn.lib.models.User.by_openid(SESSION, openid)
     if not user:
         raise APIError(403, dict(reason="%r is not a user" % openid))
 
@@ -385,7 +385,7 @@ def handle_details():
             flask.g.auth.openid, openid
         )))
 
-    user = fmn.lib.models.User.by_openid_provider(SESSION, openid)
+    user = fmn.lib.models.User.by_openid(SESSION, openid)
     if not user:
         raise APIError(403, dict(reason="%r is not a user" % openid))
 
@@ -444,7 +444,7 @@ def handle_filter():
     if method not in ['POST', 'DELETE']:
         raise APIError(405, dict(reason="Only POST and DELETE accepted"))
 
-    user = fmn.lib.models.User.by_openid_provider(SESSION, openid)
+    user = fmn.lib.models.User.by_openid(SESSION, openid)
     if not user:
         raise APIError(403, dict(reason="%r is not a user" % openid))
 

@@ -7,8 +7,10 @@ import fmn.lib.tests
 
 class TestRecipients(fmn.lib.tests.Base):
     def create_user_and_context_data(self):
-        user1 = fmn.lib.models.User.get_or_create(self.sess, username="ralph")
-        user2 = fmn.lib.models.User.get_or_create(self.sess, username="toshio")
+        user1 = fmn.lib.models.User.get_or_create(
+            self.sess, openid="ralph.id.fedoraproject.org")
+        user2 = fmn.lib.models.User.get_or_create(
+            self.sess, openid="toshio.id.fedoraproject.org")
         context1 = fmn.lib.models.Context.create(
             self.sess, name="irc", description="Internet Relay Chat",
             detail_name="irc nick", icon="user",
@@ -19,7 +21,8 @@ class TestRecipients(fmn.lib.tests.Base):
         )
 
     def create_preference_data_empty(self):
-        user = fmn.lib.models.User.get(self.sess, username="ralph")
+        user = fmn.lib.models.User.get(
+            self.sess, openid="ralph.id.fedoraproject.org")
         context = fmn.lib.models.Context.get(self.sess, name="irc")
         preference = fmn.lib.models.Preference.create(
             self.sess,
@@ -29,7 +32,8 @@ class TestRecipients(fmn.lib.tests.Base):
         )
 
     def create_preference_data_basic(self, code_path):
-        user = fmn.lib.models.User.get(self.sess, username="ralph")
+        user = fmn.lib.models.User.get(
+            self.sess, openid="ralph.id.fedoraproject.org")
         context = fmn.lib.models.Context.get(self.sess, name="irc")
         preference = fmn.lib.models.Preference.load(self.sess, user, context)
         chain = fmn.lib.models.Chain.create(self.sess, name="test chain")
@@ -72,7 +76,7 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess, self.config, self.valid_paths, 'irc', msg)
         eq_(list(recipients), [{
             'irc nick': 'threebean',
-            'user': 'ralph',
+            'user': 'ralph.id.fedoraproject.org',
             'chain': 'test chain',
             }])
 
@@ -100,7 +104,8 @@ class TestRecipients(fmn.lib.tests.Base):
         code_path = "fmn.lib.tests.example_filters:not_wat_filter"
         self.create_preference_data_basic(code_path)
 
-        preference = fmn.lib.models.Preference.load(self.sess, "ralph", "irc")
+        preference = fmn.lib.models.Preference.load(
+            self.sess, "ralph.id.fedoraproject.org", "irc")
         eq_(len(preference.chains), 2)
 
         msg = {
@@ -120,7 +125,8 @@ class TestRecipients(fmn.lib.tests.Base):
         code_path = "fmn.lib.tests.example_filters:wat_filter"
         self.create_preference_data_basic(code_path)
 
-        preference = fmn.lib.models.Preference.load(self.sess, "ralph", "irc")
+        preference = fmn.lib.models.Preference.load(
+            self.sess, "ralph.id.fedoraproject.org", "irc")
         eq_(len(preference.chains), 2)
 
         msg = {
@@ -130,7 +136,7 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess, self.config, self.valid_paths, 'irc', msg)
         eq_(list(recipients), [{
             'irc nick': 'threebean',
-            'user': 'ralph',
+            'user': 'ralph.id.fedoraproject.org',
             'chain': 'test chain',
             }])
 
@@ -144,7 +150,8 @@ class TestRecipients(fmn.lib.tests.Base):
         code_path = "fmn.lib.tests.example_filters:not_wat_filter"
         self.create_preference_data_basic(code_path)
 
-        preference = fmn.lib.models.Preference.load(self.sess, "ralph", "irc")
+        preference = fmn.lib.models.Preference.load(
+            self.sess, "ralph.id.fedoraproject.org", "irc")
         eq_(len(preference.chains), 2)
 
         msg = {
@@ -154,6 +161,6 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess, self.config, self.valid_paths, 'irc', msg)
         eq_(list(recipients), [{
             'irc nick': 'threebean',
-            'user': 'ralph',
+            'user': 'ralph.id.fedoraproject.org',
             'chain': 'test chain',
             }])

@@ -160,10 +160,10 @@ class User(BASE):
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
     @classmethod
-    def by_openid_provider(cls, session, openid):
+    def by_openid(cls, session, openid):
         return session.query(cls).filter_by(openid=openid).first()
 
-    get = by_openid_provider
+    get = by_openid
 
     @classmethod
     def all(cls, session):
@@ -171,7 +171,7 @@ class User(BASE):
 
     @classmethod
     def get_or_create(cls, session, openid):
-        user = cls.by_openid_provider(session, openid)
+        user = cls.by_openid(session, openid)
         if not user:
             user = cls(openid=openid)
             session.add(user)
@@ -483,7 +483,7 @@ class Confirmation(BASE):
     @classmethod
     def create(cls, session, openid, context, detail_value=None):
         if not isinstance(openid, User):
-            openid = User.by_openid_provider(session, openid)
+            openid = User.by_openid(session, openid)
         if not isinstance(context, Context):
             context = Context.by_name(session, context)
         confirmation = cls()
