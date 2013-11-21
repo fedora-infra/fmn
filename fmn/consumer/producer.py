@@ -61,25 +61,32 @@ class DigestProducer(FMNProducerBase):
         # 1) Loop over all preferences in the db
         for pref in fmn.lib.models.Preference.list_batching(self.session):
             # 2) Look for queued messages that need sent by time and count
-            earliest = fmn.lib.models.QueuedMessage.earliest_for(
-                self.session, pref.user, pref.context)
             count = fmn.lib.models.QueuedMessage.count_for(
                 self.session, pref.user, pref.context)
+            if not count:
+                continue
+            earliest = fmn.lib.models.QueuedMessage.earliest_for(
+                self.session, pref.user, pref.context)
             now = datetime.datetime.utcnow()
+            delta = now - earliest.created_on
             backend = self.backends[pref.context.name]
 
             # 2.1) Send and dequeue those by time
-            if pref.batch_delta >= (now - earliest.created_on):
-                queued_messages = fmn.lib.models.QueuedMessage.list_for(
-                    self.session, pref.user, pref.context)
-                backend.handle_batch(queued_messages)
-                for message in queued_messages:
-                    message.dequeue(self.session)
+            if pref.batch_delta is not None:
+                if pref.batch_delta <= delta:
+                    log.info("Sending digest for %r per time delta" % pref)
+                    self.manage_batch(backend, pref)
 
             # 2.1) Send and dequeue those by count
-            if pref.batch_count >= count:
-                queued_messages = fmn.lib.models.QueuedMessage.list_for(
-                    self.session, pref.user, pref.context)
-                backend.handle_batch(queued_messages)
-                for message in queued_messages:
-                    message.dequeue(self.session)
+            if pref.batch_count is not None:
+                if pref.batch_count <= count:
+                    log.info("Sending digest for %r per msg count" % pref)
+                    self.manage_batch(backend, pref)
+
+    def manage_batch(self, backend, pref):
+        recipient = {pref.context.detail_name: pref.detail_value}
+        queued_messages = fmn.lib.models.QueuedMessage.list_for(
+            self.session, pref.user, pref.context)
+        backend.handle_batch(recipient, queued_messages)
+        for message in queued_messages:
+            message.dequeue(self.session)
