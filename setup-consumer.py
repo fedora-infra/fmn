@@ -58,6 +58,7 @@ setup(
         ],
         'moksha.producer': [
             "fmn_confirmations_producer = fmn.consumer:ConfirmationProducer",
+            "fmn_digest_producer = fmn.consumer:DigestProducer",
         ],
     },
 )
