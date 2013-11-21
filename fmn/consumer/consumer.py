@@ -54,7 +54,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
             backend = self.backends[context]
             for recipient in recipients:
                 user = recipient['user']
-                pref = fmn.lib.model.Preference.load(
+                pref = fmn.lib.models.Preference.load(
                     self.session, user, context)
 
                 if not pref.should_batch:
@@ -63,5 +63,5 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                     backend.handle(recipient, msg)
                 else:
                     log.debug("    Queueing msg for digest")
-                    fmn.lib.model.QueuedMessage.enqueue(
+                    fmn.lib.models.QueuedMessage.enqueue(
                         self.session, user, context, msg)
