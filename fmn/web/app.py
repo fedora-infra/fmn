@@ -45,6 +45,18 @@ valid_paths = fmn.lib.load_filters(root="fmn.filters")
 SESSION = fmn.lib.models.init(db_url, debug=False, create=False)
 
 
+def extract_openid_identifier(openid_url):
+    openid = openid_url.split('://')[1]
+    if openid.endswith('/'):
+        openid = openid[:-1]
+    if 'id?id=' in openid:
+        openid = openid.split('id?id=')[1]
+    if 'me.yahoo.com/a/' in openid:
+        openid = openid.split('me.yahoo.com/a/')[1]
+    openid = openid.replace('/', '_')
+    return openid
+
+
 @app.before_request
 def check_auth():
     flask.g.auth = Bunch(
@@ -53,14 +65,7 @@ def check_auth():
         id=None,
     )
     if 'openid' in flask.session:
-        openid = flask.session.get('openid').split('://')[1]
-        if openid.endswith('/'):
-            openid = openid[:-1]
-        if 'id?id=' in openid:
-            openid = openid.split('id?id=')[1]
-        if 'me.yahoo.com/a/' in openid:
-            openid = openid.split('me.yahoo.com/a/')[1]
-        openid = openid.replace('/', '_')
+        openid = extract_openid_identifier(flask.session.get('openid'))
         flask.g.auth.logged_in = True
         flask.g.auth.method = u'openid'
         flask.g.auth.openid = openid
@@ -74,10 +79,19 @@ def check_auth():
 def after_openid_login(resp):
     default = flask.url_for('index')
     if resp.identity_url:
-        flask.session['openid'] = resp.identity_url
+        openid_url = resp.identity_url
+        flask.session['openid'] = openid_url
         flask.session['fullname'] = resp.fullname
         flask.session['nickname'] = resp.nickname or resp.fullname
         flask.session['email'] = resp.email
+
+        # Create the user if they do not yet exist.
+        user = fmn.lib.models.User.get_or_create(
+            SESSION,
+            openid=extract_openid_identifier(openid_url),
+            openid_url=openid_url,
+        )
+
         next_url = flask.request.args.get('next', default)
         return flask.redirect(next_url)
     else:
@@ -494,6 +508,7 @@ def login():
     if openid_server:
         return oid.try_login(
             openid_server, ask_for=['email', 'fullname', 'nickname'])
+
     return flask.render_template(
         'login.html', next=oid.get_next_url(), error=oid.fetch_error())
 

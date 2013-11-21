@@ -157,6 +157,7 @@ class User(BASE):
     __tablename__ = 'users'
 
     openid = sa.Column(sa.Text, primary_key=True)
+    openid_url = sa.Column(sa.Text)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
     @classmethod
@@ -170,10 +171,10 @@ class User(BASE):
         return session.query(cls).all()
 
     @classmethod
-    def get_or_create(cls, session, openid):
+    def get_or_create(cls, session, openid, openid_url):
         user = cls.by_openid_provider(session, openid)
         if not user:
-            user = cls(openid=openid)
+            user = cls(openid=openid, openid_url=openid_url)
             session.add(user)
             session.flush()
         return user
