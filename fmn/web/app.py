@@ -234,12 +234,8 @@ def context(openid, context):
     if not context:
         flask.abort(404)
 
-    try:
-        pref = fmn.lib.models.Preference.get_or_create(
-            SESSION, openid=openid, context=context)
-    except sqlalchemy.exc.IntegrityError:
-        flask.abort(403, "Someone has already loged in with the email: %s" %
-                    flask.g.auth.email)
+    pref = fmn.lib.models.Preference.get_or_create(
+        SESSION, openid=openid, context=context)
 
     return flask.render_template(
         'context.html',
