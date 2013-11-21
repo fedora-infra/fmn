@@ -10,7 +10,7 @@ config = {
     ## Backend stuff ##
     # Email
     "fmn.email.mailserver": "127.0.0.1:25",
-    "fmn.email.from_address": "fedmsg-notifications@fedoraproject.org",
+    "fmn.email.from_address": "notifications@fedoraproject.org",
 
     # IRC
     "fmn.irc.network": "irc.freenode.net",
@@ -26,7 +26,7 @@ config = {
     "fmn.base_url": "http://localhost:5000/",
     "fmn.acceptance_url": "http://localhost:5000/confirm/accept/{secret}",
     "fmn.rejection_url": "http://localhost:5000/confirm/reject/{secret}",
-    "fmn.support_email": "fedmsg-notifications@fedoraproject.org",
+    "fmn.support_email": "notifications@fedoraproject.org",
 
     # Generic stuff
     "endpoints": {

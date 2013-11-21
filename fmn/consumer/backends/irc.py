@@ -174,7 +174,7 @@ class IRCBackend(BaseBackend):
 
 class IRCBackendProtocol(twisted.words.protocols.irc.IRCClient):
     lineRate = 0.6
-    sourceURL = "http://github.com/fedora-infra/fedmsg-notifications"
+    sourceURL = "http://github.com/fedora-infra/fmn"
 
     @property
     def nickname(self):

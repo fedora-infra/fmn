@@ -1,4 +1,4 @@
-""" fedmsg-notifications internal API """
+""" Fedora Notifications internal API """
 
 import fmn.lib.models
 

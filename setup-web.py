@@ -42,11 +42,11 @@ tests_require = [
 setup(
     name='fmn.web',
     version='0.0.1',
-    description='Frontend Web Application for fedmsg-notifications',
+    description='Frontend Web Application for Fedora Notifications',
     long_description=get_description(),
     author='Ralph Bean',
     author_email='rbean@redhat.com',
-    url="https://github.com/fedora-infra/fedmsg-notifications",
+    url="https://github.com/fedora-infra/fmn",
     download_url="https://pypi.python.org/pypi/fmn.web/",
     license='LGPLv2+',
     install_requires=requires,

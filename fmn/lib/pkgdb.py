@@ -1,4 +1,4 @@
-""" fedmsg-notifications pkgdb client """
+""" Fedora Notifications pkgdb client """
 
 import json
 import logging

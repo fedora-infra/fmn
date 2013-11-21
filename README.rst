@@ -1,7 +1,7 @@
-fedmsg-notifications
+Fedora Notifications
 ====================
 
-``fedmsg-notifications`` is a family of systems to manage end-user
+``fmn`` is a family of systems to manage end-user
 notifications triggered by `fedmsg, the Fedora FEDerated MESsage bus
 <http://fedmsg.com>`_.
 

@@ -32,11 +32,11 @@ tests_require = [
 setup(
     name='fmn.consumer',
     version='0.0.1',
-    description='Internal API for components for fedmsg-notifications',
+    description='Internal API for components for Fedora Notifications',
     long_description=get_description(),
     author='Ralph Bean',
     author_email='rbean@redhat.com',
-    url="https://github.com/fedora-infra/fedmsg-notifications",
+    url="https://github.com/fedora-infra/fmn",
     download_url="https://pypi.python.org/pypi/fmn.consumer/",
     license='LGPLv2+',
     install_requires=requires,

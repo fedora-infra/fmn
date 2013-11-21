@@ -117,7 +117,7 @@ Dénouement
 ==========
 
 You can report `issues
-<https://github.com/fedora-infra/fedmsg-notifications/issues>`_ and find the
-`source <https://github.com/fedora-infra/fedmsg-notifications/>`_ on github.
+<https://github.com/fedora-infra/fmn/issues>`_ and find the
+`source <https://github.com/fedora-infra/fmn/>`_ on github.
 The development team hangs out in ``#fedora-apps``. Please do stop by and say
 hello.
