@@ -25,7 +25,7 @@
     <dl class="dl-horizontal">
     {% for ctx in contexts %}
       {% if g.fas_user %}
-      <dt><a href="{{username}}/{{ctx.name}}">{{ctx.name}}</a></dt>
+      <dt><a href="{{openid}}/{{ctx.name}}">{{ctx.name}}</a></dt>
       {% else %}
       <dt>{{ctx.name}}</dt>
       {% endif %}
@@ -33,7 +33,7 @@
     {% endfor %}
     </dl>
 
-    {% if not g.fas_user %}
+    {% if not g.auth.logged_in %}
     <p><a href="{{url_for('login')}}">Log in</a> to check it out and set up your
       profile</p>
     {% endif %}

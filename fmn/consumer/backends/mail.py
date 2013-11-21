@@ -85,7 +85,7 @@ class EmailBackend(BaseBackend):
             acceptance_url=acceptance_url,
             rejection_url=rejection_url,
             support_email=self.config['fmn.support_email'],
-            username=confirmation.user_name,
+            username=confirmation.openid,
         ).strip()
         subject = 'Confirm notification email'
 

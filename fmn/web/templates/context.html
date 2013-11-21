@@ -34,7 +34,7 @@
         <p class="list-group-item-text">This chain has zero filters</p>
         {% endif %}
           <form role="form" action="{{url_for('handle_chain')}}" method="post">
-            <input name="username" id="username" value="{{username}}" type="hidden">
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
             <input name="context" id="context" value="{{current}}" type="hidden">
             <input name="chain_name" id="chain_name" value="{{chn.name}}" type="hidden">
             <input name="method" id="method" value="delete" type="hidden">
@@ -59,7 +59,7 @@
             <label class="sr-only" for="chain_name">Chain Name</label>
             <input type="text" class="form-control" name="chain_name" id="chain_name" required=required placeholder="New Chain Name">
           </div>
-          <input name="username" id="username" value="{{username}}" type="hidden">
+          <input name="openid" id="openid" value="{{openid}}" type="hidden">
           <input name="context" id="context" value="{{current}}" type="hidden">
           <button type="submit" class="btn btn-success">
               <span class="glyphicon glyphicon-plus"></span>
@@ -84,7 +84,7 @@
                    id="detail_value" required=required
                    placeholder="{{preference.detail_value or context.placeholder}}">
           </div>
-          <input name="username" id="username" value="{{username}}" type="hidden">
+          <input name="openid" id="openid" value="{{openid}}" type="hidden">
           <input name="context" id="context" value="{{current}}" type="hidden">
           <button type="submit" class="btn btn-success">
               <span class="glyphicon glyphicon-{{context.icon}}"></span>

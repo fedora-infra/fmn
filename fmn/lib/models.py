@@ -96,9 +96,9 @@ class Context(BASE):
     icon = sa.Column(sa.String(32), nullable=False)
     placeholder = sa.Column(sa.String(256))
 
-    def get_confirmation(self, username):
+    def get_confirmation(self, openid):
         for confirmation in self.confirmations:
-            if confirmation.user_name == username:
+            if confirmation.openid == openid:
                 return confirmation
 
         return None
@@ -110,14 +110,14 @@ class Context(BASE):
     get = by_name
 
     @classmethod
-    def by_user(cls, session, username):
+    def by_user(cls, session, openid):
         return session.query(
             cls
         ).join(
             Preference,
             User
         ).filter(
-            User.username == username
+            User.openid == openid
         ).all()
 
     @classmethod
@@ -144,7 +144,7 @@ class Context(BASE):
                 chain = pref.prefers(session, config, valid_paths, message)
                 if chain:
                     yield {
-                        'user': user.username,
+                        'user': user.openid,
                         pref.context.detail_name: pref.detail_value,
                         'chain': chain.name,
                     }
@@ -156,24 +156,25 @@ class Context(BASE):
 class User(BASE):
     __tablename__ = 'users'
 
-    username = sa.Column(sa.String(50), primary_key=True)
+    openid = sa.Column(sa.Text, primary_key=True)
+    openid_url = sa.Column(sa.Text, unique=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
     @classmethod
-    def by_username(cls, session, username):
-        return session.query(cls).filter_by(username=username).first()
+    def by_openid(cls, session, openid):
+        return session.query(cls).filter_by(openid=openid).first()
 
-    get = by_username
+    get = by_openid
 
     @classmethod
     def all(cls, session):
         return session.query(cls).all()
 
     @classmethod
-    def get_or_create(cls, session, username):
-        user = cls.by_username(session, username)
+    def get_or_create(cls, session, openid, openid_url):
+        user = cls.by_openid(session, openid)
         if not user:
-            user = cls(username=username)
+            user = cls(openid=openid, openid_url=openid_url)
             session.add(user)
             session.flush()
         return user
@@ -331,9 +332,9 @@ class Preference(BASE):
 
     detail_value = sa.Column(sa.String(1024))
 
-    user_name = sa.Column(
+    openid = sa.Column(
         sa.String(50),
-        sa.ForeignKey('users.username'),
+        sa.ForeignKey('users.openid'),
         nullable=False)
     context_name = sa.Column(
         sa.String(50),
@@ -344,15 +345,15 @@ class Preference(BASE):
     context = relation('Context', backref=backref('preferences'))
 
     __table_args__ = (
-        sa.UniqueConstraint('user_name', 'context_name'),
+        sa.UniqueConstraint('openid', 'context_name'),
     )
 
     @classmethod
-    def by_user(cls, session, username, allow_none=False):
+    def by_user(cls, session, openid, allow_none=False):
         query = session.query(
             cls
         ).filter(
-            cls.user_name == username
+            cls.openid == openid
         ).order_by(
             cls.context_name
         )
@@ -365,7 +366,7 @@ class Preference(BASE):
     @classmethod
     def create(cls, session, user, context, detail_value=None):
         if not isinstance(user, User):
-            user = User.by_username(session, user)
+            user = User.by_openid(session, user)
         if not isinstance(context, Context):
             context = Context.by_name(session, context)
         pref = cls()
@@ -379,8 +380,12 @@ class Preference(BASE):
         return pref
 
     @classmethod
-    def get_or_create(cls, session, user, context):
-        user = User.get_or_create(session, user)
+    def get_or_create(cls, session, openid, context):
+        user = User.get(session, openid=openid)
+
+        if not user:
+            raise ValueError("No such user %r" % openid)
+
         result = cls.load(session, user, context)
 
         if not result:
@@ -393,14 +398,14 @@ class Preference(BASE):
     @classmethod
     def load(cls, session, user, context):
 
-        if hasattr(user, 'username'):
-            user = user.username
+        if hasattr(user, 'openid'):
+            user = user.openid
 
         if hasattr(context, 'name'):
             context = context.name
 
         return session.query(cls)\
-            .filter_by(user_name=user)\
+            .filter_by(openid=user)\
             .filter_by(context_name=context)\
             .first()
 
@@ -460,9 +465,9 @@ class Confirmation(BASE):
     secret = sa.Column(sa.String(32), default=hash_producer)
     detail_value = sa.Column(sa.String(1024))
 
-    user_name = sa.Column(
+    openid = sa.Column(
         sa.String(50),
-        sa.ForeignKey('users.username'),
+        sa.ForeignKey('users.openid'),
         nullable=False)
     context_name = sa.Column(
         sa.String(50),
@@ -473,7 +478,7 @@ class Confirmation(BASE):
     context = relation('Context', backref=backref('confirmations'))
 
     __table_args__ = (
-        sa.UniqueConstraint('user_name', 'context_name'),
+        sa.UniqueConstraint('openid', 'context_name'),
     )
 
     def repr(self):
@@ -481,13 +486,13 @@ class Confirmation(BASE):
             self.user_name, self.context_name, self.status)
 
     @classmethod
-    def create(cls, session, user, context, detail_value=None):
-        if not isinstance(user, User):
-            user = User.by_username(session, user)
+    def create(cls, session, openid, context, detail_value=None):
+        if not isinstance(openid, User):
+            openid = User.by_openid(session, openid)
         if not isinstance(context, Context):
             context = Context.by_name(session, context)
         confirmation = cls()
-        confirmation.user = user
+        confirmation.user = openid
         confirmation.context = context
 
         confirmation.detail_value = detail_value
@@ -497,12 +502,16 @@ class Confirmation(BASE):
         return confirmation
 
     @classmethod
-    def get_or_create(cls, session, user, context):
-        user = User.get_or_create(session, user)
+    def get_or_create(cls, session, openid, context):
+        user = User.get(session, openid=openid)
+
+        if not user:
+            raise ValueError("No such user %r" % openid)
+
         result = cls.load(session, user, context)
 
         if not result:
-            cls.create(session, user, context)
+            cls.create(session, openid, context)
             result = cls.load(session, user, context)
             session.commit()
 
@@ -511,14 +520,14 @@ class Confirmation(BASE):
     @classmethod
     def load(cls, session, user, context):
 
-        if hasattr(user, 'username'):
-            user = user.username
+        if hasattr(user, 'openid'):
+            user = user.openid
 
         if hasattr(context, 'name'):
             context = context.name
 
         return session.query(cls)\
-            .filter_by(user_name=user)\
+            .filter_by(openid=user)\
             .filter_by(context_name=context)\
             .first()
 
@@ -562,7 +571,7 @@ class Confirmation(BASE):
 
         # Propagate back to the Preference if everything is good.
         if self.status == 'accepted':
-            pref = Preference.load(session, self.user_name, self.context_name)
+            pref = Preference.load(session, self.openid, self.context_name)
             pref.detail_value = self.detail_value
 
         session.flush()
