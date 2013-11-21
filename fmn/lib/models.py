@@ -334,10 +334,10 @@ class Preference(BASE):
 
     # Number of seconds that have elapsed since the earliest queued message
     # before we send a digest over whatever medium.
-    batch_criteria_time = sa.Column(sa.Integer, nullable=True)
+    batch_delta = sa.Column(sa.Integer, nullable=True)
     # Number of messages that are queued before we send a digest over whatever
     # medium.
-    batch_criteria_value = sa.Column(sa.Integer, nullable=True)
+    batch_count = sa.Column(sa.Integer, nullable=True)
 
     openid = sa.Column(
         sa.Text,
@@ -354,6 +354,18 @@ class Preference(BASE):
     __table_args__ = (
         sa.UniqueConstraint('openid', 'context_name'),
     )
+
+    @property
+    def should_batch(self):
+        """ If the user has any batching preferences at all, then we should """
+        return self.batch_delta is not None or self.batch_count is not None
+
+    @classmethod
+    def list_batching(cls, session):
+        return session.query(cls)\
+            .filter(sa.not_(cls.batch_delta == None))\
+            .filter(sa.not_(cls.batch_count == None))\
+            .all()
 
     @classmethod
     def by_user(cls, session, openid, allow_none=False):
@@ -623,14 +635,26 @@ class QueuedMessage(BASE):
         session.commit()
         return queued_message
 
+    def dequeue(self, session):
+        session.delete(self)
+        session.flush()
+        session.commit()
+
     @classmethod
     def earliest_for(cls, session, user, context):
-        message = session.query(cls)\
+        return session.query(cls)\
             .filter_by(openid=user.openid)\
             .filter_by(context_name=context.name)\
             .order_by(cls.created_on)\
             .first()
-        return message
+
+    @classmethod
+    def list_for(cls, session, user, context):
+        return session.query(cls)\
+            .filter_by(openid=user.openid)\
+            .filter_by(context_name=context.name)\
+            .order_by(cls.created_on)\
+            .all()
 
     @classmethod
     def count_for(cls, session, user, context):
