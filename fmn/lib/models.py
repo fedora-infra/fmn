@@ -333,7 +333,7 @@ class Preference(BASE):
     detail_value = sa.Column(sa.String(1024))
 
     openid = sa.Column(
-        sa.String(50),
+        sa.Text,
         sa.ForeignKey('users.openid'),
         nullable=False)
     context_name = sa.Column(
@@ -466,7 +466,7 @@ class Confirmation(BASE):
     detail_value = sa.Column(sa.String(1024))
 
     openid = sa.Column(
-        sa.String(50),
+        sa.Text,
         sa.ForeignKey('users.openid'),
         nullable=False)
     context_name = sa.Column(
@@ -584,7 +584,7 @@ class QueuedMessage(BASE):
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
     openid = sa.Column(
-        sa.String(50),
+        sa.Text,
         sa.ForeignKey('users.openid'),
         nullable=False)
     context_name = sa.Column(
