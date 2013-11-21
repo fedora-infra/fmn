@@ -157,7 +157,7 @@ class User(BASE):
     __tablename__ = 'users'
 
     openid = sa.Column(sa.Text, primary_key=True)
-    openid_url = sa.Column(sa.Text)
+    openid_url = sa.Column(sa.Text, unique=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
     @classmethod
