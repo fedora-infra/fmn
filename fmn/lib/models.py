@@ -332,6 +332,13 @@ class Preference(BASE):
 
     detail_value = sa.Column(sa.String(1024))
 
+    # Number of seconds that have elapsed since the earliest queued message
+    # before we send a digest over whatever medium.
+    batch_criteria_time = sa.Column(sa.Integer, nullable=True)
+    # Number of messages that are queued before we send a digest over whatever
+    # medium.
+    batch_criteria_value = sa.Column(sa.Integer, nullable=True)
+
     openid = sa.Column(
         sa.Text,
         sa.ForeignKey('users.openid'),
@@ -583,6 +590,17 @@ class QueuedMessage(BASE):
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
+    _message = sa.Column(sa.Text, nullable=False)
+
+    @hybrid_property
+    def message(self):
+        return fedmsg.encoding.loads(self._message)
+
+    @message.setter
+    def message(self, kw):
+        if not kw is None:
+            self._message = fedmsg.encoding.dumps(kw)
+
     openid = sa.Column(
         sa.Text,
         sa.ForeignKey('users.openid'),
@@ -595,6 +613,28 @@ class QueuedMessage(BASE):
     user = relation('User', backref=backref('queued_messages'))
     context = relation('Context', backref=backref('queued_messages'))
 
-    __table_args__ = (
-        sa.UniqueConstraint('openid', 'context_name'),
-    )
+    @classmethod
+    def enqueue(cls, session, user, context, message):
+        queued_message = cls(
+            openid=user.openid,
+            context_name=context.name)
+        queued_message.message = message
+        session.add(queued_message)
+        session.commit()
+        return queued_message
+
+    @classmethod
+    def earliest_for(cls, session, user, context):
+        message = session.query(cls)\
+            .filter_by(openid=user.openid)\
+            .filter_by(context_name=context.name)\
+            .order_by(cls.created_on)\
+            .first()
+        return message
+
+    @classmethod
+    def count_for(cls, session, user, context):
+        return session.query(cls)\
+            .filter_by(openid=user.openid)\
+            .filter_by(context_name=context.name)\
+            .count()

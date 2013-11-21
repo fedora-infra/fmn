@@ -59,3 +59,61 @@ class TestBasics(fmn.lib.tests.Base):
             self.sess, name="android", description="Google Cloud Messaging",
             detail_name="registration id", icon="phone")
         eq_(len(fmn.lib.models.Context.all(self.sess)), 2)
+
+    def test_queued_message_enqueue(self):
+        user1 = fmn.lib.models.User.get_or_create(
+            self.sess, openid="ralph.id.fedoraproject",
+            openid_url="http://ralph.id.fedoraproject.org/",
+        )
+        user2 = fmn.lib.models.User.get_or_create(
+            self.sess, openid="ralph.id.fedoraproject",
+            openid_url="http://ralph.id.fedoraproject.org/",
+        )
+        context1 = fmn.lib.models.Context.create(
+            self.sess, name="irc", description="Internet Relay Chat",
+            detail_name="irc nick", icon="user")
+        context2 = fmn.lib.models.Context.create(
+            self.sess, name="android", description="Google Cloud Messaging",
+            detail_name="registration id", icon="phone")
+
+        raw_msg = {'testing': 'foobar'}
+
+        obj1 = fmn.lib.models.QueuedMessage.enqueue(
+            self.sess, user1, context1, raw_msg)
+        obj2 = fmn.lib.models.QueuedMessage.enqueue(
+            self.sess, user1, context1, raw_msg)
+        obj3 = fmn.lib.models.QueuedMessage.enqueue(
+            self.sess, user1, context1, raw_msg)
+
+        assert obj1 != obj2 and obj2 != obj3 and obj1 != obj3
+        eq_(fmn.lib.models.QueuedMessage.count_for(
+            self.sess, user1, context1), 3)
+
+    def test_queued_message_earliest(self):
+        user1 = fmn.lib.models.User.get_or_create(
+            self.sess, openid="ralph.id.fedoraproject",
+            openid_url="http://ralph.id.fedoraproject.org/",
+        )
+        user2 = fmn.lib.models.User.get_or_create(
+            self.sess, openid="ralph.id.fedoraproject",
+            openid_url="http://ralph.id.fedoraproject.org/",
+        )
+        context1 = fmn.lib.models.Context.create(
+            self.sess, name="irc", description="Internet Relay Chat",
+            detail_name="irc nick", icon="user")
+        context2 = fmn.lib.models.Context.create(
+            self.sess, name="android", description="Google Cloud Messaging",
+            detail_name="registration id", icon="phone")
+
+        raw_msg = {'testing': 'foobar'}
+
+        obj1 = fmn.lib.models.QueuedMessage.enqueue(
+            self.sess, user1, context1, raw_msg)
+        obj2 = fmn.lib.models.QueuedMessage.enqueue(
+            self.sess, user1, context1, raw_msg)
+        obj3 = fmn.lib.models.QueuedMessage.enqueue(
+            self.sess, user1, context1, raw_msg)
+
+        assert obj1 != obj2 and obj2 != obj3 and obj1 != obj3
+        eq_(fmn.lib.models.QueuedMessage.earliest_for(
+            self.sess, user1, context1), obj1)
