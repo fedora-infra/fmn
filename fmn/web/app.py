@@ -11,6 +11,7 @@ import jinja2
 import markupsafe
 
 import flask
+import sqlalchemy
 from flask.ext.openid import OpenID
 
 import fmn.lib
@@ -55,6 +56,10 @@ def check_auth():
         openid = flask.session.get('openid').split('://')[1]
         if openid.endswith('/'):
             openid = openid[:-1]
+        if 'id?id=' in openid:
+            openid = openid.split('id?id=')[1]
+        if 'me.yahoo.com/a/' in openid:
+            openid = openid.split('me.yahoo.com/a/')[1]
         openid = openid.replace('/', '_')
         flask.g.auth.logged_in = True
         flask.g.auth.method = u'openid'
@@ -230,9 +235,14 @@ def context(username, context):
     if not context:
         flask.abort(404)
 
-    pref = fmn.lib.models.Preference.get_or_create(
-        SESSION, email=flask.g.auth.email, openid=flask.g.auth.openid,
-        context=context)
+    try:
+        pref = fmn.lib.models.Preference.get_or_create(
+            SESSION, email=flask.g.auth.email, openid=flask.g.auth.openid,
+            context=context)
+    except sqlalchemy.exc.IntegrityError:
+        flask.abort(403, "Someone has already loged in with the email: %s" %
+                    flask.g.auth.email)
+
     return flask.render_template(
         'context.html',
         current=context.name,
