@@ -381,7 +381,11 @@ class Preference(BASE):
 
     @classmethod
     def get_or_create(cls, session, openid, context):
-        user = User.get_or_create(session, openid=openid)
+        user = User.get(session, openid=openid)
+
+        if not user:
+            raise ValueError("No such user %r" % openid)
+
         result = cls.load(session, user, context)
 
         if not result:
@@ -499,7 +503,11 @@ class Confirmation(BASE):
 
     @classmethod
     def get_or_create(cls, session, openid, context):
-        user = User.get_or_create(session, openid=openid)
+        user = User.get(session, openid=openid)
+
+        if not user:
+            raise ValueError("No such user %r" % openid)
+
         result = cls.load(session, user, context)
 
         if not result:

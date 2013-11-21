@@ -116,6 +116,14 @@ def login_required(function):
             flask.flash('Login required', 'errors')
             return flask.redirect(
                 flask.url_for('login', next=flask.request.url))
+
+        # Ensure that the logged in user exists before we proceed.
+        user = fmn.lib.models.User.get_or_create(
+            SESSION,
+            openid=flask.g.auth.openid,
+            openid_url=flask.g.auth.openid_url,
+        )
+
         return function(*args, **kwargs)
     return decorated_function
 
