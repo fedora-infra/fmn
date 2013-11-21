@@ -38,3 +38,4 @@ Starting as of November 15th.
 - [ ] Debug the /favicon.ico/ thing on first login.
       Weird.  I couldn't duplicate it locally.  Try again on the cloud node?
       This might resolved after our giant flask_openid feature merge.
+- [ ] Put the login options under a bootstrap dropdown.
