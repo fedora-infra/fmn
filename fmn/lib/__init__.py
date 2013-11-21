@@ -62,7 +62,8 @@ def load_filters(root='fmn.filters'):
         doc = inspect.getdoc(obj)
 
         # It's crazy, but inspect (stdlib!) doesn't return unicode objs.
-        doc = doc.decode('utf-8')
+        if doc:
+            doc = doc.decode('utf-8')
 
         if doc:
             title, doc_as_rst = doc.split('\n', 1)
