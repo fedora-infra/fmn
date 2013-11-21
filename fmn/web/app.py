@@ -198,8 +198,6 @@ def about():
 @login_required
 def profile(username):
 
-    print flask.g.auth.openid, username
-
     if (not flask.g.auth.logged_in or (
         flask.g.auth.openid != username and
             not admin(flask.g.auth.openid))):
