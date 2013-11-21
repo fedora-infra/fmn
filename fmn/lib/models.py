@@ -576,3 +576,25 @@ class Confirmation(BASE):
 
         session.flush()
         session.commit()
+
+
+class QueuedMessage(BASE):
+    __tablename__ = 'queued_messages'
+    id = sa.Column(sa.Integer, primary_key=True)
+    created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
+
+    openid = sa.Column(
+        sa.String(50),
+        sa.ForeignKey('users.openid'),
+        nullable=False)
+    context_name = sa.Column(
+        sa.String(50),
+        sa.ForeignKey('contexts.name'),
+        nullable=False)
+
+    user = relation('User', backref=backref('queued_messages'))
+    context = relation('Context', backref=backref('queued_messages'))
+
+    __table_args__ = (
+        sa.UniqueConstraint('openid', 'context_name'),
+    )
