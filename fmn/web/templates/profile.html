@@ -7,7 +7,7 @@
     <form method="POST" action="https://www.libravatar.org/openid/login/">
       <input type="hidden" name="openid_identifier" value="{{g.auth.openid_url}}"/>
       <input type="image" class="img-circle centered" src="{{avatar}}" style="outline: none;"
-             alt="{{username}}'s avatar"/>
+             alt="{{openid}}'s avatar"/>
     </form>
   </div>
 
@@ -35,7 +35,7 @@
           <h4 class="list-group-item-heading">{{pref.context_name}}</h4>
           <p class="list-group-item-text">{{pref.detail_value}}
             <span class="pull-right">
-              <a href="{{url_for('context', username=username,
+              <a href="{{url_for('context', openid=openid,
                                  context=pref.context_name)}}">
                 <button type="submit" class="btn btn-success">
                   <span class="glyphicon

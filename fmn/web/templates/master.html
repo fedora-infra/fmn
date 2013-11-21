@@ -50,7 +50,7 @@
               {% else %}
               <li>
               {% endif %}
-              <a href="{{url_for('profile', username=username)}}">
+              <a href="{{url_for('profile', openid=openid)}}">
                 profile
               </a>
               </li>
@@ -61,7 +61,7 @@
                 {% else %}
                 <li>
                 {% endif %}
-                <a href="{{url_for('context', username=username, context=ctx.name)}}">
+                <a href="{{url_for('context', openid=openid, context=ctx.name)}}">
                     <span class="glyphicon glyphicon-{{ctx.icon}}"></span>
                     {{ctx.name}}
                 </a>

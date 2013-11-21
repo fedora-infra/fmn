@@ -18,7 +18,7 @@
         <p class="list-group-item-text">{{flt.doc(valid_paths)}}
           <form role="form" action="{{url_for('handle_filter')}}" method="post">
             <input name="filter_name" id="filter_name" value="{{flt.code_path}}" type="hidden">
-            <input name="username" id="username" value="{{username}}" type="hidden">
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
             <input name="context" id="context" value="{{current}}" type="hidden">
             <input name="chain_name" id="chain_name" value="{{chain.name}}" type="hidden">
             <input name="method" id="method" value="delete" type="hidden">
@@ -61,7 +61,7 @@
                     {% endif %}
                   {% endfor %}
                 <input name="filter_name" id="filter_name" value="{{root}}:{{path}}" type="hidden">
-                <input name="username" id="username" value="{{username}}" type="hidden">
+                <input name="openid" id="openid" value="{{openid}}" type="hidden">
                 <input name="context" id="context" value="{{current}}" type="hidden">
                 <input name="chain_name" id="chain_name" value="{{chain.name}}" type="hidden">
                 <button type="submit" class="btn btn-success">
