@@ -156,13 +156,8 @@ class Context(BASE):
 class User(BASE):
     __tablename__ = 'users'
 
-    email = sa.Column(sa.String(100), unique=True)
     openid = sa.Column(sa.Text, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
-
-    @classmethod
-    def by_email(cls, session, email):
-        return session.query(cls).filter_by(email=email).first()
 
     @classmethod
     def by_openid_provider(cls, session, openid):
@@ -175,10 +170,10 @@ class User(BASE):
         return session.query(cls).all()
 
     @classmethod
-    def get_or_create(cls, session, openid, email):
+    def get_or_create(cls, session, openid):
         user = cls.by_openid_provider(session, openid)
         if not user:
-            user = cls(email=email, openid=openid)
+            user = cls(openid=openid)
             session.add(user)
             session.flush()
         return user
@@ -384,8 +379,8 @@ class Preference(BASE):
         return pref
 
     @classmethod
-    def get_or_create(cls, session, openid, email, context):
-        user = User.get_or_create(session, openid=openid, email=email)
+    def get_or_create(cls, session, openid, context):
+        user = User.get_or_create(session, openid=openid)
         result = cls.load(session, user, context)
 
         if not result:
@@ -486,7 +481,7 @@ class Confirmation(BASE):
             self.user_name, self.context_name, self.status)
 
     @classmethod
-    def create(cls, session, email, openid, context, detail_value=None):
+    def create(cls, session, openid, context, detail_value=None):
         if not isinstance(openid, User):
             openid = User.by_openid_provider(session, openid)
         if not isinstance(context, Context):
@@ -502,12 +497,12 @@ class Confirmation(BASE):
         return confirmation
 
     @classmethod
-    def get_or_create(cls, session, email, openid, context):
-        user = User.get_or_create(session, email=email, openid=openid)
+    def get_or_create(cls, session, openid, context):
+        user = User.get_or_create(session, openid=openid)
         result = cls.load(session, user, context)
 
         if not result:
-            cls.create(session, email, openid, context)
+            cls.create(session, openid, context)
             result = cls.load(session, user, context)
             session.commit()
 

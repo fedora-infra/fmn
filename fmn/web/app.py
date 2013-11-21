@@ -236,8 +236,7 @@ def context(openid, context):
 
     try:
         pref = fmn.lib.models.Preference.get_or_create(
-            SESSION, email=flask.g.auth.email, openid=openid,
-            context=context)
+            SESSION, openid=openid, context=context)
     except sqlalchemy.exc.IntegrityError:
         flask.abort(403, "Someone has already loged in with the email: %s" %
                     flask.g.auth.email)
@@ -262,8 +261,7 @@ def chain(openid, context, chain_name):
         flask.abort(404)
 
     pref = fmn.lib.models.Preference.get_or_create(
-        SESSION, email=flask.g.auth.email, openid=openid,
-        context=context)
+        SESSION, openid=openid, context=context)
 
     chain = None
     for _chain in pref.chains:
@@ -339,8 +337,7 @@ def handle_chain():
         raise APIError(403, dict(reason="%r is not a context" % context))
 
     pref = fmn.lib.models.Preference.get_or_create(
-        SESSION, email=flask.g.auth.email, openid=openid,
-        context=ctx)
+        SESSION, openid=openid, context=ctx)
 
     try:
         if method == 'POST':
@@ -405,15 +402,13 @@ def handle_details():
     # email address and spam the crap out of him.
     if fedmsg_config.get('fmn.verify_delivery_details', True):
         con = fmn.lib.models.Confirmation.get_or_create(
-            SESSION, email=flask.g.auth.email, openid=openid,
-            context=ctx)
+            SESSION, openid=openid, context=ctx)
         con.set_value(SESSION, detail_value)
         con.set_status(SESSION, 'pending')
     else:
         # Otherwise, just change the details right away.  Never do this.
         pref = fmn.lib.models.Preference.get_or_create(
-            SESSION, email=flask.g.auth.email, openid=openid,
-            context=ctx)
+            SESSION, openid=openid, context=ctx)
         pref.update_details(SESSION, detail_value)
 
     next_url = flask.url_for(
@@ -462,8 +457,7 @@ def handle_filter():
         raise APIError(403, dict(reason="%r is not a context" % context))
 
     pref = fmn.lib.models.Preference.get_or_create(
-        SESSION, email=flask.g.auth.email, openid=openid,
-        context=ctx)
+        SESSION, openid=openid, context=ctx)
 
     if not pref.has_chain(SESSION, chain_name):
         raise APIError(403, dict(reason="%r is not a chain" % chain_name))
