@@ -8,6 +8,7 @@ import docutils.examples
 import fedora.client
 import fedmsg.config
 import jinja2
+import libravatar
 import markupsafe
 
 import flask
@@ -84,14 +85,6 @@ def after_openid_login(resp):
         flask.session['fullname'] = resp.fullname
         flask.session['nickname'] = resp.nickname or resp.fullname
         flask.session['email'] = resp.email
-
-        # Create the user if they do not yet exist.
-        user = fmn.lib.models.User.get_or_create(
-            SESSION,
-            openid=extract_openid_identifier(openid_url),
-            openid_url=openid_url,
-        )
-
         next_url = flask.request.args.get('next', default)
         return flask.redirect(next_url)
     else:
@@ -107,7 +100,7 @@ def shutdown_session(exception=None):
 def admin(user):
     if user.endswith('id.fedoraproject.org'):
         username = user.split('.', 1)[0]
-        return user in flask.config.get('FMN_ADMINS', [])
+        return user in app.config.get('FMN_ADMINS', [])
     else:
         return False
 
@@ -218,9 +211,15 @@ def profile(openid):
 
         flask.abort(403)
 
-    fas = fedora.client.AccountSystem()
-    avatar = fas.avatar_url(
-        openid, lookup_email=False, service='libravatar', size=140)
+    user = fmn.lib.models.User.get_or_create(
+        SESSION,
+        openid=flask.g.auth.openid,
+        openid_url=flask.g.auth.openid_url,
+    )
+    avatar = libravatar.libravatar_url(
+        openid=user.openid_url,
+        https=app.config.get('FMN_SSL', False),
+        size=140)
 
     prefs = fmn.lib.models.Preference.by_user(
         SESSION, openid, allow_none=False)

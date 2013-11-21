@@ -17,11 +17,14 @@ session = fmn.lib.models.init(uri, debug=True, create=True)
 
 if '--with-dev-data' in sys.argv:
     user1 = fmn.lib.models.User.get_or_create(
-        session, openid="ralph.id.fedoraproject.org")
+        session, openid="ralph.id.fedoraproject.org",
+        openid_url="http://ralph.id.fedoraproject.org/")
     user2 = fmn.lib.models.User.get_or_create(
-        session, openid="toshio.id.fedoraproject.org")
+        session, openid="toshio.id.fedoraproject.org",
+        openid_url="http://toshio.id.fedoraproject.org/")
     user3 = fmn.lib.models.User.get_or_create(
-        session, openid="toshio.id.fedoraproject.org")
+        session, openid="toshio.id.fedoraproject.org",
+        openid_url="http://toshio.id.fedoraproject.org/")
 
     context1 = fmn.lib.models.Context.create(
         session, name="irc", description="Internet Relay Chat",
