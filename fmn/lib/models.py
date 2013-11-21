@@ -363,9 +363,10 @@ class Preference(BASE):
     @classmethod
     def list_batching(cls, session):
         return session.query(cls)\
-            .filter(sa.not_(cls.batch_delta == None))\
-            .filter(sa.not_(cls.batch_count == None))\
-            .all()
+            .filter(sa.or_(
+                cls.batch_delta != None,
+                cls.batch_count != None,
+            )).all()
 
     @classmethod
     def by_user(cls, session, openid, allow_none=False):
@@ -627,6 +628,10 @@ class QueuedMessage(BASE):
 
     @classmethod
     def enqueue(cls, session, user, context, message):
+        if not isinstance(user, User):
+            user = User.by_openid(session, openid=user)
+        if not isinstance(context, Context):
+            context = Context.by_name(session, context)
         queued_message = cls(
             openid=user.openid,
             context_name=context.name)
