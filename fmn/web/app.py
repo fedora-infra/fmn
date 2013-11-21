@@ -64,6 +64,7 @@ def check_auth():
         flask.g.auth.logged_in = True
         flask.g.auth.method = u'openid'
         flask.g.auth.openid = openid
+        flask.g.auth.openid_url = flask.session.get('openid')
         flask.g.auth.fullname = flask.session.get('fullname', None)
         flask.g.auth.nickname = flask.session.get('nickname', None)
         flask.g.auth.email = flask.session.get('email', None)
