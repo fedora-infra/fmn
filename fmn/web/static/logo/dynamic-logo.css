@@ -4,6 +4,10 @@ path.link {
   stroke-width: 1.5px;
 }
 
+#logo-container > svg {
+    margin-top: -100px;
+}
+
 marker#output {
   fill:   #3c6eb4;
 }
