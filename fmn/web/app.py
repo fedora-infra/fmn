@@ -91,11 +91,7 @@ def shutdown_session(exception=None):
 
 
 def admin(user):
-    if user.endswith('id.fedoraproject.org'):
-        username = user.split('.', 1)[0]
-        return user in flask.config.get('FMN_ADMINS', [])
-    else:
-        return False
+    return user in flask.config.get('FMN_ADMINS', [])
 
 
 class APIError(Exception):
