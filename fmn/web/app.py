@@ -98,11 +98,7 @@ def shutdown_session(exception=None):
 
 
 def admin(user):
-    if user.endswith('id.fedoraproject.org'):
-        username = user.split('.', 1)[0]
-        return user in app.config.get('FMN_ADMINS', [])
-    else:
-        return False
+    return user in app.config.get('FMN_ADMINS', [])
 
 
 class APIError(Exception):
@@ -337,7 +333,7 @@ def handle_chain():
     if method not in ['POST', 'DELETE']:
         raise APIError(405, dict(reason="Only POST and DELETE accepted"))
 
-    user = fmn.lib.models.User.by_openid_provider(SESSION, openid)
+    user = fmn.lib.models.User.by_openid(SESSION, openid)
     if not user:
         raise APIError(403, dict(reason="%r is not a user" % openid))
 
@@ -398,7 +394,7 @@ def handle_details():
             flask.g.auth.openid, openid
         )))
 
-    user = fmn.lib.models.User.by_openid_provider(SESSION, openid)
+    user = fmn.lib.models.User.by_openid(SESSION, openid)
     if not user:
         raise APIError(403, dict(reason="%r is not a user" % openid))
 
@@ -457,7 +453,7 @@ def handle_filter():
     if method not in ['POST', 'DELETE']:
         raise APIError(405, dict(reason="Only POST and DELETE accepted"))
 
-    user = fmn.lib.models.User.by_openid_provider(SESSION, openid)
+    user = fmn.lib.models.User.by_openid(SESSION, openid)
     if not user:
         raise APIError(403, dict(reason="%r is not a user" % openid))
 
