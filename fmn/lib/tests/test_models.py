@@ -66,8 +66,8 @@ class TestBasics(fmn.lib.tests.Base):
             openid_url="http://ralph.id.fedoraproject.org/",
         )
         user2 = fmn.lib.models.User.get_or_create(
-            self.sess, openid="ralph.id.fedoraproject",
-            openid_url="http://ralph.id.fedoraproject.org/",
+            self.sess, openid="toshio.id.fedoraproject",
+            openid_url="http://toshio.id.fedoraproject.org/",
         )
         context1 = fmn.lib.models.Context.create(
             self.sess, name="irc", description="Internet Relay Chat",
@@ -84,6 +84,10 @@ class TestBasics(fmn.lib.tests.Base):
             self.sess, user1, context1, raw_msg)
         obj3 = fmn.lib.models.QueuedMessage.enqueue(
             self.sess, user1, context1, raw_msg)
+        obj4 = fmn.lib.models.QueuedMessage.enqueue(
+            self.sess, user2, context1, raw_msg)
+        obj5 = fmn.lib.models.QueuedMessage.enqueue(
+            self.sess, user1, context2, raw_msg)
 
         assert obj1 != obj2 and obj2 != obj3 and obj1 != obj3
         eq_(fmn.lib.models.QueuedMessage.count_for(
@@ -113,6 +117,10 @@ class TestBasics(fmn.lib.tests.Base):
             self.sess, user1, context1, raw_msg)
         obj3 = fmn.lib.models.QueuedMessage.enqueue(
             self.sess, user1, context1, raw_msg)
+        obj4 = fmn.lib.models.QueuedMessage.enqueue(
+            self.sess, user2, context1, raw_msg)
+        obj5 = fmn.lib.models.QueuedMessage.enqueue(
+            self.sess, user1, context2, raw_msg)
 
         assert obj1 != obj2 and obj2 != obj3 and obj1 != obj3
         eq_(fmn.lib.models.QueuedMessage.earliest_for(
