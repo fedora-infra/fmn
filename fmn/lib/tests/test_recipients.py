@@ -8,9 +8,13 @@ import fmn.lib.tests
 class TestRecipients(fmn.lib.tests.Base):
     def create_user_and_context_data(self):
         user1 = fmn.lib.models.User.get_or_create(
-            self.sess, openid="ralph.id.fedoraproject.org")
+            self.sess, openid="ralph.id.fedoraproject.org",
+            openid_url="http://ralph.id.fedoraproject.org/",
+        )
         user2 = fmn.lib.models.User.get_or_create(
-            self.sess, openid="toshio.id.fedoraproject.org")
+            self.sess, openid="toshio.id.fedoraproject.org",
+            openid_url="http://toshio.id.fedoraproject.org/",
+        )
         context1 = fmn.lib.models.Context.create(
             self.sess, name="irc", description="Internet Relay Chat",
             detail_name="irc nick", icon="user",
