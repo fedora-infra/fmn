@@ -9,10 +9,19 @@ class TestBasics(fmn.lib.tests.Base):
         pass
 
     def test_user_get_or_create(self):
-        user1 = fmn.lib.models.User.get_or_create(self.sess, username="ralph")
-        user2 = fmn.lib.models.User.get_or_create(self.sess, username="ralph")
-        user3 = fmn.lib.models.User.get_or_create(self.sess, username="toshio")
-        eq_(user1.username, user2.username)
+        user1 = fmn.lib.models.User.get_or_create(
+            self.sess, openid="ralph.id.fedoraproject",
+            openid_url="http://ralph.id.fedoraproject.org/",
+        )
+        user2 = fmn.lib.models.User.get_or_create(
+            self.sess, openid="ralph.id.fedoraproject",
+            openid_url="http://ralph.id.fedoraproject.org/",
+        )
+        user3 = fmn.lib.models.User.get_or_create(
+            self.sess, openid="toshio.id.fedoraproject",
+            openid_url="http://toshio.id.fedoraproject.org/",
+        )
+        eq_(user1.openid, user2.openid)
         eq_(user1, user2)
         assert_not_equals(user1, user3)
 
@@ -28,9 +37,18 @@ class TestBasics(fmn.lib.tests.Base):
         assert_not_equals(context1, context3)
 
     def test_user_all(self):
-        user1 = fmn.lib.models.User.get_or_create(self.sess, username="ralph")
-        user2 = fmn.lib.models.User.get_or_create(self.sess, username="ralph")
-        user3 = fmn.lib.models.User.get_or_create(self.sess, username="toshio")
+        user1 = fmn.lib.models.User.get_or_create(
+            self.sess, openid="ralph.id.fedoraproject",
+            openid_url="http://ralph.id.fedoraproject.org/",
+        )
+        user2 = fmn.lib.models.User.get_or_create(
+            self.sess, openid="ralph.id.fedoraproject",
+            openid_url="http://ralph.id.fedoraproject.org/",
+        )
+        user3 = fmn.lib.models.User.get_or_create(
+            self.sess, openid="toshio.id.fedoraproject",
+            openid_url="http://toshio.id.fedoraproject.org/",
+        )
         eq_(len(fmn.lib.models.User.all(self.sess)), 2)
 
     def test_context_all(self):

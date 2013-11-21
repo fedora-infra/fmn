@@ -152,7 +152,7 @@ class IRCBackend(BaseBackend):
                 acceptance_url=acceptance_url,
                 rejection_url=rejection_url,
                 support_email=self.config['fmn.support_email'],
-                username=confirmation.user_name,
+                username=confirmation.openid,
             ).strip().split('\n')
 
             for line in lines:

@@ -44,13 +44,13 @@
               <a href="{{url_for('about')}}">about</a>
               <li>
 
-            {% if g.fas_user %}
+            {% if g.auth.logged_in %}
               {% if 'profile' == current %}
               <li class="active">
               {% else %}
               <li>
               {% endif %}
-              <a href="{{url_for('profile', username=username)}}">
+              <a href="{{url_for('profile', openid=openid)}}">
                 profile
               </a>
               </li>
@@ -61,7 +61,7 @@
                 {% else %}
                 <li>
                 {% endif %}
-                <a href="{{url_for('context', username=username, context=ctx.name)}}">
+                <a href="{{url_for('context', openid=openid, context=ctx.name)}}">
                     <span class="glyphicon glyphicon-{{ctx.icon}}"></span>
                     {{ctx.name}}
                 </a>
@@ -71,10 +71,15 @@
 
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            {% if g.fas_user %}
+            {% if g.auth.logged_in %}
             <li><a href="{{url_for('logout')}}">Logout</a></li>
             {% else %}
+            {% if config['FMN_ALLOW_GENERIC_OPENID'] %}
             <li><a href="{{url_for('login')}}">Login</a></li>
+            {% endif %}
+            {% if config['FMN_FEDORA_OPENID'] and config['FMN_ALLOW_FAS_OPENID'] %}
+            <li><a href="{{url_for('fedora_login')}}">Fedora Login</a></li>
+            {% endif %}
             {% endif %}
           </ul>
 
