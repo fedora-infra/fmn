@@ -35,6 +35,8 @@ Starting as of November 15th.
 - [ ] Batching/digests.  -- queue notifications in a db table.
       If a message for user comes in: wait 20 minutes or 50 more
       messages, then send a batch
+      OK, the model, lib, and backend are done.  Just need to represent it in
+      the UI now.
 - [ ] Debug the /favicon.ico/ thing on first login.
       Weird.  I couldn't duplicate it locally.  Try again on the cloud node?
       This might resolved after our giant flask_openid feature merge.
