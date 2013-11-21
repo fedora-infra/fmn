@@ -29,3 +29,9 @@ class GCMBackend(BaseBackend):
             data=json.dumps(body),
             headers=headers)
         self.log.debug(" * got %r %r" % (response.status_code, reponse.text))
+
+    def handle_batch(self, recipient, queued_messages):
+        raise NotImplementedError()
+
+    def handle_confirmation(self, confirmation):
+        raise NotImplementedError()
