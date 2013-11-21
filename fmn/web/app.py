@@ -52,9 +52,13 @@ def check_auth():
         id=None,
     )
     if 'openid' in flask.session:
+        openid = flask.session.get('openid').split('://')[1]
+        if openid.endswith('/'):
+            openid = openid[:-1]
+        openid = openid.replace('/', '_')
         flask.g.auth.logged_in = True
         flask.g.auth.method = u'openid'
-        flask.g.auth.id = flask.session.get('openid', None)
+        flask.g.auth.openid = openid
         flask.g.auth.fullname = flask.session.get('fullname', None)
         flask.g.auth.nickname = flask.session.get('nickname', None)
         flask.g.auth.email = flask.session.get('email', None)
@@ -81,7 +85,11 @@ def shutdown_session(exception=None):
 
 
 def admin(user):
-    return user in config.get('FMN_ADMINS', [])
+    if user.endswith('id.fedoraproject.org'):
+        username = user.split('.', 1)[0]
+        return user in flask.config.get('FMN_ADMINS', [])
+    else:
+        return False
 
 
 class APIError(Exception):
@@ -147,7 +155,7 @@ def inject_variable():
     username = None
     contexts = []
     if flask.g.auth.logged_in:
-        username = flask.g.auth.nickname or flask.g.auth.fullname
+        username = flask.g.auth.openid
         contexts = fmn.lib.models.Context.all(SESSION)
     return dict(username=username,
                 contexts=contexts,
@@ -184,9 +192,11 @@ def about():
 @login_required
 def profile(username):
 
+    print flask.g.auth.openid, username
+
     if (not flask.g.auth.logged_in or (
-        flask.g.auth.nickname != username and
-            not admin(flask.g.auth.nickname))):
+        flask.g.auth.openid != username and
+            not admin(flask.g.auth.openid))):
 
         flask.abort(403)
 
@@ -213,14 +223,16 @@ def profile(username):
 @app.route('/<not_reserved:username>/<context>/')
 @login_required
 def context(username, context):
-    if flask.g.auth.nickname != username and not admin(flask.g.auth.nickname):
+    if flask.g.auth.openid != username and not admin(flask.g.auth.openid):
         flask.abort(403)
 
     context = fmn.lib.models.Context.by_name(SESSION, context)
     if not context:
         flask.abort(404)
 
-    pref = fmn.lib.models.Preference.get_or_create(SESSION, username, context)
+    pref = fmn.lib.models.Preference.get_or_create(
+        SESSION, email=flask.g.auth.email, openid=flask.g.auth.openid,
+        context=context)
     return flask.render_template(
         'context.html',
         current=context.name,
@@ -233,14 +245,16 @@ def context(username, context):
 @app.route('/<not_reserved:username>/<context>/<chain_name>/')
 @login_required
 def chain(username, context, chain_name):
-    if flask.g.auth.nickname != username and not admin(flask.g.auth.nickname):
+    if flask.g.auth.openid != username and not admin(flask.g.auth.openid):
         flask.abort(403)
 
     context = fmn.lib.models.Context.by_name(SESSION, context)
     if not context:
         flask.abort(404)
 
-    pref = fmn.lib.models.Preference.get_or_create(SESSION, username, context)
+    pref = fmn.lib.models.Preference.get_or_create(
+        SESSION, email=flask.g.auth.email, openid=flask.g.auth.openid,
+        context=context)
 
     chain = None
     for _chain in pref.chains:
@@ -272,7 +286,7 @@ def handle_confirmation(action, secret):
     if not confirmation:
         flask.abort(404)
 
-    if flask.g.auth.nickname != confirmation.user_name:
+    if flask.g.auth.openid != confirmation.openid:
         flask.abort(403)
 
     if action == 'accept':
@@ -282,7 +296,7 @@ def handle_confirmation(action, secret):
 
     return flask.redirect(flask.url_for(
         'context',
-        username=confirmation.user_name,
+        username=confirmation.openid,
         context=confirmation.context_name))
 
 
@@ -299,15 +313,15 @@ def handle_chain():
     chain_name = form.chain_name.data
     method = (form.method.data or flask.request.method).upper()
 
-    if flask.g.auth.nickname != username and not admin(flask.g.auth.nickname):
+    if flask.g.auth.openid != username and not admin(flask.g.auth.openid):
         raise APIError(403, dict(reason="%r is not %r" % (
-            flask.g.auth.nickname, username
+            flask.g.auth.openid, username
         )))
 
     if method not in ['POST', 'DELETE']:
         raise APIError(405, dict(reason="Only POST and DELETE accepted"))
 
-    user = fmn.lib.models.User.by_username(SESSION, username)
+    user = fmn.lib.models.User.by_openid_provider(SESSION, username)
     if not user:
         raise APIError(403, dict(reason="%r is not a user" % username))
 
@@ -315,7 +329,9 @@ def handle_chain():
     if not ctx:
         raise APIError(403, dict(reason="%r is not a context" % context))
 
-    pref = fmn.lib.models.Preference.get_or_create(SESSION, username, ctx)
+    pref = fmn.lib.models.Preference.get_or_create(
+        SESSION, email=flask.g.auth.email, openid=flask.g.auth.openid,
+        context=ctx)
 
     try:
         if method == 'POST':
@@ -362,12 +378,12 @@ def handle_details():
     context = form.context.data
     detail_value = form.detail_value.data
 
-    if flask.g.auth.nickname != username and not admin(flask.g.auth.nickname):
+    if flask.g.auth.openid != username and not admin(flask.g.auth.openid):
         raise APIError(403, dict(reason="%r is not %r" % (
-            flask.g.auth.nickname, username
+            flask.g.auth.openid, username
         )))
 
-    user = fmn.lib.models.User.by_username(SESSION, username)
+    user = fmn.lib.models.User.by_openid_provider(SESSION, username)
     if not user:
         raise APIError(403, dict(reason="%r is not a user" % username))
 
@@ -379,12 +395,16 @@ def handle_details():
     # before we start doing stuff.  Otherwise, ralph could put in pingou's
     # email address and spam the crap out of him.
     if fedmsg_config.get('fmn.verify_delivery_details', True):
-        con = fmn.lib.models.Confirmation.get_or_create(SESSION, username, ctx)
+        con = fmn.lib.models.Confirmation.get_or_create(
+            SESSION, email=flask.g.auth.email, openid=flask.g.auth.openid,
+            context=ctx)
         con.set_value(SESSION, detail_value)
         con.set_status(SESSION, 'pending')
     else:
         # Otherwise, just change the details right away.  Never do this.
-        pref = fmn.lib.models.Preference.get_or_create(SESSION, username, ctx)
+        pref = fmn.lib.models.Preference.get_or_create(
+            SESSION, email=flask.g.auth.email, openid=flask.g.auth.openid,
+            context=ctx)
         pref.update_details(SESSION, detail_value)
 
     next_url = flask.url_for(
@@ -416,15 +436,15 @@ def handle_filter():
         if args not in known_args:
             arguments[args] = flask.request.form[args]
 
-    if flask.g.auth.nickname != username and not admin(flask.g.auth.nickname):
+    if flask.g.auth.openid != username and not admin(flask.g.auth.openid):
         raise APIError(403, dict(reason="%r is not %r" % (
-            flask.g.auth.nickname, username
+            flask.g.auth.openid, username
         )))
 
     if method not in ['POST', 'DELETE']:
         raise APIError(405, dict(reason="Only POST and DELETE accepted"))
 
-    user = fmn.lib.models.User.by_username(SESSION, username)
+    user = fmn.lib.models.User.by_openid_provider(SESSION, username)
     if not user:
         raise APIError(403, dict(reason="%r is not a user" % username))
 
@@ -432,7 +452,9 @@ def handle_filter():
     if not ctx:
         raise APIError(403, dict(reason="%r is not a context" % context))
 
-    pref = fmn.lib.models.Preference.get_or_create(SESSION, username, ctx)
+    pref = fmn.lib.models.Preference.get_or_create(
+        SESSION, email=flask.g.auth.email, openid=flask.g.auth.openid,
+        context=ctx)
 
     if not pref.has_chain(SESSION, chain_name):
         raise APIError(403, dict(reason="%r is not a chain" % chain_name))
