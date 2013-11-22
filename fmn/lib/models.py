@@ -332,8 +332,15 @@ class Preference(BASE):
 
     detail_value = sa.Column(sa.String(1024))
 
+    # Number of seconds that have elapsed since the earliest queued message
+    # before we send a digest over whatever medium.
+    batch_delta = sa.Column(sa.Integer, nullable=True)
+    # Number of messages that are queued before we send a digest over whatever
+    # medium.
+    batch_count = sa.Column(sa.Integer, nullable=True)
+
     openid = sa.Column(
-        sa.String(50),
+        sa.Text,
         sa.ForeignKey('users.openid'),
         nullable=False)
     context_name = sa.Column(
@@ -347,6 +354,25 @@ class Preference(BASE):
     __table_args__ = (
         sa.UniqueConstraint('openid', 'context_name'),
     )
+
+    @property
+    def should_batch(self):
+        """ If the user has any batching preferences at all, then we should """
+        return self.batch_delta is not None or self.batch_count is not None
+
+    @classmethod
+    def list_batching(cls, session):
+        return session.query(cls)\
+            .filter(sa.or_(
+                cls.batch_delta != None,
+                cls.batch_count != None,
+            )).all()
+
+    def set_batch_values(self, session, delta, count):
+        self.batch_delta = delta
+        self.batch_count = count
+        session.add(self)
+        session.commit()
 
     @classmethod
     def by_user(cls, session, openid, allow_none=False):
@@ -466,7 +492,7 @@ class Confirmation(BASE):
     detail_value = sa.Column(sa.String(1024))
 
     openid = sa.Column(
-        sa.String(50),
+        sa.Text,
         sa.ForeignKey('users.openid'),
         nullable=False)
     context_name = sa.Column(
@@ -483,7 +509,7 @@ class Confirmation(BASE):
 
     def repr(self):
         return "<Confirmation user:%s, context:%s, status:%s>" % (
-            self.user_name, self.context_name, self.status)
+            self.openid, self.context_name, self.status)
 
     @classmethod
     def create(cls, session, openid, context, detail_value=None):
@@ -576,3 +602,74 @@ class Confirmation(BASE):
 
         session.flush()
         session.commit()
+
+
+class QueuedMessage(BASE):
+    __tablename__ = 'queued_messages'
+    id = sa.Column(sa.Integer, primary_key=True)
+    created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
+
+    _message = sa.Column(sa.Text, nullable=False)
+
+    @hybrid_property
+    def message(self):
+        return fedmsg.encoding.loads(self._message)
+
+    @message.setter
+    def message(self, kw):
+        if not kw is None:
+            self._message = fedmsg.encoding.dumps(kw)
+
+    openid = sa.Column(
+        sa.Text,
+        sa.ForeignKey('users.openid'),
+        nullable=False)
+    context_name = sa.Column(
+        sa.String(50),
+        sa.ForeignKey('contexts.name'),
+        nullable=False)
+
+    user = relation('User', backref=backref('queued_messages'))
+    context = relation('Context', backref=backref('queued_messages'))
+
+    @classmethod
+    def enqueue(cls, session, user, context, message):
+        if not isinstance(user, User):
+            user = User.by_openid(session, openid=user)
+        if not isinstance(context, Context):
+            context = Context.by_name(session, context)
+        queued_message = cls(
+            openid=user.openid,
+            context_name=context.name)
+        queued_message.message = message
+        session.add(queued_message)
+        session.commit()
+        return queued_message
+
+    def dequeue(self, session):
+        session.delete(self)
+        session.flush()
+        session.commit()
+
+    @classmethod
+    def earliest_for(cls, session, user, context):
+        return session.query(cls)\
+            .filter_by(openid=user.openid)\
+            .filter_by(context_name=context.name)\
+            .order_by(cls.created_on)\
+            .first()
+
+    @classmethod
+    def list_for(cls, session, user, context):
+        return session.query(cls)\
+            .filter_by(openid=user.openid)\
+            .filter_by(context_name=context.name)\
+            .order_by(cls.created_on)\
+            .all()
+
+    @classmethod
+    def count_for(cls, session, user, context):
+        return session.query(cls)\
+            .filter_by(openid=user.openid)\
+            .filter_by(context_name=context.name)\
+            .count()

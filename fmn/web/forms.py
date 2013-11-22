@@ -1,4 +1,4 @@
-from wtforms import Form, TextField, validators
+from wtforms import Form, TextField, IntegerField, validators
 
 
 class ChainForm(Form):
@@ -12,6 +12,8 @@ class DetailsForm(Form):
     openid = TextField('openid', [validators.Required()])
     context = TextField('context', [validators.Required()])
     detail_value = TextField('detail_value', [validators.Required()])
+    batch_delta = IntegerField('batch_delta')
+    batch_count = IntegerField('batch_delta')
 
 
 class FilterForm(Form):

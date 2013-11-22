@@ -74,6 +74,14 @@ class EmailBackend(BaseBackend):
 
         self.send_mail(recipient, subject, content)
 
+    def handle_batch(self, recipient, queued_messages):
+        subject = "Fedora Notifications Digest"
+        content = "\n".join([
+            fedmsg.meta.msg2repr(queued_message.msg, **self.config)
+            for queued_message in queued_messages])
+
+        self.send_mail(recipient, subject, content)
+
     def handle_confirmation(self, confirmation):
         confirmation.set_status(self.session, 'valid')
         acceptance_url = self.config['fmn.acceptance_url'].format(

@@ -122,6 +122,10 @@ class IRCBackend(BaseBackend):
                 message.encode('utf-8'),
             )
 
+    def handle_batch(self, recipient, queued_messages):
+        for queued_message in queued_messages:
+            self.handle(recipient, queued_message.message)
+
     def handle_confirmation(self, confirmation):
         if not self.clients:
             self.log.warning("IRCBackend has no clients to work with.")
