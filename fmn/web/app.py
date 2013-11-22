@@ -565,15 +565,14 @@ def google_login():
         "https://www.google.com/accounts/o8/id",
         ask_for=['email', 'fullname'])
 
-@app.route('/login/google/')
-@app.route('/login/google')
+@app.route('/login/yahoo/')
+@app.route('/login/yahoo')
 @oid.loginhandler
 def yahoo_login():
     default = flask.url_for('index')
     next_url = flask.request.args.get('next', default)
     return oid.try_login(
         "https://me.yahoo.com/",
-        app.config['FMN_GOOGLE_OPENID'],
         ask_for=['email', 'fullname'])
 
 
