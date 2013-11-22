@@ -12,8 +12,11 @@ class DetailsForm(Form):
     openid = TextField('openid', [validators.Required()])
     context = TextField('context', [validators.Required()])
     detail_value = TextField('detail_value', [validators.Required()])
-    batch_delta = IntegerField('batch_delta')
-    batch_count = IntegerField('batch_delta')
+
+    # We really want these to be integers, but I don't know how to allow that
+    # to also be "None"
+    batch_delta = TextField('batch_delta')
+    batch_count = TextField('batch_delta')
 
 
 class FilterForm(Form):

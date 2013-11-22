@@ -388,6 +388,21 @@ def handle_chain():
     return dict(message="ok", url=next_url)
 
 
+def int_or_none(value):
+    """ Cast form fields to integers ourselves.
+
+    form.validate() could potentially do this for us, but I don't know how to
+    make an IntegerField also accept None.
+    """
+    if value == "<disabled>":
+        return None
+
+    try:
+        return int(value)
+    except TypeError:
+        raise APIError(400, dict(batch_delta=["Not a valid integer value"]))
+
+
 @app.route('/api/details', methods=['POST'])
 @api_method
 def handle_details():
@@ -401,6 +416,9 @@ def handle_details():
     detail_value = form.detail_value.data
     batch_delta = form.batch_delta.data
     batch_count = form.batch_count.data
+
+    batch_delta = int_or_none(batch_delta)
+    batch_count = int_or_none(batch_count)
 
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         raise APIError(403, dict(reason="%r is not %r" % (
