@@ -555,6 +555,27 @@ def fedora_login():
         app.config['FMN_FEDORA_OPENID'],
         ask_for=['email', 'fullname', 'nickname'])
 
+@app.route('/login/google/')
+@app.route('/login/google')
+@oid.loginhandler
+def google_login():
+    default = flask.url_for('index')
+    next_url = flask.request.args.get('next', default)
+    return oid.try_login(
+        "https://www.google.com/accounts/o8/id",
+        ask_for=['email', 'fullname'])
+
+@app.route('/login/google/')
+@app.route('/login/google')
+@oid.loginhandler
+def yahoo_login():
+    default = flask.url_for('index')
+    next_url = flask.request.args.get('next', default)
+    return oid.try_login(
+        "https://me.yahoo.com/",
+        app.config['FMN_GOOGLE_OPENID'],
+        ask_for=['email', 'fullname'])
+
 
 @app.route('/logout/')
 @app.route('/logout')

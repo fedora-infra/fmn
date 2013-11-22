@@ -76,12 +76,26 @@
             {% if g.auth.logged_in %}
             <li><a href="{{url_for('logout')}}">Logout</a></li>
             {% else %}
-            {% if config['FMN_ALLOW_GENERIC_OPENID'] %}
-            <li><a href="{{url_for('login')}}">Login</a></li>
-            {% endif %}
-            {% if config['FMN_FEDORA_OPENID'] and config['FMN_ALLOW_FAS_OPENID'] %}
-            <li><a href="{{url_for('fedora_login')}}">Fedora Login</a></li>
-            {% endif %}
+            <li>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Login <b class="caret"></b></b>
+                </a>
+                <ul class="dropdown-menu">
+                  {% if config['FMN_FEDORA_OPENID'] and config['FMN_ALLOW_FAS_OPENID'] %}
+                  <li><a href="{{url_for('fedora_login')}}">Fedora</a></li>
+                  <li class="divider"></li>
+                  {% endif %}
+                  {% if config['FMN_ALLOW_GOOGLE_OPENID'] %}
+                  <li><a href="{{url_for('google_login')}}">Google</a></li>
+                  {% endif %}
+                  {% if config['FMN_ALLOW_YAHOO_OPENID'] %}
+                  <li><a href="{{url_for('yahoo_login')}}">Yahoo</a></li>
+                  {% endif %}
+                  {% if config['FMN_ALLOW_GENERIC_OPENID'] %}
+                  <li><a href="{{url_for('login')}}">Other OpenID</a></li>
+                  {% endif %}
+                </ul>
+            </li>
             {% endif %}
           </ul>
 

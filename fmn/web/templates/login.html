@@ -5,51 +5,6 @@
   <div class="col-md-4">
 
   <div class="list-group">
-    {% if config['FMN_ALLOW_FAS_OPENID'] %}
-    <span class="list-group-item">
-        <h4 class="list-group-item-heading">Fedora Login</h4>
-            <span class="pull-right">
-              <a href="{{ url_for('fedora_login') }}">
-                <button type="submit" class="btn btn-success">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    Login</button>
-              </a>
-            </span>
-        <div class="clearfix"></div>
-    </span>
-    {% endif %}
-    {% if config['FMN_ALLOW_GOOGLE_OPENID'] %}
-    <span class="list-group-item">
-        <h4 class="list-group-item-heading">Google Login</h4>
-          <form role="form" action="{{url_for('login')}}" method="post">
-            <input name="openid" value="https://www.google.com/accounts/o8/id"
-                type="hidden">
-            <img src="{{ url_for('static', filename='google_logo.png') }}" />
-            <span class="pull-right">
-                <button type="submit" class="btn btn-success">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    Login</button>
-            </span>
-          </form>
-        <div class="clearfix"></div>
-    </span>
-    {% endif %}
-    {% if config['FMN_ALLOW_YAHOO_OPENID'] %}
-    <span class="list-group-item">
-        <h4 class="list-group-item-heading">Yahoo Login</h4>
-          <form role="form" action="{{url_for('login')}}" method="post">
-            <input name="openid" value="https://me.yahoo.com/"
-                type="hidden">
-            <img src="{{ url_for('static', filename='yahoo_logo.png') }}" />
-            <span class="pull-right">
-                <button type="submit" class="btn btn-success">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    Login</button>
-            </span>
-          </form>
-        <div class="clearfix"></div>
-    </span>
-    {% endif %}
     {% if config['FMN_ALLOW_GENERIC_OPENID'] %}
     <span class="list-group-item">
         <h4 class="list-group-item-heading">OpenId Login</h4>
