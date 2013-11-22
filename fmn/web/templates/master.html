@@ -11,12 +11,12 @@
 
     <title>Fedora Notifications</title>
 
-    <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet" />
-    <link href="/static/css/navbar.css" rel="stylesheet" />
-    <link href="/static/css/footer.css" rel="stylesheet" />
-    <link href="/static/css/avatars.css" rel="stylesheet" />
-    <link href="/static/logo/dynamic-logo.css" rel="stylesheet"/>
-    <script type="text/javascript" src="static/logo/d3.v2.min.js"></script>
+    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/navbar.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/footer.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/avatars.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='logo/dynamic-logo.css') }}" rel="stylesheet"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='logo/d3.v2.min.js') }}"></script>
   </head>
 
   <body>
@@ -121,7 +121,7 @@
     </div>
 
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/static/js/jquery-1.10.2.min.js"></script>
-    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/jquery-1.10.2.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
   </body>
 </html>

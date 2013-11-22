@@ -34,15 +34,17 @@
     </dl>
 
     {% if not g.auth.logged_in %}
-    <p><a href="{{url_for('login')}}">Log in</a> to check it out and set up your
-      profile</p>
+    <p><a href="{{url_for('login')}}">Log in</a> to check it out and set up
+    your profile</p>
     {% endif %}
 
   </div>
   <div id="logo-container" class="col-md-8">
     <img id="static-logo" class="centered" alt=''
-         src="{{url_for('static', filename='img/logo.png')}}" />
-    <script type="text/javascript" src="static/logo/dynamic-logo.js"></script>
+        src="{{url_for('static', filename='img/logo.png')}}" />
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='logo/dynamic-logo.js') }}">
+    </script>
   </div>
 </div>
 
