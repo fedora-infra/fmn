@@ -1,5 +1,5 @@
 var w = 600,
-    h = 700;
+    h = 600;
 
 // Destroy the old logo first
 d3.select("#static-logo").remove();
