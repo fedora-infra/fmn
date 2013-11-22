@@ -38,7 +38,7 @@ Starting as of November 15th.
       OK, the model, lib, and backend are done.  Just need to represent it in
       the UI now.
       UI is done now.
-- [ ] Debug the /favicon.ico/ thing on first login.
+- [x] Debug the /favicon.ico/ thing on first login.
       Weird.  I couldn't duplicate it locally.  Try again on the cloud node?
       This might resolved after our giant flask_openid feature merge.
 - [x] Put the login options under a bootstrap dropdown.
