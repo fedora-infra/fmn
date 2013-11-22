@@ -36,6 +36,9 @@ if 'FMN_WEB_CONFIG' in os.environ:  # pragma: no cover
 # Set up OpenID
 oid = OpenID(app)
 
+# Inject a simple jinja2 test -- it is surprising jinja2 does not have this.
+app.jinja_env.tests['equalto'] = lambda x, y: x == y
+
 fedmsg_config = fedmsg.config.load_config()
 db_url = fedmsg_config.get('fmn.sqlalchemy.uri')
 if not db_url:
@@ -396,6 +399,8 @@ def handle_details():
     openid = form.openid.data
     context = form.context.data
     detail_value = form.detail_value.data
+    batch_delta = form.batch_delta.data
+    batch_count = form.batch_count.data
 
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         raise APIError(403, dict(reason="%r is not %r" % (
@@ -410,19 +415,25 @@ def handle_details():
     if not ctx:
         raise APIError(403, dict(reason="%r is not a context" % context))
 
-    # We need to *VERIFY* that they really have this delivery detail
-    # before we start doing stuff.  Otherwise, ralph could put in pingou's
-    # email address and spam the crap out of him.
-    if fedmsg_config.get('fmn.verify_delivery_details', True):
-        con = fmn.lib.models.Confirmation.get_or_create(
-            SESSION, openid=openid, context=ctx)
-        con.set_value(SESSION, detail_value)
-        con.set_status(SESSION, 'pending')
-    else:
-        # Otherwise, just change the details right away.  Never do this.
-        pref = fmn.lib.models.Preference.get_or_create(
-            SESSION, openid=openid, context=ctx)
-        pref.update_details(SESSION, detail_value)
+    pref = fmn.lib.models.Preference.get_or_create(
+        SESSION, openid=openid, context=ctx)
+
+    # Are they changing a delivery detail?
+    if detail_value != pref.detail_value:
+        # We need to *VERIFY* that they really have this delivery detail
+        # before we start doing stuff.  Otherwise, ralph could put in pingou's
+        # email address and spam the crap out of him.
+        if fedmsg_config.get('fmn.verify_delivery_details', True):
+            con = fmn.lib.models.Confirmation.get_or_create(
+                SESSION, openid=openid, context=ctx)
+            con.set_value(SESSION, detail_value)
+            con.set_status(SESSION, 'pending')
+        else:
+            # Otherwise, just change the details right away.  Never do this.
+            pref.update_details(SESSION, detail_value)
+
+    # Let them change batch_delta and batch_count as they please.
+    pref.set_batch_values(SESSION, delta=batch_delta, count=batch_count)
 
     next_url = flask.url_for(
         'context',

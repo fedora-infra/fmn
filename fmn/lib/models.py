@@ -368,6 +368,12 @@ class Preference(BASE):
                 cls.batch_count != None,
             )).all()
 
+    def set_batch_values(self, session, delta, count):
+        self.batch_delta = delta
+        self.batch_count = count
+        session.add(self)
+        session.commit()
+
     @classmethod
     def by_user(cls, session, openid, allow_none=False):
         query = session.query(
