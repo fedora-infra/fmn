@@ -73,7 +73,7 @@ class DigestProducer(FMNProducerBase):
 
             # 2.1) Send and dequeue those by time
             if pref.batch_delta is not None:
-                if pref.batch_delta <= delta:
+                if pref.batch_delta <= delta.total_seconds():
                     log.info("Sending digest for %r per time delta" % pref)
                     self.manage_batch(backend, pref)
 
