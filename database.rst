@@ -20,13 +20,13 @@ Database design
      | created on |    |  | created on      |
      |            |    +--| openid          |
      +------------+    |  | context_name    |--+
-                       |  | delivery_detail |  |  +-------------+
-                       |  |                 |  |  | Context     |
-                       |  +-----------------+  |  |-------------|
-                       |                       +--+ name        |
-                       |                       |  | description |
+                       |  | detail_value    |  |  +-------------+
+                       |  | batch_delta     |  |  | Context     |
+                       |  | batch_count     |  |  |-------------|
+                       |  |                 |  +--+ name        |
+                       |  +-----------------+  |  | description |
                        |                       |  | created on  |
-                       |                       |  |             |
+                       |                       |  | detail_name |
                        |  +---------------+    |  +-------------+
                        |  | confirmation  |    |
                        |  |---------------|    |
