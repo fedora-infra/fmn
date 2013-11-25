@@ -4301,13 +4301,13 @@ textarea.input-group-sm > .input-group-btn > .btn {
 }
 
 .nav .caret {
-  border-top-color: #428bca;
-  border-bottom-color: #428bca;
+  border-top-color: #db3279;
+  border-bottom-color: #db3279;
 }
 
 .nav a:hover .caret {
-  border-top-color: #2a6496;
-  border-bottom-color: #2a6496;
+  border-top-color: #b92161;
+  border-bottom-color: #b92161;
 }
 
 .nav-tabs .dropdown-menu {
