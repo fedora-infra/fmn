@@ -12,6 +12,7 @@
     <title>Fedora Notifications</title>
 
     <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/text.css') }}" rel="stylesheet" />
     <link href="{{ url_for('static', filename='css/navbar.css') }}" rel="stylesheet" />
     <link href="{{ url_for('static', filename='css/footer.css') }}" rel="stylesheet" />
     <link href="{{ url_for('static', filename='css/avatars.css') }}" rel="stylesheet" />
@@ -24,7 +25,7 @@
     <div id="wrap" class="container">
 
       <!-- Static navbar -->
-      <div class="navbar navbar-default">
+      <div class="navbar navbar-default navbar-fixed-top">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse"
                 data-target=".navbar-collapse">
@@ -71,14 +72,12 @@
               {% endfor %}
             {% endif %}
 
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
             {% if g.auth.logged_in %}
-            <li><a href="{{url_for('logout')}}">Logout</a></li>
+            <li><a href="{{url_for('logout')}}">logout</a></li>
             {% else %}
             <li>
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    Login <b class="caret"></b></b>
+                    <b class="caret"></b></b> login
                 </a>
                 <ul class="dropdown-menu">
                   {% if config['FMN_FEDORA_OPENID'] and config['FMN_ALLOW_FAS_OPENID'] %}
