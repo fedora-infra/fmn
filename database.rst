@@ -16,15 +16,38 @@ Database design
      +------------+       +-----------------+  +--+ preference_id  |
      | User       |       | Preferences     |  |  |                |
      +------------|       |-----------------|  |  +----------------+
-     | username   +----+  | id              |--+
+     | openid     +----+  | id              |--+
      | created on |    |  | created on      |
-     |            |    +--| user_name       |
-     +------------+       | context_name    |--+
-                          | delivery_detail |  |  +-------------+
-                          |                 |  |  | Context     |
-                          +-----------------+  |  |-------------|
-                                               +--+ name        |
-                                                  | description |
-                                                  | created on  |
-                                                  |             |
-                                                  +-------------+
+     |            |    +--| openid          |
+     +------------+    |  | context_name    |--+
+                       |  | delivery_detail |  |  +-------------+
+                       |  |                 |  |  | Context     |
+                       |  +-----------------+  |  |-------------|
+                       |                       +--+ name        |
+                       |                       |  | description |
+                       |                       |  | created on  |
+                       |                       |  |             |
+                       |  +---------------+    |  +-------------+
+                       |  | confirmation  |    |
+                       |  |---------------|    |
+                       |  | Id            |    |
+                       |  | create on     |    |
+                       |  | status        |    |
+                       |  | secret        |    |
+                       |  | detail_value  |    |
+                       +--+ openid        |    |
+                       |  | context_name  +----+
+                       |  |               |    |
+                       |  +---------------+    |
+                       |                       |
+                       |                       |
+                       |  +-----------------+  |
+                       |  | queued_messages |  |
+                       |  |-----------------|  |
+                       |  | Id              |  |
+                       |  | created on      |  |
+                       |  | _message        |  |
+                       +--+ openid          |  |
+                          | context_name    +--+
+                          |                 |
+                          +-----------------+
