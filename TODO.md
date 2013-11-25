@@ -28,7 +28,7 @@ Starting as of November 15th.
       https://apps.fp.org/notifications/FAS_USERNAME/email/blah_blah"
 - [x] Deploy to cloud node for testing with irc and email.
 - [ ] Coordinate with relrod for testing with GCM+android.
-- [ ] Fedora theme for bootstrap.  Bonus points to make this modular so we can
+- [x] Fedora theme for bootstrap.  Bonus points to make this modular so we can
       re-use it on future apps.
 - [x] Use d3.js to make a super fancy frontpage logo.
       Fallback to the png if js not supported.
@@ -42,3 +42,6 @@ Starting as of November 15th.
       Weird.  I couldn't duplicate it locally.  Try again on the cloud node?
       This might resolved after our giant flask_openid feature merge.
 - [x] Put the login options under a bootstrap dropdown.
+- [ ] Persist the STOP/START state of the irc bot (and others) to the DB.
+      Currently, it is an in-memory thing for the backend which vanishes when
+      you restart it.
