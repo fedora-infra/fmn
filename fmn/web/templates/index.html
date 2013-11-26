@@ -2,50 +2,60 @@
 
 {% block body %}
 <div class="row">
-  <div class="col-md-4">
-    <p>Fedora Notifications is a family of systems built to manage end-user
-    notifications triggered by <a href="http://fedmsg.com">fedmsg</a>, the
-    fedora FEDerated MeSsaGe bus.</p>
+  <div class="col-md-8 col-md-offset-2">
+    <div id="notifications-carousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#notifications-carousel" data-slide-to="0" class="active"></li>
+        <li data-target="#notifications-carousel" data-slide-to="1"></li>
+        <li data-target="#notifications-carousel" data-slide-to="2"></li>
+      </ol>
 
-    <p>The wins here are:
+      <!-- Wrapper for slides -->
+      <div class="carousel-inner">
 
-    <ul>
-      <li>Diverse kinds of notification media.  Some users don't want email.
-      </li>
-      <li>A single place for end-users to manage notification preferences.
-      Instead of having to tweak preferences in bodhi, koji, pkgdb, etc..  they
-      can choose what they do and don't want to receive right here.  </li>
-      <li>A single place for email code to live, instead of being duplicated in
-      every application that we write and deploy.  This will ostensibly reduce
-      the amount of code that the infrastructure team has to maintain.</li>
-    </ul>
-    </p>
+        <div class="item active">
+          <img src="http://flocktofedora.org/wp-content/uploads/2013/04/5413251082_b39bdae158_b1-940x415.jpg">
+          <div class="carousel-caption">
+              <h3>Diverse notifications</h3>
+              <p>With different notification media, you can get updates however
+              you want them:  over email, irc, or pushed to your phone.  We
+              would send them to you in a carrier pigeon if we could.</p>
+          </div>
+        </div>
 
-    <p>We can currently serve notifications via these means:</p>
-    <dl class="dl-horizontal">
-    {% for ctx in contexts %}
-      {% if g.fas_user %}
-      <dt><a href="{{openid}}/{{ctx.name}}">{{ctx.name}}</a></dt>
-      {% else %}
-      <dt>{{ctx.name}}</dt>
-      {% endif %}
-      <dd>{{ctx.description}}</dd>
-    {% endfor %}
-    </dl>
+        <div class="item">
+          <img src="http://flocktofedora.org/wp-content/uploads/2013/04/fedora-people-blacksburg-940x415.jpg">
+          <div class="carousel-caption">
+            <h3>One place</h3>
+            <p>...a single place for end-users to manage notification
+            preferences.  Instead of having to tweak preferences in bodhi,
+            koji, pkgdb, etc..  you can choose what you do and don't want to
+            receive right here.</p>
+          </div>
+        </div>
 
-    {% if not g.auth.logged_in %}
-    <p><a href="{{url_for('login')}}">Log in</a> to check it out and set up
-    your profile</p>
-    {% endif %}
+        <div class="item">
+          <img src="http://flocktofedora.org/wp-content/uploads/2013/05/slider2-940x415.jpg">
+          <div class="carousel-caption">
+            <h3>Ultimately, simpler</h3>
+            <p>...a single place for email code to live, instead of being
+            duplicated in every new fedoraproject.org application that we write
+            and deploy.  This will ostensibly reduce the amount of code that
+            the infrastructure team has to maintain.</p>
+          </div>
+        </div>
 
-  </div>
-  <div id="logo-container" class="col-md-8">
-    <img id="static-logo" class="centered" alt=''
-        src="{{url_for('static', filename='img/logo.png')}}" />
-    <script type="text/javascript"
-        src="{{ url_for('static', filename='logo/dynamic-logo.js') }}">
-    </script>
+      </div>
+
+      <!-- Controls -->
+      <a class="left carousel-control" href="#notifications-carousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+      </a>
+      <a class="right carousel-control" href="#notifications-carousel" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+      </a>
+    </div>
   </div>
 </div>
-
 {% endblock %}

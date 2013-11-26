@@ -6,3 +6,13 @@ body {
 .navbar {
   margin-bottom: 20px;
 }
+
+.carousel-caption {
+    background-color: rgba(0,0,0,0.8);
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+}
+
+.carousel-caption > h3 {
+    margin-top: -5px;
+}
