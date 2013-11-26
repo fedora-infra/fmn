@@ -45,3 +45,14 @@ Starting as of November 15th.
 - [ ] Persist the STOP/START state of the irc bot (and others) to the DB.
       Currently, it is an in-memory thing for the backend which vanishes when
       you restart it.
+- [ ] Rename Filter(s) to Rule(s) and rename Chain(s) to Filter(s).
+- [ ] Show a list of past message that would match a particular filterchain as
+      you are building it.
+- [ ] As you add rules to a filter, other rules that cannot possibly be
+      combined with that rule should be removed from the list of possibilities.
+- [ ] Set up the UI to build filterchains independent of a context.  Then later
+      assign different contexts to them.  So you could build one filter, and
+      then say I want this to go to email and irc.
+      Perhaps we could just do this on the profile page and keep the other
+      pages as they exist now.
+
