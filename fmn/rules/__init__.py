@@ -1,8 +1,8 @@
-from fmn.filters.ansible import *
-from fmn.filters.askbot import *
-from fmn.filters.bodhi import *
-from fmn.filters.generic import *
-from fmn.filters.pkgdb import *
+from fmn.rules.ansible import *
+from fmn.rules.askbot import *
+from fmn.rules.bodhi import *
+from fmn.rules.generic import *
+from fmn.rules.pkgdb import *
 
 
 def DevelopmentFilter(*args, **kwargs):

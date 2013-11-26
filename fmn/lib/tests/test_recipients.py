@@ -70,7 +70,7 @@ class TestRecipients(fmn.lib.tests.Base):
         self.create_user_and_context_data()
         self.create_preference_data_empty()
 
-        code_path = "fmn.lib.tests.example_filters:wat_filter"
+        code_path = "fmn.lib.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
 
         msg = {
@@ -88,7 +88,7 @@ class TestRecipients(fmn.lib.tests.Base):
         self.create_user_and_context_data()
         self.create_preference_data_empty()
 
-        code_path = "fmn.lib.tests.example_filters:not_wat_filter"
+        code_path = "fmn.lib.tests.example_rules:not_wat_rule"
         self.create_preference_data_basic(code_path)
 
         msg = {
@@ -103,9 +103,9 @@ class TestRecipients(fmn.lib.tests.Base):
         self.create_preference_data_empty()
 
         # Tack two identical chains onto the preferenced
-        code_path = "fmn.lib.tests.example_filters:not_wat_filter"
+        code_path = "fmn.lib.tests.example_rules:not_wat_rule"
         self.create_preference_data_basic(code_path)
-        code_path = "fmn.lib.tests.example_filters:not_wat_filter"
+        code_path = "fmn.lib.tests.example_rules:not_wat_rule"
         self.create_preference_data_basic(code_path)
 
         preference = fmn.lib.models.Preference.load(
@@ -124,9 +124,9 @@ class TestRecipients(fmn.lib.tests.Base):
         self.create_preference_data_empty()
 
         # Tack two identical chains onto the preferenced
-        code_path = "fmn.lib.tests.example_filters:wat_filter"
+        code_path = "fmn.lib.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
-        code_path = "fmn.lib.tests.example_filters:wat_filter"
+        code_path = "fmn.lib.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
 
         preference = fmn.lib.models.Preference.load(
@@ -149,9 +149,9 @@ class TestRecipients(fmn.lib.tests.Base):
         self.create_preference_data_empty()
 
         # Tack two identical chains onto the preferenced
-        code_path = "fmn.lib.tests.example_filters:wat_filter"
+        code_path = "fmn.lib.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
-        code_path = "fmn.lib.tests.example_filters:not_wat_filter"
+        code_path = "fmn.lib.tests.example_rules:not_wat_rule"
         self.create_preference_data_basic(code_path)
 
         preference = fmn.lib.models.Preference.load(

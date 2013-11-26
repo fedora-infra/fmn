@@ -47,17 +47,17 @@ def recipients_for_context(session, config, valid_paths, context, message):
     return context.recipients(session, config, valid_paths, message)
 
 
-def load_filters(root='fmn.filters'):
-    """ Load the big list of allowed callable filters. """
+def load_rules(root='fmn.rules'):
+    """ Load the big list of allowed callable rules. """
 
     module = __import__(root, fromlist=[root.split('.')[0]])
 
-    filters = {}
+    rules = {}
     for name in dir(module):
         obj = getattr(module, name)
         if not callable(obj):
             continue
-        log.info("Found filter %r %r" % (name, obj))
+        log.info("Found rule %r %r" % (name, obj))
 
         doc = inspect.getdoc(obj)
 
@@ -73,15 +73,15 @@ def load_filters(root='fmn.filters'):
             title = "UNDOCUMENTED"
             doc = "No docs for %s:%s %r" % (root, name, obj)
 
-        filters[name] = {
+        rules[name] = {
             'func': obj,
             'title': title.strip(),
             'doc': doc.strip(),
             'args': inspect.getargspec(obj)[0],
         }
 
-    filters = OrderedDict(
-        sorted(filters.items(), key=lambda x: x[1]['title'])
+    rules = OrderedDict(
+        sorted(rules.items(), key=lambda x: x[1]['title'])
     )
 
-    return {root: filters}
+    return {root: rules}

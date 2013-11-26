@@ -1,4 +1,4 @@
-""" Some example filters for the test suite. """
+""" Some example rules for the test suite. """
 
 
 def wat_filter(config, message):

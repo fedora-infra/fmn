@@ -45,7 +45,7 @@ This is smallest, most atomic object in the Fedora Notifications system. It is
 a simple rule that can be applied to a fedmsg message. It can evaluate to
 ``True`` or ``False``.
 
-It has a name and a description. Some examples of filters are:
+It has a name and a description. Some examples of rules are:
 
 - "is a *bodhi* message"
 - "is a *wiki edit* message"
@@ -53,13 +53,13 @@ It has a name and a description. Some examples of filters are:
 - "relates to the package *nethack*"
 - "relates to a package *owned by me in pkgdb*"
 
-We have a long list of filters defined. You'll see them when you go to set up
+We have a long list of rules defined. You'll see them when you go to set up
 your first chain
 
 Chain
 -----
 
-To craft your preferences, you will build chains out of filters. Chains have a
+To craft your preferences, you will build chains out of rules. Chains have a
 name (that you give them). An example could be something like:
 
 - My bodhi packager chain
@@ -85,7 +85,7 @@ multiple users, you would need to create distinct chains for each one.
   - "is a bodhi message"
   - "relates to the user **toshio**"
 
-You could not combine those both into the same chain, because *all filters on a
+You could not combine those both into the same chain, because *all rules on a
 chain* must evalulate to ``True`` for the chain to trigger a notification.
 
 Messaging Context

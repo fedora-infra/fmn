@@ -1,4 +1,4 @@
-# Generic filters for FMN
+# Generic rules for FMN
 import fedmsg
 
 import fmn.lib.pkgdb
@@ -7,7 +7,7 @@ import fmn.lib.pkgdb
 def user_filter(config, message, fasnick=None, *args, **kw):
     """ All messages of user
 
-    Use this filter to filter out messages that are associated with a
+    Use this rule to rule out messages that are associated with a
     specified user.
     """
 
@@ -19,7 +19,7 @@ def user_filter(config, message, fasnick=None, *args, **kw):
 def user_package_filter(config, message, fasnick=None, *args, **kw):
     """ All messages concerning user's packages
 
-    This filter filters out messages that related to packages where the
+    This rule rules out messages that related to packages where the
     specified user has **commit** ACLs.
     """
 

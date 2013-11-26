@@ -182,16 +182,16 @@ class User(BASE):
 
 
 class Filter(BASE):
-    __tablename__ = 'filters'
+    __tablename__ = 'rules'
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
     chain_id = sa.Column(
         sa.Integer,
         sa.ForeignKey('chains.id'))
-    chain = relation('Chain', backref=('filters'))
+    chain = relation('Chain', backref=('rules'))
 
-    # This is something of the form 'fmn.filters:some_function'
+    # This is something of the form 'fmn.rules:some_function'
     # We need to do major validation to make sure only *our* code_paths
     # make it in the database.
     code_path = sa.Column(sa.String(50), nullable=False)
@@ -263,7 +263,7 @@ class Filter(BASE):
             return fn(config, message)
         except Exception as e:
             log.warning(
-                "filter %r(config=%r, message=%r, **kw=%r) raised %r" % (
+                "rule %r(config=%r, message=%r, **kw=%r) raised %r" % (
                     self.code_path, config, message, self.arguments, e))
             return False
 
@@ -291,35 +291,35 @@ class Chain(BASE):
         if isinstance(filt, basestring):
             filt = Filter.create_from_code_path(session, paths, filt, **kw)
         elif kw:
-            raise ValueError("Cannot handle filter with non-empty kw")
+            raise ValueError("Cannot handle rule with non-empty kw")
 
-        self.filters.append(filt)
+        self.rules.append(filt)
         session.flush()
         session.commit()
         return filt
 
     def remove_filter(self, session, code_path, **kw):
-        for f in self.filters:
+        for f in self.rules:
             if f.code_path == code_path:
                 session.delete(f)
                 session.commit()
                 return
 
-        raise ValueError("No such filter found: %r" % code_path)
+        raise ValueError("No such rule found: %r" % code_path)
 
     def matches(self, session, config, paths, message):
         """ Return true if this chain matches the given message.
 
-        This is the case if *all* of the associated filters match.
+        This is the case if *all* of the associated rules match.
 
-        ...with one exception.  If no filters are defined, the chain does not
-        match (even though technically, all of its zero filters match).
+        ...with one exception.  If no rules are defined, the chain does not
+        match (even though technically, all of its zero rules match).
         """
 
-        if not self.filters:
+        if not self.rules:
             return False
 
-        for filt in self.filters:
+        for filt in self.rules:
             if not filt.execute(session, config, paths, message):
                 return False
 

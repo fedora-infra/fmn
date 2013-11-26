@@ -44,7 +44,7 @@ db_url = fedmsg_config.get('fmn.sqlalchemy.uri')
 if not db_url:
     raise ValueError("fmn.sqlalchemy.uri must be present")
 
-valid_paths = fmn.lib.load_filters(root="fmn.filters")
+valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
 SESSION = fmn.lib.models.init(db_url, debug=False, create=False)
 
@@ -462,7 +462,7 @@ def handle_details():
     return dict(message="ok", url=next_url)
 
 
-@app.route('/api/filter', methods=['POST'])
+@app.route('/api/rule', methods=['POST'])
 @api_method
 def handle_filter():
     form = fmn.web.forms.FilterForm(flask.request.form)
@@ -473,10 +473,10 @@ def handle_filter():
     openid = form.openid.data
     context = form.context.data
     chain_name = form.chain_name.data
-    code_path = form.filter_name.data
+    code_path = form.rule_name.data
     method = (form.method.data or flask.request.method).upper()
-    # Extract arguments to filters using the extra information provided
-    known_args = ['openid', 'chain_name', 'context', 'filter_name']
+    # Extract arguments to rules using the extra information provided
+    known_args = ['openid', 'chain_name', 'context', 'rule_name']
     arguments = {}
     for args in flask.request.form:
         if args not in known_args:

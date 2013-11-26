@@ -6,7 +6,7 @@
 </div>
 <div class="row">
   <div class="col-md-6">
-    <p>You have {{preference.chains|length}} filter chains
+    <p>You have {{preference.chains|length}} rule chains
     defined for this messaging context.</p>
   </div>
 </div>
@@ -17,9 +17,9 @@
     {% for chn in preference.chains %}
       <a href="{{chn.name}}" class="list-group-item">
         <h4 class="list-group-item-heading">{{chn.name}}</h4>
-        {% if chn.filters %}
+        {% if chn.rules %}
         <dl class="list-group-item-text dl-horizontal">
-            {% for flt in chn.filters %}
+            {% for flt in chn.rules %}
             <dt>{{flt.title(valid_paths)}}</dt>
             <dd>{{flt.doc(valid_paths)}}
                 <dl class="dl-horizontal">
@@ -31,7 +31,7 @@
             {% endfor %}
         </dl>
         {% else %}
-        <p class="list-group-item-text">This chain has zero filters</p>
+        <p class="list-group-item-text">This chain has zero rules</p>
         {% endif %}
           <form role="form" action="{{url_for('handle_chain')}}" method="post">
             <input name="openid" id="openid" value="{{openid}}" type="hidden">

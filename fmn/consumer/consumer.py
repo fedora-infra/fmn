@@ -35,8 +35,8 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
             #'rss': fmn_backends.RSSBackend,
         }
 
-        log.debug("Loading filters from fmn.filters")
-        self.valid_paths = fmn.lib.load_filters(root="fmn.filters")
+        log.debug("Loading rules from fmn.rules")
+        self.valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
         log.debug("FMNConsumer initialized")
 
