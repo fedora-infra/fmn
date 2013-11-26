@@ -2,7 +2,13 @@
 
 {% block body %}
 <div class="page-header">
-  <h1>{{current}} preferences <small>{{context.description}}</small></h1>
+  <h1>{{current}} preferences 
+      {% if preference.enabled %}
+      <small>{{context.description}}</small>
+      {% else %}
+      <small>(disabled)</small>
+      {% endif %}
+  </h1>
 </div>
 <div class="row">
   <div class="col-md-6">
@@ -70,7 +76,9 @@
 
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Delivery Options</h3>
+        <h3 class="panel-title">
+            Delivery Options
+        </h3>
       </div>
 
       <div class="panel-body">
@@ -82,6 +90,7 @@
         {% endif %}
         <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
               method="post">
+          <fieldset {{'disabled' if preference.enabled is sameas false}}>
           <div class="form-group">
             <label class="col-sm-4 control-label" for="detail_value">{{context.detail_name}}</label>
             <div class="col-sm-8">
@@ -128,11 +137,24 @@
             </div>
           </div>
 
+          </fieldset>
           <input name="openid" id="openid" value="{{openid}}" type="hidden">
           <input name="context" id="context" value="{{current}}" type="hidden">
-          <button type="submit" class="btn btn-success">
-              <span class="glyphicon glyphicon-{{context.icon}}"></span> Save
-          </button>
+          <p class="pull-right">
+            {% if preference.enabled %}
+            <button type="submit" class="btn btn-danger" name="toggle_enable" value="toggle">
+                <span class="glyphicon glyphicon-off"></span> Disable
+            </button>
+            {% else %}
+            <button type="submit" class="btn btn-success" name="toggle_enable" value="toggle">
+                <span class="glyphicon glyphicon-ok-circle"></span> Enable
+            </button>
+            {% endif %}
+            <button type="submit" class="btn btn-success" name="save"
+                {{'disabled' if preference.enabled is sameas false}}>
+                <span class="glyphicon glyphicon-{{context.icon}}"></span> Save
+            </button>
+          </p>
         </form>
       </div>
     </div>

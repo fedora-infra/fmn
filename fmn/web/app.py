@@ -416,9 +416,7 @@ def handle_details():
     detail_value = form.detail_value.data
     batch_delta = form.batch_delta.data
     batch_count = form.batch_count.data
-
-    batch_delta = int_or_none(batch_delta)
-    batch_count = int_or_none(batch_count)
+    toggle_enable = form.toggle_enable.data
 
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         raise APIError(403, dict(reason="%r is not %r" % (
@@ -437,7 +435,7 @@ def handle_details():
         SESSION, openid=openid, context=ctx)
 
     # Are they changing a delivery detail?
-    if detail_value != pref.detail_value:
+    if detail_value and detail_value != pref.detail_value:
         # We need to *VERIFY* that they really have this delivery detail
         # before we start doing stuff.  Otherwise, ralph could put in pingou's
         # email address and spam the crap out of him.
@@ -451,7 +449,14 @@ def handle_details():
             pref.update_details(SESSION, detail_value)
 
     # Let them change batch_delta and batch_count as they please.
-    pref.set_batch_values(SESSION, delta=batch_delta, count=batch_count)
+    if batch_delta or batch_count:
+        batch_delta = int_or_none(batch_delta)
+        batch_count = int_or_none(batch_count)
+        pref.set_batch_values(SESSION, delta=batch_delta, count=batch_count)
+
+    # Also, let them enable or disable as they please.
+    if toggle_enable:
+        pref.set_enabled(SESSION, not pref.enabled)
 
     next_url = flask.url_for(
         'context',
