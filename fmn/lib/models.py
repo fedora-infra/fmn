@@ -332,7 +332,7 @@ class Preference(BASE):
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
-    detail_value = sa.Column(sa.String(1024))
+    detail_value = sa.Column(sa.String(1024), unique=True)
 
     # Number of seconds that have elapsed since the earliest queued message
     # before we send a digest over whatever medium.
@@ -340,6 +340,9 @@ class Preference(BASE):
     # Number of messages that are queued before we send a digest over whatever
     # medium.
     batch_count = sa.Column(sa.Integer, nullable=True)
+
+    # Hold the state of start/stop commands to the irc bot and others.
+    enabled = sa.Column(sa.Boolean, default=True, nullable=False)
 
     openid = sa.Column(
         sa.Text,
@@ -392,6 +395,14 @@ class Preference(BASE):
         return query.all()
 
     @classmethod
+    def by_detail(cls, session, detail_value):
+        return session.query(
+            cls
+        ).filter(
+            cls.detail_value == detail_value
+        ).first()
+
+    @classmethod
     def create(cls, session, user, context, detail_value=None):
         if not isinstance(user, User):
             user = User.by_openid(session, user)
@@ -439,6 +450,11 @@ class Preference(BASE):
 
     def update_details(self, session, value):
         self.detail_value = value
+        session.flush()
+        session.commit()
+
+    def set_enabled(self, session, enabled):
+        self.enabled = enabled
         session.flush()
         session.commit()
 

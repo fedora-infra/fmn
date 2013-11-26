@@ -29,6 +29,8 @@ You can contact {support_email} if you have any concerns/issues/abuse.
 
 
 class IRCBackend(BaseBackend):
+    __context_name__ = 'irc'
+
     def __init__(self, *args, **kwargs):
         super(IRCBackend, self).__init__(*args, **kwargs)
         self.network = self.config['fmn.irc.network']
@@ -47,10 +49,6 @@ class IRCBackend(BaseBackend):
             'default': self.cmd_default,
         }
 
-        # Keep a list of people who have messages 'stopped' in memory.
-        # Don't persist it for now.
-        self.stopped = []
-
         reactor.connectTCP(
             self.network,
             self.port,
@@ -64,18 +62,18 @@ class IRCBackend(BaseBackend):
 
     def cmd_start(self, nick, message):
         self.log.info("CMD start: %r sent us %r" % (nick, message))
-        if nick in self.stopped:
-            self.stopped.pop(self.stopped.index(nick))
+        if self.disabled_for(nick):
+            self.enable(nick)
             self.send(nick, "OK")
         else:
             self.send(nick, "Messages not currently stopped.  Nothing to do.")
 
     def cmd_stop(self, nick, message):
         self.log.info("CMD stop:  %r sent us %r" % (nick, message))
-        if nick in self.stopped:
+        if self.disabled_for(nick):
             self.send(nick, "Messages already stopped.  Nothing to do.")
         else:
-            self.stopped.append(nick)
+            self.disable(nick)
             self.send(nick, "OK")
 
     def cmd_help(self, nick, message):
@@ -113,7 +111,7 @@ class IRCBackend(BaseBackend):
 
         nickname = recipient['irc nick']
 
-        if nickname in self.stopped:
+        if self.disabled_for(detail_value=nickname):
             self.log.debug("Messages stopped for %r, not sending." % nickname)
             return
 

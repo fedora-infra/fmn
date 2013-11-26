@@ -22,6 +22,7 @@ You received this message due to your preference settings at
 
 
 class EmailBackend(BaseBackend):
+    __context_name__ = "email"
 
     def __init__(self, *args, **kwargs):
         super(EmailBackend, self).__init__(*args, **kwargs)
@@ -33,6 +34,10 @@ class EmailBackend(BaseBackend):
 
         if 'email address' not in recipient:
             self.log.warning("No email address found.  Bailing.")
+            return
+
+        if self.disabled_for(detail_value=recipient['email address']):
+            self.log.debug("Messages stopped for %r, not sending." % nickname)
             return
 
         email_message = email.Message.Message()

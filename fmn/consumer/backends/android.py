@@ -4,6 +4,8 @@ import requests
 
 
 class GCMBackend(BaseBackend):
+    __context_name__ = "android"
+
     def __init__(self, *args, **kwargs):
         super(GCMBackend, self).__init__(*args, **kwargs)
         self.post_url = self.config['fmn.gcm.post_url']
@@ -14,6 +16,10 @@ class GCMBackend(BaseBackend):
 
         if 'registration id' not in recipient:
             self.log.warning("No registration id found.  Bailing.")
+            return
+
+        if self.disabled_for(detail_value=recipient['registration id']):
+            self.log.debug("Messages stopped for %r, not sending." % nickname)
             return
 
         headers = {
