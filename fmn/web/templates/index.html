@@ -1,64 +1,59 @@
 {% extends "master.html" %}
 
 {% block body %}
-<div class="row">
-  <div class="col-md-8 col-md-offset-2">
-    <div id="notifications-carousel" class="carousel slide" data-ride="carousel">
-      <!-- Indicators -->
-      <ol class="carousel-indicators">
-        <li data-target="#notifications-carousel" data-slide-to="0" class="active"></li>
-        <li data-target="#notifications-carousel" data-slide-to="1"></li>
-        <li data-target="#notifications-carousel" data-slide-to="2"></li>
-      </ol>
+<div id="notifications-carousel" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#notifications-carousel" data-slide-to="0" class="active"></li>
+    <li data-target="#notifications-carousel" data-slide-to="1"></li>
+    <li data-target="#notifications-carousel" data-slide-to="2"></li>
+  </ol>
 
-      <!-- Wrapper for slides -->
-      <div class="carousel-inner">
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
 
-        <div class="item active">
-          <img src="http://flocktofedora.org/wp-content/uploads/2013/04/5413251082_b39bdae158_b1-940x415.jpg">
-          <div class="carousel-caption">
-              <h3>Diverse notifications</h3>
-              <p>With different notification media, you can get updates however
-              you want them:  over email, irc, or pushed to your phone.  We
-              would send them to you via carrier pigeon if we could.</p>
-          </div>
-        </div>
-
-        <div class="item">
-          <img src="http://flocktofedora.org/wp-content/uploads/2013/04/fedora-people-blacksburg-940x415.jpg">
-          <div class="carousel-caption">
-            <h3>One place</h3>
-            <p>...a single place for end-users to manage notification
-            preferences.  Instead of having to tweak preferences in bodhi,
-            koji, pkgdb, etc..  you can choose what you do and don't want to
-            receive right here.</p>
-          </div>
-        </div>
-
-        <div class="item">
-          <img src="http://flocktofedora.org/wp-content/uploads/2013/05/slider2-940x415.jpg">
-          <div class="carousel-caption">
-            <h3>Ultimately, simpler</h3>
-            <p>...a single place for email code to live, instead of being
-            duplicated in every new fedoraproject.org application that we write
-            and deploy.  This will ostensibly reduce the amount of code that
-            the infrastructure team has to maintain.</p>
-          </div>
-        </div>
-
+    <div class="item active">
+      <img src="{{ url_for('static', filename='img/slide-1-900x300.png') }}">
+      <div class="carousel-caption">
+          <h3>Diverse notifications</h3>
+          <p>With different notification media, you can get updates however
+          you want them:  over email, irc, or pushed to your phone.  We
+          would send them to you via carrier pigeon if we could.</p>
       </div>
-
-      <!-- Controls -->
-      <a class="left carousel-control" href="#notifications-carousel" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left"></span>
-      </a>
-      <a class="right carousel-control" href="#notifications-carousel" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right"></span>
-      </a>
     </div>
-  </div>
-</div>
 
+    <div class="item">
+      <img src="{{ url_for('static', filename='img/slide-2-900x300.png') }}">
+      <div class="carousel-caption">
+        <h3>One place</h3>
+        <p>...a single place for end-users to manage notification
+        preferences.  Instead of having to tweak preferences in bodhi,
+        koji, pkgdb, etc..  you can choose what you do and don't want to
+        receive right here.</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <img src="{{ url_for('static', filename='img/slide-3-900x300.png') }}">
+      <div class="carousel-caption">
+        <h3>Ultimately, simpler</h3>
+        <p>...a single place for email code to live, instead of being
+        duplicated in every new fedoraproject.org application that we write
+        and deploy.  This will ostensibly reduce the amount of code that
+        the infrastructure team has to maintain.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#notifications-carousel" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#notifications-carousel" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
 <div class="container marketing">
   <!-- Three columns of text below the carousel -->
   <div class="row">
@@ -90,7 +85,7 @@
       <h2><span class="glyphicon glyphicon-phone"></span> android</h2>
       <p>Push-notifications to your mobile device.  You'll need to install
       <a href="https://fedoraproject.org/mobile">Fedora Mobile</a> on your
-      phone for this wiz-biz.  </p>
+      phone for this wiz-biz to fly.  </p>
     </div><!-- /.col-lg-3 -->
   </div><!-- /.row -->
 </div>

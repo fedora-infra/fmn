@@ -7,6 +7,19 @@ body {
   margin-bottom: 20px;
 }
 
+.carousel {
+    width: 100%;
+    background: #4c4c4c;
+}
+
+.carousel-inner {
+    text-align: center;
+}
+
+.carousel .item > img {
+    display: inline-block;
+}
+
 .carousel-caption {
     background-color: rgba(0,0,0,0.8);
     -moz-border-radius: 15px;
