@@ -1,7 +1,7 @@
 from wtforms import Form, TextField, IntegerField, validators
 
 
-class ChainForm(Form):
+class FilterForm(Form):
     openid = TextField('openid', [validators.Required()])
     context = TextField('context', [validators.Required()])
     filter_name = TextField('filter_name', [validators.Required()])

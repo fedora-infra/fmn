@@ -56,10 +56,10 @@ It has a name and a description. Some examples of rules are:
 We have a long list of rules defined. You'll see them when you go to set up
 your first filter
 
-Chain
------
+Filter
+------
 
-To craft your preferences, you will build filters out of rules. Chains have a
+To craft your preferences, you will build filters out of rules. Filters have a
 name (that you give them). An example could be something like:
 
 - My bodhi packager filter

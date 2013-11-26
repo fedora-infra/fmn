@@ -326,7 +326,7 @@ def handle_confirmation(action, secret):
 @app.route('/api/filter', methods=['POST', 'DELETE'])
 @api_method
 def handle_filter():
-    form = fmn.web.forms.ChainForm(flask.request.form)
+    form = fmn.web.forms.FilterForm(flask.request.form)
 
     if not form.validate():
         raise APIError(400, form.errors)
@@ -362,7 +362,7 @@ def handle_filter():
                 raise APIError(404, dict(
                     reason="%r already exists" % filter_name))
 
-            filter = fmn.lib.models.Chain.create(SESSION, filter_name)
+            filter = fmn.lib.models.Filter.create(SESSION, filter_name)
             pref.add_filter(SESSION, filter)
             next_url = flask.url_for(
                 'filter',

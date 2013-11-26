@@ -189,7 +189,7 @@ class Rule(BASE):
     filter_id = sa.Column(
         sa.Integer,
         sa.ForeignKey('filters.id'))
-    filter = relation('Chain', backref=('rules'))
+    filter = relation('Filter', backref=('rules'))
 
     # This is something of the form 'fmn.rules:some_function'
     # We need to do major validation to make sure only *our* code_paths
@@ -269,7 +269,7 @@ class Rule(BASE):
             return False
 
 
-class Chain(BASE):
+class Filter(BASE):
     __tablename__ = 'filters'
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)

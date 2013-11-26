@@ -40,7 +40,7 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess, openid="ralph.id.fedoraproject.org")
         context = fmn.lib.models.Context.get(self.sess, name="irc")
         preference = fmn.lib.models.Preference.load(self.sess, user, context)
-        filter = fmn.lib.models.Chain.create(self.sess, name="test filter")
+        filter = fmn.lib.models.Filter.create(self.sess, name="test filter")
         filter.add_filter(self.sess, self.valid_paths, code_path)
         preference.add_filter(self.sess, filter)
 
