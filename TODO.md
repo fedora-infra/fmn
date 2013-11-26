@@ -42,12 +42,13 @@ Starting as of November 15th.
       Weird.  I couldn't duplicate it locally.  Try again on the cloud node?
       This might resolved after our giant flask_openid feature merge.
 - [x] Put the login options under a bootstrap dropdown.
-- [ ] Persist the STOP/START state of the irc bot (and others) to the DB.
+- [x] Persist the STOP/START state of the irc bot (and others) to the DB.
       Currently, it is an in-memory thing for the backend which vanishes when
       you restart it.
 - [x] Rename Filter(s) to Rule(s) and rename Chain(s) to Filter(s).
 - [ ] Show a list of past message that would match a particular filterchain as
       you are building it.
+      This would be nice to just use the new datagrepper cards for.
 - [ ] As you add rules to a filter, other rules that cannot possibly be
       combined with that rule should be removed from the list of possibilities.
 - [ ] Set up the UI to build filterchains independent of a context.  Then later
