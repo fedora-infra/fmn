@@ -2,17 +2,17 @@
 
 {% block body %}
 <div class="page-header">
-  <h1>Rules for {{g.auth.email}}'s <em>{{chain.name}}</em> chain
+  <h1>Rules for {{g.auth.email}}'s <em>{{filter.name}}</em> filter
       <small>for the {{current}} messaging context</small></h1>
 </div>
 
 
 <div class="row">
   <div class="col-md-6">
-    <p> You have these rules currently defined for this chain.</p>
+    <p> You have these rules currently defined for this filter.</p>
     <p> All these rules must be satisfied for the notification to be sent.</p>
     <div class="list-group">
-    {% for rule in chain.rules %}
+    {% for rule in filter.rules %}
       <span class="list-group-item">
         <h4 class="list-group-item-heading">{{rule.title(valid_paths)}}</h4>
         <p class="list-group-item-text">{{rule.doc(valid_paths)}}
@@ -25,7 +25,7 @@
             <input name="rule_name" id="rule_name" value="{{rule.code_path}}" type="hidden">
             <input name="openid" id="openid" value="{{openid}}" type="hidden">
             <input name="context" id="context" value="{{current}}" type="hidden">
-            <input name="chain_name" id="chain_name" value="{{chain.name}}" type="hidden">
+            <input name="filter_name" id="filter_name" value="{{filter.name}}" type="hidden">
             <input name="method" id="method" value="delete" type="hidden">
             <span class="pull-right">
                 <button type="submit" class="btn btn-danger">
@@ -41,7 +41,7 @@
   </div>
 
   <div class="col-md-6">
-    <p> You can add a new rule to this chain by selecting one from this
+    <p> You can add a new rule to this filter by selecting one from this
     pre-defined list.  Click on any rule to check it out.</p>
 
     <div class="panel-group" id="accordion">
@@ -68,7 +68,7 @@
                 <input name="rule_name" id="rule_name" value="{{root}}:{{path}}" type="hidden">
                 <input name="openid" id="openid" value="{{openid}}" type="hidden">
                 <input name="context" id="context" value="{{current}}" type="hidden">
-                <input name="chain_name" id="chain_name" value="{{chain.name}}" type="hidden">
+                <input name="filter_name" id="filter_name" value="{{filter.name}}" type="hidden">
                 <button type="submit" class="btn btn-success">
                     <span class="glyphicon glyphicon-plus"></span>
                     Add this rule</button>

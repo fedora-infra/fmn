@@ -17,7 +17,7 @@ email {support_email} if you have any concerns/issues/abuse.
 
 reason = """
 You received this message due to your preference settings at
-{base_url}/{user}/email/{chain}
+{base_url}/{user}/email/{filter}
 """
 
 
@@ -50,7 +50,7 @@ class EmailBackend(BaseBackend):
         # before setting the payload.
         footer = self.config.get('fmn.email.footer', '')
 
-        if 'chain' in recipient and 'user' in recipient:
+        if 'filter' in recipient and 'user' in recipient:
             base_url = self.config['fmn.base_url']
             footer = reason.format(base_url=base_url, **recipient) + footer
 

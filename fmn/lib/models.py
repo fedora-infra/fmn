@@ -142,12 +142,12 @@ class Context(BASE):
         for user in User.all(session):
             pref = Preference.load(session, user, self)
             if pref:
-                chain = pref.prefers(session, config, valid_paths, message)
-                if chain:
+                filter = pref.prefers(session, config, valid_paths, message)
+                if filter:
                     yield {
                         'user': user.openid,
                         pref.context.detail_name: pref.detail_value,
-                        'chain': chain.name,
+                        'filter': filter.name,
                     }
 
     def recipients(self, session, config, valid_paths, message):
@@ -186,10 +186,10 @@ class Rule(BASE):
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
-    chain_id = sa.Column(
+    filter_id = sa.Column(
         sa.Integer,
-        sa.ForeignKey('chains.id'))
-    chain = relation('Chain', backref=('rules'))
+        sa.ForeignKey('filters.id'))
+    filter = relation('Chain', backref=('rules'))
 
     # This is something of the form 'fmn.rules:some_function'
     # We need to do major validation to make sure only *our* code_paths
@@ -222,6 +222,7 @@ class Rule(BASE):
 
         root, name = code_path.split(':', 1)
         if name not in valid_paths[root]:
+            print valid_paths
             raise ValueError("%r is not a valid code_path" % code_path)
 
     @classmethod
@@ -269,7 +270,7 @@ class Rule(BASE):
 
 
 class Chain(BASE):
-    __tablename__ = 'chains'
+    __tablename__ = 'filters'
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
     name = sa.Column(sa.String(50))
@@ -277,15 +278,15 @@ class Chain(BASE):
     preference_id = sa.Column(
         sa.Integer,
         sa.ForeignKey('preferences.id'))
-    preference = relation('Preference', backref=backref('chains'))
+    preference = relation('Preference', backref=backref('filters'))
 
     @classmethod
     def create(cls, session, name):
-        chain = cls(name=name)
-        session.add(chain)
+        filter = cls(name=name)
+        session.add(filter)
         session.flush()
         session.commit()
-        return chain
+        return filter
 
     def add_filter(self, session, paths, filt, **kw):
         if isinstance(filt, basestring):
@@ -308,11 +309,11 @@ class Chain(BASE):
         raise ValueError("No such rule found: %r" % code_path)
 
     def matches(self, session, config, paths, message):
-        """ Return true if this chain matches the given message.
+        """ Return true if this filter matches the given message.
 
         This is the case if *all* of the associated rules match.
 
-        ...with one exception.  If no rules are defined, the chain does not
+        ...with one exception.  If no rules are defined, the filter does not
         match (even though technically, all of its zero rules match).
         """
 
@@ -441,38 +442,38 @@ class Preference(BASE):
         session.flush()
         session.commit()
 
-    def add_chain(self, session, chain):
-        self.chains.append(chain)
+    def add_filter(self, session, filter):
+        self.filters.append(filter)
         session.flush()
         session.commit()
 
-    def has_chain(self, session, chain_name):
-        for chain in self.chains:
-            if chain.name == chain_name:
+    def has_filter(self, session, filter_name):
+        for filter in self.filters:
+            if filter.name == filter_name:
                 return True
 
         return False
 
-    def get_chain(self, session, chain_name):
-        for chain in self.chains:
-            if chain.name == chain_name:
-                return chain
+    def get_filter(self, session, filter_name):
+        for filter in self.filters:
+            if filter.name == filter_name:
+                return filter
 
-        raise ValueError("No such chain %r" % chain_name)
+        raise ValueError("No such filter %r" % filter_name)
 
     def prefers(self, session, config, valid_paths, message):
         """ Evaluate to true if this preference "prefers" this message.
 
-        That is the case if *any* of the associated chains match.
+        That is the case if *any* of the associated filters match.
 
-        The first chain that matches the message is returned for bookkeeping.
+        The first filter that matches the message is returned for bookkeeping.
 
-        If no chain matches, None is returned.
+        If no filter matches, None is returned.
         """
 
-        for chain in self.chains:
-            if chain.matches(session, config, valid_paths, message):
-                return chain
+        for filter in self.filters:
+            if filter.matches(session, config, valid_paths, message):
+                return filter
 
         return None
 

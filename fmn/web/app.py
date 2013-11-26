@@ -265,10 +265,10 @@ def context(openid, context):
         preference=pref)
 
 
-@app.route('/<not_reserved:openid>/<context>/<chain_name>')
-@app.route('/<not_reserved:openid>/<context>/<chain_name>/')
+@app.route('/<not_reserved:openid>/<context>/<filter_name>')
+@app.route('/<not_reserved:openid>/<context>/<filter_name>/')
 @login_required
-def chain(openid, context, chain_name):
+def filter(openid, context, filter_name):
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         flask.abort(403)
 
@@ -279,21 +279,21 @@ def chain(openid, context, chain_name):
     pref = fmn.lib.models.Preference.get_or_create(
         SESSION, openid=openid, context=context)
 
-    chain = None
-    for _chain in pref.chains:
-        if _chain.name == chain_name:
-            chain = _chain
+    filter = None
+    for _filter in pref.filters:
+        if _filter.name == filter_name:
+            filter = _filter
             break
 
-    if not pref.has_chain(SESSION, chain_name):
+    if not pref.has_filter(SESSION, filter_name):
         flask.abort(404)
 
-    chain = pref.get_chain(SESSION, chain_name)
+    filter = pref.get_filter(SESSION, filter_name)
 
     return flask.render_template(
-        'chain.html',
+        'filter.html',
         current=context.name,
-        chain=chain)
+        filter=filter)
 
 
 @app.route('/confirm/<action>/<secret>')
@@ -323,9 +323,9 @@ def handle_confirmation(action, secret):
         context=confirmation.context_name))
 
 
-@app.route('/api/chain', methods=['POST', 'DELETE'])
+@app.route('/api/filter', methods=['POST', 'DELETE'])
 @api_method
-def handle_chain():
+def handle_filter():
     form = fmn.web.forms.ChainForm(flask.request.form)
 
     if not form.validate():
@@ -333,7 +333,7 @@ def handle_chain():
 
     openid = form.openid.data
     context = form.context.data
-    chain_name = form.chain_name.data
+    filter_name = form.filter_name.data
     method = (form.method.data or flask.request.method).upper()
 
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
@@ -357,22 +357,22 @@ def handle_chain():
 
     try:
         if method == 'POST':
-            # Ensure that a chain with this name doesn't already exist.
-            if pref.has_chain(SESSION, chain_name):
+            # Ensure that a filter with this name doesn't already exist.
+            if pref.has_filter(SESSION, filter_name):
                 raise APIError(404, dict(
-                    reason="%r already exists" % chain_name))
+                    reason="%r already exists" % filter_name))
 
-            chain = fmn.lib.models.Chain.create(SESSION, chain_name)
-            pref.add_chain(SESSION, chain)
+            filter = fmn.lib.models.Chain.create(SESSION, filter_name)
+            pref.add_filter(SESSION, filter)
             next_url = flask.url_for(
-                'chain',
+                'filter',
                 openid=openid,
                 context=context,
-                chain_name=chain_name,
+                filter_name=filter_name,
             )
         elif method == 'DELETE':
-            chain = pref.get_chain(SESSION, chain_name)
-            SESSION.delete(chain)
+            filter = pref.get_filter(SESSION, filter_name)
+            SESSION.delete(filter)
             SESSION.commit()
             next_url = flask.url_for(
                 'context',
@@ -472,11 +472,11 @@ def handle_filter():
 
     openid = form.openid.data
     context = form.context.data
-    chain_name = form.chain_name.data
+    filter_name = form.filter_name.data
     code_path = form.rule_name.data
     method = (form.method.data or flask.request.method).upper()
     # Extract arguments to rules using the extra information provided
-    known_args = ['openid', 'chain_name', 'context', 'rule_name']
+    known_args = ['openid', 'filter_name', 'context', 'rule_name']
     arguments = {}
     for args in flask.request.form:
         if args not in known_args:
@@ -501,16 +501,16 @@ def handle_filter():
     pref = fmn.lib.models.Preference.get_or_create(
         SESSION, openid=openid, context=ctx)
 
-    if not pref.has_chain(SESSION, chain_name):
-        raise APIError(403, dict(reason="%r is not a chain" % chain_name))
+    if not pref.has_filter(SESSION, filter_name):
+        raise APIError(403, dict(reason="%r is not a filter" % filter_name))
 
-    chain = pref.get_chain(SESSION, chain_name)
+    filter = pref.get_filter(SESSION, filter_name)
 
     try:
         if method == 'POST':
-            chain.add_filter(SESSION, valid_paths, code_path, **arguments)
+            filter.add_filter(SESSION, valid_paths, code_path, **arguments)
         elif method == 'DELETE':
-            chain.remove_filter(SESSION, code_path)  # , **arguments)
+            filter.remove_filter(SESSION, code_path)  # , **arguments)
         else:
             raise NotImplementedError("This is impossible.")
     except (ValueError, KeyError) as e:
@@ -518,10 +518,10 @@ def handle_filter():
         raise APIError(403, dict(reason=str(e)))
 
     next_url = flask.url_for(
-        'chain',
+        'filter',
         openid=openid,
         context=context,
-        chain_name=chain_name,
+        filter_name=filter_name,
     )
 
     return dict(message="ok", url=next_url)

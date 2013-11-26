@@ -4,7 +4,7 @@ from wtforms import Form, TextField, IntegerField, validators
 class ChainForm(Form):
     openid = TextField('openid', [validators.Required()])
     context = TextField('context', [validators.Required()])
-    chain_name = TextField('chain_name', [validators.Required()])
+    filter_name = TextField('filter_name', [validators.Required()])
     method = TextField('method')
 
 
@@ -22,6 +22,6 @@ class DetailsForm(Form):
 class RuleForm(Form):
     openid = TextField('openid', [validators.Required()])
     context = TextField('context', [validators.Required()])
-    chain_name = TextField('chain_name', [validators.Required()])
+    filter_name = TextField('filter_name', [validators.Required()])
     rule_name = TextField('rule_name', [validators.Required()])
     method = TextField('method')

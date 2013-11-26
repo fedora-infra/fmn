@@ -40,9 +40,9 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess, openid="ralph.id.fedoraproject.org")
         context = fmn.lib.models.Context.get(self.sess, name="irc")
         preference = fmn.lib.models.Preference.load(self.sess, user, context)
-        chain = fmn.lib.models.Chain.create(self.sess, name="test chain")
-        chain.add_filter(self.sess, self.valid_paths, code_path)
-        preference.add_chain(self.sess, chain)
+        filter = fmn.lib.models.Chain.create(self.sess, name="test filter")
+        filter.add_filter(self.sess, self.valid_paths, code_path)
+        preference.add_filter(self.sess, filter)
 
     def test_empty_recipients_list(self):
         self.create_user_and_context_data()
@@ -81,7 +81,7 @@ class TestRecipients(fmn.lib.tests.Base):
         eq_(list(recipients), [{
             'irc nick': 'threebean',
             'user': 'ralph.id.fedoraproject.org',
-            'chain': 'test chain',
+            'filter': 'test filter',
             }])
 
     def test_miss_recipients_list(self):
@@ -98,11 +98,11 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess, self.config, self.valid_paths, 'irc', msg)
         eq_(list(recipients), [])
 
-    def test_multiple_identical_chains_miss(self):
+    def test_multiple_identical_filters_miss(self):
         self.create_user_and_context_data()
         self.create_preference_data_empty()
 
-        # Tack two identical chains onto the preferenced
+        # Tack two identical filters onto the preferenced
         code_path = "fmn.lib.tests.example_rules:not_wat_rule"
         self.create_preference_data_basic(code_path)
         code_path = "fmn.lib.tests.example_rules:not_wat_rule"
@@ -110,7 +110,7 @@ class TestRecipients(fmn.lib.tests.Base):
 
         preference = fmn.lib.models.Preference.load(
             self.sess, "ralph.id.fedoraproject.org", "irc")
-        eq_(len(preference.chains), 2)
+        eq_(len(preference.filters), 2)
 
         msg = {
             "wat": "blah",
@@ -119,11 +119,11 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess, self.config, self.valid_paths, 'irc', msg)
         eq_(list(recipients), [])
 
-    def test_multiple_identical_chains_hit(self):
+    def test_multiple_identical_filters_hit(self):
         self.create_user_and_context_data()
         self.create_preference_data_empty()
 
-        # Tack two identical chains onto the preferenced
+        # Tack two identical filters onto the preferenced
         code_path = "fmn.lib.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
         code_path = "fmn.lib.tests.example_rules:wat_rule"
@@ -131,7 +131,7 @@ class TestRecipients(fmn.lib.tests.Base):
 
         preference = fmn.lib.models.Preference.load(
             self.sess, "ralph.id.fedoraproject.org", "irc")
-        eq_(len(preference.chains), 2)
+        eq_(len(preference.filters), 2)
 
         msg = {
             "wat": "blah",
@@ -141,14 +141,14 @@ class TestRecipients(fmn.lib.tests.Base):
         eq_(list(recipients), [{
             'irc nick': 'threebean',
             'user': 'ralph.id.fedoraproject.org',
-            'chain': 'test chain',
+            'filter': 'test filter',
             }])
 
-    def test_multiple_different_chains_hit(self):
+    def test_multiple_different_filters_hit(self):
         self.create_user_and_context_data()
         self.create_preference_data_empty()
 
-        # Tack two identical chains onto the preferenced
+        # Tack two identical filters onto the preferenced
         code_path = "fmn.lib.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
         code_path = "fmn.lib.tests.example_rules:not_wat_rule"
@@ -156,7 +156,7 @@ class TestRecipients(fmn.lib.tests.Base):
 
         preference = fmn.lib.models.Preference.load(
             self.sess, "ralph.id.fedoraproject.org", "irc")
-        eq_(len(preference.chains), 2)
+        eq_(len(preference.filters), 2)
 
         msg = {
             "wat": "blah",
@@ -166,5 +166,5 @@ class TestRecipients(fmn.lib.tests.Base):
         eq_(list(recipients), [{
             'irc nick': 'threebean',
             'user': 'ralph.id.fedoraproject.org',
-            'chain': 'test chain',
+            'filter': 'test filter',
             }])
