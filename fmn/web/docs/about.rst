@@ -38,8 +38,8 @@ on the backend with fedmsg. Take a look at the `list of fedmsg topics
 Some Terminology
 ================
 
-Filter
-------
+Rule
+----
 
 This is smallest, most atomic object in the Fedora Notifications system. It is
 a simple rule that can be applied to a fedmsg message. It can evaluate to

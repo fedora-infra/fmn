@@ -5,7 +5,7 @@ from fmn.rules.generic import *
 from fmn.rules.pkgdb import *
 
 
-def DevelopmentFilter(*args, **kwargs):
+def DevelopmentRule(*args, **kwargs):
     """ All messages
 
     This lets every message through not matter the content.

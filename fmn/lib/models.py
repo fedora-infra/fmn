@@ -181,7 +181,7 @@ class User(BASE):
         return user
 
 
-class Filter(BASE):
+class Rule(BASE):
     __tablename__ = 'rules'
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
@@ -228,7 +228,7 @@ class Filter(BASE):
     def create_from_code_path(cls, session, valid_paths, code_path, **kw):
 
         # This will raise an exception if invalid
-        Filter.validate_code_path(valid_paths, code_path, **kw)
+        Rule.validate_code_path(valid_paths, code_path, **kw)
 
         filt = cls(code_path=code_path)
         filt.arguments = kw
@@ -255,7 +255,7 @@ class Filter(BASE):
         arbitrary data into the db.
         """
 
-        Filter.validate_code_path(
+        Rule.validate_code_path(
             valid_paths, self.code_path, **self.arguments)
 
         fn = self._instantiate_callable()
@@ -289,7 +289,7 @@ class Chain(BASE):
 
     def add_filter(self, session, paths, filt, **kw):
         if isinstance(filt, basestring):
-            filt = Filter.create_from_code_path(session, paths, filt, **kw)
+            filt = Rule.create_from_code_path(session, paths, filt, **kw)
         elif kw:
             raise ValueError("Cannot handle rule with non-empty kw")
 

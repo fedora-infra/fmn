@@ -465,7 +465,7 @@ def handle_details():
 @app.route('/api/rule', methods=['POST'])
 @api_method
 def handle_filter():
-    form = fmn.web.forms.FilterForm(flask.request.form)
+    form = fmn.web.forms.RuleForm(flask.request.form)
 
     if not form.validate():
         raise APIError(400, form.errors)

@@ -19,7 +19,7 @@ class DetailsForm(Form):
     batch_count = TextField('batch_delta')
 
 
-class FilterForm(Form):
+class RuleForm(Form):
     openid = TextField('openid', [validators.Required()])
     context = TextField('context', [validators.Required()])
     chain_name = TextField('chain_name', [validators.Required()])
