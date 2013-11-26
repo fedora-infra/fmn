@@ -45,7 +45,7 @@ Starting as of November 15th.
 - [ ] Persist the STOP/START state of the irc bot (and others) to the DB.
       Currently, it is an in-memory thing for the backend which vanishes when
       you restart it.
-- [ ] Rename Filter(s) to Rule(s) and rename Chain(s) to Filter(s).
+- [x] Rename Filter(s) to Rule(s) and rename Chain(s) to Filter(s).
 - [ ] Show a list of past message that would match a particular filterchain as
       you are building it.
 - [ ] As you add rules to a filter, other rules that cannot possibly be

@@ -95,11 +95,11 @@ Here's a proposal:
 A user's account has a series of messaging contexts.  A messaging context is
 one of 'Email', 'IRC', 'Android', etc..
 
-For each context, a user has an unlimited number of chains.
+For each context, a user has an unlimited number of filters.
 
-Each chain has an unlimited number of filters.
+Each filter has an unlimited number of rules.
 
-A filter is something like: "is a bodhi message" or "pertains to a package
+A rule is something like: "is a bodhi message" or "pertains to a package
 owned by me." They will be implemented as python functions.  The database model
 will refer to them in some form like ``fmn.rules:pertains_to_me`` or
 ``fmn.rules:is_a_bodhi_message``.  They can optionally take arguments, which
@@ -113,7 +113,7 @@ needs a username for it to make any sense.
           V                         V                  V
          Email                     IRC               Android
           |                         |                  |
-          +--->Chain1               +--->Chain1        +----->Chain1
+          +--->Filter1               +--->Filter1        +----->Filter1
           |       |                        |                    |
           |       +-> is a koji build      +-> pertains to a    +-> pertains
           |       |   completed message        package owned        to the
@@ -124,17 +124,18 @@ needs a username for it to make any sense.
           |       +-> does not pertain to
           |           package 'nethack'
           |
-          +--->Chain2
+          +--->Filter2
                   |
                   +-> is a bodhi message
                   |
                   +-> pertains to a package
                       owned by 'lmacken'
 
-If *all* the filters match for *any* chain in a given context, a notification
-is deployed for that context.  In other words, the chains are OR'd together and
-the filters that make up a chain are AND'd together.  If multiple contexts have
-a chain that succeeds, notifications are deployed for all of those contexts.
+If *all* the rules match for *any* filter in a given context, a notification
+is deployed for that context.  In other words, the filters are OR'd together
+and the rules that make up a filter are AND'd together.  If multiple contexts
+have a filter that succeeds, notifications are deployed for all of those
+contexts.
 
 Context-specific Delivery Metadata
 ----------------------------------
