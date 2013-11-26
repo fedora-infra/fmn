@@ -19,11 +19,11 @@
         <h4 class="list-group-item-heading">{{chn.name}}</h4>
         {% if chn.rules %}
         <dl class="list-group-item-text dl-horizontal">
-            {% for flt in chn.rules %}
-            <dt>{{flt.title(valid_paths)}}</dt>
-            <dd>{{flt.doc(valid_paths)}}
+            {% for rule in chn.rules %}
+            <dt>{{rule.title(valid_paths)}}</dt>
+            <dd>{{rule.doc(valid_paths)}}
                 <dl class="dl-horizontal">
-                    {% for key, value in flt.arguments.iteritems() %}
+                    {% for key, value in rule.arguments.iteritems() %}
                     <dt>{{key}}</dt><dd>{{value}}</dd>
                     {% endfor %}
                 </dl>
