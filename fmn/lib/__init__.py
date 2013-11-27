@@ -5,6 +5,7 @@ import fmn.lib.models
 import inspect
 import logging
 
+import bs4
 import docutils.examples
 import markupsafe
 
@@ -68,15 +69,20 @@ def load_rules(root='fmn.rules'):
         if doc:
             title, doc_as_rst = doc.split('\n', 1)
             doc = docutils.examples.html_parts(doc_as_rst)['body']
+            soup = bs4.BeautifulSoup(doc)
+            doc_no_links = ''.join(map(unicode, strip_anchor_tags(soup)))
             doc = markupsafe.Markup(doc)
+            doc_no_links = markupsafe.Markup(doc_no_links)
         else:
             title = "UNDOCUMENTED"
             doc = "No docs for %s:%s %r" % (root, name, obj)
+            doc_no_links = doc
 
         rules[name] = {
             'func': obj,
             'title': title.strip(),
             'doc': doc.strip(),
+            'doc-no-links': doc_no_links.strip(),
             'args': inspect.getargspec(obj)[0],
         }
 
@@ -85,3 +91,14 @@ def load_rules(root='fmn.rules'):
     )
 
     return {root: rules}
+
+
+def strip_anchor_tags(soup):
+    for tag in soup.contents:
+        if isinstance(tag, bs4.Tag) and tag.name not in ('a'):
+            tag.contents = list(strip_anchor_tags(tag))
+            yield tag
+        elif isinstance(tag, bs4.Tag) and tag.name in ('a'):
+            yield tag.string
+        else:
+            yield tag

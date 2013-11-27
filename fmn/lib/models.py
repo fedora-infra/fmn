@@ -243,9 +243,12 @@ class Rule(BASE):
         root, name = self.code_path.split(':', 1)
         return valid_paths[root][name]['title']
 
-    def doc(self, valid_paths):
+    def doc(self, valid_paths, no_links=False):
         root, name = self.code_path.split(':', 1)
-        return valid_paths[root][name]['doc']
+        if no_links:
+            return valid_paths[root][name]['doc-no-links']
+        else:
+            return valid_paths[root][name]['doc']
 
     def execute(self, session, config, valid_paths, message):
         """ Load our callable and execute it.

@@ -27,12 +27,14 @@
         <dl class="list-group-item-text dl-horizontal">
             {% for rule in chn.rules %}
             <dt>{{rule.title(valid_paths)}}</dt>
-            <dd>{{rule.doc(valid_paths)}}
+            <dd>{{rule.doc(valid_paths, no_links=True)}}
+                {% if rule.arguments %}
                 <dl class="dl-horizontal">
                     {% for key, value in rule.arguments.iteritems() %}
                     <dt>{{key}}</dt><dd>{{value}}</dd>
                     {% endfor %}
                 </dl>
+                {% endif %}
             </dd>
             {% endfor %}
         </dl>
