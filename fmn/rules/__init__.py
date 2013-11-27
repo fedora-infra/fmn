@@ -14,13 +14,3 @@ from fmn.rules.pkgdb import *
 from fmn.rules.planet import *
 from fmn.rules.trac import *
 from fmn.rules.wiki import *
-
-
-def DevelopmentRule(*args, **kwargs):
-    """ All messages
-
-    This lets every message through not matter the content.
-
-    (Useful for development)
-    """
-    return True
