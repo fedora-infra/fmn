@@ -5,10 +5,10 @@ import fmn.lib.pkgdb
 
 
 def user_filter(config, message, fasnick=None, *args, **kw):
-    """ All messages of user
+    """ All messages for a certain user
 
-    Use this rule to rule out messages that are associated with a
-    specified user.
+    Use this rule to include messages that are associated with a
+    specific user.
     """
 
     fasnick = kw.get('fasnick', fasnick)
@@ -27,3 +27,15 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
     if fasnick:
         packages = fmn.lib.pkgdb.get_packages_of_user(fasnick)
         return packages.intersection(fedmsg.meta.msg2packages(message))
+
+
+def package_filter(config, message, package=None, *args, **kw):
+    """ All messages pertaining to a certain package
+
+    Use this rule to include messages that relate to a certain package
+    (*i.e., nethack*).
+    """
+
+    package = kw.get('package', package)
+    if package:
+        return package in fedmsg.meta.msg2packages(message)
