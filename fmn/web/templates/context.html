@@ -143,6 +143,10 @@
           <input name="openid" id="openid" value="{{openid}}" type="hidden">
           <input name="context" id="context" value="{{current}}" type="hidden">
           <p class="pull-right">
+            <button type="submit" class="btn btn-success" name="save"
+                {{'disabled' if preference.enabled is sameas false}}>
+                <span class="glyphicon glyphicon-{{context.icon}}"></span> Save
+            </button>
             {% if preference.enabled %}
             <button type="submit" class="btn btn-danger" name="toggle_enable" value="toggle">
                 <span class="glyphicon glyphicon-off"></span> Disable
@@ -152,10 +156,6 @@
                 <span class="glyphicon glyphicon-ok-circle"></span> Enable
             </button>
             {% endif %}
-            <button type="submit" class="btn btn-success" name="save"
-                {{'disabled' if preference.enabled is sameas false}}>
-                <span class="glyphicon glyphicon-{{context.icon}}"></span> Save
-            </button>
           </p>
         </form>
       </div>
