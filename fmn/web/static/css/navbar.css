@@ -24,9 +24,10 @@ body {
     background-color: rgba(0,0,0,0.8);
     -moz-border-radius: 15px;
     border-radius: 15px;
-    padding: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
     margin: auto;
-    max-width: 500px;
+    max-width: 600px;
 }
 
 .carousel-caption > h3 {
