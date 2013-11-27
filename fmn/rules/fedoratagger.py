@@ -1,22 +1,28 @@
 def fedoratagger_rating_update(config, message):
-    """ Fedoratagger: The rating of a package has been updated
+    """ Tagger: The rating of a package has been updated
 
-    TODO description for the web interface goes here
+    Adding this rule to your filters will let through messages
+    from `Fedora Tagger <https://apps.fedoraproject.org/tagger>`_
+    that get published when a user updates the **rating** on a package.
     """
     return message['topic'].endswith('fedoratagger.rating.update')
 
 
 def fedoratagger_tag_create(config, message):
-    """ Fedoratagger: A new tag has been added to a package
+    """ Tagger: A new tag has been added to a package
 
-    TODO description for the web interface goes here
+    Adding this rule to your filters will let through messages
+    from `Fedora Tagger <https://apps.fedoraproject.org/tagger>`_
+    that get published when a user adds a **new tag** to a package.
     """
     return message['topic'].endswith('fedoratagger.tag.create')
 
 
 def fedoratagger_tag_update(config, message):
-    """ Fedoratagger: Someone voted on a tag
+    """ Tagger: Someone voted on a tag
 
-    TODO description for the web interface goes here
+    Adding this rule to your filters will let through messages
+    from `Fedora Tagger <https://apps.fedoraproject.org/tagger>`_
+    that get published when a user **votes on an existing tag**.
     """
     return message['topic'].endswith('fedoratagger.tag.update')
