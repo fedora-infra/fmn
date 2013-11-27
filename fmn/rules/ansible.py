@@ -1,16 +1,24 @@
 
 
 def playbook_complete(config, message):
-    """ Playbook completed
+    """ Ansible playbook completed
 
-    TODO description for the web interface goes here
+    The `Fedora Infrastructure team
+    <https://fedoraproject.org/wiki/Infrastructure>`_ uses `ansible
+    <http://ansibleworks.com>`_ to manage resources and deploy services.
+    This rule will let through messages indicating that a playbook run has
+    *completed*.
     """
     return message['topic'].endswith('ansible.playbook.complete')
 
 
 def playbook_started(config, message):
-    """ Playbook started
+    """ Ansible playbook started
 
-    TODO description for the web interface goes here
+    The `Fedora Infrastructure team
+    <https://fedoraproject.org/wiki/Infrastructure>`_ uses `ansible
+    <http://ansibleworks.com>`_ to manage resources and deploy services.
+    This rule will let through messages indicating that a playbook run has
+    *started*.
     """
     return message['topic'].endswith('ansible.playbook.start')
