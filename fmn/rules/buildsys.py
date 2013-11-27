@@ -1,7 +1,7 @@
 
 
 def koji_build_state_change(config, message):
-    """ koji: build changed state (started, failed, finished)
+    """ Koji: build changed state (started, failed, finished)
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime a
@@ -11,7 +11,7 @@ def koji_build_state_change(config, message):
     return message['topic'].endswith('koji.build.state.change')
 
 def koji_build_started(config, message):
-    """ koji: build started
+    """ Koji: build started
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime **a
@@ -23,7 +23,7 @@ def koji_build_started(config, message):
     return message['msg']['new'] == 0
 
 def koji_build_completed(config, message):
-    """ koji: build completed
+    """ Koji: build completed
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime **a
@@ -35,7 +35,7 @@ def koji_build_completed(config, message):
     return message['msg']['new'] == 1
 
 def koji_build_deleted(config, message):
-    """ koji: build deleted
+    """ Koji: build deleted
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime **a
@@ -47,7 +47,7 @@ def koji_build_deleted(config, message):
     return message['msg']['new'] == 2
 
 def koji_build_failed(config, message):
-    """ koji: build failed
+    """ Koji: build failed
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime **a
@@ -59,7 +59,7 @@ def koji_build_failed(config, message):
     return message['msg']['new'] == 3
 
 def koji_build_cancelled(config, message):
-    """ koji: build cancelled
+    """ Koji: build cancelled
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime **a
@@ -71,7 +71,7 @@ def koji_build_cancelled(config, message):
     return message['msg']['new'] == 4
 
 def koji_repo_done(config, message):
-    """ koji: Building a repo has finished
+    """ Koji: Building a repo has finished
 
     This rule lets through messages indicating that the `koji build
     system <https://koji.fedoraproject.org>`_ has **finished** rebuilding a
@@ -81,7 +81,7 @@ def koji_repo_done(config, message):
 
 
 def koji_repo_init(config, message):
-    """ koji: Building a repo has started
+    """ Koji: Building a repo has started
 
     This rule lets through messages indicating that the `koji build
     system <https://koji.fedoraproject.org>`_ has **started** rebuilding a
@@ -91,7 +91,7 @@ def koji_repo_init(config, message):
 
 
 def koji_tag(config, message):
-    """ koji: A package has been tagged
+    """ Koji: A package has been tagged
 
     This rule lets through messages that get published when the `koji build
     system <https://koji.fedoraproject.org>`_ applies a certain tag to a
@@ -101,7 +101,7 @@ def koji_tag(config, message):
 
 
 def koji_untag(config, message):
-    """ koji: A package has been untagged
+    """ Koji: A package has been untagged
 
     This rule lets through messages that get published when the `koji build
     system <https://koji.fedoraproject.org>`_ removes a tag from a
