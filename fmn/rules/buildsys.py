@@ -1,48 +1,110 @@
 
 
-def buildsys_build_state_change(config, message):
-    """ Buildsys: build changed state (started, failed, finished)
+def koji_build_state_change(config, message):
+    """ koji: build changed state (started, failed, finished)
 
-    TODO description for the web interface goes here
+    This rule lets through messages from the `koji build
+    system <https://koji.fedoraproject.org>`_ that get published anytime a
+    build changes state.  The state could be anything:  started, completed,
+    deleted, failed, or cancelled.
     """
-    return message['topic'].endswith('buildsys.build.state.change')
+    return message['topic'].endswith('koji.build.state.change')
 
+def koji_build_started(config, message):
+    """ koji: build started
 
-def buildsys_package_list_change(config, message):
-    """ Buildsys: Package list changed
-
-    TODO description for the web interface goes here
+    This rule lets through messages from the `koji build
+    system <https://koji.fedoraproject.org>`_ that get published anytime **a
+    build starts**.
     """
-    return message['topic'].endswith('buildsys.package.list.change')
+    if not koji_build_state_change(config, message):
+        return False
 
+    return message['msg']['new'] == 0
 
-def buildsys_repo_done(config, message):
-    """ Buildsys: Building a repo has finished
+def koji_build_completed(config, message):
+    """ koji: build completed
 
-    TODO description for the web interface goes here
+    This rule lets through messages from the `koji build
+    system <https://koji.fedoraproject.org>`_ that get published anytime **a
+    build completes**.
     """
-    return message['topic'].endswith('buildsys.repo.done')
+    if not koji_build_state_change(config, message):
+        return False
 
+    return message['msg']['new'] == 1
 
-def buildsys_repo_init(config, message):
-    """ Buildsys: Building a repo has started
+def koji_build_deleted(config, message):
+    """ koji: build deleted
 
-    TODO description for the web interface goes here
+    This rule lets through messages from the `koji build
+    system <https://koji.fedoraproject.org>`_ that get published anytime **a
+    build is deleted**.
     """
-    return message['topic'].endswith('buildsys.repo.init')
+    if not koji_build_state_change(config, message):
+        return False
 
+    return message['msg']['new'] == 2
 
-def buildsys_tag(config, message):
-    """ Buildsys: A package has been tagged
+def koji_build_failed(config, message):
+    """ koji: build failed
 
-    TODO description for the web interface goes here
+    This rule lets through messages from the `koji build
+    system <https://koji.fedoraproject.org>`_ that get published anytime **a
+    build fails**.
     """
-    return message['topic'].endswith('buildsys.tag')
+    if not koji_build_state_change(config, message):
+        return False
 
+    return message['msg']['new'] == 3
 
-def buildsys_untag(config, message):
-    """ Buildsys: A package has been untagged
+def koji_build_cancelled(config, message):
+    """ koji: build cancelled
 
-    TODO description for the web interface goes here
+    This rule lets through messages from the `koji build
+    system <https://koji.fedoraproject.org>`_ that get published anytime **a
+    build is cancelled**.
     """
-    return message['topic'].endswith('buildsys.untag')
+    if not koji_build_state_change(config, message):
+        return False
+
+    return message['msg']['new'] == 4
+
+def koji_repo_done(config, message):
+    """ koji: Building a repo has finished
+
+    This rule lets through messages indicating that the `koji build
+    system <https://koji.fedoraproject.org>`_ has **finished** rebuilding a
+    repo.
+    """
+    return message['topic'].endswith('koji.repo.done')
+
+
+def koji_repo_init(config, message):
+    """ koji: Building a repo has started
+
+    This rule lets through messages indicating that the `koji build
+    system <https://koji.fedoraproject.org>`_ has **started** rebuilding a
+    repo.
+    """
+    return message['topic'].endswith('koji.repo.init')
+
+
+def koji_tag(config, message):
+    """ koji: A package has been tagged
+
+    This rule lets through messages that get published when the `koji build
+    system <https://koji.fedoraproject.org>`_ applies a certain tag to a
+    package.
+    """
+    return message['topic'].endswith('koji.tag')
+
+
+def koji_untag(config, message):
+    """ koji: A package has been untagged
+
+    This rule lets through messages that get published when the `koji build
+    system <https://koji.fedoraproject.org>`_ removes a tag from a
+    package.
+    """
+    return message['topic'].endswith('koji.untag')
