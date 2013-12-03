@@ -21,6 +21,8 @@ def get_description():
 
 requires = [
     'python-fedora',
+    'fedmsg',
+    'fedmsg_meta_fedora_infrastructure',
 ]
 
 tests_require = [
