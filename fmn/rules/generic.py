@@ -1,7 +1,7 @@
 # Generic rules for FMN
 import fedmsg
 
-import fmn.lib.pkgdb
+import fmn.rules.utils
 
 
 def user_filter(config, message, fasnick=None, *args, **kw):
@@ -25,7 +25,7 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
 
     fasnick = kw.get('fasnick', fasnick)
     if fasnick:
-        packages = fmn.lib.pkgdb.get_packages_of_user(fasnick)
+        packages = fmn.rules.utils.get_packages_of_user(fasnick)
         return packages.intersection(fedmsg.meta.msg2packages(message))
 
 
