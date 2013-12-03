@@ -31,7 +31,7 @@ tests_require = [
 
 setup(
     name='fmn.consumer',
-    version='0.1.1',
+    version='0.1.2',
     description='Backend worker daemon for Fedora Notifications',
     long_description=get_description(),
     author='Ralph Bean',
