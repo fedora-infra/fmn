@@ -23,6 +23,7 @@ requires = [
     'SQLAlchemy>=0.8',
     'beautifulsoup4',
     'fmn.rules',
+    'docutils',
 ]
 
 if sys.version_info[0] == 2 and sys.version_info[1] <= 6:
