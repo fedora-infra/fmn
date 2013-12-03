@@ -34,7 +34,7 @@ setup(
     long_description=get_description(),
     author='Ralph Bean',
     author_email='rbean@redhat.com',
-    url="https://github.com/fedora-infra/fmn",
+    url="https://github.com/fedora-infra/fmn.rules",
     download_url="https://pypi.python.org/pypi/fmn.rules/",
     license='LGPLv2+',
     install_requires=requires,
