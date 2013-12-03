@@ -29,12 +29,12 @@ tests_require = [
 
 setup(
     name='fmn.rules',
-    version='0.1.0',
+    version='0.1.1',
     description='Message processing rules for Fedora Notifications',
     long_description=get_description(),
     author='Ralph Bean',
     author_email='rbean@redhat.com',
-    url="https://github.com/fedora-infra/fmn",
+    url="https://github.com/fedora-infra/fmn.rules",
     download_url="https://pypi.python.org/pypi/fmn.rules/",
     license='LGPLv2+',
     install_requires=requires,
