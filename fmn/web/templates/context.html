@@ -1,0 +1,166 @@
+{% extends "master.html" %}
+
+{% block body %}
+<div class="page-header">
+  <h1>{{current}} preferences 
+      {% if preference.enabled %}
+      <small>{{context.description}}</small>
+      {% else %}
+      <small>(disabled)</small>
+      {% endif %}
+  </h1>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <p>You have {{preference.filters|length}} rule filters
+    defined for this messaging context.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="list-group">
+    {% for chn in preference.filters %}
+      <a href="{{chn.name}}" class="list-group-item">
+        <h4 class="list-group-item-heading">{{chn.name}}</h4>
+        {% if chn.rules %}
+        <dl class="list-group-item-text dl-horizontal">
+            {% for rule in chn.rules %}
+            <dt>{{rule.title(valid_paths)}}</dt>
+            <dd>{{rule.doc(valid_paths, no_links=True)}}
+                {% if rule.arguments %}
+                <dl class="dl-horizontal">
+                    {% for key, value in rule.arguments.iteritems() %}
+                    <dt>{{key}}</dt><dd>{{value}}</dd>
+                    {% endfor %}
+                </dl>
+                {% endif %}
+            </dd>
+            {% endfor %}
+        </dl>
+        {% else %}
+        <p class="list-group-item-text">This filter has zero rules</p>
+        {% endif %}
+          <form role="form" action="{{url_for('handle_filter')}}" method="post">
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <input name="filter_name" id="filter_name" value="{{chn.name}}" type="hidden">
+            <input name="method" id="method" value="delete" type="hidden">
+            <span class="pull-right">
+                <button type="submit" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Delete this filter</button>
+            </span>
+          </form>
+          <div class="clearfix"></div>
+      </a>
+    {% endfor %}
+    </div>
+  </div>
+
+  <div class="col-md-5">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form class="form-inline" role="form" action="{{url_for('handle_filter')}}"
+              method="post">
+          <div class="form-group">
+            <label class="sr-only" for="filter_name">Filter Name</label>
+            <input type="text" class="form-control" name="filter_name" id="filter_name" required=required placeholder="New Filter Name">
+          </div>
+          <input name="openid" id="openid" value="{{openid}}" type="hidden">
+          <input name="context" id="context" value="{{current}}" type="hidden">
+          <button type="submit" class="btn btn-success">
+              <span class="glyphicon glyphicon-plus"></span>
+              Create a new filter</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+            Delivery Options
+        </h3>
+      </div>
+
+      <div class="panel-body">
+        {% if confirmation %}
+        <div class="alert alert-{{ {'pending': 'info', 'valid': 'info', 'accepted': 'success', 'rejected': 'danger', 'invalid': 'warning'}[confirmation.status] }}">
+            <p><strong>{{confirmation.status}}</strong> Your confirmation for
+            {{confirmation.detail_value}} is {{confirmation.status}}</p>
+        </div>
+        {% endif %}
+        <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+              method="post">
+          <fieldset {{'disabled' if preference.enabled is sameas false}}>
+          <div class="form-group">
+            <label class="col-sm-4 control-label" for="detail_value">{{context.detail_name}}</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="detail_value"
+                   id="detail_value" required=required
+                   {{'' if preference.detail_value is none else 'value=' + preference.detail_value}}
+                   placeholder="{{preference.detail_value or context.placeholder}}">
+            </div>
+          </div>
+
+          <div class="panel-heading">
+            <h4>Batching</h4>
+            <p class="help-block">Receive messages in real-time or as a digest</p>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-1 control-label" for="batch_delta">Wait</label>
+            <div class="col-sm-4">
+                <select name="batch_delta" class="form-control">
+                  <option {{'selected' if preference.batch_delta is none}}>&lt;disabled&gt;</option>
+                  <option {{'selected' if preference.batch_delta is equalto 20}} value="20">20 seconds</option>
+                  <option {{'selected' if preference.batch_delta is equalto 120}} value="120">2 minutes</option>
+                  <option {{'selected' if preference.batch_delta is equalto 300}} value="300">5 minutes</option>
+                  <option {{'selected' if preference.batch_delta is equalto 600}} value="600">10 minutes</option>
+                  <option {{'selected' if preference.batch_delta is equalto 1200}} value="1200">20 minutes</option>
+                  <option {{'selected' if preference.batch_delta is equalto 3600}} value="3600">1 hour</option>
+                  <option {{'selected' if preference.batch_delta is equalto 18000}} value="18000">5 hours</option>
+                  <option {{'selected' if preference.batch_delta is equalto 86400}} value="86400">1 day</option>
+                </select>
+            </div>
+            <label class="col-sm-2 control-label" for="batch_count">or for</label>
+            <div class="col-sm-4">
+                <select name="batch_count" class="form-control">
+                  <option {{'selected' if preference.batch_count is none}}>&lt;disabled&gt;</option>
+                  <option {{'selected' if preference.batch_count is equalto 5}} value="5">5 messages</option>
+                  <option {{'selected' if preference.batch_count is equalto 10}} value="10">10 messages</option>
+                  <option {{'selected' if preference.batch_count is equalto 50}} value="50">50 messages</option>
+                  <option {{'selected' if preference.batch_count is equalto 100}} value="100">100 messages</option>
+                  <option {{'selected' if preference.batch_count is equalto 250}} value="250">250 messages</option>
+                </select>
+            </div>
+            <div class="col-sm-11">
+                <p class="help-block text-right">..whichever comes first.</p>
+            </div>
+          </div>
+
+          </fieldset>
+          <input name="openid" id="openid" value="{{openid}}" type="hidden">
+          <input name="context" id="context" value="{{current}}" type="hidden">
+          <p class="pull-right">
+            <button type="submit" class="btn btn-success" name="save"
+                {{'disabled' if preference.enabled is sameas false}}>
+                <span class="glyphicon glyphicon-{{context.icon}}"></span> Save
+            </button>
+            {% if preference.enabled %}
+            <button type="submit" class="btn btn-danger" name="toggle_enable" value="toggle">
+                <span class="glyphicon glyphicon-off"></span> Disable
+            </button>
+            {% else %}
+            <button type="submit" class="btn btn-success" name="toggle_enable" value="toggle">
+                <span class="glyphicon glyphicon-ok-circle"></span> Enable
+            </button>
+            {% endif %}
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

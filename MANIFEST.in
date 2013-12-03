@@ -1,0 +1,7 @@
+include README.rst
+graft apache/
+graft fedmsg.d/
+<<<<<<< HEAD
+=======
+include createdb.py
+>>>>>>> develop

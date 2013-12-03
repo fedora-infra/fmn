@@ -1,0 +1,85 @@
+{% extends "master.html" %}
+
+{% block body %}
+<div class="page-header">
+  <h1>Rules for {{g.auth.email}}'s <em>{{filter.name}}</em> filter
+      <small>for the {{current}} messaging context</small></h1>
+</div>
+
+
+<div class="row">
+  <div class="col-md-6">
+    <p> You have these rules currently defined for this filter.</p>
+    <p> All these rules must be satisfied for the notification to be sent.</p>
+    <div class="list-group">
+    {% for rule in filter.rules %}
+      <span class="list-group-item">
+        <h4 class="list-group-item-heading">{{rule.title(valid_paths)}}</h4>
+        <p class="list-group-item-text">{{rule.doc(valid_paths)}}
+          <dl class="dl-horizontal">
+              {% for key, value in rule.arguments.iteritems() %}
+              <dt>{{key}}</dt><dd>{{value}}</dd>
+              {% endfor %}
+          </dl>
+          <form role="form" action="{{url_for('handle_rule')}}" method="post">
+            <input name="rule_name" id="rule_name" value="{{rule.code_path}}" type="hidden">
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <input name="filter_name" id="filter_name" value="{{filter.name}}" type="hidden">
+            <input name="method" id="method" value="delete" type="hidden">
+            <span class="pull-right">
+                <button type="submit" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Delete this rule</button>
+            </span>
+          </form>
+        <div class="clearfix"></div>
+        </p>
+      </span>
+    {% endfor %}
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <p> You can add a new rule to this filter by selecting one from this
+    pre-defined list.  Click on any rule to check it out.</p>
+
+    <div class="panel-group" id="accordion">
+      {% for root in valid_paths %}
+      {% for path in valid_paths[root] %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{path}}">
+                {{ valid_paths[root][path]['title'] }}
+            </a>
+          </h4>
+        </div>
+        <div id="collapse{{path}}" class="panel-collapse collapse">
+          <div class="panel-body">
+              {{ valid_paths[root][path]['doc'] }}
+              <form class="form-inline" role="form" action="{{url_for('handle_rule')}}" method="post">
+                  {% for arg in valid_paths[root][path]['args'] %}
+                    {% if arg not in ['config', 'message'] %}
+                      {{arg}}
+                      <input name="{{arg}}" id="arg_{{arg}}" type="text" />
+                    {% endif %}
+                  {% endfor %}
+                <input name="rule_name" id="rule_name" value="{{root}}:{{path}}" type="hidden">
+                <input name="openid" id="openid" value="{{openid}}" type="hidden">
+                <input name="context" id="context" value="{{current}}" type="hidden">
+                <input name="filter_name" id="filter_name" value="{{filter.name}}" type="hidden">
+                <button type="submit" class="btn btn-success">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Add this rule</button>
+              </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
