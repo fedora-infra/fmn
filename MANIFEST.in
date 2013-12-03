@@ -1,2 +1,5 @@
 include README.rst
 include createdb.py
+include COPYING
+include COPYING.LESSER
+include CHANGELOG.rst
