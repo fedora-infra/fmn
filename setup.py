@@ -24,6 +24,7 @@ requires = [
     'beautifulsoup4',
     'fmn.rules',
     'docutils',
+    'markupsafe',
 ]
 
 if sys.version_info[0] == 2 and sys.version_info[1] <= 6:
