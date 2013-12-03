@@ -31,37 +31,41 @@ For terminology's sake, refer to these as the ``N`` notification ``contexts``.
 Hacking
 -------
 
-- Clone the repo, cd into it.
+*This repository is just a placeholder* and the code for the various
+components can be found here:
+
+- `fmn.rules <https://github.com/fedora-infra/fmn.rules>`_
+- `fmn.lib <https://github.com/fedora-infra/fmn.lib>`_
+- `fmn.consumer <https://github.com/fedora-infra/fmn.consumer>`_
+- `fmn.web <https://github.com/fedora-infra/fmn.web>`_
+
+If you want to set up fmn for development, you could try something like this:
 
 - Set up a virtualenv:
 
   - ``$ mkvirtualenv fmn``
 
-- The project is split into multiple sub packages, so run:
+- Install all the subcomponents, in order, as development deps:
 
-  - ``$ python setup-lib.py develop``
-  - ``$ python setup-consumer.py develop``
-  - ``$ python setup-web.py develop``
+  - ``$ export MODS="rules lib consumer web"
+  - ``$ for i in $MODS; do git clone git@github.com:fedora-infra/fmn.$i.git; done``
+  - ``$ for i in $MODS; do pushd fmn.$MOD; python setup.py develop; popd; done``
 
-- Do the tests pass out of the box?
+- Do the base libs tests pass?
 
-  - ``$ python setup-lib.py test``
+  - ``$ pushd fmn.lib; python setup.py test; popd``
 
 - Create some dev data for the webapp:
 
-  - ``$ python createdb.py --with-dev-data``
+  - ``$ python fmn.lib/createdb.py --with-dev-data``
 
 - Start the webapp:
 
-  - ``$ python fmn/web/main.py``
-
-- Edit the dev data to use your ``ircnick`` and email:
-
-  - ``$ vim fedmsg.d/fmn.py``
+  - ``$ pushd fmn.web; python fmn/web/main.py; popd``
 
 - Run the consumer to give it a try:
 
-  - ``$ fedmsg-hub``
+  - ``$ pushd fmn.consumer; fedmsg-hub; popd``
 
 
 Architecture
