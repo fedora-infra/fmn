@@ -2,6 +2,7 @@ import codecs
 import functools
 import os
 from bunch import Bunch
+from pkg_resources import get_distribution
 
 import docutils
 import docutils.examples
@@ -19,9 +20,6 @@ import fmn.lib
 import fmn.lib.models
 import fmn.web.converters
 import fmn.web.forms
-
-
-__version__ = '0.1.0'
 
 # Create the application.
 app = flask.Flask(__name__)
@@ -177,10 +175,17 @@ def inject_variable():
     if flask.g.auth.logged_in:
         openid = flask.g.auth.openid
         contexts = fmn.lib.models.Context.all(SESSION)
+
+    web_version = get_distribution('fmn.web').version
+    lib_version = get_distribution('fmn.lib').version
+    rules_version = get_distribution('fmn.rules').version
+
     return dict(openid=openid,
                 contexts=contexts,
                 valid_paths=valid_paths,
-                version=__version__)
+                web_version=web_version,
+                lib_version=lib_version,
+                rules_version=rules_version)
 
 
 @app.route('/_heartbeat')

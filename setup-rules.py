@@ -1,4 +1,4 @@
-""" Setup file for fmn.lib """
+""" Setup file for fmn.rules """
 
 import sys
 import os
@@ -20,33 +20,27 @@ def get_description():
 
 
 requires = [
-    'SQLAlchemy>=0.8',
-    'beautifulsoup4',
+    'python-fedora',
 ]
-
-if sys.version_info[0] == 2 and sys.version_info[1] <= 6:
-    requires.extend([
-        "ordereddict",
-    ])
 
 tests_require = [
     'nose',
 ]
 
 setup(
-    name='fmn.lib',
+    name='fmn.rules',
     version='0.0.1',
-    description='Internal API for components for Fedora Notifications',
+    description='Message processing rules for Fedora Notifications',
     long_description=get_description(),
     author='Ralph Bean',
     author_email='rbean@redhat.com',
     url="https://github.com/fedora-infra/fmn",
-    download_url="https://pypi.python.org/pypi/fmn.lib/",
+    download_url="https://pypi.python.org/pypi/fmn.rules/",
     license='LGPLv2+',
     install_requires=requires,
     tests_require=tests_require,
     test_suite='nose.collector',
-    packages=['fmn', 'fmn.lib'],
+    packages=['fmn', 'fmn.rules'],
     namespace_packages=['fmn'],
     include_package_data=True,
     zip_safe=False,
