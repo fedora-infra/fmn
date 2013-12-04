@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.1.2
+-----
+
+- mod_wsgi files. `91649ff0f <https://github.com/fedora-infra/fmn.web/commit/91649ff0fee071f154cf60b0f13f5ce234b9fb1e>`_
+
 0.1.1
 -----
 
