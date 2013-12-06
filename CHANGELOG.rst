@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.1.4
+-----
+
+- Deactivate apache config by default. `57cd98987 <https://github.com/fedora-infra/fmn.web/commit/57cd98987b71bada2d01f29ae7b438d6e0631107>`_
+
 0.1.3
 -----
 
