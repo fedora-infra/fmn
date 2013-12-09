@@ -5,3 +5,6 @@ include createdb.py
 include CHANGELOG.rst
 include COPYING
 include COPYING.LESSER
+graft fmn/web/templates
+graft fmn/web/static
+graft fmn/web/docs
