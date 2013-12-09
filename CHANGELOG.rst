@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.1.5
+-----
+
+- Include static resources in the tarball. `ed6bf3a60 <https://github.com/fedora-infra/fmn.web/commit/ed6bf3a606657a0e667c65639f4c86cf77cac54c>`_
+
 0.1.4
 -----
 
