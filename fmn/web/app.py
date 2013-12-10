@@ -589,7 +589,8 @@ def yahoo_login():
 @app.route('/logout/')
 @app.route('/logout')
 def logout():
-    flask.session.pop('openid')
+    if 'openid' in flask.session:
+        flask.session.pop('openid')
     return flask.redirect(flask.url_for('index'))
 
 
