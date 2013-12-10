@@ -11,7 +11,7 @@ log = logging.getLogger("fmn")
 
 
 class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
-    topic = 'org.fedoraproject.prod.*'
+    topic = 'org.fedoraproject.*'
     config_key = 'fmn.consumer.enabled'
 
     def __init__(self, *args, **kwargs):
