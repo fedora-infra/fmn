@@ -91,7 +91,7 @@ def init(db_url, alembic_ini=None, debug=False, create=False):
 class Context(BASE):
     __tablename__ = 'contexts'
     name = sa.Column(sa.String(50), primary_key=True)
-    description = sa.Column(sa.String(1024), primary_key=True)
+    description = sa.Column(sa.String(1024), unique=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
     detail_name = sa.Column(sa.String(64), nullable=False)
     icon = sa.Column(sa.String(32), nullable=False)
