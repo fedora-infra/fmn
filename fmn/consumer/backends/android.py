@@ -1,6 +1,7 @@
 from fmn.consumer.backends.base import BaseBackend
 
 import requests
+import json
 
 
 class GCMBackend(BaseBackend):
