@@ -25,7 +25,12 @@ class BaseBackend(object):
         return fmn.lib.models.Preference.by_detail(self.session, detail_value)
 
     def disabled_for(self, detail_value):
-        return not self.preference_for(detail_value).enabled
+        pref = self.preference_for(detail_value)
+
+        if not pref:
+            return False
+
+        return not pref.enabled
 
     def enable(self, detail_value):
         self.preference_for(detail_value).set_enabled(self.session, True)
