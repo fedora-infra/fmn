@@ -3,6 +3,7 @@ from fmn.rules.askbot import *
 from fmn.rules.bodhi import *
 from fmn.rules.buildsys import *
 from fmn.rules.compose import *
+from fmn.rules.coprs import *
 from fmn.rules.fas import *
 from fmn.rules.fedbadges import *
 from fmn.rules.fedoratagger import *
