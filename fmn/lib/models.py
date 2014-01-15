@@ -45,6 +45,8 @@ from sqlalchemy.orm import backref
 
 import fedmsg.utils
 
+import fmn.lib.defaults
+
 BASE = declarative_base()
 
 log = logging.getLogger(__name__)
@@ -172,17 +174,21 @@ class User(BASE):
         return session.query(cls).all()
 
     @classmethod
-    def get_or_create(cls, session, openid, openid_url):
+    def get_or_create(cls, session, openid, openid_url, create_defaults=True):
         user = cls.by_openid(session, openid)
         if not user:
-            user = cls.create(session, openid, openid_url)
+            user = cls.create(session, openid, openid_url, create_defaults)
         return user
 
     @classmethod
-    def create(cls, session, openid, openid_url):
+    def create(cls, session, openid, openid_url, create_defaults):
         user = cls(openid=openid, openid_url=openid_url)
         session.add(user)
         session.flush()
+
+        if create_defaults:
+            fmn.lib.defaults.create_defaults_for(session, user)
+
         return user
 
 
