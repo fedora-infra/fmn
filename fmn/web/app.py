@@ -518,7 +518,7 @@ def handle_rule():
 
     try:
         if method == 'POST':
-            filter.add_filter(SESSION, valid_paths, code_path, **arguments)
+            filter.add_rule(SESSION, valid_paths, code_path, **arguments)
         elif method == 'DELETE':
             filter.remove_filter(SESSION, code_path)  # , **arguments)
         else:
