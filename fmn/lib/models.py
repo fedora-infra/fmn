@@ -296,16 +296,16 @@ class Filter(BASE):
         session.commit()
         return filter
 
-    def add_filter(self, session, paths, filt, **kw):
-        if isinstance(filt, basestring):
-            filt = Rule.create_from_code_path(session, paths, filt, **kw)
+    def add_rule(self, session, paths, rule, **kw):
+        if isinstance(rule, basestring):
+            rule = Rule.create_from_code_path(session, paths, rule, **kw)
         elif kw:
             raise ValueError("Cannot handle rule with non-empty kw")
 
-        self.rules.append(filt)
+        self.rules.append(rule)
         session.flush()
         session.commit()
-        return filt
+        return rule
 
     def remove_filter(self, session, code_path, **kw):
         for f in self.rules:
