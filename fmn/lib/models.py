@@ -350,7 +350,9 @@ class Preference(BASE):
     batch_count = sa.Column(sa.Integer, nullable=True)
 
     # Hold the state of start/stop commands to the irc bot and others.
-    enabled = sa.Column(sa.Boolean, default=True, nullable=False)
+    # Disabled by default so that we can provide robust default filters without
+    # forcing new users into an opt-out situation.
+    enabled = sa.Column(sa.Boolean, default=False, nullable=False)
 
     openid = sa.Column(
         sa.Text,
