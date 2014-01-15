@@ -175,9 +175,14 @@ class User(BASE):
     def get_or_create(cls, session, openid, openid_url):
         user = cls.by_openid(session, openid)
         if not user:
-            user = cls(openid=openid, openid_url=openid_url)
-            session.add(user)
-            session.flush()
+            user = cls.create(session, openid, openid_url)
+        return user
+
+    @classmethod
+    def create(cls, session, openid, openid_url):
+        user = cls(openid=openid, openid_url=openid_url)
+        session.add(user)
+        session.flush()
         return user
 
 
