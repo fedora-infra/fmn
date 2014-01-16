@@ -73,6 +73,15 @@
       If you do this, you'll need to re-register your Android device to continue
       receiving notifications.
     </p>
+    {% if fedora_mobile %}
+    <p>
+      Since it appears that you came to this page from the Fedora Mobile app,
+      you should be able to
+      <a href="fedoramobile://org.fedoraproject.mobile/register_fmn?api_key={{ api_key }}&openid={{ openid }}">click here</a>
+      to configure the app with your API credentials. You'll have to do this
+      again if you ever reset your API key above.
+    </p>
+    {% endif %}
   </div>
 </div>
 

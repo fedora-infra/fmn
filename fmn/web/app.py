@@ -246,7 +246,9 @@ def profile(openid):
         avatar=avatar,
         prefs=prefs,
         icons=icons,
-        api_key=user.api_key)
+        api_key=user.api_key,
+        fedora_mobile=flask.request.args.get('fedora_mobile') == 'true',
+        openid_url=flask.g.auth.openid)
 
 @app.route('/reset-api-key')
 @app.route('/reset-api-key/')
