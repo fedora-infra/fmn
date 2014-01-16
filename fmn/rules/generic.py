@@ -19,7 +19,7 @@ def user_filter(config, message, fasnick=None, *args, **kw):
 def user_package_filter(config, message, fasnick=None, *args, **kw):
     """ All messages concerning user's packages
 
-    This rule rules out messages that related to packages where the
+    This rule includes messages that relate to packages where the
     specified user has **commit** ACLs.
     """
 
