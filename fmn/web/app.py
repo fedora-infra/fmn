@@ -11,6 +11,7 @@ import fedmsg.config
 import jinja2
 import libravatar
 import markupsafe
+import uuid
 
 import flask
 import sqlalchemy
@@ -245,7 +246,24 @@ def profile(openid):
         current='profile',
         avatar=avatar,
         prefs=prefs,
-        icons=icons)
+        icons=icons,
+        api_key=user.api_key)
+
+@app.route('/reset-api-key')
+@app.route('/reset-api-key/')
+@login_required
+def reset_api_key():
+    if not flask.g.auth.logged_in:
+        flask.abort(403)
+
+    user = fmn.lib.models.User.get_or_create(
+        SESSION,
+        openid=flask.g.auth.openid,
+        openid_url=flask.g.auth.openid_url,
+    )
+
+    user.reset_api_key(SESSION)
+    return flask.redirect(flask.url_for('profile', openid=flask.g.auth.openid))
 
 
 @app.route('/<not_reserved:openid>/<context>')
