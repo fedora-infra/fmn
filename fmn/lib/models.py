@@ -465,7 +465,12 @@ class Preference(BASE):
             .first()
 
     def update_details(self, session, value):
-        self.detail_value = value
+        if self.detail_value:
+            tokens = self.detail_value.split(',')
+            if value not in tokens:
+                self.detail_value = ','.join(tokens + [value])
+        else:
+            self.detail_value = value
         session.flush()
         session.commit()
 
@@ -632,7 +637,7 @@ class Confirmation(BASE):
         # Propagate back to the Preference if everything is good.
         if self.status == 'accepted':
             pref = Preference.load(session, self.openid, self.context_name)
-            pref.detail_value = self.detail_value
+            pref.update_details(session, self.detail_value)
 
         session.flush()
         session.commit()

@@ -58,7 +58,7 @@ def load_rules(root='fmn.rules'):
         obj = getattr(module, name)
         if not callable(obj):
             continue
-        log.info("Found rule %r %r" % (name, obj))
+        log.debug("Found rule %r %r" % (name, obj))
 
         doc = inspect.getdoc(obj)
 
