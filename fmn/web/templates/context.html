@@ -79,9 +79,40 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-            Delivery Options
+            Active?
         </h3>
+      </div> <!-- end panel-heading -->
+
+      <div class="panel-body">
+        <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+              method="post">
+          <p class="pull-left">
+            You account is currently <strong>
+              {% if preference.enabled %}active{% else %}inactive{% endif %}.
+            </strong></p>
+          <input name="openid" id="openid" value="{{openid}}" type="hidden">
+          <input name="context" id="context" value="{{current}}" type="hidden">
+          <p class="pull-right">
+            {% if preference.enabled %}
+            <button type="submit" class="btn btn-danger" name="toggle_enable" value="toggle">
+                <span class="glyphicon glyphicon-off"></span> Disable
+            </button>
+            {% else %}
+            <button type="submit" class="btn btn-success" name="toggle_enable" value="toggle">
+                <span class="glyphicon glyphicon-ok-circle"></span> Enable
+            </button>
+            {% endif %}
+          </p>
+        </form>
       </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+            Where should we send your messages?
+        </h3>
+      </div> <!-- end panel-heading -->
 
       <div class="panel-body">
         {% if confirmation %}
@@ -102,12 +133,32 @@
                    placeholder="{{preference.detail_value or context.placeholder}}">
             </div>
           </div>
+          <input name="openid" id="openid" value="{{openid}}" type="hidden">
+          <input name="context" id="context" value="{{current}}" type="hidden">
+          <p class="pull-right">
+            <button type="submit" class="btn btn-success" name="save"
+                {{'disabled' if preference.enabled is sameas false}}>
+                <span class="glyphicon glyphicon-{{context.icon}}"></span> Save
+            </button>
+          </p>
+          </fieldset>
+        </form>
+      </div> <!-- end panel-body -->
+    </div> <!-- end panel -->
 
-          <div class="panel-heading">
-            <h4>Batching</h4>
-            <p class="help-block">Receive messages in real-time or as a digest</p>
-          </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+            How often should we send you messages?
+        </h3>
+      </div> <!-- end panel-heading -->
 
+      <div class="panel-body">
+        <p class="help-block text-left"> If you leave these <code>&lt;disabled&gt;</code>
+        then we'll just forward you your notifications in real time.  </p>
+        <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+              method="post">
+          <fieldset {{'disabled' if preference.enabled is sameas false}}>
           <div class="form-group">
             <label class="col-sm-1 control-label" for="batch_delta">Wait</label>
             <div class="col-sm-4">
@@ -147,15 +198,6 @@
                 {{'disabled' if preference.enabled is sameas false}}>
                 <span class="glyphicon glyphicon-{{context.icon}}"></span> Save
             </button>
-            {% if preference.enabled %}
-            <button type="submit" class="btn btn-danger" name="toggle_enable" value="toggle">
-                <span class="glyphicon glyphicon-off"></span> Disable
-            </button>
-            {% else %}
-            <button type="submit" class="btn btn-success" name="toggle_enable" value="toggle">
-                <span class="glyphicon glyphicon-ok-circle"></span> Enable
-            </button>
-            {% endif %}
           </p>
         </form>
       </div>
