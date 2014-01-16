@@ -32,7 +32,7 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess,
             user=user,
             context=context,
-            detail_value="threebean",
+            detail_value="threebean,threebean2",
         )
 
     def create_preference_data_basic(self, code_path):
@@ -79,10 +79,10 @@ class TestRecipients(fmn.lib.tests.Base):
         recipients = fmn.lib.recipients_for_context(
             self.sess, self.config, self.valid_paths, 'irc', msg)
         eq_(list(recipients), [{
-            'irc nick': 'threebean',
+            'irc nick': ['threebean', 'threebean2'],
             'user': 'ralph.id.fedoraproject.org',
             'filter': 'test filter',
-            }])
+        }])
 
     def test_miss_recipients_list(self):
         self.create_user_and_context_data()
@@ -139,7 +139,7 @@ class TestRecipients(fmn.lib.tests.Base):
         recipients = fmn.lib.recipients_for_context(
             self.sess, self.config, self.valid_paths, 'irc', msg)
         eq_(list(recipients), [{
-            'irc nick': 'threebean',
+            'irc nick': ['threebean', 'threebean2'],
             'user': 'ralph.id.fedoraproject.org',
             'filter': 'test filter',
             }])
@@ -164,7 +164,7 @@ class TestRecipients(fmn.lib.tests.Base):
         recipients = fmn.lib.recipients_for_context(
             self.sess, self.config, self.valid_paths, 'irc', msg)
         eq_(list(recipients), [{
-            'irc nick': 'threebean',
+            'irc nick': ['threebean', 'threebean2'],
             'user': 'ralph.id.fedoraproject.org',
             'filter': 'test filter',
             }])

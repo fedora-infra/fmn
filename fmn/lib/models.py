@@ -148,7 +148,7 @@ class Context(BASE):
                 if filter:
                     yield {
                         'user': user.openid,
-                        pref.context.detail_name: pref.detail_value,
+                        pref.context.detail_name: pref.detail_value.split(','),
                         'filter': filter.name,
                     }
 
