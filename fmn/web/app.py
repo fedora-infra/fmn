@@ -11,7 +11,6 @@ import fedmsg.config
 import jinja2
 import libravatar
 import markupsafe
-import uuid
 
 import flask
 import sqlalchemy
