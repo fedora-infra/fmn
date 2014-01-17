@@ -125,8 +125,7 @@
               method="post">
           <fieldset {{'disabled' if preference.enabled is sameas false}}>
           <div class="form-group">
-            {% if preference.detail_value is none %}
-            {% else %}
+            {% if preference.detail_value %}
             <label class="col-sm-4 control-label" for="detail_value">confirmed {{context.detail_name}}</label>
             <div class="col-sm-8">
               {% for value in preference.detail_value.split(',') %}
