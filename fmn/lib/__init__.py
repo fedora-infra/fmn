@@ -4,6 +4,7 @@ import fmn.lib.models
 
 import inspect
 import logging
+import re
 
 import bs4
 import docutils.examples
@@ -15,6 +16,10 @@ except ImportError:
     from ordereddict import OrderedDict
 
 log = logging.getLogger(__name__)
+
+irc_regex = r'^[\w-]+$'
+email_regex = r'^([a-zA-Z0-9_\-\.]+)@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$'
+gcm_regex = r'^[\w-]+$'
 
 
 def recipients(session, config, valid_paths, message):
@@ -102,3 +107,19 @@ def strip_anchor_tags(soup):
             yield tag.string
         else:
             yield tag
+
+
+def validate_detail_value(ctx, value):
+    if ctx.name == 'irc':
+        if re.match(irc_regex, value) is None:
+            raise ValueError("irc nick must be alphanumeric")
+    elif ctx.name == 'email':
+        if re.match(email_regex, value) is None:
+            raise ValueError("value must be an email address")
+    elif ctx.name == 'gcm':
+        if re.match(gcm_regex, value) is None:
+            raise ValueError("not a valid android registration id")
+    else:
+        raise NotImplementedError("No validation scheme for %r" % ctx.name)
+    # Happy.
+    return
