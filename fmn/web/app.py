@@ -439,6 +439,12 @@ def handle_details():
     pref = fmn.lib.models.Preference.get_or_create(
         SESSION, openid=openid, context=ctx)
 
+    # Do some validation on the specifics of the detail value before we commit.
+    try:
+        fmn.lib.validate_detail_value(ctx, detail_value)
+    except Exception as e:
+        raise APIError(403, dict(reason=str(e)))
+
     # Are they changing a delivery detail?
     if detail_value and detail_value != pref.detail_value:
         # We need to *VERIFY* that they really have this delivery detail
