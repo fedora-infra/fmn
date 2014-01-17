@@ -26,6 +26,7 @@ def get_packages_of_user(username, acl='commit', branch=None):
         the specified ACL on the specified branch(es).
 
     """
+    log.debug("Requesting packages for user %r" % username)
     req = requests.get(
         '{0}/packager/acl/{1}'.format(PKGDB_API_URL, username))
     if not req.status_code == 200:
@@ -40,4 +41,5 @@ def get_packages_of_user(username, acl='commit', branch=None):
         if branch and pkgacl['packagelist']['collection']['branchname'] != branch:
             continue
         packages.add(pkgacl['packagelist']['package']['name'])
+    log.debug("done talking with pkgdb for now.")
     return packages
