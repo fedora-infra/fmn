@@ -72,6 +72,10 @@ def load_rules(root='fmn.rules'):
             doc = doc.decode('utf-8')
 
         if doc:
+            # If we have a docstring, then mark it up beautifully for display
+            # in the web app.
+            # FWIW, this should probably be moved into fmn.web since nowhere
+            # else are we going to want HTML... we'll still want raw .rst.
             title, doc_as_rst = doc.split('\n', 1)
             doc = docutils.examples.html_parts(doc_as_rst)['body']
             soup = bs4.BeautifulSoup(doc)
