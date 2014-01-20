@@ -49,7 +49,40 @@
     </div>
   </div>
   {% endif %}
+</div>
 
+<div class="row">
+  <div class="col-md-4">
+    <hr />
+    <p>
+      Your API key is used to link your Fedora Notifications account to
+      <a href="https://github.com/fedora-infra/mobile">Fedora Mobile</a>.
+    </p>
+    <p>
+      This is a temporary key, which should not be relied upon. This
+      functionality will be removed from Fedora Notifications in the future.
+    </p>
+    <p>
+      Your current API key is:
+      <code>{{ api_key }}</code>
+    </p>
+    <p>
+      You can
+      <a href="{{ url_for('reset_api_key') }}"
+         onclick="return confirm('You are about to reset your API key. Are you sure you wish to do this?');">reset your key</a>.
+      If you do this, you'll need to re-register your Android device to continue
+      receiving notifications.
+    </p>
+    {% if fedora_mobile %}
+    <p>
+      Since it appears that you came to this page from the Fedora Mobile app,
+      you should be able to
+      <a href="fedoramobile://org.fedoraproject.mobile/register_fmn?api_key={{ api_key }}&openid={{ openid }}">click here</a>
+      to configure the app with your API credentials. You'll have to do this
+      again if you ever reset your API key above.
+    </p>
+    {% endif %}
+  </div>
 </div>
 
 {% endblock %}
