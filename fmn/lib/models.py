@@ -143,7 +143,7 @@ class Context(BASE):
         """ Returns the list of recipients for a message. """
         for user in User.all(session):
             pref = Preference.load(session, user, self)
-            if pref:
+            if pref and pref.detail_value:
                 filter = pref.prefers(session, config, valid_paths, message)
                 if filter:
                     yield {
