@@ -30,8 +30,16 @@
     <div class="list-group">
       {% for pref in prefs %}
         <span class="list-group-item">
-          <h4 class="list-group-item-heading">{{pref.context_name}}</h4>
-          <p class="list-group-item-text">{{', '.join([value.value for value in pref.detail_values])}}
+          <h4 class="list-group-item-heading">
+            {{pref.context_name}}
+            <small><strong>
+              {% if pref.enabled %} (enabled) {% else %}(disabled){% endif %}
+            </strong> </small>
+          </h4>
+          <p class="list-group-item-text">
+            {% for value in pref.detail_values %}
+              {{ value.value }}
+            {% endfor %}
             <span class="pull-right">
               <a href="{{url_for('context', openid=openid,
                                  context=pref.context_name)}}">

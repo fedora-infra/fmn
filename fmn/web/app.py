@@ -233,8 +233,7 @@ def profile(openid):
         https=app.config.get('FMN_SSL', False),
         size=140)
 
-    prefs = fmn.lib.models.Preference.by_user(
-        SESSION, openid, allow_none=False)
+    prefs = fmn.lib.models.Preference.by_user(SESSION, openid)
 
     icons = {}
     for context in fmn.lib.models.Context.all(SESSION):
