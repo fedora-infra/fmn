@@ -7,6 +7,10 @@ config = {
     "fmn.consumer.enabled": True,
     "fmn.sqlalchemy.uri": "sqlite:////var/tmp/fmn-dev-db.sqlite",
 
+    # Some configuration for the rule processors
+    "fmn.rules.utils.use_pkgdb2": False,
+    "fmn.rules.utils.pkgdb2_api_url": "http://209.132.184.188/api/",
+
     ## Backend stuff ##
     # Email
     "fmn.email.mailserver": "127.0.0.1:25",
