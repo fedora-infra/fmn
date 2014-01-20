@@ -5,9 +5,6 @@ import logging
 import requests
 log = logging.getLogger(__name__)
 
-## TODO: Move this variable into a configuration file
-PKGDB_API_URL = 'http://209.132.184.188/api/'
-
 
 ## TODO: cache the results of this method
 # This might mean removing the acl and branch argument
@@ -27,9 +24,17 @@ def get_packages_of_user(config, username, acl='commit', branch=None):
         the specified ACL on the specified branch(es).
 
     """
-    log.debug("Requesting packages for user %r" % username)
-    req = requests.get(
-        '{0}/packager/acl/{1}'.format(PKGDB_API_URL, username))
+
+    if config.get('fmn.rules.utils.use_pkgdb2', True):
+        return _get_pkgdb2_packages_for(config, username, acl, branch)
+    else:
+        return _get_pkgdb1_packages_for(config, username, acl, branch)
+
+
+def _get_pkgdb2_packages_for(config, username, acl, branch):
+    log.debug("Requesting pkgdb2 packages for user %r" % username)
+    req = requests.get('{0}/packager/acl/{1}'.format(
+        fmn.config['fmn.rules.utils.pkgdb2_api_url'], username))
     if not req.status_code == 200:
         return []
     data = json.loads(req.text)
@@ -42,5 +47,19 @@ def get_packages_of_user(config, username, acl='commit', branch=None):
         if branch and pkgacl['packagelist']['collection']['branchname'] != branch:
             continue
         packages.add(pkgacl['packagelist']['package']['name'])
-    log.debug("done talking with pkgdb for now.")
+    log.debug("done talking with pkgdb2 for now.")
+    return packages
+
+
+# TODO -- delete this once pkgdb2 goes live.
+def _get_pkgdb1_packages_for(config, username, acl, branch):
+    log.debug("Requesting pkgdb1 packages for user %r" % username)
+    pkgdb1_base_url = 'https://admin.fedoraproject.org/pkgdb'
+    req = requests.get('{0}/users/packages/{1}?tg_format=json'.format(
+        pkgdb1_base_url, username))
+    if not req.status_code == 200:
+        return []
+    data = json.loads(req.text)
+    packages = set([pkg['name'] for pkg in data['pkgs']])
+    log.debug("done talking with pkgdb1 for now.")
     return packages
