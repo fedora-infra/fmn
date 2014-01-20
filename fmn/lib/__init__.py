@@ -17,7 +17,7 @@ except ImportError:
 
 log = logging.getLogger(__name__)
 
-irc_regex = r'^[\w-]+$'
+irc_regex = r'[a-zA-Z_\-\[\]\\^{}|`][a-zA-Z0-9_\-\[\]\\^{}|`]*'
 email_regex = r'^([a-zA-Z0-9_\-\.]+)@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$'
 gcm_regex = r'^[\w-]+$'
 
@@ -116,7 +116,7 @@ def strip_anchor_tags(soup):
 def validate_detail_value(ctx, value):
     if ctx.name == 'irc':
         if re.match(irc_regex, value) is None:
-            raise ValueError("irc nick must be alphanumeric")
+            raise ValueError("value must be a valid irc nick")
     elif ctx.name == 'email':
         if re.match(email_regex, value) is None:
             raise ValueError("value must be an email address")
