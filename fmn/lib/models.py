@@ -465,6 +465,7 @@ class Preference(BASE):
             .first()
 
     def update_details(self, session, value):
+        value = value.strip()
         if self.detail_value:
             tokens = self.detail_value.split(',')
             if value not in tokens:
