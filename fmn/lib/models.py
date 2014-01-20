@@ -141,16 +141,22 @@ class Context(BASE):
 
     def _recipients(self, session, config, valid_paths, message):
         """ Returns the list of recipients for a message. """
+
         for user in User.all(session):
             pref = Preference.load(session, user, self)
-            if pref and pref.detail_value:
-                filter = pref.prefers(session, config, valid_paths, message)
-                if filter:
-                    yield {
-                        'user': user.openid,
-                        pref.context.detail_name: pref.detail_value.split(','),
-                        'filter': filter.name,
-                    }
+            if not pref or not pref.detail_values:
+                continue
+
+            flter = pref.prefers(session, config, valid_paths, message)
+            if not flter:
+                continue
+
+            for value in pref.detail_values:
+                yield {
+                    'user': user.openid,
+                    pref.context.detail_name: value.value,
+                    'filter': flter.name,
+                }
 
     def recipients(self, session, config, valid_paths, message):
         return list(self._recipients(session, config, valid_paths, message))
@@ -189,7 +195,11 @@ class User(BASE):
 
     @classmethod
     def create(cls, session, openid, openid_url, create_defaults):
-        user = cls(openid=openid, openid_url=openid_url, api_key=str(uuid.uuid4()))
+        user = cls(
+            openid=openid,
+            openid_url=openid_url,
+            api_key=str(uuid.uuid4()),
+        )
         session.add(user)
         session.flush()
 
@@ -348,12 +358,42 @@ class Filter(BASE):
         return True
 
 
+class DetailValue(BASE):
+    __tablename__ = 'detail_values'
+    id = sa.Column(sa.Integer, primary_key=True)
+    created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
+    value = sa.Column(sa.String(1024), unique=True)
+    preference_id = sa.Column(
+        sa.Integer,
+        sa.ForeignKey('preferences.id'))
+    preference = relation('Preference', backref=backref('detail_values'))
+
+    @classmethod
+    def get(cls, session, value):
+        return session.query(cls).filter(cls.value==value).first()
+
+    @classmethod
+    def create(cls, session, value):
+        obj = cls()
+        obj.value = value
+        session.add(obj)
+        session.commit()
+        return obj
+
+    @classmethod
+    def exists(cls, session, value):
+        return (
+            session.query(cls).filter(
+                cls.value == value).count() > 0 or
+            session.query(Confirmation).filter(
+                Confirmation.detail_value == value).count() > 0
+        )
+
+
 class Preference(BASE):
     __tablename__ = 'preferences'
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
-
-    detail_value = sa.Column(sa.String(1024), unique=True)
 
     # Number of seconds that have elapsed since the earliest queued message
     # before we send a digest over whatever medium.
@@ -403,7 +443,7 @@ class Preference(BASE):
         session.commit()
 
     @classmethod
-    def by_user(cls, session, openid, allow_none=False):
+    def by_user(cls, session, openid):
         query = session.query(
             cls
         ).filter(
@@ -412,18 +452,12 @@ class Preference(BASE):
             cls.context_name
         )
 
-        if not allow_none:
-            query = query.filter(sa.not_(cls.detail_value == None))
-
         return query.all()
 
     @classmethod
     def by_detail(cls, session, detail_value):
-        return session.query(
-            cls
-        ).filter(
-            cls.detail_value == detail_value
-        ).first()
+        value = DetailValue.get(session, detail_value)
+        return value.preference
 
     @classmethod
     def create(cls, session, user, context, detail_value=None):
@@ -435,7 +469,11 @@ class Preference(BASE):
         pref.user = user
         pref.context = context
 
-        pref.detail_value = detail_value
+        if detail_value:
+            value = DetailValue.create(session, detail_value)
+            pref.detail_values.append(value)
+
+            session.add(value)
 
         session.add(pref)
         session.flush()
@@ -471,14 +509,10 @@ class Preference(BASE):
             .filter_by(context_name=context)\
             .first()
 
-    def update_details(self, session, value):
-        value = value.strip()
-        if self.detail_value:
-            tokens = self.detail_value.split(',')
-            if value not in tokens:
-                self.detail_value = ','.join(tokens + [value])
-        else:
-            self.detail_value = value
+    def update_details(self, session, detail_value):
+        detail_value = detail_value.strip()
+        value = DetailValue.create(session, detail_value)
+        self.detail_values.append(value)
         session.flush()
         session.commit()
 

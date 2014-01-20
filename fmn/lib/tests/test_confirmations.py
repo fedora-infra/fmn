@@ -35,11 +35,20 @@ class TestConfirmations(fmn.lib.tests.Base):
         context = fmn.lib.models.Context.get(self.sess, name="irc")
         preference = fmn.lib.models.Preference.load(self.sess, user, context)
         preference.update_details(self.sess, 'wat')
-        eq_(preference.detail_value, 'wat')
+        eq_(preference.detail_values[0].value, 'wat')
         preference.update_details(self.sess, 'wat2')
-        eq_(preference.detail_value, 'wat,wat2')
-        preference.update_details(self.sess, 'wat')
-        eq_(preference.detail_value, 'wat,wat2')
+        eq_(preference.detail_values[0].value, 'wat')
+        eq_(preference.detail_values[1].value, 'wat2')
+
+        try:
+            preference.update_details(self.sess, 'wat')
+            assert(False)
+        except Exception:
+            self.sess.rollback()
+
+        eq_(len(preference.detail_values), 2)
+        eq_(preference.detail_values[0].value, 'wat')
+        eq_(preference.detail_values[1].value, 'wat2')
 
     def test_confirmation(self):
         self.create_user_and_context_data()
@@ -54,6 +63,6 @@ class TestConfirmations(fmn.lib.tests.Base):
             context,
             detail_value='awesome',
         )
-        eq_(preference.detail_value, None)
+        eq_(preference.detail_values, [])
         confirmation.set_status(self.sess, 'accepted')
-        eq_(preference.detail_value, 'awesome')
+        eq_(preference.detail_values[0].value, 'awesome')
