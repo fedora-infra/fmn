@@ -245,7 +245,26 @@ def profile(openid):
         current='profile',
         avatar=avatar,
         prefs=prefs,
-        icons=icons)
+        icons=icons,
+        api_key=user.api_key,
+        fedora_mobile=flask.request.args.get('fedora_mobile') == 'true',
+        openid_url=flask.g.auth.openid)
+
+@app.route('/reset-api-key')
+@app.route('/reset-api-key/')
+@login_required
+def reset_api_key():
+    if not flask.g.auth.logged_in:
+        flask.abort(403)
+
+    user = fmn.lib.models.User.get_or_create(
+        SESSION,
+        openid=flask.g.auth.openid,
+        openid_url=flask.g.auth.openid_url,
+    )
+
+    user.reset_api_key(SESSION)
+    return flask.redirect(flask.url_for('profile', openid=flask.g.auth.openid))
 
 
 @app.route('/<not_reserved:openid>/<context>')
