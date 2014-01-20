@@ -12,10 +12,11 @@ PKGDB_API_URL = 'http://209.132.184.188/api/'
 ## TODO: cache the results of this method
 # This might mean removing the acl and branch argument
 # Can be done using dogpile.cache
-def get_packages_of_user(username, acl='commit', branch=None):
+def get_packages_of_user(config, username, acl='commit', branch=None):
     """ Retrieve the list of packages where the specified user has the
     specified acl on the specified branch.
 
+    :arg config: a dict containing the fedmsg config
     :arg username: the fas username of the packager whose packages are of
         interest.
     :kwarg acl: the acl that the specified user has on the packages
