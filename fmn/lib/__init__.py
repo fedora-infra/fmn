@@ -4,6 +4,7 @@ import fmn.lib.models
 
 import inspect
 import logging
+import re
 
 import bs4
 import docutils.examples
@@ -15,6 +16,10 @@ except ImportError:
     from ordereddict import OrderedDict
 
 log = logging.getLogger(__name__)
+
+irc_regex = r'[a-zA-Z_\-\[\]\\^{}|`][a-zA-Z0-9_\-\[\]\\^{}|`]*'
+email_regex = r'^([a-zA-Z0-9_\-\.]+)@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$'
+gcm_regex = r'^[\w-]+$'
 
 
 def recipients(session, config, valid_paths, message):
@@ -58,7 +63,7 @@ def load_rules(root='fmn.rules'):
         obj = getattr(module, name)
         if not callable(obj):
             continue
-        log.info("Found rule %r %r" % (name, obj))
+        log.debug("Found rule %r %r" % (name, obj))
 
         doc = inspect.getdoc(obj)
 
@@ -67,6 +72,10 @@ def load_rules(root='fmn.rules'):
             doc = doc.decode('utf-8')
 
         if doc:
+            # If we have a docstring, then mark it up beautifully for display
+            # in the web app.
+            # FWIW, this should probably be moved into fmn.web since nowhere
+            # else are we going to want HTML... we'll still want raw .rst.
             title, doc_as_rst = doc.split('\n', 1)
             doc = docutils.examples.html_parts(doc_as_rst)['body']
             soup = bs4.BeautifulSoup(doc)
@@ -102,3 +111,19 @@ def strip_anchor_tags(soup):
             yield tag.string
         else:
             yield tag
+
+
+def validate_detail_value(ctx, value):
+    if ctx.name == 'irc':
+        if re.match(irc_regex, value) is None:
+            raise ValueError("value must be a valid irc nick")
+    elif ctx.name == 'email':
+        if re.match(email_regex, value) is None:
+            raise ValueError("value must be an email address")
+    elif ctx.name == 'gcm':
+        if re.match(gcm_regex, value) is None:
+            raise ValueError("not a valid android registration id")
+    else:
+        raise NotImplementedError("No validation scheme for %r" % ctx.name)
+    # Happy.
+    return

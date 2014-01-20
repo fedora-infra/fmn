@@ -143,12 +143,12 @@ class Context(BASE):
         """ Returns the list of recipients for a message. """
         for user in User.all(session):
             pref = Preference.load(session, user, self)
-            if pref:
+            if pref and pref.detail_value:
                 filter = pref.prefers(session, config, valid_paths, message)
                 if filter:
                     yield {
                         'user': user.openid,
-                        pref.context.detail_name: pref.detail_value,
+                        pref.context.detail_name: pref.detail_value.split(','),
                         'filter': filter.name,
                     }
 
@@ -465,7 +465,13 @@ class Preference(BASE):
             .first()
 
     def update_details(self, session, value):
-        self.detail_value = value
+        value = value.strip()
+        if self.detail_value:
+            tokens = self.detail_value.split(',')
+            if value not in tokens:
+                self.detail_value = ','.join(tokens + [value])
+        else:
+            self.detail_value = value
         session.flush()
         session.commit()
 
@@ -632,7 +638,7 @@ class Confirmation(BASE):
         # Propagate back to the Preference if everything is good.
         if self.status == 'accepted':
             pref = Preference.load(session, self.openid, self.context_name)
-            pref.detail_value = self.detail_value
+            pref.update_details(session, self.detail_value)
 
         session.flush()
         session.commit()
