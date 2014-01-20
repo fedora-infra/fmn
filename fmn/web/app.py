@@ -440,7 +440,17 @@ def handle_details():
         SESSION, openid=openid, context=ctx)
 
     # Are they changing a delivery detail?
-    if detail_value and detail_value != pref.detail_value:
+    if detail_value:
+        # Do some validation on the specifics of the value before we commit.
+        try:
+            fmn.lib.validate_detail_value(ctx, detail_value)
+        except Exception as e:
+            raise APIError(403, dict(reason=str(e)))
+
+        # Make sure no one else has this one in play yet
+        if fmn.lib.models.DetailValue.exists(SESSION, detail_value):
+            raise APIError(403, dict(reason="That value is already claimed."))
+
         # We need to *VERIFY* that they really have this delivery detail
         # before we start doing stuff.  Otherwise, ralph could put in pingou's
         # email address and spam the crap out of him.

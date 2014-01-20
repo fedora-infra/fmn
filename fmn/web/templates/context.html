@@ -125,12 +125,21 @@
               method="post">
           <fieldset {{'disabled' if preference.enabled is sameas false}}>
           <div class="form-group">
-            <label class="col-sm-4 control-label" for="detail_value">{{context.detail_name}}</label>
+            {% if preference.detail_values %}
+            <label class="col-sm-4 control-label" for="detail_value">confirmed {{context.detail_name}}</label>
+            <div class="col-sm-8">
+              {% for value in preference.detail_values %}
+              <input type="text" class="form-control" name="detail_value"
+                   id="detail_value" required=required
+                   value='{{ value.value }}' disabled>
+               {% endfor %}
+            </div>
+            {% endif %}
+            <label class="col-sm-4 control-label" for="detail_value">add a new {{context.detail_name}}</label>
             <div class="col-sm-8">
               <input type="text" class="form-control" name="detail_value"
                    id="detail_value" required=required
-                   {{'' if preference.detail_value is none else 'value=' + preference.detail_value}}
-                   placeholder="{{preference.detail_value or context.placeholder}}">
+                   placeholder="{{context.placeholder}}">
             </div>
           </div>
           <input name="openid" id="openid" value="{{openid}}" type="hidden">
