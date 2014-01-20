@@ -161,6 +161,8 @@ class User(BASE):
 
     openid = sa.Column(sa.Text, primary_key=True)
     openid_url = sa.Column(sa.Text, unique=True)
+    # doesn't have to be unique, because we'll require the openid url, too.
+    api_key = sa.Column(sa.Text)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
     @classmethod
@@ -173,6 +175,11 @@ class User(BASE):
     def all(cls, session):
         return session.query(cls).all()
 
+    def reset_api_key(self, session):
+        self.api_key = str(uuid.uuid4())
+        session.flush()
+        session.commit()
+
     @classmethod
     def get_or_create(cls, session, openid, openid_url, create_defaults=True):
         user = cls.by_openid(session, openid)
@@ -182,7 +189,7 @@ class User(BASE):
 
     @classmethod
     def create(cls, session, openid, openid_url, create_defaults):
-        user = cls(openid=openid, openid_url=openid_url)
+        user = cls(openid=openid, openid_url=openid_url, api_key=str(uuid.uuid4()))
         session.add(user)
         session.flush()
 
