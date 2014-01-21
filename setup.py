@@ -23,6 +23,7 @@ requires = [
     'python-fedora',
     'fedmsg',
     'fedmsg_meta_fedora_infrastructure',
+    'dogpile.cache',
 ]
 
 tests_require = [
