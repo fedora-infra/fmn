@@ -23,6 +23,14 @@
     We also need to know where you want your {{current}} messages delivered
     (a <em>{{context.detail_name}}</em>); you can set that up here.
     </p>
+    {% if current == 'android' %}
+    <p>Furthermore, for android notifications you'll need to set up
+      <a href="https://github.com/fedora-infra/mobile">Fedora Mobile</a>
+      on your device.  You'll also need to use the API key (available on your
+      <a href="{{ url_for('profile', openid=openid) }}">profile page</a>) to
+      link everything together and transmit your <em>registration ids</em>.
+    </p>
+    {% endif %}
   </div>
 </div>
 
