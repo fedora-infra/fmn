@@ -212,6 +212,14 @@ def about():
     )
 
 
+@app.route('/home')
+@app.route('/home/')
+@login_required
+def profile_redirect():
+    # Simply redirect a user to their profile
+    return flask.redirect(flask.url_for('profile', openid=flask.g.auth.openid))
+
+
 @app.route('/<not_reserved:openid>')
 @app.route('/<not_reserved:openid>/')
 @login_required
@@ -587,7 +595,7 @@ def login():
 @app.route('/login/fedora')
 @oid.loginhandler
 def fedora_login():
-    default = flask.url_for('index')
+    default = flask.url_for('profile_redirect')
     next_url = flask.request.args.get('next', default)
     return oid.try_login(
         app.config['FMN_FEDORA_OPENID'],

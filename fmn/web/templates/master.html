@@ -79,17 +79,17 @@
                 </a>
                 <ul class="dropdown-menu">
                   {% if config['FMN_FEDORA_OPENID'] and config['FMN_ALLOW_FAS_OPENID'] %}
-                  <li><a href="{{url_for('fedora_login')}}">Fedora</a></li>
+                  <li><a href="{{url_for('fedora_login')}}?next={{url_for('profile_redirect')}}">Fedora</a></li>
                   <li class="divider"></li>
                   {% endif %}
                   {% if config['FMN_ALLOW_GOOGLE_OPENID'] %}
-                  <li><a href="{{url_for('google_login')}}">Google</a></li>
+                  <li><a href="{{url_for('google_login')}}?next={{url_for('profile_redirect')}}">Google</a></li>
                   {% endif %}
                   {% if config['FMN_ALLOW_YAHOO_OPENID'] %}
-                  <li><a href="{{url_for('yahoo_login')}}">Yahoo</a></li>
+                  <li><a href="{{url_for('yahoo_login')}}?next={{url_for('profile_redirect')}}">Yahoo</a></li>
                   {% endif %}
                   {% if config['FMN_ALLOW_GENERIC_OPENID'] %}
-                  <li><a href="{{url_for('login')}}">Other OpenID</a></li>
+                  <li><a href="{{url_for('login')}}?next={{url_for('profile_redirect')}}">Other OpenID</a></li>
                   {% endif %}
                 </ul>
             </li>
