@@ -10,6 +10,13 @@ config = {
     # Some configuration for the rule processors
     "fmn.rules.utils.use_pkgdb2": False,
     "fmn.rules.utils.pkgdb2_api_url": "http://209.132.184.188/api/",
+    "fmn.rules.cache": {
+        "backend": "dogpile.cache.dbm",
+        "expiration_time": 300,
+        "arguments": {
+            "filename": "/var/tmp/fmn-cache.dbm",
+        },
+    },
 
     ## Backend stuff ##
     # Email
