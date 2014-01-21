@@ -3,6 +3,10 @@ import fmn.lib.models
 
 log = logging.getLogger(__name__)
 
+bare_rule_path_defaults = [
+    ('Anything involving my username', 'fmn.rules:user_filter'),
+]
+
 generic_rule_path_defaults = [
 
     # Intentionally leaving this one out of the defaults
@@ -81,6 +85,7 @@ package_rule_path_defaults = [
      'fmn.rules:pkgdb_package_update'),
 ]
 
+
 def create_defaults_for(session, user):
     """ Create a sizable amount of defaults for a new user. """
 
@@ -99,7 +104,6 @@ def create_defaults_for(session, user):
         return fmn.lib.models.Rule.create_from_code_path(
             session, valid_paths, path, **kw)
 
-
     def contexts():
         for name in ['email', 'irc']:
             context = fmn.lib.models.Context.get(session, name)
@@ -112,6 +116,11 @@ def create_defaults_for(session, user):
         pref = fmn.lib.models.Preference.load(session, user, context)
         if not pref:
             pref = fmn.lib.models.Preference.create(session, user, context)
+
+        for name, rule_path in bare_rule_path_defaults:
+            filt = fmn.lib.models.Filter.create(session, name)
+            filt.add_rule(session, valid_paths, rule_path)
+            pref.add_filter(session, filt)
 
         qualifier_path = 'fmn.rules:user_filter'
         for name, rule_path in generic_rule_path_defaults:
