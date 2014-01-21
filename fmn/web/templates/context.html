@@ -13,7 +13,16 @@
 <div class="row">
   <div class="col-md-6">
     <p>You have {{preference.filters|length}} rule filters
-    defined for this messaging context.</p>
+    defined for this messaging context.  You can add new ones and
+    delete existing ones.</p>
+    <p>If a message on the <a href="http://fedmsg.com">fedmsg bus</a> matches
+    any one of these criteria, then a notification will be sent your
+    way{% if preference.enabled %}.{% else %} (except that you currently have
+    the {{current}} delivery mechanism disabled.  Enable it and
+    <strong>then</strong> we'll send you notifications.){% endif %}
+    We also need to know where you want your {{current}} messages delivered
+    (a <em>{{context.detail_name}}</em>); you can set that up here.
+    </p>
   </div>
 </div>
 
@@ -87,7 +96,7 @@
         <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
               method="post">
           <p class="pull-left">
-            You account is currently <strong>
+            This message delivery mechanism is currently <strong>
               {% if preference.enabled %}active{% else %}inactive{% endif %}.
             </strong></p>
           <input name="openid" id="openid" value="{{openid}}" type="hidden">
