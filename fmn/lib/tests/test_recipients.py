@@ -41,7 +41,7 @@ class TestRecipients(fmn.lib.tests.Base):
         context = fmn.lib.models.Context.get(self.sess, name="irc")
         preference = fmn.lib.models.Preference.load(self.sess, user, context)
         filter = fmn.lib.models.Filter.create(self.sess, name="test filter")
-        filter.add_filter(self.sess, self.valid_paths, code_path)
+        filter.add_rule(self.sess, self.valid_paths, code_path)
         preference.add_filter(self.sess, filter)
 
     def test_empty_recipients_list(self):
@@ -82,7 +82,7 @@ class TestRecipients(fmn.lib.tests.Base):
             'irc nick': 'threebean',
             'user': 'ralph.id.fedoraproject.org',
             'filter': 'test filter',
-            }])
+        }])
 
     def test_miss_recipients_list(self):
         self.create_user_and_context_data()
