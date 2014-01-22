@@ -10,6 +10,7 @@ def koji_build_state_change(config, message):
     """
     return message['topic'].endswith('koji.build.state.change')
 
+
 def koji_build_started(config, message):
     """ Koji: build started
 
@@ -21,6 +22,7 @@ def koji_build_started(config, message):
         return False
 
     return message['msg']['new'] == 0
+
 
 def koji_build_completed(config, message):
     """ Koji: build completed
@@ -34,6 +36,7 @@ def koji_build_completed(config, message):
 
     return message['msg']['new'] == 1
 
+
 def koji_build_deleted(config, message):
     """ Koji: build deleted
 
@@ -45,6 +48,7 @@ def koji_build_deleted(config, message):
         return False
 
     return message['msg']['new'] == 2
+
 
 def koji_build_failed(config, message):
     """ Koji: build failed
@@ -58,6 +62,7 @@ def koji_build_failed(config, message):
 
     return message['msg']['new'] == 3
 
+
 def koji_build_cancelled(config, message):
     """ Koji: build cancelled
 
@@ -69,6 +74,7 @@ def koji_build_cancelled(config, message):
         return False
 
     return message['msg']['new'] == 4
+
 
 def koji_repo_done(config, message):
     """ Koji: Building a repo has finished

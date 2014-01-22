@@ -23,6 +23,7 @@ requires = [
     'python-fedora',
     'fedmsg',
     'fedmsg_meta_fedora_infrastructure',
+    'dogpile.cache',
 ]
 
 tests_require = [
@@ -31,7 +32,7 @@ tests_require = [
 
 setup(
     name='fmn.rules',
-    version='0.1.3',
+    version='0.1.4',
     description='Message processing rules for Fedora Notifications',
     long_description=get_description(),
     author='Ralph Bean',
