@@ -638,7 +638,7 @@ def handle_rule():
         if method == 'POST':
             filter.add_rule(SESSION, valid_paths, code_path, **arguments)
         elif method == 'DELETE':
-            filter.remove_filter(SESSION, code_path)  # , **arguments)
+            filter.remove_rule(SESSION, code_path)  # , **arguments)
         else:
             raise NotImplementedError("This is impossible.")
     except (ValueError, KeyError) as e:
