@@ -12,9 +12,34 @@
 </div>
 <div class="row">
   <div class="col-md-6">
+    {% if current == 'email' %}
+    <p class="lead">We all get too much email.</p>
+    <p>You probably don't want any more email.  I'm sorry..  but we can
+    help!  This application is an attempt at a robust filtering system, built
+    so you can avoid receiving 2000 emails from the pkgdb about stuff you
+    already know.</p>
+    {% endif %}
+
+    {% if current == 'irc' %}
+    <p class="lead">We have a bot...</p>
+    <p>...on the <a href="https://freenode.net">freenode</a> network that can
+    direct messages to you with notifications you care about.  Simply login,
+    confirm your IRC nick, set up some filters, and wait for the magic.</p>
+    {% endif %}
+
+    {% if current == 'android' %}
+    <p class="lead">Push-notifications to your mobile device.</p>
+    <p>You'll need to install <a href="https://fedoraproject.org/mobile">Fedora
+    Mobile</a> on your phone for this wiz-biz to fly.  You'll also need to use
+    the API key (available on your <a
+      href="{{ url_for('profile', openid=openid)}}">profile page</a>) to link
+      everything together and transmit your <em>registration ids</em>.
+    </p>
+    {% endif %}
+
     <p>You have {{preference.filters|length}} rule filters
-    defined for this messaging context.  You can add new ones and
-    delete existing ones.</p>
+    defined for the {{current}} messaging context.  You can add new ones and
+    delete existing ones here.</p>
     <p>If a message on the <a href="http://fedmsg.com">fedmsg bus</a> matches
     any one of these criteria, then a notification will be sent your
     way{% if preference.enabled %}.{% else %} (except that you currently have
@@ -23,19 +48,7 @@
     We also need to know where you want your {{current}} messages delivered
     (a <em>{{context.detail_name}}</em>); you can set that up here.
     </p>
-    {% if current == 'android' %}
-    <p>Furthermore, for android notifications you'll need to set up
-      <a href="https://github.com/fedora-infra/mobile">Fedora Mobile</a>
-      on your device.  You'll also need to use the API key (available on your
-      <a href="{{ url_for('profile', openid=openid) }}">profile page</a>) to
-      link everything together and transmit your <em>registration ids</em>.
-    </p>
-    {% endif %}
-  </div>
-</div>
 
-<div class="row">
-  <div class="col-md-6">
     <div class="list-group">
     {% for chn in preference.filters %}
       <a href="{{chn.name}}" class="list-group-item">

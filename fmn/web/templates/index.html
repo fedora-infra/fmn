@@ -1,93 +1,29 @@
 {% extends "master.html" %}
 
 {% block body %}
-<div id="notifications-carousel" class="carousel slide" data-ride="carousel">
-  <!-- Indicators -->
-  <ol class="carousel-indicators">
-    <li data-target="#notifications-carousel" data-slide-to="0" class="active"></li>
-    <li data-target="#notifications-carousel" data-slide-to="1"></li>
-    <li data-target="#notifications-carousel" data-slide-to="2"></li>
-  </ol>
-
-  <!-- Wrapper for slides -->
-  <div class="carousel-inner">
-
-    <div class="item active">
-      <img src="{{ url_for('static', filename='img/slide-1-900x300.png') }}">
-      <div class="carousel-caption">
-          <h3>Diverse notifications</h3>
-          <p>With different notification media, you can get updates however
-          you want them:  over email, irc, or pushed to your phone.  We
-          would send them to you via carrier pigeon if we could.</p>
-      </div>
-    </div>
-
-    <div class="item">
-      <img src="{{ url_for('static', filename='img/slide-2-900x300.png') }}">
-      <div class="carousel-caption">
-        <h3>One place</h3>
-        <p>...a single place for end-users to manage notification
-        preferences.  Instead of having to tweak preferences in bodhi,
-        koji, pkgdb, etc..  you can choose what you do and don't want to
-        receive right here.</p>
-      </div>
-    </div>
-
-    <div class="item">
-      <img src="{{ url_for('static', filename='img/slide-3-900x300.png') }}">
-      <div class="carousel-caption">
-        <h3>Ultimately, simpler</h3>
-        <p>...a single place for email code to live, instead of being
-        duplicated in every new fedoraproject.org application that we write
-        and deploy.  This will ostensibly reduce the amount of code that
-        the infrastructure team has to maintain.</p>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Controls -->
-  <a class="left carousel-control" href="#notifications-carousel" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left"></span>
-  </a>
-  <a class="right carousel-control" href="#notifications-carousel" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right"></span>
-  </a>
+<div class="container marketing masthead">
+    <h1>Notifications</h1>
+    <p class="lead">Centrally managed preferences for Fedora Infrastructure
+    notifications to your inbox, irc client, and mobile device.  </p>
+    <p>
+      {% if config['FMN_FEDORA_OPENID'] and config['FMN_ALLOW_FAS_OPENID'] %}
+      <a class="btn btn-default btn-lg"
+        href="{{url_for('fedora_login')}}?next={{url_for('profile_redirect')}}">Login with FAS</a>
+      {% endif %}
+      {% if config['FMN_ALLOW_GOOGLE_OPENID'] %}
+      <a class="btn btn-default btn-lg"
+        href="{{url_for('google_login')}}?next={{url_for('profile_redirect')}}">Login with Google</a>
+      {% endif %}
+      {% if config['FMN_ALLOW_YAHOO_OPENID'] %}
+      <a class="btn btn-default btn-lg"
+        href="{{url_for('yahoo_login')}}?next={{url_for('profile_redirect')}}">Login with Yahoo</a>
+      {% endif %}
+      {% if config['FMN_ALLOW_GENERIC_OPENID'] %}
+      <a class="btn btn-default btn-lg"
+        href="{{url_for('login')}}?next={{url_for('profile_redirect')}}">Login with OpenID</a>
+      {% endif %}
+      <a href="https://github.com/fedora-infra"
+        class="btn btn-default btn-lg">Contribute</a>
+    </p>
 </div>
-<div class="container marketing">
-  <!-- Three columns of text below the carousel -->
-  <div class="row">
-    <div class="col-lg-3">
-      <h2><span class="glyphicon glyphicon-bullhorn"></span> fmn</h2>
-      <p>This is a system for managing end-user notifications powered by
-      <a href="http://fedmsg.com">fedmsg</a>, the Fedora's FEDerated MeSsaGe
-      bus. </p>
-      <p>With Fedora's fedmsg notifications (FMN), you can receive the message
-      you want <em>how</em> you want them.</p>
-    </div><!-- /.col-lg-3 -->
-    <div class="col-lg-3">
-      <h2><span class="glyphicon glyphicon-envelope"></span> email</h2>
-      <p>We all get too much email.  You probably don't want any more
-      email.  I'm so sorry..</p>
-      <p>We can help!  This application is an attempt at a
-      robust filtering system, built so you can avoid receiving 2000 emails
-      from the pkgdb about stuff you already know.</p>
-
-    </div><!-- /.col-lg-3 -->
-    <div class="col-lg-3">
-      <h2><span class="glyphicon glyphicon-user"></span> irc</h2>
-      <p>We have a bot on the <a href="https://freenode.net">freenode</a>
-      network that can direct message you with notifications you care about.
-      Simply login, confirm your IRC nick, set up some filters, and wait for
-      the magic.</p>
-    </div><!-- /.col-lg-3 -->
-    <div class="col-lg-3">
-      <h2><span class="glyphicon glyphicon-phone"></span> android</h2>
-      <p>Push-notifications to your mobile device.  You'll need to install
-      <a href="https://fedoraproject.org/mobile">Fedora Mobile</a> on your
-      phone for this wiz-biz to fly.  </p>
-    </div><!-- /.col-lg-3 -->
-  </div><!-- /.row -->
-</div>
-
 {% endblock %}

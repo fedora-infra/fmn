@@ -16,7 +16,6 @@ The wins here are:
   all) in many different apps in many different places. (bodhi, koji, pkgdb,
   etc..). With this app (Fedora Notifications), you can choose what you do and
   don't want to receive in one place -- right here.
-
 - A single place for email code to live -- instead of being duplicated in every
   application that we write and deploy. This will ostensibly reduce the amount
   of code that the infrastructure team has to maintain.
@@ -99,19 +98,6 @@ When a fedmsg message arrives in the system, if *any one filter* on one of your
 messaging contexts evaluates to ``True``, then you will receive a notification
 for that context. If some filters evaluate to ``True`` for multiple contexts,
 you will receive notifications for all those contexts.
-
-Future Features
-===============
-
-Batching
---------
-
-TODO -- we'd like to be able to send digests over email. pkgdb sends too many messages.
-
-Templates
----------
-
-TODO -- we'd like to have pre-pressed templates for new users, so new packagers get the "packager" template.
 
 Dénouement
 ==========

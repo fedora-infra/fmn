@@ -196,6 +196,9 @@ def heartbeat():
 
 @app.route('/')
 def index():
+    if flask.g.auth.logged_in:
+        return flask.redirect(flask.url_for('profile_redirect'))
+
     return flask.render_template(
         'index.html',
         current='index',
