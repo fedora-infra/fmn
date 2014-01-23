@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.2.1
+-----
+
+- Shorten string. `d614743fc <https://github.com/fedora-infra/fmn.consumer/commit/d614743fcc256364871206c6b40d6f556e5f2d5d>`_
+
 0.2.0
 -----
 
