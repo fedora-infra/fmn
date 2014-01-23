@@ -15,7 +15,7 @@ confirmation_template = """
   {rejection_url}
 Alternatively, you can ignore this.  This is an automated message, please
 email {support_email} if you have any concerns/issues/abuse.
-I am a notifications bot run by Fedora Infrastructure.  Type 'help' for more information.
+I am run by Fedora Infrastructure.  Type 'help' for more information.
 """
 
 help_template = """
