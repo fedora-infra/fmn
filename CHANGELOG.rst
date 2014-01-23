@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.2.1
+-----
+
+- Re-do the frontpage and redistribute that text to the context template. `86caa7d7a <https://github.com/fedora-infra/fmn.web/commit/86caa7d7a78f183caaa235624ef6ac1dfbb763aa>`_
+- Show examples messages that match a filter.  Fixes #2. \ó/ `4a45c5f7a <https://github.com/fedora-infra/fmn.web/commit/4a45c5f7a127ed0f2c6aee2bb7c6696ed26111f3>`_
+- Update the name of this method call. `7dab102be <https://github.com/fedora-infra/fmn.web/commit/7dab102be28cb05b4a80fad32de5c2b45a71ea50>`_
+
 0.2.0
 -----
 
