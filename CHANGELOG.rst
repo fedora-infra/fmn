@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.1.5
+-----
+
+- Fix koji rules. `739bf99f7 <https://github.com/fedora-infra/fmn.rules/commit/739bf99f7903699360dae982a3ec079bff5afc88>`_
+- Add rules for scratch builds. `36e749fe1 <https://github.com/fedora-infra/fmn.rules/commit/36e749fe1f83339893f17e00d43142e0abd700ba>`_
+
 0.1.4
 -----
 
