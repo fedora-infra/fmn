@@ -30,6 +30,8 @@ generic_rule_path_defaults = [
 
     ('My blog posts!', 'fmn.rules:planet_post_new'),
 
+    ('My Koji scratch builds',
+     'fmn.rules:koji_scratch_build_state_change'),
 ]
 
 package_rule_path_defaults = [

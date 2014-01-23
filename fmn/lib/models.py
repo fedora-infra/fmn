@@ -330,10 +330,10 @@ class Filter(BASE):
         session.commit()
         return rule
 
-    def remove_filter(self, session, code_path, **kw):
-        for f in self.rules:
-            if f.code_path == code_path:
-                session.delete(f)
+    def remove_rule(self, session, code_path, **kw):
+        for r in self.rules:
+            if r.code_path == code_path:
+                session.delete(r)
                 session.commit()
                 return
 
