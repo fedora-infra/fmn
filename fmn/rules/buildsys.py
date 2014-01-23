@@ -1,4 +1,65 @@
 
+def koji_scratch_build_state_change(config, message):
+    """ Koji: *scratch* build changed state (started, failed, finished)
+
+    This rule lets through messages from the `koji build
+    system <https://koji.fedoraproject.org>`_ about **scratch** build state
+    state changes (any state at all:  started, completed, failed, cancelled).
+    """
+    return message['topic'].endswith('buildsys.task.state.change')
+
+
+def koji_scratch_build_started(config, message):
+    """ Koji: *scratch* build started
+
+    This rule lets through messages from the `koji build
+    system <https://koji.fedoraproject.org>`_ that get published anytime a
+    **scratch** build starts.
+    """
+    if not koji_scratch_build_state_change(config, message):
+        return False
+
+    return message['msg']['new'] == 'OPEN'
+
+
+def koji_scratch_build_completed(config, message):
+    """ Koji: *scratch* build completed
+
+    This rule lets through messages from the `koji build
+    system <https://koji.fedoraproject.org>`_ that get published anytime a
+    **scratch** build completes.
+    """
+    if not koji_scratch_build_state_change(config, message):
+        return False
+
+    return message['msg']['new'] == 'CLOSED'
+
+
+def koji_scratch_build_failed(config, message):
+    """ Koji: *scratch* build failed
+
+    This rule lets through messages from the `koji build
+    system <https://koji.fedoraproject.org>`_ that get published anytime a
+    **scratch** build fails.
+    """
+    if not koji_scratch_build_state_change(config, message):
+        return False
+
+    return message['msg']['new'] == 'FAILED'
+
+
+def koji_scratch_build_cancelled(config, message):
+    """ Koji: *scratch* build cancelled
+
+    This rule lets through messages from the `koji build
+    system <https://koji.fedoraproject.org>`_ that get published anytime a
+    **scratch** build is cancelled.
+    """
+    if not koji_scratch_build_state_change(config, message):
+        return False
+
+    return message['msg']['new'] == 'CANCELED'
+
 
 def koji_build_state_change(config, message):
     """ Koji: build changed state (started, failed, finished)
