@@ -7,6 +7,10 @@ config = {
     "fmn.consumer.enabled": True,
     "fmn.sqlalchemy.uri": "sqlite:////var/tmp/fmn-dev-db.sqlite",
 
+    # Our web frontend also needs to be able to talk to datanommer to get
+    # example messages that match rules (optional)
+    "datanommer.sqlalchemy.url": "postgresql+psycopg2://datanommer:bunbunbun@localhost:5432/datanommer",
+
     # Some configuration for the rule processors
     "fmn.rules.utils.use_pkgdb2": False,
     "fmn.rules.utils.pkgdb2_api_url": "http://209.132.184.188/api/",

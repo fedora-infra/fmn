@@ -1,13 +1,16 @@
 import codecs
+import datetime
 import functools
 import os
 from bunch import Bunch
 from pkg_resources import get_distribution
 
+import arrow
 import docutils
 import docutils.examples
 import fedora.client
 import fedmsg.config
+import fedmsg.meta
 import jinja2
 import libravatar
 import markupsafe
@@ -21,8 +24,11 @@ import fmn.lib.models
 import fmn.web.converters
 import fmn.web.forms
 
+import datanommer.models
+
 # Create the application.
 app = flask.Flask(__name__)
+log = app.logger
 
 app.url_map.converters['not_reserved'] = fmn.web.converters.NotReserved
 
@@ -42,9 +48,19 @@ db_url = fedmsg_config.get('fmn.sqlalchemy.uri')
 if not db_url:
     raise ValueError("fmn.sqlalchemy.uri must be present")
 
+fedmsg.meta.make_processors(**fedmsg_config)
+
 valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
+# Initialize our own db connection
 SESSION = fmn.lib.models.init(db_url, debug=False, create=False)
+
+# Initialize a datanommer session.
+try:
+    datanommer.models.init(fedmsg_config['datanommer.sqlalchemy.url'])
+except Exception as e:
+    log.warning("Could not initialize datanommer db connection:")
+    log.exception(e)
 
 
 def extract_openid_identifier(openid_url):
@@ -137,7 +153,7 @@ def api_method(function):
         try:
             result = function(*args, **kwargs)
         except APIError as e:
-            app.logger.exception(e)
+            log.exception(e)
             response = flask.jsonify(e.errors)
             response.status_code = e.status_code
         else:
@@ -146,7 +162,16 @@ def api_method(function):
             if 'url' in result and request_wants_html():
                 response = flask.redirect(result['url'])
             else:
-                response = flask.jsonify(result)
+                # Here we use fedmsg's encoder instead of flask.jsonify since
+                # fedmsg can handle things like datetime objects buried in the
+                # messages.
+                if flask.request.is_xhr:
+                    encoder = fedmsg.encoding.dumps
+                else:
+                    encoder = fedmsg.encoding.pretty_dumps
+
+                response = flask.Response(
+                    encoder(result), mimetype='application/json')
                 response.status_code = 200
         return response
 
@@ -260,6 +285,7 @@ def profile(openid):
         fedora_mobile=flask.request.args.get('fedora_mobile') == 'true',
         openid_url=flask.g.auth.openid)
 
+
 @app.route('/reset-api-key')
 @app.route('/reset-api-key/')
 @login_required
@@ -313,12 +339,6 @@ def filter(openid, context, filter_name):
     pref = fmn.lib.models.Preference.get_or_create(
         SESSION, openid=openid, context=context)
 
-    filter = None
-    for _filter in pref.filters:
-        if _filter.name == filter_name:
-            filter = _filter
-            break
-
     if not pref.has_filter(SESSION, filter_name):
         flask.abort(404)
 
@@ -328,6 +348,65 @@ def filter(openid, context, filter_name):
         'filter.html',
         current=context.name,
         filter=filter)
+
+
+@app.route('/<not_reserved:openid>/<context>/<filter_name>/ex/<int:page>')
+@app.route('/<not_reserved:openid>/<context>/<filter_name>/ex/<int:page>')
+@api_method
+@login_required
+def example_messages(openid, context, filter_name, page):
+    if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
+        flask.abort(403)
+
+    context = fmn.lib.models.Context.by_name(SESSION, context)
+    if not context:
+        flask.abort(404)
+
+    pref = fmn.lib.models.Preference.get_or_create(
+        SESSION, openid=openid, context=context)
+
+    if not pref.has_filter(SESSION, filter_name):
+        flask.abort(404)
+
+    filter = pref.get_filter(SESSION, filter_name)
+
+    # Now, connect to datanommer and get the latest bazillion messages
+    bazillion = 100
+    try:
+        total, pages, messages = datanommer.models.Message.grep(
+            start=datetime.datetime.fromtimestamp(1),
+            end=datetime.datetime.now(),
+            rows_per_page=bazillion,
+            page=page,
+            order='desc',
+        )
+    except Exception as e:
+        log.exception(e)
+        raise APIError(500, dict(
+            reason="Error talking to datanommer",
+            furthermore=str(e),
+        ))
+
+    def _make_result(msg, d):
+        """ Little utility used inside the loop below """
+        return {
+            'icon': fedmsg.meta.msg2icon(d, **fedmsg_config),
+            'icon2': fedmsg.meta.msg2secondary_icon(d, **fedmsg_config),
+            'subtitle': fedmsg.meta.msg2subtitle(d, **fedmsg_config),
+            'link': fedmsg.meta.msg2link(d, **fedmsg_config),
+            'time': arrow.get(msg.timestamp).humanize(),
+        }
+
+    results = []
+    for message in messages:
+        original = message.__json__()
+        if filter.matches(SESSION, fedmsg_config, valid_paths, original):
+            results.append(_make_result(message, original))
+
+    return dict(
+        results=results,
+        next_page=page + 1,
+    )
 
 
 @app.route('/confirm/<action>/<secret>')

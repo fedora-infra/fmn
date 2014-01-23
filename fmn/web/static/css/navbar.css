@@ -44,3 +44,10 @@ body {
 .masthead .lead {
     font-size: 28pt;
 }
+.example-message strong {
+    font-size: 9pt;
+}
+.example-message img {
+    width: 24px;
+    height: 24px;
+}

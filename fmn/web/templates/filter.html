@@ -8,9 +8,9 @@
 
 
 <div class="row">
-  <div class="col-md-6">
-    <p> You have these rules currently defined for this filter.</p>
-    <p> All these rules must be satisfied for the notification to be sent.</p>
+  <div class="col-md-7">
+    <p class="lead">Rules currently defined for this filter:</p>
+    <p>(all these rules must be satisfied for the notification to be sent)</p>
     <div class="list-group">
     {% for rule in filter.rules %}
       <span class="list-group-item">
@@ -38,9 +38,19 @@
       </span>
     {% endfor %}
     </div>
+
+    <!-- A place to hold examples that match these rules.
+    We'll populate this with javascript to make the page load more quickly.
+    -->
+    <div id="examples-container">
+      <p class="lead"></p>
+      <ul class="list-group"></ul>
+    </div>
+
   </div>
 
-  <div class="col-md-6">
+  <div class="col-md-5">
+    <p class="lead">Possible rules:</p>
     <p> You can add a new rule to this filter by selecting one from this
     pre-defined list.  Click on any rule to check it out.</p>
 

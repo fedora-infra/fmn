@@ -33,6 +33,8 @@ requires = [
     'pylibravatar',
     'pydns',
     'urllib3',
+    'datanommer.models',
+    'arrow',
 ]
 
 tests_require = [
