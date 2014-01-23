@@ -8,7 +8,7 @@ def koji_build_state_change(config, message):
     build changes state.  The state could be anything:  started, completed,
     deleted, failed, or cancelled.
     """
-    return message['topic'].endswith('koji.build.state.change')
+    return message['topic'].endswith('buildsys.build.state.change')
 
 
 def koji_build_started(config, message):
@@ -83,7 +83,7 @@ def koji_repo_done(config, message):
     system <https://koji.fedoraproject.org>`_ has **finished** rebuilding a
     repo.
     """
-    return message['topic'].endswith('koji.repo.done')
+    return message['topic'].endswith('buildsys.repo.done')
 
 
 def koji_repo_init(config, message):
@@ -93,7 +93,7 @@ def koji_repo_init(config, message):
     system <https://koji.fedoraproject.org>`_ has **started** rebuilding a
     repo.
     """
-    return message['topic'].endswith('koji.repo.init')
+    return message['topic'].endswith('buildsys.repo.init')
 
 
 def koji_tag(config, message):
@@ -103,7 +103,7 @@ def koji_tag(config, message):
     system <https://koji.fedoraproject.org>`_ applies a certain tag to a
     package.
     """
-    return message['topic'].endswith('koji.tag')
+    return message['topic'].endswith('buildsys.tag')
 
 
 def koji_untag(config, message):
@@ -113,4 +113,4 @@ def koji_untag(config, message):
     system <https://koji.fedoraproject.org>`_ removes a tag from a
     package.
     """
-    return message['topic'].endswith('koji.untag')
+    return message['topic'].endswith('buildsys.untag')
