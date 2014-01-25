@@ -294,7 +294,7 @@ def link_fedora_mobile(openid, api_key, registration_id):
         con = fmn.lib.models.Confirmation.get_or_create(
             SESSION, openid=openid, context=ctx)
         con.set_value(SESSION, registration_id)
-        con.set_status(SESSION, 'pending')
+        con.set_status(SESSION, 'accepted')
     else:
         # Otherwise, just change the details right away.  Never do this.
         pref.update_details(SESSION, registration_id)
