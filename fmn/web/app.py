@@ -239,6 +239,67 @@ def about():
         docs=load_docs(flask.request),
     )
 
+@app.route('/link-fedora-mobile/<not_reserved:openid>/<not_reserved:api_key>/<not_reserved:registration_id>')
+@app.route('/link-fedora-mobile/<not_reserved:openid>/<not_reserved:api_key>/<not_reserved:registration_id>/')
+def link_fedora_mobile(openid, api_key, registration_id):
+    '''This workflow is kind of weird. When a user signs up on fmn, they are
+    given an API key (which they can reset). Fedora Mobile needs to know about
+    this key, in order to make use of it. This (will be) handled in Fedora
+    Mobile by checking our preferences and seeing if a key is saved. If it's
+    not, and the user wants to opt-in to notifications, we'll show a button that
+    allows them to log into fmn. When they click the button, they'll be taken to
+    the openid login page, where they should proceed to log in. Once they do
+    that, they'll be taken to their profile page, where they can press another
+    button to tell Fedora Mobile their API key.
+
+    Once Fedora Mobile has the API key, the user can finally click a button in
+    the app to complete the registration of their device. A lot of this workflow
+    will go away when FAS-oAuth is a thing. This endpoint is also what gets
+    called to update the registration ID in the background.
+
+    Once they register the device, they'll get a test notification sent to it,
+    which confirms that they own the device. It'll show an accept and reject
+    button, and clicking accept will mark the confirmation as accepted.'''
+
+    user = fmn.lib.models.User.by_openid(SESSION, openid)
+    if not user or user.api_key != api_key:
+        raise APIError(403, dict(reason="Invalid login"))
+
+    # At this point, we can reasonably assume the user is who they say they are
+    # (or that their phone got stolen and someone decided to show them how
+    # awesome Fedora Mobile is before giving their phone back).
+    #
+    # Now we can add an Android context to the user's account.
+    # Much of this is copied from /api/details below. :(
+    ctx = fmn.lib.models.Context.by_name(SESSION, "android")
+    if not ctx:
+        raise APIError(403, dict(reason="android is not a context"))
+
+    pref = fmn.lib.models.Preference.get_or_create(
+        SESSION, openid=openid, context=ctx)
+
+    try:
+        fmn.lib.validate_detail_value(ctx, registration_id)
+    except Exception as e:
+        raise APIError(403, dict(reason=str(e)))
+
+    # Make sure no one else has this one in play yet
+    if fmn.lib.models.DetailValue.exists(SESSION, registration_id):
+        raise APIError(403, dict(reason="That value is already claimed."))
+
+    # We need to *VERIFY* that they really have this delivery detail
+    # before we start doing stuff.  Otherwise, ralph could put in pingou's
+    # email address and spam the crap out of him.
+    if fedmsg_config.get('fmn.verify_delivery_details', True):
+        con = fmn.lib.models.Confirmation.get_or_create(
+            SESSION, openid=openid, context=ctx)
+        con.set_value(SESSION, registration_id)
+        con.set_status(SESSION, 'pending')
+    else:
+        # Otherwise, just change the details right away.  Never do this.
+        pref.update_details(SESSION, registration_id)
+    return "ok"
+
 
 @app.route('/home')
 @app.route('/home/')
