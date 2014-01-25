@@ -1,3 +1,4 @@
+import fmn.lib.models
 from fmn.consumer.backends.base import BaseBackend
 
 import requests
@@ -30,6 +31,14 @@ class GCMBackend(BaseBackend):
           data=json.dumps(body),
           headers=headers)
       self.log.debug(" * got %r %r" % (response.status_code, response.text))
+      j = response.json()
+      if j.get("message_id") and j.get("message_id").get("registration_id"):
+          self.log.debug("   * Was informed by Google that the " +
+                         " registration id is old. Updating.")
+
+          pref = fmn.lib.models.Preference.by_detail(self.session, registration_id)
+          pref.update_details(self.session,
+                              j.get("message_id").get("registration_id"))
 
 
     def handle(self, recipient, msg):
