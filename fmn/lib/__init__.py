@@ -120,7 +120,7 @@ def validate_detail_value(ctx, value):
     elif ctx.name == 'email':
         if re.match(email_regex, value) is None:
             raise ValueError("value must be an email address")
-    elif ctx.name == 'gcm':
+    elif ctx.name == 'android':
         if re.match(gcm_regex, value) is None:
             raise ValueError("not a valid android registration id")
     else:
