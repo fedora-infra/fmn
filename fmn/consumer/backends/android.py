@@ -18,20 +18,29 @@ class GCMBackend(BaseBackend):
          whether or not the user has notifications enabled. The calling method
          **MUST** do this itself.'''
 
+      # Extra data that applies to all messages goes here. Try to keep it
+      # short to save users bandwidth!
+      data['fmn_base_url'] = self.config['fmn.base_url']
+
       headers = {
           'Authorization': 'key=%s' % self.api_key,
           'content-type': 'application/json',
       }
+
       body = {
           'registration_ids': [registration_id],
           'data': data,
       }
+
       response = requests.post(
           self.post_url,
           data=json.dumps(body),
           headers=headers)
+
       self.log.debug(" * got %r %r" % (response.status_code, response.text))
+
       j = response.json()
+
       if j.get("message_id") and j.get("message_id").get("registration_id"):
           self.log.debug("   * Was informed by Google that the " +
                          " registration id is old. Updating.")
@@ -59,16 +68,12 @@ class GCMBackend(BaseBackend):
 
     def handle_confirmation(self, confirmation):
         confirmation.set_status(self.session, 'valid')
-        acceptance_url = self.config['fmn.acceptance_url'].format(
-            secret=confirmation.secret)
-        rejection_url = self.config['fmn.rejection_url'].format(
-            secret=confirmation.secret)
 
         confirmation_msg = {
-            "title": "Fedora Notifications Confirmation"
-          , "message": "Hi! Tap this notification to confirm that you would" +
-                       " like to receive Fedora related notifications."
-          , "secret": confirmation.secret
-          }
+            "title": "Fedora Notifications Confirmation",
+            "message": "Hi there! Please confirm that you would like to " +
+                       "receive Fedora related notifications.",
+            "secret": confirmation.secret
+        }
 
         self._send_notification(confirmation.detail_value, confirmation_msg)
