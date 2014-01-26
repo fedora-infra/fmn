@@ -148,9 +148,20 @@
         {% if confirmation %}
         <div class="alert alert-{{ {'pending': 'info', 'valid': 'info', 'accepted': 'success', 'rejected': 'danger', 'invalid': 'warning'}[confirmation.status] }}">
             <p><strong>{{confirmation.status}}</strong> Your confirmation for
-            {{confirmation.detail_value}} is {{confirmation.status}}</p>
+              {% if context.name == "android" %}
+              {{confirmation.detail_value[0:30]}}...
+              {% else %}
+              {{confirmation.detail_value}}
+              {% endif %}
+              is {{confirmation.status}}</p>
         </div>
         {% endif %}
+        {% if context.name == "android" %}
+        <p>
+          Follow the instructions in the Fedora Mobile Android app to register
+          for Fedora Notifications on your Android device.
+        </p>
+        {% else %}
         <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
               method="post">
           <fieldset {{'disabled' if preference.enabled is sameas false}}>
@@ -182,6 +193,7 @@
           </p>
           </fieldset>
         </form>
+        {% endif %}
       </div> <!-- end panel-body -->
     </div> <!-- end panel -->
 
