@@ -242,24 +242,21 @@ def about():
 @app.route('/link-fedora-mobile/<not_reserved:openid>/<not_reserved:api_key>/<not_reserved:registration_id>')
 @app.route('/link-fedora-mobile/<not_reserved:openid>/<not_reserved:api_key>/<not_reserved:registration_id>/')
 def link_fedora_mobile(openid, api_key, registration_id):
-    '''This workflow is kind of weird. When a user signs up on fmn, they are
-    given an API key (which they can reset). Fedora Mobile needs to know about
-    this key, in order to make use of it. This (will be) handled in Fedora
-    Mobile by checking our preferences and seeing if a key is saved. If it's
-    not, and the user wants to opt-in to notifications, we'll show a button that
-    allows them to log into fmn. When they click the button, they'll be taken to
-    the openid login page, where they should proceed to log in. Once they do
-    that, they'll be taken to their profile page, where they can press another
-    button to tell Fedora Mobile their API key.
+    '''The workflow for using this endpoint works like this:
 
-    Once Fedora Mobile has the API key, the user can finally click a button in
-    the app to complete the registration of their device. A lot of this workflow
-    will go away when FAS-oAuth is a thing. This endpoint is also what gets
-    called to update the registration ID in the background.
-
-    Once they register the device, they'll get a test notification sent to it,
-    which confirms that they own the device. It'll show an accept and reject
-    button, and clicking accept will mark the confirmation as accepted.'''
+    - Nancy installs Fedora Mobile and wants notifications
+    - She hits a button in the app which takes her to a login page for fmn
+    - She logs in and taps a link to tell Mobile her fmn API key
+    - Mobile gets the key and shows a button for actually registering the
+      device on fmn (i.e. using *this* endpoint)
+    - She taps the button - now FMN knows about her registration id and it is
+      pending her confirmation
+    - Consumer sends her a notification which renders with two buttons
+      (accept, reject)
+    - She taps one of these buttons which hits the normal accept/reject URL,
+      or perhaps a modified version of them which takes the registration ID
+      and API key, so the app can hit them instead of opening a browser.
+    '''
 
     user = fmn.lib.models.User.by_openid(SESSION, openid)
     if not user or user.api_key != api_key:
@@ -294,12 +291,39 @@ def link_fedora_mobile(openid, api_key, registration_id):
         con = fmn.lib.models.Confirmation.get_or_create(
             SESSION, openid=openid, context=ctx)
         con.set_value(SESSION, registration_id)
-        con.set_status(SESSION, 'accepted')
+        con.set_status(SESSION, 'pending')
     else:
         # Otherwise, just change the details right away.  Never do this.
         pref.update_details(SESSION, registration_id)
     return "ok"
 
+@app.route('/confirm/<action>/<not_reserved:openid>/<secret>/<api_key>/')
+@app.route('/confirm/<action>/<not_reserved:openid>/<secret>/<api_key>')
+def handle_confirmation_api_mobile(action, openid, secret, api_key):
+    '''This is an *unauthenticated* endpoint to confirm registration. Or
+    rather, it's authenticated via the api key in the URL instead of by the
+    normal Flask auth mechanism.
+
+    This is for Fedora Mobile and should not be relied upon to always exist.'''
+
+    if action not in ['accept', 'reject']:
+        flask.abort(404)
+
+    user = fmn.lib.models.User.by_openid(SESSION, openid)
+    if not user or user.api_key != api_key:
+        raise APIError(403, dict(reason="Invalid login"))
+
+    confirmation = fmn.lib.models.Confirmation.by_secret(SESSION, secret)
+
+    if not confirmation:
+        flask.abort(404)
+
+    if action == 'accept':
+        confirmation.set_status(SESSION, 'accepted')
+    else:
+        confirmation.set_status(SESSION, 'rejected')
+
+    return "ok"
 
 @app.route('/home')
 @app.route('/home/')
