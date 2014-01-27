@@ -457,7 +457,10 @@ class Preference(BASE):
     @classmethod
     def by_detail(cls, session, detail_value):
         value = DetailValue.get(session, detail_value)
-        return value.preference
+        if value:
+            return value.preference
+        else:
+            return None
 
     @classmethod
     def create(cls, session, user, context, detail_value=None):
