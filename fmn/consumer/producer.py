@@ -92,9 +92,13 @@ class DigestProducer(FMNProducerBase):
                     self.manage_batch(backend, pref)
 
     def manage_batch(self, backend, pref):
-        recipient = {pref.context.detail_name: pref.detail_value}
+        name = pref.context.detail_name
+        recipients = [{name: value.value} for value in pref.detail_values]
         queued_messages = fmn.lib.models.QueuedMessage.list_for(
             self.session, pref.user, pref.context)
-        backend.handle_batch(recipient, queued_messages)
+
+        for recipient in recipients:
+            backend.handle_batch(recipient, queued_messages)
+
         for message in queued_messages:
             message.dequeue(self.session)
