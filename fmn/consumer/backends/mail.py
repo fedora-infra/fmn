@@ -1,6 +1,7 @@
 from fmn.consumer.backends.base import BaseBackend
 import fedmsg.meta
 
+import datetime
 import smtplib
 import email
 
@@ -80,12 +81,19 @@ class EmailBackend(BaseBackend):
         self.send_mail(recipient, subject, content)
 
     def handle_batch(self, recipient, queued_messages):
-        subject = "Fedora Notifications Digest"
+        def _format_line(msg):
+            timestamp = datetime.datetime.fromtimestamp(msg['timestamp'])
+            payload = fedmsg.meta.msg2repr(msg, **self.config)
+            return timestamp.strftime("%c") + ", " + payload
+
+        n = len(queued_messages)
+        subject = "Fedora Notifications Digest (%i updates)" % n
         content = "\n".join([
-            fedmsg.meta.msg2repr(queued_message.message, **self.config)
+            _format_line(queued_message.message)
             for queued_message in queued_messages])
 
         self.send_mail(recipient, subject, content)
+
 
     def handle_confirmation(self, confirmation):
         confirmation.set_status(self.session, 'valid')
