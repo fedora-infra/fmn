@@ -1,6 +1,19 @@
 Changelog
 =========
 
+0.2.2
+-----
+
+- Remove unnecessary word. `587df5258 <https://github.com/fedora-infra/fmn.web/commit/587df525807eab27ab8031580966b7d4312babcb>`_
+- add /link-fedora-mobile endpoint for...linking fedora mobile. ;) `1eff1d432 <https://github.com/fedora-infra/fmn.web/commit/1eff1d4328fcc189048e0fd37a3e403d08204f21>`_
+- Change status to accepted instead of pending `335e5c3bf <https://github.com/fedora-infra/fmn.web/commit/335e5c3bfabfdc8e0aa97b7219e25f60fce2227e>`_
+- Add an endpoint for accepting without login. `f66ed7e51 <https://github.com/fedora-infra/fmn.web/commit/f66ed7e513f4fa357c1b7877c93e22e2ad950395>`_
+- make the context page prettier for android `53c4605eb <https://github.com/fedora-infra/fmn.web/commit/53c4605ebc5ef0343a23616bd3514c4b72f99e7e>`_
+- use @api_method and return dicts `22a23e296 <https://github.com/fedora-infra/fmn.web/commit/22a23e29696f566ed6f3035242689baccf64c6ba>`_
+- Merge pull request #8 from fedora-infra/android `8b79bf0c0 <https://github.com/fedora-infra/fmn.web/commit/8b79bf0c0861bb19bdfe547c3de25e3974579648>`_
+- Use filter_id in urls instead of unsafe filter_name. `901366c40 <https://github.com/fedora-infra/fmn.web/commit/901366c401829651d2d7bfafa734203b33d405b9>`_
+- Merge branch 'develop' of github.com:fedora-infra/fmn.web into develop `19b5ad4ac <https://github.com/fedora-infra/fmn.web/commit/19b5ad4acf374b1136bd8ece5c21cc8a81243c5e>`_
+
 0.2.1
 -----
 
