@@ -155,7 +155,8 @@ class Context(BASE):
                 yield {
                     'user': user.openid,
                     pref.context.detail_name: value.value,
-                    'filter': flter.name,
+                    'filter_name': flter.name,
+                    'filter_id': flter.id,
                 }
 
     def recipients(self, session, config, valid_paths, message):

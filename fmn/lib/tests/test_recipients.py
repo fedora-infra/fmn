@@ -81,7 +81,8 @@ class TestRecipients(fmn.lib.tests.Base):
         eq_(list(recipients), [{
             'irc nick': 'threebean',
             'user': 'ralph.id.fedoraproject.org',
-            'filter': 'test filter',
+            'filter_name': 'test filter',
+            'filter_id': 1,
         }])
 
     def test_miss_recipients_list(self):
@@ -141,7 +142,8 @@ class TestRecipients(fmn.lib.tests.Base):
         eq_(list(recipients), [{
             'irc nick': 'threebean',
             'user': 'ralph.id.fedoraproject.org',
-            'filter': 'test filter',
+            'filter_name': 'test filter',
+            'filter_id': 1,
             }])
 
     def test_multiple_different_filters_hit(self):
@@ -166,5 +168,6 @@ class TestRecipients(fmn.lib.tests.Base):
         eq_(list(recipients), [{
             'irc nick': 'threebean',
             'user': 'ralph.id.fedoraproject.org',
-            'filter': 'test filter',
+            'filter_name': 'test filter',
+            'filter_id': 1,
             }])
