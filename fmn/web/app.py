@@ -325,10 +325,10 @@ def context(openid, context):
         preference=pref)
 
 
-@app.route('/<not_reserved:openid>/<context>/<filter_name>')
-@app.route('/<not_reserved:openid>/<context>/<filter_name>/')
+@app.route('/<not_reserved:openid>/<context>/<int:filter_id>')
+@app.route('/<not_reserved:openid>/<context>/<int:filter_id>/')
 @login_required
-def filter(openid, context, filter_name):
+def filter(openid, context, filter_id):
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         flask.abort(403)
 
@@ -339,10 +339,10 @@ def filter(openid, context, filter_name):
     pref = fmn.lib.models.Preference.get_or_create(
         SESSION, openid=openid, context=context)
 
-    if not pref.has_filter(SESSION, filter_name):
+    if not pref.has_filter(SESSION, filter_id):
         flask.abort(404)
 
-    filter = pref.get_filter(SESSION, filter_name)
+    filter = pref.get_filter(SESSION, filter_id)
 
     return flask.render_template(
         'filter.html',
@@ -350,11 +350,11 @@ def filter(openid, context, filter_name):
         filter=filter)
 
 
-@app.route('/<not_reserved:openid>/<context>/<filter_name>/ex/<int:page>')
-@app.route('/<not_reserved:openid>/<context>/<filter_name>/ex/<int:page>')
+@app.route('/<not_reserved:openid>/<context>/<int:filter_id>/ex/<int:page>')
+@app.route('/<not_reserved:openid>/<context>/<int:filter_id>/ex/<int:page>')
 @api_method
 @login_required
-def example_messages(openid, context, filter_name, page):
+def example_messages(openid, context, filter_id, page):
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         flask.abort(403)
 
@@ -365,10 +365,10 @@ def example_messages(openid, context, filter_name, page):
     pref = fmn.lib.models.Preference.get_or_create(
         SESSION, openid=openid, context=context)
 
-    if not pref.has_filter(SESSION, filter_name):
+    if not pref.has_filter(SESSION, filter_id):
         flask.abort(404)
 
-    filter = pref.get_filter(SESSION, filter_name)
+    filter = pref.get_filter(SESSION, filter_id)
 
     # Now, connect to datanommer and get the latest bazillion messages
     bazillion = 100
@@ -471,7 +471,7 @@ def handle_filter():
     try:
         if method == 'POST':
             # Ensure that a filter with this name doesn't already exist.
-            if pref.has_filter(SESSION, filter_name):
+            if pref.has_filter_name(SESSION, filter_name):
                 raise APIError(404, dict(
                     reason="%r already exists" % filter_name))
 
@@ -481,10 +481,10 @@ def handle_filter():
                 'filter',
                 openid=openid,
                 context=context,
-                filter_name=filter_name,
+                filter_id=filter.id,
             )
         elif method == 'DELETE':
-            filter = pref.get_filter(SESSION, filter_name)
+            filter = pref.get_filter_name(SESSION, filter_name)
             SESSION.delete(filter)
             SESSION.commit()
             next_url = flask.url_for(
@@ -600,11 +600,11 @@ def handle_rule():
 
     openid = form.openid.data
     context = form.context.data
-    filter_name = form.filter_name.data
+    filter_id = form.filter_id.data
     code_path = form.rule_name.data
     method = (form.method.data or flask.request.method).upper()
     # Extract arguments to rules using the extra information provided
-    known_args = ['openid', 'filter_name', 'context', 'rule_name']
+    known_args = ['openid', 'filter_id', 'context', 'rule_name']
     arguments = {}
     for args in flask.request.form:
         if args not in known_args:
@@ -629,10 +629,10 @@ def handle_rule():
     pref = fmn.lib.models.Preference.get_or_create(
         SESSION, openid=openid, context=ctx)
 
-    if not pref.has_filter(SESSION, filter_name):
-        raise APIError(403, dict(reason="%r is not a filter" % filter_name))
+    if not pref.has_filter(SESSION, filter_id):
+        raise APIError(403, dict(reason="%r is not a filter" % filter_id))
 
-    filter = pref.get_filter(SESSION, filter_name)
+    filter = pref.get_filter(SESSION, filter_id)
 
     try:
         if method == 'POST':
@@ -649,7 +649,7 @@ def handle_rule():
         'filter',
         openid=openid,
         context=context,
-        filter_name=filter_name,
+        filter_id=filter_id,
     )
 
     return dict(message="ok", url=next_url)

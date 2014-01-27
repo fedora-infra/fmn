@@ -50,12 +50,12 @@
     </p>
 
     <div class="list-group">
-    {% for chn in preference.filters %}
-      <a href="{{chn.name}}" class="list-group-item">
-        <h4 class="list-group-item-heading">{{chn.name}}</h4>
-        {% if chn.rules %}
+    {% for fltr in preference.filters %}
+      <a href="{{fltr.id}}" class="list-group-item">
+        <h4 class="list-group-item-heading">{{fltr.name}}</h4>
+        {% if fltr.rules %}
         <dl class="list-group-item-text dl-horizontal">
-            {% for rule in chn.rules %}
+            {% for rule in fltr.rules %}
             <dt>{{rule.title(valid_paths)}}</dt>
             <dd>{{rule.doc(valid_paths, no_links=True)}}
                 {% if rule.arguments %}
@@ -74,7 +74,7 @@
           <form role="form" action="{{url_for('handle_filter')}}" method="post">
             <input name="openid" id="openid" value="{{openid}}" type="hidden">
             <input name="context" id="context" value="{{current}}" type="hidden">
-            <input name="filter_name" id="filter_name" value="{{chn.name}}" type="hidden">
+            <input name="filter_name" id="filter_name" value="{{fltr.name}}" type="hidden">
             <input name="method" id="method" value="delete" type="hidden">
             <span class="pull-right">
                 <button type="submit" class="btn btn-danger">
