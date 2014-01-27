@@ -239,6 +239,93 @@ def about():
         docs=load_docs(flask.request),
     )
 
+@app.route('/link-fedora-mobile/<not_reserved:openid>/<not_reserved:api_key>/<not_reserved:registration_id>')
+@app.route('/link-fedora-mobile/<not_reserved:openid>/<not_reserved:api_key>/<not_reserved:registration_id>/')
+@api_method
+def link_fedora_mobile(openid, api_key, registration_id):
+    '''The workflow for using this endpoint works like this:
+
+    - Nancy installs Fedora Mobile and wants notifications
+    - She hits a button in the app which takes her to a login page for fmn
+    - She logs in and taps a link to tell Mobile her fmn API key
+    - Mobile gets the key and shows a button for actually registering the
+      device on fmn (i.e. using *this* endpoint)
+    - She taps the button - now FMN knows about her registration id and it is
+      pending her confirmation
+    - Consumer sends her a notification which renders with two buttons
+      (accept, reject)
+    - She taps one of these buttons which hits the normal accept/reject URL,
+      or perhaps a modified version of them which takes the registration ID
+      and API key, so the app can hit them instead of opening a browser.
+    '''
+
+    user = fmn.lib.models.User.by_openid(SESSION, openid)
+    if not user or user.api_key != api_key:
+        raise APIError(403, dict(reason="Invalid login"))
+
+    # At this point, we can reasonably assume the user is who they say they are
+    # (or that their phone got stolen and someone decided to show them how
+    # awesome Fedora Mobile is before giving their phone back).
+    #
+    # Now we can add an Android context to the user's account.
+    # Much of this is copied from /api/details below. :(
+    ctx = fmn.lib.models.Context.by_name(SESSION, "android")
+    if not ctx:
+        raise APIError(403, dict(reason="android is not a context"))
+
+    pref = fmn.lib.models.Preference.get_or_create(
+        SESSION, openid=openid, context=ctx)
+
+    try:
+        fmn.lib.validate_detail_value(ctx, registration_id)
+    except Exception as e:
+        raise APIError(403, dict(reason=str(e)))
+
+    # Make sure no one else has this one in play yet
+    if fmn.lib.models.DetailValue.exists(SESSION, registration_id):
+        raise APIError(403, dict(reason="That value is already claimed."))
+
+    # We need to *VERIFY* that they really have this delivery detail
+    # before we start doing stuff.  Otherwise, ralph could put in pingou's
+    # email address and spam the crap out of him.
+    if fedmsg_config.get('fmn.verify_delivery_details', True):
+        con = fmn.lib.models.Confirmation.get_or_create(
+            SESSION, openid=openid, context=ctx)
+        con.set_value(SESSION, registration_id)
+        con.set_status(SESSION, 'pending')
+    else:
+        # Otherwise, just change the details right away.  Never do this.
+        pref.update_details(SESSION, registration_id)
+    return {"status": "ok"}
+
+@app.route('/confirm/<action>/<not_reserved:openid>/<secret>/<api_key>/')
+@app.route('/confirm/<action>/<not_reserved:openid>/<secret>/<api_key>')
+@api_method
+def handle_confirmation_api_mobile(action, openid, secret, api_key):
+    '''This is an *unauthenticated* endpoint to confirm registration. Or
+    rather, it's authenticated via the api key in the URL instead of by the
+    normal Flask auth mechanism.
+
+    This is for Fedora Mobile and should not be relied upon to always exist.'''
+
+    if action not in ['accept', 'reject']:
+        flask.abort(404)
+
+    user = fmn.lib.models.User.by_openid(SESSION, openid)
+    if not user or user.api_key != api_key:
+        raise APIError(403, dict(reason="Invalid login"))
+
+    confirmation = fmn.lib.models.Confirmation.by_secret(SESSION, secret)
+
+    if not confirmation:
+        flask.abort(404)
+
+    if action == 'accept':
+        confirmation.set_status(SESSION, 'accepted')
+    else:
+        confirmation.set_status(SESSION, 'rejected')
+
+    return {"status": "ok"}
 
 @app.route('/home')
 @app.route('/home/')
