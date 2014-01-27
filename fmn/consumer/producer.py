@@ -84,12 +84,14 @@ class DigestProducer(FMNProducerBase):
                 if pref.batch_delta <= total_seconds(delta):
                     log.info("Sending digest for %r per time delta" % pref)
                     self.manage_batch(backend, pref)
+                    continue
 
             # 2.1) Send and dequeue those by count
             if pref.batch_count is not None:
                 if pref.batch_count <= count:
                     log.info("Sending digest for %r per msg count" % pref)
                     self.manage_batch(backend, pref)
+                    continue
 
     def manage_batch(self, backend, pref):
         name = pref.context.detail_name
