@@ -8,6 +8,14 @@ import logging
 log = logging.getLogger("fmn")
 
 
+def total_seconds(dt):
+    """ Take a datetime.timedelta object and return the total seconds.
+
+    dt.total_seconds() exists in the python 2.7 stdlib, but not in python 2.6.
+    """
+    return dt.days * 24 * 60 * 60 + dt.seconds + dt.microseconds / 1000000.0
+
+
 class FMNProducerBase(moksha.hub.api.PollingProducer):
     """ An abstract base class for our other producers. """
     def __init__(self, hub):
@@ -73,7 +81,7 @@ class DigestProducer(FMNProducerBase):
 
             # 2.1) Send and dequeue those by time
             if pref.batch_delta is not None:
-                if pref.batch_delta <= delta.total_seconds():
+                if pref.batch_delta <= total_seconds(delta):
                     log.info("Sending digest for %r per time delta" % pref)
                     self.manage_batch(backend, pref)
 
