@@ -529,19 +529,33 @@ class Preference(BASE):
         session.flush()
         session.commit()
 
-    def has_filter(self, session, filter_name):
+    def has_filter_name(self, session, filter_name):
         for filter in self.filters:
             if filter.name == filter_name:
                 return True
 
         return False
 
-    def get_filter(self, session, filter_name):
+    def get_filter_name(self, session, filter_name):
         for filter in self.filters:
             if filter.name == filter_name:
                 return filter
 
-        raise ValueError("No such filter %r" % filter_name)
+        raise ValueError("No such filter %r" % filter_id)
+
+    def has_filter(self, session, filter_id):
+        for filter in self.filters:
+            if filter.id == filter_id:
+                return True
+
+        return False
+
+    def get_filter(self, session, filter_id):
+        for filter in self.filters:
+            if filter.id == filter_id:
+                return filter
+
+        raise ValueError("No such filter %r" % filter_id)
 
     def prefers(self, session, config, valid_paths, message):
         """ Evaluate to true if this preference "prefers" this message.
