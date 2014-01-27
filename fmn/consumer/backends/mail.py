@@ -82,7 +82,7 @@ class EmailBackend(BaseBackend):
     def handle_batch(self, recipient, queued_messages):
         subject = "Fedora Notifications Digest"
         content = "\n".join([
-            fedmsg.meta.msg2repr(queued_message.msg, **self.config)
+            fedmsg.meta.msg2repr(queued_message.message, **self.config)
             for queued_message in queued_messages])
 
         self.send_mail(recipient, subject, content)
