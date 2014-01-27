@@ -241,6 +241,7 @@ def about():
 
 @app.route('/link-fedora-mobile/<not_reserved:openid>/<not_reserved:api_key>/<not_reserved:registration_id>')
 @app.route('/link-fedora-mobile/<not_reserved:openid>/<not_reserved:api_key>/<not_reserved:registration_id>/')
+@api_method
 def link_fedora_mobile(openid, api_key, registration_id):
     '''The workflow for using this endpoint works like this:
 
@@ -295,10 +296,11 @@ def link_fedora_mobile(openid, api_key, registration_id):
     else:
         # Otherwise, just change the details right away.  Never do this.
         pref.update_details(SESSION, registration_id)
-    return "ok"
+    return {"status": "ok"}
 
 @app.route('/confirm/<action>/<not_reserved:openid>/<secret>/<api_key>/')
 @app.route('/confirm/<action>/<not_reserved:openid>/<secret>/<api_key>')
+@api_method
 def handle_confirmation_api_mobile(action, openid, secret, api_key):
     '''This is an *unauthenticated* endpoint to confirm registration. Or
     rather, it's authenticated via the api key in the URL instead of by the
@@ -323,7 +325,7 @@ def handle_confirmation_api_mobile(action, openid, secret, api_key):
     else:
         confirmation.set_status(SESSION, 'rejected')
 
-    return "ok"
+    return {"status": "ok"}
 
 @app.route('/home')
 @app.route('/home/')
