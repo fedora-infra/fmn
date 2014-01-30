@@ -21,6 +21,8 @@ class DetailsForm(Form):
     # Did they press the button?
     toggle_enable = TextField('toggle_enable')
 
+    next_url = TextField('next_url')
+
 
 class RuleForm(Form):
     openid = TextField('openid', [validators.Required()])

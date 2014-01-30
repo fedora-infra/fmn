@@ -617,6 +617,7 @@ def handle_details():
     batch_delta = form.batch_delta.data
     batch_count = form.batch_count.data
     toggle_enable = form.toggle_enable.data
+    next_url = form.next_url.data
 
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         raise APIError(403, dict(reason="%r is not %r" % (
@@ -668,7 +669,7 @@ def handle_details():
     if toggle_enable:
         pref.set_enabled(SESSION, not pref.enabled)
 
-    next_url = flask.url_for(
+    next_url = next_url or flask.url_for(
         'context',
         openid=openid,
         context=context,

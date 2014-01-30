@@ -40,16 +40,28 @@
             {% for value in pref.detail_values %}
               {{ value.value }}
             {% endfor %}
-            <span class="pull-right">
-              <a href="{{url_for('context', openid=openid,
-                                 context=pref.context_name)}}">
-                <button type="submit" class="btn btn-success">
-                  <span class="glyphicon
-                    glyphicon-{{icons[pref.context_name]}}"></span>
-                  Update
+
+            <form action="{{url_for('handle_details')}}" method="post">
+              <input name="next_url" id="next_url" value="{{url_for('profile_redirect')}}" type="hidden">
+              <input name="openid" id="openid" value="{{openid}}" type="hidden">
+              <input name="context" id="context" value="{{pref.context_name}}" type="hidden">
+              <span class="pull-right">
+                {% if pref.enabled %}
+                <button type="submit" class="btn btn-danger" name="toggle_enable" value="toggle">
+                    <span class="glyphicon glyphicon-off"></span> Disable
                 </button>
-              </a>
-            </span>
+                {% else %}
+                <button type="submit" class="btn btn-success" name="toggle_enable" value="toggle">
+                    <span class="glyphicon glyphicon-ok-circle"></span> Enable
+                </button>
+                {% endif %}
+                <a class="btn btn-success" role="button"
+                   href="{{url_for('context', openid=openid,
+                                   context=pref.context_name)}}">
+                    <span class="glyphicon glyphicon-{{icons[pref.context_name]}}"></span> Update
+                </a>
+              </span>
+            </form>
             <div class="clearfix"></div>
           </p>
         </span>
