@@ -40,7 +40,7 @@ def _get_pkgdb2_packages_for(config, username):
     req = requests.get('{0}/packager/acl/{1}'.format(
         fmn.config['fmn.rules.utils.pkgdb2_api_url'], username))
     if not req.status_code == 200:
-        return []
+        return set()
     data = json.loads(req.text)
     packages = set()
     for pkgacl in data['acls']:
@@ -58,7 +58,7 @@ def _get_pkgdb1_packages_for(config, username):
     req = requests.get('{0}/users/packages/{1}?tg_format=json'.format(
         pkgdb1_base_url, username))
     if not req.status_code == 200:
-        return []
+        return set()
     data = json.loads(req.text)
     packages = set([pkg['name'] for pkg in data['pkgs']])
     log.debug("done talking with pkgdb1 for now.")
