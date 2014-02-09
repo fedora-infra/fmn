@@ -41,6 +41,7 @@ def package_filter(config, message, package=None, *args, **kw):
     if package:
         return package in fedmsg.meta.msg2packages(message, **config)
 
+
 def trac_hosted_filter(config, message, project=None, *args, **kw):
     """ Filter the messages for a specified fedorahosted project
 
@@ -48,6 +49,17 @@ def trac_hosted_filter(config, message, project=None, *args, **kw):
      `fedorahosted <https://fedorahosted.org>`_ project.
      """
     project = kw.get('project', project)
-    if project:
-        return '://fedorahosted.org/%s/' % project in fedmsg.meta.msg2link(
-                message, **config)
+    link = fedmsg.meta.msg2link(message, **config)
+    if not link:
+        return False
+
+    if ',' in project:
+        project = project.split(',')
+    else:
+        project = [project]
+
+    valid = False
+    for proj in project:
+        valid = '://fedorahosted.org/%s/' % proj in link
+
+    return valid
