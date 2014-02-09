@@ -40,3 +40,14 @@ def package_filter(config, message, package=None, *args, **kw):
     package = kw.get('package', package)
     if package:
         return package in fedmsg.meta.msg2packages(message, **config)
+
+def trac_hosted_filter(config, message, project=None, *args, **kw):
+    """ Filter the messages for a specified fedorahosted project
+
+     Adding this rule allows you to get notifications for a specific
+     `fedorahosted <https://fedorahosted.org>`_ project.
+     """
+    project = kw.get('project', project)
+    if project:
+        return '://fedorahosted.org/%s/' % project in fedmsg.meta.msg2link(
+                message, **config)
