@@ -45,21 +45,20 @@ def package_filter(config, message, package=None, *args, **kw):
 def trac_hosted_filter(config, message, project=None, *args, **kw):
     """ Filter the messages for a specified fedorahosted project
 
-     Adding this rule allows you to get notifications for a specific
-     `fedorahosted <https://fedorahosted.org>`_ project.
+     Adding this rule allows you to get notifications for one or more
+     `fedorahosted <https://fedorahosted.org>`_ project. Specify multiple
+     projects by separating them with a comma ','.
      """
     project = kw.get('project', project)
     link = fedmsg.meta.msg2link(message, **config)
     if not link:
         return False
 
-    if ',' in project:
-        project = project.split(',')
-    else:
-        project = [project]
+    project = project.split(',')
 
     valid = False
     for proj in project:
-        valid = '://fedorahosted.org/%s/' % proj in link
+        if '://fedorahosted.org/%s/' % proj in link:
+            valid = True
 
     return valid
