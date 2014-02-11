@@ -15,6 +15,26 @@ def user_filter(config, message, fasnick=None, *args, **kw):
     if fasnick:
         return fasnick in fedmsg.meta.msg2usernames(message, **config)
 
+def not_user_filter(config, message, fasnick=None, *args, **kw):
+    """ All messages not concerning one or more users.
+
+    Use this rule to exclude messages that are associated with one or more
+    users. Specify several users by separating them with a comma ','.
+    """
+
+    fasnick = kw.get('fasnick', fasnick)
+    if not fasnick:
+        return False
+
+    fasnick = fasnick.split(',')
+    valid = False
+    for nick in fasnick:
+        if nick.strip() in fedmsg.meta.msg2usernames(message, **config):
+            valid = True
+            break
+
+    return valid
+
 
 def user_package_filter(config, message, fasnick=None, *args, **kw):
     """ All messages concerning user's packages
