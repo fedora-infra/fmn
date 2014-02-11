@@ -58,7 +58,7 @@ def trac_hosted_filter(config, message, project=None, *args, **kw):
 
     valid = False
     for proj in project:
-        if '://fedorahosted.org/%s/' % proj in link:
+        if '://fedorahosted.org/%s/' % proj.strip() in link:
             valid = True
 
     return valid
