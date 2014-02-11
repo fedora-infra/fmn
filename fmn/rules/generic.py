@@ -15,8 +15,9 @@ def user_filter(config, message, fasnick=None, *args, **kw):
     if fasnick:
         return fasnick in fedmsg.meta.msg2usernames(message, **config)
 
+
 def not_user_filter(config, message, fasnick=None, *args, **kw):
-    """ All messages not concerning one or more users.
+    """ All messages not concerning one or more users
 
     Use this rule to exclude messages that are associated with one or more
     users. Specify several users by separating them with a comma ','.
