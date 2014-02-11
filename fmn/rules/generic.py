@@ -28,10 +28,10 @@ def not_user_filter(config, message, fasnick=None, *args, **kw):
         return False
 
     fasnick = fasnick.split(',')
-    valid = False
+    valid = True
     for nick in fasnick:
         if nick.strip() in fedmsg.meta.msg2usernames(message, **config):
-            valid = True
+            valid = False
             break
 
     return valid
