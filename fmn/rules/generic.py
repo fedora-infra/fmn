@@ -27,7 +27,7 @@ def not_user_filter(config, message, fasnick=None, *args, **kw):
     if not fasnick:
         return False
 
-    fasnick = fasnick.split(',')
+    fasnick = fasnick or [] and fasnick.split(',')
     valid = True
     for nick in fasnick:
         if nick.strip() in fedmsg.meta.msg2usernames(message, **config):
@@ -75,7 +75,7 @@ def trac_hosted_filter(config, message, project=None, *args, **kw):
     if not link:
         return False
 
-    project = project.split(',')
+    project = project or [] and project.split(',')
 
     valid = False
     for proj in project:
