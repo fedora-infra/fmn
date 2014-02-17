@@ -16,6 +16,27 @@ def user_filter(config, message, fasnick=None, *args, **kw):
         return fasnick in fedmsg.meta.msg2usernames(message, **config)
 
 
+def not_user_filter(config, message, fasnick=None, *args, **kw):
+    """ All messages not concerning one or more users
+
+    Use this rule to exclude messages that are associated with one or more
+    users. Specify several users by separating them with a comma ','.
+    """
+
+    fasnick = kw.get('fasnick', fasnick)
+    if not fasnick:
+        return False
+
+    fasnick = fasnick or [] and fasnick.split(',')
+    valid = True
+    for nick in fasnick:
+        if nick.strip() in fedmsg.meta.msg2usernames(message, **config):
+            valid = False
+            break
+
+    return valid
+
+
 def user_package_filter(config, message, fasnick=None, *args, **kw):
     """ All messages concerning user's packages
 
@@ -54,7 +75,7 @@ def trac_hosted_filter(config, message, project=None, *args, **kw):
     if not link:
         return False
 
-    project = project.split(',')
+    project = project or [] and project.split(',')
 
     valid = False
     for proj in project:
