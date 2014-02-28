@@ -36,12 +36,14 @@ def _shorten(link):
     return requests.get('http://da.gd/s', params=dict(url=link)).text.strip()
 
 
-def _format_message(msg, config):
-    template = u"{title} -- {subtitle} {link}"
+def _format_message(msg, recipient, config):
+    template = u"{title} -- {subtitle} {link}   (triggered by {flt})"
     title = fedmsg.meta.msg2title(msg, **config)
     subtitle = fedmsg.meta.msg2subtitle(msg, **config)
     link = _shorten(fedmsg.meta.msg2link(msg, **config))
-    return template.format(title=title, subtitle=subtitle, link=link)
+    flt = _shorten("{base_url}/{user}/irc/{filter_id}".format(
+        base_url=config['fmn.base_url'], **recipient))
+    return template.format(title=title, subtitle=subtitle, link=link, flt=flt)
 
 
 class IRCBackend(BaseBackend):
@@ -123,7 +125,7 @@ class IRCBackend(BaseBackend):
             self.log.warning("No irc nick found.  Bailing.")
             return
 
-        message = _format_message(msg, self.config)
+        message = _format_message(msg, recipient, self.config)
 
         nickname = recipient['irc nick']
 
