@@ -2,6 +2,8 @@ import fmn.lib.models
 from fmn.consumer.backends.base import BaseBackend
 import fedmsg.meta
 
+import requests
+
 import twisted.internet.protocol
 import twisted.words.protocols.irc
 
@@ -26,6 +28,20 @@ I am a notifications bot run by Fedora Infrastructure.  My commands are:
 You can update your preferences at {base_url}
 You can contact {support_email} if you have any concerns/issues/abuse.
 """
+
+
+def _shorten(link):
+    if not link:
+        return ''
+    return requests.get('http://da.gd/s', params=dict(url=link)).text.strip()
+
+
+def _format_message(msg, config):
+    template = u"{title} -- {subtitle} {link}"
+    title = fedmsg.meta.msg2title(msg, **config)
+    subtitle = fedmsg.meta.msg2subtitle(msg, **config)
+    link = _shorten(fedmsg.meta.msg2link(msg, **config))
+    return template.format(title=title, subtitle=subtitle, link=link)
 
 
 class IRCBackend(BaseBackend):
@@ -107,7 +123,7 @@ class IRCBackend(BaseBackend):
             self.log.warning("No irc nick found.  Bailing.")
             return
 
-        message = fedmsg.meta.msg2repr(msg, **self.config)
+        message = _format_message(msg, self.config)
 
         nickname = recipient['irc nick']
 
