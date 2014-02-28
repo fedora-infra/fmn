@@ -172,6 +172,9 @@ class User(BASE):
     api_key = sa.Column(sa.Text)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
+    def __repr__(self):
+        return "<fmn.lib.models.User %r %r>" % (self.openid, self.openid_url)
+
     @classmethod
     def by_openid(cls, session, openid):
         return session.query(cls).filter_by(openid=openid).first()
@@ -226,6 +229,10 @@ class Rule(BASE):
     code_path = sa.Column(sa.String(50), nullable=False)
     # JSON-encoded kw
     _arguments = sa.Column(sa.String(256))
+
+    def __repr__(self):
+        return "<fmn.lib.models.Rule %r(**%r)>" % (
+            self.code_path, self.arguments)
 
     @hybrid_property
     def arguments(self):
@@ -311,6 +318,9 @@ class Filter(BASE):
         sa.Integer,
         sa.ForeignKey('preferences.id'))
     preference = relation('Preference', backref=backref('filters'))
+
+    def __repr__(self):
+        return "<fmn.lib.models.Filter %r>" % (self.name)
 
     @classmethod
     def create(cls, session, name):
