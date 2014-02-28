@@ -32,6 +32,8 @@ import functools
 import hashlib
 import json
 import logging
+import pprint
+import traceback
 import uuid
 
 import sqlalchemy as sa
@@ -50,6 +52,20 @@ import fmn.lib.defaults
 BASE = declarative_base()
 
 log = logging.getLogger(__name__)
+
+execute_error_template = """
+exception
+---------
+%s
+
+rule
+----
+%r
+
+message
+-------
+%s
+"""
 
 
 def init(db_url, alembic_ini=None, debug=False, create=False):
@@ -301,9 +317,11 @@ class Rule(BASE):
         try:
             return fn(config, message)
         except Exception as e:
-            log.warning(
-                "rule %r(config=%r, message=%r, **kw=%r) raised %r" % (
-                    self.code_path, config, message, self.arguments, e))
+            log.error(execute_error_template % (
+                traceback.format_exc(),
+                self,
+                pprint.pformat(message),
+            ))
             return False
 
 
