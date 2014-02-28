@@ -361,8 +361,8 @@ class Filter(BASE):
         if not self.rules:
             return False
 
-        for filt in self.rules:
-            if not filt.execute(session, config, paths, message):
+        for rule in self.rules:
+            if not rule.execute(session, config, paths, message):
                 return False
 
         return True
