@@ -2,6 +2,8 @@ import fmn.lib.models
 from fmn.consumer.backends.base import BaseBackend
 import fedmsg.meta
 
+import requests
+
 import twisted.internet.protocol
 import twisted.words.protocols.irc
 
@@ -26,6 +28,22 @@ I am a notifications bot run by Fedora Infrastructure.  My commands are:
 You can update your preferences at {base_url}
 You can contact {support_email} if you have any concerns/issues/abuse.
 """
+
+
+def _shorten(link):
+    if not link:
+        return ''
+    return requests.get('http://da.gd/s', params=dict(url=link)).text.strip()
+
+
+def _format_message(msg, recipient, config):
+    template = u"{title} -- {subtitle} {link}   (triggered by {flt})"
+    title = fedmsg.meta.msg2title(msg, **config)
+    subtitle = fedmsg.meta.msg2subtitle(msg, **config)
+    link = _shorten(fedmsg.meta.msg2link(msg, **config))
+    flt = _shorten("{base_url}/{user}/irc/{filter_id}".format(
+        base_url=config['fmn.base_url'], **recipient))
+    return template.format(title=title, subtitle=subtitle, link=link, flt=flt)
 
 
 class IRCBackend(BaseBackend):
@@ -122,7 +140,7 @@ class IRCBackend(BaseBackend):
 
         # With all of that out of the way, now we can actually send them the
         # message that triggered all this.
-        message = fedmsg.meta.msg2repr(msg, **self.config)
+        message = _format_message(msg, recipient, self.config)
 
         nickname = recipient['irc nick']
 
