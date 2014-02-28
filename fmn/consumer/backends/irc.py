@@ -37,12 +37,17 @@ def _shorten(link):
 
 
 def _format_message(msg, recipient, config):
-    template = u"{title} -- {subtitle} {link}   (triggered by {flt})"
+    template = u"{title} -- {subtitle} {link}{flt}"
     title = fedmsg.meta.msg2title(msg, **config)
     subtitle = fedmsg.meta.msg2subtitle(msg, **config)
     link = _shorten(fedmsg.meta.msg2link(msg, **config))
-    flt = _shorten("{base_url}/{user}/irc/{filter_id}".format(
-        base_url=config['fmn.base_url'], **recipient))
+
+    flt = ''
+    if 'filter_id' in recipient:
+        flt_template = "{base_url}/{user}/irc/{filter_id}"
+        flt = "    (triggered by %s)" % _shorten(flt_template.format(
+            base_url=config['fmn.base_url'], **recipient))
+
     return template.format(title=title, subtitle=subtitle, link=link, flt=flt)
 
 
