@@ -258,7 +258,6 @@ class Rule(BASE):
 
         root, name = code_path.split(':', 1)
         if name not in valid_paths[root]:
-            print valid_paths
             raise ValueError("%r is not a valid code_path" % code_path)
 
     @classmethod
