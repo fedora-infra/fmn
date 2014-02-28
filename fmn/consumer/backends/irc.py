@@ -37,12 +37,17 @@ def _shorten(link):
 
 
 def _format_message(msg, recipient, config):
-    template = u"{title} -- {subtitle} {link}   (triggered by {flt})"
+    template = u"{title} -- {subtitle} {link}{flt}"
     title = fedmsg.meta.msg2title(msg, **config)
     subtitle = fedmsg.meta.msg2subtitle(msg, **config)
     link = _shorten(fedmsg.meta.msg2link(msg, **config))
-    flt = _shorten("{base_url}/{user}/irc/{filter_id}".format(
-        base_url=config['fmn.base_url'], **recipient))
+
+    flt = ''
+    if 'filter_id' in recipient:
+        flt_template = "{base_url}/{user}/irc/{filter_id}"
+        flt = "    (triggered by %s)" % _shorten(flt_template.format(
+            base_url=config['fmn.base_url'], **recipient))
+
     return template.format(title=title, subtitle=subtitle, link=link, flt=flt)
 
 
@@ -114,9 +119,14 @@ class IRCBackend(BaseBackend):
         self.log.info("CMD unk:   %r sent us %r" % (nick, message))
         self.send(nick, "say 'help' for help or 'stop' to stop messages")
 
-    def handle(self, recipient, msg):
+    def handle(self, recipient, msg, streamline=False):
+        user = recipient['user']
+
         if not self.clients:
-            self.log.warning("IRCBackend has no clients to work with.")
+            # This is usually the case if we are suffering a netsplit.
+            self.log.warning("IRCBackend has no clients to work with; enqueue")
+            fmn.lib.models.QueuedMessage.enqueue(
+                self.session, user, 'irc', msg)
             return
 
         self.log.debug("Notifying via irc %r" % recipient)
@@ -125,6 +135,16 @@ class IRCBackend(BaseBackend):
             self.log.warning("No irc nick found.  Bailing.")
             return
 
+        # Handle any backlog that may have accumulated while we were suffering
+        # a netsplit.
+        preference_obj = fmn.lib.models.Preference.load(
+            self.session, user, 'irc')
+        if not streamline:
+            fmn.consumer.producer.DigestProducer.manage_batch(
+                self.session, self, preference_obj)
+
+        # With all of that out of the way, now we can actually send them the
+        # message that triggered all this.
         message = _format_message(msg, recipient, self.config)
 
         nickname = recipient['irc nick']
@@ -141,7 +161,7 @@ class IRCBackend(BaseBackend):
 
     def handle_batch(self, recipient, queued_messages):
         for queued_message in queued_messages:
-            self.handle(recipient, queued_message.message)
+            self.handle(recipient, queued_message.message, streamline=True)
 
     def handle_confirmation(self, confirmation):
         if not self.clients:

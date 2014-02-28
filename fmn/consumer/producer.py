@@ -83,24 +83,32 @@ class DigestProducer(FMNProducerBase):
             if pref.batch_delta is not None:
                 if pref.batch_delta <= total_seconds(delta):
                     log.info("Sending digest for %r per time delta" % pref)
-                    self.manage_batch(backend, pref)
+                    self.manage_batch(self.session, backend, pref)
                     continue
 
             # 2.1) Send and dequeue those by count
             if pref.batch_count is not None:
                 if pref.batch_count <= count:
                     log.info("Sending digest for %r per msg count" % pref)
-                    self.manage_batch(backend, pref)
+                    self.manage_batch(self.session, backend, pref)
                     continue
 
-    def manage_batch(self, backend, pref):
+    @staticmethod
+    def manage_batch(session, backend, pref):
         name = pref.context.detail_name
-        recipients = [{name: value.value} for value in pref.detail_values]
+        recipients = [{
+            name: value.value,
+            'user': pref.user.openid,
+        } for value in pref.detail_values]
+
         queued_messages = fmn.lib.models.QueuedMessage.list_for(
-            self.session, pref.user, pref.context)
+            session, pref.user, pref.context)
+
+        if queued_messages:
+            log.info("* Found %r queued messages" % len(queued_messages))
 
         for recipient in recipients:
             backend.handle_batch(recipient, queued_messages)
 
         for message in queued_messages:
-            message.dequeue(self.session)
+            message.dequeue(session)
