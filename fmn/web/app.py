@@ -635,6 +635,21 @@ def handle_details():
     pref = fmn.lib.models.Preference.get_or_create(
         SESSION, openid=openid, context=ctx)
 
+    # Check to see if they pressed a delete button.
+    delete_value = flask.request.form.get('delete', None)
+
+    # Are they deleting a delivery detail?
+    if delete_value:
+        # Primarily, delete the value from this user
+        pref.delete_details(SESSION, delete_value)
+
+        # Also, if they have a confirmation hanging around, delete that too.
+        # XXX - Make sure that they cannot delete someone ELSE's confirmation.
+        con = fmn.lib.models.Confirmation.by_detail(SESSION, ctx, delete_value)
+        if con and con.user == user:
+            SESSION.delete(con)
+            SESSION.flush()
+
     # Are they changing a delivery detail?
     if detail_value:
         # Do some validation on the specifics of the value before we commit.
