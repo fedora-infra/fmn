@@ -645,10 +645,16 @@ def handle_details():
 
         # Also, if they have a confirmation hanging around, delete that too.
         # XXX - Make sure that they cannot delete someone ELSE's confirmation.
-        con = fmn.lib.models.Confirmation.by_detail(SESSION, ctx, delete_value)
-        if con and con.user == user:
-            SESSION.delete(con)
-            SESSION.flush()
+        confirmations = fmn.lib.models.Confirmation.by_detail(
+            SESSION, ctx, delete_value)
+        for confirmation in confirmations:
+            if confirmation.user == user:
+                user.confirmations.remove(confirmation)
+                SESSION.delete(confirmation)
+                SESSION.flush()
+
+        # Finalize all of that.
+        SESSION.commit()
 
     # Are they changing a delivery detail?
     if detail_value:
