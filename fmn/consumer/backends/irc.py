@@ -237,4 +237,6 @@ class IRCClientFactory(twisted.internet.protocol.ClientFactory):
         connector.connect()
 
     def clientConnectionFailed(self, connector, reason):
-        self.parent.log.error("Could not connect: %r" % reason)
+        self.parent.log.error("Could not connect: %r, retry in 60s" % reason)
+        self.parent.cleanup_clients(factory=self)
+        reactor.callLater(60, connector.connect)
