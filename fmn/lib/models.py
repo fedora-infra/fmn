@@ -540,7 +540,17 @@ class Preference(BASE):
             .filter_by(context_name=context)\
             .first()
 
+    def delete_details(self, session, detail_value):
+        log.debug("Deleting %r from %r" % (detail_value, self))
+        detail_value = detail_value.strip()
+        value = DetailValue.get(session, detail_value)
+        self.detail_values.remove(value)
+        session.delete(value)
+        session.flush()
+        session.commit()
+
     def update_details(self, session, detail_value):
+        log.debug("Adding %r to %r" % (detail_value, self))
         detail_value = detail_value.strip()
         value = DetailValue.create(session, detail_value)
         self.detail_values.append(value)
