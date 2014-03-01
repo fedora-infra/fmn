@@ -3,11 +3,11 @@
 {% block body %}
 <div class="page-header">
   <h1>{{current}} preferences 
-      {% if preference.enabled %}
-      <small>{{context.description}}</small>
-      {% else %}
-      <small>(disabled)</small>
-      {% endif %}
+    {% if preference.enabled %}
+    <small>{{context.description}}</small>
+    {% else %}
+    <small>(disabled)</small>
+    {% endif %}
   </h1>
 </div>
 <div class="row">
@@ -30,10 +30,10 @@
     {% if current == 'android' %}
     <p class="lead">Push-notifications to your mobile device.</p>
     <p>You'll need to install <a href="https://fedoraproject.org/mobile">Fedora
-    Mobile</a> on your phone for this wiz-biz to fly.  You'll also need to use
+      Mobile</a> on your phone for this wiz-biz to fly.  You'll also need to use
     the API key (available on your <a
       href="{{ url_for('profile', openid=openid)}}">profile page</a>) to link
-      everything together and transmit your <em>registration ids</em>.
+    everything together and transmit your <em>registration ids</em>.
     </p>
     {% endif %}
 
@@ -50,41 +50,41 @@
     </p>
 
     <div class="list-group">
-    {% for fltr in preference.filters %}
+      {% for fltr in preference.filters %}
       <a href="{{fltr.id}}" class="list-group-item">
         <h4 class="list-group-item-heading">{{fltr.name}}</h4>
         {% if fltr.rules %}
         <dl class="list-group-item-text dl-horizontal">
-            {% for rule in fltr.rules %}
-            <dt>{{rule.title(valid_paths)}}</dt>
-            <dd>{{rule.doc(valid_paths, no_links=True)}}
-                {% if rule.arguments %}
-                <dl class="dl-horizontal">
-                    {% for key, value in rule.arguments.iteritems() %}
-                    <dt>{{key}}</dt><dd>{{value}}</dd>
-                    {% endfor %}
-                </dl>
-                {% endif %}
-            </dd>
+          {% for rule in fltr.rules %}
+          <dt>{{rule.title(valid_paths)}}</dt>
+          <dd>{{rule.doc(valid_paths, no_links=True)}}
+          {% if rule.arguments %}
+          <dl class="dl-horizontal">
+            {% for key, value in rule.arguments.iteritems() %}
+            <dt>{{key}}</dt><dd>{{value}}</dd>
             {% endfor %}
+          </dl>
+          {% endif %}
+          </dd>
+          {% endfor %}
         </dl>
         {% else %}
         <p class="list-group-item-text">This filter has zero rules</p>
         {% endif %}
-          <form role="form" action="{{url_for('handle_filter')}}" method="post">
-            <input name="openid" id="openid" value="{{openid}}" type="hidden">
-            <input name="context" id="context" value="{{current}}" type="hidden">
-            <input name="filter_name" id="filter_name" value="{{fltr.name}}" type="hidden">
-            <input name="method" id="method" value="delete" type="hidden">
-            <span class="pull-right">
-                <button type="submit" class="btn btn-danger">
-                    <span class="glyphicon glyphicon-remove"></span>
-                    Delete this filter</button>
-            </span>
-          </form>
-          <div class="clearfix"></div>
+        <form role="form" action="{{url_for('handle_filter')}}" method="post">
+          <input name="openid" id="openid" value="{{openid}}" type="hidden">
+          <input name="context" id="context" value="{{current}}" type="hidden">
+          <input name="filter_name" id="filter_name" value="{{fltr.name}}" type="hidden">
+          <input name="method" id="method" value="delete" type="hidden">
+          <span class="pull-right">
+            <button type="submit" class="btn btn-danger">
+              <span class="glyphicon glyphicon-remove"></span>
+              Delete this filter</button>
+          </span>
+        </form>
+        <div class="clearfix"></div>
       </a>
-    {% endfor %}
+      {% endfor %}
     </div>
   </div>
 
@@ -92,7 +92,7 @@
     <div class="panel panel-default">
       <div class="panel-body">
         <form class="form-inline" role="form" action="{{url_for('handle_filter')}}"
-              method="post">
+          method="post">
           <div class="form-group">
             <label class="sr-only" for="filter_name">Filter Name</label>
             <input type="text" class="form-control" name="filter_name" id="filter_name" required=required placeholder="New Filter Name">
@@ -100,8 +100,8 @@
           <input name="openid" id="openid" value="{{openid}}" type="hidden">
           <input name="context" id="context" value="{{current}}" type="hidden">
           <button type="submit" class="btn btn-success">
-              <span class="glyphicon glyphicon-plus"></span>
-              Create a new filter</button>
+            <span class="glyphicon glyphicon-plus"></span>
+            Create a new filter</button>
         </form>
       </div>
     </div>
@@ -109,29 +109,29 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-            Active?
+          Active?
         </h3>
       </div> <!-- end panel-heading -->
 
       <div class="panel-body">
         <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
-              method="post">
+          method="post">
           <p class="pull-left">
-            This message delivery mechanism is currently <strong>
-              {% if preference.enabled %}active{% else %}inactive{% endif %}.
-            </strong></p>
+          This message delivery mechanism is currently <strong>
+            {% if preference.enabled %}active{% else %}inactive{% endif %}.
+          </strong></p>
           <input name="openid" id="openid" value="{{openid}}" type="hidden">
           <input name="context" id="context" value="{{current}}" type="hidden">
           <p class="pull-right">
-            {% if preference.enabled %}
-            <button type="submit" class="btn btn-danger" name="toggle_enable" value="toggle">
-                <span class="glyphicon glyphicon-off"></span> Disable
-            </button>
-            {% else %}
-            <button type="submit" class="btn btn-success" name="toggle_enable" value="toggle">
-                <span class="glyphicon glyphicon-ok-circle"></span> Enable
-            </button>
-            {% endif %}
+          {% if preference.enabled %}
+          <button type="submit" class="btn btn-danger" name="toggle_enable" value="toggle">
+            <span class="glyphicon glyphicon-off"></span> Disable
+          </button>
+          {% else %}
+          <button type="submit" class="btn btn-success" name="toggle_enable" value="toggle">
+            <span class="glyphicon glyphicon-ok-circle"></span> Enable
+          </button>
+          {% endif %}
           </p>
         </form>
       </div>
@@ -140,120 +140,140 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-            Where should we send your messages?
+          Where should we send your messages?
         </h3>
       </div> <!-- end panel-heading -->
 
       <div class="panel-body">
         {% if confirmation %}
         <div class="alert alert-{{ {'pending': 'info', 'valid': 'info', 'accepted': 'success', 'rejected': 'danger', 'invalid': 'warning'}[confirmation.status] }}">
-            <p><strong>{{confirmation.status}}</strong> Your confirmation for
-              {% if context.name == "android" %}
-              {{confirmation.detail_value[0:30]}}...
-              {% else %}
-              {{confirmation.detail_value}}
-              {% endif %}
-              is {{confirmation.status}}</p>
+          <p><strong>{{confirmation.status}}</strong> Your confirmation for
+          {% if context.name == "android" %}
+          {{confirmation.detail_value[0:30]}}...
+          {% else %}
+          {{confirmation.detail_value}}
+          {% endif %}
+          is {{confirmation.status}}</p>
         </div>
         {% endif %}
         {% if context.name == "android" %}
         <p>
-          Follow the instructions in the Fedora Mobile Android app to register
-          for Fedora Notifications on your Android device.
+        Follow the instructions in the Fedora Mobile Android app to register
+        for Fedora Notifications on your Android device.
         </p>
         {% else %}
-        <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
-              method="post">
+        <form class="form-horizontal" role="form"
+          action="{{url_for('handle_details')}}" method="post">
           <fieldset {{'disabled' if preference.enabled is sameas false}}>
-          <div class="form-group">
-            {% if preference.detail_values %}
-            <label class="col-sm-4 control-label" for="detail_value">confirmed {{context.detail_name}}</label>
-            <div class="col-sm-8">
-              {% for value in preference.detail_values %}
-              <input type="text" class="form-control" name="detail_value"
-                   id="detail_value" required=required
-                   value='{{ value.value }}' disabled>
-               {% endfor %}
-            </div>
-            {% endif %}
-            <label class="col-sm-4 control-label" for="detail_value">add a new {{context.detail_name}}</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control" name="detail_value"
-                   id="detail_value" required=required
-                   placeholder="{{context.placeholder}}">
-            </div>
-          </div>
-          <input name="openid" id="openid" value="{{openid}}" type="hidden">
-          <input name="context" id="context" value="{{current}}" type="hidden">
-          <p class="pull-right">
-            <button type="submit" class="btn btn-success" name="save"
-                {{'disabled' if preference.enabled is sameas false}}>
-                <span class="glyphicon glyphicon-{{context.icon}}"></span> Save
-            </button>
-          </p>
-          </fieldset>
-        </form>
-        {% endif %}
-      </div> <!-- end panel-body -->
-    </div> <!-- end panel -->
+            <div class="form-group">
+              <input name="openid" id="openid" value="{{openid}}" type="hidden">
+              <input name="context" id="context" value="{{current}}" type="hidden">
+              <table class="table">
+                {% if preference.detail_values %}
+                <tr>
+                  <td>
+                    <label class="control-label" for="detail_value">
+                      confirmed {{context.detail_name}}</label>
+                  </td>
+                  {% for value in preference.detail_values %}
+                  <td>
+                    <input type="text" class="form-control input-sm"
+                    name="detail_value" id="detail_value" required=required
+                    value='{{ value.value }}' disabled>
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-sm btn-danger"
+                      name="delete" value="{{value.value}}"
+                      {{'disabled' if preference.enabled is sameas false}}>
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+                <tr>
+                  <td>
+                    <label class="control-label" for="detail_value">
+                      new {{context.detail_name}}</label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control input-sm"
+                    name="detail_value" id="detail_value"
+                    placeholder="{{context.placeholder}}">
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-sm btn-success"
+                      name="save"
+                      {{'disabled' if preference.enabled is sameas false}}>
+                      <span class="glyphicon glyphicon-plus">
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </fieldset>
+          </form>
+          {% endif %}
+        </div> <!-- end panel-body -->
+      </div> <!-- end panel -->
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
             How often should we send you messages?
-        </h3>
-      </div> <!-- end panel-heading -->
+          </h3>
+        </div> <!-- end panel-heading -->
 
-      <div class="panel-body">
-        <p class="help-block text-left"> If you leave these <code>&lt;disabled&gt;</code>
-        then we'll just forward you your notifications in real time.  </p>
-        <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
-              method="post">
-          <fieldset {{'disabled' if preference.enabled is sameas false}}>
-          <div class="form-group">
-            <label class="col-sm-1 control-label" for="batch_delta">Wait</label>
-            <div class="col-sm-4">
-                <select name="batch_delta" class="form-control">
-                  <option {{'selected' if preference.batch_delta is none}}>&lt;disabled&gt;</option>
-                  <option {{'selected' if preference.batch_delta is equalto 20}} value="20">20 seconds</option>
-                  <option {{'selected' if preference.batch_delta is equalto 120}} value="120">2 minutes</option>
-                  <option {{'selected' if preference.batch_delta is equalto 300}} value="300">5 minutes</option>
-                  <option {{'selected' if preference.batch_delta is equalto 600}} value="600">10 minutes</option>
-                  <option {{'selected' if preference.batch_delta is equalto 1200}} value="1200">20 minutes</option>
-                  <option {{'selected' if preference.batch_delta is equalto 3600}} value="3600">1 hour</option>
-                  <option {{'selected' if preference.batch_delta is equalto 18000}} value="18000">5 hours</option>
-                  <option {{'selected' if preference.batch_delta is equalto 86400}} value="86400">1 day</option>
-                </select>
-            </div>
-            <label class="col-sm-2 control-label" for="batch_count">or for</label>
-            <div class="col-sm-4">
-                <select name="batch_count" class="form-control">
-                  <option {{'selected' if preference.batch_count is none}}>&lt;disabled&gt;</option>
-                  <option {{'selected' if preference.batch_count is equalto 5}} value="5">5 messages</option>
-                  <option {{'selected' if preference.batch_count is equalto 10}} value="10">10 messages</option>
-                  <option {{'selected' if preference.batch_count is equalto 50}} value="50">50 messages</option>
-                  <option {{'selected' if preference.batch_count is equalto 100}} value="100">100 messages</option>
-                  <option {{'selected' if preference.batch_count is equalto 250}} value="250">250 messages</option>
-                </select>
-            </div>
-            <div class="col-sm-11">
-                <p class="help-block text-right">..whichever comes first.</p>
-            </div>
-          </div>
+        <div class="panel-body">
+          <p class="help-block text-left"> If you leave these <code>&lt;disabled&gt;</code>
+          then we'll just forward you your notifications in real time.  </p>
+          <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+            method="post">
+            <fieldset {{'disabled' if preference.enabled is sameas false}}>
+              <div class="form-group">
+                <label class="col-sm-1 control-label" for="batch_delta">Wait</label>
+                <div class="col-sm-4">
+                  <select name="batch_delta" class="form-control">
+                    <option {{'selected' if preference.batch_delta is none}}>&lt;disabled&gt;</option>
+                    <option {{'selected' if preference.batch_delta is equalto 20}} value="20">20 seconds</option>
+                    <option {{'selected' if preference.batch_delta is equalto 120}} value="120">2 minutes</option>
+                    <option {{'selected' if preference.batch_delta is equalto 300}} value="300">5 minutes</option>
+                    <option {{'selected' if preference.batch_delta is equalto 600}} value="600">10 minutes</option>
+                    <option {{'selected' if preference.batch_delta is equalto 1200}} value="1200">20 minutes</option>
+                    <option {{'selected' if preference.batch_delta is equalto 3600}} value="3600">1 hour</option>
+                    <option {{'selected' if preference.batch_delta is equalto 18000}} value="18000">5 hours</option>
+                    <option {{'selected' if preference.batch_delta is equalto 86400}} value="86400">1 day</option>
+                  </select>
+                </div>
+                <label class="col-sm-2 control-label" for="batch_count">or for</label>
+                <div class="col-sm-4">
+                  <select name="batch_count" class="form-control">
+                    <option {{'selected' if preference.batch_count is none}}>&lt;disabled&gt;</option>
+                    <option {{'selected' if preference.batch_count is equalto 5}} value="5">5 messages</option>
+                    <option {{'selected' if preference.batch_count is equalto 10}} value="10">10 messages</option>
+                    <option {{'selected' if preference.batch_count is equalto 50}} value="50">50 messages</option>
+                    <option {{'selected' if preference.batch_count is equalto 100}} value="100">100 messages</option>
+                    <option {{'selected' if preference.batch_count is equalto 250}} value="250">250 messages</option>
+                  </select>
+                </div>
+                <div class="col-sm-11">
+                  <p class="help-block text-right">..whichever comes first.</p>
+                </div>
+              </div>
 
-          </fieldset>
-          <input name="openid" id="openid" value="{{openid}}" type="hidden">
-          <input name="context" id="context" value="{{current}}" type="hidden">
-          <p class="pull-right">
+            </fieldset>
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <p class="pull-right">
             <button type="submit" class="btn btn-success" name="save"
-                {{'disabled' if preference.enabled is sameas false}}>
-                <span class="glyphicon glyphicon-{{context.icon}}"></span> Save
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-{{context.icon}}"></span> Save
             </button>
-          </p>
-        </form>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-{% endblock %}
+  {% endblock %}
