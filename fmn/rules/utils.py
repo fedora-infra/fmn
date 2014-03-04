@@ -38,7 +38,7 @@ def get_packages_of_user(config, username):
 def _get_pkgdb2_packages_for(config, username):
     log.debug("Requesting pkgdb2 packages for user %r" % username)
     req = requests.get('{0}/packager/acl/{1}'.format(
-        fmn.config['fmn.rules.utils.pkgdb2_api_url'], username))
+        config['fmn.rules.utils.pkgdb2_api_url'], username))
     if not req.status_code == 200:
         return set()
     data = json.loads(req.text)
