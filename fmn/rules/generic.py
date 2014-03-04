@@ -16,6 +16,27 @@ def user_filter(config, message, fasnick=None, *args, **kw):
         return fasnick in fedmsg.meta.msg2usernames(message, **config)
 
 
+def not_user_filter(config, message, fasnick=None, *args, **kw):
+    """ All messages not concerning one or more users
+
+    Use this rule to exclude messages that are associated with one or more
+    users. Specify several users by separating them with a comma ','.
+    """
+
+    fasnick = kw.get('fasnick', fasnick)
+    if not fasnick:
+        return False
+
+    fasnick = fasnick or [] and fasnick.split(',')
+    valid = True
+    for nick in fasnick:
+        if nick.strip() in fedmsg.meta.msg2usernames(message, **config):
+            valid = False
+            break
+
+    return valid
+
+
 def user_package_filter(config, message, fasnick=None, *args, **kw):
     """ All messages concerning user's packages
 
@@ -40,3 +61,25 @@ def package_filter(config, message, package=None, *args, **kw):
     package = kw.get('package', package)
     if package:
         return package in fedmsg.meta.msg2packages(message, **config)
+
+
+def trac_hosted_filter(config, message, project=None, *args, **kw):
+    """ Filter the messages for one or more fedorahosted projects
+
+     Adding this rule allows you to get notifications for one or more
+     `fedorahosted <https://fedorahosted.org>`_ project. Specify multiple
+     projects by separating them with a comma ','.
+     """
+    project = kw.get('project', project)
+    link = fedmsg.meta.msg2link(message, **config)
+    if not link:
+        return False
+
+    project = project or [] and project.split(',')
+
+    valid = False
+    for proj in project:
+        if '://fedorahosted.org/%s/' % proj.strip() in link:
+            valid = True
+
+    return valid
