@@ -125,14 +125,15 @@ class APIError(Exception):
 
 
 def login_required(function):
-    """ Flask decorator to retrict access to logged-in users. """
+    """ Flask decorator to restrict access to logged-in users. """
     @functools.wraps(function)
     def decorated_function(*args, **kwargs):
         """ Decorated function, actually does the work. """
         if not flask.g.auth.logged_in:
             flask.flash('Login required', 'errors')
-            return flask.redirect(
-                flask.url_for('login', next=flask.request.url))
+            return flask.redirect(flask.url_for(
+                fedmsg_config.get('fmn.web.default_login', 'login'),
+                next=flask.request.url))
 
         # Ensure that the logged in user exists before we proceed.
         user = fmn.lib.models.User.get_or_create(
