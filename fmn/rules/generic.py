@@ -1,4 +1,6 @@
 # Generic rules for FMN
+import re
+
 import fedmsg
 
 import fmn.rules.utils
@@ -61,6 +63,21 @@ def package_filter(config, message, package=None, *args, **kw):
     package = kw.get('package', package)
     if package:
         return package in fedmsg.meta.msg2packages(message, **config)
+
+
+def package_regex_filter(config, message, pattern=None, *args, **kw):
+    """ All messages pertaining to packages matching a given regex
+
+    Use this rule to include messages that relate to packages that match
+    particular regular expressions
+    (*i.e., (maven|javapackages-tools|maven-surefire)*).
+    """
+
+    pattern = kw.get('pattern', pattern)
+    if pattern:
+        packages = fedmsg.meta.msg2packages(message, **config)
+        regex = re.compile(pattern)
+        return any([regex.match(package) for package in packages])
 
 
 def trac_hosted_filter(config, message, project=None, *args, **kw):
