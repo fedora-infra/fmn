@@ -6,6 +6,21 @@
       <small>for the {{current}} messaging context</small></h1>
 </div>
 
+<div class="row">
+  <div class="col-md-1 col-md-offset-10">
+    <form class="form-horizontal" role="form"
+      action="{{url_for('handle_filter')}}" method="post">
+      <input name="openid" id="openid" value="{{openid}}" type="hidden">
+      <input name="context" id="context" value="{{current}}" type="hidden">
+      <input name="filter_name" id="filter_name" value="{{filter.name}}" type="hidden">
+      <input name="method" id="method" value="delete" type="hidden">
+      <button type="submit" class="btn btn-danger"
+        name="delete" value="{{filter.id}}">
+        <span class="glyphicon glyphicon-remove">Delete this filter</span>
+      </button>
+    </form>
+  </div>
+</div>
 
 <div class="row">
   <div class="col-md-7">
