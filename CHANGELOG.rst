@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.2.4
+-----
+
+- Fix graft statements. `5fe32a029 <https://github.com/fedora-infra/fmn.web/commit/5fe32a029e3c82d10f3330737759a0a0f65c6438>`_
+
 0.2.3
 -----
 
