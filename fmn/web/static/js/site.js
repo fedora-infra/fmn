@@ -39,7 +39,7 @@ var examples_success = function(data, status, jqXHR) {
             content = content + "<img src='" + meta.icon + "'/>";
         }
 
-        if (meta.link != "") {
+        if (meta.link != "" && meta.link != null) {
             content = content +
                 " <a href='" + meta.link + "'>" + meta.time + "</a> ";
         } else {
