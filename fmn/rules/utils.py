@@ -37,16 +37,35 @@ def get_packages_of_user(config, username):
 
 def _get_pkgdb2_packages_for(config, username):
     log.debug("Requesting pkgdb2 packages for user %r" % username)
-    req = requests.get('{0}/packager/acl/{1}'.format(
-        fmn.config['fmn.rules.utils.pkgdb2_api_url'], username))
-    if not req.status_code == 200:
-        return []
-    data = json.loads(req.text)
+
+    def _get_page(page):
+        req = requests.get('{0}/packager/acl/{1}'.format(
+            config['fmn.rules.utils.pkgdb_url'], username),
+            params=dict(page=page),
+        )
+
+        if not req.status_code == 200:
+            return set()
+
+        return req.json()
+
+    # We have to request the first page of data to figure out the total number
+    data = _get_page(1)
+    pages = data['page_total']
+
     packages = set()
-    for pkgacl in data['acls']:
-        if pkgacl['status'] != 'Approved':
-            continue
-        packages.add(pkgacl['packagelist']['package']['name'])
+    for i in range(1, pages + 1):
+
+        # Avoid requesting the data twice the first time around
+        if i != 1:
+            data = _get_pages(i)
+
+        for pkgacl in data['acls']:
+            if pkgacl['status'] != 'Approved':
+                continue
+
+            packages.add(pkgacl['packagelist']['package']['name'])
+
     log.debug("done talking with pkgdb2 for now.")
     return packages
 
@@ -54,12 +73,17 @@ def _get_pkgdb2_packages_for(config, username):
 # TODO -- delete this once pkgdb2 goes live.
 def _get_pkgdb1_packages_for(config, username):
     log.debug("Requesting pkgdb1 packages for user %r" % username)
-    pkgdb1_base_url = 'https://admin.fedoraproject.org/pkgdb'
-    req = requests.get('{0}/users/packages/{1}?tg_format=json'.format(
-        pkgdb1_base_url, username))
+
+    pkgdb1_base_url = config['fmn.rules.utils.pkgdb_url']
+    query_string = "tg_format=json&pkgs_tgp_limit=10000"
+
+    req = requests.get('{0}/users/packages/{1}?{2}'.format(
+        pkgdb1_base_url, username, query_string))
+
     if not req.status_code == 200:
-        return []
-    data = json.loads(req.text)
+        return set()
+
+    data = req.json()
     packages = set([pkg['name'] for pkg in data['pkgs']])
     log.debug("done talking with pkgdb1 for now.")
     return packages
