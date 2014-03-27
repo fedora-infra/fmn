@@ -1,6 +1,17 @@
 Changelog
 =========
 
+0.2.3
+-----
+
+- Add enable/disable switches to the profile page.  Fixes #9. `9005111a7 <https://github.com/fedora-infra/fmn.web/commit/9005111a7e85b405ff40aeb6f43deb966b900824>`_
+- Just formatting. `e43656f2a <https://github.com/fedora-infra/fmn.web/commit/e43656f2a6ff122278c1fa1503bcc78d6adb16b7>`_
+- Allow deleting detail_values. `55b42e578 <https://github.com/fedora-infra/fmn.web/commit/55b42e5782f5e69af9b03c2049f3e8095efe8544>`_
+- Correct this. `1f63c5cee <https://github.com/fedora-infra/fmn.web/commit/1f63c5ceeae466a18577aba9edea93406ce75023>`_
+- Merge pull request #15 from fedora-infra/feature/delete-details `8a83cae6d <https://github.com/fedora-infra/fmn.web/commit/8a83cae6dece473b8b9ee7cb69cc7910087e2819>`_
+- Add a button to delete a filter from its own view.  Fixes #11. `a79bea25b <https://github.com/fedora-infra/fmn.web/commit/a79bea25b7bdf7c91c95c3753056161a73b60976>`_
+- Merge pull request #16 from fedora-infra/feature/delete-filter `bc01c670f <https://github.com/fedora-infra/fmn.web/commit/bc01c670f33a0ef7fedccf560980114cad3721ed>`_
+
 0.2.2
 -----
 
