@@ -32,6 +32,8 @@ import functools
 import hashlib
 import json
 import logging
+import pprint
+import traceback
 import uuid
 
 import sqlalchemy as sa
@@ -50,6 +52,20 @@ import fmn.lib.defaults
 BASE = declarative_base()
 
 log = logging.getLogger(__name__)
+
+execute_error_template = """
+exception
+---------
+%s
+
+rule
+----
+%r
+
+message
+-------
+%s
+"""
 
 
 def init(db_url, alembic_ini=None, debug=False, create=False):
@@ -155,7 +171,8 @@ class Context(BASE):
                 yield {
                     'user': user.openid,
                     pref.context.detail_name: value.value,
-                    'filter': flter.name,
+                    'filter_name': flter.name,
+                    'filter_id': flter.id,
                 }
 
     def recipients(self, session, config, valid_paths, message):
@@ -170,6 +187,9 @@ class User(BASE):
     # doesn't have to be unique, because we'll require the openid url, too.
     api_key = sa.Column(sa.Text)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
+
+    def __repr__(self):
+        return "<fmn.lib.models.User %r %r>" % (self.openid, self.openid_url)
 
     @classmethod
     def by_openid(cls, session, openid):
@@ -226,6 +246,10 @@ class Rule(BASE):
     # JSON-encoded kw
     _arguments = sa.Column(sa.String(256))
 
+    def __repr__(self):
+        return "<fmn.lib.models.Rule %r(**%r)>" % (
+            self.code_path, self.arguments)
+
     @hybrid_property
     def arguments(self):
         return json.loads(self._arguments)
@@ -250,7 +274,6 @@ class Rule(BASE):
 
         root, name = code_path.split(':', 1)
         if name not in valid_paths[root]:
-            print valid_paths
             raise ValueError("%r is not a valid code_path" % code_path)
 
     @classmethod
@@ -294,9 +317,11 @@ class Rule(BASE):
         try:
             return fn(config, message)
         except Exception as e:
-            log.warning(
-                "rule %r(config=%r, message=%r, **kw=%r) raised %r" % (
-                    self.code_path, config, message, self.arguments, e))
+            log.error(execute_error_template % (
+                traceback.format_exc(),
+                self,
+                pprint.pformat(message),
+            ))
             return False
 
 
@@ -310,6 +335,9 @@ class Filter(BASE):
         sa.Integer,
         sa.ForeignKey('preferences.id'))
     preference = relation('Preference', backref=backref('filters'))
+
+    def __repr__(self):
+        return "<fmn.lib.models.Filter %r>" % (self.name)
 
     @classmethod
     def create(cls, session, name):
@@ -351,8 +379,8 @@ class Filter(BASE):
         if not self.rules:
             return False
 
-        for filt in self.rules:
-            if not filt.execute(session, config, paths, message):
+        for rule in self.rules:
+            if not rule.execute(session, config, paths, message):
                 return False
 
         return True
@@ -512,7 +540,17 @@ class Preference(BASE):
             .filter_by(context_name=context)\
             .first()
 
+    def delete_details(self, session, detail_value):
+        log.debug("Deleting %r from %r" % (detail_value, self))
+        detail_value = detail_value.strip()
+        value = DetailValue.get(session, detail_value)
+        self.detail_values.remove(value)
+        session.delete(value)
+        session.flush()
+        session.commit()
+
     def update_details(self, session, detail_value):
+        log.debug("Adding %r to %r" % (detail_value, self))
         detail_value = detail_value.strip()
         value = DetailValue.create(session, detail_value)
         self.detail_values.append(value)
