@@ -125,7 +125,7 @@ class APIError(Exception):
 
 
 def login_required(function):
-    """ Flask decorator to retrict access to logged-in users. """
+    """ Flask decorator to restrict access to logged-in users. """
     @functools.wraps(function)
     def decorated_function(*args, **kwargs):
         """ Decorated function, actually does the work. """
