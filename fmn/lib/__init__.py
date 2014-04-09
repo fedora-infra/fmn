@@ -89,6 +89,7 @@ def load_rules(root='fmn.rules'):
 
         rules[name] = {
             'func': obj,
+            'submodule': obj.__module__.split('.')[-1],
             'title': title.strip(),
             'doc': doc.strip(),
             'doc-no-links': doc_no_links.strip(),
