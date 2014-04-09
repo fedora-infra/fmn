@@ -69,16 +69,21 @@
     <p> You can add a new rule to this filter by selecting one from this
     pre-defined list.  Click on any rule to check it out.</p>
 
-    <div class="panel-group" id="accordion">
+    {% for kind in rule_types %}
+    <div class="panel-group" id="accordion-{{kind}}">
+      <h4>{{kind.capitalize()}} Rules</h4>
       {% for root in valid_paths %}
       {% for path in valid_paths[root] %}
+
+      {%- if valid_paths[root][path]['submodule'] != kind %} {% continue %} {% endif %}
+
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{path}}">
-                {{ valid_paths[root][path]['title'] }}
+          <h5 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion-{{kind}}" href="#collapse{{path}}">
+              {{ valid_paths[root][path]['title'] }}
             </a>
-          </h4>
+          </h5>
         </div>
         <div id="collapse{{path}}" class="panel-collapse collapse">
           <div class="panel-body">
@@ -104,6 +109,7 @@
       {% endfor %}
       {% endfor %}
     </div>
+    {% endfor %}
   </div>
 </div>
 

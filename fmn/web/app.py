@@ -43,6 +43,9 @@ oid = OpenID(app, store_factory=lambda: None)
 # Inject a simple jinja2 test -- it is surprising jinja2 does not have this.
 app.jinja_env.tests['equalto'] = lambda x, y: x == y
 
+# Also, allow 'continue' and 'break' statements in jinja loops
+app.jinja_env.add_extension('jinja2.ext.loopcontrols')
+
 fedmsg_config = fedmsg.config.load_config()
 db_url = fedmsg_config.get('fmn.sqlalchemy.uri')
 if not db_url:
@@ -51,6 +54,22 @@ if not db_url:
 fedmsg.meta.make_processors(**fedmsg_config)
 
 valid_paths = fmn.lib.load_rules(root="fmn.rules")
+
+# Pick out the submodules so we can group rules nicely in the UI
+# Order them alphabetically, except for 'generic' which comes first.
+rule_types = list(set([
+    d[path]['submodule'] for _, d in valid_paths.items() for path in d
+]))
+
+
+def _rule_type_comparator(x, y):
+    if x == 'generic':
+        return -1
+    elif y == 'generic':
+        return 1
+    return cmp(x, y)
+
+rule_types.sort(_rule_type_comparator)
 
 # Initialize our own db connection
 SESSION = fmn.lib.models.init(db_url, debug=False, create=False)
@@ -209,6 +228,7 @@ def inject_variable():
     return dict(openid=openid,
                 contexts=contexts,
                 valid_paths=valid_paths,
+                rule_types=rule_types,
                 web_version=web_version,
                 lib_version=lib_version,
                 rules_version=rules_version)
