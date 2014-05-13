@@ -270,11 +270,21 @@ class IRCClientFactory(twisted.internet.protocol.ClientFactory):
         self.parent = parent
 
     def clientConnectionLost(self, connector, reason):
-        self.parent.log.warning("Lost connection %r, reconnecting." % reason)
         self.parent.cleanup_clients(factory=self)
+
+        if self.parent.die:
+            self.parent.log.warning("Lost IRC connection.  Shutting down.")
+            return
+
+        self.parent.log.warning("Lost connection %r, reconnecting." % reason)
         connector.connect()
 
     def clientConnectionFailed(self, connector, reason):
-        self.parent.log.error("Could not connect: %r, retry in 60s" % reason)
         self.parent.cleanup_clients(factory=self)
+
+        if self.parent.die:
+            self.parent.log.warning("Couldn't connect to IRC.  Shutting down.")
+            return
+
+        self.parent.log.error("Could not connect: %r, retry in 60s" % reason)
         reactor.callLater(60, connector.connect)

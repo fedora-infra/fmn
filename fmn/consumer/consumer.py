@@ -65,3 +65,9 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                     log.debug("    Queueing msg for digest")
                     fmn.lib.models.QueuedMessage.enqueue(
                         self.session, user, context, msg)
+
+    def stop(self):
+        log.info("Cleaning up FMNConsumer.")
+        for context, backend in self.backends.iteritems():
+            backend.stop()
+        super(FMNConsumer, self).stop()

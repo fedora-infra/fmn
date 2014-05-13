@@ -3,6 +3,8 @@ import fmn.lib.models
 
 
 class BaseBackend(object):
+    die = False
+
     def __init__(self, config, session, **kwargs):
         self.config = config
         self.session = session
@@ -37,3 +39,6 @@ class BaseBackend(object):
 
     def disable(self, detail_value):
         self.preference_for(detail_value).set_enabled(self.session, False)
+
+    def stop(self):
+        self.die = True
