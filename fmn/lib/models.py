@@ -384,6 +384,11 @@ class Filter(BASE):
             if r.code_path == code_path:
                 session.delete(r)
                 session.commit()
+
+                pref = self.preference
+                if pref:
+                    self.notify(pref.openid, pref.context_name, "rules")
+
                 return
 
         raise ValueError("No such rule found: %r" % code_path)
