@@ -45,11 +45,27 @@ from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import backref
 
+import fedmsg
 import fedmsg.utils
 
 import fmn.lib.defaults
 
-BASE = declarative_base()
+
+class FMNBase(object):
+    def notify(self, openid, context, changed):
+        obj = type(self).__name__.lower()
+        topic = obj + ".update"
+        fedmsg.publish(
+            topic=topic,
+            msg=dict(
+                openid=openid,
+                context=context,
+                changed=changed,
+            )
+        )
+
+
+BASE = declarative_base(cls=FMNBase)
 
 log = logging.getLogger(__name__)
 
@@ -356,6 +372,11 @@ class Filter(BASE):
         self.rules.append(rule)
         session.flush()
         session.commit()
+
+        pref = self.preference
+        if pref:
+            self.notify(pref.openid, pref.context_name, "rules")
+
         return rule
 
     def remove_rule(self, session, code_path, **kw):
@@ -469,6 +490,7 @@ class Preference(BASE):
         self.batch_count = count
         session.add(self)
         session.commit()
+        self.notify(self.openid, self.context_name, "batch_values")
 
     @classmethod
     def by_user(cls, session, openid):
@@ -561,11 +583,13 @@ class Preference(BASE):
         self.enabled = enabled
         session.flush()
         session.commit()
+        self.notify(self.openid, self.context_name, "enabled")
 
     def add_filter(self, session, filter):
         self.filters.append(filter)
         session.flush()
         session.commit()
+        self.notify(self.openid, self.context_name, "filters")
 
     def has_filter_name(self, session, filter_name):
         for filter in self.filters:
@@ -725,6 +749,7 @@ class Confirmation(BASE):
         self.detail_value = value
         session.flush()
         session.commit()
+        self.notify(self.openid, self.context_name, "value")
 
     def set_status(self, session, status):
         assert status in self.STATUSES
@@ -738,6 +763,7 @@ class Confirmation(BASE):
 
         session.flush()
         session.commit()
+        self.notify(self.openid, self.context_name, "status")
 
 
 class QueuedMessage(BASE):
