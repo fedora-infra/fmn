@@ -587,10 +587,10 @@ class Preference(BASE):
         session.commit()
         self.notify(self.openid, self.context_name, "enabled")
 
-    def delete_filter(self, session, filter):
-        filter = pref.get_filter_name(SESSION, filter_name)
-        SESSION.delete(filter)
-        SESSION.commit()
+    def delete_filter(self, session, filter_name):
+        filter = self.get_filter_name(session, filter_name)
+        session.delete(filter)
+        session.commit()
         self.notify(self.openid, self.context_name, "filters")
 
     def add_filter(self, session, filter):
