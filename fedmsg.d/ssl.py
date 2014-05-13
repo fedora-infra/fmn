@@ -25,7 +25,7 @@ here = os.getcwd()
 
 config = dict(
     sign_messages=False,
-    validate_signatures=True,
+    validate_signatures=False,
     ssldir="/etc/pki/fedmsg",
 
     crl_location="https://fedoraproject.org/fedmsg/crl.pem",

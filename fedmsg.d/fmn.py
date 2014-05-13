@@ -43,6 +43,7 @@ config = {
     "endpoints": {
         "fmn.%s" % hostname: [
             "tcp://127.0.0.1:3041",
+            "tcp://127.0.0.1:3042",
         ],
     },
     "logging": dict(
