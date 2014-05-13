@@ -570,6 +570,7 @@ class Preference(BASE):
         session.delete(value)
         session.flush()
         session.commit()
+        self.notify(self.openid, self.context_name, "details")
 
     def update_details(self, session, detail_value):
         log.debug("Adding %r to %r" % (detail_value, self))
@@ -578,12 +579,19 @@ class Preference(BASE):
         self.detail_values.append(value)
         session.flush()
         session.commit()
+        self.notify(self.openid, self.context_name, "details")
 
     def set_enabled(self, session, enabled):
         self.enabled = enabled
         session.flush()
         session.commit()
         self.notify(self.openid, self.context_name, "enabled")
+
+    def delete_filter(self, session, filter):
+        filter = pref.get_filter_name(SESSION, filter_name)
+        SESSION.delete(filter)
+        SESSION.commit()
+        self.notify(self.openid, self.context_name, "filters")
 
     def add_filter(self, session, filter):
         self.filters.append(filter)
