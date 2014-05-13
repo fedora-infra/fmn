@@ -309,14 +309,11 @@ def link_fedora_mobile(openid, api_key, registration_id):
     # We need to *VERIFY* that they really have this delivery detail
     # before we start doing stuff.  Otherwise, ralph could put in pingou's
     # email address and spam the crap out of him.
-    if fedmsg_config.get('fmn.verify_delivery_details', True):
-        con = fmn.lib.models.Confirmation.get_or_create(
-            SESSION, openid=openid, context=ctx)
-        con.set_value(SESSION, registration_id)
-        con.set_status(SESSION, 'pending')
-    else:
-        # Otherwise, just change the details right away.  Never do this.
-        pref.update_details(SESSION, registration_id)
+    con = fmn.lib.models.Confirmation.get_or_create(
+        SESSION, openid=openid, context=ctx)
+    con.set_value(SESSION, registration_id)
+    con.set_status(SESSION, 'pending')
+
     return {"status": "ok"}
 
 @app.route('/confirm/<action>/<not_reserved:openid>/<secret>/<api_key>/')
@@ -692,14 +689,10 @@ def handle_details():
         # We need to *VERIFY* that they really have this delivery detail
         # before we start doing stuff.  Otherwise, ralph could put in pingou's
         # email address and spam the crap out of him.
-        if fedmsg_config.get('fmn.verify_delivery_details', True):
-            con = fmn.lib.models.Confirmation.get_or_create(
-                SESSION, openid=openid, context=ctx)
-            con.set_value(SESSION, detail_value)
-            con.set_status(SESSION, 'pending')
-        else:
-            # Otherwise, just change the details right away.  Never do this.
-            pref.update_details(SESSION, detail_value)
+        con = fmn.lib.models.Confirmation.get_or_create(
+            SESSION, openid=openid, context=ctx)
+        con.set_value(SESSION, detail_value)
+        con.set_status(SESSION, 'pending')
 
     # Let them change batch_delta and batch_count as they please.
     if batch_delta or batch_count:
