@@ -592,9 +592,7 @@ def handle_filter():
                 filter_id=filter.id,
             )
         elif method == 'DELETE':
-            filter = pref.get_filter_name(SESSION, filter_name)
-            SESSION.delete(filter)
-            SESSION.commit()
+            pref.delete_filter(SESSION, filter_name)
             next_url = flask.url_for(
                 'context',
                 openid=openid,

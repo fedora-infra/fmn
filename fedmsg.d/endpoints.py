@@ -28,7 +28,7 @@ config = dict(
         # These are here so your local box can listen to the upstream
         # infrastructure's bus.  Cool, right?  :)
         "fedora-infrastructure": [
-            "tcp://hub.fedoraproject.org:9940",
+            #"tcp://hub.fedoraproject.org:9940",
             #"tcp://stg.fedoraproject.org:9940",
         ],
 
