@@ -28,7 +28,6 @@ __requires__ = ['SQLAlchemy >= 0.7']
 import pkg_resources
 
 import datetime
-import functools
 import hashlib
 import json
 import logging
@@ -46,7 +45,6 @@ from sqlalchemy.orm import relation
 from sqlalchemy.orm import backref
 
 import fedmsg
-import fedmsg.utils
 
 import fmn.lib.defaults
 
@@ -68,20 +66,6 @@ class FMNBase(object):
 BASE = declarative_base(cls=FMNBase)
 
 log = logging.getLogger(__name__)
-
-execute_error_template = """
-exception
----------
-%s
-
-rule
-----
-%r
-
-message
--------
-%s
-"""
 
 
 def init(db_url, alembic_ini=None, debug=False, create=False):
@@ -131,6 +115,16 @@ class Context(BASE):
     icon = sa.Column(sa.String(32), nullable=False)
     placeholder = sa.Column(sa.String(256))
 
+    def __json__(self):
+        return {
+            'name': self.name,
+            'detail_name': self.detail_name,
+            'description': self.description,
+            'created_on': self.created_on,
+            'icon': self.icon,
+            'placeholder': self.placeholder,
+        }
+
     def get_confirmation(self, openid):
         for confirmation in self.confirmations:
             if confirmation.openid == openid:
@@ -171,29 +165,6 @@ class Context(BASE):
         session.commit()
         return context
 
-    def _recipients(self, session, config, valid_paths, message):
-        """ Returns the list of recipients for a message. """
-
-        for user in User.all(session):
-            pref = Preference.load(session, user, self)
-            if not pref or not pref.detail_values:
-                continue
-
-            flter = pref.prefers(session, config, valid_paths, message)
-            if not flter:
-                continue
-
-            for value in pref.detail_values:
-                yield {
-                    'user': user.openid,
-                    pref.context.detail_name: value.value,
-                    'filter_name': flter.name,
-                    'filter_id': flter.id,
-                }
-
-    def recipients(self, session, config, valid_paths, message):
-        return list(self._recipients(session, config, valid_paths, message))
-
 
 class User(BASE):
     __tablename__ = 'users'
@@ -203,6 +174,13 @@ class User(BASE):
     # doesn't have to be unique, because we'll require the openid url, too.
     api_key = sa.Column(sa.Text)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
+
+    def __json__(self):
+        return {
+            'openid': self.openid,
+            'openid_url': self.openid_url,
+            'created_on': self.created_on,
+        }
 
     def __repr__(self):
         return "<fmn.lib.models.User %r %r>" % (self.openid, self.openid_url)
@@ -262,6 +240,13 @@ class Rule(BASE):
     # JSON-encoded kw
     _arguments = sa.Column(sa.String(256))
 
+    def __json__(self):
+        return {
+            'created_on': self.created_on,
+            'code_path': self.code_path,
+            'arguments': self.arguments,
+        }
+
     def __repr__(self):
         return "<fmn.lib.models.Rule %r(**%r)>" % (
             self.code_path, self.arguments)
@@ -274,13 +259,6 @@ class Rule(BASE):
     def arguments(self, kw):
         if not kw is None:
             self._arguments = json.dumps(kw)
-
-    def _instantiate_callable(self):
-        # This is a bit of a misnomer, load_class can load anything.
-        fn = fedmsg.utils.load_class(str(self.code_path))
-        # Now, partially apply our keyword arguments.
-        fn = functools.partial(fn, **self.arguments)
-        return fn
 
     @staticmethod
     def validate_code_path(valid_paths, code_path, **kw):
@@ -317,29 +295,6 @@ class Rule(BASE):
         else:
             return valid_paths[root][name]['doc']
 
-    def execute(self, session, config, valid_paths, message):
-        """ Load our callable and execute it.
-
-        Note, we validate the code_path again here for the second time.  Once
-        before it is inserted into the db, and once again before we execute it.
-        This is mitigation in case other code is vulnerable to injecting
-        arbitrary data into the db.
-        """
-
-        Rule.validate_code_path(
-            valid_paths, self.code_path, **self.arguments)
-
-        fn = self._instantiate_callable()
-        try:
-            return fn(config, message)
-        except Exception as e:
-            log.error(execute_error_template % (
-                traceback.format_exc(),
-                self,
-                pprint.pformat(message),
-            ))
-            return False
-
 
 class Filter(BASE):
     __tablename__ = 'filters'
@@ -351,6 +306,14 @@ class Filter(BASE):
         sa.Integer,
         sa.ForeignKey('preferences.id'))
     preference = relation('Preference', backref=backref('filters'))
+
+    def __json__(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'created_on': self.created_on,
+            'rules': [r.__json__() for r in self.rules]
+        }
 
     def __repr__(self):
         return "<fmn.lib.models.Filter %r>" % (self.name)
@@ -387,24 +350,6 @@ class Filter(BASE):
                 return
 
         raise ValueError("No such rule found: %r" % code_path)
-
-    def matches(self, session, config, paths, message):
-        """ Return true if this filter matches the given message.
-
-        This is the case if *all* of the associated rules match.
-
-        ...with one exception.  If no rules are defined, the filter does not
-        match (even though technically, all of its zero rules match).
-        """
-
-        if not self.rules:
-            return False
-
-        for rule in self.rules:
-            if not rule.execute(session, config, paths, message):
-                return False
-
-        return True
 
 
 class DetailValue(BASE):
@@ -471,6 +416,18 @@ class Preference(BASE):
     __table_args__ = (
         sa.UniqueConstraint('openid', 'context_name'),
     )
+
+    def __json__(self):
+        return {
+            'created_on': self.created_on,
+            'batch_delta': self.batch_delta,
+            'batch_count': self.batch_count,
+            'enabled': self.enabled,
+            'context': self.context.__json__(),
+            'user': self.user.__json__(),
+            'filters': [f.__json__() for f in self.filters],
+            'detail_values': [v.value for v in self.detail_values],
+        }
 
     @property
     def should_batch(self):
@@ -626,22 +583,6 @@ class Preference(BASE):
                 return filter
 
         raise ValueError("No such filter %r" % filter_id)
-
-    def prefers(self, session, config, valid_paths, message):
-        """ Evaluate to true if this preference "prefers" this message.
-
-        That is the case if *any* of the associated filters match.
-
-        The first filter that matches the message is returned for bookkeeping.
-
-        If no filter matches, None is returned.
-        """
-
-        for filter in self.filters:
-            if filter.matches(session, config, valid_paths, message):
-                return filter
-
-        return None
 
 
 def hash_producer(*args, **kwargs):

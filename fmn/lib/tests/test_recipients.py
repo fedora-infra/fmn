@@ -6,6 +6,9 @@ import fmn.lib.tests
 
 
 class TestRecipients(fmn.lib.tests.Base):
+    def setUp(self):
+        super(TestRecipients, self).setUp()
+
     def create_user_and_context_data(self):
         user1 = fmn.lib.models.User.get_or_create(
             self.sess, openid="ralph.id.fedoraproject.org",
@@ -46,25 +49,28 @@ class TestRecipients(fmn.lib.tests.Base):
 
     def test_empty_recipients_list(self):
         self.create_user_and_context_data()
-        incoming_message = {
+
+        msg = {
             "wat": "blah",
         }
+        preferences = fmn.lib.load_preferences(
+            self.sess, self.config, self.valid_paths)
         recipients = fmn.lib.recipients(
-            self.sess, self.config, incoming_message)
-        expected_keys = set(['irc', 'android'])
-        eq_(set(recipients.keys()), expected_keys)
-        eq_(list(recipients['irc']), [])
-        eq_(list(recipients['android']), [])
+            preferences, msg, self.valid_paths, self.config)
+        eq_(recipients, {})
 
     def test_empty_recipients_list(self):
         self.create_user_and_context_data()
         self.create_preference_data_empty()
+
         msg = {
             "wat": "blah",
         }
-        recipients = fmn.lib.recipients_for_context(
-            self.sess, self.config, self.valid_paths, 'android', msg)
-        eq_(list(recipients), [])
+        preferences = fmn.lib.load_preferences(
+            self.sess, self.config, self.valid_paths)
+        recipients = fmn.lib.recipients(
+            preferences, msg, self.valid_paths, self.config)
+        eq_(recipients, {})
 
     def test_basic_recipients_list(self):
         self.create_user_and_context_data()
@@ -76,14 +82,16 @@ class TestRecipients(fmn.lib.tests.Base):
         msg = {
             "wat": "blah",
         }
-        recipients = fmn.lib.recipients_for_context(
-            self.sess, self.config, self.valid_paths, 'irc', msg)
-        eq_(list(recipients), [{
+        preferences = fmn.lib.load_preferences(
+            self.sess, self.config, self.valid_paths)
+        recipients = fmn.lib.recipients(
+            preferences, msg, self.valid_paths, self.config)
+        eq_(recipients, {'irc': [{
             'irc nick': 'threebean',
             'user': 'ralph.id.fedoraproject.org',
             'filter_name': 'test filter',
             'filter_id': 1,
-        }])
+        }]})
 
     def test_miss_recipients_list(self):
         self.create_user_and_context_data()
@@ -95,9 +103,11 @@ class TestRecipients(fmn.lib.tests.Base):
         msg = {
             "wat": "blah",
         }
-        recipients = fmn.lib.recipients_for_context(
-            self.sess, self.config, self.valid_paths, 'irc', msg)
-        eq_(list(recipients), [])
+        preferences = fmn.lib.load_preferences(
+            self.sess, self.config, self.valid_paths)
+        recipients = fmn.lib.recipients(
+            preferences, msg, self.valid_paths, self.config)
+        eq_(recipients, {})
 
     def test_multiple_identical_filters_miss(self):
         self.create_user_and_context_data()
@@ -116,9 +126,11 @@ class TestRecipients(fmn.lib.tests.Base):
         msg = {
             "wat": "blah",
         }
-        recipients = fmn.lib.recipients_for_context(
-            self.sess, self.config, self.valid_paths, 'irc', msg)
-        eq_(list(recipients), [])
+        preferences = fmn.lib.load_preferences(
+            self.sess, self.config, self.valid_paths)
+        recipients = fmn.lib.recipients(
+            preferences, msg, self.valid_paths, self.config)
+        eq_(recipients, {})
 
     def test_multiple_identical_filters_hit(self):
         self.create_user_and_context_data()
@@ -137,14 +149,17 @@ class TestRecipients(fmn.lib.tests.Base):
         msg = {
             "wat": "blah",
         }
-        recipients = fmn.lib.recipients_for_context(
-            self.sess, self.config, self.valid_paths, 'irc', msg)
-        eq_(list(recipients), [{
+        preferences = fmn.lib.load_preferences(
+            self.sess, self.config, self.valid_paths)
+        recipients = fmn.lib.recipients(
+            preferences, msg, self.valid_paths, self.config)
+        expected = {'irc': [{
             'irc nick': 'threebean',
             'user': 'ralph.id.fedoraproject.org',
             'filter_name': 'test filter',
             'filter_id': 1,
-            }])
+        }]}
+        eq_(dict(recipients), expected)
 
     def test_multiple_different_filters_hit(self):
         self.create_user_and_context_data()
@@ -163,11 +178,13 @@ class TestRecipients(fmn.lib.tests.Base):
         msg = {
             "wat": "blah",
         }
-        recipients = fmn.lib.recipients_for_context(
-            self.sess, self.config, self.valid_paths, 'irc', msg)
-        eq_(list(recipients), [{
+        preferences = fmn.lib.load_preferences(
+            self.sess, self.config, self.valid_paths)
+        recipients = fmn.lib.recipients(
+            preferences, msg, self.valid_paths, self.config)
+        eq_(recipients, {'irc': [{
             'irc nick': 'threebean',
             'user': 'ralph.id.fedoraproject.org',
             'filter_name': 'test filter',
             'filter_id': 1,
-            }])
+            }]})
