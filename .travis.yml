@@ -6,7 +6,7 @@ python:
 
 install:
  - python setup.py install
- - pip install nose mock sqlalchemy unittest2
+ - pip install nose mock sqlalchemy unittest2 fmn.rules
 script: nosetests -v
 notifications:
     email: false
