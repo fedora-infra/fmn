@@ -2,6 +2,7 @@
 
 import fmn.lib.models
 
+import functools
 import inspect
 import logging
 import re
@@ -9,6 +10,10 @@ import re
 import bs4
 import docutils.examples
 import markupsafe
+
+import fedmsg.utils
+
+from collections import defaultdict
 
 try:
     from collections import OrderedDict
@@ -22,7 +27,7 @@ email_regex = r'^([a-zA-Z0-9_\-\.]+)@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$'
 gcm_regex = r'^[\w-]+$'
 
 
-def recipients(session, config, valid_paths, message):
+def recipients(preferences, message, valid_paths, config):
     """ The main API function.
 
     Accepts a fedmsg message as an argument.
@@ -30,27 +35,68 @@ def recipients(session, config, valid_paths, message):
     Returns a dict mapping context names to lists of recipients.
     """
 
-    res = {}
+    results = defaultdict(list)
+    notified = set()
 
-    for context in session.query(fmn.lib.models.Context).all():
-        res[context.name] = recipients_for_context(
-            session, config, valid_paths, context, message)
+    for preference in preferences:
+        user = preference['user']
+        context = preference['context']
+        if (user['openid'], context['name']) in notified:
+            continue
 
-    return res
+        filters = preference['filters']
+        for filter in preference['filters']:
+            if matches(filter, message, valid_paths, config):
+                for detail_value in preference['detail_values']:
+                    results[context['name']].append({
+                        'user': user['openid'],
+                        context['detail_name']: detail_value,
+                        'filter_name': filter['name'],
+                        'filter_id': filter['id'],
+                    })
+                notified.add((user['openid'], context['name']))
+                break
+
+    return results
 
 
-def recipients_for_context(session, config, valid_paths, context, message):
-    """ Returns the recipients for a given fedmsg message and stated context.
+def matches(filter, message, valid_paths, config):
+    """ Returns True if the given filter matches the given message. """
 
-    Context may be either the name of a context or an instance of
-    fmn.lib.models.Context.
+    if not filter['rules']:
+        return False
+
+    for rule in filter['rules']:
+        code_path = rule['code_path']
+        arguments = rule['arguments']
+
+        # First, validate the rule before doing anything
+        fmn.lib.models.Rule.validate_code_path(valid_paths, code_path)
+
+        # Next, instantiate it into a python callable.
+        # (This is a bit of a misnomer though, load_class can load anything.)
+        fn = fedmsg.utils.load_class(str(code_path))
+        # And, partially apply our keyword arguments.
+        fn = functools.partial(fn, **arguments)
+
+        try:
+            result = fn(config, message)
+            if result:
+                return True
+        except Exception as e:
+            log.exception(e)
+
+    # Then no rule on this filter matched..
+    return False
+
+
+def load_preferences(session, config, valid_paths):
+    """ Every rule for every filter for every context for every user.
+
+    This is an expensive query that loads, practically, the whole database.
     """
-
-    if isinstance(context, basestring):
-        context = session.query(fmn.lib.models.Context)\
-            .filter_by(name=context).one()
-
-    return context.recipients(session, config, valid_paths, message)
+    preferences = session.query(fmn.lib.models.Preference).all()
+    return [preference.__json__() for preference in preferences]
 
 
 def load_rules(root='fmn.rules'):
@@ -63,7 +109,6 @@ def load_rules(root='fmn.rules'):
         obj = getattr(module, name)
         if not callable(obj):
             continue
-        log.debug("Found rule %r %r" % (name, obj))
 
         doc = inspect.getdoc(obj)
 
