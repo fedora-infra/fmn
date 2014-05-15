@@ -58,7 +58,7 @@ def _get_pkgdb2_packages_for(config, username):
 
         # Avoid requesting the data twice the first time around
         if i != 1:
-            data = _get_pages(i)
+            data = _get_page(i)
 
         for pkgacl in data['acls']:
             if pkgacl['status'] != 'Approved':
