@@ -62,6 +62,9 @@ def _get_pkgdb2_packages_for(config, username):
         if i != 1:
             data = _get_page(i)
 
+        if data is None:
+            continue
+
         for pkgacl in data['acls']:
             if pkgacl['status'] != 'Approved':
                 continue
