@@ -39,21 +39,26 @@ def _get_pkgdb2_packages_for(config, username):
     log.debug("Requesting pkgdb2 packages for user %r" % username)
 
     def _get_page(page):
-        req = requests.get('{0}/packager/acl/{1}'.format(
-            config['fmn.rules.utils.pkgdb_url'], username),
-            params=dict(page=page),
-        )
+        url = '{0}/packager/acl/{1}'.format(
+                    config['fmn.rules.utils.pkgdb_url'], username)
+        log.info("hitting url: %r" % url)
+        req = requests.get(url, params=dict(page=page))
 
         if not req.status_code == 200:
+            log.debug('URL %s returned code %s', req.url, req.status_code)
             return set()
 
         return req.json()
 
     # We have to request the first page of data to figure out the total number
+    packages = set()
     data = _get_page(1)
+
+    if data == set():
+        return packages
+
     pages = data['page_total']
 
-    packages = set()
     for i in range(1, pages + 1):
 
         # Avoid requesting the data twice the first time around
