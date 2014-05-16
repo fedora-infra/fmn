@@ -49,7 +49,7 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
     fasnick = kw.get('fasnick', fasnick)
     if fasnick:
         msg_packages = fedmsg.meta.msg2packages(message, **config)
-        for package in msg_packages:
+        for pkg in msg_packages:
             packagers = fmn.rules.utils.get_packagers_of_package(config, pkg)
             if fasnick in packagers:
                 return True
