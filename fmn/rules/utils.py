@@ -11,6 +11,50 @@ log = logging.getLogger(__name__)
 _cache = make_region()
 
 
+def get_packagers_of_package(config, package):
+    """ Retrieve the list of users who have commit on a package.
+
+    :arg config: a dict containing the fedmsg config
+    :arg package: the package you are interested in.
+    :return: a set listing all the fas usernames that have some ACL on package.
+    """
+
+    if not hasattr(_cache, 'backend'):
+        _cache.configure(**config['fmn.rules.cache'])
+
+    @_cache.cache_on_arguments()
+    def _getter(package):
+        return _get_pkgdb2_packagers_for(config, package)
+
+    return _getter(package)
+
+
+def _get_pkgdb2_packagers_for(config, package):
+    log.debug("Requesting pkgdb2 packagers of package %r" % package)
+
+    default = 'https://admin.fedoraproject.org/pkgdb/api'
+    base = config.get('fmn.rules.utils.pkgdb_url', default)
+    url = '{0}/package/{1}'.format(base, package)
+    log.info("hitting url: %r" % url)
+    req = requests.get(url)
+
+    if not req.status_code == 200:
+        log.debug('URL %s returned code %s', req.url, req.status_code)
+        return set()
+
+    data = req.json()
+
+    if not data['packages'] or not 'acls' in data['packages'][0]:
+        return set()
+
+    obj = data['packages'][0]
+
+    packagers = set([
+        acl['fas_name'] for acl in obj['acls']
+        if acl['status'] == 'Approved'])
+    return packagers
+
+
 def get_packages_of_user(config, username):
     """ Retrieve the list of packages where the specified user some acl.
 
