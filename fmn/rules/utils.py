@@ -43,6 +43,10 @@ def _get_pkgdb2_packagers_for(config, package):
         return set()
 
     data = req.json()
+
+    if not data['packages'] or not 'acls' in data['packages'][0]:
+        return set()
+
     obj = data['packages'][0]
 
     packagers = set([
