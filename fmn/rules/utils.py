@@ -45,6 +45,7 @@ def _get_pkgdb2_packages_for(config, username):
         )
 
         if not req.status_code == 200:
+            log.debug('URL %s returned code %s', req.url, req.status_code)
             return set()
 
         return req.json()
