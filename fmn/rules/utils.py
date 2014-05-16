@@ -27,10 +27,7 @@ def get_packages_of_user(config, username):
 
     @_cache.cache_on_arguments()
     def _getter(username):
-        if config.get('fmn.rules.utils.use_pkgdb2', True):
-            return _get_pkgdb2_packages_for(config, username)
-        else:
-            return _get_pkgdb1_packages_for(config, username)
+        return _get_pkgdb2_packages_for(config, username)
 
     return _getter(username)
 
@@ -72,23 +69,4 @@ def _get_pkgdb2_packages_for(config, username):
             packages.add(pkgacl['packagelist']['package']['name'])
 
     log.debug("done talking with pkgdb2 for now.")
-    return packages
-
-
-# TODO -- delete this once pkgdb2 goes live.
-def _get_pkgdb1_packages_for(config, username):
-    log.debug("Requesting pkgdb1 packages for user %r" % username)
-
-    pkgdb1_base_url = config['fmn.rules.utils.pkgdb_url']
-    query_string = "tg_format=json&pkgs_tgp_limit=10000"
-
-    req = requests.get('{0}/users/packages/{1}?{2}'.format(
-        pkgdb1_base_url, username, query_string))
-
-    if not req.status_code == 200:
-        return set()
-
-    data = req.json()
-    packages = set([pkg['name'] for pkg in data['pkgs']])
-    log.debug("done talking with pkgdb1 for now.")
     return packages
