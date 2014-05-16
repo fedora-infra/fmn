@@ -48,9 +48,12 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
 
     fasnick = kw.get('fasnick', fasnick)
     if fasnick:
-        user_packages = fmn.rules.utils.get_packages_of_user(config, fasnick)
         msg_packages = fedmsg.meta.msg2packages(message, **config)
-        return user_packages.intersection(msg_packages)
+        for package in msg_packages:
+            packagers = fmn.rules.utils.get_packagers_for_package(config, pkg)
+            if fasnick in packagers:
+                return True
+    return False
 
 
 def package_filter(config, message, package=None, *args, **kw):
