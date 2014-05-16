@@ -43,7 +43,7 @@ def _get_pkgdb2_packages_for(config, username):
 
         if not req.status_code == 200:
             log.debug('URL %s returned code %s', req.url, req.status_code)
-            return set()
+            return None
 
         return req.json()
 
@@ -51,7 +51,7 @@ def _get_pkgdb2_packages_for(config, username):
     packages = set()
     data = _get_page(1)
 
-    if data == set():
+    if data is None:
         return packages
 
     pages = data['page_total']
