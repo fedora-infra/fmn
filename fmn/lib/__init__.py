@@ -81,13 +81,13 @@ def matches(filter, message, valid_paths, config):
 
         try:
             result = fn(config, message)
-            if result:
-                return True
+            if not result:
+                return False
         except Exception as e:
             log.exception(e)
 
-    # Then no rule on this filter matched..
-    return False
+    # Then all rules matched on this filter..
+    return True
 
 
 def load_preferences(session, config, valid_paths):
