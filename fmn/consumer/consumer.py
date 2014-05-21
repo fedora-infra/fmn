@@ -49,6 +49,8 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                                      self.valid_paths, msg)
 
         for context, recipients in results.items():
+            if not recipients:
+                continue
             log.debug("  Considering %r with %i recips" % (
                 context, len(list(recipients))))
             backend = self.backends[context]
