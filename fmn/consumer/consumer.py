@@ -38,15 +38,25 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         log.debug("Loading rules from fmn.rules")
         self.valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
+        self.refresh_cache()
+
         log.debug("FMNConsumer initialized")
+
+    def refresh_cache(self, topic=None, msg=None):
+        log.debug("Loading and caching preferences")
+        self.cached_preferences = fmn.lib.load_preferences(
+            self.session, self.hub.config, self.valid_paths)
 
     def consume(self, raw_msg):
         topic, msg = raw_msg['topic'], raw_msg['body']
 
-        log.debug("Received topic %r" % topic)
+        log.debug("FMNConsumer received topic %r" % topic)
 
-        results = fmn.lib.recipients(self.session, self.hub.config,
-                                     self.valid_paths, msg)
+        if '.fmn.' in topic:
+            self.refresh_cache(topic, msg)
+
+        results = fmn.lib.recipients(self.cached_preferences, msg,
+                                     self.valid_paths, self.hub.config)
 
         for context, recipients in results.items():
             if not recipients:
