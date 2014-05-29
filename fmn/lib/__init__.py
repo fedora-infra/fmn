@@ -2,7 +2,6 @@
 
 import fmn.lib.models
 
-import functools
 import inspect
 import logging
 import re
@@ -76,11 +75,9 @@ def matches(filter, message, valid_paths, config):
         # Next, instantiate it into a python callable.
         # (This is a bit of a misnomer though, load_class can load anything.)
         fn = fedmsg.utils.load_class(str(code_path))
-        # And, partially apply our keyword arguments.
-        fn = functools.partial(fn, **arguments)
 
         try:
-            result = fn(config, message)
+            result = fn(config, message, **arguments)
             if not result:
                 return False
         except Exception as e:
