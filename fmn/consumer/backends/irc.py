@@ -2,7 +2,9 @@ import fmn.lib.models
 from fmn.consumer.backends.base import BaseBackend
 import fedmsg.meta
 
+import arrow
 import requests
+import time
 
 import twisted.internet.protocol
 import twisted.words.protocols.irc
@@ -37,10 +39,16 @@ def _shorten(link):
 
 
 def _format_message(msg, recipient, config):
-    template = u"{title} -- {subtitle} {link}{flt}"
+    template = u"{title} -- {subtitle} {delta}{link}{flt}"
     title = fedmsg.meta.msg2title(msg, **config)
     subtitle = fedmsg.meta.msg2subtitle(msg, **config)
     link = _shorten(fedmsg.meta.msg2link(msg, **config))
+
+    # Tack a human-readable delta on the end so users know that fmn is
+    # backlogged (if it is).
+    delta = ''
+    if abs(time.time() - msg['timestamp']) > 10:
+        delta = arrow.get(msg['timestamp']).humanize() + ' '
 
     flt = ''
     if 'filter_id' in recipient:
@@ -48,7 +56,8 @@ def _format_message(msg, recipient, config):
         flt = "    (triggered by %s)" % _shorten(flt_template.format(
             base_url=config['fmn.base_url'], **recipient))
 
-    return template.format(title=title, subtitle=subtitle, link=link, flt=flt)
+    return template.format(title=title, subtitle=subtitle, delta=delta,
+                           link=link, flt=flt)
 
 
 class IRCBackend(BaseBackend):
