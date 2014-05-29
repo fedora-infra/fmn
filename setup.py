@@ -23,6 +23,7 @@ requires = [
     'fmn.lib',
     'fedmsg',
     'requests',
+    'arrow',
 ]
 
 tests_require = [
