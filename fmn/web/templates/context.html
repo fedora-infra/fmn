@@ -113,7 +113,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          Active?
+          Should we send you messages?
         </h3>
       </div> <!-- end panel-heading -->
 
@@ -280,7 +280,79 @@
             </p>
           </form>
         </div>
-      </div>
+      </div> <!-- end panel -->
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Should we do extra stuff to your messages?
+          </h3>
+        </div> <!-- end panel-heading -->
+
+        <div class="panel-body">
+
+          <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+            method="post">
+            <p class="pull-left">We can annotate your messages with a
+            "triggered by" link that will let you know which filter was
+            responsible for triggering each message.  This can be useful if you
+            are actively tuning your profile, or even if you just  want to
+            track down why you're getting certain messages.  On the other hand,
+            some people find it annoying to have extra links tacked onto their
+            messages.  It's up to you...</p>
+            <p class="pull-left">
+            I'm configured right now to <strong>
+              {% if preference.triggered_by_links %}append{% else %}not append{% endif %}
+            </strong> those links.</p>
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <p class="pull-right">
+            {% if preference.triggered_by_links %}
+            <button type="submit" class="btn btn-danger" name="toggle_triggered_by" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-off"></span> Disable
+            </button>
+            {% else %}
+            <button type="submit" class="btn btn-success" name="toggle_triggered_by" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-ok-circle"></span> Enable
+            </button>
+            {% endif %}
+            </p>
+          </form>
+
+          <div class="clearfix"></div><hr></hr>
+
+          <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+            method="post">
+            <p class="pull-left">We can pass all links through a url shortener to make your
+            delivered messages cute and manageable.  Some people don't like the
+            indirection that link shortening introduces, so we give you the
+            option here to turn it off.</p>
+            <p class="pull-left">
+            I'm configured right now to <strong>
+              {% if preference.shorten_links %}shorten{% else %}not shorten{% endif %}
+            </strong> your links.</p>
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <p class="pull-right">
+            {% if preference.shorten_links %}
+            <button type="submit" class="btn btn-danger" name="toggle_shorten" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-off"></span> Disable
+            </button>
+            {% else %}
+            <button type="submit" class="btn btn-success" name="toggle_shorten" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-ok-circle"></span> Enable
+            </button>
+            {% endif %}
+            </p>
+          </form>
+
+        </div> <!-- end panel-body -->
+      </div> <!-- end panel -->
+
     </div>
   </div>
 

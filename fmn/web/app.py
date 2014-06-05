@@ -639,6 +639,8 @@ def handle_details():
     batch_delta = form.batch_delta.data
     batch_count = form.batch_count.data
     toggle_enable = form.toggle_enable.data
+    toggle_triggered_by = form.toggle_triggered_by.data
+    toggle_shorten = form.toggle_shorten.data
     next_url = form.next_url.data
 
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
@@ -707,6 +709,12 @@ def handle_details():
     # Also, let them enable or disable as they please.
     if toggle_enable:
         pref.set_enabled(SESSION, not pref.enabled)
+
+    if toggle_triggered_by:
+        pref.set_triggered_by_links(SESSION, not pref.triggered_by_links)
+
+    if toggle_shorten:
+        pref.set_shorten_links(SESSION, not pref.shorten_links)
 
     next_url = next_url or flask.url_for(
         'context',

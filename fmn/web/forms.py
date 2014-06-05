@@ -20,6 +20,8 @@ class DetailsForm(Form):
 
     # Did they press the button?
     toggle_enable = TextField('toggle_enable')
+    toggle_triggered_by = TextField('toggle_triggered_by')
+    toggle_shorten = TextField('toggle_shorten')
 
     next_url = TextField('next_url')
 
