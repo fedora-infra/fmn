@@ -35,6 +35,18 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
             #'rss': fmn_backends.RSSBackend,
         }
 
+        # But, disable any of those backends that don't appear explicitly in
+        # our config.
+        for key, value in self.backends.items():
+            if key not in self.hub.config['fmn.backends']:
+                del self.backends[key]
+
+        # Also, check that we don't have something enabled that's not explicit
+        for key in self.hub.config['fmn.backends']:
+            if key not in self.backends:
+                raise ValueError("%r in fmn.backends (%r) is invalid" % (
+                    key, self.hub.config['fmn.backends']))
+
         log.debug("Loading rules from fmn.rules")
         self.valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
