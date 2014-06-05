@@ -11,7 +11,9 @@ class Base(object):
             os.unlink(dbfile)
         self.sess = fmn.lib.models.init(DB_PATH, debug=False, create=True)
 
-        self.config = {}
+        self.config = {
+            'fmn.backends': ['irc', 'email', 'android'],
+        }
         self.valid_paths = fmn.lib.load_rules(
             root='fmn.lib.tests.example_rules')
 
