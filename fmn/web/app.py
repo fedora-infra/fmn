@@ -96,6 +96,7 @@ def extract_openid_identifier(openid_url):
 
 @app.before_request
 def check_auth():
+    flask.g.fedmsg_config = fedmsg_config
     flask.g.auth = Bunch(
         logged_in=False,
         method=None,
@@ -417,6 +418,11 @@ def context(openid, context):
 
     context = fmn.lib.models.Context.by_name(SESSION, context)
     if not context:
+        flask.abort(404)
+
+    if context.name not in fedmsg_config['fmn.backends']:
+        # TODO - is there a better status code for this?  More like
+        # "temporariliy unavailable" or "under construction"
         flask.abort(404)
 
     pref = fmn.lib.models.Preference.get_or_create(

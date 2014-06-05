@@ -23,6 +23,11 @@ config = {
     },
 
     ## Backend stuff ##
+
+    # This is the list of enabled backends (so we can turn one off globally)
+    #"fmn.backends": ['email', 'irc', 'android'],
+    "fmn.backends": ['email', 'irc'],
+
     # Email
     "fmn.email.mailserver": "127.0.0.1:25",
     "fmn.email.from_address": "notifications@fedoraproject.org",

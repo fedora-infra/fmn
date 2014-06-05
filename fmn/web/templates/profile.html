@@ -18,8 +18,10 @@
 
     <dl class="dl-horizontal">
     {% for ctx in contexts %}
+      {% if ctx.name in g.fedmsg_config['fmn.backends'] %}
       <dt><a href="{{ctx.name}}">{{ctx.name}}</a></dt>
       <dd>{{ctx.description}}</dd>
+      {% endif %}
     {% endfor %}
     </dl>
   </div>
@@ -29,6 +31,7 @@
     <h3>Current settings</h3>
     <div class="list-group">
       {% for pref in prefs %}
+      {% if pref.context.name in g.fedmsg_config['fmn.backends'] %}
         <span class="list-group-item">
           <h4 class="list-group-item-heading">
             {{pref.context_name}}
@@ -65,6 +68,7 @@
             <div class="clearfix"></div>
           </p>
         </span>
+      {% endif %}
       {% endfor %}
     </div>
   </div>

@@ -57,16 +57,18 @@
               </li>
 
               {% for ctx in contexts %}
-                {% if ctx.name == current %}
-                <li class="active">
-                {% else %}
-                <li>
+                {% if ctx.name in g.fedmsg_config['fmn.backends'] %}
+                  {% if ctx.name == current %}
+                  <li class="active">
+                  {% else %}
+                  <li>
+                  {% endif %}
+                  <a href="{{url_for('context', openid=openid, context=ctx.name)}}">
+                      <span class="glyphicon glyphicon-{{ctx.icon}}"></span>
+                      {{ctx.name}}
+                  </a>
+                  </li>
                 {% endif %}
-                <a href="{{url_for('context', openid=openid, context=ctx.name)}}">
-                    <span class="glyphicon glyphicon-{{ctx.icon}}"></span>
-                    {{ctx.name}}
-                </a>
-                </li>
               {% endfor %}
             {% endif %}
 
