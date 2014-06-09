@@ -458,6 +458,18 @@ class Preference(BASE):
         session.commit()
         self.notify(self.openid, self.context_name, "batch_values")
 
+    def set_triggered_by_links(self, session, value):
+        self.triggered_by_links = value
+        session.add(self)
+        session.commit()
+        self.notify(self.openid, self.context_name, "triggered_by_links")
+
+    def set_shorten_links(self, session, value):
+        self.shorten_links = value
+        session.add(self)
+        session.commit()
+        self.notify(self.openid, self.context_name, "shorten_links")
+
     @classmethod
     def by_user(cls, session, openid):
         query = session.query(
