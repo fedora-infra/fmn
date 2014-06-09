@@ -406,6 +406,10 @@ class Preference(BASE):
     # forcing new users into an opt-out situation.
     enabled = sa.Column(sa.Boolean, default=False, nullable=False)
 
+    # Various presentation booleans
+    triggered_by_links = sa.Column(sa.Boolean, default=False)
+    shorten_links = sa.Column(sa.Boolean, default=False)
+
     openid = sa.Column(
         sa.Text,
         sa.ForeignKey('users.openid'),
