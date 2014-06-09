@@ -36,45 +36,53 @@ class FMNProducerBase(moksha.hub.api.PollingProducer):
 
         raise ValueError('FMNConsumer not found by ConfirmationProducer')
 
-    @property
-    def session(self):
-        return self.sister.session
+    def make_session(self):
+        return self.sister.make_session()
 
     @property
     def backends(self):
         return self.sister.backends
 
+    def poll(self):
+        session = self.make_session()
+        try:
+            self.work(session)
+            session.commit()
+        except:
+            session.rollback()
+            raise
+
 
 class ConfirmationProducer(FMNProducerBase):
     """ Handle managing the pending confirmations. """
 
-    def poll(self):
+    def work(self, session):
         # 1) Look for confirmations that need action in the db
-        pending = fmn.lib.models.Confirmation.list_pending(self.session)
+        pending = fmn.lib.models.Confirmation.list_pending(session)
 
         # 2) process each one.
         for confirmation in pending:
             log.info("Processing confirmation %r" % confirmation)
             backend = self.backends[confirmation.context.name]
-            backend.handle_confirmation(confirmation)
+            backend.handle_confirmation(session, confirmation)
 
         # 3) clean up any old ones that need to be deleted.
-        fmn.lib.models.Confirmation.delete_expired(self.session)
+        fmn.lib.models.Confirmation.delete_expired(session)
 
 
 class DigestProducer(FMNProducerBase):
     """ Handle sending out digests of messages for various contexts. """
 
-    def poll(self):
+    def work(self, session):
         # 1) Loop over all preferences in the db
-        for pref in fmn.lib.models.Preference.list_batching(self.session):
+        for pref in fmn.lib.models.Preference.list_batching(session):
             # 2) Look for queued messages that need sent by time and count
             count = fmn.lib.models.QueuedMessage.count_for(
-                self.session, pref.user, pref.context)
+                session, pref.user, pref.context)
             if not count:
                 continue
             earliest = fmn.lib.models.QueuedMessage.earliest_for(
-                self.session, pref.user, pref.context)
+                session, pref.user, pref.context)
             now = datetime.datetime.utcnow()
             delta = now - earliest.created_on
             backend = self.backends[pref.context.name]
@@ -83,14 +91,14 @@ class DigestProducer(FMNProducerBase):
             if pref.batch_delta is not None:
                 if pref.batch_delta <= total_seconds(delta):
                     log.info("Sending digest for %r per time delta" % pref)
-                    self.manage_batch(self.session, backend, pref)
+                    self.manage_batch(session, backend, pref)
                     continue
 
             # 2.1) Send and dequeue those by count
             if pref.batch_count is not None:
                 if pref.batch_count <= count:
                     log.info("Sending digest for %r per msg count" % pref)
-                    self.manage_batch(self.session, backend, pref)
+                    self.manage_batch(session, backend, pref)
                     continue
 
     @staticmethod
@@ -108,7 +116,7 @@ class DigestProducer(FMNProducerBase):
             log.info("* Found %r queued messages" % len(queued_messages))
 
         for recipient in recipients:
-            backend.handle_batch(recipient, queued_messages)
+            backend.handle_batch(session, recipient, queued_messages)
 
         for message in queued_messages:
             message.dequeue(session)

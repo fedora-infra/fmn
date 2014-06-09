@@ -74,13 +74,13 @@ class EmailBackend(BaseBackend):
         server.quit()
         self.log.debug("Email sent")
 
-    def handle(self, recipient, msg):
+    def handle(self, session, recipient, msg):
         content = fedmsg.meta.msg2repr(msg, **self.config)
         subject = fedmsg.meta.msg2subtitle(msg, **self.config)
 
         self.send_mail(recipient, subject, content)
 
-    def handle_batch(self, recipient, queued_messages):
+    def handle_batch(self, session, recipient, queued_messages):
         def _format_line(msg):
             timestamp = datetime.datetime.fromtimestamp(msg['timestamp'])
             payload = fedmsg.meta.msg2repr(msg, **self.config)
@@ -95,8 +95,8 @@ class EmailBackend(BaseBackend):
         self.send_mail(recipient, subject, content)
 
 
-    def handle_confirmation(self, confirmation):
-        confirmation.set_status(self.session, 'valid')
+    def handle_confirmation(self, session, confirmation):
+        confirmation.set_status(session, 'valid')
         acceptance_url = self.config['fmn.acceptance_url'].format(
             secret=confirmation.secret)
         rejection_url = self.config['fmn.rejection_url'].format(

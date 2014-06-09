@@ -94,19 +94,25 @@ class IRCBackend(BaseBackend):
 
     def cmd_start(self, nick, message):
         self.log.info("CMD start: %r sent us %r" % (nick, message))
-        if self.disabled_for(nick):
-            self.enable(nick)
+        sess = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
+        if self.disabled_for(sess, nick):
+            self.enable(sess, nick)
             self.send(nick, "OK")
         else:
             self.send(nick, "Messages not currently stopped.  Nothing to do.")
+        sess.commit()
+        sess.close()
 
     def cmd_stop(self, nick, message):
         self.log.info("CMD stop:  %r sent us %r" % (nick, message))
-        if self.disabled_for(nick):
+        sess = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
+        if self.disabled_for(sess, nick):
             self.send(nick, "Messages already stopped.  Nothing to do.")
         else:
-            self.disable(nick)
+            self.disable(sess, nick)
             self.send(nick, "OK")
+        sess.commit()
+        sess.close()
 
     def cmd_help(self, nick, message):
         self.log.info("CMD help:  %r sent us %r" % (nick, message))
@@ -128,14 +134,14 @@ class IRCBackend(BaseBackend):
         self.log.info("CMD unk:   %r sent us %r" % (nick, message))
         self.send(nick, "say 'help' for help or 'stop' to stop messages")
 
-    def handle(self, recipient, msg, streamline=False):
+    def handle(self, session, recipient, msg, streamline=False):
         user = recipient['user']
 
         if not self.clients:
             # This is usually the case if we are suffering a netsplit.
             self.log.warning("IRCBackend has no clients to work with; enqueue")
             fmn.lib.models.QueuedMessage.enqueue(
-                self.session, user, 'irc', msg)
+                session, user, 'irc', msg)
             return
 
         self.log.debug("Notifying via irc %r" % recipient)
@@ -146,11 +152,10 @@ class IRCBackend(BaseBackend):
 
         # Handle any backlog that may have accumulated while we were suffering
         # a netsplit.
-        preference_obj = fmn.lib.models.Preference.load(
-            self.session, user, 'irc')
+        preference_obj = fmn.lib.models.Preference.load(session, user, 'irc')
         if not streamline:
             fmn.consumer.producer.DigestProducer.manage_batch(
-                self.session, self, preference_obj)
+                session, self, preference_obj)
 
         # With all of that out of the way, now we can actually send them the
         # message that triggered all this.
@@ -158,7 +163,7 @@ class IRCBackend(BaseBackend):
 
         nickname = recipient['irc nick']
 
-        if self.disabled_for(detail_value=nickname):
+        if self.disabled_for(session, detail_value=nickname):
             self.log.debug("Messages stopped for %r, not sending." % nickname)
             return
 
@@ -168,11 +173,12 @@ class IRCBackend(BaseBackend):
                 message.encode('utf-8'),
             )
 
-    def handle_batch(self, recipient, queued_messages):
+    def handle_batch(self, session, recipient, queued_messages):
         for queued_message in queued_messages:
-            self.handle(recipient, queued_message.message, streamline=True)
+            self.handle(session, recipient, queued_message.message,
+                        streamline=True)
 
-    def handle_confirmation(self, confirmation):
+    def handle_confirmation(self, session, confirmation):
         if not self.clients:
             self.log.warning("IRCBackend has no clients to work with.")
             return
@@ -183,16 +189,16 @@ class IRCBackend(BaseBackend):
         for client in self.clients:
             client.msg((u'NickServ').encode('utf-8'), query.encode('utf-8'))
 
-    def handle_confirmation_valid_nick(self, nick):
+    def handle_confirmation_valid_nick(self, session, nick):
         if not self.clients:
             self.log.warning("IRCBackend has no clients to work with.")
             return
 
         confirmations = fmn.lib.models.Confirmation.by_detail(
-            self.session, context="irc", value=nick)
+            session, context="irc", value=nick)
 
         for confirmation in confirmations:
-            confirmation.set_status(self.session, 'valid')
+            confirmation.set_status(session, 'valid')
             acceptance_url = self.config['fmn.acceptance_url'].format(
                 secret=confirmation.secret)
             rejection_url = self.config['fmn.rejection_url'].format(
@@ -209,11 +215,11 @@ class IRCBackend(BaseBackend):
                 for client in self.clients:
                     client.msg(nick.encode('utf-8'), line.encode('utf-8'))
 
-    def handle_confirmation_invalid_nick(self, nick):
+    def handle_confirmation_invalid_nick(self, session, nick):
         confirmations = fmn.lib.models.Confirmation.by_detail(
-            self.session, context="irc", value=nick)
+            session, context="irc", value=nick)
         for confirmation in confirmations:
-            confirmation.set_status(self.session, 'invalid')
+            confirmation.set_status(session, 'invalid')
 
     def cleanup_clients(self, factory):
         self.clients = [c for c in self.clients if c.factory != factory]
@@ -255,16 +261,22 @@ class IRCBackendProtocol(twisted.words.protocols.irc.IRCClient):
         # We query NickServ off the bat.  This is probably her responding.
         # We check NickServ before doing confirmations, so, let's do that now.
         if user == "NickServ!NickServ@services.":
-            nickname, commands, result = msg.split(None, 2)
+            nick, commands, result = msg.split(None, 2)
+
+            s = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
+
             if result.strip() == '3':
                 # Then all is good.
                 # 1) the nickname is registered
                 # 2) the person is currently logged in and identified.
-                self.factory.parent.handle_confirmation_valid_nick(nickname)
+                self.factory.parent.handle_confirmation_valid_nick(s, nick)
             else:
                 # Something is off.  There are a number of possible scenarios,
                 # but we'll just report back "invalid"
-                self.factory.parent.handle_confirmation_invalid_nick(nickname)
+                self.factory.parent.handle_confirmation_invalid_nick(s, nick)
+
+            s.commit()
+            s.close()
         else:
             # If it's not NickServ, then it might be a user asking for help
             nick = user.split("!")[0]

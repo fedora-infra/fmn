@@ -13,7 +13,7 @@ class GCMBackend(BaseBackend):
         self.post_url = self.config['fmn.gcm.post_url']
         self.api_key = self.config['fmn.gcm.api_key']
 
-    def _send_notification(self, registration_id, data):
+    def _send_notification(self, sess, registration_id, data):
       '''Immediately send a notification to a device. This does **NOT** check
          whether or not the user has notifications enabled. The calling method
          **MUST** do this itself.'''
@@ -45,12 +45,11 @@ class GCMBackend(BaseBackend):
           self.log.debug("   * Was informed by Google that the " +
                          " registration id is old. Updating.")
 
-          pref = fmn.lib.models.Preference.by_detail(self.session, registration_id)
-          pref.update_details(self.session,
-                              j.get("message_id").get("registration_id"))
+          pref = fmn.lib.models.Preference.by_detail(sess, registration_id)
+          pref.update_details(sess, j.get("message_id").get("registration_id"))
 
 
-    def handle(self, recipient, msg):
+    def handle(self, session, recipient, msg):
         self.log.debug("Notifying via gcm/android %r" % recipient)
 
         if 'registration id' not in recipient:
@@ -61,19 +60,19 @@ class GCMBackend(BaseBackend):
             self.log.debug("Messages stopped for %r, not sending." % nickname)
             return
 
-        self._send_notification(recipient['registration id'], msg)
+        self._send_notification(session, recipient['registration id'], msg)
 
-    def handle_batch(self, recipient, queued_messages):
+    def handle_batch(self, session, recipient, queued_messages):
         raise NotImplementedError()
 
-    def handle_confirmation(self, confirmation):
-        confirmation.set_status(self.session, 'valid')
+    def handle_confirmation(self, session, confirmation):
+        confirmation.set_status(session, 'valid')
 
-        confirmation_msg = {
+        msg = {
             "title": "Fedora Notifications Confirmation",
             "message": "Hi there! Please confirm that you would like to " +
                        "receive Fedora related notifications.",
             "secret": confirmation.secret
         }
 
-        self._send_notification(confirmation.detail_value, confirmation_msg)
+        self._send_notification(session, confirmation.detail_value, msg)
