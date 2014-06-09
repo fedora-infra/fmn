@@ -431,6 +431,8 @@ class Preference(BASE):
             'created_on': self.created_on,
             'batch_delta': self.batch_delta,
             'batch_count': self.batch_count,
+            'triggered_by_links': self.triggered_by_links,
+            'shorten_links': self.shorten_links,
             'enabled': self.enabled,
             'context': self.context.__json__(),
             'user': self.user.__json__(),
