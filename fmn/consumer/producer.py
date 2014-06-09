@@ -107,6 +107,8 @@ class DigestProducer(FMNProducerBase):
         recipients = [{
             name: value.value,
             'user': pref.user.openid,
+            'triggered_by_links': pref.triggered_by_links,
+            'shorten_links': pref.shorten_links,
         } for value in pref.detail_values]
 
         queued_messages = fmn.lib.models.QueuedMessage.list_for(

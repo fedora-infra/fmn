@@ -42,7 +42,10 @@ def _format_message(msg, recipient, config):
     template = u"{title} -- {subtitle} {delta}{link}{flt}"
     title = fedmsg.meta.msg2title(msg, **config)
     subtitle = fedmsg.meta.msg2subtitle(msg, **config)
-    link = _shorten(fedmsg.meta.msg2link(msg, **config))
+    link = fedmsg.meta.msg2link(msg, **config)
+
+    if recipient['shorten_links']:
+        link = _shorten(link)
 
     # Tack a human-readable delta on the end so users know that fmn is
     # backlogged (if it is).
@@ -51,10 +54,13 @@ def _format_message(msg, recipient, config):
         delta = arrow.get(msg['timestamp']).humanize() + ' '
 
     flt = ''
-    if 'filter_id' in recipient:
-        flt_template = "{base_url}/{user}/irc/{filter_id}"
-        flt = "    (triggered by %s)" % _shorten(flt_template.format(
-            base_url=config['fmn.base_url'], **recipient))
+    if recipient['triggered_by_links'] and 'filter_id' in recipient:
+        flt_template = "{base_url}{user}/irc/{filter_id}"
+        flt_link = flt_template.format(
+            base_url=config['fmn.base_url'], **recipient)
+        if recipient['shorten_links']:
+            flt_link = _shorten(flt_link)
+        flt = "    (triggered by %s)" % flt_link
 
     return template.format(title=title, subtitle=subtitle, delta=delta,
                            link=link, flt=flt)
