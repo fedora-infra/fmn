@@ -407,6 +407,7 @@ class Preference(BASE):
     enabled = sa.Column(sa.Boolean, default=False, nullable=False)
 
     # Various presentation booleans
+    markup_messages = sa.Column(sa.Boolean, default=False)
     triggered_by_links = sa.Column(sa.Boolean, default=False)
     shorten_links = sa.Column(sa.Boolean, default=False)
 
@@ -431,6 +432,7 @@ class Preference(BASE):
             'created_on': self.created_on,
             'batch_delta': self.batch_delta,
             'batch_count': self.batch_count,
+            'markup_messages': self.markup_messages,
             'triggered_by_links': self.triggered_by_links,
             'shorten_links': self.shorten_links,
             'enabled': self.enabled,
@@ -459,6 +461,12 @@ class Preference(BASE):
         session.add(self)
         session.commit()
         self.notify(self.openid, self.context_name, "batch_values")
+
+    def set_markup_messages(self, session, value):
+        self.markup_messages = value
+        session.add(self)
+        session.commit()
+        self.notify(self.openid, self.context_name, "markup_messages")
 
     def set_triggered_by_links(self, session, value):
         self.triggered_by_links = value
