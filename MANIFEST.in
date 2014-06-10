@@ -3,3 +3,5 @@ include createdb.py
 include COPYING
 include COPYING.LESSER
 include CHANGELOG.rst
+include alembic.ini
+recursive-include alembic *
