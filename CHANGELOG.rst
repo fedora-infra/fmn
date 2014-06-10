@@ -1,6 +1,32 @@
 Changelog
 =========
 
+0.2.4
+-----
+
+- Add submodule to the valid_paths dict. `a55d5e38b <https://github.com/fedora-infra/fmn.lib/commit/a55d5e38b6c006608d774457f2360715103ab232>`_
+- Mock out a notify method on the models for the tests. `247980d9d <https://github.com/fedora-infra/fmn.lib/commit/247980d9dedfa7278affd181da4a0df59436122d>`_
+- Add that notify method. `53b8ed78e <https://github.com/fedora-infra/fmn.lib/commit/53b8ed78ef8fa0fd4180df53f2eddaa17c2b85fe>`_
+- A few more notifications. `a288c53e3 <https://github.com/fedora-infra/fmn.lib/commit/a288c53e3e6cb7aa6d3776b443454c6c8a9b6891>`_
+- Copy-pasta fixes. `532580bca <https://github.com/fedora-infra/fmn.lib/commit/532580bca29388b7f24564cfbcdff436854fb83e>`_
+- Oop... also here. `960333774 <https://github.com/fedora-infra/fmn.lib/commit/960333774e1ddb0208507710bef54ccdace27888>`_
+- Merge pull request #5 from fedora-infra/feature/fedmsg-messages `1d966a8ca <https://github.com/fedora-infra/fmn.lib/commit/1d966a8caf8e073bd14bf4512aa237f3e2307e12>`_
+- Refactor the main "recipients" api to be much easier to cache. `c917681ba <https://github.com/fedora-infra/fmn.lib/commit/c917681ba854eba9af1af546020ec3ef5711fa17>`_
+- Travis.yml `096c303d4 <https://github.com/fedora-infra/fmn.lib/commit/096c303d44f84a6d88ac45b6a15d1255ce8e89ca>`_
+- Merge pull request #6 from fedora-infra/feature/refactor `a3db7d70c <https://github.com/fedora-infra/fmn.lib/commit/a3db7d70cd53c09a88226d2f3802a050e5fe9753>`_
+- Merge commit '9603337' into develop `99cbd419d <https://github.com/fedora-infra/fmn.lib/commit/99cbd419d93af7c4c1f8d6a85fee6780894a76c8>`_
+- Add fmn.rules to the travis config. `a3b3edc34 <https://github.com/fedora-infra/fmn.lib/commit/a3b3edc34335e52905285b42a9f75002f28999f8>`_
+- This is significantly different.. and correct. `a6cd4e772 <https://github.com/fedora-infra/fmn.lib/commit/a6cd4e772b6207f7482cb566c9baf8903f14b922>`_
+- After the reorg in #6, this is no longer necessary. `f82e1eb28 <https://github.com/fedora-infra/fmn.lib/commit/f82e1eb28ac5a4f5f03062d2853241a1555d13ab>`_
+- Link to dev instructions from the README. `c051ba34d <https://github.com/fedora-infra/fmn.lib/commit/c051ba34dda349631f7d879c33a2e48bd98d535f>`_
+- Add a way to disable a backend alltogether. `5209ea762 <https://github.com/fedora-infra/fmn.lib/commit/5209ea762b0813f88979fe0fbb8cee92d7f5cebd>`_
+- Add presentation booleans. `56d0c5113 <https://github.com/fedora-infra/fmn.lib/commit/56d0c51132d39613e54fada1ebcc23513c837d3c>`_
+- Add setters. `e011a3f50 <https://github.com/fedora-infra/fmn.lib/commit/e011a3f5011430b6ba2ed2e4dda5e7c4cbf64b29>`_
+- Include presentation bools in json. `e1a44d859 <https://github.com/fedora-infra/fmn.lib/commit/e1a44d859a0a1a7d5c47e0ee7f310a3378a427e2>`_
+- Handle colorizing IRC messages. `b83e46cc3 <https://github.com/fedora-infra/fmn.lib/commit/b83e46cc37745ef79d6603376e5d995587c461a8>`_
+- Support restoring defaults for only a single context. `0be517b23 <https://github.com/fedora-infra/fmn.lib/commit/0be517b23865be81c501a2af8c438f1ef8a8d26f>`_
+- Include alembic scripts in dist. `74ad1a67d <https://github.com/fedora-infra/fmn.lib/commit/74ad1a67d3cbc157390c7f12b5b99d1c1502c218>`_
+
 0.2.3
 -----
 

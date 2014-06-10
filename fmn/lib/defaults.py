@@ -84,7 +84,7 @@ package_rule_path_defaults = [
 ]
 
 
-def create_defaults_for(session, user):
+def create_defaults_for(session, user, only_for=None):
     """ Create a sizable amount of defaults for a new user. """
 
     if not user.openid.endswith('id.fedoraproject.org'):
@@ -103,7 +103,11 @@ def create_defaults_for(session, user):
             session, valid_paths, path, **kw)
 
     def contexts():
-        for name in ['email', 'irc']:
+        names = ['email', 'irc']
+        if only_for:
+            names = [only_for.name]
+
+        for name in names:
             context = fmn.lib.models.Context.get(session, name)
             if context:
                 yield context
