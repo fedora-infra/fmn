@@ -107,6 +107,7 @@ class DigestProducer(FMNProducerBase):
         recipients = [{
             name: value.value,
             'user': pref.user.openid,
+            'markup_messages': pref.markup_messages,
             'triggered_by_links': pref.triggered_by_links,
             'shorten_links': pref.shorten_links,
         } for value in pref.detail_values]

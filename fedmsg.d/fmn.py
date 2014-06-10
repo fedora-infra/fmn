@@ -18,6 +18,20 @@ config = {
         },
     },
 
+    # Colors:
+    "irc_color_lookup": {
+        "fas": "light blue",
+        "bodhi": "green",
+        "git": "red",
+        "tagger": "brown",
+        "wiki": "purple",
+        "logger": "orange",
+        "pkgdb": "teal",
+        "buildsys": "yellow",
+        "planet": "light green",
+        "fmn": "purple",
+    },
+
     ## Backend stuff ##
 
     # This is the list of enabled backends (so we can turn one off globally)

@@ -31,6 +31,25 @@ You can update your preferences at {base_url}
 You can contact {support_email} if you have any concerns/issues/abuse.
 """
 
+mirc_colors = {
+    "white": 0,
+    "black": 1,
+    "blue": 2,
+    "green": 3,
+    "red": 4,
+    "brown": 5,
+    "purple": 6,
+    "orange": 7,
+    "yellow": 8,
+    "light green": 9,
+    "teal": 10,
+    "light cyan": 11,
+    "light blue": 12,
+    "pink": 13,
+    "grey": 14,
+    "light grey": 15,
+}
+
 
 def _shorten(link):
     if not link:
@@ -61,6 +80,14 @@ def _format_message(msg, recipient, config):
         if recipient['shorten_links']:
             flt_link = _shorten(flt_link)
         flt = "    (triggered by %s)" % flt_link
+
+    if recipient['markup_messages']:
+        markup = lambda s, color: "\x03%i%s\x03" % (mirc_colors[color], s)
+        color_lookup = config.get('irc_color_lookup', {})
+        title_color = color_lookup.get(title.split('.')[0], "light grey")
+        title = markup(title, title_color)
+        if link:
+            link = markup(link, "teal")
 
     return template.format(title=title, subtitle=subtitle, delta=delta,
                            link=link, flt=flt)
