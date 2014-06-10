@@ -350,6 +350,32 @@
             </p>
           </form>
 
+          <div class="clearfix"></div><hr></hr>
+
+          <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+            method="post">
+            <p class="pull-left">In some cases, we can try to enrich your
+            messages with markup and color.  Want to try it out?</p>
+            <p class="pull-left">
+            I'm configured right now to <strong>
+              {% if preference.markup_messages %}markup{% else %}not markup{% endif %}
+            </strong> your messages.</p>
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <p class="pull-right">
+            {% if preference.markup_messages %}
+            <button type="submit" class="btn btn-danger" name="toggle_markup" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-off"></span> Disable
+            </button>
+            {% else %}
+            <button type="submit" class="btn btn-success" name="toggle_markup" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-ok-circle"></span> Enable
+            </button>
+            {% endif %}
+            </p>
+          </form>
         </div> <!-- end panel-body -->
       </div> <!-- end panel -->
 

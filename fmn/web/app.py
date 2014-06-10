@@ -641,6 +641,7 @@ def handle_details():
     toggle_enable = form.toggle_enable.data
     toggle_triggered_by = form.toggle_triggered_by.data
     toggle_shorten = form.toggle_shorten.data
+    toggle_markup = form.toggle_markup.data
     next_url = form.next_url.data
 
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
@@ -715,6 +716,9 @@ def handle_details():
 
     if toggle_shorten:
         pref.set_shorten_links(SESSION, not pref.shorten_links)
+
+    if toggle_markup:
+        pref.set_markup_messages(SESSION, not pref.markup_messages)
 
     next_url = next_url or flask.url_for(
         'context',
