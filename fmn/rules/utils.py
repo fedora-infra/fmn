@@ -3,6 +3,7 @@
 import json
 import logging
 import requests
+import requests.exceptions
 
 from dogpile.cache import make_region
 
@@ -24,7 +25,16 @@ def get_packagers_of_package(config, package):
 
     @_cache.cache_on_arguments()
     def _getter(package):
-        return _get_pkgdb2_packagers_for(config, package)
+        """ Cached access to pkgdb2 """
+        def _get(attempt=0):
+            """ Try at most three times before giving up if err """
+            try:
+                return _get_pkgdb2_packagers_for(config, package)
+            except requests.exceptions.ConnectionError:
+                if attempt >= 3:
+                    raise
+                return _get(attempt + 1)
+        return _get()
 
     return _getter(package)
 
@@ -105,6 +115,9 @@ def _get_pkgdb2_packages_for(config, username):
         # Avoid requesting the data twice the first time around
         if i != 1:
             data = _get_page(i)
+
+        if data is None:
+            continue
 
         for pkgacl in data['acls']:
             if pkgacl['status'] != 'Approved':
