@@ -1,6 +1,37 @@
 Changelog
 =========
 
+0.2.5
+-----
+
+- Also, handle null here. `6898b2f44 <https://github.com/fedora-infra/fmn.web/commit/6898b2f447818f213e680e5308829cb8a539477d>`_
+- Typofix. `3b92d5030 <https://github.com/fedora-infra/fmn.web/commit/3b92d5030242651dc87a461f9259d42e6f795e24>`_
+- Allow to override which login method is the default one. `dc3be8184 <https://github.com/fedora-infra/fmn.web/commit/dc3be818469884ae8f18ff89fc4a1eeb8d1100c8>`_
+- Merge pull request #18 from fedora-infra/feature/default-login `a4cf707f6 <https://github.com/fedora-infra/fmn.web/commit/a4cf707f6dd3bf6bbbaabecff134fc74374a0ebc>`_
+- Merge pull request #17 from fedora-infra/feature/also-null `559b09de5 <https://github.com/fedora-infra/fmn.web/commit/559b09de57eb461537f250239e9cef0e1a66112a>`_
+- Group possible rules by service in the UI. `e84958eec <https://github.com/fedora-infra/fmn.web/commit/e84958eec63e6ddcaee9a5d31e138d0956b25c0b>`_
+- Merge pull request #19 from fedora-infra/feature/group-rules `cb9f79a08 <https://github.com/fedora-infra/fmn.web/commit/cb9f79a08de7fa4072ebf4a860bcc341215c9379>`_
+- Provide clarification on confirmation process. `7b2f88fcb <https://github.com/fedora-infra/fmn.web/commit/7b2f88fcb5c9bf1a4070b7c9f81895de44785dce>`_
+- Clarify irc delivery details. `43ebd68b5 <https://github.com/fedora-infra/fmn.web/commit/43ebd68b5a0586b01cba6580eaef56bad882ff0d>`_
+- Further clarification as per review feedback. `15a858dd2 <https://github.com/fedora-infra/fmn.web/commit/15a858dd21bea09cf3ad985b61e13151e8081e9d>`_
+- Merge pull request #21 from fedora-infra/feature/delivery-clarification `45fbc8b5e <https://github.com/fedora-infra/fmn.web/commit/45fbc8b5e17d9e0c24caf0e0baf981afcd1b33bb>`_
+- Merge pull request #20 from fedora-infra/feature/confirmation-clarification `57975bce0 <https://github.com/fedora-infra/fmn.web/commit/57975bce0ada5bf14019d848663a46e8c9f3bbd6>`_
+- Latest bootstrap-fedora. `5120bf05d <https://github.com/fedora-infra/fmn.web/commit/5120bf05dadf8efeb7951e00b71cd55986bcee60>`_
+- Merge branch 'feature/confirmation-clarification' into develop `9d58de5cd <https://github.com/fedora-infra/fmn.web/commit/9d58de5cd926f66be8a3ba488508421508f04ffe>`_
+- Merge branch 'develop' of github.com:fedora-infra/fmn.web into develop `d5800687e <https://github.com/fedora-infra/fmn.web/commit/d5800687e969ac9e1dd54ac0accb7e44e5853d0c>`_
+- Use flask_openid safe_roots for Covert Redirect. `7dc10fd25 <https://github.com/fedora-infra/fmn.web/commit/7dc10fd2594267cb56fa1703c02900b088f99456>`_
+- Go ahead and simplify these two blocks. `ce90c2b66 <https://github.com/fedora-infra/fmn.web/commit/ce90c2b66777ed1ef74b7ef59b2dbe8ed639965c>`_
+- Adjust config for development. `4cf0adbe5 <https://github.com/fedora-infra/fmn.web/commit/4cf0adbe5faa749fa74af0ac43bce7fd7ab3d8e8>`_
+- Move this one call into fmn.lib. `23fef4d34 <https://github.com/fedora-infra/fmn.web/commit/23fef4d34bc921269698e2479b2a483b1462bf13>`_
+- Add another endpoint so the hub and webapp can share config during development. `34a32cc09 <https://github.com/fedora-infra/fmn.web/commit/34a32cc0916304ea20e8e4190a53575fc943a925>`_
+- Merge pull request #24 from fedora-infra/feature/fedmsg-messages `7d64a9672 <https://github.com/fedora-infra/fmn.web/commit/7d64a9672bcee69eddff9075b5bb8f1d234c2c01>`_
+- Merge pull request #23 from fedora-infra/feature/simplify `ec33ade3e <https://github.com/fedora-infra/fmn.web/commit/ec33ade3e024a6931e2e688aa28d8badfbbf2089>`_
+- Link to dev instructions from the README. `3d71270c5 <https://github.com/fedora-infra/fmn.web/commit/3d71270c596b4ee82a691e505f4d579afd8ea459>`_
+- Add a way to disable a backend alltogether. `c1f5692a5 <https://github.com/fedora-infra/fmn.web/commit/c1f5692a5744a779cc904a9a3af81eb72d18d8fe>`_
+- UI for making some links configurable. `54c46f370 <https://github.com/fedora-infra/fmn.web/commit/54c46f370040cfac39b5da402e9a5a97a4c772d0>`_
+- Handle colorizing IRC messages. `d757d753a <https://github.com/fedora-infra/fmn.web/commit/d757d753af4dd265fce1aaa87833771ae105e64e>`_
+- Allow resetting a context to the default set of filters. `93335d9de <https://github.com/fedora-infra/fmn.web/commit/93335d9de8b6e2dfcad8dc57fb59cb514864c969>`_
+
 0.2.4
 -----
 
