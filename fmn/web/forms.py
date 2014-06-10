@@ -26,6 +26,8 @@ class DetailsForm(Form):
 
     next_url = TextField('next_url')
 
+    reset_to_defaults = TextField('reset_to_defaults')
+
 
 class RuleForm(Form):
     openid = TextField('openid', [validators.Required()])

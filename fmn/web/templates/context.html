@@ -376,6 +376,36 @@
             {% endif %}
             </p>
           </form>
+
+        </div> <!-- end panel-body -->
+      </div> <!-- end panel -->
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Party Perished
+          </h3>
+        </div> <!-- end panel-heading -->
+
+        <div class="panel-body">
+          <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+            method="post">
+            <p class="pull-left">If you like, we can destroy all your existing
+            filters for the {{current}} context and restore the "factory
+            defaults": the settings that were in place when you first created
+            your account.</p>
+            <p><strong>Beware, there is no way to undo this operation.
+            </strong></p>
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <p class="pull-right">
+            <button type="submit" class="btn btn-danger" name="reset_to_defaults" value="confirm"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-repeat"></span> Reset
+            </button>
+            </p>
+          </form>
+
         </div> <!-- end panel-body -->
       </div> <!-- end panel -->
 

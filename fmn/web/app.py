@@ -643,6 +643,7 @@ def handle_details():
     toggle_shorten = form.toggle_shorten.data
     toggle_markup = form.toggle_markup.data
     next_url = form.next_url.data
+    reset_to_defaults = form.reset_to_defaults.data
 
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         raise APIError(403, dict(reason="%r is not %r" % (
@@ -719,6 +720,12 @@ def handle_details():
 
     if toggle_markup:
         pref.set_markup_messages(SESSION, not pref.markup_messages)
+
+    if reset_to_defaults:
+        for flt in pref.filters:
+            SESSION.delete(flt)
+        SESSION.flush()
+        fmn.lib.defaults.create_defaults_for(SESSION, user, pref.context)
 
     next_url = next_url or flask.url_for(
         'context',
