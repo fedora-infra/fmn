@@ -77,6 +77,11 @@ def cache_key_generator(fn, arg):
     return "|".join([fn.__module__, fn.__name__, arg]).encode('utf-8')
 
 
+def invalidate_cache(fn, arg):
+    key = cache_key_generator(fn, arg)
+    return _cache.delete(key)
+
+
 def _get_pkgdb2_packages_for(config, username):
     log.debug("Requesting pkgdb2 packages for user %r" % username)
 
