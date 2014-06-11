@@ -23,20 +23,9 @@ def get_packagers_of_package(config, package):
     if not hasattr(_cache, 'backend'):
         _cache.configure(**config['fmn.rules.cache'])
 
-    @_cache.cache_on_arguments()
-    def _getter(package):
-        """ Cached access to pkgdb2 """
-        def _get(attempt=0):
-            """ Try at most three times before giving up if err """
-            try:
-                return _get_pkgdb2_packagers_for(config, package)
-            except requests.exceptions.ConnectionError:
-                if attempt >= 3:
-                    raise
-                return _get(attempt + 1)
-        return _get()
-
-    return _getter(package)
+    key = cache_key_generator(get_packages_of_user, package)
+    creator = lambda: _get_pkgdb2_packagers_for(config, package)
+    return _cache.get_or_create(key, creator)
 
 
 def _get_pkgdb2_packagers_for(config, package):
@@ -79,11 +68,13 @@ def get_packages_of_user(config, username):
     if not hasattr(_cache, 'backend'):
         _cache.configure(**config['fmn.rules.cache'])
 
-    @_cache.cache_on_arguments()
-    def _getter(username):
-        return _get_pkgdb2_packages_for(config, username)
+    key = cache_key_generator(get_packages_of_user, username)
+    creator = lambda: _get_pkgdb2_packages_for(config, username)
+    return _cache.get_or_create(key, creator)
 
-    return _getter(username)
+
+def cache_key_generator(fn, arg):
+    return "|".join([fn.__module__, fn.__name__, arg]).encode('utf-8')
 
 
 def _get_pkgdb2_packages_for(config, username):
