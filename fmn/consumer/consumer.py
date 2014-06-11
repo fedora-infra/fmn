@@ -2,9 +2,8 @@
 
 import fedmsg.consumers
 import fmn.lib
+import fmn.rules.utils
 import backends as fmn_backends
-
-from pprint import pprint
 
 import logging
 log = logging.getLogger("fmn")
@@ -73,14 +72,40 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
 
         log.debug("FMNConsumer received topic %r" % topic)
 
+        # First, do some cache management.  This can be confusing because there
+        # are two different caches, with two different mechanisms, storing two
+        # different kinds of data.  The first is a simple python dict that
+        # contains the 'preferences' from the fmn database.  The second is a
+        # dogpile.cache (potentially stored in memcached, but configurable from
+        # /etc/fedmsg.d/).  The dogpile.cache cache stores pkgdb2
+        # package-ownership relations.  Both caches are held for a very long
+        # time and update themselves dynamically here.
+        #
+        # If the user has tweaked their preferences on the frontend, then
+        # invalidate our entire in-memory cache of the fmn preferences
+        # database.
         if '.fmn.' in topic or not self.cached_preferences:
             self.refresh_cache(session, topic, msg)
 
+        # If a user has tweaked something in the pkgdb2 db, then invalidate our
+        # dogpile cache.. but only the parts that have something to do with any
+        # one of the users involved in the pkgdb2 interaction.
+        if '.pkgdb.' in topic:
+            usernames = fedmsg.meta.msg2usernames(msg, **self.hub.config)
+            for username in usernames:
+                log.info("Invalidating pkgdb2 dogpile cache for %r" % username)
+                target = fmn.rules.utils.get_packages_of_user
+                fmn.rules.utils.invalidate_cache_for(
+                    self.hub.config, target, username)
+
+        # With cache management done, we can move on to the real work.
+        # Compute, based on our in-memory cache of preferences, who we think
+        # should receive this message.
         results = fmn.lib.recipients(self.cached_preferences, msg,
                                      self.valid_paths, self.hub.config)
 
-        # Anyways, let's look at the results of our matching operation and send
-        # stuff where we need to.
+        # Let's look at the results of our matching operation and send stuff
+        # where we need to.
         for context, recipients in results.items():
             if not recipients:
                 continue
