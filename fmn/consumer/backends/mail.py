@@ -30,14 +30,14 @@ class EmailBackend(BaseBackend):
         self.mailserver = self.config['fmn.email.mailserver']
         self.from_address = self.config['fmn.email.from_address']
 
-    def send_mail(self, recipient, subject, content):
+    def send_mail(self, session, recipient, subject, content):
         self.log.debug("Sending email")
 
         if 'email address' not in recipient:
             self.log.warning("No email address found.  Bailing.")
             return
 
-        if self.disabled_for(detail_value=recipient['email address']):
+        if self.disabled_for(session, detail_value=recipient['email address']):
             self.log.debug("Messages stopped for %r, not sending." % nickname)
             return
 
@@ -78,7 +78,7 @@ class EmailBackend(BaseBackend):
         content = fedmsg.meta.msg2repr(msg, **self.config)
         subject = fedmsg.meta.msg2subtitle(msg, **self.config)
 
-        self.send_mail(recipient, subject, content)
+        self.send_mail(session, recipient, subject, content)
 
     def handle_batch(self, session, recipient, queued_messages):
         def _format_line(msg):
@@ -92,7 +92,7 @@ class EmailBackend(BaseBackend):
             _format_line(queued_message.message)
             for queued_message in queued_messages])
 
-        self.send_mail(recipient, subject, content)
+        self.send_mail(session, recipient, subject, content)
 
 
     def handle_confirmation(self, session, confirmation):
@@ -112,4 +112,4 @@ class EmailBackend(BaseBackend):
 
         recipient = {'email address': confirmation.detail_value}
 
-        self.send_mail(recipient, subject, content)
+        self.send_mail(session, recipient, subject, content)
