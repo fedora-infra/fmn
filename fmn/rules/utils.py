@@ -23,7 +23,7 @@ def get_packagers_of_package(config, package):
     if not hasattr(_cache, 'backend'):
         _cache.configure(**config['fmn.rules.cache'])
 
-    key = cache_key_generator(get_packages_of_user, package)
+    key = cache_key_generator(get_packagers_of_package, package)
     creator = lambda: _get_pkgdb2_packagers_for(config, package)
     return _cache.get_or_create(key, creator)
 
@@ -77,7 +77,10 @@ def cache_key_generator(fn, arg):
     return "|".join([fn.__module__, fn.__name__, arg]).encode('utf-8')
 
 
-def invalidate_cache(fn, arg):
+def invalidate_cache_for(config, fn, arg):
+    if not hasattr(_cache, 'backend'):
+        _cache.configure(**config['fmn.rules.cache'])
+
     key = cache_key_generator(fn, arg)
     return _cache.delete(key)
 
