@@ -89,41 +89,20 @@ def get_packages_of_user(config, username):
 def _get_pkgdb2_packages_for(config, username):
     log.debug("Requesting pkgdb2 packages for user %r" % username)
 
-    def _get_page(page):
-        url = '{0}/packager/acl/{1}'.format(
-                    config['fmn.rules.utils.pkgdb_url'], username)
-        log.info("hitting url: %r" % url)
-        req = requests.get(url, params=dict(page=page))
+    default = 'https://admin.fedoraproject.org/pkgdb/api'
+    base = config.get('fmn.rules.utils.pkgdb_url', default)
 
-        if not req.status_code == 200:
-            log.debug('URL %s returned code %s', req.url, req.status_code)
-            return None
+    url = '{0}/packager/package/{1}'.format(base, username)
+    log.info("hitting url: %r" % url)
+    req = requests.get(url)
 
-        return req.json()
+    if not req.status_code == 200:
+        log.debug('URL %s returned code %s', req.url, req.status_code)
+        return set()
 
-    # We have to request the first page of data to figure out the total number
-    packages = set()
-    data = _get_page(1)
+    data = req.json()
 
-    if data is None:
-        return packages
-
-    pages = data['page_total']
-
-    for i in range(1, pages + 1):
-
-        # Avoid requesting the data twice the first time around
-        if i != 1:
-            data = _get_page(i)
-
-        if data is None:
-            continue
-
-        for pkgacl in data['acls']:
-            if pkgacl['status'] != 'Approved':
-                continue
-
-            packages.add(pkgacl['packagelist']['package']['name'])
-
+    packages_of_interest = data['point of contact'] + data['co-maintained']
+    packages_of_interest = set([p['name'] for p in packages_of_interest])
     log.debug("done talking with pkgdb2 for now.")
-    return packages
+    return packages_of_interest
