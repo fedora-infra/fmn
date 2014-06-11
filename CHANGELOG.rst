@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.2.3
+-----
+
+- Switch back to using user-centric caching. `664a27fd8 <https://github.com/fedora-infra/fmn.rules/commit/664a27fd82f26dbcc288900096eecc9dbe60c519>`_
+- Use our own cache keys for dogpile.cache. `a197a39ed <https://github.com/fedora-infra/fmn.rules/commit/a197a39ed4d8288a713a53e63d1c6271bde930a9>`_
+- Add a cache invalidation function. `08afda487 <https://github.com/fedora-infra/fmn.rules/commit/08afda48728864ade9a033bef5f1008e97980adc>`_
+- Typofixes. `12d7f5bd8 <https://github.com/fedora-infra/fmn.rules/commit/12d7f5bd88e9f5f39f0c76257f5ccf9a5f6a7783>`_
+- Merge pull request #13 from fedora-infra/feature/whats-old-is-new-again `9e6b00e5f <https://github.com/fedora-infra/fmn.rules/commit/9e6b00e5f9615fc4a1ba78b6f99644d2cfe228ec>`_
+
 0.2.2
 -----
 
