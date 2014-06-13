@@ -37,13 +37,15 @@
           </div>
 
           <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav navbar-right">
                 {% if 'about' == current %}
                 <li class="active">
                 {% else %}
                 <li>
                 {% endif %}
-                <a href="{{url_for('about')}}">about</a>
+                <a href="{{url_for('about')}}">
+                  <span class="glyphicon glyphicon-question-sign"></span>
+                  About</a>
                 <li>
 
               {% if g.auth.logged_in %}
@@ -53,7 +55,8 @@
                 <li>
                 {% endif %}
                 <a href="{{url_for('profile', openid=openid)}}">
-                  profile
+                  <span class="glyphicon glyphicon-user"></span>
+                  Profile
                 </a>
                 </li>
 
@@ -74,11 +77,15 @@
               {% endif %}
 
               {% if g.auth.logged_in %}
-              <li><a href="{{url_for('logout')}}">logout</a></li>
+              <li><a href="{{url_for('logout')}}">
+                <span class="glyphicon glyphicon-log-out"></span>
+                Logout
+              </a></li>
               {% else %}
               <li>
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                      <b class="caret"></b></b> login
+                      <span class="glyphicon glyphicon-log-in"></span>
+                      Login
                   </a>
                   <ul class="dropdown-menu">
                     {% if config['FMN_FEDORA_OPENID'] and config['FMN_ALLOW_FAS_OPENID'] %}
