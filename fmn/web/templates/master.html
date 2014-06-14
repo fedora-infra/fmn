@@ -24,81 +24,90 @@
 
       <!-- Static navbar -->
       <div class="navbar navbar-default navbar-fixed-top">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse"
-                data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="{{url_for('index')}}">
-            Fedora Notifications</a>
-        </div>
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                  data-target=".navbar-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{url_for('index')}}">
+              Fedora Notifications</a>
+          </div>
 
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-              {% if 'about' == current %}
-              <li class="active">
-              {% else %}
-              <li>
-              {% endif %}
-              <a href="{{url_for('about')}}">about</a>
-              <li>
-
-            {% if g.auth.logged_in %}
-              {% if 'profile' == current %}
-              <li class="active">
-              {% else %}
-              <li>
-              {% endif %}
-              <a href="{{url_for('profile', openid=openid)}}">
-                profile
-              </a>
-              </li>
-
-              {% for ctx in contexts %}
-                {% if ctx.name in g.fedmsg_config['fmn.backends'] %}
-                  {% if ctx.name == current %}
-                  <li class="active">
-                  {% else %}
-                  <li>
-                  {% endif %}
-                  <a href="{{url_for('context', openid=openid, context=ctx.name)}}">
-                      <span class="glyphicon glyphicon-{{ctx.icon}}"></span>
-                      {{ctx.name}}
-                  </a>
-                  </li>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                {% if 'about' == current %}
+                <li class="active">
+                {% else %}
+                <li>
                 {% endif %}
-              {% endfor %}
-            {% endif %}
+                <a href="{{url_for('about')}}">
+                  <span class="glyphicon glyphicon-question-sign"></span>
+                  About</a>
+                <li>
 
-            {% if g.auth.logged_in %}
-            <li><a href="{{url_for('logout')}}">logout</a></li>
-            {% else %}
-            <li>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <b class="caret"></b></b> login
+              {% if g.auth.logged_in %}
+                {% if 'profile' == current %}
+                <li class="active">
+                {% else %}
+                <li>
+                {% endif %}
+                <a href="{{url_for('profile', openid=openid)}}">
+                  <span class="glyphicon glyphicon-user"></span>
+                  Profile
                 </a>
-                <ul class="dropdown-menu">
-                  {% if config['FMN_FEDORA_OPENID'] and config['FMN_ALLOW_FAS_OPENID'] %}
-                  <li><a href="{{url_for('fedora_login')}}?next={{url_for('profile_redirect')}}">Fedora</a></li>
-                  <li class="divider"></li>
-                  {% endif %}
-                  {% if config['FMN_ALLOW_GOOGLE_OPENID'] %}
-                  <li><a href="{{url_for('google_login')}}?next={{url_for('profile_redirect')}}">Google</a></li>
-                  {% endif %}
-                  {% if config['FMN_ALLOW_YAHOO_OPENID'] %}
-                  <li><a href="{{url_for('yahoo_login')}}?next={{url_for('profile_redirect')}}">Yahoo</a></li>
-                  {% endif %}
-                  {% if config['FMN_ALLOW_GENERIC_OPENID'] %}
-                  <li><a href="{{url_for('login')}}?next={{url_for('profile_redirect')}}">Other OpenID</a></li>
-                  {% endif %}
-                </ul>
-            </li>
-            {% endif %}
-          </ul>
+                </li>
 
-        </div><!--/.nav-collapse -->
+                {% for ctx in contexts %}
+                  {% if ctx.name in g.fedmsg_config['fmn.backends'] %}
+                    {% if ctx.name == current %}
+                    <li class="active">
+                    {% else %}
+                    <li>
+                    {% endif %}
+                    <a href="{{url_for('context', openid=openid, context=ctx.name)}}">
+                        <span class="glyphicon glyphicon-{{ctx.icon}}"></span>
+                        {{ctx.name}}
+                    </a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              {% if g.auth.logged_in %}
+              <li><a href="{{url_for('logout')}}">
+                <span class="glyphicon glyphicon-log-out"></span>
+                Logout
+              </a></li>
+              {% else %}
+              <li>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      <span class="glyphicon glyphicon-log-in"></span>
+                      Login
+                  </a>
+                  <ul class="dropdown-menu">
+                    {% if config['FMN_FEDORA_OPENID'] and config['FMN_ALLOW_FAS_OPENID'] %}
+                    <li><a href="{{url_for('fedora_login')}}?next={{url_for('profile_redirect')}}">Fedora</a></li>
+                    <li class="divider"></li>
+                    {% endif %}
+                    {% if config['FMN_ALLOW_GOOGLE_OPENID'] %}
+                    <li><a href="{{url_for('google_login')}}?next={{url_for('profile_redirect')}}">Google</a></li>
+                    {% endif %}
+                    {% if config['FMN_ALLOW_YAHOO_OPENID'] %}
+                    <li><a href="{{url_for('yahoo_login')}}?next={{url_for('profile_redirect')}}">Yahoo</a></li>
+                    {% endif %}
+                    {% if config['FMN_ALLOW_GENERIC_OPENID'] %}
+                    <li><a href="{{url_for('login')}}?next={{url_for('profile_redirect')}}">Other OpenID</a></li>
+                    {% endif %}
+                  </ul>
+              </li>
+              {% endif %}
+            </ul>
+
+          </div><!--/.nav-collapse -->
+        </div>
       </div>
 
       {% block body %}{% endblock %}
