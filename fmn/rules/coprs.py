@@ -16,6 +16,42 @@ def copr_build_end(config, message):
     return message['topic'].endswith('copr.build.end')
 
 
+def copr_build_failed(config, message):
+    """ Copr:  Build failed
+
+    `Copr <https://fedorahosted.org/copr/>`_ publishes messages
+    when a new build fails.  Adding this rule will get you those messages.
+    """
+    if not copr_build_end(config, message):
+        return False
+
+    return message['msg']['status'] == 0
+
+
+def copr_build_success(config, message):
+    """ Copr:  Build successfully ended
+
+    `Copr <https://fedorahosted.org/copr/>`_ publishes messages
+    when a new build successfully ends.  Adding this rule will get you those messages.
+    """
+    if not copr_build_end(config, message):
+        return False
+
+    return message['msg']['status'] == 1
+
+
+def copr_build_skipped(config, message):
+    """ Copr:  Build skipped
+
+    `Copr <https://fedorahosted.org/copr/>`_ publishes messages
+    when a new build is skipped.  Adding this rule will get you those messages.
+    """
+    if not copr_build_end(config, message):
+        return False
+
+    return message['msg']['status'] == 5
+
+
 def copr_chroot_start(config, message):
     """ Copr:  chroot started
 
