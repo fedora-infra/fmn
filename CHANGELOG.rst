@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.2.4
+-----
+
+- More Copr messages: success, failed, skipped `c7004cd1f <https://github.com/fedora-infra/fmn.rules/commit/c7004cd1fb50acb94ef6f991e375fbfa7c2a6352>`_
+- Merge pull request #14 from hroncok/copr_status `e3b6ebe9e <https://github.com/fedora-infra/fmn.rules/commit/e3b6ebe9e6c84539af40d37ca32ffd7b5fd20e38>`_
+
 0.2.3
 -----
 
