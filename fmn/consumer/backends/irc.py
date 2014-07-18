@@ -79,7 +79,7 @@ def _format_message(msg, recipient, config):
             base_url=config['fmn.base_url'], **recipient)
         if recipient['shorten_links']:
             flt_link = _shorten(flt_link)
-        flt = "    (triggered by %s)" % flt_link
+        flt = "    (triggered by %s )" % flt_link
 
     if recipient['markup_messages']:
         markup = lambda s, color: "\x03%i%s\x03" % (mirc_colors[color], s)
