@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.2.5
+-----
+
+- Get tests passing. `1734196b3 <https://github.com/fedora-infra/fmn.lib/commit/1734196b36acf242ef1ed90ae2fb25bdf045eae8>`_
+- Reduce spam. `97296a856 <https://github.com/fedora-infra/fmn.lib/commit/97296a856da0061726f2fe532d241cc66e0c4a91>`_
+- Merge pull request #7 from fedora-infra/feature/tests-passing `969d94610 <https://github.com/fedora-infra/fmn.lib/commit/969d946103fb63e801b9a25a9f4c849961d48bf3>`_
+- Merge pull request #8 from fedora-infra/feature/reduce-spam `96d2a968e <https://github.com/fedora-infra/fmn.lib/commit/96d2a968ec6e6e3094772bc057afc9b7b6e2b8a0>`_
+
 0.2.4
 -----
 
