@@ -119,21 +119,13 @@ def create_defaults_for(session, user, only_for=None):
         if not pref:
             pref = fmn.lib.models.Preference.create(session, user, context)
 
-        # Provide one catchall before adding the more specific rules below
-        name = 'Anything involving my username'
-        rule_path = 'fmn.rules:user_filter'
-        filt = fmn.lib.models.Filter.create(session, name)
-        filt.add_rule(session, valid_paths, rule_path, fasnick=nick)
-        pref.add_filter(session, filt)
-
         # Add rules that look for this user
         qualifier_path = 'fmn.rules:user_filter'
         for name, rule_path in generic_rule_path_defaults:
             filt = fmn.lib.models.Filter.create(session, name)
             filt.add_rule(session, valid_paths, rule_path)
             filt.add_rule(session, valid_paths, qualifier_path, fasnick=nick)
-
-            pref.add_filter(session, filt)
+            pref.add_filter(session, filt, notify=False)
 
         # Add rules that look for this user's packages
         qualifier_path = 'fmn.rules:user_package_filter'
@@ -141,5 +133,11 @@ def create_defaults_for(session, user, only_for=None):
             filt = fmn.lib.models.Filter.create(session, name)
             filt.add_rule(session, valid_paths, rule_path)
             filt.add_rule(session, valid_paths, qualifier_path, fasnick=nick)
+            pref.add_filter(session, filt, notify=False)
 
-            pref.add_filter(session, filt)
+        # Lastly, provide one catchall
+        name = 'Anything involving my username'
+        rule_path = 'fmn.rules:user_filter'
+        filt = fmn.lib.models.Filter.create(session, name)
+        filt.add_rule(session, valid_paths, rule_path, fasnick=nick)
+        pref.add_filter(session, filt, notify=True)
