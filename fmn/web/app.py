@@ -482,7 +482,7 @@ def example_messages(openid, context, filter_id, page):
     filter = pref.get_filter(SESSION, filter_id)
 
     # Now, connect to datanommer and get the latest bazillion messages
-    bazillion = 100
+    bazillion = 500
     try:
         total, pages, messages = datanommer.models.Message.grep(
             start=datetime.datetime.fromtimestamp(1),
@@ -508,10 +508,19 @@ def example_messages(openid, context, filter_id, page):
             'time': arrow.get(msg.timestamp).humanize(),
         }
 
+    # Mock out a fake 'cached preferences' object like we have in the consumer,
+    # but really it just consists of the one preferences and its *one* filter
+    # for which we're trying to find example messages.
+    preferences = [pref.__json__()]
+    preferences[0]['detail_values'] = ['mock']
+    preferences[0]['filters'] = [filter.__json__()]
+
     results = []
     for message in messages:
         original = message.__json__()
-        if filter.matches(SESSION, fedmsg_config, valid_paths, original):
+        recips = fmn.lib.recipients(
+            preferences, message.__json__(), valid_paths, fedmsg_config)
+        if recips:
             results.append(_make_result(message, original))
 
     return dict(
