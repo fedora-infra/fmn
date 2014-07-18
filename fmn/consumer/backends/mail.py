@@ -38,7 +38,7 @@ class EmailBackend(BaseBackend):
             return
 
         if self.disabled_for(session, detail_value=recipient['email address']):
-            self.log.debug("Messages stopped for %r, not sending." % nickname)
+            self.log.debug("Messages stopped for %r, not sending." % recipient)
             return
 
         email_message = email.Message.Message()
