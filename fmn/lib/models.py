@@ -581,11 +581,12 @@ class Preference(BASE):
         session.commit()
         self.notify(self.openid, self.context_name, "filters")
 
-    def add_filter(self, session, filter):
+    def add_filter(self, session, filter, notify=True):
         self.filters.append(filter)
         session.flush()
         session.commit()
-        self.notify(self.openid, self.context_name, "filters")
+        if notify:
+            self.notify(self.openid, self.context_name, "filters")
 
     def has_filter_name(self, session, filter_name):
         for filter in self.filters:
