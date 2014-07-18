@@ -183,7 +183,7 @@ class User(BASE):
         }
 
     def __repr__(self):
-        return "<fmn.lib.models.User %r %r>" % (self.openid, self.openid_url)
+        return "<fmn.lib.models.User: %r %r>" % (self.openid, self.openid_url)
 
     @classmethod
     def by_openid(cls, session, openid):
@@ -248,7 +248,7 @@ class Rule(BASE):
         }
 
     def __repr__(self):
-        return "<fmn.lib.models.Rule %r(**%r)>" % (
+        return "<fmn.lib.models.Rule: %r(**%r)>" % (
             self.code_path, self.arguments)
 
     @hybrid_property
@@ -316,7 +316,7 @@ class Filter(BASE):
         }
 
     def __repr__(self):
-        return "<fmn.lib.models.Filter %r>" % (self.name)
+        return "<fmn.lib.models.Filter: %r>" % (self.name)
 
     @classmethod
     def create(cls, session, name):
@@ -441,6 +441,10 @@ class Preference(BASE):
             'filters': [f.__json__() for f in self.filters],
             'detail_values': [v.value for v in self.detail_values],
         }
+
+    def __repr__(self):
+        return "<fmn.lib.models.Preference: %r %r>" % (
+            self.openid, self.context_name)
 
     @property
     def should_batch(self):
@@ -648,8 +652,8 @@ class Confirmation(BASE):
         sa.UniqueConstraint('openid', 'context_name'),
     )
 
-    def repr(self):
-        return "<Confirmation user:%s, context:%s, status:%s>" % (
+    def __repr__(self):
+        return "<fmn.lib.models.Confirmation: %r %r %r>" % (
             self.openid, self.context_name, self.status)
 
     @classmethod
