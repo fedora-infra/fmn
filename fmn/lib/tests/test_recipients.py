@@ -87,6 +87,9 @@ class TestRecipients(fmn.lib.tests.Base):
         recipients = fmn.lib.recipients(
             preferences, msg, self.valid_paths, self.config)
         eq_(recipients, {'irc': [{
+            'triggered_by_links': False,
+            'markup_messages': False,
+            'shorten_links': False,
             'irc nick': 'threebean',
             'user': 'ralph.id.fedoraproject.org',
             'filter_name': 'test filter',
@@ -154,6 +157,9 @@ class TestRecipients(fmn.lib.tests.Base):
         recipients = fmn.lib.recipients(
             preferences, msg, self.valid_paths, self.config)
         expected = {'irc': [{
+            'triggered_by_links': False,
+            'markup_messages': False,
+            'shorten_links': False,
             'irc nick': 'threebean',
             'user': 'ralph.id.fedoraproject.org',
             'filter_name': 'test filter',
@@ -183,6 +189,9 @@ class TestRecipients(fmn.lib.tests.Base):
         recipients = fmn.lib.recipients(
             preferences, msg, self.valid_paths, self.config)
         eq_(recipients, {'irc': [{
+            'triggered_by_links': False,
+            'markup_messages': False,
+            'shorten_links': False,
             'irc nick': 'threebean',
             'user': 'ralph.id.fedoraproject.org',
             'filter_name': 'test filter',
