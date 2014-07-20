@@ -86,7 +86,7 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess, self.config, self.valid_paths)
         recipients = fmn.lib.recipients(
             preferences, msg, self.valid_paths, self.config)
-        eq_(recipients, {'irc': [{
+        eq_(recipients['irc'][0], {
             'triggered_by_links': False,
             'markup_messages': False,
             'shorten_links': False,
@@ -94,7 +94,7 @@ class TestRecipients(fmn.lib.tests.Base):
             'user': 'ralph.id.fedoraproject.org',
             'filter_name': 'test filter',
             'filter_id': 1,
-        }]})
+        })
 
     def test_miss_recipients_list(self):
         self.create_user_and_context_data()
@@ -156,7 +156,7 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess, self.config, self.valid_paths)
         recipients = fmn.lib.recipients(
             preferences, msg, self.valid_paths, self.config)
-        expected = {'irc': [{
+        expected = {
             'triggered_by_links': False,
             'markup_messages': False,
             'shorten_links': False,
@@ -164,8 +164,8 @@ class TestRecipients(fmn.lib.tests.Base):
             'user': 'ralph.id.fedoraproject.org',
             'filter_name': 'test filter',
             'filter_id': 1,
-        }]}
-        eq_(dict(recipients), expected)
+        }
+        eq_(recipients['irc'][0], expected)
 
     def test_multiple_different_filters_hit(self):
         self.create_user_and_context_data()
@@ -188,7 +188,7 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess, self.config, self.valid_paths)
         recipients = fmn.lib.recipients(
             preferences, msg, self.valid_paths, self.config)
-        eq_(recipients, {'irc': [{
+        eq_(recipients['irc'][0], {
             'triggered_by_links': False,
             'markup_messages': False,
             'shorten_links': False,
@@ -196,4 +196,4 @@ class TestRecipients(fmn.lib.tests.Base):
             'user': 'ralph.id.fedoraproject.org',
             'filter_name': 'test filter',
             'filter_id': 1,
-            }]})
+        })
