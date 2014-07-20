@@ -38,12 +38,31 @@ class TestRecipients(fmn.lib.tests.Base):
             detail_value="threebean",
         )
 
+        user = fmn.lib.models.User.get(
+            self.sess, openid="toshio.id.fedoraproject.org")
+        context = fmn.lib.models.Context.get(self.sess, name="irc")
+        preference = fmn.lib.models.Preference.create(
+            self.sess,
+            user=user,
+            context=context,
+            detail_value="abadger1999",
+        )
+        preference.enabled = True
+
     def create_preference_data_basic(self, code_path):
         user = fmn.lib.models.User.get(
             self.sess, openid="ralph.id.fedoraproject.org")
         context = fmn.lib.models.Context.get(self.sess, name="irc")
         preference = fmn.lib.models.Preference.load(self.sess, user, context)
         filter = fmn.lib.models.Filter.create(self.sess, name="test filter")
+        filter.add_rule(self.sess, self.valid_paths, code_path)
+        preference.add_filter(self.sess, filter)
+
+        user = fmn.lib.models.User.get(
+            self.sess, openid="toshio.id.fedoraproject.org")
+        context = fmn.lib.models.Context.get(self.sess, name="irc")
+        preference = fmn.lib.models.Preference.load(self.sess, user, context)
+        filter = fmn.lib.models.Filter.create(self.sess, name="test filter 2")
         filter.add_rule(self.sess, self.valid_paths, code_path)
         preference.add_filter(self.sess, filter)
 
@@ -197,3 +216,35 @@ class TestRecipients(fmn.lib.tests.Base):
             'filter_name': 'test filter',
             'filter_id': 1,
         })
+
+    def test_load_preferences(self):
+        self.create_user_and_context_data()
+        self.create_preference_data_empty()
+        code_path = "fmn.lib.tests.example_rules:wat_rule"
+        self.create_preference_data_basic(code_path)
+
+        preferences = fmn.lib.load_preferences(
+            self.sess, self.config, self.valid_paths)
+
+        eq_(len(preferences), 2)
+        pref = preferences[0]
+        eq_(pref['enabled'], False)
+        eq_(pref['user']['openid'], u'ralph.id.fedoraproject.org')
+        eq_(pref['context']['name'], u'irc')
+        eq_(len(pref['filters']), 1)
+
+    def test_load_preferences_sans_disabled(self):
+        self.create_user_and_context_data()
+        self.create_preference_data_empty()
+        code_path = "fmn.lib.tests.example_rules:wat_rule"
+        self.create_preference_data_basic(code_path)
+
+        preferences = fmn.lib.load_preferences(
+            self.sess, self.config, self.valid_paths, cull_disabled=True)
+
+        eq_(len(preferences), 1)
+        pref = preferences[0]
+        eq_(pref['enabled'], True)
+        eq_(pref['user']['openid'], u'toshio.id.fedoraproject.org')
+        eq_(pref['context']['name'], u'irc')
+        eq_(len(pref['filters']), 1)
