@@ -90,7 +90,7 @@ def matches(filter, message, valid_paths, config):
     return True
 
 
-def load_preferences(session, config, valid_paths):
+def load_preferences(session, config, valid_paths, cull_disabled=False):
     """ Every rule for every filter for every context for every user.
 
     Any preferences in the DB that are for contexts that are disabled in the
@@ -99,8 +99,11 @@ def load_preferences(session, config, valid_paths):
     This is an expensive query that loads, practically, the whole database.
     """
     preferences = session.query(fmn.lib.models.Preference).all()
-    return [preference.__json__() for preference in preferences
-            if preference.context.name in config['fmn.backends']]
+    return [preference.__json__() for preference in preferences if (
+        preference.context.name in config['fmn.backends'] and (
+            not cull_disabled or preference.enabled
+        )
+    )]
 
 
 def load_rules(root='fmn.rules'):
