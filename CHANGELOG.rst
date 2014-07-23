@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.2.6
+-----
+
+- Adjust, fix, and add some __repr__ methods. `3d1e3cb77 <https://github.com/fedora-infra/fmn.lib/commit/3d1e3cb77a2c284f28693ad5eccacad1c233cb7d>`_
+- Make some tests less fragile. `95338a033 <https://github.com/fedora-infra/fmn.lib/commit/95338a033f2650e12625317921dea93179d75d4d>`_
+- Add option to load-preferences to omit disabled accounts. `a95a959d2 <https://github.com/fedora-infra/fmn.lib/commit/a95a959d2f4d9d77b5fa5ec8e46751203233f25c>`_
+- Merge pull request #9 from fedora-infra/feature/sans-disabled `23b597f6d <https://github.com/fedora-infra/fmn.lib/commit/23b597f6d87a8a7a9e766f47c2cbc2207ce77a60>`_
+
 0.2.5
 -----
 
