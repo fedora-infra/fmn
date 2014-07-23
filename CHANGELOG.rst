@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.2.5
+-----
+
+- Add a rule for matching a generic regex. `07276649c <https://github.com/fedora-infra/fmn.rules/commit/07276649c5d1479d80ead5e3ec3171b87cd53ce1>`_
+- Merge pull request #15 from fedora-infra/feature/generic-regex `063d5fc46 <https://github.com/fedora-infra/fmn.rules/commit/063d5fc46327f5cb872e390b23ad8269266b3e8f>`_
+
 0.2.4
 -----
 
