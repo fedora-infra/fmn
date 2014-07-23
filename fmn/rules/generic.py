@@ -82,6 +82,23 @@ def package_regex_filter(config, message, pattern=None, *args, **kw):
         return any([regex.match(package) for package in packages])
 
 
+def regex_filter(config, message, pattern=None, *args, **kw):
+    """ All messages matching a given regex
+
+    Use this rule to include messages that bear a certain pattern.
+    This can be anything that appears anywhere in the message (for instance,
+    you could combine this with rules for wiki updates or Ask Fedora changes
+    to alert yourself of activity in your area of expertise).
+
+    (*i.e., (beefy miracle)*).
+    """
+
+    pattern = kw.get('pattern', pattern)
+    if pattern:
+        regex = re.compile(pattern)
+        return bool(regex.match(json.dumps(message)))
+
+
 def trac_hosted_filter(config, message, project=None, *args, **kw):
     """ Filter the messages for one or more fedorahosted projects
 
