@@ -1,5 +1,6 @@
 # Generic rules for FMN
 import re
+import json
 
 import fedmsg
 
