@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.2.7
+-----
+
+- Typofix. `a759ebc2d <https://github.com/fedora-infra/fmn.consumer/commit/a759ebc2d033e6cc7d1b92757b10fe76df68170f>`_
+
 0.2.6
 -----
 
