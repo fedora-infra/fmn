@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.2.6
+-----
+
+- Copy in real, latest bootstrap-fedora. `6df0d3880 <https://github.com/fedora-infra/fmn.web/commit/6df0d3880da2a7ff2340bc9b78955ea5084db8c2>`_
+- Constrain the navbar in a container. `d2185270f <https://github.com/fedora-infra/fmn.web/commit/d2185270fcc0c1df6622f0056438ccac07ccdb93>`_
+- Navbar tweaks to make fmn match up with bodhi2. `b55a6dcd4 <https://github.com/fedora-infra/fmn.web/commit/b55a6dcd42613268e4802ab9ed2f88d197051477>`_
+- Merge pull request #25 from fedora-infra/feature/bodhi-ui-matchup `5cb8628bd <https://github.com/fedora-infra/fmn.web/commit/5cb8628bd8b5a75269efeefcf6149cba6586a210>`_
+- Fix the "examples" feature. `a3c1e4ece <https://github.com/fedora-infra/fmn.web/commit/a3c1e4ece2f5d0ea9c4a519612eca88911d98e0c>`_
+- Merge pull request #26 from fedora-infra/feature/examples-fix `fa325a35f <https://github.com/fedora-infra/fmn.web/commit/fa325a35fb460f632dd068a4c80110bcc12c4e7d>`_
+
 0.2.5
 -----
 
