@@ -34,6 +34,7 @@ def recipients(preferences, message, valid_paths, config):
     Returns a dict mapping context names to lists of recipients.
     """
 
+    rule_cache = dict()
     results = defaultdict(list)
     notified = set()
 
@@ -45,7 +46,7 @@ def recipients(preferences, message, valid_paths, config):
 
         filters = preference['filters']
         for filter in preference['filters']:
-            if matches(filter, message, valid_paths, config):
+            if matches(filter, message, valid_paths, rule_cache, config):
                 for detail_value in preference['detail_values']:
                     results[context['name']].append({
                         'user': user['openid'],
@@ -62,7 +63,7 @@ def recipients(preferences, message, valid_paths, config):
     return results
 
 
-def matches(filter, message, valid_paths, config):
+def matches(filter, message, valid_paths, rule_cache, config):
     """ Returns True if the given filter matches the given message. """
 
     if not filter['rules']:
@@ -71,10 +72,14 @@ def matches(filter, message, valid_paths, config):
     for rule in filter['rules']:
         fn = rule['fn']
         arguments = rule['arguments']
+        rule_cache_key = rule['cache_key']
+
+        if rule_cache_key in rule_cache:
+            return rule_cache[rule_cache_key]
 
         try:
-            result = fn(config, message, **arguments)
-            if not result:
+            rule_cache[rule_cache_key] = fn(config, message, **arguments)
+            if not rule_cache[rule_cache_key]:
                 return False
         except Exception as e:
             log.exception(e)

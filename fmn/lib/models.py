@@ -246,15 +246,19 @@ class Rule(BASE):
             'created_on': self.created_on,
             'code_path': self.code_path,
             'arguments': self.arguments,
+            'cache_key': self.cache_key,
         }
         if reify:
             result['fn'] = fedmsg.utils.load_class(str(self.code_path))
         return result
 
-
     def __repr__(self):
         return "<fmn.lib.models.Rule: %r(**%r)>" % (
             self.code_path, self.arguments)
+
+    @property
+    def cache_key(self):
+        return hashlib.sha256(self.code_path + self._arguments).hexdigest()
 
     @hybrid_property
     def arguments(self):
