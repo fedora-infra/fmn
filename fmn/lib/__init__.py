@@ -69,15 +69,8 @@ def matches(filter, message, valid_paths, config):
         return False
 
     for rule in filter['rules']:
-        code_path = rule['code_path']
+        fn = rule['fn']
         arguments = rule['arguments']
-
-        # First, validate the rule before doing anything
-        fmn.lib.models.Rule.validate_code_path(valid_paths, code_path)
-
-        # Next, instantiate it into a python callable.
-        # (This is a bit of a misnomer though, load_class can load anything.)
-        fn = fedmsg.utils.load_class(str(code_path))
 
         try:
             result = fn(config, message, **arguments)
@@ -99,7 +92,7 @@ def load_preferences(session, config, valid_paths, cull_disabled=False):
     This is an expensive query that loads, practically, the whole database.
     """
     preferences = session.query(fmn.lib.models.Preference).all()
-    return [preference.__json__() for preference in preferences if (
+    return [preference.__json__(reify=True) for preference in preferences if (
         preference.context.name in config['fmn.backends'] and (
             not cull_disabled or preference.enabled
         )
