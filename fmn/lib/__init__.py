@@ -34,6 +34,7 @@ def recipients(preferences, message, valid_paths, config):
     Returns a dict mapping context names to lists of recipients.
     """
 
+    rule_cache = dict()
     results = defaultdict(list)
     notified = set()
 
@@ -45,7 +46,7 @@ def recipients(preferences, message, valid_paths, config):
 
         filters = preference['filters']
         for filter in preference['filters']:
-            if matches(filter, message, valid_paths, config):
+            if matches(filter, message, valid_paths, rule_cache, config):
                 for detail_value in preference['detail_values']:
                     results[context['name']].append({
                         'user': user['openid'],
@@ -62,26 +63,23 @@ def recipients(preferences, message, valid_paths, config):
     return results
 
 
-def matches(filter, message, valid_paths, config):
+def matches(filter, message, valid_paths, rule_cache, config):
     """ Returns True if the given filter matches the given message. """
 
     if not filter['rules']:
         return False
 
     for rule in filter['rules']:
-        code_path = rule['code_path']
+        fn = rule['fn']
         arguments = rule['arguments']
+        rule_cache_key = rule['cache_key']
 
-        # First, validate the rule before doing anything
-        fmn.lib.models.Rule.validate_code_path(valid_paths, code_path)
-
-        # Next, instantiate it into a python callable.
-        # (This is a bit of a misnomer though, load_class can load anything.)
-        fn = fedmsg.utils.load_class(str(code_path))
+        if rule_cache_key in rule_cache:
+            return rule_cache[rule_cache_key]
 
         try:
-            result = fn(config, message, **arguments)
-            if not result:
+            rule_cache[rule_cache_key] = fn(config, message, **arguments)
+            if not rule_cache[rule_cache_key]:
                 return False
         except Exception as e:
             log.exception(e)
@@ -99,7 +97,7 @@ def load_preferences(session, config, valid_paths, cull_disabled=False):
     This is an expensive query that loads, practically, the whole database.
     """
     preferences = session.query(fmn.lib.models.Preference).all()
-    return [preference.__json__() for preference in preferences if (
+    return [preference.__json__(reify=True) for preference in preferences if (
         preference.context.name in config['fmn.backends'] and (
             not cull_disabled or preference.enabled
         )
