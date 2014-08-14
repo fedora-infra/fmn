@@ -45,6 +45,7 @@ from sqlalchemy.orm import relation
 from sqlalchemy.orm import backref
 
 import fedmsg
+import fedmsg.utils
 
 import fmn.lib.defaults
 
@@ -115,7 +116,7 @@ class Context(BASE):
     icon = sa.Column(sa.String(32), nullable=False)
     placeholder = sa.Column(sa.String(256))
 
-    def __json__(self):
+    def __json__(self, reify=False):
         return {
             'name': self.name,
             'detail_name': self.detail_name,
@@ -175,7 +176,7 @@ class User(BASE):
     api_key = sa.Column(sa.Text)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
 
-    def __json__(self):
+    def __json__(self, reify=False):
         return {
             'openid': self.openid,
             'openid_url': self.openid_url,
@@ -240,16 +241,24 @@ class Rule(BASE):
     # JSON-encoded kw
     _arguments = sa.Column(sa.String(256))
 
-    def __json__(self):
-        return {
+    def __json__(self, reify=False):
+        result = {
             'created_on': self.created_on,
             'code_path': self.code_path,
             'arguments': self.arguments,
+            'cache_key': self.cache_key,
         }
+        if reify:
+            result['fn'] = fedmsg.utils.load_class(str(self.code_path))
+        return result
 
     def __repr__(self):
         return "<fmn.lib.models.Rule: %r(**%r)>" % (
             self.code_path, self.arguments)
+
+    @property
+    def cache_key(self):
+        return hashlib.sha256(self.code_path + self._arguments).hexdigest()
 
     @hybrid_property
     def arguments(self):
@@ -307,12 +316,12 @@ class Filter(BASE):
         sa.ForeignKey('preferences.id'))
     preference = relation('Preference', backref=backref('filters'))
 
-    def __json__(self):
+    def __json__(self, reify=False):
         return {
             'id': self.id,
             'name': self.name,
             'created_on': self.created_on,
-            'rules': [r.__json__() for r in self.rules]
+            'rules': [r.__json__(reify=reify) for r in self.rules]
         }
 
     def __repr__(self):
@@ -427,7 +436,7 @@ class Preference(BASE):
         sa.UniqueConstraint('openid', 'context_name'),
     )
 
-    def __json__(self):
+    def __json__(self, reify=False):
         return {
             'created_on': self.created_on,
             'batch_delta': self.batch_delta,
@@ -436,9 +445,9 @@ class Preference(BASE):
             'triggered_by_links': self.triggered_by_links,
             'shorten_links': self.shorten_links,
             'enabled': self.enabled,
-            'context': self.context.__json__(),
-            'user': self.user.__json__(),
-            'filters': [f.__json__() for f in self.filters],
+            'context': self.context.__json__(reify=reify),
+            'user': self.user.__json__(reify=reify),
+            'filters': [f.__json__(reify=reify) for f in self.filters],
             'detail_values': [v.value for v in self.detail_values],
         }
 

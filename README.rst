@@ -5,7 +5,7 @@ fmn.lib
 end-user notifications triggered by
 `fedmsg, the Fedora FEDerated MESsage bus <http://fedmsg.com>`_.
 
-This modules contains the internal API for components and data model for Fedora
+This module contains the internal API components and data model for Fedora
 Notifications
 
 There is a parental placeholder repo with some useful information you might
