@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.2.7
+-----
+
+- That barely made sense. `9ea2e0ed2 <https://github.com/fedora-infra/fmn.lib/commit/9ea2e0ed2680f06e05e28a77b39dad38bb277b67>`_
+- Instantiate rule code_paths at load-time instead of consume-time. `f97926473 <https://github.com/fedora-infra/fmn.lib/commit/f97926473725868e90cf45de28343b16efe59522>`_
+- Cache the results of rules for each message. `114d6762b <https://github.com/fedora-infra/fmn.lib/commit/114d6762be24009220fe998152814c2efe4df9b8>`_
+- Merge pull request #10 from fedora-infra/feature/optimizations `595312af1 <https://github.com/fedora-infra/fmn.lib/commit/595312af138bc81166b8eaaf90a428bbd95cc331>`_
+
 0.2.6
 -----
 
