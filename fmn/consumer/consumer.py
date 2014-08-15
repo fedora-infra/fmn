@@ -53,7 +53,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
     def refresh_cache(self, session, topic=None, msg=None):
         log.info("Loading and caching preferences")
         self.cached_preferences = fmn.lib.load_preferences(
-            session, self.hub.config, self.valid_paths)
+            session, self.hub.config, self.valid_paths, cull_disabled=True)
 
     def make_session(self):
         return fmn.lib.models.init(self.uri)
