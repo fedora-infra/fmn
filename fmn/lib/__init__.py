@@ -74,11 +74,10 @@ def matches(filter, message, valid_paths, rule_cache, config):
         arguments = rule['arguments']
         rule_cache_key = rule['cache_key']
 
-        if rule_cache_key in rule_cache:
-            return rule_cache[rule_cache_key]
-
         try:
-            rule_cache[rule_cache_key] = fn(config, message, **arguments)
+            if rule_cache_key not in rule_cache:
+                rule_cache[rule_cache_key] = fn(config, message, **arguments)
+
             if not rule_cache[rule_cache_key]:
                 return False
         except Exception as e:

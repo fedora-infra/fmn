@@ -68,18 +68,6 @@ class TestRecipients(fmn.lib.tests.Base):
 
     def test_empty_recipients_list(self):
         self.create_user_and_context_data()
-
-        msg = {
-            "wat": "blah",
-        }
-        preferences = fmn.lib.load_preferences(
-            self.sess, self.config, self.valid_paths)
-        recipients = fmn.lib.recipients(
-            preferences, msg, self.valid_paths, self.config)
-        eq_(recipients, {})
-
-    def test_empty_recipients_list(self):
-        self.create_user_and_context_data()
         self.create_preference_data_empty()
 
         msg = {
