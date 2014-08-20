@@ -51,6 +51,15 @@ def _get_pkgdb2_packagers_for(config, package):
     packagers = set([
         acl['fas_name'] for acl in obj['acls']
         if acl['status'] == 'Approved'])
+
+    groups = set([
+        acl['fas_name'].replace('group::', '')
+        for acl in obj['acls']
+        if acl['status'] == 'Approved' and acl['fas_name'].startswith('group::')
+    ])
+    for group in groups:
+        packagers.update(get_user_of_group(fas, group))
+
     return packagers
 
 
