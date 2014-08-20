@@ -6,10 +6,31 @@ import requests
 import requests.exceptions
 
 from dogpile.cache import make_region
+from fedora.client.fas2 import AccountSystem
 
 log = logging.getLogger(__name__)
 
 _cache = make_region()
+_FAS = None
+
+
+def get_fas(config):
+    """ Return a fedora.client.fas2.AccountSystem object if the provided
+    configuration contains a FAS username and password.
+    """
+    global _FAS
+    if _FAS is not None:
+        return _FAS
+
+    _FAS = AccountSystem(
+        config.get('fmn.fas.url', 'https://admin.fedoraproject.org/accounts'),
+        username=config.get('fmn.fas.user')
+        password=config.get('fmn.fas.password'),
+        cache_session=False,
+        insecure=config.get('fmn.fas.insecure', False)
+    )
+
+    return _FAS
 
 
 def get_packagers_of_package(config, package):
