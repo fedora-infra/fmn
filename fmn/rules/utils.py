@@ -78,8 +78,10 @@ def _get_pkgdb2_packagers_for(config, package):
         for acl in obj['acls']
         if acl['status'] == 'Approved' and acl['fas_name'].startswith('group::')
     ])
+    if groups:
+        fas = get_fas(config)
     for group in groups:
-        packagers.update(get_user_of_group(fas, group))
+        packagers.update(get_user_of_group(config, fas, group))
 
     return packagers
 
