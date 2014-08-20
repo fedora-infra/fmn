@@ -116,9 +116,10 @@ def _get_pkgdb2_packages_for(config, username):
     return packages_of_interest
 
 
-def get_user_of_group(fas, groupname):
+def get_user_of_group(config, fas, groupname):
     ''' Return the list of user in the specified group.
     
+    :arg config: a dict containing the fedmsg config
     :arg fas: a fedora.client.fas2.AccountSystem object instanciated and loged
         into FAS.
     :arg groupname: the name of the group for which we want to retrieve the
