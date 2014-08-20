@@ -513,7 +513,7 @@ def example_messages(openid, context, filter_id, page):
     # for which we're trying to find example messages.
     preferences = [pref.__json__()]
     preferences[0]['detail_values'] = ['mock']
-    preferences[0]['filters'] = [filter.__json__()]
+    preferences[0]['filters'] = [filter.__json__(reify=True)]
 
     results = []
     for message in messages:
