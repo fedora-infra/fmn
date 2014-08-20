@@ -105,3 +105,22 @@ def _get_pkgdb2_packages_for(config, username):
     packages_of_interest = set([p['name'] for p in packages_of_interest])
     log.debug("done talking with pkgdb2 for now.")
     return packages_of_interest
+
+
+def get_user_of_group(fas, groupname):
+    ''' Return the list of user in the specified group.
+    
+    :arg fas: a fedora.client.fas2.AccountSystem object instanciated and loged
+        into FAS.
+    :arg groupname: the name of the group for which we want to retrieve the
+        members.
+    :return: a list of FAS user members of the specified group.
+    '''
+
+    if not hasattr(_cache, 'backend'):
+        cache.configure(**config['fmn.rules.cache'])
+
+    key = cache_key_generator(get_user_of_group, groupname)
+    creator = lambda: fas.group_members(groupname)
+    return _cache.get_or_create(key, creator)
+
