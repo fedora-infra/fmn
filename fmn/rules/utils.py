@@ -22,12 +22,15 @@ def get_fas(config):
     if _FAS is not None:
         return _FAS
 
+    creds = config['fas_credentials']
+    default_url = 'https://admin.fedoraproject.org/accounts/'
+
     _FAS = AccountSystem(
-        config.get('fmn.fas.url', 'https://admin.fedoraproject.org/accounts'),
-        username=config.get('fmn.fas.user')
-        password=config.get('fmn.fas.password'),
+        creds.get('base_url', default_url),
+        username=creds['username'],
+        password=creds['password'],
         cache_session=False,
-        insecure=config.get('fmn.fas.insecure', False)
+        insecure=creds.get('insecure', False)
     )
 
     return _FAS
