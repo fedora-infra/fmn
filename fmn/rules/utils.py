@@ -104,9 +104,18 @@ def get_packages_of_user(config, username):
     if not hasattr(_cache, 'backend'):
         _cache.configure(**config['fmn.rules.cache'])
 
-    key = cache_key_generator(get_packages_of_user, username)
-    creator = lambda: _get_pkgdb2_packages_for(config, username)
-    return _cache.get_or_create(key, creator)
+    packages = []
+
+    groups = get_groups_of_user(config, get_fas(config), username)
+    owners = [username] + ['group::' + group for group in groups]
+
+    for owner in owners:
+        key = cache_key_generator(get_packages_of_user, owner)
+        creator = lambda: _get_pkgdb2_packages_for(config, owner)
+        subset = _cache.get_or_create(key, creator)
+        packages.extend(subset)
+
+    return set(packages)
 
 
 def cache_key_generator(fn, arg):
@@ -159,5 +168,28 @@ def get_user_of_group(config, fas, groupname):
 
     key = cache_key_generator(get_user_of_group, groupname)
     creator = lambda: fas.group_members(groupname)
+    return _cache.get_or_create(key, creator)
+
+def get_groups_of_user(config, fas, username):
+    ''' Return the list of groups to which the user belongs.
+
+    :arg config: a dict containing the fedmsg config
+    :arg fas: a fedora.client.fas2.AccountSystem object instanciated and loged
+        into FAS.
+    :arg username: the name of a user for which we want to retrieve groups
+    :return: a list of FAS groups to which the user belongs.
+    '''
+
+    if not hasattr(_cache, 'backend'):
+        cache.configure(**config['fmn.rules.cache'])
+
+    key = cache_key_generator(get_groups_of_user, username)
+
+    def creator():
+        results = []
+        for group in fas.person_by_username(username).get('memberships', []):
+            results.append(group.name)
+        return results
+
     return _cache.get_or_create(key, creator)
 
