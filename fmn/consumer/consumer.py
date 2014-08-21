@@ -89,7 +89,9 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
 
         # If a user has tweaked something in the pkgdb2 db, then invalidate our
         # dogpile cache.. but only the parts that have something to do with any
-        # one of the users involved in the pkgdb2 interaction.
+        # one of the users involved in the pkgdb2 interaction.  Note that a
+        # 'username' here could be an actual username, or a group name like
+        # 'group::infra-sig'.
         if '.pkgdb.' in topic:
             usernames = fedmsg.meta.msg2usernames(msg, **self.hub.config)
             for username in usernames:
@@ -97,6 +99,16 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 target = fmn.rules.utils.get_packages_of_user
                 fmn.rules.utils.invalidate_cache_for(
                     self.hub.config, target, username)
+
+        # Do the same invalidation trick for fas group membership changes.
+        if '.fas.group.' in topic:
+            usernames = fedmsg.meta.msg2usernames(msg, **self.hub.config)
+            for username in usernames:
+                log.info("Invalidating fas cache for %r" % username)
+                target = fmn.rules.utils.get_groups_of_user
+                fmn.rules.utils.invalidate_cache_for(
+                    self.hub.config, target, username)
+
 
         # With cache management done, we can move on to the real work.
         # Compute, based on our in-memory cache of preferences, who we think
