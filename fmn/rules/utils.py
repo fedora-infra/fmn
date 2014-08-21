@@ -78,8 +78,9 @@ def _get_pkgdb2_packagers_for(config, package):
 
     groups = set([
         acl['fas_name'].replace('group::', '')
-        for acl in obj['acls']
-        if acl['status'] == 'Approved' and acl['fas_name'].startswith('group::')
+        for acl in obj['acls'] if (
+            acl['status'] == 'Approved' and
+            acl['fas_name'].startswith('group::'))
     ])
     if groups:
         fas = get_fas(config)
