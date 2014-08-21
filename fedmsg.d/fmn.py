@@ -44,7 +44,7 @@ config = {
 
     # IRC
     "fmn.irc.network": "irc.freenode.net",
-    "fmn.irc.nickname": "pingoubot",
+    "fmn.irc.nickname": "threebot",
     "fmn.irc.port": 6667,
     "fmn.irc.timeout": 120,
 
