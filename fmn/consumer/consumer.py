@@ -116,7 +116,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                     )
                     session.add(user)
                 session.commit()
-
+                self.refresh_cache(session, topic, msg)
 
         # Do the same invalidation trick for fas group membership changes.
         if '.fas.group.' in topic:
@@ -126,7 +126,6 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 target = fmn.rules.utils.get_groups_of_user
                 fmn.rules.utils.invalidate_cache_for(
                     self.hub.config, target, username)
-
 
         # With cache management done, we can move on to the real work.
         # Compute, based on our in-memory cache of preferences, who we think
