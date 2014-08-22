@@ -770,8 +770,9 @@ def handle_rule():
             flask.g.auth.openid, openid
         )))
 
-    if method not in ['POST', 'DELETE']:
-        raise APIError(405, dict(reason="Only POST and DELETE accepted"))
+    if method not in ['POST', 'DELETE', 'NEGATE']:
+        raise APIError(405, dict(
+            reason="Only POST, NEGATE and DELETE accepted"))
 
     user = fmn.lib.models.User.by_openid(SESSION, openid)
     if not user:
@@ -792,6 +793,8 @@ def handle_rule():
     try:
         if method == 'POST':
             filter.add_rule(SESSION, valid_paths, code_path, **arguments)
+        elif method == 'NEGATE':
+            filter.negate_rule(SESSION, code_path)
         elif method == 'DELETE':
             filter.remove_rule(SESSION, code_path)  # , **arguments)
         else:
