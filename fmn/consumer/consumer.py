@@ -2,6 +2,7 @@
 
 import fedmsg.consumers
 import fmn.lib
+import fmn.lib.model
 import fmn.rules.utils
 import backends as fmn_backends
 
@@ -99,6 +100,23 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 target = fmn.rules.utils.get_packages_of_user
                 fmn.rules.utils.invalidate_cache_for(
                     self.hub.config, target, username)
+
+        # Create a local account with all the default rules if an user is added
+        # to the `packager` group in FAS
+        if '.fas.group.member.sponsor' in topic:
+            group = msg['msg']['group']['name']
+            if group == 'packager':
+                usernames = fedmsg.meta.msg2usernames(msg, **self.hub.config)
+                for username in usernames:
+                    user = fmn.lib.model.User.get_or_create(
+                        session,
+                        openid='%s.id.fedoraproject.org' % username,
+                        openid_url='https://%s.id.fedoraproject.org' % username,
+                        create_defaults=True,
+                    )
+                    session.add(user)
+                session.commit()
+
 
         # Do the same invalidation trick for fas group membership changes.
         if '.fas.group.' in topic:
