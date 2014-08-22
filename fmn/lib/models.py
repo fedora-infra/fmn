@@ -369,6 +369,20 @@ class Filter(BASE):
 
         raise ValueError("No such rule found: %r" % code_path)
 
+    def negate_rule(self, session, code_path, **kw):
+        for r in self.rules:
+            if r.code_path == code_path:
+                r.negated = not r.negated
+                session.commit()
+
+                pref = self.preference
+                if pref:
+                    self.notify(pref.openid, pref.context_name, "rules")
+
+                return
+
+        raise ValueError("No such rule found: %r" % code_path)
+
 
 class DetailValue(BASE):
     __tablename__ = 'detail_values'
