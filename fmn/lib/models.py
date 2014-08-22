@@ -240,6 +240,8 @@ class Rule(BASE):
     code_path = sa.Column(sa.String(50), nullable=False)
     # JSON-encoded kw
     _arguments = sa.Column(sa.String(256))
+    # Should we negate the output of the computed rule?
+    negated = sa.Column(sa.Boolean, default=False)
 
     def __json__(self, reify=False):
         result = {
@@ -247,14 +249,16 @@ class Rule(BASE):
             'code_path': self.code_path,
             'arguments': self.arguments,
             'cache_key': self.cache_key,
+            'negated': self.negated,
         }
         if reify:
             result['fn'] = fedmsg.utils.load_class(str(self.code_path))
         return result
 
     def __repr__(self):
-        return "<fmn.lib.models.Rule: %r(**%r)>" % (
-            self.code_path, self.arguments)
+        negation = '' or self.negated and '!'
+        return "<fmn.lib.models.Rule: %s%r(**%r)>" % (
+            negation, self.code_path, self.arguments)
 
     @property
     def cache_key(self):

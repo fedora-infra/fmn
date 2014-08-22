@@ -71,12 +71,16 @@ def matches(filter, message, valid_paths, rule_cache, config):
 
     for rule in filter['rules']:
         fn = rule['fn']
+        negated = rule['negated']
         arguments = rule['arguments']
         rule_cache_key = rule['cache_key']
 
         try:
             if rule_cache_key not in rule_cache:
-                rule_cache[rule_cache_key] = fn(config, message, **arguments)
+                value = fn(config, message, **arguments)
+                if negated:
+                    value = not value
+                rule_cache[rule_cache_key] =  value
 
             if not rule_cache[rule_cache_key]:
                 return False
