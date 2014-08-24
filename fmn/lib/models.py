@@ -256,7 +256,7 @@ class Rule(BASE):
         return result
 
     def __repr__(self):
-        negation = '' or self.negated and '!'
+        negation = self.negated and '!' or ''
         return "<fmn.lib.models.Rule: %s%r(**%r)>" % (
             negation, self.code_path, self.arguments)
 
