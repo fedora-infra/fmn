@@ -1,5 +1,7 @@
 # An example fedmsg koji consumer
 
+import threading
+
 import fedmsg.consumers
 import fmn.lib
 import fmn.lib.model
@@ -48,13 +50,15 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         self.valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
         self.cached_preferences = None
+        self.cached_preferences_lock = threading.Lock()
 
         log.debug("FMNConsumer initialized")
 
     def refresh_cache(self, session, topic=None, msg=None):
         log.info("Loading and caching preferences")
-        self.cached_preferences = fmn.lib.load_preferences(
-            session, self.hub.config, self.valid_paths, cull_disabled=True)
+        with self.cached_preferences_lock:
+            self.cached_preferences = fmn.lib.load_preferences(
+                session, self.hub.config, self.valid_paths, cull_disabled=True)
 
     def make_session(self):
         return fmn.lib.models.init(self.uri)
