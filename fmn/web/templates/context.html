@@ -180,6 +180,27 @@
               <input name="openid" id="openid" value="{{openid}}" type="hidden">
               <input name="context" id="context" value="{{current}}" type="hidden">
               <table class="table">
+                {% if confirmation %}
+                <tr>
+                  <td>
+                    <label class="control-label" for="detail_value">
+                      {{confirmation.status}} {{context.detail_name}}</label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control input-sm"
+                    name="detail_value" id="detail_value" required=required
+                    value='{{ confirmation.detail_value }}' disabled>
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-sm btn-danger"
+                      name="delete" value="{{confirmation.detail_value}}"
+                      {{'disabled' if preference.enabled is sameas false}}>
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </td>
+                </tr>
+                {% endif %}
+
                 {% if preference.detail_values %}
                 <tr>
                   <td>
