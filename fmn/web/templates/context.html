@@ -54,6 +54,22 @@
     </p>
 
     <div class="list-group">
+
+      <div class="list-group-item">
+        <form class="form-inline" role="form" action="{{url_for('handle_filter')}}"
+          method="post">
+          <div class="form-group">
+            <label class="sr-only" for="filter_name">Filter Name</label>
+            <input type="text" class="form-control" name="filter_name" id="filter_name" required=required placeholder="New Filter Name">
+          </div>
+          <input name="openid" id="openid" value="{{openid}}" type="hidden">
+          <input name="context" id="context" value="{{current}}" type="hidden">
+          <button type="submit" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span>
+            Create a new filter</button>
+        </form>
+      </div>
+
       {% for fltr in preference.filters %}
       <a href="{{fltr.id}}" class="list-group-item">
         <h4 class="list-group-item-heading">{{fltr.name}}</h4>
@@ -93,23 +109,6 @@
   </div>
 
   <div class="col-md-5">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <form class="form-inline" role="form" action="{{url_for('handle_filter')}}"
-          method="post">
-          <div class="form-group">
-            <label class="sr-only" for="filter_name">Filter Name</label>
-            <input type="text" class="form-control" name="filter_name" id="filter_name" required=required placeholder="New Filter Name">
-          </div>
-          <input name="openid" id="openid" value="{{openid}}" type="hidden">
-          <input name="context" id="context" value="{{current}}" type="hidden">
-          <button type="submit" class="btn btn-success">
-            <span class="glyphicon glyphicon-plus"></span>
-            Create a new filter</button>
-        </form>
-      </div>
-    </div>
-
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
