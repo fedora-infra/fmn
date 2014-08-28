@@ -165,6 +165,20 @@
         {% elif preference.detail_values.__len__() == 0 %}
         <div class="alert alert-info">
           <p><strong>Next</strong>-- we need to know where to send your messages.</p>
+          {% if context.name == "irc" %}
+          <p>Note that we will try to private message you on the freenode irc
+          network.  For this to work you need to be:
+          <ul>
+            <li>signed in to freenode right now</li>
+            <li><em>identified</em> with <code>NickServ</code></li>
+          </ul>
+          If that's not the case already, you should go do those things
+          first.</p>
+          {% elif context.name == "email" %}
+          <p>Note that we will try to email you with a confirmation link.
+          You will need to check your email and follow that link to
+          proceed.</p>
+          {% endif %}
         </div>
         {% endif %}
         {% if context.name == "android" %}
