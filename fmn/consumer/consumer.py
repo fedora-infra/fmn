@@ -107,7 +107,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         # Create a local account with all the default rules if an user is added
         # to the `packager` group in FAS
         if '.fas.group.member.sponsor' in topic:
-            group = msg['msg']['group']['name']
+            group = msg['msg']['group']
             if group == 'packager':
                 usernames = fedmsg.meta.msg2usernames(msg, **self.hub.config)
                 for username in usernames:
