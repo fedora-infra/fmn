@@ -474,6 +474,10 @@ class Preference(BASE):
             self.openid, self.context_name)
 
     @property
+    def can_send(self):
+        return self.enabled and bool(self.detail_values)
+
+    @property
     def should_batch(self):
         """ If the user has any batching preferences at all, then we should """
         return self.batch_delta is not None or self.batch_count is not None
