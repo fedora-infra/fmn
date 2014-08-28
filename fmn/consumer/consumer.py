@@ -4,7 +4,6 @@ import threading
 
 import fedmsg.consumers
 import fmn.lib
-import fmn.lib.model
 import fmn.rules.utils
 import backends as fmn_backends
 
@@ -112,7 +111,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
             if group == 'packager':
                 usernames = fedmsg.meta.msg2usernames(msg, **self.hub.config)
                 for username in usernames:
-                    user = fmn.lib.model.User.get_or_create(
+                    user = fmn.lib.models.User.get_or_create(
                         session,
                         openid='%s.id.fedoraproject.org' % username,
                         openid_url='https://%s.id.fedoraproject.org' % username,
