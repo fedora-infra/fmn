@@ -53,7 +53,23 @@
     (a <em>{{context.detail_name}}</em>); you can set that up here.
     </p>
 
-    <div class="list-group">
+    <div class="list-group {{'hidden' if preference.can_send is sameas false}}">
+
+      <div class="list-group-item">
+        <form class="form-inline" role="form" action="{{url_for('handle_filter')}}"
+          method="post">
+          <div class="form-group">
+            <label class="sr-only" for="filter_name">Filter Name</label>
+            <input type="text" class="form-control" name="filter_name" id="filter_name" required=required placeholder="New Filter Name">
+          </div>
+          <input name="openid" id="openid" value="{{openid}}" type="hidden">
+          <input name="context" id="context" value="{{current}}" type="hidden">
+          <button type="submit" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span>
+            Create a new filter</button>
+        </form>
+      </div>
+
       {% for fltr in preference.filters %}
       <a href="{{fltr.id}}" class="list-group-item">
         <h4 class="list-group-item-heading">{{fltr.name}}</h4>
@@ -94,23 +110,6 @@
 
   <div class="col-md-5">
     <div class="panel panel-default">
-      <div class="panel-body">
-        <form class="form-inline" role="form" action="{{url_for('handle_filter')}}"
-          method="post">
-          <div class="form-group">
-            <label class="sr-only" for="filter_name">Filter Name</label>
-            <input type="text" class="form-control" name="filter_name" id="filter_name" required=required placeholder="New Filter Name">
-          </div>
-          <input name="openid" id="openid" value="{{openid}}" type="hidden">
-          <input name="context" id="context" value="{{current}}" type="hidden">
-          <button type="submit" class="btn btn-success">
-            <span class="glyphicon glyphicon-plus"></span>
-            Create a new filter</button>
-        </form>
-      </div>
-    </div>
-
-    <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
           Should we send you messages?
@@ -141,7 +140,7 @@
       </div>
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default {{'hidden' if preference.enabled is sameas false}}">
       <div class="panel-heading">
         <h3 class="panel-title">
           Where should we send your messages?
@@ -163,6 +162,24 @@
           {% endif %}
           </p>
         </div>
+        {% elif preference.detail_values.__len__() == 0 %}
+        <div class="alert alert-info">
+          <p><strong>Next</strong>-- we need to know where to send your messages.</p>
+          {% if context.name == "irc" %}
+          <p>Note that we will try to private message you on the freenode irc
+          network.  For this to work you need to be:
+          <ul>
+            <li>signed in to freenode right now</li>
+            <li><em>identified</em> with <code>NickServ</code></li>
+          </ul>
+          If that's not the case already, you should go do those things
+          first.</p>
+          {% elif context.name == "email" %}
+          <p>Note that we will try to email you with a confirmation link.
+          You will need to check your email and follow that link to
+          proceed.</p>
+          {% endif %}
+        </div>
         {% endif %}
         {% if context.name == "android" %}
         <p>
@@ -177,6 +194,27 @@
               <input name="openid" id="openid" value="{{openid}}" type="hidden">
               <input name="context" id="context" value="{{current}}" type="hidden">
               <table class="table">
+                {% if confirmation %}
+                <tr>
+                  <td>
+                    <label class="control-label" for="detail_value">
+                      {{confirmation.status}} {{context.detail_name}}</label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control input-sm"
+                    name="detail_value" id="detail_value" required=required
+                    value='{{ confirmation.detail_value }}' disabled>
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-sm btn-danger"
+                      name="delete" value="{{confirmation.detail_value}}"
+                      {{'disabled' if preference.enabled is sameas false}}>
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </td>
+                </tr>
+                {% endif %}
+
                 {% if preference.detail_values %}
                 <tr>
                   <td>
@@ -225,7 +263,7 @@
         </div> <!-- end panel-body -->
       </div> <!-- end panel -->
 
-      <div class="panel panel-default">
+      <div class="panel panel-default {{'hidden' if preference.can_send is sameas false}}">
         <div class="panel-heading">
           <h3 class="panel-title">
             How often should we send you messages?
@@ -282,7 +320,7 @@
         </div>
       </div> <!-- end panel -->
 
-      <div class="panel panel-default">
+      <div class="panel panel-default {{'hidden' if preference.can_send is sameas false}}">
         <div class="panel-heading">
           <h3 class="panel-title">
             Should we do extra stuff to your messages?
@@ -380,7 +418,7 @@
         </div> <!-- end panel-body -->
       </div> <!-- end panel -->
 
-      <div class="panel panel-default">
+      <div class="panel panel-default {{'hidden' if preference.can_send is sameas false}}">
         <div class="panel-heading">
           <h3 class="panel-title">
             Party Perished
