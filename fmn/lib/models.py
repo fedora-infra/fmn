@@ -466,7 +466,10 @@ class Preference(BASE):
             'enabled': self.enabled,
             'context': self.context.__json__(reify=reify),
             'user': self.user.__json__(reify=reify),
-            'filters': [f.__json__(reify=reify) for f in self.filters],
+            'filters': [
+                f.__json__(reify=reify)
+                for f in self.filters
+                if f.active],
             'detail_values': [v.value for v in self.detail_values],
         }
 
