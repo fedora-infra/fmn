@@ -314,6 +314,7 @@ class Filter(BASE):
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
     name = sa.Column(sa.String(50))
+    active = sa.Column(sa.Boolean, default=True, nullable=False)
 
     preference_id = sa.Column(
         sa.Integer,
