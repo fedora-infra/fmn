@@ -627,6 +627,12 @@ class Preference(BASE):
         if notify:
             self.notify(self.openid, self.context_name, "filters")
 
+    def set_filter_active(self, session, filter_name, active):
+        filter = self.get_filter_name(session, filter_name)
+        filter.active = active;
+        session.commit()
+        self.notify(self.openid, self.context_name, "filters")
+
     def has_filter_name(self, session, filter_name):
         for filter in self.filters:
             if filter.name == filter_name:
