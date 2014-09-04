@@ -111,12 +111,12 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
             if group == 'packager':
                 usernames = fedmsg.meta.msg2usernames(msg, **self.hub.config)
                 for username in usernames:
+                    openid='%s.id.fedoraproject.org' % username
                     openid_url = 'https://%s.id.fedoraproject.org' % username
+                    email = '%s@fedoraproject.org' % username
                     user = fmn.lib.models.User.get_or_create(
-                        session,
-                        openid='%s.id.fedoraproject.org' % username,
-                        openid_url=openid_url,
-                        create_defaults=True,
+                        session, openid=openid, openid_url=openid_url,
+                        create_defaults=True, detail_values=dict(email=email),
                     )
                     session.add(user)
                 session.commit()
