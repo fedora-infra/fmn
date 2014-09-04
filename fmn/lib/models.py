@@ -202,14 +202,17 @@ class User(BASE):
         session.commit()
 
     @classmethod
-    def get_or_create(cls, session, openid, openid_url, create_defaults=True):
+    def get_or_create(cls, session, openid, openid_url,
+                      create_defaults=True, detail_values=None):
         user = cls.by_openid(session, openid)
         if not user:
-            user = cls.create(session, openid, openid_url, create_defaults)
+            user = cls.create(session, openid, openid_url,
+                              create_defaults, detail_values)
         return user
 
     @classmethod
-    def create(cls, session, openid, openid_url, create_defaults):
+    def create(cls, session, openid, openid_url,
+               create_defaults, detail_values=None):
         user = cls(
             openid=openid,
             openid_url=openid_url,
@@ -219,7 +222,8 @@ class User(BASE):
         session.flush()
 
         if create_defaults:
-            fmn.lib.defaults.create_defaults_for(session, user)
+            fmn.lib.defaults.create_defaults_for(
+                session, user, detail_values=detail_values)
 
         return user
 
@@ -548,7 +552,7 @@ class Preference(BASE):
         if detail_value:
             value = DetailValue.create(session, detail_value)
             pref.detail_values.append(value)
-
+            pref.enabled = True
             session.add(value)
 
         session.add(pref)
