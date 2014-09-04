@@ -76,14 +76,14 @@
         {% if fltr.rules %}
         <dl class="list-group-item-text dl-horizontal">
           {% for rule in fltr.rules %}
-          <dt>{{rule.title(valid_paths)}}</dt>
+          <dt style='white-space: normal;'>{{rule.title(valid_paths)}}</dt>
           <dd>{{rule.doc(valid_paths, no_links=True)}}
           {% if rule.arguments %}
-          <dl class="dl-horizontal">
+          <table class="table">
             {% for key, value in rule.arguments.iteritems() %}
-            <dt>{{key}}</dt><dd>{{value}}</dd>
+            <tr><th>{{key}}</th><td>{{value}}</td></tr>
             {% endfor %}
-          </dl>
+          </table>
           {% endif %}
           </dd>
           {% endfor %}
