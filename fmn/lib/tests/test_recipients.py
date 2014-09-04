@@ -37,6 +37,7 @@ class TestRecipients(fmn.lib.tests.Base):
             context=context,
             detail_value="threebean",
         )
+        preference.enabled = False
 
         user = fmn.lib.models.User.get(
             self.sess, openid="toshio.id.fedoraproject.org")
@@ -47,7 +48,6 @@ class TestRecipients(fmn.lib.tests.Base):
             context=context,
             detail_value="abadger1999",
         )
-        preference.enabled = True
 
     def create_preference_data_basic(self, code_path):
         user = fmn.lib.models.User.get(
