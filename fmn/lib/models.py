@@ -630,7 +630,6 @@ class Preference(BASE):
     def set_filter_active(self, session, filter_name, active):
         filter = self.get_filter_name(session, filter_name)
         filter.active = active;
-        session.flush()
         session.commit()
         self.notify(self.openid, self.context_name, "filters")
 
