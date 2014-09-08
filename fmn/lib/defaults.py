@@ -84,8 +84,10 @@ package_rule_path_defaults = [
 ]
 
 
-def create_defaults_for(session, user, only_for=None):
+def create_defaults_for(session, user, only_for=None, detail_values=None):
     """ Create a sizable amount of defaults for a new user. """
+
+    detail_values = detail_values or {}
 
     if not user.openid.endswith('id.fedoraproject.org'):
         log.warn("New user not from fedoraproject.org.  No defaults set.")
@@ -117,7 +119,9 @@ def create_defaults_for(session, user, only_for=None):
     for context in contexts():
         pref = fmn.lib.models.Preference.load(session, user, context)
         if not pref:
-            pref = fmn.lib.models.Preference.create(session, user, context)
+            value = detail_values.get(context.name)
+            pref = fmn.lib.models.Preference.create(
+                session, user, context, detail_value=value)
 
         # Add rules that look for this user
         qualifier_path = 'fmn.rules:user_filter'
