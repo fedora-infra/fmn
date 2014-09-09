@@ -318,6 +318,7 @@ class Filter(BASE):
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
     name = sa.Column(sa.String(50))
+    active = sa.Column(sa.Boolean, default=True, nullable=False)
 
     preference_id = sa.Column(
         sa.Integer,
@@ -469,7 +470,10 @@ class Preference(BASE):
             'enabled': self.enabled,
             'context': self.context.__json__(reify=reify),
             'user': self.user.__json__(reify=reify),
-            'filters': [f.__json__(reify=reify) for f in self.filters],
+            'filters': [
+                f.__json__(reify=reify)
+                for f in self.filters
+                if f.active],
             'detail_values': [v.value for v in self.detail_values],
         }
 
@@ -626,6 +630,12 @@ class Preference(BASE):
         session.commit()
         if notify:
             self.notify(self.openid, self.context_name, "filters")
+
+    def set_filter_active(self, session, filter_name, active):
+        filter = self.get_filter_name(session, filter_name)
+        filter.active = active;
+        session.commit()
+        self.notify(self.openid, self.context_name, "filters")
 
     def has_filter_name(self, session, filter_name):
         for filter in self.filters:

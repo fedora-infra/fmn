@@ -100,11 +100,14 @@ def load_preferences(session, config, valid_paths, cull_disabled=False):
     This is an expensive query that loads, practically, the whole database.
     """
     preferences = session.query(fmn.lib.models.Preference).all()
-    return [preference.__json__(reify=True) for preference in preferences if (
-        preference.context.name in config['fmn.backends'] and (
-            not cull_disabled or preference.enabled
+    return [
+        preference.__json__(reify=True)
+        for preference in preferences
+        if (
+            preference.context.name in config['fmn.backends']
+            and (not cull_disabled or preference.enabled)
         )
-    )]
+    ]
 
 
 def load_rules(root='fmn.rules'):
