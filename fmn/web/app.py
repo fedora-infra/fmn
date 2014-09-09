@@ -573,9 +573,8 @@ def handle_filter():
         raise APIError(403, dict(reason="%r is not %r" % (
             flask.g.auth.openid, openid
         )))
-
-    if method not in ['POST', 'DELETE']:
-        raise APIError(405, dict(reason="Only POST and DELETE accepted"))
+    if method not in ['POST', 'DISABLE', 'ENABLE', 'DELETE']:
+        raise APIError(405, dict(reason="Only POST, ENABLE, DISABLE, and DELETE accepted"))
 
     user = fmn.lib.models.User.by_openid(SESSION, openid)
     if not user:
@@ -602,6 +601,20 @@ def handle_filter():
                 openid=openid,
                 context=context,
                 filter_id=filter.id,
+            )
+        elif method == 'DISABLE':
+            pref.set_filter_active(SESSION, filter_name, False)
+            next_url = flask.url_for(
+                'context',
+                openid=openid,
+                context=context,
+            )
+        elif method == 'ENABLE':
+            pref.set_filter_active(SESSION, filter_name, True)
+            next_url = flask.url_for(
+                'context',
+                openid=openid,
+                context=context,
             )
         elif method == 'DELETE':
             pref.delete_filter(SESSION, filter_name)

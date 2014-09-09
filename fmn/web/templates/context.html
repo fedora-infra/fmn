@@ -95,8 +95,16 @@
           <input name="openid" id="openid" value="{{openid}}" type="hidden">
           <input name="context" id="context" value="{{current}}" type="hidden">
           <input name="filter_name" id="filter_name" value="{{fltr.name}}" type="hidden">
-          <input name="method" id="method" value="delete" type="hidden">
           <span class="pull-right">
+            {% if fltr.active %}
+            <button type="submit" name="method" value="disable" class="btn btn-warning">
+              <span class="glyphicon glyphicon-remove"></span>
+              Disable this filter</button>
+            {% else %}
+            <button type="submit" name="method" value="enable" class="btn btn-success">
+              <span class="glyphicon glyphicon-ok"></span>
+              Enable this filter</button>
+            {% endif %}
             <button type="submit" class="btn btn-danger">
               <span class="glyphicon glyphicon-remove"></span>
               Delete this filter</button>
