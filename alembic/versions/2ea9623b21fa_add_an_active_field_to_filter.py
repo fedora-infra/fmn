@@ -20,7 +20,7 @@ def upgrade():
         sa.Column(
             'active',
             sa.Boolean(),
-            default=True,
+            server_default=sa.sql.expression.true(),
             nullable=False)
     )
 
