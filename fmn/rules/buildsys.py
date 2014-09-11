@@ -22,7 +22,8 @@ def koji_instance(config, message, instance=None, *args, **kw):
     if not instance:
         return False
 
-    return message['msg'].get('instance') in instance.split(',')
+    instances = [item.strip() for item in instance.split(',')]
+    return message['msg'].get('instance') in instances
 
 
 def koji_scratch_build_state_change(config, message):
