@@ -1,6 +1,28 @@
 Changelog
 =========
 
+0.3.0
+-----
+
+- Need to thingify rules so that matches() will work. `89f9a703e <https://github.com/fedora-infra/fmn.web/commit/89f9a703ee558101170b22e5f1db5f2328c06761>`_
+- Provide a UI for users to modify rule-negation. `cae816452 <https://github.com/fedora-infra/fmn.web/commit/cae8164525b7d69a812dba1301e5235ef84ee398>`_
+- Merge pull request #27 from fedora-infra/feature/rule-negation `8e6ea9542 <https://github.com/fedora-infra/fmn.web/commit/8e6ea9542fe08d171d2c841c5a2d35e2204de95f>`_
+- Move the new-filter form on the context page over to the left. `6c7265e8b <https://github.com/fedora-infra/fmn.web/commit/6c7265e8bfce9b7703c542ced134737308ec8906>`_
+- Hide panels if context is not active. `8c4d64bb4 <https://github.com/fedora-infra/fmn.web/commit/8c4d64bb4a6e390b3080f007c5c35cc8799b299b>`_
+- Furthermore, hide panels if context is yet unable to send. `0c8c9ad2a <https://github.com/fedora-infra/fmn.web/commit/0c8c9ad2a79a85e1f0938b4b9f7fe7d404f1a597>`_
+- Allow the user to delete pending confirmations. `1df6c04fe <https://github.com/fedora-infra/fmn.web/commit/1df6c04fe50e305280db43aa006b0557304b8645>`_
+- Provide some more information to users about how to register their delivery details. `c7167284b <https://github.com/fedora-infra/fmn.web/commit/c7167284b05103bf8bb35b1b2c9330f080cb0ed3>`_
+- Merge pull request #28 from fedora-infra/feature/context-page-reorganization `3106cd948 <https://github.com/fedora-infra/fmn.web/commit/3106cd94875437806794c82fd7c06cdfa137a102>`_
+- Don't truncate rule names. `4d6064d99 <https://github.com/fedora-infra/fmn.web/commit/4d6064d995c37daa2bfa76f7459704bce14390c1>`_
+- Change wording of Android API key generation. `5a4079421 <https://github.com/fedora-infra/fmn.web/commit/5a40794214935feddec3afc76599b738cbfb0d10>`_
+- Merge pull request #30 from fedora-infra/wording `fd9e08dcf <https://github.com/fedora-infra/fmn.web/commit/fd9e08dcff91bd7700a62cbce69132855b9d7bb2>`_
+- Added code to handle_filter to enable/disable filters `b1c27ba31 <https://github.com/fedora-infra/fmn.web/commit/b1c27ba313ef800329d8216a2d8e3d1830919f56>`_
+- Merge pull request #29 from fedora-infra/feature/no-truncate `31d16c7de <https://github.com/fedora-infra/fmn.web/commit/31d16c7de69cfcee1b0dfa0d3eba7d047d4f5a24>`_
+- added a button to the filter page to enable/disable filters `8332b8db8 <https://github.com/fedora-infra/fmn.web/commit/8332b8db8f7941b8a1d55269d69d5ce0ff0d4333>`_
+- Added enable/disable filter button to the context page This finishes up the last item mentioned in fedora-infra/fmn#13 `5ffe01307 <https://github.com/fedora-infra/fmn.web/commit/5ffe01307312c48d7db79b2d3b9b2792cdf6da6a>`_
+- Updated the icons for the disable/enable filter buttons to be a checkmark for enable, and an x for disable `e6b575eb3 <https://github.com/fedora-infra/fmn.web/commit/e6b575eb3c500cd7be60e5f821bd7c35f56103dc>`_
+- Merge pull request #31 from rossdylan/disable_filter `69dc70042 <https://github.com/fedora-infra/fmn.web/commit/69dc70042a3e71cdb428aa3565c25119cc3e23f2>`_
+
 0.2.6
 -----
 
