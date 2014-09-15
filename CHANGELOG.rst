@@ -1,6 +1,24 @@
 Changelog
 =========
 
+0.3.0
+-----
+
+- Add forgotten import. `d1b0ab33d <https://github.com/fedora-infra/fmn.rules/commit/d1b0ab33dee0e9f6a654a6ab02543279037d5169>`_
+- Start an utility method to retrieve the member of a group `get_user_of_group` `ae0e02c9c <https://github.com/fedora-infra/fmn.rules/commit/ae0e02c9c2d7b49e535a8fe8e9d3b7e82e56937f>`_
+- Expand _get_pkgdb2_packagers_for to include the members of a group if the group has ACLs `d04966c17 <https://github.com/fedora-infra/fmn.rules/commit/d04966c17c8a33d95a94055365b699d0158e4351>`_
+- get_user_of_group requires access to the fedmsg config `4663e3954 <https://github.com/fedora-infra/fmn.rules/commit/4663e3954885a5660959eae30efa78631f405dff>`_
+- Add logic to instantiate an AccountSystem object if there isn't already one `f7ac04f40 <https://github.com/fedora-infra/fmn.rules/commit/f7ac04f40fc750cc78cca0c54f22a4256279641c>`_
+- If the package has a group with some ACL, get the AccountSystem client and forward the configuration `fb75e310c <https://github.com/fedora-infra/fmn.rules/commit/fb75e310c9e091cc6b3d3435fed769f03d003492>`_
+- Adjust the structure of the FAS credential per @ralphbean's advice `ccbea668e <https://github.com/fedora-infra/fmn.rules/commit/ccbea668e28ff6c9df21f881081af034d9867fe5>`_
+- pep8. `89b22b5d6 <https://github.com/fedora-infra/fmn.rules/commit/89b22b5d6a189fe06169e6c7f6f31012d73b9b8d>`_
+- Typofix. `7d50e5751 <https://github.com/fedora-infra/fmn.rules/commit/7d50e5751e423f6f4cc7b3601984e1d8089fd855>`_
+- Apply group-ownership stuff to packages-of-user in addition to packagers-of-package. `23a469e91 <https://github.com/fedora-infra/fmn.rules/commit/23a469e91afa77a72d2187833ebcee7f5a86bf67>`_
+- Merge pull request #16 from fedora-infra/feature/group_maintainer `ea438e745 <https://github.com/fedora-infra/fmn.rules/commit/ea438e7457fc8514fb2478ce5ee7d1ac1e426e4c>`_
+- Add a rule that lets you filter by koji instance(s). `9b9e6b963 <https://github.com/fedora-infra/fmn.rules/commit/9b9e6b96386ed56c63778c2b05d3fd078fe3e2a2>`_
+- Strip instances. `07b8cb64e <https://github.com/fedora-infra/fmn.rules/commit/07b8cb64e71f55f1fd77ecea3281ff9b58385189>`_
+- Merge pull request #17 from fedora-infra/feature/koji-instances `8c77c2648 <https://github.com/fedora-infra/fmn.rules/commit/8c77c2648f603145ec8466329e5213a777d2f047>`_
+
 0.2.5
 -----
 
