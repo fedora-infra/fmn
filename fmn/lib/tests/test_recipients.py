@@ -37,6 +37,7 @@ class TestRecipients(fmn.lib.tests.Base):
             context=context,
             detail_value="threebean",
         )
+        preference.enabled = False
 
         user = fmn.lib.models.User.get(
             self.sess, openid="toshio.id.fedoraproject.org")
@@ -47,7 +48,6 @@ class TestRecipients(fmn.lib.tests.Base):
             context=context,
             detail_value="abadger1999",
         )
-        preference.enabled = True
 
     def create_preference_data_basic(self, code_path):
         user = fmn.lib.models.User.get(
@@ -65,18 +65,6 @@ class TestRecipients(fmn.lib.tests.Base):
         filter = fmn.lib.models.Filter.create(self.sess, name="test filter 2")
         filter.add_rule(self.sess, self.valid_paths, code_path)
         preference.add_filter(self.sess, filter)
-
-    def test_empty_recipients_list(self):
-        self.create_user_and_context_data()
-
-        msg = {
-            "wat": "blah",
-        }
-        preferences = fmn.lib.load_preferences(
-            self.sess, self.config, self.valid_paths)
-        recipients = fmn.lib.recipients(
-            preferences, msg, self.valid_paths, self.config)
-        eq_(recipients, {})
 
     def test_empty_recipients_list(self):
         self.create_user_and_context_data()

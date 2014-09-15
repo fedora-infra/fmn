@@ -71,14 +71,17 @@ def matches(filter, message, valid_paths, rule_cache, config):
 
     for rule in filter['rules']:
         fn = rule['fn']
+        negated = rule['negated']
         arguments = rule['arguments']
         rule_cache_key = rule['cache_key']
 
-        if rule_cache_key in rule_cache:
-            return rule_cache[rule_cache_key]
-
         try:
-            rule_cache[rule_cache_key] = fn(config, message, **arguments)
+            if rule_cache_key not in rule_cache:
+                value = fn(config, message, **arguments)
+                if negated:
+                    value = not value
+                rule_cache[rule_cache_key] =  value
+
             if not rule_cache[rule_cache_key]:
                 return False
         except Exception as e:
@@ -97,11 +100,14 @@ def load_preferences(session, config, valid_paths, cull_disabled=False):
     This is an expensive query that loads, practically, the whole database.
     """
     preferences = session.query(fmn.lib.models.Preference).all()
-    return [preference.__json__(reify=True) for preference in preferences if (
-        preference.context.name in config['fmn.backends'] and (
-            not cull_disabled or preference.enabled
+    return [
+        preference.__json__(reify=True)
+        for preference in preferences
+        if (
+            preference.context.name in config['fmn.backends']
+            and (not cull_disabled or preference.enabled)
         )
-    )]
+    ]
 
 
 def load_rules(root='fmn.rules'):

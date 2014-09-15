@@ -1,6 +1,32 @@
 Changelog
 =========
 
+0.3.0
+-----
+
+- Remove duplicate test. `71a1947fb <https://github.com/fedora-infra/fmn.lib/commit/71a1947fba1e08ab756a25abe1f433f05c8e3810>`_
+- Don't return prematurely. `9b1a53b32 <https://github.com/fedora-infra/fmn.lib/commit/9b1a53b327d169303a81730ff7d5144dee90a648>`_
+- Merge pull request #11 from fedora-infra/feature/debug-that-crazy-last-release `911cc17cd <https://github.com/fedora-infra/fmn.lib/commit/911cc17cdc899af7fda93a8859c79d431879f612>`_
+- Try to get travis tests running. `992e13e51 <https://github.com/fedora-infra/fmn.lib/commit/992e13e51a13960a7d9a65fc0e87757936ba2c97>`_
+- Allow individual rules to be negated. `9987846b8 <https://github.com/fedora-infra/fmn.lib/commit/9987846b805bcaae3efe3c947226e3cf368eb212>`_
+- Add alembic revision for that. `195edf0e5 <https://github.com/fedora-infra/fmn.lib/commit/195edf0e5578e0d30677b4da7375d8f04e9a91a1>`_
+- Provide an API to modify rule-negation. `107d8e229 <https://github.com/fedora-infra/fmn.lib/commit/107d8e229c645aa8dac91c16e2519badce3fc9ca>`_
+- Fix __repr__ logic. `5f84885a0 <https://github.com/fedora-infra/fmn.lib/commit/5f84885a02d3a761a92a8b51e4dde1a47638c7d0>`_
+- Merge pull request #12 from fedora-infra/feature/rule-negation `d6eeac2c8 <https://github.com/fedora-infra/fmn.lib/commit/d6eeac2c8d837f47c4d5da90c031ada3a4702db5>`_
+- Add a new can_send property. `f028ce0e7 <https://github.com/fedora-infra/fmn.lib/commit/f028ce0e7148f4d82874bbb475b5220ef7b92af9>`_
+- Add an `active` field to the filters table allowing to disable a filter w/o deleting it `94bbbd081 <https://github.com/fedora-infra/fmn.lib/commit/94bbbd0815ae773da512b780822b4acce4fa66d3>`_
+- Add an alembic migration script adding the `active` field to the filters table `5059c8776 <https://github.com/fedora-infra/fmn.lib/commit/5059c8776c6ddc16c2f037e40dd0af849e9ca673>`_
+- Style change `d0f626b43 <https://github.com/fedora-infra/fmn.lib/commit/d0f626b43fbf8a29324b21e01cddbf4471d1295a>`_
+- Only include the filters that are active in the json representation of the preferences `913c13144 <https://github.com/fedora-infra/fmn.lib/commit/913c1314480ca899e93360bcfe4765fe4e90f44e>`_
+- Added a method on the Preference model to disable/enable filters `3f3feadc8 <https://github.com/fedora-infra/fmn.lib/commit/3f3feadc86b5d5456bcae147298f9e0f0f8b3d19>`_
+- Removed session.flush from Preference.set_filter_active. It isn't needed as pointed out by @pypingou `4e407cbf2 <https://github.com/fedora-infra/fmn.lib/commit/4e407cbf2ceeca84f917227f1433bf2d5f0ca683>`_
+- Merge pull request #13 from rossdylan/disable_filter `086a63c14 <https://github.com/fedora-infra/fmn.lib/commit/086a63c1488e5607adbccca081f20a0ac7afaccc>`_
+- Make it possible to make accounts active by default. `53656bdb7 <https://github.com/fedora-infra/fmn.lib/commit/53656bdb772a2c287258a36d21dff59b3f263d35>`_
+- Adjust other test cases now that providing a detail_value makes preferences active. `e7110bbbd <https://github.com/fedora-infra/fmn.lib/commit/e7110bbbd05d7669b97b6f8a9e7c64b9db5dc04b>`_
+- Merge pull request #14 from fedora-infra/feature/possibly-active-by-default `7b9e0778c <https://github.com/fedora-infra/fmn.lib/commit/7b9e0778cde76b00a4c78cc789f9804a751bb742>`_
+- User server_default instead of default to make this whole thing work. `4981620a0 <https://github.com/fedora-infra/fmn.lib/commit/4981620a0cdd40ccebdab064cfb57dd56b57f00b>`_
+- Merge pull request #15 from fedora-infra/disable_filter `95dbbf0f0 <https://github.com/fedora-infra/fmn.lib/commit/95dbbf0f0031b4b8b747268f8655634f5fc0f5e9>`_
+
 0.2.7
 -----
 

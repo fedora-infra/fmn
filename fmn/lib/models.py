@@ -202,14 +202,17 @@ class User(BASE):
         session.commit()
 
     @classmethod
-    def get_or_create(cls, session, openid, openid_url, create_defaults=True):
+    def get_or_create(cls, session, openid, openid_url,
+                      create_defaults=True, detail_values=None):
         user = cls.by_openid(session, openid)
         if not user:
-            user = cls.create(session, openid, openid_url, create_defaults)
+            user = cls.create(session, openid, openid_url,
+                              create_defaults, detail_values)
         return user
 
     @classmethod
-    def create(cls, session, openid, openid_url, create_defaults):
+    def create(cls, session, openid, openid_url,
+               create_defaults, detail_values=None):
         user = cls(
             openid=openid,
             openid_url=openid_url,
@@ -219,7 +222,8 @@ class User(BASE):
         session.flush()
 
         if create_defaults:
-            fmn.lib.defaults.create_defaults_for(session, user)
+            fmn.lib.defaults.create_defaults_for(
+                session, user, detail_values=detail_values)
 
         return user
 
@@ -240,6 +244,8 @@ class Rule(BASE):
     code_path = sa.Column(sa.String(50), nullable=False)
     # JSON-encoded kw
     _arguments = sa.Column(sa.String(256))
+    # Should we negate the output of the computed rule?
+    negated = sa.Column(sa.Boolean, default=False)
 
     def __json__(self, reify=False):
         result = {
@@ -247,14 +253,16 @@ class Rule(BASE):
             'code_path': self.code_path,
             'arguments': self.arguments,
             'cache_key': self.cache_key,
+            'negated': self.negated,
         }
         if reify:
             result['fn'] = fedmsg.utils.load_class(str(self.code_path))
         return result
 
     def __repr__(self):
-        return "<fmn.lib.models.Rule: %r(**%r)>" % (
-            self.code_path, self.arguments)
+        negation = self.negated and '!' or ''
+        return "<fmn.lib.models.Rule: %s%r(**%r)>" % (
+            negation, self.code_path, self.arguments)
 
     @property
     def cache_key(self):
@@ -310,6 +318,7 @@ class Filter(BASE):
     id = sa.Column(sa.Integer, primary_key=True)
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
     name = sa.Column(sa.String(50))
+    active = sa.Column(sa.Boolean, default=True, nullable=False)
 
     preference_id = sa.Column(
         sa.Integer,
@@ -355,6 +364,20 @@ class Filter(BASE):
         for r in self.rules:
             if r.code_path == code_path:
                 session.delete(r)
+                session.commit()
+
+                pref = self.preference
+                if pref:
+                    self.notify(pref.openid, pref.context_name, "rules")
+
+                return
+
+        raise ValueError("No such rule found: %r" % code_path)
+
+    def negate_rule(self, session, code_path, **kw):
+        for r in self.rules:
+            if r.code_path == code_path:
+                r.negated = not r.negated
                 session.commit()
 
                 pref = self.preference
@@ -447,13 +470,20 @@ class Preference(BASE):
             'enabled': self.enabled,
             'context': self.context.__json__(reify=reify),
             'user': self.user.__json__(reify=reify),
-            'filters': [f.__json__(reify=reify) for f in self.filters],
+            'filters': [
+                f.__json__(reify=reify)
+                for f in self.filters
+                if f.active],
             'detail_values': [v.value for v in self.detail_values],
         }
 
     def __repr__(self):
         return "<fmn.lib.models.Preference: %r %r>" % (
             self.openid, self.context_name)
+
+    @property
+    def can_send(self):
+        return self.enabled and bool(self.detail_values)
 
     @property
     def should_batch(self):
@@ -526,7 +556,7 @@ class Preference(BASE):
         if detail_value:
             value = DetailValue.create(session, detail_value)
             pref.detail_values.append(value)
-
+            pref.enabled = True
             session.add(value)
 
         session.add(pref)
@@ -600,6 +630,12 @@ class Preference(BASE):
         session.commit()
         if notify:
             self.notify(self.openid, self.context_name, "filters")
+
+    def set_filter_active(self, session, filter_name, active):
+        filter = self.get_filter_name(session, filter_name)
+        filter.active = active;
+        session.commit()
+        self.notify(self.openid, self.context_name, "filters")
 
     def has_filter_name(self, session, filter_name):
         for filter in self.filters:
