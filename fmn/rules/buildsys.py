@@ -1,3 +1,30 @@
+def koji_instance(config, message, instance=None, *args, **kw):
+    """ Koji: pertains only to particular instances
+
+    You may not have even known it, but we have multiple instances of the koji
+    build system.  There is the **primary** buildsystem at
+    `koji.fedoraproject.org <https://koji.fedoraproject.org>`_ and also
+    secondary instances for `ppc <https://ppc.koji.fedoraproject.org>`_, `arm
+    <https://arm.koji.fedoraproject.org>`_, and `s390
+    <https://s390.koji.fedoraproject.org>`_.
+
+    With this rule, you can limit messages to only those from particular koji
+    instances (like the **primary** one if you want to ignore the secondary
+    ones).  You should use this rule **in combination** with other koji rules
+    so you get only a *certain subset* of messages from one instance.  You
+    almost certainly do not want **all** messages from a given instance.
+
+    You can specify several instances by separating them with a comma ',',
+    i.e.: ``primary,ppc``.
+    """
+
+    instance = kw.get('instance', instance)
+    if not instance:
+        return False
+
+    instances = [item.strip() for item in instance.split(',')]
+    return message['msg'].get('instance') in instances
+
 
 def koji_scratch_build_state_change(config, message):
     """ Koji: *scratch* build changed state (started, failed, finished)
