@@ -1,12 +1,14 @@
 from fmn.consumer.backends.base import BaseBackend
 import fedmsg.meta
 
+from kitchen.text.converters import to_bytes
+
 import datetime
 import smtplib
 import email
 
 
-confirmation_template = """
+confirmation_template = u"""
 {username} has requested that notifications be sent to this email address
 * To accept, visit this address:
   {acceptance_url}
@@ -16,7 +18,7 @@ Alternatively, you can ignore this.  This is an automated message, please
 email {support_email} if you have any concerns/issues/abuse.
 """
 
-reason = """
+reason = u"""
 You received this message due to your preference settings at
 {base_url}/{user}/email/{filter_id}
 """
@@ -42,36 +44,43 @@ class EmailBackend(BaseBackend):
             return
 
         email_message = email.Message.Message()
-        email_message.add_header('To', recipient['email address'])
-        email_message.add_header('From', self.from_address)
+        to_addr = ('utf-8', None, to_bytes(recipient['email address']))
+        email_message.add_header('To', to_addr)
+        from_addr = ('utf-8', None, to_bytes(self.from_address))
+        email_message.add_header('From', from_addr)
 
         subject_prefix = self.config.get('fmn.email.subject_prefix', '')
         if subject_prefix:
             subject = '{0} {1}'.format(
                 subject_prefix.strip(), subject.strip())
 
-        email_message.add_header('Subject', subject)
+        email_message.add_header('Subject', ('utf-8', None, to_bytes(subject)))
 
         # Since we do simple text email, adding the footer to the content
         # before setting the payload.
-        footer = self.config.get('fmn.email.footer', '')
+        footer = to_unicode(self.config.get('fmn.email.footer', ''))
 
         if 'filter_id' in recipient and 'user' in recipient:
             base_url = self.config['fmn.base_url']
             footer = reason.format(base_url=base_url, **recipient) + footer
 
         if footer:
-            content += '\n\n--\n{0}'.format(footer.strip())
+            content += u'\n\n--\n{0}'.format(footer.strip())
 
-        email_message.set_payload(content)
+        email_message.set_payload(('utf-8', None, to_bytes(content)))
 
         server = smtplib.SMTP(self.mailserver)
-        server.sendmail(
-            self.from_address.encode('utf-8'),
-            [recipient['email address'].encode('utf-8')],
-            email_message.as_string().encode('utf-8'),
-        )
-        server.quit()
+        try:
+            server.sendmail(
+                to_bytes(self.from_address),
+                [to_bytes(recipient['email address'])],
+                to_bytes(email_message.as_string()),
+            )
+        except:
+            self.log.info("%r" % email_message.as_string())
+            raise
+        finally:
+            server.quit()
         self.log.debug("Email sent")
 
     def handle(self, session, recipient, msg):
@@ -87,7 +96,7 @@ class EmailBackend(BaseBackend):
             return timestamp.strftime("%c") + ", " + payload
 
         n = len(queued_messages)
-        subject = "Fedora Notifications Digest (%i updates)" % n
+        subject = u"Fedora Notifications Digest (%i updates)" % n
         content = "\n".join([
             _format_line(queued_message.message)
             for queued_message in queued_messages])
@@ -108,7 +117,7 @@ class EmailBackend(BaseBackend):
             support_email=self.config['fmn.support_email'],
             username=confirmation.openid,
         ).strip()
-        subject = 'Confirm notification email'
+        subject = u'Confirm notification email'
 
         recipient = {'email address': confirmation.detail_value}
 
