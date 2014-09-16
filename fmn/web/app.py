@@ -689,7 +689,7 @@ def handle_details():
     # Are they deleting a delivery detail?
     if delete_value:
         # Primarily, delete the value from this user
-        if detail_value in pref.detail_values:
+        if delete_value in [value.value for value in pref.detail_values]:
             pref.delete_details(SESSION, delete_value)
 
         # Also, if they have a confirmation hanging around, delete that too.
