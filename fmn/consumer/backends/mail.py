@@ -1,6 +1,8 @@
 from fmn.consumer.backends.base import BaseBackend
 import fedmsg.meta
 
+from kitchen.text.converters import to_bytes
+
 import datetime
 import smtplib
 import email
@@ -42,15 +44,17 @@ class EmailBackend(BaseBackend):
             return
 
         email_message = email.Message.Message()
-        email_message.add_header('To', recipient['email address'].encode('utf-8'))
-        email_message.add_header('From', self.from_address.encode('utf-8'))
+        to_addr = ('utf-8', None, to_bytes(recipient['email address']))
+        email_message.add_header('To', to_addr)
+        from_addr = ('utf-8', None, to_bytes(self.from_address))
+        email_message.add_header('From', from_addr)
 
         subject_prefix = self.config.get('fmn.email.subject_prefix', '')
         if subject_prefix:
             subject = '{0} {1}'.format(
                 subject_prefix.strip(), subject.strip())
 
-        email_message.add_header('Subject', subject.encode('utf-8'))
+        email_message.add_header('Subject', ('utf-8', None, to_bytes(subject)))
 
         # Since we do simple text email, adding the footer to the content
         # before setting the payload.
@@ -63,14 +67,14 @@ class EmailBackend(BaseBackend):
         if footer:
             content += '\n\n--\n{0}'.format(footer.strip())
 
-        email_message.set_payload(content.encode('utf-8'))
+        email_message.set_payload(('utf-8', None, to_bytes(content)))
 
         server = smtplib.SMTP(self.mailserver)
         try:
             server.sendmail(
-                self.from_address.encode('utf-8'),
-                [recipient['email address'].encode('utf-8')],
-                email_message.as_string(),
+                to_bytes(self.from_address),
+                [to_bytes(recipient['email address'])],
+                to_bytes(email_message.as_string()),
             )
         except:
             self.log.info("%r" % email_message.as_string())
