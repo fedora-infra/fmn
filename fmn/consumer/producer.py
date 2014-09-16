@@ -49,8 +49,8 @@ class FMNProducerBase(moksha.hub.api.PollingProducer):
             self.work(session)
             session.commit()
         except:
+            log.exception('Error during routine work.')
             session.rollback()
-            raise
 
 
 class ConfirmationProducer(FMNProducerBase):
