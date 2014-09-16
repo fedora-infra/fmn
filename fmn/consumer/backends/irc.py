@@ -69,7 +69,7 @@ def _format_message(msg, recipient, config):
     # Tack a human-readable delta on the end so users know that fmn is
     # backlogged (if it is).
     delta = ''
-    if msg['timestamp'] - time.time() > 10:
+    if time.time() - msg['timestamp'] > 10:
         delta = arrow.get(msg['timestamp']).humanize() + ' '
 
     flt = ''
