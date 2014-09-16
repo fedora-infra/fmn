@@ -8,7 +8,7 @@ import smtplib
 import email
 
 
-confirmation_template = """
+confirmation_template = u"""
 {username} has requested that notifications be sent to this email address
 * To accept, visit this address:
   {acceptance_url}
@@ -18,7 +18,7 @@ Alternatively, you can ignore this.  This is an automated message, please
 email {support_email} if you have any concerns/issues/abuse.
 """
 
-reason = """
+reason = u"""
 You received this message due to your preference settings at
 {base_url}/{user}/email/{filter_id}
 """
@@ -58,14 +58,14 @@ class EmailBackend(BaseBackend):
 
         # Since we do simple text email, adding the footer to the content
         # before setting the payload.
-        footer = self.config.get('fmn.email.footer', '')
+        footer = to_unicode(self.config.get('fmn.email.footer', ''))
 
         if 'filter_id' in recipient and 'user' in recipient:
             base_url = self.config['fmn.base_url']
             footer = reason.format(base_url=base_url, **recipient) + footer
 
         if footer:
-            content += '\n\n--\n{0}'.format(footer.strip())
+            content += u'\n\n--\n{0}'.format(footer.strip())
 
         email_message.set_payload(('utf-8', None, to_bytes(content)))
 
@@ -96,7 +96,7 @@ class EmailBackend(BaseBackend):
             return timestamp.strftime("%c") + ", " + payload
 
         n = len(queued_messages)
-        subject = "Fedora Notifications Digest (%i updates)" % n
+        subject = u"Fedora Notifications Digest (%i updates)" % n
         content = "\n".join([
             _format_line(queued_message.message)
             for queued_message in queued_messages])
@@ -117,7 +117,7 @@ class EmailBackend(BaseBackend):
             support_email=self.config['fmn.support_email'],
             username=confirmation.openid,
         ).strip()
-        subject = 'Confirm notification email'
+        subject = u'Confirm notification email'
 
         recipient = {'email address': confirmation.detail_value}
 
