@@ -42,15 +42,15 @@ class EmailBackend(BaseBackend):
             return
 
         email_message = email.Message.Message()
-        email_message.add_header('To', recipient['email address'])
-        email_message.add_header('From', self.from_address)
+        email_message.add_header('To', recipient['email address'].encode('utf-8'))
+        email_message.add_header('From', self.from_address.encode('utf-8'))
 
         subject_prefix = self.config.get('fmn.email.subject_prefix', '')
         if subject_prefix:
             subject = '{0} {1}'.format(
                 subject_prefix.strip(), subject.strip())
 
-        email_message.add_header('Subject', subject)
+        email_message.add_header('Subject', subject.encode('utf-8'))
 
         # Since we do simple text email, adding the footer to the content
         # before setting the payload.
@@ -63,15 +63,20 @@ class EmailBackend(BaseBackend):
         if footer:
             content += '\n\n--\n{0}'.format(footer.strip())
 
-        email_message.set_payload(content)
+        email_message.set_payload(content.encode('utf-8'))
 
         server = smtplib.SMTP(self.mailserver)
-        server.sendmail(
-            self.from_address.encode('utf-8'),
-            [recipient['email address'].encode('utf-8')],
-            email_message.as_string().encode('utf-8'),
-        )
-        server.quit()
+        try:
+            server.sendmail(
+                self.from_address.encode('utf-8'),
+                [recipient['email address'].encode('utf-8')],
+                email_message.as_string(),
+            )
+        except:
+            self.log.info("%r" % email_message.as_string())
+            raise
+        finally:
+            server.quit()
         self.log.debug("Email sent")
 
     def handle(self, session, recipient, msg):
