@@ -1,7 +1,7 @@
 from fmn.consumer.backends.base import BaseBackend
 import fedmsg.meta
 
-from kitchen.text.converters import to_bytes
+from kitchen.text.converters import to_bytes, to_unicode
 
 import datetime
 import smtplib
