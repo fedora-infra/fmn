@@ -1,5 +1,5 @@
 def anitya_mapping_new(config, message):
-    """ Anitya: a new mapping of a project to a distribution has been added
+    """ Upstream: a new mapping of a project to a distribution has been added
 
     Adding this rule will trigger notifications when a new mapping of a
     project to a distribution is **added** in `anitya
@@ -9,7 +9,7 @@ def anitya_mapping_new(config, message):
 
 
 def anitya_mapping_update(config, message):
-    """ Anitya: the mapping of a project to a distribution has been updated
+    """ Upstream: the mapping of a project to a distribution has been updated
 
     Adding this rule will trigger notifications when the mapping of a
     project to a distribution is **updated** in `anitya
@@ -19,7 +19,7 @@ def anitya_mapping_update(config, message):
 
 
 def anitya_mapping_deleted(config, message):
-    """ Anitya: a mapping of a project to a distribution has been deleted
+    """ Upstream: a mapping of a project to a distribution has been deleted
 
     Adding this rule will trigger notifications when the mapping of a
     project in a distribution is **deleted** in `anitya
@@ -29,7 +29,7 @@ def anitya_mapping_deleted(config, message):
 
 
 def anitya_distro_add(config, message):
-    """ Anitya: a distribution is added
+    """ Upstream: a distribution is added
 
     Adding this rule will trigger notifications when a new distribution is
     **added** to `anitya <release-monitoring.org>`_.
@@ -38,7 +38,7 @@ def anitya_distro_add(config, message):
 
 
 def anitya_distro_update(config, message):
-    """ Anitya: a distribution has been updated
+    """ Upstream: a distribution has been updated
 
     Adding this rule will trigger notifications when a distribution is
     **updated** in `anitya <release-monitoring.org>`_.
@@ -47,7 +47,7 @@ def anitya_distro_update(config, message):
 
 
 def anitya_project_add(config, message):
-    """ Anitya: a project is added
+    """ Upstream: a project is added
 
     Adding this rule will trigger notifications when a project is **added**
     to `anitya <release-monitoring.org>`_.
@@ -65,7 +65,7 @@ def anitya_info_update(config, message):
 
 
 def anitya_project_deleted(config, message):
-    """ Anitya: a project is deleted
+    """ Upstream: a project is deleted
 
     Adding this rule will trigger notifications when a project is **deleted**
     to `anitya <release-monitoring.org>`_.
@@ -74,7 +74,7 @@ def anitya_project_deleted(config, message):
 
 
 def anitya_new_update(config, message):
-    """ Anitya: a project has an update
+    """ Upstream: a project has an update
 
     Adding this rule will trigger notifications when a project has a
     **new release** according to `anitya <release-monitoring.org>`_.
