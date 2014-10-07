@@ -11,6 +11,7 @@ from fmn.rules.fedocal import *
 from fmn.rules.fedoratagger import *
 from fmn.rules.generic import *
 from fmn.rules.git import *
+from fmn.rules.koschei import *
 from fmn.rules.logger import *
 from fmn.rules.mailman import *
 from fmn.rules.meetbot import *
