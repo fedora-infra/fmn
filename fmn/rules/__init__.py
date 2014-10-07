@@ -1,3 +1,4 @@
+from fmn.rules.anitya import *
 from fmn.rules.ansible import *
 from fmn.rules.askbot import *
 from fmn.rules.bodhi import *
