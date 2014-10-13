@@ -79,4 +79,4 @@ def anitya_new_update(config, message):
     Adding this rule will trigger notifications when a project has a
     **new release** according to `anitya <release-monitoring.org>`_.
     """
-    return message['topic'].endswith('anitya.project.remove')
+    return message['topic'].endswith('anitya.project.version.update')
