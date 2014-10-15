@@ -164,6 +164,16 @@ def koji_build_cancelled(config, message):
     return message['msg']['new'] == 4
 
 
+def koji_package_list_change(config, message):
+    """ Koji: Package listing has changed
+
+    This rule lets through messages from the `koji build
+    system <https://koji.fedoraproject.org>`_ indicating that the package
+    listing for a tag has changed.
+    """
+    return message['topic'].endswith('buildsys.package.list.change')
+
+
 def koji_repo_done(config, message):
     """ Koji: Building a repo has finished
 
