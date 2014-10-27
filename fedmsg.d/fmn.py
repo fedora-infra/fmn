@@ -6,6 +6,7 @@ config = {
     # Consumer stuff
     "fmn.consumer.enabled": True,
     "fmn.sqlalchemy.uri": "sqlite:////var/tmp/fmn-dev-db.sqlite",
+    "fmn.autocreate": True,  # Should new packagers auto-get accounts?
 
     # Some configuration for the rule processors
     "fmn.rules.utils.use_pkgdb2": False,
