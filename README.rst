@@ -47,9 +47,8 @@ If you want to set up fmn for development, you could try something like this:
 
 - Install all the subcomponents, in order, as development deps:
 
-  - ``$ export MODS="rules lib consumer web"``
-  - ``$ for i in $MODS; do git clone git@github.com:fedora-infra/fmn.$i.git; done``
-  - ``$ for i in $MODS; do pushd fmn.$i; python setup.py develop; popd; done``
+  - ``$ for i in rules lib consumer web; do git clone git@github.com:fedora-infra/fmn.$i.git; done``
+  - ``$ for i in rules lib consumer web; do pushd fmn.$i; python setup.py develop; popd; done``
 
 - Do the base libs tests pass?
 
