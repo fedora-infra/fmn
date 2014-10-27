@@ -20,6 +20,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         super(FMNConsumer, self).__init__(*args, **kwargs)
 
         self.uri = self.hub.config.get('fmn.sqlalchemy.uri', None)
+        self.autocreate = self.hub.config.get('fmn.autocreate', False)
 
         if not self.uri:
             raise ValueError('fmn.sqlalchemy.uri must be present')
@@ -106,7 +107,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
 
         # Create a local account with all the default rules if an user is added
         # to the `packager` group in FAS
-        if '.fas.group.member.sponsor' in topic:
+        if self.autocreate and '.fas.group.member.sponsor' in topic:
             group = msg['msg']['group']
             if group == 'packager':
                 usernames = fedmsg.meta.msg2usernames(msg, **self.hub.config)
