@@ -104,24 +104,34 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 fmn.rules.utils.invalidate_cache_for(
                     self.hub.config, target, username)
 
-        # Create a local account with all the default rules if an user is added
-        # to the `packager` group in FAS
-        if '.fas.group.member.sponsor' in topic:
-            group = msg['msg']['group']
-            if group == 'packager':
-                username = msg['msg']['user']
-                openid='%s.id.fedoraproject.org' % username
-                openid_url = 'https://%s.id.fedoraproject.org' % username
-                email = '%s@fedoraproject.org' % username
-                user = fmn.lib.models.User.get_or_create(
-                    session, openid=openid, openid_url=openid_url,
-                    create_defaults=True, detail_values=dict(email=email),
-                )
-                session.add(user)
-                session.commit()
-                self.refresh_cache(session, topic, msg)
+        # Create a local account with all the default rules if a user is
+        # identified by one of our 'selectors'.  Here we can add all kinds of
+        # new triggers that should create new FMN accounts.  At this point in
+        # time we only create new accounts if 1) a new user is added to the
+        # packager group or 2) someone logs into badges.fp.o for the first
+        # time.
+        selectors = [new_packager, new_badges_user]
+        candidates = [fn(topic, msg) for fn in selectors]
+        for username in candidates:
+            if not username:
+                continue
+            openid='%s.id.fedoraproject.org' % username
+            openid_url = 'https://%s.id.fedoraproject.org' % username
+            email = '%s@fedoraproject.org' % username
+            user = fmn.lib.models.User.get_or_create(
+                session, openid=openid, openid_url=openid_url,
+                create_defaults=True, detail_values=dict(email=email),
+            )
+            session.add(user)
+            session.commit()
+            self.refresh_cache(session, topic, msg)
 
-        # Do the same invalidation trick for fas group membership changes.
+        # Do the same dogpile.cache invalidation trick that we did above, but
+        # here do it for fas group membership changes.  (This is important
+        # because someone could be in a group like the infra-sig which itself
+        # has package-ownership relations in pkgdb.  If membership in that
+        # group changes we need to sync fas relationships to catch up and route
+        # messages to the new group members).
         if '.fas.group.' in topic:
             usernames = fedmsg.meta.msg2usernames(msg, **self.hub.config)
             for username in usernames:
@@ -163,3 +173,18 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         for context, backend in self.backends.iteritems():
             backend.stop()
         super(FMNConsumer, self).stop()
+
+
+def new_packager(topic, msg):
+    """ Returns a username if the message is about a new packager in FAS. """
+    if '.fas.group.member.sponsor' in topic:
+        group = msg['msg']['group']
+        if group == 'packager':
+            return msg['msg']['user']
+    return None
+
+def new_badges_user(topic, msg):
+    """ Returns a username if the message is about a new fedbadges user. """
+    if '.fedbadges.person.login.first' in topic:
+        return msg['msg']['user']['username']
+    return None
