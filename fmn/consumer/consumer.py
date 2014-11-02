@@ -117,6 +117,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
             for username in candidates:
                 if not username:
                     continue
+                log.info("Autocreating account for %r" % username)
                 openid='%s.id.fedoraproject.org' % username
                 openid_url = 'https://%s.id.fedoraproject.org' % username
                 email = '%s@fedoraproject.org' % username
