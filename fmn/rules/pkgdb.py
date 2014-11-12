@@ -177,4 +177,4 @@ def pkgdb_package_update_status(config, message):
     updated** in the Fedora `Package DB
     <https://admin.fedoraproject.org/pkgdb>`_.
     """
-    return message['topic'].endswith('pkgdb.package.update')
+    return message['topic'].endswith('pkgdb.package.update.status')
