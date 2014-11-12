@@ -19,7 +19,7 @@ def fedoratagger_tag_create(config, message):
 
 
 def fedoratagger_tag_update(config, message):
-    """ Tagger: Someone voted on a tag
+    """ Tagger: Someone marked that they use a package
 
     Adding this rule to your filters will let through messages
     from `Fedora Tagger <https://apps.fedoraproject.org/tagger>`_
