@@ -89,3 +89,12 @@ def anitya_new_update(config, message):
     **new release** according to `anitya <release-monitoring.org>`_.
     """
     return message['topic'].endswith('anitya.project.version.update')
+
+
+def anitya_info_update(config, message):
+    """ Upstream: a project has been updated
+
+    Adding this rule will trigger notifications when the information about
+    a project are **updated** in `anitya <release-monitoring.org>`_.
+    """
+    return message['topic'].endswith('anitya.project.update')
