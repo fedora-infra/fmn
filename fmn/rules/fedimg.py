@@ -35,11 +35,11 @@ def fedimg_image_test_completed(config, message):
 
 
 def fedimg_image_test_failed(config, message):
-    """ Fedimg: An image test has completed
+    """ Fedimg: An image test has failed
 
     Adding this rule will let through notifications from the `Fedimg
     <https://github.com/fedora-infra/fedimg>`_ indicating the *image
-    test* has completed.
+    test* has failed.
     """
     if not fedimg_image_test_state(config, message):
         return False
@@ -84,7 +84,7 @@ def fedimg_image_upload_completed(config, message):
 
 
 def fedimg_image_upload_failed(config, message):
-    """ Fedimg: An image upload has completed
+    """ Fedimg: An image upload has failed
 
     Adding this rule will let through notifications from the `Fedimg
     <https://github.com/fedora-infra/fedimg>`_ indicating the *image
