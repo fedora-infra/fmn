@@ -1,4 +1,4 @@
-def fedora_electionsi_candidate_delete(config, message):
+def fedora_elections_candidate_delete(config, message):
     """ Elections: A candidate was deleted from an election.
 
     Adding this rule will let through elections from `Fedora
