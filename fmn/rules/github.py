@@ -25,16 +25,6 @@ def github_delete(config, message):
     from `Github <https://apps.fedoraproject.org/github2fedmsg>`_
     when someone **deletes a tag or branch**.
     """
-    return message['topic'].endswith('github.create')
-
-
-def github_delete(config, message):
-    """ Github: Someone deleted a tag or branch
-
-    Adding this rule to your filters will let through messages
-    from `Github <https://apps.fedoraproject.org/github2fedmsg>`_
-    when someone **deletes a tag or branch**.
-    """
     return message['topic'].endswith('github.delete')
 
 
