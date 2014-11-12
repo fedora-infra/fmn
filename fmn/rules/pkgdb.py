@@ -141,10 +141,10 @@ def pkgdb_package_delete(config, message):
 
 
 def pkgdb_package_monitor_update(config, message):
-    """ Pkgdb: a new branch is created for a package
+    """ Pkgdb: an admin updated monitoring status
 
-    Adding this rule will trigger notifications when a **new branch** is
-    **created** for a package in the Fedora `Package DB
+    Adding this rule will trigger notifications when an admin **updates**
+    **monitoring status** for a package in the Fedora `Package DB
     <https://admin.fedoraproject.org/pkgdb>`_.
     """
     return message['topic'].endswith('pkgdb.package.montior.update')
