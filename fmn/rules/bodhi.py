@@ -78,7 +78,7 @@ def bodhi_update_request_unpush(config, message):
 
 
 def bodhi_update_epel_sync(config, message):
-    """ Bodhi: a user requested an update be unpushed
+    """ Bodhi: new epel updates are synced out to mirror master
 
     This rule will let through messages from the `Bodhi Updates System
     <https://admin.fedoraproject.org/updates>`_ when new epel updates are
@@ -88,7 +88,7 @@ def bodhi_update_epel_sync(config, message):
 
 
 def bodhi_update_fedora_sync(config, message):
-    """ Bodhi: a user requested an update be unpushed
+    """ Bodhi: new fedora updates are synced out to mirror master
 
     This rule will let through messages from the `Bodhi Updates System
     <https://admin.fedoraproject.org/updates>`_ when new fedora updates are
