@@ -839,7 +839,8 @@ def login():
     openid_server = flask.request.form.get('openid', None)
     if openid_server:
         return oid.try_login(
-            openid_server, ask_for=['email', 'fullname', 'nickname'])
+            openid_server, ask_for=['email', 'fullname', 'nickname'],
+            ask_for_optional=[])
 
     return flask.render_template(
         'login.html', next=oid.get_next_url(), error=oid.fetch_error())
@@ -853,7 +854,8 @@ def fedora_login():
     next_url = flask.request.args.get('next', default)
     return oid.try_login(
         app.config['FMN_FEDORA_OPENID'],
-        ask_for=['email', 'fullname', 'nickname'])
+        ask_for=['email', 'fullname', 'nickname'],
+        ask_for_optional=[])
 
 @app.route('/login/google/')
 @app.route('/login/google')
@@ -863,7 +865,8 @@ def google_login():
     next_url = flask.request.args.get('next', default)
     return oid.try_login(
         "https://www.google.com/accounts/o8/id",
-        ask_for=['email', 'fullname'])
+        ask_for=['email', 'fullname'],
+        ask_for_optional=[])
 
 @app.route('/login/yahoo/')
 @app.route('/login/yahoo')
@@ -873,7 +876,8 @@ def yahoo_login():
     next_url = flask.request.args.get('next', default)
     return oid.try_login(
         "https://me.yahoo.com/",
-        ask_for=['email', 'fullname'])
+        ask_for=['email', 'fullname'],
+        ask_for_optional=[])
 
 
 @app.route('/logout/')
