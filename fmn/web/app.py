@@ -38,7 +38,8 @@ if 'FMN_WEB_CONFIG' in os.environ:  # pragma: no cover
     app.config.from_envvar('FMN_WEB_CONFIG')
 
 # Set up OpenID in stateless mode
-oid = OpenID(app, safe_roots=[], store_factory=lambda: None)
+oid = OpenID(app, safe_roots=[], store_factory=lambda: None,
+             url_root_as_trust_root=True)
 
 # Inject a simple jinja2 test -- it is surprising jinja2 does not have this.
 app.jinja_env.tests['equalto'] = lambda x, y: x == y
