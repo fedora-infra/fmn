@@ -26,7 +26,7 @@ requires = [
     'python-openid-cla',
     'python-openid-teams',
     'Flask',
-    'Flask-openid',
+    'Flask-openid>=1.2.4',
     'wtforms',
     'docutils',
     'markupsafe',
