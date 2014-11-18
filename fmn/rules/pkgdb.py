@@ -9,10 +9,10 @@ def pkgdb_acl_update(config, message):
 
 
 def pkgdb_acl_delete(config, message):
-    """ Pkgdb: an admin deleted a branch of a package
+    """ Pkgdb: a user deleted an ACL
 
-    Adding this rule will trigger notifications when an admin **deletes**
-    a branch of a package in the Fedora `Package DB
+    Adding this rule will trigger notifications when an ACL on a package
+    is **deleted** in the Fedora `Package DB
     <https://admin.fedoraproject.org/pkgdb>`_.
     """
     return message['topic'].endswith('pkgdb.acl.delete')
