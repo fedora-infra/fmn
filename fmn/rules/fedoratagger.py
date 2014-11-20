@@ -19,7 +19,7 @@ def fedoratagger_tag_create(config, message):
 
 
 def fedoratagger_tag_update(config, message):
-    """ Tagger: Someone marked that they use a package
+    """ Tagger: Someone voted on a tag
 
     Adding this rule to your filters will let through messages
     from `Fedora Tagger <https://apps.fedoraproject.org/tagger>`_
@@ -29,11 +29,11 @@ def fedoratagger_tag_update(config, message):
 
 
 def fedoratagger_usage_toggle(config, message):
-    """ Tagger: Someone voted on a tag
+    """ Tagger: Someone marked that they use a package
 
     Adding this rule to your filters will let through messages
     from `Fedora Tagger <https://apps.fedoraproject.org/tagger>`_
-    that get published when a user **toggles their status for a
+    that get published when a user **toggles their usage status for a
     package**.
     """
     return message['topic'].endswith('fedoratagger.usage.toggle')
