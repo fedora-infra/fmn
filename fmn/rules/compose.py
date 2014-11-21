@@ -89,6 +89,17 @@ def compose_branched_start(config, message):
     """
     return message['topic'].endswith('compose.branched.start')
 
+def compose_epelbeta_complete(config, message):
+    """ Release Engineering: Compose completed for epelbeta
+
+    Adding this rule will allow through notifications published when `release
+    engineering <https://fedoraproject.org/wiki/ReleaseEngineering>`_ completes
+    the **entire** `compose <https://apps.fedoraproject.org/releng-dash/>`_ of
+    EPEL beta.
+    """
+    return message['topic'].endswith('compose.epelbeta.complete')
+
+
 def compose_rawhide_complete(config, message):
     """ Release Engineering: Compose completed for rawhide
 

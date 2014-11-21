@@ -5,7 +5,7 @@ def bodhi_buildroot_override_tag(config, message):
     **requests a buildroot override** via the `Bodhi Updates System
     <https://admin.fedoraproject.org/updates>`_.
     """
-    return message['topic'].endswith('bodhi.override.tag')
+    return message['topic'].endswith('bodhi.buildroot_override.tag')
 
 
 def bodhi_buildroot_override_untag(config, message):
@@ -15,7 +15,7 @@ def bodhi_buildroot_override_untag(config, message):
     **delets a request for a buildroot override** via the `Bodhi Updates System
     <https://admin.fedoraproject.org/updates>`_.
     """
-    return message['topic'].endswith('bodhi.override.untag')
+    return message['topic'].endswith('bodhi.buildroot_override.untag')
 
 
 def bodhi_update_comment(config, message):
@@ -75,3 +75,24 @@ def bodhi_update_request_unpush(config, message):
     *requested* that an updated be **unpushed**.
     """
     return message['topic'].endswith('bodhi.update.request.unpush')
+
+
+def bodhi_update_epel_sync(config, message):
+    """ Bodhi: new epel updates are synced out to mirror master
+
+    This rule will let through messages from the `Bodhi Updates System
+    <https://admin.fedoraproject.org/updates>`_ when new epel updates are
+    synced out to the mirror master.
+    """
+    return message['topic'].endswith('bodhi.update.epel.sync')
+
+
+def bodhi_update_fedora_sync(config, message):
+    """ Bodhi: new fedora updates are synced out to mirror master
+
+    This rule will let through messages from the `Bodhi Updates System
+    <https://admin.fedoraproject.org/updates>`_ when new fedora updates are
+    synced out to the mirror master.
+    """
+    return message['topic'].endswith('bodhi.update.fedora.sync')
+
