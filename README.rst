@@ -56,7 +56,7 @@ If you want to set up fmn for development, you could try something like this:
 
 - Create some dev data for the webapp:
 
-  - ``$ python fmn.lib/createdb.py --with-dev-data``
+  - ``$ pushd fmn.web; python ../fmn.lib/createdb.py --with-dev-data; popd``
 
 - Start the webapp:
 
