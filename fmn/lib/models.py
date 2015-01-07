@@ -644,7 +644,7 @@ class Preference(BASE):
             if filter.name == filter_name:
                 return filter
 
-        raise ValueError("No such filter %r" % filter_id)
+        raise ValueError("No such filter %r" % filter_name)
 
     def has_filter(self, session, filter_id):
         for filter in self.filters:
