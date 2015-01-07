@@ -1,6 +1,49 @@
 Changelog
 =========
 
+0.4.0
+-----
+
+- Add the first rules for anitya integration in FMN `f409289c7 <https://github.com/fedora-infra/fmn.rules/commit/f409289c75a3ff63d8f4d18ffc4be912011d7979>`_
+- Import the anitya rules at the module level `89a71d5c4 <https://github.com/fedora-infra/fmn.rules/commit/89a71d5c499514afcc21425e1c07bd93e9d62273>`_
+- Change from Anitya:.. to Upstream:.. to be a little more user-friendly `aec962486 <https://github.com/fedora-infra/fmn.rules/commit/aec9624863122e8fc2dc6471a7662913ec00d4a6>`_
+- Merge pull request #18 from fedora-infra/feature/anitya `9fa5cec2a <https://github.com/fedora-infra/fmn.rules/commit/9fa5cec2a2aaab7ec190b37e832bee552960ec76>`_
+- Rules for Koschei state change and groups `ba0dfd910 <https://github.com/fedora-infra/fmn.rules/commit/ba0dfd910efddb87ce6bb10fcac56df6c5fe2d0a>`_
+- Use links in docstrings `a7b954859 <https://github.com/fedora-infra/fmn.rules/commit/a7b95485980e50b47959b89f83b5cfd78b3e1899>`_
+- Merge pull request #19 from msimacek/feature/koschei `26c6838f0 <https://github.com/fedora-infra/fmn.rules/commit/26c6838f0d4cf0bcdcda9992ecca81eb534ff2d6>`_
+- fix topic name on project update `86f68de3c <https://github.com/fedora-infra/fmn.rules/commit/86f68de3cb314e7abfdb70c38006dfa6bcdd26a4>`_
+- Merge pull request #20 from sayanchowdhury/topic-fix `ac1d39f85 <https://github.com/fedora-infra/fmn.rules/commit/ac1d39f8568597a23fe50c534b908200f26063bf>`_
+- update the rules for anitya `e3ceacdae <https://github.com/fedora-infra/fmn.rules/commit/e3ceacdae0c9851a625fa193b22ea093c5ae2fbd>`_
+- update the rules for bodhi `059ebb859 <https://github.com/fedora-infra/fmn.rules/commit/059ebb8593578598ac2d5f685c305cfed5f935de>`_
+- add rules for bugzilla `56ddd8f31 <https://github.com/fedora-infra/fmn.rules/commit/56ddd8f3189271c1463179926caa3e4b7ec59be7>`_
+- update the rules for buildsys `88ffe3b6e <https://github.com/fedora-infra/fmn.rules/commit/88ffe3b6e812578474527171bc55c11cc8f90011>`_
+- update the rules for compose `ac603ecac <https://github.com/fedora-infra/fmn.rules/commit/ac603ecaca2f28dc6f127db8d0214fd4d63bb1fa>`_
+- update rules for fedbadges `215b8b7ac <https://github.com/fedora-infra/fmn.rules/commit/215b8b7ac92403ff94adbc7c47ed75252755447d>`_
+- create rules for fedimg `6cbb43cb3 <https://github.com/fedora-infra/fmn.rules/commit/6cbb43cb32c836ceb61e1408c1e70c3ec0cd0eeb>`_
+- update the rules of fedimg `c9bdbb98c <https://github.com/fedora-infra/fmn.rules/commit/c9bdbb98c6c86737bf15fe870100e5112084c0c0>`_
+- create the rules for fedora_elections `ceb793db5 <https://github.com/fedora-infra/fmn.rules/commit/ceb793db57d19bafa2dcd7c64cd555e8de5145a2>`_
+- update the rules for fedoratagger `e50456a8d <https://github.com/fedora-infra/fmn.rules/commit/e50456a8d8a35a35c760447a1f5e60ae8b74bab6>`_
+- create rules for nuancier `9412c6b98 <https://github.com/fedora-infra/fmn.rules/commit/9412c6b9894396c721ee9fa46ac39fbb49d85ac2>`_
+- Add the new rules for kerneltest `b609809c5 <https://github.com/fedora-infra/fmn.rules/commit/b609809c561dd550445559bfef14160063cda576>`_
+- create the rules for jenkins `592544f01 <https://github.com/fedora-infra/fmn.rules/commit/592544f010d5665b033424f4e567ea14b5fc9b79>`_
+- Create rules for github `aec4444e5 <https://github.com/fedora-infra/fmn.rules/commit/aec4444e5574339ca54c9a1cead5b7598df5353c>`_
+- create rules for fmn `b98c44c9e <https://github.com/fedora-infra/fmn.rules/commit/b98c44c9e3cd64ca8318e2a77b62f1231d9d12fe>`_
+- update and add news for Fedora Package DB `2097c15c0 <https://github.com/fedora-infra/fmn.rules/commit/2097c15c06ed47a1222ddc4d90786cebadb43e4f>`_
+- fix typo in fedora_elections `7e59dd3c6 <https://github.com/fedora-infra/fmn.rules/commit/7e59dd3c636b6d3df3aefb6ae8500c569faf7f0c>`_
+- add the removed function for anitya info update `2a76d03a2 <https://github.com/fedora-infra/fmn.rules/commit/2a76d03a2f98bb42e15cf9c48fea49c6401f52c6>`_
+- fix topic description in bodhi `227441b1f <https://github.com/fedora-infra/fmn.rules/commit/227441b1fca53bbbc1cff982038d90b150effb27>`_
+- fix topic descriptions in fedimg `f6fd09a26 <https://github.com/fedora-infra/fmn.rules/commit/f6fd09a269d14182981ca94addf00127b0cf602c>`_
+- change topic description in tagger `8dd722df2 <https://github.com/fedora-infra/fmn.rules/commit/8dd722df27cc117eac294910a79d613fdb89cb79>`_
+- remove duplicate redundant method in github `939114bc6 <https://github.com/fedora-infra/fmn.rules/commit/939114bc696483da67bb75c593ba1f0434d8ff87>`_
+- update the topic description in pkgdb `eecd8d5ec <https://github.com/fedora-infra/fmn.rules/commit/eecd8d5ec59e4835a2307bb48078cd09166bb7e4>`_
+- fix topic name in pkgdb `291e4ae5f <https://github.com/fedora-infra/fmn.rules/commit/291e4ae5fe962fc57ad08f5a4b74a1d43db5c8e0>`_
+- fix description in pkgdb acl delete `02876f511 <https://github.com/fedora-infra/fmn.rules/commit/02876f511bfbc0f0f8d35c1d3ae7f55da9be31b2>`_
+- update description for topics in fedoratagger `b4014518f <https://github.com/fedora-infra/fmn.rules/commit/b4014518f3c80d7702718987e2ab9e92714d16f3>`_
+- rename fmn to fmn_notifications `16cce9b7b <https://github.com/fedora-infra/fmn.rules/commit/16cce9b7b78d35f3e65917c1fd31a38b7c253acb>`_
+- Merge pull request #21 from sayanchowdhury/gh-31 `8cb2ca696 <https://github.com/fedora-infra/fmn.rules/commit/8cb2ca696cffb31fe4e0f46cb717d730325dc50a>`_
+- update the init file with the new modules `a40226143 <https://github.com/fedora-infra/fmn.rules/commit/a40226143c268756a256c532543fb9831a805ea0>`_
+- Merge pull request #22 from sayanchowdhury/update_init `923fc8d32 <https://github.com/fedora-infra/fmn.rules/commit/923fc8d3273bcd8004ed3b039fe5ff07c95cde17>`_
+
 0.3.0
 -----
 

@@ -8,24 +8,24 @@ def pkgdb_acl_update(config, message):
     return message['topic'].endswith('pkgdb.acl.update')
 
 
-def pkgdb_acl_user_remove(config, message):
-    """ Pkgdb: a user removed an ACL
+def pkgdb_acl_delete(config, message):
+    """ Pkgdb: a user deleted an ACL
 
     Adding this rule will trigger notifications when an ACL on a package
-    is **removed** from the Fedora `Package DB
+    is **deleted** in the Fedora `Package DB
     <https://admin.fedoraproject.org/pkgdb>`_.
     """
-    return message['topic'].endswith('pkgdb.acl.user.remove')
+    return message['topic'].endswith('pkgdb.acl.delete')
 
 
-def pkgdb_branch_clone(config, message):
-    """ Pkgdb: branched a specific package
+def pkgdb_admin_action_status_update(config, message):
+    """ Pkgdb: an admin updated the status of Admin Action.
 
-    Adding this rule will trigger notifications when a new branch is cloned
-    for a package in the Fedora `Package DB
+    Adding this rule will trigger notifications when an admin **updates**
+    the status of Admin Action in the Fedora `Package DB
     <https://admin.fedoraproject.org/pkgdb>`_.
     """
-    return message['topic'].endswith('pkgdb.branch.clone')
+    return message['topic'].endswith('pkgdb.admin.action.status.update')
 
 
 def pkgdb_branch_complete(config, message):
@@ -68,17 +68,6 @@ def pkgdb_collection_update(config, message):
     return message['topic'].endswith('pkgdb.collection.update')
 
 
-def pkgdb_critpath_update(config, message):
-    """ Pkgdb: a user updated a critpath status
-
-    Adding this rule will trigger notifications when **the critical path
-    status** of a package in the Fedora `Package DB
-    <https://admin.fedoraproject.org/pkgdb>`_ **changes** (when a package is
-    either added or removed from the critical path).
-    """
-    return message['topic'].endswith('pkgdb.critpath.update')
-
-
 def pkgdb_owner_update(config, message):
     """ Pkgdb: a user updated the owner of a package
 
@@ -87,6 +76,36 @@ def pkgdb_owner_update(config, message):
     **changes**.  This includes when a package is orphaned.
     """
     return message['topic'].endswith('pkgdb.owner.update')
+
+
+def pkgdb_package_branch_delete(config, message):
+    """ Pkgdb: an admin deleted a branch of a package
+
+    Adding this rule will trigger notifications when an admin **deletes**
+    a branch of a package in the Fedora `Package DB
+    <https://admin.fedoraproject.org/pkgdb>`_.
+    """
+    return message['topic'].endswith('pkgdb.package.branch.delete')
+
+
+def pkgdb_package_branch_new(config, message):
+    """ Pkgdb: a new branch is created for a package
+
+    Adding this rule will trigger notifications when a **new branch** is
+    **created** for a package in the Fedora `Package DB
+    <https://admin.fedoraproject.org/pkgdb>`_.
+    """
+    return message['topic'].endswith('pkgdb.package.branch.new')
+
+
+def pkgdb_package_branch_request(config, message):
+    """ Pkgdb: a user requested a new branch for a package
+
+    Adding this rule will trigger notifications when a user **requests** a
+    **new branch** for a package in the Fedora `Package DB
+    <https://admin.fedoraproject.org/pkgdb>`_.
+    """
+    return message['topic'].endswith('pkgdb.package.branch.request')
 
 
 def pkgdb_package_new(config, message):
@@ -101,14 +120,44 @@ def pkgdb_package_new(config, message):
     return message['topic'].endswith('pkgdb.package.new')
 
 
-def pkgdb_package_retire(config, message):
-    """ Pkgdb: a package has been retired
+def pkgdb_package_critpath_update(config, message):
+    """ Pkgdb: an admin updated the critpath flag
 
-    Adding this rule will trigger notifications when a **package is
-    retired** from the Fedora `Package DB
+    Adding this rule will trigger notifications when **the critical path
+    flag** of a package in the Fedora `Package DB
+    <https://admin.fedoraproject.org/pkgdb>`_ **updates**.
+    """
+    return message['topic'].endswith('pkgdb.package.critpath.update')
+
+
+def pkgdb_package_delete(config, message):
+    """ Pkgdb: an admin deleted a package
+
+    Adding this rule will trigger notifications when an admin **deletes** a
+    package in the Fedora `Package DB
     <https://admin.fedoraproject.org/pkgdb>`_.
     """
-    return message['topic'].endswith('pkgdb.package.retire')
+    return message['topic'].endswith('pkgdb.package.delete')
+
+
+def pkgdb_package_monitor_update(config, message):
+    """ Pkgdb: an admin updated monitoring status
+
+    Adding this rule will trigger notifications when an admin **updates**
+    **monitoring status** for a package in the Fedora `Package DB
+    <https://admin.fedoraproject.org/pkgdb>`_.
+    """
+    return message['topic'].endswith('pkgdb.package.montior.update')
+
+
+def pkgdb_package_new_request(config, message):
+    """ Pkgdb: a user requested a new package
+
+    Adding this rule will trigger notifications when a user **requests** a
+    **new package** to be added in the Fedora `Package DB
+    <https://admin.fedoraproject.org/pkgdb>`_.
+    """
+    return message['topic'].endswith('pkgdb.package.new.request')
 
 
 def pkgdb_package_update(config, message):
@@ -119,3 +168,13 @@ def pkgdb_package_update(config, message):
     <https://admin.fedoraproject.org/pkgdb>`_.
     """
     return message['topic'].endswith('pkgdb.package.update')
+
+
+def pkgdb_package_update_status(config, message):
+    """ Pkgdb: a user updated the status of a package
+
+    Adding this rule will trigger notifications when a **package's status is
+    updated** in the Fedora `Package DB
+    <https://admin.fedoraproject.org/pkgdb>`_.
+    """
+    return message['topic'].endswith('pkgdb.package.update.status')
