@@ -76,7 +76,14 @@
         {% if fltr.rules %}
         <dl class="list-group-item-text dl-horizontal">
           {% for rule in fltr.rules %}
-          <dt style='white-space: normal;'>{{rule.title(valid_paths)}}</dt>
+          <dt style='white-space: normal;'>
+            {% if rule.negated %}
+            <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
+            {% else %}
+            <span class="glyphicon glyphicon-ok-circle text-success"></span>
+            {% endif %}
+            {{rule.title(valid_paths)}}
+          </dt>
           <dd>{{rule.doc(valid_paths, no_links=True)}}
           {% if rule.arguments %}
           <table class="table">
