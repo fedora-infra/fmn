@@ -24,15 +24,10 @@
 Mapping of python classes to Database Tables.
 """
 
-__requires__ = ['SQLAlchemy >= 0.7']
-import pkg_resources
-
 import datetime
 import hashlib
 import json
 import logging
-import pprint
-import traceback
 import uuid
 
 import sqlalchemy as sa
