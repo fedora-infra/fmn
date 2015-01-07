@@ -14,9 +14,6 @@ log = logging.getLogger(__name__)
 #                     filters)
 
 exclusion_packages = [
-    # If this is a message about a package of mine, **and** i'm responsible for
-    # it, then don't trigger this filter.  Rely on the other one.
-    'user_filter',
 ]
 
 exclusion_username = [
@@ -343,6 +340,13 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
             session, "Events on packages that I own")
         filt.add_rule(session, valid_paths,
                       "fmn.rules:user_package_filter", fasnick=nick)
+
+        # If this is a message about a package of mine, **and** i'm responsible
+        # for it, then don't trigger this filter.  Rely on the previous one.
+        filt.add_rule(session, valid_paths,
+                      "fmn.rules:user_filter",
+                      fasnick=nick,
+                      negated=True)
 
         # Right off the bat, ignore all messages from non-primary kojis.
         filt.add_rule(session, valid_paths,
