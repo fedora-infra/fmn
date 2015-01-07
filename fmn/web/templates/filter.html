@@ -45,7 +45,25 @@
     <div class="list-group">
     {% for rule in filter.rules %}
       <span class="list-group-item">
-        <h4 class="list-group-item-heading">{{rule.title(valid_paths)}}</h4>
+        <h4 class="list-group-item-heading">
+          <form class="form-inline" role="form" action="{{url_for('handle_rule')}}" method="post">
+            <input name="rule_name" id="rule_name" value="{{rule.code_path}}" type="hidden">
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
+            <input name="method" id="method" value="negate" type="hidden">
+            {% if rule.negated %}
+            <button type="submit" class="btn btn-danger btn-xs">
+                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                Ignore</button>
+            {% else %}
+            <button type="submit" class="btn btn-success btn-xs">
+                <span class="glyphicon glyphicon-ok-circle"></span>
+                Include</button>
+            {% endif %}
+            {{rule.title(valid_paths)}}
+          </form>
+        </h4>
         <p class="list-group-item-text">{{rule.doc(valid_paths)}}
           <dl class="dl-horizontal">
               {% for key, value in rule.arguments.iteritems() %}
@@ -55,25 +73,7 @@
         </p>
         <p class="list-group-item-text">
           <div class="row">
-            <div class="col-md-offset-1 col-md-2">
-              <form class="form-inline" role="form" action="{{url_for('handle_rule')}}" method="post">
-                <input name="rule_name" id="rule_name" value="{{rule.code_path}}" type="hidden">
-                <input name="openid" id="openid" value="{{openid}}" type="hidden">
-                <input name="context" id="context" value="{{current}}" type="hidden">
-                <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
-                <input name="method" id="method" value="negate" type="hidden">
-                {% if rule.negated %}
-                <button type="submit" class="btn btn-danger btn-xs">
-                    <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    Match if False</button>
-                {% else %}
-                <button type="submit" class="btn btn-success btn-xs">
-                    <span class="glyphicon glyphicon-ok-circle"></span>
-                    Match if True</button>
-                {% endif %}
-              </form>
-            </div>
-            <div class="col-md-offset-6 col-md-2">
+            <div class="col-md-offset-9 col-md-2">
               <form class="form-inline" role="form" action="{{url_for('handle_rule')}}" method="post">
                 <input name="rule_name" id="rule_name" value="{{rule.code_path}}" type="hidden">
                 <input name="openid" id="openid" value="{{openid}}" type="hidden">
