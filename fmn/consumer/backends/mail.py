@@ -90,7 +90,7 @@ class EmailBackend(BaseBackend):
     def handle_batch(self, session, recipient, queued_messages):
         def _format_line(msg):
             timestamp = datetime.datetime.fromtimestamp(msg['timestamp'])
-            payload = fedmsg.meta.msg2repr(msg, **self.config)
+            payload = fedmsg.meta.msg2long_form(msg, **self.config)
             return timestamp.strftime("%c") + ", " + payload
 
         n = len(queued_messages)
