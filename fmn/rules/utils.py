@@ -171,7 +171,7 @@ def get_user_of_group(config, fas, groupname):
     return _cache.get_or_create(key, creator)
 
 def get_groups_of_user(config, fas, username):
-    ''' Return the list of groups to which the user belongs.
+    ''' Return the list of (pkgdb) groups to which the user belongs.
 
     :arg config: a dict containing the fedmsg config
     :arg fas: a fedora.client.fas2.AccountSystem object instanciated and loged
@@ -188,7 +188,8 @@ def get_groups_of_user(config, fas, username):
     def creator():
         results = []
         for group in fas.person_by_username(username).get('memberships', []):
-            results.append(group.name)
+            if group['group_type'] == 'pkgdb':
+                results.append(group.name)
         return results
 
     return _cache.get_or_create(key, creator)
