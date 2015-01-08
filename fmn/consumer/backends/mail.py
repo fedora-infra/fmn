@@ -82,7 +82,7 @@ class EmailBackend(BaseBackend):
         self.log.debug("Email sent")
 
     def handle(self, session, recipient, msg):
-        content = fedmsg.meta.msg2repr(msg, **self.config)
+        content = fedmsg.meta.msg2long_form(msg, **self.config)
         subject = fedmsg.meta.msg2subtitle(msg, **self.config)
 
         self.send_mail(session, recipient, subject, content)
