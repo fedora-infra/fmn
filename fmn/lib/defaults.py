@@ -78,7 +78,7 @@ exclusion_username = [
     'fmn_preference_update',
     'fmn_confirmation_update',
 
-    # Ignore all meetbot stuff about meetings I am involved in.  bocecha
+    # Ignore all meetbot stuff about meetings I am involved in.  bochecha
     # pointed it out that this was ridiculous.
     'meetbot_meeting_complete',
     'meetbot_meeting_start',
