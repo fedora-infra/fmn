@@ -159,13 +159,13 @@ exclusion_mutual = [
 
     # No need to tell me about copr starts, I just want to know about completed
     # stuff.
-    'copr_build_end',
-    'copr_build_failed',
-    'copr_build_skipped',
-    #'copr_build_start',
-    'copr_build_success',
-    #'copr_chroot_start',
-    #'copr_worker_create',
+    #'copr_build_end',
+    #'copr_build_failed',
+    #'copr_build_skipped',
+    'copr_build_start',
+    #'copr_build_success',
+    'copr_chroot_start',
+    'copr_worker_create',
 
     ## No need to tell me about any fedora-elections stuff, but this should
     ## never match anyways (it won't relate to my username or a package of
