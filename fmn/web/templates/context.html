@@ -76,10 +76,12 @@
         {% if fltr.rules %}
         <dl class="list-group-item-text dl-horizontal">
           {% for rule in fltr.rules %}
-          <dt style='white-space: normal;'>
+          <dt style='white-space: normal;' data-toggle="tooltip"
             {% if rule.negated %}
+              title="(ignore) {{rule.title(valid_paths)}}">
             <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
             {% else %}
+              title="(include) {{rule.title(valid_paths)}}">
             <span class="glyphicon glyphicon-ok-circle text-success"></span>
             {% endif %}
             {{rule.title(valid_paths)}}
