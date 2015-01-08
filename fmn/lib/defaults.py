@@ -272,6 +272,12 @@ exclusion_mutual = [
     #'compose_rawhide_rsync_complete',
     #'compose_branched_rsync_start',
     #'compose_rawhide_rsync_start',
+
+    # Go ahead and ignore all summershum messages by default too.  @jwboyer
+    # complained rightly https://github.com/fedora-infra/fmn/issues/27
+    'summershum_ingest_start',
+    'summershum_ingest_complete',
+    'summershum_ingest_fail',
 ]
 
 
