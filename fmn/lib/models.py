@@ -24,15 +24,10 @@
 Mapping of python classes to Database Tables.
 """
 
-__requires__ = ['SQLAlchemy >= 0.7']
-import pkg_resources
-
 import datetime
 import hashlib
 import json
 import logging
-import pprint
-import traceback
 import uuid
 
 import sqlalchemy as sa
@@ -649,7 +644,7 @@ class Preference(BASE):
             if filter.name == filter_name:
                 return filter
 
-        raise ValueError("No such filter %r" % filter_id)
+        raise ValueError("No such filter %r" % filter_name)
 
     def has_filter(self, session, filter_id):
         for filter in self.filters:
