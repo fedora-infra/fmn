@@ -1,3 +1,13 @@
+def bodhi_critpath(config, message):
+    """ Bodhi: Any critpath update
+
+    Adding this rule will allow through notifications about **critpath
+    updates** from the `Bodhi Updates System
+    <https://admin.fedoraproject.org/updates>`_.
+    """
+    return message['msg'].get('update', {}).get('critpath', False)
+
+
 def bodhi_buildroot_override_tag(config, message):
     """ Bodhi: A user requested a buildroot override
 
