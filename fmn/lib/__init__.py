@@ -1,5 +1,6 @@
 """ Fedora Notifications internal API """
 
+import fmn.lib.hinting
 import fmn.lib.models
 
 import inspect
