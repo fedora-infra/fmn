@@ -524,9 +524,12 @@ def example_messages(openid, context, filter_id, page):
         if recips:
             results.append(_make_result(message, original))
 
+    next_page = page + 1
+    if page > pages:
+        next_page = None
     return dict(
         results=results,
-        next_page=page + 1,
+        next_page=next_page,
     )
 
 
