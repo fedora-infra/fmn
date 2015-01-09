@@ -1,5 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(topics=[_('askbot.post.delete')])
 def askbot_post_deleted(config, message):
     """ Ask: post deleted
 
@@ -10,6 +12,7 @@ def askbot_post_deleted(config, message):
     return message['topic'].endswith('askbot.post.delete')
 
 
+@hint(topics=[_('askbot.post.edit')])
 def askbot_post_edited(config, message):
     """ Ask: post edited
 
@@ -20,6 +23,7 @@ def askbot_post_edited(config, message):
     return message['topic'].endswith('askbot.post.edit')
 
 
+@hint(topics=[_('askbot.post.flag_offensive.add')])
 def askbot_post_flagged_offensive(config, message):
     """ Ask: post flagged as offensive
 
@@ -30,6 +34,7 @@ def askbot_post_flagged_offensive(config, message):
     return message['topic'].endswith('askbot.post.flag_offensive.add')
 
 
+@hint(topics=[_('askbot.post.flag_offensive.delete')])
 def askbot_post_unflagged_offensive(config, message):
     """ Ask: post unflagged as offensive
 
@@ -40,6 +45,7 @@ def askbot_post_unflagged_offensive(config, message):
     return message['topic'].endswith('askbot.post.flag_offensive.delete')
 
 
+@hint(topics=[_('askbot.tag.update')])
 def askbot_tag_update(config, message):
     """ Ask: tag update
 
