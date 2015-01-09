@@ -82,16 +82,18 @@ class EmailBackend(BaseBackend):
         self.log.debug("Email sent")
 
     def handle(self, session, recipient, msg):
-        content = fedmsg.meta.msg2repr(msg, **self.config)
+        link = fedmsg.meta.msg2link(msg, **self.config)
+        content = fedmsg.meta.msg2long_form(msg, **self.config)
         subject = fedmsg.meta.msg2subtitle(msg, **self.config)
 
-        self.send_mail(session, recipient, subject, content)
+        self.send_mail(session, recipient, subject, content + "\n\t" + link)
 
     def handle_batch(self, session, recipient, queued_messages):
         def _format_line(msg):
             timestamp = datetime.datetime.fromtimestamp(msg['timestamp'])
-            payload = fedmsg.meta.msg2repr(msg, **self.config)
-            return timestamp.strftime("%c") + ", " + payload
+            link = fedmsg.meta.msg2link(msg, **self.config)
+            payload = fedmsg.meta.msg2long_form(msg, **self.config)
+            return timestamp.strftime("%c") + ", " + payload + "\n\t" + link
 
         n = len(queued_messages)
         subject = u"Fedora Notifications Digest (%i updates)" % n
