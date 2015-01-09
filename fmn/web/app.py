@@ -9,7 +9,6 @@ from pkg_resources import get_distribution
 import arrow
 import docutils
 import docutils.examples
-import fedora.client
 import fedmsg.config
 import fedmsg.meta
 import jinja2
@@ -17,7 +16,6 @@ import libravatar
 import markupsafe
 
 import flask
-import sqlalchemy
 from flask.ext.openid import OpenID
 
 import fmn.lib
@@ -158,7 +156,7 @@ def login_required(function):
                 next=flask.request.url))
 
         # Ensure that the logged in user exists before we proceed.
-        user = fmn.lib.models.User.get_or_create(
+        fmn.lib.models.User.get_or_create(
             SESSION,
             openid=flask.g.auth.openid,
             openid_url=flask.g.auth.openid_url,
@@ -297,7 +295,8 @@ def link_fedora_mobile(openid, api_key, registration_id):
     if not ctx:
         raise APIError(403, dict(reason="android is not a context"))
 
-    pref = fmn.lib.models.Preference.get_or_create(
+    # Ensure that the preference exists before we proceed.
+    fmn.lib.models.Preference.get_or_create(
         SESSION, openid=openid, context=ctx)
 
     try:
