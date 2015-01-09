@@ -150,6 +150,7 @@ def load_rules(root='fmn.rules'):
             'doc': doc.strip(),
             'doc-no-links': doc_no_links.strip(),
             'args': inspect.getargspec(obj)[0],
+            'datanommer-hints': getattr(obj, 'hints', {}),
         }
 
     rules = OrderedDict(
