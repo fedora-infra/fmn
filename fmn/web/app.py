@@ -1,4 +1,5 @@
 import codecs
+import collections
 import datetime
 import functools
 import os
@@ -482,8 +483,24 @@ def example_messages(openid, context, filter_id, page):
 
     filter = pref.get_filter(SESSION, filter_id)
 
+    # Rules can optionally define a "hint" for a datanommer query.  For
+    # instance, if a rule has to do with filtering for bodhi messages, then a
+    # provided hint could be {'category': 'bodhi'}.  This simply speeds up the
+    # process of looking for potential message matches in the history by
+    # letting the database server do some of the work for us.  Without this, we
+    # have to comb through literally every message ever and then try to see
+    # what matches and what doesn't in python-land:  Slow!
+    hinting = collections.defaultdict(list)
+    for rule in filter.rules:
+        root, name = rule.code_path.split(':', 1)
+        for key, value in valid_paths[root][name]['datanommer-hints'].items():
+            if rule.negated:
+                key = 'not_' + key
+            hinting[key] += value
+
     # Now, connect to datanommer and get the latest bazillion messages
-    bazillion = 500
+    # (adjusting by any hinting the rules we're evalulating might provide).
+    bazillion = 400
     try:
         total, pages, messages = datanommer.models.Message.grep(
             start=datetime.datetime.fromtimestamp(1),
@@ -491,6 +508,7 @@ def example_messages(openid, context, filter_id, page):
             rows_per_page=bazillion,
             page=page,
             order='desc',
+            **hinting
         )
     except Exception as e:
         log.exception(e)
