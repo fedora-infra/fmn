@@ -62,11 +62,13 @@ def _format_message(msg, recipient, config):
     # might arrive: the `raw` message from fedmsg itself and the product of a
     # call to `fedmsg.meta.conglomerate(..)`
     if not 'subtitle' in msg:
+        # This handles normal, 'raw' messages which get passed through msg2*.
         template = u"{title} -- {subtitle} {delta}{link}{flt}"
         title = fedmsg.meta.msg2title(msg, **config)
         subtitle = fedmsg.meta.msg2subtitle(msg, **config)
         link = fedmsg.meta.msg2link(msg, **config)
     else:
+        # This handles messages that have already been 'conglomerated'.
         template = u"{subtitle} {delta}{link}{flt}"
         title = u""
         subtitle = msg['subtitle']
