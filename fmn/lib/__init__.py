@@ -86,6 +86,8 @@ def matches(filter, message, valid_paths, rule_cache, config):
                 return False
         except Exception as e:
             log.exception(e)
+            # If something throws an exception then we do *not* have a match.
+            return False
 
     # Then all rules matched on this filter..
     return True
