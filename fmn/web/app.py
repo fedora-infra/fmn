@@ -1,5 +1,4 @@
 import codecs
-import collections
 import datetime
 import functools
 import os
@@ -19,6 +18,7 @@ import flask
 from flask.ext.openid import OpenID
 
 import fmn.lib
+import fmn.lib.hinting
 import fmn.lib.models
 import fmn.web.converters
 import fmn.web.forms
@@ -482,20 +482,7 @@ def example_messages(openid, context, filter_id, page):
 
     filter = pref.get_filter(SESSION, filter_id)
 
-    # Rules can optionally define a "hint" for a datanommer query.  For
-    # instance, if a rule has to do with filtering for bodhi messages, then a
-    # provided hint could be {'category': 'bodhi'}.  This simply speeds up the
-    # process of looking for potential message matches in the history by
-    # letting the database server do some of the work for us.  Without this, we
-    # have to comb through literally every message ever and then try to see
-    # what matches and what doesn't in python-land:  Slow!
-    hinting = collections.defaultdict(list)
-    for rule in filter.rules:
-        root, name = rule.code_path.split(':', 1)
-        for key, value in valid_paths[root][name]['datanommer-hints'].items():
-            if rule.negated:
-                key = 'not_' + key
-            hinting[key] += value
+    hinting = fmn.lib.hinting.gather_hints(filter, valid_paths)
 
     # Now, connect to datanommer and get the latest bazillion messages
     # (adjusting by any hinting the rules we're evalulating might provide).
