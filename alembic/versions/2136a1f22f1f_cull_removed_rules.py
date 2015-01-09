@@ -25,7 +25,6 @@ def upgrade():
     goners = [
         'fmn.rules:pkgdb_acl_user_remove',
         'fmn.rules:pkgdb_branch_clone',
-        'fmn.rules:pkgdb_critpath_update',
         'fmn.rules:pkgdb_package_retire',
     ]
 
@@ -39,6 +38,17 @@ def upgrade():
                 rule.filter.preference.context.name,
             )
             session.delete(rule)
+
+    # And one of them wasn't actually removed, it was just renamed.
+    moves = [
+        ('fmn.rules:pkgdb_critpath_update',
+         'fmn.rules:pkgdb_package_critpath_update'),
+    ]
+    for src, dest in moves:
+        rules = session.query(fmn.lib.models.Rule)\
+            .filter_by(code_path=src).all()
+        for rule in rules:
+            rule.code_path = dest
 
     session.commit()
 
