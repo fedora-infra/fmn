@@ -112,6 +112,8 @@ def load_rules(root='fmn.rules'):
 
     module = __import__(root, fromlist=[root.split('.')[0]])
 
+    hinting_helpers = fmn.lib.hinting.__dict__.values()
+
     rules = {}
     for name in dir(module):
         obj = getattr(module, name)
@@ -120,8 +122,8 @@ def load_rules(root='fmn.rules'):
         if not callable(obj):
             continue
 
-        # Ignore our decorator
-        if name == 'hint':
+        # Ignore our decorator and its friends
+        if obj in hinting_helpers:
             continue
 
         doc = inspect.getdoc(obj)
