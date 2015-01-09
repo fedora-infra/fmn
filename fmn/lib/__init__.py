@@ -10,8 +10,6 @@ import bs4
 import docutils.examples
 import markupsafe
 
-import fedmsg.utils
-
 from collections import defaultdict
 
 try:
@@ -44,7 +42,6 @@ def recipients(preferences, message, valid_paths, config):
         if (user['openid'], context['name']) in notified:
             continue
 
-        filters = preference['filters']
         for filter in preference['filters']:
             if matches(filter, message, valid_paths, rule_cache, config):
                 for detail_value in preference['detail_values']:
