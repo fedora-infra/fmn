@@ -115,7 +115,13 @@ def load_rules(root='fmn.rules'):
     rules = {}
     for name in dir(module):
         obj = getattr(module, name)
+
+        # Ignore non-callables.
         if not callable(obj):
+            continue
+
+        # Ignore our decorator
+        if name == 'hint':
             continue
 
         doc = inspect.getdoc(obj)
