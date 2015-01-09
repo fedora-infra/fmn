@@ -58,10 +58,21 @@ def _shorten(link):
 
 
 def _format_message(msg, recipient, config):
-    template = u"{title} -- {subtitle} {delta}{link}{flt}"
-    title = fedmsg.meta.msg2title(msg, **config)
-    subtitle = fedmsg.meta.msg2subtitle(msg, **config)
-    link = fedmsg.meta.msg2link(msg, **config)
+    # Here we have to distinguish between two different kinds of messages that
+    # might arrive: the `raw` message from fedmsg itself and the product of a
+    # call to `fedmsg.meta.conglomerate(..)`
+    if not 'subtitle' in msg:
+        # This handles normal, 'raw' messages which get passed through msg2*.
+        template = u"{title} -- {subtitle} {delta}{link}{flt}"
+        title = fedmsg.meta.msg2title(msg, **config)
+        subtitle = fedmsg.meta.msg2subtitle(msg, **config)
+        link = fedmsg.meta.msg2link(msg, **config)
+    else:
+        # This handles messages that have already been 'conglomerated'.
+        template = u"{subtitle} {delta}{link}{flt}"
+        title = u""
+        subtitle = msg['subtitle']
+        link = msg['link']
 
     if recipient['shorten_links']:
         link = _shorten(link)
@@ -207,9 +218,12 @@ class IRCBackend(BaseBackend):
             )
 
     def handle_batch(self, session, recipient, queued_messages):
-        for queued_message in queued_messages:
-            self.handle(session, recipient, queued_message.message,
-                        streamline=True)
+        messages = [m.message for m in queued_messages]
+        # Squash some messages into one conglomerate message
+        # https://github.com/fedora-infra/datagrepper/issues/132
+        messages = fedmsg.meta.conglomerate(messages, **self.config)
+        for message in messages:
+            self.handle(session, recipient, message, streamline=True)
 
     def handle_confirmation(self, session, confirmation):
         if not self.clients:
