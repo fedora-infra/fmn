@@ -1,3 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('github.commit_comment')])
 def github_commit_comment(config, message):
     """ Github: Someone commented directly on a commit
 
@@ -8,6 +12,7 @@ def github_commit_comment(config, message):
     return message['topic'].endswith('github.commit_comment')
 
 
+@hint(topics=[_('github.create')])
 def github_create(config, message):
     """ Github: Someone created a new tag or branch
 
@@ -18,6 +23,7 @@ def github_create(config, message):
     return message['topic'].endswith('github.create')
 
 
+@hint(topics=[_('github.delete')])
 def github_delete(config, message):
     """ Github: Someone deleted a tag or branch
 
@@ -28,6 +34,7 @@ def github_delete(config, message):
     return message['topic'].endswith('github.delete')
 
 
+@hint(topics=[_('github.fork')])
 def github_fork(config, message):
     """ Github: Someone forked a repo
 
@@ -38,6 +45,7 @@ def github_fork(config, message):
     return message['topic'].endswith('github.fork')
 
 
+@hint(topics=[_('github.issue.comment')])
 def github_issue_comment(config, message):
     """ Github: Someone commented on an issue
 
@@ -48,6 +56,7 @@ def github_issue_comment(config, message):
     return message['topic'].endswith('github.issue.comment')
 
 
+@hint(topics=[_('github.issue.reopened')])
 def github_issue_reopened(config, message):
     """ Github: Someone changed an issue
 
@@ -58,6 +67,7 @@ def github_issue_reopened(config, message):
     return message['topic'].endswith('github.issue.reopened')
 
 
+@hint(topics=[_('github.pull_request.closed')])
 def github_pull_request_closed(config, message):
     """ Github: Someone closed an existing pull request
 
@@ -68,6 +78,7 @@ def github_pull_request_closed(config, message):
     return message['topic'].endswith('github.pull_request.closed')
 
 
+@hint(topics=[_('github.pull_request_review_comment')])
 def github_pull_request_review_comment(config, message):
     """ Github: Someone commented on a pull request
 
@@ -78,6 +89,7 @@ def github_pull_request_review_comment(config, message):
     return message['topic'].endswith('github.pull_request_review_comment')
 
 
+@hint(topics=[_('github.push')])
 def github_push(config, message):
     """ Github: Someone pushed to a github repo
 
@@ -88,6 +100,7 @@ def github_push(config, message):
     return message['topic'].endswith('github.push')
 
 
+@hint(topics=[_('github.status')])
 def github_status(config, message):
     """ Github: CI service updated the status of new commit
 
@@ -99,6 +112,7 @@ def github_status(config, message):
     return message['topic'].endswith('github.status')
 
 
+@hint(topics=[_('github.watch')])
 def github_watch(config, message):
     """ Github: Someone started watching a repository
 
@@ -109,6 +123,7 @@ def github_watch(config, message):
     return message['topic'].endswith('github.watch')
 
 
+@hint(topics=[_('github.webhook')])
 def github_webhook(config, message):
     """ Github: Someone enabled hook for fedmsg broadcast on a repository
 
@@ -117,5 +132,3 @@ def github_webhook(config, message):
     when someone **enables a new repository for fedmsg broadcast**.
     """
     return message['topic'].endswith('github.webhook')
-
-

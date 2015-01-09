@@ -1,3 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('git.branch')])
 def git_branch(config, message):
     """ Git: A new branch has been created in the git of package
 
@@ -7,6 +11,7 @@ def git_branch(config, message):
     return message['topic'].endswith('git.branch')
 
 
+@hint(topics=[_('git.lookaside.new')])
 def git_lookaside_new(config, message):
     """ Git: New sources have been uploaded to the "lookaside cache"
 
@@ -17,6 +22,7 @@ def git_lookaside_new(config, message):
     return message['topic'].endswith('git.lookaside.new')
 
 
+@hint(topics=[_('git.mass_branch.complete')])
 def git_mass_branch_complete(config, message):
     """ Git: Mass branching process completed
 
@@ -29,6 +35,7 @@ def git_mass_branch_complete(config, message):
     return message['topic'].endswith('git.mass_branch.complete')
 
 
+@hint(topics=[_('git.mass_branch.start')])
 def git_mass_branch_start(config, message):
     """Git: Mass branching process started
 
@@ -41,6 +48,7 @@ def git_mass_branch_start(config, message):
     return message['topic'].endswith('git.mass_branch.start')
 
 
+@hint(topics=[_('git.pkgdb2branch.complete')])
 def git_pkgdb2branch_complete(config, message):
     """Git: Process to set branches on a package completed
 
@@ -57,6 +65,7 @@ def git_pkgdb2branch_complete(config, message):
 
 
 
+@hint(topics=[_('git.pkgdb2branch.start')])
 def git_pkgdb2branch_start(config, message):
     """Git: Process to set branches on a package started
 
@@ -72,6 +81,7 @@ def git_pkgdb2branch_start(config, message):
     return message['topic'].endswith('git.pkgdb2branch.start')
 
 
+@hint(topics=[_('git.receive')])
 def git_receive(config, message):
     """ Git: Changes have been pushed onto the git of a package
 

@@ -1,3 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('fedbadges.badge.award')])
 def fedbadges_badge_award(config, message):
     """ Badges: A new badge has been awarded to someone
 
@@ -8,6 +12,7 @@ def fedbadges_badge_award(config, message):
     return message['topic'].endswith('fedbadges.badge.award')
 
 
+@hint(topics=[_('fedbadges.person.login.first')])
 def fedbadges_person_first_login(config, message):
     """ Badges: Someone logs in for the first time
 
@@ -18,6 +23,7 @@ def fedbadges_person_first_login(config, message):
     return message['topic'].endswith('fedbadges.person.login.first')
 
 
+@hint(topics=[_('fedbadges.person.rank.advance')])
 def fedbadges_person_rank_advance(config, message):
     """ Badges: The rank of someone changed on the badges leaderboard
 

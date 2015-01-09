@@ -1,4 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
 
+
+@hint(topics=[_('fedocal.calendar.clear')])
 def fedocal_calendar_clear(config, message):
     """ Calendar:  An admin has cleared all meetings from a calendar.
 
@@ -9,6 +12,7 @@ def fedocal_calendar_clear(config, message):
     return message['topic'].endswith('fedocal.calendar.clear')
 
 
+@hint(topics=[_('fedocal.calendar.new')])
 def fedocal_calendar_create(config, message):
     """ Calendar:  An admin has created a new calendar.
 
@@ -19,6 +23,7 @@ def fedocal_calendar_create(config, message):
     return message['topic'].endswith('fedocal.calendar.new')
 
 
+@hint(topics=[_('fedocal.calendar.delete')])
 def fedocal_calendar_delete(config, message):
     """ Calendar:  An admin has deleted a calendar.
 
@@ -29,6 +34,7 @@ def fedocal_calendar_delete(config, message):
     return message['topic'].endswith('fedocal.calendar.delete')
 
 
+@hint(topics=[_('fedocal.calendar.update')])
 def fedocal_calendar_update(config, message):
     """ Calendar:  An admin has updated a calendar.
 
@@ -39,6 +45,7 @@ def fedocal_calendar_update(config, message):
     return message['topic'].endswith('fedocal.calendar.update')
 
 
+@hint(topics=[_('fedocal.meeting.new')])
 def fedocal_meeting_create(config, message):
     """ Meeting:  Someone created a new meeting.
 
@@ -49,6 +56,7 @@ def fedocal_meeting_create(config, message):
     return message['topic'].endswith('fedocal.meeting.new')
 
 
+@hint(topics=[_('fedocal.meeting.update')])
 def fedocal_meeting_update(config, message):
     """ Meeting:  Someone updated a meeting.
 
@@ -59,6 +67,7 @@ def fedocal_meeting_update(config, message):
     return message['topic'].endswith('fedocal.meeting.update')
 
 
+@hint(topics=[_('fedocal.meeting.delete')])
 def fedocal_meeting_delete(config, message):
     """ Meeting:  Someone deleted a meeting.
 
@@ -69,6 +78,7 @@ def fedocal_meeting_delete(config, message):
     return message['topic'].endswith('fedocal.meeting.delete')
 
 
+@hint(topics=[_('fedocal.meeting.reminder')])
 def fedocal_meeting_reminder(config, message):
     """ Meeting:  Automatic upcoming meeting reminders.
 

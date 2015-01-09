@@ -1,3 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('kerneltest.release.edit')])
 def kerneltest_release_edit(config, message):
     """ Kernel Test: An admin edited an existing release
 
@@ -8,6 +12,7 @@ def kerneltest_release_edit(config, message):
     return message['topic'].endswith('kerneltest.release.edit')
 
 
+@hint(topics=[_('kerneltest.release.new')])
 def kerneltest_release_new(config, message):
     """ Kernel Test: An admin did set up an existing release
 
@@ -18,6 +23,7 @@ def kerneltest_release_new(config, message):
     return message['topic'].endswith('kerneltest.release.new')
 
 
+@hint(topics=[_('kerneltest.upload.new')])
 def kerneltest_upload_new(config, message):
     """ Kernel Test: A new test result was uploaded
 
@@ -26,5 +32,3 @@ def kerneltest_upload_new(config, message):
     when a new test result is uploaded.
     """
     return message['topic'].endswith('kerneltest.upload.new')
-
-

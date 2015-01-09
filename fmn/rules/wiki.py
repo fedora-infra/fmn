@@ -1,3 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('wiki.article.edit')])
 def wiki_article_edit(config, message):
     """ Wiki: A user edited a wiki page
 
@@ -8,6 +12,7 @@ def wiki_article_edit(config, message):
     return message['topic'].endswith('wiki.article.edit')
 
 
+@hint(topics=[_('wiki.upload.complete')])
 def wiki_upload_complete(config, message):
     """ Wiki: A user uploaded content on the wiki
 

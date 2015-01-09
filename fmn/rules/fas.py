@@ -1,3 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('fas.group.create')])
 def fas_group_create(config, message):
     """ FAS: New group created
 
@@ -8,6 +12,7 @@ def fas_group_create(config, message):
     return message['topic'].endswith('fas.group.create')
 
 
+@hint(topics=[_('fas.group.member.apply')])
 def fas_group_member_apply(config, message):
     """ FAS: A member requested to join a group
 
@@ -18,6 +23,7 @@ def fas_group_member_apply(config, message):
     return message['topic'].endswith('fas.group.member.apply')
 
 
+@hint(topics=[_('fas.group.member.remove')])
 def fas_group_member_remove(config, message):
     """ FAS: A user was removed from a group
 
@@ -28,6 +34,7 @@ def fas_group_member_remove(config, message):
     return message['topic'].endswith('fas.group.member.remove')
 
 
+@hint(topics=[_('fas.group.member.sponsor')])
 def fas_group_member_sponsor(config, message):
     """ FAS: A user has been sponsored by an authorized user into a group
 
@@ -38,6 +45,7 @@ def fas_group_member_sponsor(config, message):
     return message['topic'].endswith('fas.group.member.sponsor')
 
 
+@hint(topics=[_('fas.group.update')])
 def fas_group_update(config, message):
     """ FAS: A group's properties have been modified
 
@@ -48,6 +56,7 @@ def fas_group_update(config, message):
     return message['topic'].endswith('fas.group.update')
 
 
+@hint(topics=[_('fas.role.update')])
 def fas_role_update(config, message):
     """ FAS: A user's role in a particular group has been updated
 
@@ -58,6 +67,7 @@ def fas_role_update(config, message):
     return message['topic'].endswith('fas.role.update')
 
 
+@hint(topics=[_('fas.user.create')])
 def fas_user_create(config, message):
     """ FAS: A new user account has been created
 
@@ -68,6 +78,7 @@ def fas_user_create(config, message):
     return message['topic'].endswith('fas.user.create')
 
 
+@hint(topics=[_('fas.user.update')])
 def fas_user_update(config, message):
     """ FAS: A user updated his/her account
 

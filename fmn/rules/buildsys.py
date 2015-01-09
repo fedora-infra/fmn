@@ -1,5 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['buildsys'], invertible=False)
 def koji_instance(config, message, instance=None, *args, **kw):
     """ Koji: pertains only to particular instances
 
@@ -28,6 +30,7 @@ def koji_instance(config, message, instance=None, *args, **kw):
     return message['msg'].get('instance') in instances
 
 
+@hint(topics=[_('buildsys.task.state.change')])
 def koji_scratch_build_state_change(config, message):
     """ Koji: *scratch* build changed state (started, failed, finished)
 
@@ -38,6 +41,7 @@ def koji_scratch_build_state_change(config, message):
     return message['topic'].endswith('buildsys.task.state.change')
 
 
+@hint(topics=[_('buildsys.task.state.change')], invertible=False)
 def koji_scratch_build_started(config, message):
     """ Koji: *scratch* build started
 
@@ -51,6 +55,7 @@ def koji_scratch_build_started(config, message):
     return message['msg']['new'] == 'OPEN'
 
 
+@hint(topics=[_('buildsys.task.state.change')], invertible=False)
 def koji_scratch_build_completed(config, message):
     """ Koji: *scratch* build completed
 
@@ -64,6 +69,7 @@ def koji_scratch_build_completed(config, message):
     return message['msg']['new'] == 'CLOSED'
 
 
+@hint(topics=[_('buildsys.task.state.change')], invertible=False)
 def koji_scratch_build_failed(config, message):
     """ Koji: *scratch* build failed
 
@@ -77,6 +83,7 @@ def koji_scratch_build_failed(config, message):
     return message['msg']['new'] == 'FAILED'
 
 
+@hint(topics=[_('buildsys.task.state.change')], invertible=False)
 def koji_scratch_build_cancelled(config, message):
     """ Koji: *scratch* build cancelled
 
@@ -90,6 +97,7 @@ def koji_scratch_build_cancelled(config, message):
     return message['msg']['new'] == 'CANCELED'
 
 
+@hint(topics=[_('buildsys.build.state.change')])
 def koji_build_state_change(config, message):
     """ Koji: build changed state (started, failed, finished)
 
@@ -101,6 +109,7 @@ def koji_build_state_change(config, message):
     return message['topic'].endswith('buildsys.build.state.change')
 
 
+@hint(topics=[_('buildsys.build.state.change')], invertible=False)
 def koji_build_started(config, message):
     """ Koji: build started
 
@@ -114,6 +123,7 @@ def koji_build_started(config, message):
     return message['msg']['new'] == 0
 
 
+@hint(topics=[_('buildsys.build.state.change')], invertible=False)
 def koji_build_completed(config, message):
     """ Koji: build completed
 
@@ -127,6 +137,7 @@ def koji_build_completed(config, message):
     return message['msg']['new'] == 1
 
 
+@hint(topics=[_('buildsys.build.state.change')], invertible=False)
 def koji_build_deleted(config, message):
     """ Koji: build deleted
 
@@ -140,6 +151,7 @@ def koji_build_deleted(config, message):
     return message['msg']['new'] == 2
 
 
+@hint(topics=[_('buildsys.build.state.change')], invertible=False)
 def koji_build_failed(config, message):
     """ Koji: build failed
 
@@ -153,6 +165,7 @@ def koji_build_failed(config, message):
     return message['msg']['new'] == 3
 
 
+@hint(topics=[_('buildsys.build.state.change')], invertible=False)
 def koji_build_cancelled(config, message):
     """ Koji: build cancelled
 
@@ -166,6 +179,7 @@ def koji_build_cancelled(config, message):
     return message['msg']['new'] == 4
 
 
+@hint(topics=[_('buildsys.package.list.change')])
 def koji_package_list_change(config, message):
     """ Koji: Package listing has changed
 
@@ -176,6 +190,7 @@ def koji_package_list_change(config, message):
     return message['topic'].endswith('buildsys.package.list.change')
 
 
+@hint(topics=[_('buildsys.repo.done')])
 def koji_repo_done(config, message):
     """ Koji: Building a repo has finished
 
@@ -186,6 +201,7 @@ def koji_repo_done(config, message):
     return message['topic'].endswith('buildsys.repo.done')
 
 
+@hint(topics=[_('buildsys.repo.init')])
 def koji_repo_init(config, message):
     """ Koji: Building a repo has started
 
@@ -196,6 +212,7 @@ def koji_repo_init(config, message):
     return message['topic'].endswith('buildsys.repo.init')
 
 
+@hint(topics=[_('buildsys.tag')])
 def koji_tag(config, message):
     """ Koji: A package has been tagged
 
@@ -206,6 +223,7 @@ def koji_tag(config, message):
     return message['topic'].endswith('buildsys.tag')
 
 
+@hint(topics=[_('buildsys.untag')])
 def koji_untag(config, message):
     """ Koji: A package has been untagged
 
