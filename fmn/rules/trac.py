@@ -1,3 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('trac.git.receive')])
 def trac_git_receive(config, message):
     """ Fedora Hosted: Commits pushed to a git repository
 
@@ -7,6 +11,7 @@ def trac_git_receive(config, message):
     return message['topic'].endswith('trac.git.receive')
 
 
+@hint(topics=[_('trac.ticket.delete')])
 def trac_ticket_delete(config, message):
     """ Fedora Hosted: Deleted a ticket on a trac instance
 
@@ -16,6 +21,7 @@ def trac_ticket_delete(config, message):
     return message['topic'].endswith('trac.ticket.delete')
 
 
+@hint(topics=[_('trac.ticket.new')])
 def trac_ticket_new(config, message):
     """ Fedora Hosted: Created a new ticket on a trac instance
 
@@ -25,6 +31,7 @@ def trac_ticket_new(config, message):
     return message['topic'].endswith('trac.ticket.new')
 
 
+@hint(topics=[_('trac.ticket.update')])
 def trac_ticket_update(config, message):
     """ Fedora Hosted: Updated a ticket on a trac instance
 
@@ -34,6 +41,7 @@ def trac_ticket_update(config, message):
     return message['topic'].endswith('trac.ticket.update')
 
 
+@hint(topics=[_('trac.wiki.page.delete')])
 def trac_wiki_page_delete(config, message):
     """ Fedora Hosted: Deleted a wiki page of a trac instance
 
@@ -43,6 +51,7 @@ def trac_wiki_page_delete(config, message):
     return message['topic'].endswith('trac.wiki.page.delete')
 
 
+@hint(topics=[_('trac.wiki.page.new')])
 def trac_wiki_page_new(config, message):
     """ Fedora Hosted: Created a wiki page of a trac instance
 
@@ -52,6 +61,7 @@ def trac_wiki_page_new(config, message):
     return message['topic'].endswith('trac.wiki.page.new')
 
 
+@hint(topics=[_('trac.wiki.page.rename')])
 def trac_wiki_page_rename(config, message):
     """ Fedora Hosted: Renamed a wiki page of a trac instance
 
@@ -61,6 +71,7 @@ def trac_wiki_page_rename(config, message):
     return message['topic'].endswith('trac.wiki.page.rename')
 
 
+@hint(topics=[_('trac.wiki.page.update')])
 def trac_wiki_page_update(config, message):
     """ Fedora Hosted: Updated a wiki page of a trac instance
 
@@ -70,6 +81,7 @@ def trac_wiki_page_update(config, message):
     return message['topic'].endswith('trac.wiki.page.update')
 
 
+@hint(topics=[_('trac.wiki.page.version.delete')])
 def trac_wiki_page_version_delete(config, message):
     """ Fedora Hosted: Deleted a version of a wiki page
 

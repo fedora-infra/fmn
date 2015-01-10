@@ -1,3 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('pkgdb.acl.update')])
 def pkgdb_acl_update(config, message):
     """ Pkgdb: a user updated an ACL
 
@@ -8,6 +12,7 @@ def pkgdb_acl_update(config, message):
     return message['topic'].endswith('pkgdb.acl.update')
 
 
+@hint(topics=[_('pkgdb.acl.delete')])
 def pkgdb_acl_delete(config, message):
     """ Pkgdb: a user deleted an ACL
 
@@ -18,6 +23,7 @@ def pkgdb_acl_delete(config, message):
     return message['topic'].endswith('pkgdb.acl.delete')
 
 
+@hint(topics=[_('pkgdb.admin.action.status.update')])
 def pkgdb_admin_action_status_update(config, message):
     """ Pkgdb: an admin updated the status of Admin Action.
 
@@ -28,6 +34,7 @@ def pkgdb_admin_action_status_update(config, message):
     return message['topic'].endswith('pkgdb.admin.action.status.update')
 
 
+@hint(topics=[_('pkgdb.branch.complete')])
 def pkgdb_branch_complete(config, message):
     """ Pkgdb: finished the branching process
 
@@ -38,6 +45,7 @@ def pkgdb_branch_complete(config, message):
     return message['topic'].endswith('pkgdb.branch.complete')
 
 
+@hint(topics=[_('pkgdb.branch.start')])
 def pkgdb_branch_start(config, message):
     """ Pkgdb: started the branching process
 
@@ -48,6 +56,7 @@ def pkgdb_branch_start(config, message):
     return message['topic'].endswith('pkgdb.branch.start')
 
 
+@hint(topics=[_('pkgdb.collection.new')])
 def pkgdb_collection_new(config, message):
     """ Pkgdb: new collection created
 
@@ -58,6 +67,7 @@ def pkgdb_collection_new(config, message):
     return message['topic'].endswith('pkgdb.collection.new')
 
 
+@hint(topics=[_('pkgdb.collection.update')])
 def pkgdb_collection_update(config, message):
     """ Pkgdb: a collection has been updated
 
@@ -68,6 +78,7 @@ def pkgdb_collection_update(config, message):
     return message['topic'].endswith('pkgdb.collection.update')
 
 
+@hint(topics=[_('pkgdb.owner.update')])
 def pkgdb_owner_update(config, message):
     """ Pkgdb: a user updated the owner of a package
 
@@ -78,6 +89,7 @@ def pkgdb_owner_update(config, message):
     return message['topic'].endswith('pkgdb.owner.update')
 
 
+@hint(topics=[_('pkgdb.package.branch.delete')])
 def pkgdb_package_branch_delete(config, message):
     """ Pkgdb: an admin deleted a branch of a package
 
@@ -88,6 +100,7 @@ def pkgdb_package_branch_delete(config, message):
     return message['topic'].endswith('pkgdb.package.branch.delete')
 
 
+@hint(topics=[_('pkgdb.package.branch.new')])
 def pkgdb_package_branch_new(config, message):
     """ Pkgdb: a new branch is created for a package
 
@@ -98,6 +111,7 @@ def pkgdb_package_branch_new(config, message):
     return message['topic'].endswith('pkgdb.package.branch.new')
 
 
+@hint(topics=[_('pkgdb.package.branch.request')])
 def pkgdb_package_branch_request(config, message):
     """ Pkgdb: a user requested a new branch for a package
 
@@ -108,6 +122,7 @@ def pkgdb_package_branch_request(config, message):
     return message['topic'].endswith('pkgdb.package.branch.request')
 
 
+@hint(topics=[_('pkgdb.package.new')])
 def pkgdb_package_new(config, message):
     """ Pkgdb: a new package has been created
 
@@ -120,6 +135,7 @@ def pkgdb_package_new(config, message):
     return message['topic'].endswith('pkgdb.package.new')
 
 
+@hint(topics=[_('pkgdb.package.critpath.update')])
 def pkgdb_package_critpath_update(config, message):
     """ Pkgdb: an admin updated the critpath flag
 
@@ -130,6 +146,7 @@ def pkgdb_package_critpath_update(config, message):
     return message['topic'].endswith('pkgdb.package.critpath.update')
 
 
+@hint(topics=[_('pkgdb.package.delete')])
 def pkgdb_package_delete(config, message):
     """ Pkgdb: an admin deleted a package
 
@@ -140,6 +157,7 @@ def pkgdb_package_delete(config, message):
     return message['topic'].endswith('pkgdb.package.delete')
 
 
+@hint(topics=[_('pkgdb.package.monitor.update')])
 def pkgdb_package_monitor_update(config, message):
     """ Pkgdb: an admin updated monitoring status
 
@@ -147,9 +165,10 @@ def pkgdb_package_monitor_update(config, message):
     **monitoring status** for a package in the Fedora `Package DB
     <https://admin.fedoraproject.org/pkgdb>`_.
     """
-    return message['topic'].endswith('pkgdb.package.montior.update')
+    return message['topic'].endswith('pkgdb.package.monitor.update')
 
 
+@hint(topics=[_('pkgdb.package.new.request')])
 def pkgdb_package_new_request(config, message):
     """ Pkgdb: a user requested a new package
 
@@ -160,6 +179,7 @@ def pkgdb_package_new_request(config, message):
     return message['topic'].endswith('pkgdb.package.new.request')
 
 
+@hint(topics=[_('pkgdb.package.update')])
 def pkgdb_package_update(config, message):
     """ Pkgdb: a user updated information about a package
 
@@ -170,6 +190,7 @@ def pkgdb_package_update(config, message):
     return message['topic'].endswith('pkgdb.package.update')
 
 
+@hint(topics=[_('pkgdb.package.update.status')])
 def pkgdb_package_update_status(config, message):
     """ Pkgdb: a user updated the status of a package
 

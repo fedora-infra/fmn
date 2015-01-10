@@ -1,3 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('summershum.ingest.start')])
 def summershum_ingest_start(config, message):
     """ Summershum: Started ingesting a tarball
 
@@ -7,6 +11,8 @@ def summershum_ingest_start(config, message):
     """
     return message['topic'].endswith('summershum.ingest.start')
 
+
+@hint(topics=[_('summershum.ingest.fail')])
 def summershum_ingest_fail(config, message):
     """ Summershum: failed to ingest a tarball
 
@@ -16,6 +22,8 @@ def summershum_ingest_fail(config, message):
     """
     return message['topic'].endswith('summershum.ingest.fail')
 
+
+@hint(topics=[_('summershum.ingest.complete')])
 def summershum_ingest_complete(config, message):
     """ Summershum: finished ingesting a tarball
 

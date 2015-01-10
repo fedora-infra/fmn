@@ -1,3 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('logger.log')])
 def logger_log(config, message):
     """ Logger: Triggered by the default `fedmsg-logger` configuration.
 

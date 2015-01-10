@@ -1,5 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(topics=[_('ansible.playbook.complete')])
 def playbook_complete(config, message):
     """ Ansible playbook completed
 
@@ -12,6 +14,7 @@ def playbook_complete(config, message):
     return message['topic'].endswith('ansible.playbook.complete')
 
 
+@hint(topics=[_('ansible.playbook.start')])
 def playbook_started(config, message):
     """ Ansible playbook started
 

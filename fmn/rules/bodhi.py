@@ -1,3 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+# No hint for critpath -- it is not invertible.
 def bodhi_critpath(config, message):
     """ Bodhi: Any critpath update
 
@@ -8,6 +12,7 @@ def bodhi_critpath(config, message):
     return message['msg'].get('update', {}).get('critpath', False)
 
 
+@hint(topics=[_('bodhi.buildroot_override.tag')])
 def bodhi_buildroot_override_tag(config, message):
     """ Bodhi: A user requested a buildroot override
 
@@ -18,6 +23,7 @@ def bodhi_buildroot_override_tag(config, message):
     return message['topic'].endswith('bodhi.buildroot_override.tag')
 
 
+@hint(topics=[_('bodhi.buildroot_override.untag')])
 def bodhi_buildroot_override_untag(config, message):
     """ Bodhi: A user removed a buildroot override
 
@@ -28,6 +34,7 @@ def bodhi_buildroot_override_untag(config, message):
     return message['topic'].endswith('bodhi.buildroot_override.untag')
 
 
+@hint(topics=[_('bodhi.update.comment')])
 def bodhi_update_comment(config, message):
     """ Bodhi: a user added a comment to a bodhi update
 
@@ -37,6 +44,8 @@ def bodhi_update_comment(config, message):
     """
     return message['topic'].endswith('bodhi.update.comment')
 
+
+@hint(topics=[_('bodhi.update.request.obsolete')])
 def bodhi_update_request_obsolete(config, message):
     """ Bodhi: a user requested an update be obsoleted
 
@@ -47,6 +56,7 @@ def bodhi_update_request_obsolete(config, message):
     return message['topic'].endswith('bodhi.update.request.obsolete')
 
 
+@hint(topics=[_('bodhi.update.request.revoke')])
 def bodhi_update_request_revoke(config, message):
     """ Bodhi: a user revoked a prior request on an update
 
@@ -57,6 +67,7 @@ def bodhi_update_request_revoke(config, message):
     return message['topic'].endswith('bodhi.update.request.revoke')
 
 
+@hint(topics=[_('bodhi.update.request.stable')])
 def bodhi_update_request_stable(config, message):
     """ Bodhi: a user requested an update be marked as stable
 
@@ -67,6 +78,7 @@ def bodhi_update_request_stable(config, message):
     return message['topic'].endswith('bodhi.update.request.stable')
 
 
+@hint(topics=[_('bodhi.update.request.testing')])
 def bodhi_update_request_testing(config, message):
     """ Bodhi: a user requested an update be pushed to testing
 
@@ -77,6 +89,7 @@ def bodhi_update_request_testing(config, message):
     return message['topic'].endswith('bodhi.update.request.testing')
 
 
+@hint(topics=[_('bodhi.update.request.unpush')])
 def bodhi_update_request_unpush(config, message):
     """ Bodhi: a user requested an update be unpushed
 
@@ -87,6 +100,7 @@ def bodhi_update_request_unpush(config, message):
     return message['topic'].endswith('bodhi.update.request.unpush')
 
 
+@hint(topics=[_('bodhi.updates.epel.sync')])
 def bodhi_update_epel_sync(config, message):
     """ Bodhi: new epel updates are synced out to mirror master
 
@@ -94,9 +108,10 @@ def bodhi_update_epel_sync(config, message):
     <https://admin.fedoraproject.org/updates>`_ when new epel updates are
     synced out to the mirror master.
     """
-    return message['topic'].endswith('bodhi.update.epel.sync')
+    return message['topic'].endswith('bodhi.updates.epel.sync')
 
 
+@hint(topics=[_('bodhi.updates.fedora.sync')])
 def bodhi_update_fedora_sync(config, message):
     """ Bodhi: new fedora updates are synced out to mirror master
 
@@ -104,5 +119,4 @@ def bodhi_update_fedora_sync(config, message):
     <https://admin.fedoraproject.org/updates>`_ when new fedora updates are
     synced out to the mirror master.
     """
-    return message['topic'].endswith('bodhi.update.fedora.sync')
-
+    return message['topic'].endswith('bodhi.updates.fedora.sync')

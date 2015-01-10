@@ -5,6 +5,7 @@ import json
 import fedmsg
 
 import fmn.rules.utils
+from fmn.lib.hinting import hint
 
 
 def user_filter(config, message, fasnick=None, *args, **kw):
@@ -100,6 +101,7 @@ def regex_filter(config, message, pattern=None, *args, **kw):
         return bool(regex.match(json.dumps(message)))
 
 
+@hint(categories=['trac'], invertible=False)
 def trac_hosted_filter(config, message, project=None, *args, **kw):
     """ Filter the messages for one or more fedorahosted projects
 

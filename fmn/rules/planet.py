@@ -1,3 +1,7 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('planet.post.new')])
 def planet_post_new(config, message):
     """ Planet: A user posted on the Fedora planet
 
