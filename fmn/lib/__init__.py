@@ -1,5 +1,6 @@
 """ Fedora Notifications internal API """
 
+import fmn.lib.hinting
 import fmn.lib.models
 
 import inspect
@@ -9,8 +10,6 @@ import re
 import bs4
 import docutils.examples
 import markupsafe
-
-import fedmsg.utils
 
 from collections import defaultdict
 
@@ -44,7 +43,6 @@ def recipients(preferences, message, valid_paths, config):
         if (user['openid'], context['name']) in notified:
             continue
 
-        filters = preference['filters']
         for filter in preference['filters']:
             if matches(filter, message, valid_paths, rule_cache, config):
                 for detail_value in preference['detail_values']:
@@ -117,10 +115,18 @@ def load_rules(root='fmn.rules'):
 
     module = __import__(root, fromlist=[root.split('.')[0]])
 
+    hinting_helpers = fmn.lib.hinting.__dict__.values()
+
     rules = {}
     for name in dir(module):
         obj = getattr(module, name)
+
+        # Ignore non-callables.
         if not callable(obj):
+            continue
+
+        # Ignore our decorator and its friends
+        if obj in hinting_helpers:
             continue
 
         doc = inspect.getdoc(obj)
@@ -152,6 +158,8 @@ def load_rules(root='fmn.rules'):
             'doc': doc.strip(),
             'doc-no-links': doc_no_links.strip(),
             'args': inspect.getargspec(obj)[0],
+            'datanommer-hints': getattr(obj, 'hints', {}),
+            'hints-invertible': getattr(obj, 'hinting_invertible', True),
         }
 
     rules = OrderedDict(
