@@ -2,3 +2,4 @@
 *.egg*
 dist
 build
+fedmsg.d/fas_credentials.py

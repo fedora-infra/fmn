@@ -8,7 +8,6 @@ from pkg_resources import get_distribution
 import arrow
 import docutils
 import docutils.examples
-import fedora.client
 import fedmsg.config
 import fedmsg.meta
 import jinja2
@@ -16,10 +15,10 @@ import libravatar
 import markupsafe
 
 import flask
-import sqlalchemy
 from flask.ext.openid import OpenID
 
 import fmn.lib
+import fmn.lib.hinting
 import fmn.lib.models
 import fmn.web.converters
 import fmn.web.forms
@@ -157,7 +156,7 @@ def login_required(function):
                 next=flask.request.url))
 
         # Ensure that the logged in user exists before we proceed.
-        user = fmn.lib.models.User.get_or_create(
+        fmn.lib.models.User.get_or_create(
             SESSION,
             openid=flask.g.auth.openid,
             openid_url=flask.g.auth.openid_url,
@@ -296,7 +295,8 @@ def link_fedora_mobile(openid, api_key, registration_id):
     if not ctx:
         raise APIError(403, dict(reason="android is not a context"))
 
-    pref = fmn.lib.models.Preference.get_or_create(
+    # Ensure that the preference exists before we proceed.
+    fmn.lib.models.Preference.get_or_create(
         SESSION, openid=openid, context=ctx)
 
     try:
@@ -482,8 +482,11 @@ def example_messages(openid, context, filter_id, page):
 
     filter = pref.get_filter(SESSION, filter_id)
 
+    hinting = fmn.lib.hinting.gather_hints(filter, valid_paths)
+
     # Now, connect to datanommer and get the latest bazillion messages
-    bazillion = 500
+    # (adjusting by any hinting the rules we're evalulating might provide).
+    bazillion = 400
     try:
         total, pages, messages = datanommer.models.Message.grep(
             start=datetime.datetime.fromtimestamp(1),
@@ -491,6 +494,7 @@ def example_messages(openid, context, filter_id, page):
             rows_per_page=bazillion,
             page=page,
             order='desc',
+            **hinting
         )
     except Exception as e:
         log.exception(e)
@@ -524,9 +528,12 @@ def example_messages(openid, context, filter_id, page):
         if recips:
             results.append(_make_result(message, original))
 
+    next_page = page + 1
+    if page > pages:
+        next_page = None
     return dict(
         results=results,
-        next_page=page + 1,
+        next_page=next_page,
     )
 
 
