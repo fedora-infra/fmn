@@ -3,7 +3,7 @@ from fmn.lib.hinting import hint, prefixed as _
 
 @hint(topics=[_('askbot.post.delete')])
 def askbot_post_deleted(config, message):
-    """ Ask: post deleted
+    """ Deleted Ask Fedora posts
 
     This rule will let through messages that get sent when either
     a question or an answer are **deleted** from the `Ask Fedora
@@ -14,7 +14,7 @@ def askbot_post_deleted(config, message):
 
 @hint(topics=[_('askbot.post.edit')])
 def askbot_post_edited(config, message):
-    """ Ask: post edited
+    """ Updates to Ask Fedora posts
 
     This rule will let through messages that get sent when either
     a question or an answer are **edited** on the `Ask Fedora
@@ -25,7 +25,7 @@ def askbot_post_edited(config, message):
 
 @hint(topics=[_('askbot.post.flag_offensive.add')])
 def askbot_post_flagged_offensive(config, message):
-    """ Ask: post flagged as offensive
+    """ When Ask Fedora posts are flagged as 'offensive'
 
     Sometimes, people are rude.  This rule will let you get notified whenever
     a post is **flagged as offensive** on the `Ask Fedora
@@ -36,7 +36,7 @@ def askbot_post_flagged_offensive(config, message):
 
 @hint(topics=[_('askbot.post.flag_offensive.delete')])
 def askbot_post_unflagged_offensive(config, message):
-    """ Ask: post unflagged as offensive
+    """ When Ask Fedora posts are unflagged as 'offensive'
 
     Sometimes, people are rude.  This rule will let you get notified whenever
     a post is **unflagged as offensive** on the `Ask Fedora
@@ -47,7 +47,7 @@ def askbot_post_unflagged_offensive(config, message):
 
 @hint(topics=[_('askbot.tag.update')])
 def askbot_tag_update(config, message):
-    """ Ask: tag update
+    """ Tags altered on Ask Fedora posts
 
     This rule lets through messages indicating that **tags** on an
     `Ask Fedora <https://ask.fedoraproject.org/questions>`_ post have been

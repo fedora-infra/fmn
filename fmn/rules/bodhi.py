@@ -1,9 +1,9 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
-# No hint for critpath -- it is not invertible.
+@hint(categories=['bodhi'], invertible=False)
 def bodhi_critpath(config, message):
-    """ Bodhi: Any critpath update
+    """ Critpath updates (of any kind)
 
     Adding this rule will allow through notifications about **critpath
     updates** from the `Bodhi Updates System
@@ -14,7 +14,7 @@ def bodhi_critpath(config, message):
 
 @hint(topics=[_('bodhi.buildroot_override.tag')])
 def bodhi_buildroot_override_tag(config, message):
-    """ Bodhi: A user requested a buildroot override
+    """ New buildroot overrides
 
     Adding this rule will allow through notifications whenever a user
     **requests a buildroot override** via the `Bodhi Updates System
@@ -25,7 +25,7 @@ def bodhi_buildroot_override_tag(config, message):
 
 @hint(topics=[_('bodhi.buildroot_override.untag')])
 def bodhi_buildroot_override_untag(config, message):
-    """ Bodhi: A user removed a buildroot override
+    """ Buildroot overrides being removed
 
     Adding this rule will allow through notifications whenever a user
     **delets a request for a buildroot override** via the `Bodhi Updates System
@@ -36,7 +36,7 @@ def bodhi_buildroot_override_untag(config, message):
 
 @hint(topics=[_('bodhi.update.comment')])
 def bodhi_update_comment(config, message):
-    """ Bodhi: a user added a comment to a bodhi update
+    """ Bodhi comments
 
     As part of the QA process, users may comment on updates in
     the `Bodhi Updates System <https://admin.fedoraproject.org/updates>`_.
@@ -47,7 +47,7 @@ def bodhi_update_comment(config, message):
 
 @hint(topics=[_('bodhi.update.request.obsolete')])
 def bodhi_update_request_obsolete(config, message):
-    """ Bodhi: a user requested an update be obsoleted
+    """ Bodhi updates being obsoleted
 
     This rule will let through messages from the `Bodhi Updates System
     <https://admin.fedoraproject.org/updates>`_ indicating that a user has
@@ -58,7 +58,7 @@ def bodhi_update_request_obsolete(config, message):
 
 @hint(topics=[_('bodhi.update.request.revoke')])
 def bodhi_update_request_revoke(config, message):
-    """ Bodhi: a user revoked a prior request on an update
+    """ Bodhi having their request revoked
 
     This rule will let through messages from the `Bodhi Updates System
     <https://admin.fedoraproject.org/updates>`_ indicating that a user has
@@ -69,7 +69,7 @@ def bodhi_update_request_revoke(config, message):
 
 @hint(topics=[_('bodhi.update.request.stable')])
 def bodhi_update_request_stable(config, message):
-    """ Bodhi: a user requested an update be marked as stable
+    """ Requests for "stable" status on Bodhi updates
 
     This rule will let through messages from the `Bodhi Updates System
     <https://admin.fedoraproject.org/updates>`_ indicating that a user has
@@ -80,7 +80,7 @@ def bodhi_update_request_stable(config, message):
 
 @hint(topics=[_('bodhi.update.request.testing')])
 def bodhi_update_request_testing(config, message):
-    """ Bodhi: a user requested an update be pushed to testing
+    """ New updates requested for updates-testing
 
     This rule will let through messages from the `Bodhi Updates System
     <https://admin.fedoraproject.org/updates>`_ indicating that a user has
@@ -91,7 +91,7 @@ def bodhi_update_request_testing(config, message):
 
 @hint(topics=[_('bodhi.update.request.unpush')])
 def bodhi_update_request_unpush(config, message):
-    """ Bodhi: a user requested an update be unpushed
+    """ Requests for Bodhi updates to be unpushed
 
     This rule will let through messages from the `Bodhi Updates System
     <https://admin.fedoraproject.org/updates>`_ indicating that a user has
@@ -102,7 +102,7 @@ def bodhi_update_request_unpush(config, message):
 
 @hint(topics=[_('bodhi.updates.epel.sync')])
 def bodhi_update_epel_sync(config, message):
-    """ Bodhi: new epel updates are synced out to mirror master
+    """ New EPEL content has hit the master mirror
 
     This rule will let through messages from the `Bodhi Updates System
     <https://admin.fedoraproject.org/updates>`_ when new epel updates are
@@ -113,7 +113,7 @@ def bodhi_update_epel_sync(config, message):
 
 @hint(topics=[_('bodhi.updates.fedora.sync')])
 def bodhi_update_fedora_sync(config, message):
-    """ Bodhi: new fedora updates are synced out to mirror master
+    """ New Fedora updates content has hit the master mirror
 
     This rule will let through messages from the `Bodhi Updates System
     <https://admin.fedoraproject.org/updates>`_ when new fedora updates are

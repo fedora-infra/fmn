@@ -3,7 +3,7 @@ from fmn.lib.hinting import hint, prefixed as _
 
 @hint(topics=[_('github.commit_comment')])
 def github_commit_comment(config, message):
-    """ Github: Someone commented directly on a commit
+    """ Commit comments (github.com)
 
     Adding this rule to your filters will let through messages
     from `Github <https://apps.fedoraproject.org/github2fedmsg>`_
@@ -14,7 +14,7 @@ def github_commit_comment(config, message):
 
 @hint(topics=[_('github.create')])
 def github_create(config, message):
-    """ Github: Someone created a new tag or branch
+    """ New tags and branches (github.com)
 
     Adding this rule to your filters will let through messages
     from `Github <https://apps.fedoraproject.org/github2fedmsg>`_
@@ -25,7 +25,7 @@ def github_create(config, message):
 
 @hint(topics=[_('github.delete')])
 def github_delete(config, message):
-    """ Github: Someone deleted a tag or branch
+    """ Deleted tags and branches (github.com)
 
     Adding this rule to your filters will let through messages
     from `Github <https://apps.fedoraproject.org/github2fedmsg>`_
@@ -36,7 +36,7 @@ def github_delete(config, message):
 
 @hint(topics=[_('github.fork')])
 def github_fork(config, message):
-    """ Github: Someone forked a repo
+    """ Forked repos (github.com)
 
     Adding this rule to your filters will let through messages
     from `Github <https://apps.fedoraproject.org/github2fedmsg>`_
@@ -47,7 +47,7 @@ def github_fork(config, message):
 
 @hint(topics=[_('github.issue.comment')])
 def github_issue_comment(config, message):
-    """ Github: Someone commented on an issue
+    """ Issue comments (github.com)
 
     Adding this rule to your filters will let through messages
     from `Github <https://apps.fedoraproject.org/github2fedmsg>`_
@@ -58,7 +58,7 @@ def github_issue_comment(config, message):
 
 @hint(topics=[_('github.issue.reopened')])
 def github_issue_reopened(config, message):
-    """ Github: Someone changed an issue
+    """ Reopened issues (github.com)
 
     Adding this rule to your filters will let through messages
     from `Github <https://apps.fedoraproject.org/github2fedmsg>`_
@@ -69,7 +69,7 @@ def github_issue_reopened(config, message):
 
 @hint(topics=[_('github.pull_request.closed')])
 def github_pull_request_closed(config, message):
-    """ Github: Someone closed an existing pull request
+    """ Closed pull-requests (github.com)
 
     Adding this rule to your filters will let through messages
     from `Github <https://apps.fedoraproject.org/github2fedmsg>`_
@@ -80,7 +80,7 @@ def github_pull_request_closed(config, message):
 
 @hint(topics=[_('github.pull_request_review_comment')])
 def github_pull_request_review_comment(config, message):
-    """ Github: Someone commented on a pull request
+    """ Pull-request review comments (github.com)
 
     Adding this rule to your filters will let through messages
     from `Github <https://apps.fedoraproject.org/github2fedmsg>`_
@@ -91,7 +91,7 @@ def github_pull_request_review_comment(config, message):
 
 @hint(topics=[_('github.push')])
 def github_push(config, message):
-    """ Github: Someone pushed to a github repo
+    """ Git pushes (github.com)
 
     Adding this rule to your filters will let through messages
     from `Github <https://apps.fedoraproject.org/github2fedmsg>`_
@@ -102,7 +102,7 @@ def github_push(config, message):
 
 @hint(topics=[_('github.status')])
 def github_status(config, message):
-    """ Github: CI service updated the status of new commit
+    """ Continuous integration status (github.com)
 
     Adding this rule to your filters will let through messages
     from `Github <https://apps.fedoraproject.org/github2fedmsg>`_
@@ -114,7 +114,7 @@ def github_status(config, message):
 
 @hint(topics=[_('github.watch')])
 def github_watch(config, message):
-    """ Github: Someone started watching a repository
+    """ Users watching repos (github.com)
 
     Adding this rule to your filters will let through messages
     from `Github <https://apps.fedoraproject.org/github2fedmsg>`_
@@ -125,7 +125,7 @@ def github_watch(config, message):
 
 @hint(topics=[_('github.webhook')])
 def github_webhook(config, message):
-    """ Github: Someone enabled hook for fedmsg broadcast on a repository
+    """ New github repos on the fedmsg bus
 
     Adding this rule to your filters will let through messages
     from `Github <https://apps.fedoraproject.org/github2fedmsg>`_

@@ -3,7 +3,7 @@ from fmn.lib.hinting import hint, prefixed as _
 
 @hint(topics=[_('ansible.playbook.complete')])
 def playbook_complete(config, message):
-    """ Ansible playbook completed
+    """ Fedora-infra playbook runs finishing
 
     The `Fedora Infrastructure team
     <https://fedoraproject.org/wiki/Infrastructure>`_ uses `ansible
@@ -16,7 +16,7 @@ def playbook_complete(config, message):
 
 @hint(topics=[_('ansible.playbook.start')])
 def playbook_started(config, message):
-    """ Ansible playbook started
+    """ Fedora-infra playbook runs starting
 
     The `Fedora Infrastructure team
     <https://fedoraproject.org/wiki/Infrastructure>`_ uses `ansible

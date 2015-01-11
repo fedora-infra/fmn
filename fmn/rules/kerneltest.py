@@ -3,7 +3,7 @@ from fmn.lib.hinting import hint, prefixed as _
 
 @hint(topics=[_('kerneltest.release.edit')])
 def kerneltest_release_edit(config, message):
-    """ Kernel Test: An admin edited an existing release
+    """ An admin edits an existing release (kerneltest)
 
     Adding this rule to your filters will let through messages
     from `Kernel Test <https://apps.fedoraproject.org/kerneltest>`_
@@ -14,7 +14,7 @@ def kerneltest_release_edit(config, message):
 
 @hint(topics=[_('kerneltest.release.new')])
 def kerneltest_release_new(config, message):
-    """ Kernel Test: An admin did set up an existing release
+    """ An admin adds a new release (kerneltest)
 
     Adding this rule to your filters will let through messages
     from `Kernel Test <https://apps.fedoraproject.org/kerneltest>`_
@@ -25,7 +25,7 @@ def kerneltest_release_new(config, message):
 
 @hint(topics=[_('kerneltest.upload.new')])
 def kerneltest_upload_new(config, message):
-    """ Kernel Test: A new test result was uploaded
+    """ New kerneltest test results
 
     Adding this rule to your filters will let through messages
     from `Kernel Test <https://apps.fedoraproject.org/kerneltest>`_

@@ -3,7 +3,7 @@ from fmn.lib.hinting import hint, prefixed as _
 
 @hint(topics=[_('nuancier.candidate.approved')])
 def nuancier_candidate_approved(config, message):
-    """ Nuancier: An admin approved a candidate submission
+    """ Approved wallpaper candidates
 
     Adding this rule to your filters will let through messages
     from `Nuancier <https://apps.fedoraproject.org/nuancier>`_
@@ -14,7 +14,7 @@ def nuancier_candidate_approved(config, message):
 
 @hint(topics=[_('nuancier.candidate.denied')])
 def nuancier_candidate_denied(config, message):
-    """ Nuancier: An admin denied a candidate submission
+    """ Denied wallpaper candidates
 
     Adding this rule to your filters will let through messages
     from `Nuancier <https://apps.fedoraproject.org/nuancier>`_
@@ -25,7 +25,7 @@ def nuancier_candidate_denied(config, message):
 
 @hint(topics=[_('nuancier.candidate.new')])
 def nuancier_candidate_new(config, message):
-    """ Nuancier: A contributor submitted a new candidate
+    """ New wallpaper candidates
 
     Adding this rule to your filters will let through messages
     from `Nuancier <https://apps.fedoraproject.org/nuancier>`_
@@ -36,7 +36,7 @@ def nuancier_candidate_new(config, message):
 
 @hint(topics=[_('nuancier.election.new')])
 def nuancier_election_new(config, message):
-    """ Nuancier: An admin created a new election
+    """ New wallpaper elections are set up
 
     Adding this rule to your filters will let through messages
     from `Nuancier <https://apps.fedoraproject.org/nuancier>`_
@@ -47,7 +47,7 @@ def nuancier_election_new(config, message):
 
 @hint(topics=[_('nuancier.election.update')])
 def nuancier_election_update(config, message):
-    """ Nuancier: An admin updated details of a election
+    """ Existing wallpaper elections are modified
 
     Adding this rule to your filters will let through messages
     from `Nuancier <https://apps.fedoraproject.org/nuancier>`_

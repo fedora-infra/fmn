@@ -3,7 +3,7 @@ from fmn.lib.hinting import hint, prefixed as _
 
 @hint(topics=[_('fedocal.calendar.clear')])
 def fedocal_calendar_clear(config, message):
-    """ Calendar:  An admin has cleared all meetings from a calendar.
+    """ When an admin has cleared all meetings from a calendar.
 
     Adding this rule will let through notifications from `Fedocal
     <https://apps.fedoraproject.org/calendar>`_ whenever someone clears all
@@ -14,7 +14,7 @@ def fedocal_calendar_clear(config, message):
 
 @hint(topics=[_('fedocal.calendar.new')])
 def fedocal_calendar_create(config, message):
-    """ Calendar:  An admin has created a new calendar.
+    """ New fedocal calendars
 
     Adding this rule will let through notifications from `Fedocal
     <https://apps.fedoraproject.org/calendar>`_ whenever someone creates a
@@ -25,7 +25,7 @@ def fedocal_calendar_create(config, message):
 
 @hint(topics=[_('fedocal.calendar.delete')])
 def fedocal_calendar_delete(config, message):
-    """ Calendar:  An admin has deleted a calendar.
+    """ Old fedocal calendars are deleted
 
     Adding this rule will let through notifications from `Fedocal
     <https://apps.fedoraproject.org/calendar>`_ whenever someone deletes a
@@ -36,7 +36,7 @@ def fedocal_calendar_delete(config, message):
 
 @hint(topics=[_('fedocal.calendar.update')])
 def fedocal_calendar_update(config, message):
-    """ Calendar:  An admin has updated a calendar.
+    """ Fedocal calendars get their metadata updated
 
     Adding this rule will let through notifications from `Fedocal
     <https://apps.fedoraproject.org/calendar>`_ whenever someone updates a
@@ -47,7 +47,7 @@ def fedocal_calendar_update(config, message):
 
 @hint(topics=[_('fedocal.meeting.new')])
 def fedocal_meeting_create(config, message):
-    """ Meeting:  Someone created a new meeting.
+    """ New meetings scheduled in fedocal
 
     Adding this rule will let through notifications from `Fedocal
     <https://apps.fedoraproject.org/meeting>`_ whenever someone creates a
@@ -58,7 +58,7 @@ def fedocal_meeting_create(config, message):
 
 @hint(topics=[_('fedocal.meeting.update')])
 def fedocal_meeting_update(config, message):
-    """ Meeting:  Someone updated a meeting.
+    """ Updated fedocal meetings
 
     Adding this rule will let through notifications from `Fedocal
     <https://apps.fedoraproject.org/meeting>`_ whenever someone updates an
@@ -69,7 +69,7 @@ def fedocal_meeting_update(config, message):
 
 @hint(topics=[_('fedocal.meeting.delete')])
 def fedocal_meeting_delete(config, message):
-    """ Meeting:  Someone deleted a meeting.
+    """ Old fedocal meetings are deleted
 
     Adding this rule will let through notifications from `Fedocal
     <https://apps.fedoraproject.org/meeting>`_ whenever someone deletes an
@@ -80,7 +80,7 @@ def fedocal_meeting_delete(config, message):
 
 @hint(topics=[_('fedocal.meeting.reminder')])
 def fedocal_meeting_reminder(config, message):
-    """ Meeting:  Automatic upcoming meeting reminders.
+    """ Fedocal meeting reminders
 
     Adding this rule will let through scheduled notifications from `Fedocal
     <https://apps.fedoraproject.org/meeting>`_ whenever a meeting is
