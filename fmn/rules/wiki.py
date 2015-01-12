@@ -9,7 +9,7 @@ def wiki_catchall(config, message):
     from the Fedora Project `wiki <https://fedoraproject.org/wiki>`_ i.e.
     edits to wiki pages, new media uploads, etc...
     """
-    return '.wiki.' in message['topic']
+    return message['topic'].split('.')[3] == 'wiki'
 
 
 @hint(topics=[_('wiki.article.edit')])

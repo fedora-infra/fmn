@@ -9,7 +9,7 @@ def fedoratagger_catchall(config, message):
     from `fedora-tagger <https://apps.fedoraproject.org/tagger>`_, i.e. votes
     on tags, usage count changes, etc..
     """
-    return '.fedoratagger.' in message['topic']
+    return message['topic'].split('.')[3] == 'fedoratagger'
 
 
 @hint(topics=[_('fedoratagger.rating.update')])

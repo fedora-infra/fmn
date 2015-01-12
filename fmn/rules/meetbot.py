@@ -10,7 +10,7 @@ def meetbot_catchall(config, message):
     publishes messages about IRC meetings stopping, starting, changing,.. etc,
     as they occur.
     """
-    return '.meetbot.' in message['topic']
+    return message['topic'].split('.')[3] == 'meetbot'
 
 
 @hint(topics=[_('meetbot.meeting.complete')])

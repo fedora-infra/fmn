@@ -8,7 +8,7 @@ def bugzilla_catchall(config, message):
     Adding this rule will indiscriminately match notifications of all types
     from `Bugzilla <https://bugzilla.redhat.com>`_.
     """
-    return '.bugzilla.' in message['topic']
+    return message['topic'].split('.')[3] == 'bugzilla'
 
 
 @hint(topics=[_('bugzilla.bug.new')])

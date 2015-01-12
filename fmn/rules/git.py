@@ -8,7 +8,7 @@ def git_catchall(config, message):
     Adding this rule will indiscriminately match notifications of all types
     from `dist-git <http://pkgs.fedoraproject.org/cgit>`_.
     """
-    return '.git.' in message['topic']
+    return message['topic'].split('.')[3] == 'git'
 
 
 @hint(topics=[_('git.branch')])

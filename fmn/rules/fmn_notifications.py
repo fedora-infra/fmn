@@ -10,7 +10,7 @@ def fmn_catchall(config, message):
     kinds of messages include account, profile, and notification-preference
     changes.
     """
-    return '.fmn.' in message['topic']
+    return message['topic'].split('.')[3] == 'fmn'
 
 
 @hint(topics=[_('fmn.confirmation.update')])

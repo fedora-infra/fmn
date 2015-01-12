@@ -8,7 +8,7 @@ def trac_catchall(config, message):
     Adding this rule will indiscriminately match notifications of all types
     from `fedorahosted <https://fedorahosted.org>`_.
     """
-    return '.trac.' in message['topic']
+    return message['topic'].split('.')[3] == 'trac'
 
 
 @hint(topics=[_('trac.git.receive')])

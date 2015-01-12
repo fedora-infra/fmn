@@ -10,7 +10,7 @@ def summershum_catchall(config, message):
     service that tracks the md5 and sha sums of the contents of new upstream
     tarballs.
     """
-    return '.summershum.' in message['topic']
+    return message['topic'].split('.')[3] == 'summershum'
 
 
 @hint(topics=[_('summershum.ingest.start')])

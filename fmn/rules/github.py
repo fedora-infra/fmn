@@ -10,7 +10,7 @@ def github_catchall(config, message):
     mapped to Fedora via the `github2fedmsg service
     <https://apps.fedoraproject.org/github2fedmsg>`_).
     """
-    return '.github.' in message['topic']
+    return message['topic'].split('.')[3] == 'github'
 
 
 @hint(topics=[_('github.commit_comment')])

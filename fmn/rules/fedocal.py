@@ -10,7 +10,7 @@ def fedocal_catchall(config, message):
     <https://apps.fedoraproject.org/calendar>`_, i.e. messages about new
     calendars, new meetings, and more.
     """
-    return '.fedocal.' in message['topic']
+    return message['topic'].split('.')[3] == 'fedocal'
 
 
 @hint(topics=[_('fedocal.calendar.clear')])

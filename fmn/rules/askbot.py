@@ -9,7 +9,7 @@ def askbot_catchall(config, message):
     from `Ask Fedora <https://ask.fedoraproject.org>`_ i.e.
     answers to questions, tag changes, moderation flags, etc..
     """
-    return '.askbot.' in message['topic']
+    return message['topic'].split('.')[3] == 'askbot'
 
 
 @hint(topics=[_('askbot.post.delete')])

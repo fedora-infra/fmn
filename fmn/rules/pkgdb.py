@@ -9,7 +9,7 @@ def pkgdb_catchall(config, message):
     from `pkgdb2 <https://admin.fedoraproject.org/pkgdb>`_, i.e. ACL changes,
     new packages, requests for ownership, etc..
     """
-    return '.pkgdb.' in message['topic']
+    return message['topic'].split('.')[3] == 'pkgdb'
 
 
 @hint(topics=[_('pkgdb.acl.update')])

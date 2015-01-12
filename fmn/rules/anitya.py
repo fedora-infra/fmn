@@ -10,7 +10,7 @@ def anitya_catchall(config, message):
     called "anitya"), i.e. notices of new upstream tarball releases, changes to
     package/project mappings, new distributions being added, etc..
     """
-    return '.anitya.' in message['topic']
+    return message['topic'].split('.')[3] == 'anitya'
 
 
 @hint(topics=[_('anitya.distro.add', prefix='org.release-monitoring')])
