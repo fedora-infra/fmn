@@ -1,6 +1,18 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['anitya'])
+def anitya_catchall(config, message):
+    """ All release-monitoring.org events
+
+    Adding this rule will indiscriminately match notifications of all types
+    from `release-monitoring.org <https://release-monitoring.org>`_ (also
+    called "anitya"), i.e. notices of new upstream tarball releases, changes to
+    package/project mappings, new distributions being added, etc..
+    """
+    return '.anitya.' in message['topic']
+
+
 @hint(topics=[_('anitya.distro.add', prefix='org.release-monitoring')])
 def anitya_distro_add(config, message):
     """ New distributions added to release-monitoring.org

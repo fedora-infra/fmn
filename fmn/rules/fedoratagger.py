@@ -1,6 +1,17 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['fedoratagger'])
+def fedoratagger_catchall(config, message):
+    """ All Fedora Tagger events
+
+    Adding this rule will indiscriminately match notifications of all types
+    from `fedora-tagger <https://apps.fedoraproject.org/tagger>`_, i.e. votes
+    on tags, usage count changes, etc..
+    """
+    return '.fedoratagger.' in message['topic']
+
+
 @hint(topics=[_('fedoratagger.rating.update')])
 def fedoratagger_rating_update(config, message):
     """ The rating changes on a package (fedora-tagger)

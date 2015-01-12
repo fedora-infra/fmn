@@ -1,6 +1,18 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['summershum'])
+def summershum_catchall(config, message):
+    """ All summershum events
+
+    Adding this rule will indiscriminately match notifications of all types
+    from `summershum <https://github.com/fedora-infra/summershum>`_, a backend
+    service that tracks the md5 and sha sums of the contents of new upstream
+    tarballs.
+    """
+    return '.summershum.' in message['topic']
+
+
 @hint(topics=[_('summershum.ingest.start')])
 def summershum_ingest_start(config, message):
     """ Summershum starts ingesting a tarball

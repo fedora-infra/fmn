@@ -1,6 +1,17 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['wiki'])
+def wiki_catchall(config, message):
+    """ All wiki events
+
+    Adding this rule will indiscriminately match notifications of all types
+    from the Fedora Project `wiki <https://fedoraproject.org/wiki>`_ i.e.
+    edits to wiki pages, new media uploads, etc...
+    """
+    return '.wiki.' in message['topic']
+
+
 @hint(topics=[_('wiki.article.edit')])
 def wiki_article_edit(config, message):
     """ Wiki edits
