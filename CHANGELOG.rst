@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.4.2
+-----
+
+- Add fedmsg.d/ for tests on travis. `b2c7addf2 <https://github.com/fedora-infra/fmn.lib/commit/b2c7addf23f96dcacff991c70717faaa4da6a875>`_
+- Remove extra newlines. `97c2e57a0 <https://github.com/fedora-infra/fmn.lib/commit/97c2e57a0ad8a678ade97710b4d91defb1aa16d6>`_
+- Explicitly order rules attached to a filter. `39ce3d34f <https://github.com/fedora-infra/fmn.lib/commit/39ce3d34f2b0157f107d3d2e1887e694e29cd645>`_
+- Merge pull request #23 from fedora-infra/feature/explicit-ordering `daf89590a <https://github.com/fedora-infra/fmn.lib/commit/daf89590a9ef1048fb08ec3712485261bac01684>`_
+- Consolidate defaults. `7ac202149 <https://github.com/fedora-infra/fmn.lib/commit/7ac2021494e520db9f83084aac5418baf4c123b8>`_
+- Merge pull request #24 from fedora-infra/feature/consolidate `b4ac16366 <https://github.com/fedora-infra/fmn.lib/commit/b4ac1636630029dbe056985c0f87a99d9d8f1be9>`_
+
 0.4.1
 -----
 
