@@ -1,6 +1,18 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['github'])
+def github_catchall(config, message):
+    """ All Fedora-related GitHub activity
+
+    Adding this rule will indiscriminately match notifications of all types
+    from `github <https://github.com>`_ (but only the repositories that are
+    mapped to Fedora via the `github2fedmsg service
+    <https://apps.fedoraproject.org/github2fedmsg>`_).
+    """
+    return message['topic'].split('.')[3] == 'github'
+
+
 @hint(topics=[_('github.commit_comment')])
 def github_commit_comment(config, message):
     """ Commit comments (github.com)

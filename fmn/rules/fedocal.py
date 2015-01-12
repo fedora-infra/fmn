@@ -1,6 +1,18 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['fedocal'])
+def fedocal_catchall(config, message):
+    """ All Fedora Calendar events
+
+    Adding this rule will indiscriminately match notifications of all types
+    from the `Fedocal Calendaring System
+    <https://apps.fedoraproject.org/calendar>`_, i.e. messages about new
+    calendars, new meetings, and more.
+    """
+    return message['topic'].split('.')[3] == 'fedocal'
+
+
 @hint(topics=[_('fedocal.calendar.clear')])
 def fedocal_calendar_clear(config, message):
     """ When an admin has cleared all meetings from a calendar.

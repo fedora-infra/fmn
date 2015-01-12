@@ -1,6 +1,17 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['askbot'])
+def askbot_catchall(config, message):
+    """ All askbot events
+
+    Adding this rule will indiscriminately match notifications of all types
+    from `Ask Fedora <https://ask.fedoraproject.org>`_ i.e.
+    answers to questions, tag changes, moderation flags, etc..
+    """
+    return message['topic'].split('.')[3] == 'askbot'
+
+
 @hint(topics=[_('askbot.post.delete')])
 def askbot_post_deleted(config, message):
     """ Deleted Ask Fedora posts

@@ -17,7 +17,7 @@ except:
 
 def get_description():
     with open('README.rst', 'r') as f:
-        return '\n'.join(f.readlines()[2:])
+        return ''.join(f.readlines()[2:])
 
 requires = [
     'python-fedora',
@@ -32,7 +32,7 @@ tests_require = [
 
 setup(
     name='fmn.rules',
-    version='0.4.1',
+    version='0.4.2',
     description='Message processing rules for Fedora Notifications',
     long_description=get_description(),
     author='Ralph Bean',

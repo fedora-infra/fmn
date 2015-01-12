@@ -1,6 +1,16 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['git'])
+def git_catchall(config, message):
+    """ All dist-git activity
+
+    Adding this rule will indiscriminately match notifications of all types
+    from `dist-git <http://pkgs.fedoraproject.org/cgit>`_.
+    """
+    return message['topic'].split('.')[3] == 'git'
+
+
 @hint(topics=[_('git.branch')])
 def git_branch(config, message):
     """ New dist-git branches for packages

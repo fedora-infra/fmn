@@ -1,6 +1,16 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['trac'])
+def trac_catchall(config, message):
+    """ All Fedora Hosted activity
+
+    Adding this rule will indiscriminately match notifications of all types
+    from `fedorahosted <https://fedorahosted.org>`_.
+    """
+    return message['topic'].split('.')[3] == 'trac'
+
+
 @hint(topics=[_('trac.git.receive')])
 def trac_git_receive(config, message):
     """ Git pushes (fedorahosted.org)
