@@ -38,7 +38,7 @@ def upgrade():
                 session.delete(rule)
             print "Deleting filter %r." % fltr
             session.delete(fltr)
-
+    session.commit()
 
 def downgrade():
     pass
