@@ -1,6 +1,17 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['pkgdb'])
+def pkgdb_catchall(config, message):
+    """ All Package DB events
+
+    Adding this rule will indiscriminately match notifications of all types
+    from `pkgdb2 <https://admin.fedoraproject.org/pkgdb>`_, i.e. ACL changes,
+    new packages, requests for ownership, etc..
+    """
+    return message['topic'].split('.')[3] == 'pkgdb'
+
+
 @hint(topics=[_('pkgdb.acl.update')])
 def pkgdb_acl_update(config, message):
     """ Package ACL updates

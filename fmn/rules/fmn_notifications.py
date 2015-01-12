@@ -1,6 +1,18 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['fmn'])
+def fmn_catchall(config, message):
+    """ All FMN meta-notification stuff
+
+    Adding this rule will indiscriminately match notifications of all types
+    from `this service <https://apps.fedoraproject.org/notifications>`_.  Those
+    kinds of messages include account, profile, and notification-preference
+    changes.
+    """
+    return message['topic'].split('.')[3] == 'fmn'
+
+
 @hint(topics=[_('fmn.confirmation.update')])
 def fmn_confirmation_update(config, message):
     """ Confirmation status changes (FMN)

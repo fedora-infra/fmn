@@ -1,6 +1,16 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['bugzilla'])
+def bugzilla_catchall(config, message):
+    """ All RHBZ activity
+
+    Adding this rule will indiscriminately match notifications of all types
+    from `Bugzilla <https://bugzilla.redhat.com>`_.
+    """
+    return message['topic'].split('.')[3] == 'bugzilla'
+
+
 @hint(topics=[_('bugzilla.bug.new')])
 def bugzilla_bug_new(config, message):
     """ New RHBZ bugs
