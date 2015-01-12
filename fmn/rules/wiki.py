@@ -3,7 +3,7 @@ from fmn.lib.hinting import hint, prefixed as _
 
 @hint(topics=[_('wiki.article.edit')])
 def wiki_article_edit(config, message):
-    """ Wiki: A user edited a wiki page
+    """ Wiki edits
 
     Fedora's `Wiki <https://fedoraproject.org/wiki>`_ has a fedmsg hook
     that publishes messages when a user **edits a page**.  Adding this rule
@@ -14,7 +14,7 @@ def wiki_article_edit(config, message):
 
 @hint(topics=[_('wiki.upload.complete')])
 def wiki_upload_complete(config, message):
-    """ Wiki: A user uploaded content on the wiki
+    """ Wiki media uploads
 
     Fedora's `Wiki <https://fedoraproject.org/wiki>`_ has a fedmsg hook
     that publishes messages when a user **uploads some media** (like a video or

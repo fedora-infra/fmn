@@ -3,7 +3,7 @@ from fmn.lib.hinting import hint, prefixed as _
 
 @hint(topics=[_('git.branch')])
 def git_branch(config, message):
-    """ Git: A new branch has been created in the git of package
+    """ New dist-git branches for packages
 
     Include this rule to receive notifications of new branches being created
     for Fedora package git repos.
@@ -13,7 +13,7 @@ def git_branch(config, message):
 
 @hint(topics=[_('git.lookaside.new')])
 def git_lookaside_new(config, message):
-    """ Git: New sources have been uploaded to the "lookaside cache"
+    """ New tarballs uploaded to the lookaside cache
 
     Include this rule to receive notifications of of new sources being uploaded
     to the "lookaside cache" as when someone runs ``fedpkg new-sources
@@ -24,7 +24,7 @@ def git_lookaside_new(config, message):
 
 @hint(topics=[_('git.mass_branch.complete')])
 def git_mass_branch_complete(config, message):
-    """ Git: Mass branching process completed
+    """ Mass-branch completes
 
     There is a script called ``pkgdb2branch`` that gets run by an SCM
     admin, typically as part of the new package process.
@@ -37,7 +37,7 @@ def git_mass_branch_complete(config, message):
 
 @hint(topics=[_('git.mass_branch.start')])
 def git_mass_branch_start(config, message):
-    """Git: Mass branching process started
+    """ Mass-branch begins
 
     There is a script called ``pkgdb2branch`` that gets run by an SCM
     admin, typically as part of the new package process.
@@ -50,7 +50,7 @@ def git_mass_branch_start(config, message):
 
 @hint(topics=[_('git.pkgdb2branch.complete')])
 def git_pkgdb2branch_complete(config, message):
-    """Git: Process to set branches on a package completed
+    """ pkgdb2branch completes
 
     There is a script called ``pkgdb2branch`` that gets run by an SCM
     admin as part of the new package process.  Typically, when an `SCM Admin
@@ -67,7 +67,7 @@ def git_pkgdb2branch_complete(config, message):
 
 @hint(topics=[_('git.pkgdb2branch.start')])
 def git_pkgdb2branch_start(config, message):
-    """Git: Process to set branches on a package started
+    """ pkgdb2branch starts
 
     There is a script called ``pkgdb2branch`` that gets run by an SCM
     admin as part of the new package process.  Typically, when an `SCM Admin
@@ -83,7 +83,7 @@ def git_pkgdb2branch_start(config, message):
 
 @hint(topics=[_('git.receive')])
 def git_receive(config, message):
-    """ Git: Changes have been pushed onto the git of a package
+    """ Git pushes to dist-git
 
     Including this rule will produce notifications triggered when somebody runs
     ``fedpkg push`` on a package.

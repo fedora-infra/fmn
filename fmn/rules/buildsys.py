@@ -3,7 +3,7 @@ from fmn.lib.hinting import hint, prefixed as _
 
 @hint(categories=['buildsys'], invertible=False)
 def koji_instance(config, message, instance=None, *args, **kw):
-    """ Koji: pertains only to particular instances
+    """ Particular koji instances
 
     You may not have even known it, but we have multiple instances of the koji
     build system.  There is the **primary** buildsystem at
@@ -32,7 +32,7 @@ def koji_instance(config, message, instance=None, *args, **kw):
 
 @hint(topics=[_('buildsys.task.state.change')])
 def koji_scratch_build_state_change(config, message):
-    """ Koji: *scratch* build changed state (started, failed, finished)
+    """ Scratch builds changing state (any state)
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ about **scratch** build state
@@ -43,7 +43,7 @@ def koji_scratch_build_state_change(config, message):
 
 @hint(topics=[_('buildsys.task.state.change')], invertible=False)
 def koji_scratch_build_started(config, message):
-    """ Koji: *scratch* build started
+    """ Scratch builds starting
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime a
@@ -57,7 +57,7 @@ def koji_scratch_build_started(config, message):
 
 @hint(topics=[_('buildsys.task.state.change')], invertible=False)
 def koji_scratch_build_completed(config, message):
-    """ Koji: *scratch* build completed
+    """ Scratch builds completing
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime a
@@ -71,7 +71,7 @@ def koji_scratch_build_completed(config, message):
 
 @hint(topics=[_('buildsys.task.state.change')], invertible=False)
 def koji_scratch_build_failed(config, message):
-    """ Koji: *scratch* build failed
+    """ Scratch builds failing
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime a
@@ -85,7 +85,7 @@ def koji_scratch_build_failed(config, message):
 
 @hint(topics=[_('buildsys.task.state.change')], invertible=False)
 def koji_scratch_build_cancelled(config, message):
-    """ Koji: *scratch* build cancelled
+    """ Scratch builds being cancelled
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime a
@@ -99,7 +99,7 @@ def koji_scratch_build_cancelled(config, message):
 
 @hint(topics=[_('buildsys.build.state.change')])
 def koji_build_state_change(config, message):
-    """ Koji: build changed state (started, failed, finished)
+    """ Builds changing state (any state)
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime a
@@ -111,7 +111,7 @@ def koji_build_state_change(config, message):
 
 @hint(topics=[_('buildsys.build.state.change')], invertible=False)
 def koji_build_started(config, message):
-    """ Koji: build started
+    """ Builds starting
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime **a
@@ -125,7 +125,7 @@ def koji_build_started(config, message):
 
 @hint(topics=[_('buildsys.build.state.change')], invertible=False)
 def koji_build_completed(config, message):
-    """ Koji: build completed
+    """ Builds completing
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime **a
@@ -139,7 +139,7 @@ def koji_build_completed(config, message):
 
 @hint(topics=[_('buildsys.build.state.change')], invertible=False)
 def koji_build_deleted(config, message):
-    """ Koji: build deleted
+    """ Builds being deleted
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime **a
@@ -153,7 +153,7 @@ def koji_build_deleted(config, message):
 
 @hint(topics=[_('buildsys.build.state.change')], invertible=False)
 def koji_build_failed(config, message):
-    """ Koji: build failed
+    """ Builds failing
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime **a
@@ -167,7 +167,7 @@ def koji_build_failed(config, message):
 
 @hint(topics=[_('buildsys.build.state.change')], invertible=False)
 def koji_build_cancelled(config, message):
-    """ Koji: build cancelled
+    """ Builds being cancelled
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ that get published anytime **a
@@ -181,7 +181,7 @@ def koji_build_cancelled(config, message):
 
 @hint(topics=[_('buildsys.package.list.change')])
 def koji_package_list_change(config, message):
-    """ Koji: Package listing has changed
+    """ Koji "package list" changes
 
     This rule lets through messages from the `koji build
     system <https://koji.fedoraproject.org>`_ indicating that the package
@@ -192,7 +192,7 @@ def koji_package_list_change(config, message):
 
 @hint(topics=[_('buildsys.repo.done')])
 def koji_repo_done(config, message):
-    """ Koji: Building a repo has finished
+    """ Koji repo regeneration (complete)
 
     This rule lets through messages indicating that the `koji build
     system <https://koji.fedoraproject.org>`_ has **finished** rebuilding a
@@ -203,7 +203,7 @@ def koji_repo_done(config, message):
 
 @hint(topics=[_('buildsys.repo.init')])
 def koji_repo_init(config, message):
-    """ Koji: Building a repo has started
+    """ Koji repo regeneration (start)
 
     This rule lets through messages indicating that the `koji build
     system <https://koji.fedoraproject.org>`_ has **started** rebuilding a
@@ -214,7 +214,7 @@ def koji_repo_init(config, message):
 
 @hint(topics=[_('buildsys.tag')])
 def koji_tag(config, message):
-    """ Koji: A package has been tagged
+    """ Packages are added to a Koji tag
 
     This rule lets through messages that get published when the `koji build
     system <https://koji.fedoraproject.org>`_ applies a certain tag to a
@@ -225,7 +225,7 @@ def koji_tag(config, message):
 
 @hint(topics=[_('buildsys.untag')])
 def koji_untag(config, message):
-    """ Koji: A package has been untagged
+    """ Packages are removed from a Koji tag
 
     This rule lets through messages that get published when the `koji build
     system <https://koji.fedoraproject.org>`_ removes a tag from a

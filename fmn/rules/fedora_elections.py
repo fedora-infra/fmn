@@ -3,7 +3,7 @@ from fmn.lib.hinting import hint, prefixed as _
 
 @hint(topics=[_('fedora_elections.candidate.delete')])
 def fedora_elections_candidate_delete(config, message):
-    """ Elections: A candidate was deleted from an election.
+    """ Candidates are deleted from an election.
 
     Adding this rule will let through elections from `Fedora
     Elections <https://apps.fedoraproject.org/voting/>`_ whenever
@@ -14,7 +14,7 @@ def fedora_elections_candidate_delete(config, message):
 
 @hint(topics=[_('fedora_elections.candidate.edit')])
 def fedora_elections_candidate_edit(config, message):
-    """ Elections: A candidate was edited in an election.
+    """ Candidates are updated in an election.
 
     Adding this rule will let through elections from `Fedora
     Elections <https://apps.fedoraproject.org/voting/>`_ whenever a
@@ -25,7 +25,7 @@ def fedora_elections_candidate_edit(config, message):
 
 @hint(topics=[_('fedora_elections.candidate.new')])
 def fedora_elections_candidate_new(config, message):
-    """ Elections: A candidate is added to an election.
+    """ New candidates are added to an election.
 
     Adding this rule will let through elections from `Fedora
     Elections <https://apps.fedoraproject.org/voting/>`_ whenever a
@@ -36,18 +36,18 @@ def fedora_elections_candidate_new(config, message):
 
 @hint(topics=[_('fedora_elections.election.edit')])
 def fedora_elections_election_edit(config, message):
-    """ Elections: Someone edited an election.
+    """ Elections are updated
 
     Adding this rule will let through elections from `Fedora
     Elections <https://apps.fedoraproject.org/voting/>`_ whenever someone
-    edits an election.
+    edits the metadata of an election.
     """
     return message['topic'].endswith('fedora_elections.election.edit')
 
 
 @hint(topics=[_('fedora_elections.election.new')])
 def fedora_elections_election_new(config, message):
-    """ Elections: Someone created a new election.
+    """ New elections
 
     Adding this rule will let through elections from `Fedora
     Elections <https://apps.fedoraproject.org/voting/>`_ whenever someone

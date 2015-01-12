@@ -3,7 +3,7 @@ from fmn.lib.hinting import hint, prefixed as _
 
 @hint(topics=[_('summershum.ingest.start')])
 def summershum_ingest_start(config, message):
-    """ Summershum: Started ingesting a tarball
+    """ Summershum starts ingesting a tarball
 
     Adding this rule to your filters will let through messages
     from `summershum <https://github.com/fedora-infra/summershum>`_
@@ -14,7 +14,7 @@ def summershum_ingest_start(config, message):
 
 @hint(topics=[_('summershum.ingest.fail')])
 def summershum_ingest_fail(config, message):
-    """ Summershum: failed to ingest a tarball
+    """ Summershum fails to ingest a tarball
 
     Adding this rule to your filters will let through messages
     from `summershum <https://github.com/fedora-infra/summershum>`_
@@ -25,7 +25,7 @@ def summershum_ingest_fail(config, message):
 
 @hint(topics=[_('summershum.ingest.complete')])
 def summershum_ingest_complete(config, message):
-    """ Summershum: finished ingesting a tarball
+    """ Summershum finishes ingesting a tarball
 
     Adding this rule to your filters will let through messages
     from `summershum <https://github.com/fedora-infra/summershum>`_
