@@ -1,6 +1,23 @@
 Changelog
 =========
 
+0.4.1
+-----
+
+- Only check pkgdb ownership of pkgdb groups (instead of *all* groups). `873dff49b <https://github.com/fedora-infra/fmn.rules/commit/873dff49b8fc2a89479a9226807a44a9a96e9b12>`_
+- Merge pull request #23 from fedora-infra/feature/pkgdb-groups `cbfc37d05 <https://github.com/fedora-infra/fmn.rules/commit/cbfc37d0506aad0bd3eb34d6b5f8b157d9b802b9>`_
+- Add rules for summershum messages. `3844335d5 <https://github.com/fedora-infra/fmn.rules/commit/3844335d59e804e728603e34325887fadfca7c96>`_
+- Add a rule to select only critpath updates from bodhi. `aaca4f4d1 <https://github.com/fedora-infra/fmn.rules/commit/aaca4f4d17987ca3cd16fcf72d34f3290f058c33>`_
+- Merge pull request #24 from fedora-infra/feature/summershum `d99ea4252 <https://github.com/fedora-infra/fmn.rules/commit/d99ea4252a13535fa0ee112919a29823d3dbded8>`_
+- Merge pull request #25 from fedora-infra/feature/critical-path `a1adb3ee3 <https://github.com/fedora-infra/fmn.rules/commit/a1adb3ee33664daa0804c71c70679bfebd93d520>`_
+- datanommer hints for bodhi rules `5e791a464 <https://github.com/fedora-infra/fmn.rules/commit/5e791a464aa52fb3e969ae0faa4685c1e864e889>`_
+- Make a bunch of topic-specific hints. `c74bfd577 <https://github.com/fedora-infra/fmn.rules/commit/c74bfd57788a92960f46967b2e46641ccdfdd167>`_
+- All the rest of the hinting. `4800247ad <https://github.com/fedora-infra/fmn.rules/commit/4800247ad8de35d04f99ee366dc26bef137e9de1>`_
+- Merge pull request #26 from fedora-infra/feature/datanommer-hinting `1ec8389b2 <https://github.com/fedora-infra/fmn.rules/commit/1ec8389b204c76185e32345d6d1c621317796495>`_
+- Less formal short-descriptions for rules. `8d5735c9e <https://github.com/fedora-infra/fmn.rules/commit/8d5735c9e332a708a6c0feff2a5b43e7728e8bb8>`_
+- Update some text based on code review. `0e2fdcf27 <https://github.com/fedora-infra/fmn.rules/commit/0e2fdcf27916a879939fdc31d79305622b33b18b>`_
+- Merge pull request #27 from fedora-infra/feature/less-formal `f673b694a <https://github.com/fedora-infra/fmn.rules/commit/f673b694ada32e9f7a929ae0a6ee718590ae3aee>`_
+
 0.4.0
 -----
 
