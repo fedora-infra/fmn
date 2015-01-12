@@ -231,7 +231,8 @@ class Rule(BASE):
     filter_id = sa.Column(
         sa.Integer,
         sa.ForeignKey('filters.id'))
-    filter = relation('Filter', backref=('rules'))
+    filter = relation(
+        'Filter', backref=backref('rules', order_by=('Rule.created_on')))
 
     # This is something of the form 'fmn.rules:some_function'
     # We need to do major validation to make sure only *our* code_paths
