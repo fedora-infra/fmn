@@ -1,6 +1,37 @@
 Changelog
 =========
 
+0.4.1
+-----
+
+- Remove unused imports. `e4fb1dbfc <https://github.com/fedora-infra/fmn.lib/commit/e4fb1dbfc63ba004c2a0a95b96a2c8f4cb8716d0>`_
+- Typofix. `68be5aa80 <https://github.com/fedora-infra/fmn.lib/commit/68be5aa807d314f29ad89bd6b8740a715cb17634>`_
+- Allow creating a rule already negated. `eac5d81c7 <https://github.com/fedora-infra/fmn.lib/commit/eac5d81c703fb294267d69a80334034d468a1110>`_
+- First stab at new defaults. `cadf73646 <https://github.com/fedora-infra/fmn.lib/commit/cadf73646f3505e5994f9bcb147d8398d252845a>`_
+- Forgot to specify the fasnick here. `7e7f3f111 <https://github.com/fedora-infra/fmn.lib/commit/7e7f3f1111a27a9763672b9260a5a03288d0f6b5>`_
+- Invert copr excludes as per @bochecha's recommendation. `e25074b7d <https://github.com/fedora-infra/fmn.lib/commit/e25074b7dfdb030b5a507e2e8644a2b5bb3a5844>`_
+- Fix a grievous error. `b3dcc5e24 <https://github.com/fedora-infra/fmn.lib/commit/b3dcc5e240ffe48213c79f3bd75db5ae2c315eb4>`_
+- Add some tests for our detail value validator(s). `f698ca84b <https://github.com/fedora-infra/fmn.lib/commit/f698ca84bf01ea36dafa11a9e4937d733737c08b>`_
+- Fix email parser for fedora-infra/fmn#39. `74c83fc09 <https://github.com/fedora-infra/fmn.lib/commit/74c83fc09fbc9cab6caa3279ea8613a41b7d44b8>`_
+- Merge pull request #18 from fedora-infra/feature/fix-email-regex `a21988ca0 <https://github.com/fedora-infra/fmn.lib/commit/a21988ca097fef7ec8905b3c0682d5ece9799ebe>`_
+- Merge pull request #16 from fedora-infra/feature/bugfix `fb0c1f5b9 <https://github.com/fedora-infra/fmn.lib/commit/fb0c1f5b95141fabeb627206b07866dadd10f637>`_
+- Merge pull request #17 from fedora-infra/feature/improved-defaults `4d5cdd8f7 <https://github.com/fedora-infra/fmn.lib/commit/4d5cdd8f7ab867b7133f16b873a66491f0068461>`_
+- Cull removed rules. `f4a2a304e <https://github.com/fedora-infra/fmn.lib/commit/f4a2a304ed37d32c4bb1d755187fa29a4fe5a8e8>`_
+- Ignore summershum messages by default as per fedora-infra/fmn.rules#24. `f5f8e84da <https://github.com/fedora-infra/fmn.lib/commit/f5f8e84da13c621370d4a3f2e3e5ba854f3cb9de>`_
+- One of these was not removed, only moved. `1a37b1710 <https://github.com/fedora-infra/fmn.lib/commit/1a37b171005524f061cff3224b82eea3fbd80b0e>`_
+- Merge pull request #19 from fedora-infra/feature/cull-removed-rules `c30533139 <https://github.com/fedora-infra/fmn.lib/commit/c305331395092f16d09318f829fdf83523b88440>`_
+- Stuff a datanommer-hints attribute into the rule dict. `682c32a0a <https://github.com/fedora-infra/fmn.lib/commit/682c32a0ae5e6cb56164698bf6a64ddfcdb2862e>`_
+- Some cleaning. `6d530b3e0 <https://github.com/fedora-infra/fmn.lib/commit/6d530b3e06eedeb76866d0a0af49cc7bba5959dc>`_
+- Need to ignore the decorator here. `6a488312e <https://github.com/fedora-infra/fmn.lib/commit/6a488312ed99a6b4b5517033af3fa1398fdfa6e3>`_
+- Ignore everything from fmn.lib.hinting. `61b633c09 <https://github.com/fedora-infra/fmn.lib/commit/61b633c090c7150a49cb25454f17c56986d230f9>`_
+- If a rule throws an exception, then the match should fail. `58ec8503f <https://github.com/fedora-infra/fmn.lib/commit/58ec8503f49e0fe0080c8dca8f8fd8e38c718d8b>`_
+- Add a module full of hinting helpers. `e670901eb <https://github.com/fedora-infra/fmn.lib/commit/e670901ebaf7422f7a71f78a3dc94730eba5605b>`_
+- Pass this through the rule dict too. `0a9a085ae <https://github.com/fedora-infra/fmn.lib/commit/0a9a085aec893a28ac61ff54e69a15f1fa0e4f00>`_
+- Add forgotten import. `4645e2cfd <https://github.com/fedora-infra/fmn.lib/commit/4645e2cfd33905f6d5232309545ddd8d27c24cc4>`_
+- Merge pull request #21 from fedora-infra/feature/for-bochecha `d46c7cc6b <https://github.com/fedora-infra/fmn.lib/commit/d46c7cc6b7da826896379b5b45a8caee4e3dc7a0>`_
+- Merge pull request #20 from fedora-infra/feature/summershum-by-default `d3f6848ef <https://github.com/fedora-infra/fmn.lib/commit/d3f6848ef9cac0adb19be14fcdcaa3ea47b1a218>`_
+- Merge pull request #22 from fedora-infra/feature/datanommer-hinting `d08084eed <https://github.com/fedora-infra/fmn.lib/commit/d08084eeddb3357094836e6f1e447467369053d1>`_
+
 0.3.0
 -----
 
