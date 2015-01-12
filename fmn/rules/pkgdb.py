@@ -5,7 +5,7 @@ from fmn.lib.hinting import hint, prefixed as _
 def pkgdb_catchall(config, message):
     """ All Package DB events
 
-    Adding this rule will indiscriminately trigger notifications of all types
+    Adding this rule will indiscriminately match notifications of all types
     from `pkgdb2 <https://admin.fedoraproject.org/pkgdb>`_, i.e. ACL changes,
     new packages, requests for ownership, etc..
     """

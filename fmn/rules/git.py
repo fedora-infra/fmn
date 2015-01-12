@@ -5,7 +5,7 @@ from fmn.lib.hinting import hint, prefixed as _
 def git_catchall(config, message):
     """ All dist-git activity
 
-    Adding this rule will indiscriminately trigger notifications of all types
+    Adding this rule will indiscriminately match notifications of all types
     from `dist-git <http://pkgs.fedoraproject.org/cgit>`_.
     """
     return '.git.' in message['topic']

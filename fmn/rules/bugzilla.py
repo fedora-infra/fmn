@@ -5,7 +5,7 @@ from fmn.lib.hinting import hint, prefixed as _
 def bugzilla_catchall(config, message):
     """ All RHBZ activity
 
-    Adding this rule will indiscriminately trigger notifications of all types
+    Adding this rule will indiscriminately match notifications of all types
     from `Bugzilla <https://bugzilla.redhat.com>`_.
     """
     return '.bugzilla.' in message['topic']

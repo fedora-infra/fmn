@@ -5,7 +5,7 @@ from fmn.lib.hinting import hint, prefixed as _
 def meetbot_catchall(config, message):
     """ All IRC meeting events
 
-    Adding this rule will indiscriminately trigger notifications of all types
+    Adding this rule will indiscriminately match notifications of all types
     from trusty old `zodbot <https://meetbot.fedoraproject.org/>`_.  It
     publishes messages about IRC meetings stopping, starting, changing,.. etc,
     as they occur.

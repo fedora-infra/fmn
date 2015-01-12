@@ -5,7 +5,7 @@ from fmn.lib.hinting import hint, prefixed as _
 def trac_catchall(config, message):
     """ All Fedora Hosted activity
 
-    Adding this rule will indiscriminately trigger notifications of all types
+    Adding this rule will indiscriminately match notifications of all types
     from `fedorahosted <https://fedorahosted.org>`_.
     """
     return '.trac.' in message['topic']

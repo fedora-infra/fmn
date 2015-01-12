@@ -5,7 +5,7 @@ from fmn.lib.hinting import hint, prefixed as _
 def fedocal_catchall(config, message):
     """ All Fedora Calendar events
 
-    Adding this rule will indiscriminately trigger notifications of all types
+    Adding this rule will indiscriminately match notifications of all types
     from the `Fedocal Calendaring System
     <https://apps.fedoraproject.org/calendar>`_, i.e. messages about new
     calendars, new meetings, and more.
