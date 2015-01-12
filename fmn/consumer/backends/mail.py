@@ -82,17 +82,17 @@ class EmailBackend(BaseBackend):
         self.log.debug("Email sent")
 
     def handle(self, session, recipient, msg):
-        link = fedmsg.meta.msg2link(msg, **self.config)
-        content = fedmsg.meta.msg2long_form(msg, **self.config)
-        subject = fedmsg.meta.msg2subtitle(msg, **self.config)
+        link = fedmsg.meta.msg2link(msg, **self.config) or u''
+        content = fedmsg.meta.msg2long_form(msg, **self.config) or u''
+        subject = fedmsg.meta.msg2subtitle(msg, **self.config) or u''
 
         self.send_mail(session, recipient, subject, content + "\n\t" + link)
 
     def handle_batch(self, session, recipient, queued_messages):
         def _format_line(msg):
             timestamp = datetime.datetime.fromtimestamp(msg['timestamp'])
-            link = fedmsg.meta.msg2link(msg, **self.config)
-            payload = fedmsg.meta.msg2long_form(msg, **self.config)
+            link = fedmsg.meta.msg2link(msg, **self.config) or u''
+            payload = fedmsg.meta.msg2long_form(msg, **self.config) or u''
             return timestamp.strftime("%c") + ", " + payload + "\n\t" + link
 
         n = len(queued_messages)
