@@ -24,15 +24,10 @@
 Mapping of python classes to Database Tables.
 """
 
-__requires__ = ['SQLAlchemy >= 0.7']
-import pkg_resources
-
 import datetime
 import hashlib
 import json
 import logging
-import pprint
-import traceback
 import uuid
 
 import sqlalchemy as sa
@@ -288,12 +283,13 @@ class Rule(BASE):
             raise ValueError("%r is not a valid code_path" % code_path)
 
     @classmethod
-    def create_from_code_path(cls, session, valid_paths, code_path, **kw):
+    def create_from_code_path(cls, session, valid_paths, code_path,
+                              negated=False, **kw):
 
         # This will raise an exception if invalid
         Rule.validate_code_path(valid_paths, code_path, **kw)
 
-        filt = cls(code_path=code_path)
+        filt = cls(code_path=code_path, negated=negated)
         filt.arguments = kw
 
         session.add(filt)
@@ -649,7 +645,7 @@ class Preference(BASE):
             if filter.name == filter_name:
                 return filter
 
-        raise ValueError("No such filter %r" % filter_id)
+        raise ValueError("No such filter %r" % filter_name)
 
     def has_filter(self, session, filter_id):
         for filter in self.filters:
