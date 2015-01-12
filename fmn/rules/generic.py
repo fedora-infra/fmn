@@ -70,7 +70,7 @@ def package_filter(config, message, package=None, *args, **kw):
 
 
 def package_regex_filter(config, message, pattern=None, *args, **kw):
-    """ A particular package regular expression
+    """ All packages matching a regular expression
 
     Use this rule to include messages that relate to packages that match
     particular regular expressions
@@ -85,7 +85,7 @@ def package_regex_filter(config, message, pattern=None, *args, **kw):
 
 
 def regex_filter(config, message, pattern=None, *args, **kw):
-    """ A particular regular expression
+    """ All messages matching a regular expression
 
     Use this rule to include messages that bear a certain pattern.
     This can be anything that appears anywhere in the message (for instance,

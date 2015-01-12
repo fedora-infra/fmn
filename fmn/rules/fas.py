@@ -47,7 +47,7 @@ def fas_group_member_sponsor(config, message):
 
 @hint(topics=[_('fas.group.update')])
 def fas_group_update(config, message):
-    """ FAS groups metadata changes
+    """ FAS groups information changes
 
     Adding this rule to a filter will allow through `Fedora Account System
     <https://admin.fedoraproject.org/accounts>`_ notifications indicating that

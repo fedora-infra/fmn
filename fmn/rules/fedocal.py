@@ -69,7 +69,7 @@ def fedocal_meeting_update(config, message):
 
 @hint(topics=[_('fedocal.meeting.delete')])
 def fedocal_meeting_delete(config, message):
-    """ Old fedocal meetings are deleted
+    """ Fedocal meetings are deleted
 
     Adding this rule will let through notifications from `Fedocal
     <https://apps.fedoraproject.org/meeting>`_ whenever someone deletes an
