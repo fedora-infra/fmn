@@ -1,6 +1,17 @@
 Changelog
 =========
 
+0.4.2
+-----
+
+- Remove extra newlines. `610afeff9 <https://github.com/fedora-infra/fmn.rules/commit/610afeff91658ee542e5cfa8597c356debe2fdbf>`_
+- Include rules for the-new-hotness. `45a13621d <https://github.com/fedora-infra/fmn.rules/commit/45a13621d6336c306dabaeeaaf640fcee72ffac6>`_
+- Add some new "catchall" rules to try and simplify the giant list of defaults. `2f93288ae <https://github.com/fedora-infra/fmn.rules/commit/2f93288ae723557bd2cc53a6286bfb5c23a0cade>`_
+- Merge pull request #28 from fedora-infra/feature/hotness `cdeb6299d <https://github.com/fedora-infra/fmn.rules/commit/cdeb6299d08c41a4808e766b8251075c2470c941>`_
+- s/trigger/match/ `777f5a408 <https://github.com/fedora-infra/fmn.rules/commit/777f5a40807b93df214db506afd54d6a283f61ac>`_
+- Test specifically the category field. `fbaf35901 <https://github.com/fedora-infra/fmn.rules/commit/fbaf35901772d9fabf82daba33dc120da35afa33>`_
+- Merge pull request #29 from fedora-infra/feature/consolidate `b46d2fee0 <https://github.com/fedora-infra/fmn.rules/commit/b46d2fee04358b8057da543c7952e3ed8edcbbb0>`_
+
 0.4.1
 -----
 
