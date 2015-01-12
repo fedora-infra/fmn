@@ -17,7 +17,7 @@ except:
 
 def get_description():
     with open('README.rst', 'r') as f:
-        return '\n'.join(f.readlines()[2:])
+        return ''.join(f.readlines()[2:])
 
 requires = [
     'SQLAlchemy>=0.8',
