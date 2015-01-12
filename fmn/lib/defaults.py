@@ -31,114 +31,42 @@ exclusion_username = [
 
     # Don't tell me about my own bugzilla activity, but I do want to know if
     # other people act on bugs on my packages.
-    'bugzilla_bug_new',
-    'bugzilla_bug_update',
+    'bugzilla_catchall',
 
     # Exclude fedorahosted notifications by default.  No need to notify me of
     # my own activity.
-    'trac_git_receive',
-    'trac_ticket_new',
-    'trac_wiki_page_new',
-    'trac_ticket_delete',
-    'trac_wiki_page_version_delete',
-    'trac_wiki_page_delete',
-    'trac_wiki_page_rename',
-    'trac_ticket_update',
-    'trac_wiki_page_update',
-    'trac_hosted_filter',
+    'trac_catchall',
 
     # Ignore dist-git scm messages if I am responsible for them, but I *do*
     # want to get notified if someone else pushes to a package that I own.
-    'git_branch',
-    'git_receive',
-    'git_mass_branch_complete',
-    'git_mass_branch_start',
-    'git_lookaside_new',
-    'git_pkgdb2branch_complete',
-    'git_pkgdb2branch_start',
+    'git_catchall',
 
     # Don't bother notifying me of my own github activity
-    'github_issue_reopened',
-    'github_pull_request_closed',
-    'github_commit_comment',
-    'github_pull_request_review_comment',
-    'github_issue_comment',
-    'github_create',
-    'github_delete',
-    'github_push',
-    'github_watch',
-    # Except for this one.  It is useful to get travis-ci information forwarded
-    #'github_status',
-    # And these two, which are neat to see.
-    #'github_webhook',
-    #'github_fork',
+    'github_catchall',
 
     # Ignore all FMN stuff that you do yourself.
-    'fmn_filter_update',
-    'fmn_preference_update',
-    'fmn_confirmation_update',
+    'fmn_catchall',
 
     # Ignore all meetbot stuff about meetings I am involved in.  bochecha
     # pointed it out that this was ridiculous.
-    'meetbot_meeting_complete',
-    'meetbot_meeting_start',
-    'meetbot_meeting_topic_update',
+    'meetbot_catchall',
 
     ## No need to notify me about any fedocal stuff that I do.
-    'fedocal_calendar_clear',
-    'fedocal_calendar_create',
-    'fedocal_calendar_delete',
-    'fedocal_calendar_update',
-    'fedocal_meeting_reminder',
-    'fedocal_meeting_create',
-    'fedocal_meeting_delete',
-    'fedocal_meeting_update',
+    'fedocal_catchall',
 
     ## Go ahead and ignore all pkgdb stuff that *I* do myself, but I do want to
     ## be notified if someone else does something with respect to one of my
     ## packages there.
-    'pkgdb_collection_update',
-    'pkgdb_package_branch_new',
-    'pkgdb_package_new',
-    'pkgdb_acl_delete',
-    'pkgdb_package_branch_request',
-    'pkgdb_package_new_request',
-    'pkgdb_acl_update',
-    'pkgdb_package_update',
-    'pkgdb_owner_update',
-    'pkgdb_package_update_status',
-    'pkgdb_package_branch_delete',
-    'pkgdb_package_delete',
-    'pkgdb_package_monitor_update',
-    'pkgdb_package_critpath_update',
-    'pkgdb_admin_action_status_update',
-    'pkgdb_branch_complete',
-    'pkgdb_collection_new',
-    'pkgdb_branch_start',
+    'pkgdb_catchall',
 
     # Ignore all of my own tagger stuff
-    'fedoratagger_tag_create',
-    'fedoratagger_user_rank_update',
-    'fedoratagger_usage_toggle',
-    'fedoratagger_tag_update',
-    'fedoratagger_rating_update',
+    'fedoratagger_catchall',
 
     # Ignore all of my own anitya stuff
-    'anitya_distro_update',
-    'anitya_distro_add',
-    'anitya_mapping_deleted',
-    'anitya_mapping_new',
-    'anitya_new_update',
-    'anitya_project_update',
-    'anitya_info_update',
-    'anitya_project_add',
-    'anitya_project_deleted',
-    'anitya_project_add_tried',
-    'anitya_mapping_update',
+    'anitya_catchall',
 
     # Ignore all of my own wiki stuff.
-    'wiki_article_edit',
-    'wiki_upload_complete',
+    'wiki_catchall',
 
 ]
 exclusion_mutual = [
@@ -147,11 +75,7 @@ exclusion_mutual = [
     'playbook_started',
 
     # No need to notify about your own askbot activity
-    'askbot_post_deleted',
-    'askbot_post_edited',
-    'askbot_post_flagged_offensive',
-    'askbot_post_unflagged_offensive',
-    'askbot_tag_update',
+    'askbot_catchall',
 
     # Ignore the spammy fedbadges stuff, but keep the badge.award message
     'fedbadges_person_first_login',
@@ -275,9 +199,7 @@ exclusion_mutual = [
 
     # Go ahead and ignore all summershum messages by default too.  @jwboyer
     # complained rightly https://github.com/fedora-infra/fmn/issues/27
-    'summershum_ingest_start',
-    'summershum_ingest_complete',
-    'summershum_ingest_fail',
+    'summershum_catchall',
 ]
 
 
