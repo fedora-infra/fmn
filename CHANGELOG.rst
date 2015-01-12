@@ -1,6 +1,32 @@
 Changelog
 =========
 
+0.4.1
+-----
+
+- Add accidentally omitted attrs. `c1dbaac79 <https://github.com/fedora-infra/fmn.web/commit/c1dbaac79dd6b6acb523f0f612957b472bec9d57>`_
+- Fix this conditional.  It was not working at all. `ad3d70d6b <https://github.com/fedora-infra/fmn.web/commit/ad3d70d6b9d4ba60732853dba6ac14818dcbb4b2>`_
+- Merge pull request #32 from fedora-infra/feature/bugfixes `7d13abde7 <https://github.com/fedora-infra/fmn.web/commit/7d13abde75ac9f1c879b8f1ad4c064e692233e8f>`_
+- Work around bug in python-flask-openid-1.2-1.el7. `e880789ca <https://github.com/fedora-infra/fmn.web/commit/e880789cacda5ef9bb2a4c9f4b9306a183af53d1>`_
+- Unconstrain Flask. `67d542bcf <https://github.com/fedora-infra/fmn.web/commit/67d542bcfa084f8a9515534354fe786b0babe5a3>`_
+- Merge pull request #36 from fedora-infra/feature/unconstrained-flask `f42256823 <https://github.com/fedora-infra/fmn.web/commit/f422568230aaae5fe3910f2460c0c7569bcbebbe>`_
+- Merge pull request #35 from fedora-infra/feature/python-flask-openid-1.2-1.el7-workaround `166dce421 <https://github.com/fedora-infra/fmn.web/commit/166dce421d523946caf9e52235c38e659f176451>`_
+- Use the URL root as trust root (needs flask-openid 1.2.4+) `c8ea3877c <https://github.com/fedora-infra/fmn.web/commit/c8ea3877c87b3e341a60950abc48480a970a295f>`_
+- Merge pull request #34 from fedora-infra/url-root-as-trust-root `48799f496 <https://github.com/fedora-infra/fmn.web/commit/48799f4968160b211a5b68c7fb1b31cde506b5a4>`_
+- Move the negation button. `cbc105b98 <https://github.com/fedora-infra/fmn.web/commit/cbc105b9808343c6aee633773111f933a880c421>`_
+- Merge pull request #37 from fedora-infra/feature/move-negation-button `79c482b45 <https://github.com/fedora-infra/fmn.web/commit/79c482b453b0019dc10b66e077ea2822d073a6ba>`_
+- Indicate negation status on the context page as well. `81da84740 <https://github.com/fedora-infra/fmn.web/commit/81da847409ed71558b5426562a423387f2cc3578>`_
+- Include tooltips to clarify meaning of icon. `0d0eeacb6 <https://github.com/fedora-infra/fmn.web/commit/0d0eeacb6e84fdc88413a3d5d10c5252f11e5f9e>`_
+- Update copyright year. `d5856e7c1 <https://github.com/fedora-infra/fmn.web/commit/d5856e7c191bf9d79d1589b459bd03f8e9c9ce1c>`_
+- Tell the ui JS to stop paging if we have run out of results. `754a89029 <https://github.com/fedora-infra/fmn.web/commit/754a8902968b7d584fd5cbe981fc651d1904c566>`_
+- Use datanommer hints provided by fmn.rules if there are any. `ae63d9b7f <https://github.com/fedora-infra/fmn.web/commit/ae63d9b7f699fe3cab10e72ec7b05a1b13fa1660>`_
+- Some generic, unrelated cleanup. `4a5cabf05 <https://github.com/fedora-infra/fmn.web/commit/4a5cabf05e1642f38847af3b465f7453ccad5523>`_
+- Ignore local creds. `3ca1304ac <https://github.com/fedora-infra/fmn.web/commit/3ca1304ac8a47112b222ebd6d7134fbd2f065d09>`_
+- Move gather_hinting out to fmn.lib. `d996f404b <https://github.com/fedora-infra/fmn.web/commit/d996f404b43c73a5794697e6ef41f8d63bafee04>`_
+- Merge pull request #39 from fedora-infra/feature/datanommer-hinting `ecd552b06 <https://github.com/fedora-infra/fmn.web/commit/ecd552b0633a4fb3102291cb1cc3873a1fff0b91>`_
+- Merge pull request #38 from fedora-infra/feature/negation-on-context-page-too `75cdbb1fc <https://github.com/fedora-infra/fmn.web/commit/75cdbb1fcabe2920867db1e4f52c4126dff1ed40>`_
+- Typofix. `461fed3d7 <https://github.com/fedora-infra/fmn.web/commit/461fed3d7595c78b90fa195b3b92cec81693de14>`_
+
 0.3.0
 -----
 
