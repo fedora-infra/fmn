@@ -5,10 +5,11 @@ import json
 import fedmsg
 
 import fmn.rules.utils
+from fmn.lib.hinting import hint
 
 
 def user_filter(config, message, fasnick=None, *args, **kw):
-    """ All messages for a certain user
+    """ A particular user
 
     Use this rule to include messages that are associated with a
     specific user.
@@ -20,7 +21,7 @@ def user_filter(config, message, fasnick=None, *args, **kw):
 
 
 def not_user_filter(config, message, fasnick=None, *args, **kw):
-    """ All messages not concerning one or more users
+    """ Everything except a particular user
 
     Use this rule to exclude messages that are associated with one or more
     users. Specify several users by separating them with a comma ','.
@@ -41,7 +42,7 @@ def not_user_filter(config, message, fasnick=None, *args, **kw):
 
 
 def user_package_filter(config, message, fasnick=None, *args, **kw):
-    """ All messages concerning user's packages
+    """ A particular user's packages
 
     This rule includes messages that relate to packages where the
     specified user has **commit** ACLs.
@@ -57,7 +58,7 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
 
 
 def package_filter(config, message, package=None, *args, **kw):
-    """ All messages pertaining to a certain package
+    """ A particular package
 
     Use this rule to include messages that relate to a certain package
     (*i.e., nethack*).
@@ -69,7 +70,7 @@ def package_filter(config, message, package=None, *args, **kw):
 
 
 def package_regex_filter(config, message, pattern=None, *args, **kw):
-    """ All messages pertaining to packages matching a given regex
+    """ All packages matching a regular expression
 
     Use this rule to include messages that relate to packages that match
     particular regular expressions
@@ -84,7 +85,7 @@ def package_regex_filter(config, message, pattern=None, *args, **kw):
 
 
 def regex_filter(config, message, pattern=None, *args, **kw):
-    """ All messages matching a given regex
+    """ All messages matching a regular expression
 
     Use this rule to include messages that bear a certain pattern.
     This can be anything that appears anywhere in the message (for instance,
@@ -100,11 +101,12 @@ def regex_filter(config, message, pattern=None, *args, **kw):
         return bool(regex.match(json.dumps(message)))
 
 
+@hint(categories=['trac'], invertible=False)
 def trac_hosted_filter(config, message, project=None, *args, **kw):
-    """ Filter the messages for one or more fedorahosted projects
+    """ Particular fedorahosted projects
 
      Adding this rule allows you to get notifications for one or more
-     `fedorahosted <https://fedorahosted.org>`_ project. Specify multiple
+     `fedorahosted <https://fedorahosted.org>`_ projects. Specify multiple
      projects by separating them with a comma ','.
      """
     project = kw.get('project', project)

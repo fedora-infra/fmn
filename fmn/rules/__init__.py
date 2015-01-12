@@ -25,5 +25,6 @@ from fmn.rules.meetbot import *
 from fmn.rules.nuancier import *
 from fmn.rules.pkgdb import *
 from fmn.rules.planet import *
+from fmn.rules.summershum import *
 from fmn.rules.trac import *
 from fmn.rules.wiki import *

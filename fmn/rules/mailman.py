@@ -1,5 +1,9 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('mailman.receive')])
 def mailman_receive(config, message):
-    """ Mailman: An email has been sent to a mailing list
+    """ Mailing list emails
 
     Including this rule will trigger a notification anytime
     an **email is posted** to any Fedora Project **mailman3** list.

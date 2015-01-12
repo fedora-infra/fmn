@@ -1,5 +1,9 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('meetbot.meeting.complete')])
 def meetbot_meeting_complete(config, message):
-    """ Meetbot: Meeting completed
+    """ IRC meetings ending
 
     Trusty old `zodbot <https://meetbot.fedoraproject.org/>`_ publishes
     messages too!  Adding this rule will notify you when an IRC meeting
@@ -8,8 +12,9 @@ def meetbot_meeting_complete(config, message):
     return message['topic'].endswith('meetbot.meeting.complete')
 
 
+@hint(topics=[_('meetbot.meeting.start')])
 def meetbot_meeting_start(config, message):
-    """ Meetbot: Meeting started
+    """ IRC meetings starting
 
     Trusty old `zodbot <https://meetbot.fedoraproject.org/>`_ publishes
     messages too!  Adding this rule will notify you (perhaps obviously)
@@ -18,8 +23,9 @@ def meetbot_meeting_start(config, message):
     return message['topic'].endswith('meetbot.meeting.start')
 
 
+@hint(topics=[_('meetbot.meeting.topic.update')])
 def meetbot_meeting_topic_update(config, message):
-    """ Meetbot: Topic of a meeting changed
+    """ IRC meeting topic changes
 
     As IRC meetings chug along, the chairperson may change the meeting;
     zodbot publishes message for that!  Guess what?  Adding this rule will let

@@ -1,5 +1,9 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('fedoratagger.rating.update')])
 def fedoratagger_rating_update(config, message):
-    """ Tagger: The rating of a package has been updated
+    """ The rating changes on a package (fedora-tagger)
 
     Adding this rule to your filters will let through messages
     from `Fedora Tagger <https://apps.fedoraproject.org/tagger>`_
@@ -8,8 +12,9 @@ def fedoratagger_rating_update(config, message):
     return message['topic'].endswith('fedoratagger.rating.update')
 
 
+@hint(topics=[_('fedoratagger.tag.create')])
 def fedoratagger_tag_create(config, message):
-    """ Tagger: A new tag has been added to a package
+    """ New tags on a package (fedora-tagger)
 
     Adding this rule to your filters will let through messages
     from `Fedora Tagger <https://apps.fedoraproject.org/tagger>`_
@@ -18,8 +23,9 @@ def fedoratagger_tag_create(config, message):
     return message['topic'].endswith('fedoratagger.tag.create')
 
 
+@hint(topics=[_('fedoratagger.tag.update')])
 def fedoratagger_tag_update(config, message):
-    """ Tagger: Someone voted on a tag
+    """ Votes on a package tag (fedora-tagger)
 
     Adding this rule to your filters will let through messages
     from `Fedora Tagger <https://apps.fedoraproject.org/tagger>`_
@@ -28,8 +34,9 @@ def fedoratagger_tag_update(config, message):
     return message['topic'].endswith('fedoratagger.tag.update')
 
 
+@hint(topics=[_('fedoratagger.usage.toggle')])
 def fedoratagger_usage_toggle(config, message):
-    """ Tagger: Someone marked that they use a package
+    """ Usage counts change on a package (fedora-tagger)
 
     Adding this rule to your filters will let through messages
     from `Fedora Tagger <https://apps.fedoraproject.org/tagger>`_
@@ -39,13 +46,12 @@ def fedoratagger_usage_toggle(config, message):
     return message['topic'].endswith('fedoratagger.usage.toggle')
 
 
+@hint(topics=[_('fedoratagger.user.rank.update')])
 def fedoratagger_user_rank_update(config, message):
-    """ Tagger: Rank of an user in Fedora Tagger leaderboard was changed
+    """ Leaderboard changes (fedora-tagger)
 
     Adding this rule to your filters will let through messages
     from `Fedora Tagger <https://apps.fedoraproject.org/tagger>`_
     that get published when a user **rank gets updated**.
     """
     return message['topic'].endswith('fedoratagger.user.rank.update')
-
-

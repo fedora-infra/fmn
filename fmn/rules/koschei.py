@@ -1,13 +1,19 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('koschei.package.state.change')])
 def koschei_package_state_change(config, message):
-    """ Koschei: Package state has changed
+    """ Continuous integration state changes for a package (koschei)
 
     `Koschei <http://koschei.cloud.fedoraproject.org>`_ publishes this
     message when package's build or resolution state changes.
     """
     return message['topic'].endswith('koschei.package.state.change')
 
+
+@hint(categories=['koschei'], invertible=False)
 def koschei_group(config, message, group=None):
-    """ Koschei: Messages pertaining to a package in given groups
+    """ Particular Koschei package groups
 
     This rule limits message to particular
     `Koschei <http://koschei.cloud.fedoraproject.org>`_ groups. You can

@@ -1,5 +1,9 @@
+from fmn.lib.hinting import hint, prefixed as _
+
+
+@hint(topics=[_('jenkins.build.aborted')])
 def jenkins_build_aborted(config, message):
-    """ Jenkins: A build has been aborted
+    """ Jenkins builds abort
 
     Adding this rule to your filters will let through messages
     from `Jenkins <http://jenkins.cloud.fedoraproject.org/>`_
@@ -8,8 +12,9 @@ def jenkins_build_aborted(config, message):
     return message['topic'].endswith('jenkins.build.aborted')
 
 
+@hint(topics=[_('jenkins.build.failed')])
 def jenkins_build_failed(config, message):
-    """ Jenkins: A build has failed
+    """ Jenkins builds that fail
 
     Adding this rule to your filters will let through messages
     from `Jenkins <http://jenkins.cloud.fedoraproject.org/>`_
@@ -18,8 +23,9 @@ def jenkins_build_failed(config, message):
     return message['topic'].endswith('jenkins.build.failed')
 
 
+@hint(topics=[_('jenkins.build.notbuilt')])
 def jenkins_build_notbuilt(config, message):
-    """ Jenkins: A build was not built
+    """ Jenkins builds that become "notbuilt"
 
     Adding this rule to your filters will let through messages
     from `Jenkins <http://jenkins.cloud.fedoraproject.org/>`_
@@ -28,8 +34,9 @@ def jenkins_build_notbuilt(config, message):
     return message['topic'].endswith('jenkins.build.notbuilt')
 
 
+@hint(topics=[_('jenkins.build.passed')])
 def jenkins_build_passed(config, message):
-    """ Jenkins: A build was completed successfully
+    """ Jenkins builds that finish
 
     Adding this rule to your filters will let through messages
     from `Jenkins <http://jenkins.cloud.fedoraproject.org/>`_
@@ -38,8 +45,9 @@ def jenkins_build_passed(config, message):
     return message['topic'].endswith('jenkins.build.passed')
 
 
+@hint(topics=[_('jenkins.build.start')])
 def jenkins_build_start(config, message):
-    """ Jenkins: A build has started
+    """ Jenkins builds starting
 
     Adding this rule to your filters will let through messages
     from `Jenkins <http://jenkins.cloud.fedoraproject.org/>`_
@@ -48,13 +56,12 @@ def jenkins_build_start(config, message):
     return message['topic'].endswith('jenkins.build.start')
 
 
+@hint(topics=[_('jenkins.build.unstable')])
 def jenkins_build_unstable(config, message):
-    """ Jenkins: A build has completed with warnings
+    """ Jenkins builds that finish with warnings
 
     Adding this rule to your filters will let through messages
     from `Jenkins <http://jenkins.cloud.fedoraproject.org/>`_
     when a build **completes with warnings**.
     """
     return message['topic'].endswith('jenkins.build.unstable')
-
-
