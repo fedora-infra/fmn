@@ -5,7 +5,7 @@ from fmn.lib.hinting import hint, prefixed as _
 def hotness_bug_file(config, message):
     """ New bugs filed for upstream releases
 
-    There is a constellation of services involvedfoonotifying packagers of
+    There is a constellation of services involved in notifying packagers of
     `new upstream releases
     <https://fedoraproject.org/wiki/Upstream_release_monitoring>`_.
     Adding this rule will trigger notifications from the component called
@@ -19,7 +19,7 @@ def hotness_bug_file(config, message):
 def hotness_bug_followup(config, message):
     """ Automated koji activity on new upstream releases
 
-    There is a constellation of services involvedfoonotifying packagers of
+    There is a constellation of services involved in notifying packagers of
     `new upstream releases
     <https://fedoraproject.org/wiki/Upstream_release_monitoring>`_.
     Adding this rule will trigger notifications from the component called
@@ -35,7 +35,7 @@ def hotness_bug_followup(config, message):
 def hotness_update_drop(config, message):
     """ Failures to act on new upstream releases
 
-    There is a constellation of services involvedfoonotifying packagers of
+    There is a constellation of services involved in notifying packagers of
     `new upstream releases
     <https://fedoraproject.org/wiki/Upstream_release_monitoring>`_.
     Adding this rule will trigger notifications from the component called
