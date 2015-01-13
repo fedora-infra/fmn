@@ -14,9 +14,15 @@ log = logging.getLogger(__name__)
 #                     filters)
 
 exclusion_packages = [
+    # Go ahead and ignore all summershum messages by default.  @jwboyer
+    # complained rightly https://github.com/fedora-infra/fmn/issues/27
+    'summershum_catchall',
 ]
 
 exclusion_username = [
+    # No need to notify about your own askbot activity
+    'askbot_catchall',
+
     # Don't tell me about my own bodhi activity, but do tell me if other people
     # do bodhi stuff to my packages.
     'bodhi_buildroot_override_untag',
@@ -68,19 +74,16 @@ exclusion_username = [
     # Ignore all of my own wiki stuff.
     'wiki_catchall',
 
-]
-exclusion_mutual = [
-    # This is noisy for admins.  Keep only the 'completed' ones which is nice
-    # for long-running playbooks.
-    'playbook_started',
-
-    # No need to notify about your own askbot activity
-    'askbot_catchall',
-
     # Ignore the spammy fedbadges stuff, but keep the badge.award message
     'fedbadges_person_first_login',
     'fedbadges_person_rank_advance',
 
+    ## Go ahead and ignore all mailman stuff since you should be getting it by
+    ## email anyways.
+    'mailman_receive',
+
+]
+exclusion_mutual = [
     # No need to tell me about copr starts, I just want to know about completed
     # stuff.
     #'copr_build_end',
@@ -163,10 +166,6 @@ exclusion_mutual = [
     #'koschei_group',
     #'koschei_package_state_change',
 
-    ## Go ahead and ignore all mailman stuff since you should be getting it by
-    ## email anyways.
-    'mailman_receive',
-
     ## I actually want to know about all the nuancier stuff associated with me,
     ## if I'm ever in an election.
     #'nuancier_candidate_new',
@@ -174,8 +173,6 @@ exclusion_mutual = [
     #'nuancier_election_new',
     #'nuancier_candidate_denied',
     #'nuancier_election_update',
-
-    'planet_post_new',
 
     ## Ignore all the compose stuff.. but this can be commented out since
     ## compose messages are associated with neither a username nor a package.
@@ -196,10 +193,6 @@ exclusion_mutual = [
     #'compose_rawhide_rsync_complete',
     #'compose_branched_rsync_start',
     #'compose_rawhide_rsync_start',
-
-    # Go ahead and ignore all summershum messages by default too.  @jwboyer
-    # complained rightly https://github.com/fedora-infra/fmn/issues/27
-    'summershum_catchall',
 ]
 
 
