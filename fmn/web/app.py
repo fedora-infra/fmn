@@ -1,4 +1,5 @@
 import codecs
+import copy
 import datetime
 import functools
 import os
@@ -437,10 +438,33 @@ def context(openid, context):
         preference=pref)
 
 
+@app.route('/<not_reserved:openid>/<context>/<int:filter_id>/json')
+@app.route('/<not_reserved:openid>/<context>/<int:filter_id>/json/')
+@login_required
+def filter_json(openid, context, filter_id):
+    filter = _get_filter(openid, context, filter_id).__json__()
+
+    # Stuff nice extra info in there for human readability
+    for rule in filter['rules']:
+        prefix, key = rule['code_path'].split(':', 1)
+        rule['info'] = copy.copy(valid_paths[prefix][key])
+        del rule['info']['func']
+
+    return flask.jsonify(filter)
+
+
 @app.route('/<not_reserved:openid>/<context>/<int:filter_id>')
 @app.route('/<not_reserved:openid>/<context>/<int:filter_id>/')
 @login_required
-def filter(openid, context, filter_id):
+def filter_html(openid, context, filter_id):
+    filter = _get_filter(openid, context, filter_id)
+    return flask.render_template(
+        'filter.html',
+        current=context,
+        filter=filter)
+
+
+def _get_filter(openid, context, filter_id):
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         flask.abort(403)
 
@@ -455,11 +479,7 @@ def filter(openid, context, filter_id):
         flask.abort(404)
 
     filter = pref.get_filter(SESSION, filter_id)
-
-    return flask.render_template(
-        'filter.html',
-        current=context.name,
-        filter=filter)
+    return filter
 
 
 @app.route('/<not_reserved:openid>/<context>/<int:filter_id>/ex/<int:page>')
