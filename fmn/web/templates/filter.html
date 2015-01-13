@@ -7,34 +7,40 @@
 </div>
 
 <div class="row-fluid">
-  <div class="col-md-1 col-md-offset-10">
+  <div class="col-md-6 col-md-offset-6">
     <form class="form-inline" role="form"
       action="{{url_for('handle_filter')}}" method="post">
       <input name="openid" id="openid" value="{{openid}}" type="hidden">
       <input name="context" id="context" value="{{current}}" type="hidden">
       <input name="filter_name" id="filter_name" value="{{filter.name}}" type="hidden">
-      <div class="btn-group">
-      <span>
-      {% if filter.active %}
-      <button type="submit" class="btn btn-warning"
-          name="method" value="disable" style="margin-bottom: 6px;">
-          <span class="glyphicon glyphicon-remove">Disable this filter</span>
-      </button>
-      {% else %}
-      <button type="submit" class="btn btn-success"
-          name="method" value="enable" style="margin-bottom: 6px">
-          <span class="glyphicon glyphicon-ok">Enable this filter</span>
-      </button>
-      {% endif %}
-      </span>
-      <span>
-      <button type="submit" class="btn btn-danger"
-        name="method" value="delete">
-        <span class="glyphicon glyphicon-remove">Delete this filter</span>
-      </button>
-      </span>
-    </button>
+      <div class="btn-group pull-right">
+        <span>
+        <a class="btn btn-info" href="{{url_for('context_json', openid=openid, context=current)}}">
+          <span class="glyphicon glyphicon-floppy-save"></span>Export</a>
+        </span>
+
+        <span>
+        {% if filter.active %}
+        <button type="submit" class="btn btn-warning"
+          name="method" value="disable">
+          <span class="glyphicon glyphicon-remove"></span>Disable</button>
+        {% else %}
+        <button type="submit" class="btn btn-success"
+          name="method" value="enable">
+          <span class="glyphicon glyphicon-ok"></span>Enable</button>
+        {% endif %}
+        </span>
+
+        <span class="divider"></span>
+
+        <span>
+        <button type="submit" class="btn btn-danger"
+          name="method" value="delete">
+          <span class="glyphicon glyphicon-remove"></span>Delete</button>
+        </span>
+      </div>
     </form>
+
   </div>
 </div>
 
