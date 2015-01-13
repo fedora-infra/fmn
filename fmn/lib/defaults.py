@@ -236,26 +236,6 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
             pref = fmn.lib.models.Preference.create(
                 session, user, context, detail_value=value)
 
-        # Add a filter that looks for this user
-        filt = fmn.lib.models.Filter.create(
-            session, "Events referring to my username")
-        filt.add_rule(session, valid_paths,
-                      "fmn.rules:user_filter", fasnick=nick)
-
-        # Right off the bat, ignore all messages from non-primary kojis.
-        filt.add_rule(session, valid_paths,
-                      "fmn.rules:koji_instance",
-                      instance="ppc,s390,arm",
-                      negated=True)
-
-        # And furthermore exclude lots of message types
-        for code_path in exclusion_username + exclusion_mutual:
-            filt.add_rule(
-                session, valid_paths, "fmn.rules:%s" % code_path, negated=True)
-
-        pref.add_filter(session, filt, notify=True)
-
-
         # Add a filter that looks for packages of this user
         filt = fmn.lib.models.Filter.create(
             session, "Events on packages that I own")
@@ -281,3 +261,24 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
                 session, valid_paths, "fmn.rules:%s" % code_path, negated=True)
 
         pref.add_filter(session, filt, notify=True)
+        # END "packages I own"
+
+        # Add a filter that looks for this user
+        filt = fmn.lib.models.Filter.create(
+            session, "Events referring to my username")
+        filt.add_rule(session, valid_paths,
+                      "fmn.rules:user_filter", fasnick=nick)
+
+        # Right off the bat, ignore all messages from non-primary kojis.
+        filt.add_rule(session, valid_paths,
+                      "fmn.rules:koji_instance",
+                      instance="ppc,s390,arm",
+                      negated=True)
+
+        # And furthermore exclude lots of message types
+        for code_path in exclusion_username + exclusion_mutual:
+            filt.add_rule(
+                session, valid_paths, "fmn.rules:%s" % code_path, negated=True)
+
+        pref.add_filter(session, filt, notify=True)
+        # END "events references my username"
