@@ -1,4 +1,5 @@
 import codecs
+import copy
 import datetime
 import functools
 import os
@@ -410,10 +411,38 @@ def reset_api_key():
     return flask.redirect(flask.url_for('profile', openid=flask.g.auth.openid))
 
 
+@app.route('/api/<openid>/<context>')
+@app.route('/api/<openid>/<context>/')
+@login_required
+def context_json(openid, context):
+    context, pref = _get_context(openid, context)
+
+    pref = pref.__json__()
+
+    # Stuff nice extra info in there for human readability
+    for filter in pref['filters']:
+        for rule in filter['rules']:
+            prefix, key = rule['code_path'].split(':', 1)
+            rule['info'] = copy.copy(valid_paths[prefix][key])
+            del rule['info']['func']
+
+    return flask.jsonify(pref)
+
+
 @app.route('/<not_reserved:openid>/<context>')
 @app.route('/<not_reserved:openid>/<context>/')
 @login_required
 def context(openid, context):
+    context, pref = _get_context(openid, context)
+    return flask.render_template(
+        'context.html',
+        current=context.name,
+        context=context,
+        confirmation=context.get_confirmation(openid),
+        preference=pref)
+
+
+def _get_context(openid, context):
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         flask.abort(403)
 
@@ -429,18 +458,36 @@ def context(openid, context):
     pref = fmn.lib.models.Preference.get_or_create(
         SESSION, openid=openid, context=context)
 
-    return flask.render_template(
-        'context.html',
-        current=context.name,
-        context=context,
-        confirmation=context.get_confirmation(openid),
-        preference=pref)
+    return context, pref
+
+
+@app.route('/api/<openid>/<context>/<int:filter_id>')
+@app.route('/api/<openid>/<context>/<int:filter_id>/')
+@login_required
+def filter_json(openid, context, filter_id):
+    filter = _get_filter(openid, context, filter_id).__json__()
+
+    # Stuff nice extra info in there for human readability
+    for rule in filter['rules']:
+        prefix, key = rule['code_path'].split(':', 1)
+        rule['info'] = copy.copy(valid_paths[prefix][key])
+        del rule['info']['func']
+
+    return flask.jsonify(filter)
 
 
 @app.route('/<not_reserved:openid>/<context>/<int:filter_id>')
 @app.route('/<not_reserved:openid>/<context>/<int:filter_id>/')
 @login_required
 def filter(openid, context, filter_id):
+    filter = _get_filter(openid, context, filter_id)
+    return flask.render_template(
+        'filter.html',
+        current=context,
+        filter=filter)
+
+
+def _get_filter(openid, context, filter_id):
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         flask.abort(403)
 
@@ -455,11 +502,7 @@ def filter(openid, context, filter_id):
         flask.abort(404)
 
     filter = pref.get_filter(SESSION, filter_id)
-
-    return flask.render_template(
-        'filter.html',
-        current=context.name,
-        filter=filter)
+    return filter
 
 
 @app.route('/<not_reserved:openid>/<context>/<int:filter_id>/ex/<int:page>')
