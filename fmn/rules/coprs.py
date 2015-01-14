@@ -1,6 +1,17 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['copr'])
+def copr_catchall(config, message):
+    """ All Copr events
+
+    Adding this rule will indiscriminately match notifications of all types
+    from `copr <https://copr.fedoraproject.org>`_, i.e. new
+    and finished builds, newly spun up workers and chroots, etc..
+    """
+    return message['topic'].split('.')[3] == 'copr'
+
+
 @hint(topics=[_('copr.build.start')])
 def copr_build_start(config, message):
     """ Copr builds starting

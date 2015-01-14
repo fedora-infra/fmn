@@ -1,6 +1,18 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['buildsys'])
+def koji_catchall(config, message):
+    """ All Koji events
+
+    Adding this rule will indiscriminately match notifications of all types
+    from the `koji build system <http://koji.fedoraproject.org>`_, i.e. new
+    and finished *real* builds, new and finished scratch builds, internal
+    repository regeneration, etc..
+    """
+    return message['topic'].split('.')[3] == 'buildsys'
+
+
 @hint(categories=['buildsys'], invertible=False)
 def koji_instance(config, message, instance=None, *args, **kw):
     """ Particular koji instances
