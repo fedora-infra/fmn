@@ -1,8 +1,8 @@
 # Generic rules for FMN
 import re
-import json
 
 import fedmsg
+import fedmsg.encoding
 
 import fmn.rules.utils
 from fmn.lib.hinting import hint
@@ -98,7 +98,7 @@ def regex_filter(config, message, pattern=None, *args, **kw):
     pattern = kw.get('pattern', pattern)
     if pattern:
         regex = re.compile(pattern)
-        return bool(regex.match(json.dumps(message)))
+        return bool(regex.match(fedmsg.encoding.dumps(message)))
 
 
 @hint(categories=['trac'], invertible=False)
