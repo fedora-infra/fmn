@@ -1,6 +1,20 @@
 Changelog
 =========
 
+0.4.3
+-----
+
+- Avoid calling pkgdb when we don't have to. `e3701471d <https://github.com/fedora-infra/fmn.rules/commit/e3701471df0c599bd8f06719b86c3cf75a319b41>`_
+- Actually add rules for the-new-hotness. `d8b6ca63d <https://github.com/fedora-infra/fmn.rules/commit/d8b6ca63d4ac596cb8b6dd6eac60b2c638ea8d48>`_
+- Fix stray search/replace. `7cfe56383 <https://github.com/fedora-infra/fmn.rules/commit/7cfe56383fdd67d5b03fc823d9eac2dda5cf8860>`_
+- Merge pull request #31 from fedora-infra/feature/hotness2 `bb1f1f0d2 <https://github.com/fedora-infra/fmn.rules/commit/bb1f1f0d256eae12af21f2da03a65fa42ca242b2>`_
+- Merge pull request #30 from fedora-infra/feature/mini-optimization `d8d5763c1 <https://github.com/fedora-infra/fmn.rules/commit/d8d5763c183e2c734ce4a8d78cdc848b2a66a719>`_
+- Add a few more catchall rules. `c1f5d61bb <https://github.com/fedora-infra/fmn.rules/commit/c1f5d61bb7cb0cdfc3ee4c0960f0eb9bea69b6f5>`_
+- Fix some links in the docstrings. `71893a4c1 <https://github.com/fedora-infra/fmn.rules/commit/71893a4c1a11eae9acf372874afe9cbad47d9c68>`_
+- Careful with encoding for regex match. `ad0dd1b86 <https://github.com/fedora-infra/fmn.rules/commit/ad0dd1b86930db9fcc689e71a847c28a442a4786>`_
+- Merge pull request #33 from fedora-infra/feature/special-encoding `f29f52ca6 <https://github.com/fedora-infra/fmn.rules/commit/f29f52ca6b73a865b1bc5179b362274ccb23b372>`_
+- Merge pull request #32 from fedora-infra/feature/more-catchall `b784aef95 <https://github.com/fedora-infra/fmn.rules/commit/b784aef9513526f87cc690356849581840c287a1>`_
+
 0.4.2
 -----
 
