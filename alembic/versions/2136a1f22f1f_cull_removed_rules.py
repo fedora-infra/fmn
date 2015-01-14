@@ -32,11 +32,7 @@ def upgrade():
         rules = session.query(fmn.lib.models.Rule)\
             .filter_by(code_path=path).all()
         for rule in rules:
-            print "Deleting %r for %s/%s" % (
-                rule,
-                rule.filter.preference.user.openid,
-                rule.filter.preference.context.name,
-            )
+            print "Deleting %r." % rule
             session.delete(rule)
 
     # And one of them wasn't actually removed, it was just renamed.

@@ -14,20 +14,18 @@ log = logging.getLogger(__name__)
 #                     filters)
 
 exclusion_packages = [
+    # Go ahead and ignore all summershum messages by default.  @jwboyer
+    # complained rightly https://github.com/fedora-infra/fmn/issues/27
+    'summershum_catchall',
 ]
 
 exclusion_username = [
+    # No need to notify about your own askbot activity
+    'askbot_catchall',
+
     # Don't tell me about my own bodhi activity, but do tell me if other people
     # do bodhi stuff to my packages.
-    'bodhi_buildroot_override_untag',
-    'bodhi_buildroot_override_tag',
-    'bodhi_update_request_stable',
-    'bodhi_update_request_obsolete',
-    'bodhi_update_request_testing',
-    'bodhi_update_request_unpush',
-    'bodhi_update_request_revoke',
-    ## Except, comments.  Comments are nice to get.
-    #'bodhi_update_comment',
+    'bodhi_catchall',
 
     # Don't tell me about my own bugzilla activity, but I do want to know if
     # other people act on bugs on my packages.
@@ -68,19 +66,16 @@ exclusion_username = [
     # Ignore all of my own wiki stuff.
     'wiki_catchall',
 
-]
-exclusion_mutual = [
-    # This is noisy for admins.  Keep only the 'completed' ones which is nice
-    # for long-running playbooks.
-    'playbook_started',
-
-    # No need to notify about your own askbot activity
-    'askbot_catchall',
-
     # Ignore the spammy fedbadges stuff, but keep the badge.award message
     'fedbadges_person_first_login',
     'fedbadges_person_rank_advance',
 
+    ## Go ahead and ignore all mailman stuff since you should be getting it by
+    ## email anyways.
+    'mailman_receive',
+
+]
+exclusion_mutual = [
     # No need to tell me about copr starts, I just want to know about completed
     # stuff.
     #'copr_build_end',
@@ -163,10 +158,6 @@ exclusion_mutual = [
     #'koschei_group',
     #'koschei_package_state_change',
 
-    ## Go ahead and ignore all mailman stuff since you should be getting it by
-    ## email anyways.
-    'mailman_receive',
-
     ## I actually want to know about all the nuancier stuff associated with me,
     ## if I'm ever in an election.
     #'nuancier_candidate_new',
@@ -174,8 +165,6 @@ exclusion_mutual = [
     #'nuancier_election_new',
     #'nuancier_candidate_denied',
     #'nuancier_election_update',
-
-    'planet_post_new',
 
     ## Ignore all the compose stuff.. but this can be commented out since
     ## compose messages are associated with neither a username nor a package.
@@ -196,10 +185,6 @@ exclusion_mutual = [
     #'compose_rawhide_rsync_complete',
     #'compose_branched_rsync_start',
     #'compose_rawhide_rsync_start',
-
-    # Go ahead and ignore all summershum messages by default too.  @jwboyer
-    # complained rightly https://github.com/fedora-infra/fmn/issues/27
-    'summershum_catchall',
 ]
 
 
@@ -235,7 +220,7 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
             else:
                 log.warn("No such context %r is in the DB." % name)
 
-    # For each context, build two big filters
+    # For each context, build one little and two big filters
     for context in contexts():
         pref = fmn.lib.models.Preference.load(session, user, context)
         if not pref:
@@ -243,25 +228,14 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
             pref = fmn.lib.models.Preference.create(
                 session, user, context, detail_value=value)
 
-        # Add a filter that looks for this user
+        # Add a special filter that looks for mentions like @ralph
         filt = fmn.lib.models.Filter.create(
-            session, "Events referring to my username")
+            session, "Mentions of my @username")
+        pattern = '[!-~ ]*[^\w@]@%s[^\w@][!-~ ]*' % nick
         filt.add_rule(session, valid_paths,
-                      "fmn.rules:user_filter", fasnick=nick)
-
-        # Right off the bat, ignore all messages from non-primary kojis.
-        filt.add_rule(session, valid_paths,
-                      "fmn.rules:koji_instance",
-                      instance="ppc,s390,arm",
-                      negated=True)
-
-        # And furthermore exclude lots of message types
-        for code_path in exclusion_username + exclusion_mutual:
-            filt.add_rule(
-                session, valid_paths, "fmn.rules:%s" % code_path, negated=True)
-
+                    "fmn.rules:regex_filter", pattern=pattern)
         pref.add_filter(session, filt, notify=True)
-
+        # END @username filter
 
         # Add a filter that looks for packages of this user
         filt = fmn.lib.models.Filter.create(
@@ -288,3 +262,24 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
                 session, valid_paths, "fmn.rules:%s" % code_path, negated=True)
 
         pref.add_filter(session, filt, notify=True)
+        # END "packages I own"
+
+        # Add a filter that looks for this user
+        filt = fmn.lib.models.Filter.create(
+            session, "Events referring to my username")
+        filt.add_rule(session, valid_paths,
+                      "fmn.rules:user_filter", fasnick=nick)
+
+        # Right off the bat, ignore all messages from non-primary kojis.
+        filt.add_rule(session, valid_paths,
+                      "fmn.rules:koji_instance",
+                      instance="ppc,s390,arm",
+                      negated=True)
+
+        # And furthermore exclude lots of message types
+        for code_path in exclusion_username + exclusion_mutual:
+            filt.add_rule(
+                session, valid_paths, "fmn.rules:%s" % code_path, negated=True)
+
+        pref.add_filter(session, filt, notify=True)
+        # END "events references my username"

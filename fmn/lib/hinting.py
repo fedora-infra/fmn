@@ -15,24 +15,26 @@ construct the hint dict for ``datanommer.grep(..., **hints)``.
 """
 
 import collections
-import functools
+import decorator
 
 import fedmsg.config
 
 
 def hint(invertible=True, **hints):
     """ A decorator that can optionally hang datanommer hints on a rule. """
-    def wrapper(fn):
-        @functools.wraps(fn)
-        def replacement(*args, **kwargs):
-            return fn(*args, **kwargs)
 
-        # Hang hints on the function.
-        replacement.hints = hints
-        replacement.hinting_invertible = invertible
-        return replacement
+    @decorator.decorator
+    def wrapper(fn, *args, **kwargs):
+        return fn(*args, **kwargs)
 
-    return wrapper
+    def wrapper_wrapper(fn):
+        wrapped = wrapper(fn)
+        # Hang hints on the wrapped function.
+        wrapped.hints = hints
+        wrapped.hinting_invertible = invertible
+        return wrapped
+
+    return wrapper_wrapper
 
 
 def prefixed(topic, prefix='org.fedoraproject'):

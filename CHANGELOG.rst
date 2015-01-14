@@ -1,6 +1,27 @@
 Changelog
 =========
 
+0.4.3
+-----
+
+- Make this print statement simpler. `89c2ff8fd <https://github.com/fedora-infra/fmn.lib/commit/89c2ff8fde7bfc2dba3941be79236b03acf08cc0>`_
+- Cascade removed rules to their filters. `6a7a52559 <https://github.com/fedora-infra/fmn.lib/commit/6a7a525592017539fc3bc252cf373ca673b01bd2>`_
+- Merge pull request #25 from fedora-infra/feature/cascade-removed-rules `72d284e53 <https://github.com/fedora-infra/fmn.lib/commit/72d284e531d10062b8f9872c90e2876ae7624730>`_
+- Essential. `105063e09 <https://github.com/fedora-infra/fmn.lib/commit/105063e09f81faa1165a83a085aa032da3075e99>`_
+- Merge pull request #26 from fedora-infra/feature/cascade-removed-rules `ca8ce4db9 <https://github.com/fedora-infra/fmn.lib/commit/ca8ce4db9c32ac42986b03231b74806e8dd0922e>`_
+- Further update the defaults. `adea18d19 <https://github.com/fedora-infra/fmn.lib/commit/adea18d19de9ade03b0803d7ccc27333e2962030>`_
+- Swap the order of the two default filters. `0c105d0ff <https://github.com/fedora-infra/fmn.lib/commit/0c105d0ffa5f775598e6bf170e171d6dcf0145ec>`_
+- Merge pull request #27 from fedora-infra/feature/further-update-defaults `1be4450d4 <https://github.com/fedora-infra/fmn.lib/commit/1be4450d4c355d2559e61eec7eeb354f34471f50>`_
+- Add failing test for fedora-infra/fmn#40. `6a04a1ace <https://github.com/fedora-infra/fmn.lib/commit/6a04a1ace26762082afee0552d431e126b5fd602>`_
+- Add example rule for test. `b0aad0ba8 <https://github.com/fedora-infra/fmn.lib/commit/b0aad0ba83557fc529e803547f93a54d272f5817>`_
+- Get and test all three: argspec, docstring, and custom attrs. `f9bb4df31 <https://github.com/fedora-infra/fmn.lib/commit/f9bb4df31377b6c0c69f39d915ef7ae6ad836d8a>`_
+- Fix bug in cache-key generation. `7eefcead4 <https://github.com/fedora-infra/fmn.lib/commit/7eefcead4f2be89c5b66c588bc1480ec13118d77>`_
+- Merge pull request #28 from fedora-infra/feature/hint-decoration-fix `9ef68848c <https://github.com/fedora-infra/fmn.lib/commit/9ef68848c05ee577a7db3fa211cd779332399b1f>`_
+- Merge pull request #29 from fedora-infra/feature/cache-key-bugbear `146654621 <https://github.com/fedora-infra/fmn.lib/commit/146654621a4305adc117e8f420fda98d5b67cafb>`_
+- Actually, just ignore all my own bodhi activity. `0dadb5d50 <https://github.com/fedora-infra/fmn.lib/commit/0dadb5d505363b4d83ad995bf390bc43bdb5fed2>`_
+- Add a default filter to catch username mentions. `811054e24 <https://github.com/fedora-infra/fmn.lib/commit/811054e24c2c4bafb2e438dac27bda2e586c6171>`_
+- Merge pull request #30 from fedora-infra/feature/still-more-default-tweaking `962c9ec0e <https://github.com/fedora-infra/fmn.lib/commit/962c9ec0e2a04bec63350034681c9d8d99b3621b>`_
+
 0.4.2
 -----
 

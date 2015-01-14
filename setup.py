@@ -25,6 +25,7 @@ requires = [
     'fmn.rules',
     'docutils',
     'markupsafe',
+    'decorator',
 ]
 
 if sys.version_info[0] == 2 and sys.version_info[1] <= 6:
@@ -38,7 +39,7 @@ tests_require = [
 
 setup(
     name='fmn.lib',
-    version='0.4.2',
+    version='0.4.3',
     description='Internal API components and model for Fedora Notifications',
     long_description=get_description(),
     author='Ralph Bean',
