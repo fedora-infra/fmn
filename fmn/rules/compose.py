@@ -1,6 +1,16 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['compose'])
+def compose_catchall(config, message):
+    """ All compose events
+
+    Adding this rule will indiscriminately match notifications of all types
+    from the `compose process <https://apps.fedoraproject.org/releng-dash>`_.
+    """
+    return message['topic'].split('.')[3] == 'compose'
+
+
 @hint(topics=[_('compose.branched.complete')])
 def compose_branched_complete(config, message):
     """ Compose completed for a specific branch

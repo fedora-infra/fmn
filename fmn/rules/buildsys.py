@@ -1,16 +1,28 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['buildsys'])
+def koji_catchall(config, message):
+    """ All Koji events
+
+    Adding this rule will indiscriminately match notifications of all types
+    from the `koji build system <http://koji.fedoraproject.org>`_, i.e. new
+    and finished *real* builds, new and finished scratch builds, internal
+    repository regeneration, etc..
+    """
+    return message['topic'].split('.')[3] == 'buildsys'
+
+
 @hint(categories=['buildsys'], invertible=False)
 def koji_instance(config, message, instance=None, *args, **kw):
     """ Particular koji instances
 
     You may not have even known it, but we have multiple instances of the koji
     build system.  There is the **primary** buildsystem at
-    `koji.fedoraproject.org <https://koji.fedoraproject.org>`_ and also
-    secondary instances for `ppc <https://ppc.koji.fedoraproject.org>`_, `arm
-    <https://arm.koji.fedoraproject.org>`_, and `s390
-    <https://s390.koji.fedoraproject.org>`_.
+    `koji.fedoraproject.org <http://koji.fedoraproject.org>`_ and also
+    secondary instances for `ppc <http://ppc.koji.fedoraproject.org>`_, `arm
+    <http://arm.koji.fedoraproject.org>`_, and `s390
+    <http://s390.koji.fedoraproject.org>`_.
 
     With this rule, you can limit messages to only those from particular koji
     instances (like the **primary** one if you want to ignore the secondary
@@ -35,7 +47,7 @@ def koji_scratch_build_state_change(config, message):
     """ Scratch builds changing state (any state)
 
     This rule lets through messages from the `koji build
-    system <https://koji.fedoraproject.org>`_ about **scratch** build state
+    system <http://koji.fedoraproject.org>`_ about **scratch** build state
     state changes (any state at all:  started, completed, failed, cancelled).
     """
     return message['topic'].endswith('buildsys.task.state.change')
@@ -46,7 +58,7 @@ def koji_scratch_build_started(config, message):
     """ Scratch builds starting
 
     This rule lets through messages from the `koji build
-    system <https://koji.fedoraproject.org>`_ that get published anytime a
+    system <http://koji.fedoraproject.org>`_ that get published anytime a
     **scratch** build starts.
     """
     if not koji_scratch_build_state_change(config, message):
@@ -60,7 +72,7 @@ def koji_scratch_build_completed(config, message):
     """ Scratch builds completing
 
     This rule lets through messages from the `koji build
-    system <https://koji.fedoraproject.org>`_ that get published anytime a
+    system <http://koji.fedoraproject.org>`_ that get published anytime a
     **scratch** build completes.
     """
     if not koji_scratch_build_state_change(config, message):
@@ -74,7 +86,7 @@ def koji_scratch_build_failed(config, message):
     """ Scratch builds failing
 
     This rule lets through messages from the `koji build
-    system <https://koji.fedoraproject.org>`_ that get published anytime a
+    system <http://koji.fedoraproject.org>`_ that get published anytime a
     **scratch** build fails.
     """
     if not koji_scratch_build_state_change(config, message):
@@ -88,7 +100,7 @@ def koji_scratch_build_cancelled(config, message):
     """ Scratch builds being cancelled
 
     This rule lets through messages from the `koji build
-    system <https://koji.fedoraproject.org>`_ that get published anytime a
+    system <http://koji.fedoraproject.org>`_ that get published anytime a
     **scratch** build is cancelled.
     """
     if not koji_scratch_build_state_change(config, message):
@@ -102,7 +114,7 @@ def koji_build_state_change(config, message):
     """ Builds changing state (any state)
 
     This rule lets through messages from the `koji build
-    system <https://koji.fedoraproject.org>`_ that get published anytime a
+    system <http://koji.fedoraproject.org>`_ that get published anytime a
     build changes state.  The state could be anything:  started, completed,
     deleted, failed, or cancelled.
     """
@@ -114,7 +126,7 @@ def koji_build_started(config, message):
     """ Builds starting
 
     This rule lets through messages from the `koji build
-    system <https://koji.fedoraproject.org>`_ that get published anytime **a
+    system <http://koji.fedoraproject.org>`_ that get published anytime **a
     build starts**.
     """
     if not koji_build_state_change(config, message):
@@ -128,7 +140,7 @@ def koji_build_completed(config, message):
     """ Builds completing
 
     This rule lets through messages from the `koji build
-    system <https://koji.fedoraproject.org>`_ that get published anytime **a
+    system <http://koji.fedoraproject.org>`_ that get published anytime **a
     build completes**.
     """
     if not koji_build_state_change(config, message):
@@ -142,7 +154,7 @@ def koji_build_deleted(config, message):
     """ Builds being deleted
 
     This rule lets through messages from the `koji build
-    system <https://koji.fedoraproject.org>`_ that get published anytime **a
+    system <http://koji.fedoraproject.org>`_ that get published anytime **a
     build is deleted**.
     """
     if not koji_build_state_change(config, message):
@@ -156,7 +168,7 @@ def koji_build_failed(config, message):
     """ Builds failing
 
     This rule lets through messages from the `koji build
-    system <https://koji.fedoraproject.org>`_ that get published anytime **a
+    system <http://koji.fedoraproject.org>`_ that get published anytime **a
     build fails**.
     """
     if not koji_build_state_change(config, message):
@@ -170,7 +182,7 @@ def koji_build_cancelled(config, message):
     """ Builds being cancelled
 
     This rule lets through messages from the `koji build
-    system <https://koji.fedoraproject.org>`_ that get published anytime **a
+    system <http://koji.fedoraproject.org>`_ that get published anytime **a
     build is cancelled**.
     """
     if not koji_build_state_change(config, message):
@@ -184,7 +196,7 @@ def koji_package_list_change(config, message):
     """ Koji "package list" changes
 
     This rule lets through messages from the `koji build
-    system <https://koji.fedoraproject.org>`_ indicating that the package
+    system <http://koji.fedoraproject.org>`_ indicating that the package
     listing for a tag has changed.
     """
     return message['topic'].endswith('buildsys.package.list.change')
@@ -195,7 +207,7 @@ def koji_repo_done(config, message):
     """ Koji repo regeneration (complete)
 
     This rule lets through messages indicating that the `koji build
-    system <https://koji.fedoraproject.org>`_ has **finished** rebuilding a
+    system <http://koji.fedoraproject.org>`_ has **finished** rebuilding a
     repo.
     """
     return message['topic'].endswith('buildsys.repo.done')
@@ -206,7 +218,7 @@ def koji_repo_init(config, message):
     """ Koji repo regeneration (start)
 
     This rule lets through messages indicating that the `koji build
-    system <https://koji.fedoraproject.org>`_ has **started** rebuilding a
+    system <http://koji.fedoraproject.org>`_ has **started** rebuilding a
     repo.
     """
     return message['topic'].endswith('buildsys.repo.init')
@@ -217,7 +229,7 @@ def koji_tag(config, message):
     """ Packages are added to a Koji tag
 
     This rule lets through messages that get published when the `koji build
-    system <https://koji.fedoraproject.org>`_ applies a certain tag to a
+    system <http://koji.fedoraproject.org>`_ applies a certain tag to a
     package.
     """
     return message['topic'].endswith('buildsys.tag')
@@ -228,7 +240,7 @@ def koji_untag(config, message):
     """ Packages are removed from a Koji tag
 
     This rule lets through messages that get published when the `koji build
-    system <https://koji.fedoraproject.org>`_ removes a tag from a
+    system <http://koji.fedoraproject.org>`_ removes a tag from a
     package.
     """
     return message['topic'].endswith('buildsys.untag')
