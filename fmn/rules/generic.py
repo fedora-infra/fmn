@@ -1,8 +1,8 @@
 # Generic rules for FMN
 import re
-import json
 
 import fedmsg
+import fedmsg.encoding
 
 import fmn.rules.utils
 from fmn.lib.hinting import hint
@@ -50,9 +50,15 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
 
     fasnick = kw.get('fasnick', fasnick)
     if fasnick:
-        packages = fmn.rules.utils.get_packages_of_user(config, fasnick)
         msg_packages = fedmsg.meta.msg2packages(message, **config)
-        return packages.intersection(msg_packages)
+        if not msg_packages:
+            # If the message has no packages associated with it, there's no
+            # way that "one of them" is going to happen to belong to this user,
+            # so let's not waste our time doing the somewhat expensive call out
+            # to pkgdb on the next line to check.
+            return False
+        usr_packages = fmn.rules.utils.get_packages_of_user(config, fasnick)
+        return usr_packages.intersection(msg_packages)
 
     return False
 
@@ -98,7 +104,7 @@ def regex_filter(config, message, pattern=None, *args, **kw):
     pattern = kw.get('pattern', pattern)
     if pattern:
         regex = re.compile(pattern)
-        return bool(regex.match(json.dumps(message)))
+        return bool(regex.match(fedmsg.encoding.dumps(message)))
 
 
 @hint(categories=['trac'], invertible=False)

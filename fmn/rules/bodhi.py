@@ -1,6 +1,17 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['bodhi'])
+def bodhi_catchall(config, message):
+    """ All bodhi events
+
+    Adding this rule will indiscriminately match notifications of all types
+    from the `Bodhi Updates System <https://admin.fedoraproject.org/updates>`_
+    i.e. new updates, comments on updates, buildroot overrides, etc..
+    """
+    return message['topic'].split('.')[3] == 'bodhi'
+
+
 @hint(categories=['bodhi'], invertible=False)
 def bodhi_critpath(config, message):
     """ Critpath updates (of any kind)
