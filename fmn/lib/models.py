@@ -262,7 +262,9 @@ class Rule(BASE):
 
     @property
     def cache_key(self):
-        return hashlib.sha256(self.code_path + self._arguments).hexdigest()
+        return hashlib.sha256(
+            self.code_path + str(self.negated) + self._arguments
+        ).hexdigest()
 
     @hybrid_property
     def arguments(self):
