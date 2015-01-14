@@ -25,15 +25,7 @@ exclusion_username = [
 
     # Don't tell me about my own bodhi activity, but do tell me if other people
     # do bodhi stuff to my packages.
-    'bodhi_buildroot_override_untag',
-    'bodhi_buildroot_override_tag',
-    'bodhi_update_request_stable',
-    'bodhi_update_request_obsolete',
-    'bodhi_update_request_testing',
-    'bodhi_update_request_unpush',
-    'bodhi_update_request_revoke',
-    ## Except, comments.  Comments are nice to get.
-    #'bodhi_update_comment',
+    'bodhi_catchall',
 
     # Don't tell me about my own bugzilla activity, but I do want to know if
     # other people act on bugs on my packages.
