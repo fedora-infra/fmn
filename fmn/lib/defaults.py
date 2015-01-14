@@ -25,15 +25,7 @@ exclusion_username = [
 
     # Don't tell me about my own bodhi activity, but do tell me if other people
     # do bodhi stuff to my packages.
-    'bodhi_buildroot_override_untag',
-    'bodhi_buildroot_override_tag',
-    'bodhi_update_request_stable',
-    'bodhi_update_request_obsolete',
-    'bodhi_update_request_testing',
-    'bodhi_update_request_unpush',
-    'bodhi_update_request_revoke',
-    ## Except, comments.  Comments are nice to get.
-    #'bodhi_update_comment',
+    'bodhi_catchall',
 
     # Don't tell me about my own bugzilla activity, but I do want to know if
     # other people act on bugs on my packages.
@@ -228,13 +220,22 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
             else:
                 log.warn("No such context %r is in the DB." % name)
 
-    # For each context, build two big filters
+    # For each context, build one little and two big filters
     for context in contexts():
         pref = fmn.lib.models.Preference.load(session, user, context)
         if not pref:
             value = detail_values.get(context.name)
             pref = fmn.lib.models.Preference.create(
                 session, user, context, detail_value=value)
+
+        # Add a special filter that looks for mentions like @ralph
+        filt = fmn.lib.models.Filter.create(
+            session, "Mentions of my @username")
+        pattern = '[!-~ ]*[^\w@]@%s[^\w@][!-~ ]*' % nick
+        filt.add_rule(session, valid_paths,
+                    "fmn.rules:regex_filter", pattern=pattern)
+        pref.add_filter(session, filt, notify=True)
+        # END @username filter
 
         # Add a filter that looks for packages of this user
         filt = fmn.lib.models.Filter.create(
