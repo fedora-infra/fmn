@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.4.3
+-----
+
+- Remove extra lines from desc on PyPI `11e593f92 <https://github.com/fedora-infra/fmn.web/commit/11e593f926ff517f4556c922a3a6251908736bb5>`_
+- Merge pull request #40 from msabramo/remove_extra_lines_from_desc_on_PyPI `d99300b2b <https://github.com/fedora-infra/fmn.web/commit/d99300b2b7c48e133b2cf86725bbb15e7e9beccf>`_
+- Export individual filters. `f86a6f89d <https://github.com/fedora-infra/fmn.web/commit/f86a6f89d809cff7aa6267f172bd9394422484a9>`_
+- Export whole Preference objects. `90d8299d7 <https://github.com/fedora-infra/fmn.web/commit/90d8299d707cda9adc73a0f4acab3c034df99c8c>`_
+- Add some export-as-json buttons. `06faa98b4 <https://github.com/fedora-infra/fmn.web/commit/06faa98b486048137da8dbc56f13fcff5dcd845a>`_
+- Merge pull request #41 from fedora-infra/feature/export-prefs `7557e11ee <https://github.com/fedora-infra/fmn.web/commit/7557e11ee34f2193ce4d8d8238b80940f07a77a8>`_
+
 0.4.1
 -----
 
