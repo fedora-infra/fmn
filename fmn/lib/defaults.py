@@ -14,9 +14,6 @@ log = logging.getLogger(__name__)
 #                     filters)
 
 exclusion_packages = [
-    # Go ahead and ignore all summershum messages by default.  @jwboyer
-    # complained rightly https://github.com/fedora-infra/fmn/issues/27
-    'summershum_catchall',
 ]
 
 exclusion_username = [
@@ -73,7 +70,6 @@ exclusion_username = [
     ## Go ahead and ignore all mailman stuff since you should be getting it by
     ## email anyways.
     'mailman_receive',
-
 ]
 exclusion_mutual = [
     # No need to tell me about copr starts, I just want to know about completed
@@ -185,6 +181,10 @@ exclusion_mutual = [
     #'compose_rawhide_rsync_complete',
     #'compose_branched_rsync_start',
     #'compose_rawhide_rsync_start',
+
+    # Go ahead and ignore all summershum messages by default.  @jwboyer
+    # complained rightly https://github.com/fedora-infra/fmn/issues/27
+    'summershum_catchall',
 ]
 
 
