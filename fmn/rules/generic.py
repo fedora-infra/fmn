@@ -87,7 +87,7 @@ def package_regex_filter(config, message, pattern=None, *args, **kw):
     if pattern:
         packages = fedmsg.meta.msg2packages(message, **config)
         regex = re.compile(pattern)
-        return any([regex.match(package) for package in packages])
+        return any([regex.search(package) for package in packages])
 
 
 def regex_filter(config, message, pattern=None, *args, **kw):
@@ -104,7 +104,7 @@ def regex_filter(config, message, pattern=None, *args, **kw):
     pattern = kw.get('pattern', pattern)
     if pattern:
         regex = re.compile(pattern)
-        return bool(regex.match(fedmsg.encoding.dumps(message)))
+        return bool(regex.search(fedmsg.encoding.dumps(message)))
 
 
 @hint(categories=['trac'], invertible=False)
