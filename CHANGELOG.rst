@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.4.4
+-----
+
+- Initialize the cache at startup. `e9d5cdcff <https://github.com/fedora-infra/fmn.consumer/commit/e9d5cdcff1f6cc2f1df428466f3e889a37c8ac59>`_
+- Only refresh the prefs cache for single users when we can. `b8af37260 <https://github.com/fedora-infra/fmn.consumer/commit/b8af3726026cb9bf3a637abb69a38e9b7cecb3d6>`_
+- Merge pull request #42 from fedora-infra/feature/per-person-cache-refresh `34774c5ca <https://github.com/fedora-infra/fmn.consumer/commit/34774c5cac62ec27d5389a1aa4a78701a6d8684f>`_
+
 0.4.3
 -----
 
