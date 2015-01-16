@@ -91,15 +91,24 @@ def matches(filter, message, valid_paths, rule_cache, config):
     return True
 
 
-def load_preferences(session, config, valid_paths, cull_disabled=False):
+def load_preferences(session, config, valid_paths,
+                     cull_disabled=False, openid=None):
     """ Every rule for every filter for every context for every user.
 
     Any preferences in the DB that are for contexts that are disabled in the
     config are omitted here.
 
-    This is an expensive query that loads, practically, the whole database.
+    If the `openid` argument is None, then this is an expensive query that
+    loads, practically, the whole database.  However, if an openid string is
+    submitted, then only the preferences of that user are returned (and this is
+    less expensive).
     """
-    preferences = session.query(fmn.lib.models.Preference).all()
+    query = session.query(fmn.lib.models.Preference)
+
+    if openid:
+        query = query.filter(fmn.lib.models.Preference.openid==openid)
+
+    preferences = query.all()
     return [
         preference.__json__(reify=True)
         for preference in preferences
