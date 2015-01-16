@@ -49,8 +49,12 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         log.debug("Loading rules from fmn.rules")
         self.valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
-        self.cached_preferences = None
+        # Initialize our in-memory cache of the FMN preferences database
         self.cached_preferences_lock = threading.Lock()
+        self.cached_preferences = None
+        session = self.make_session()
+        self.refresh_cache(session)
+        session.close()
 
         log.debug("FMNConsumer initialized")
 
