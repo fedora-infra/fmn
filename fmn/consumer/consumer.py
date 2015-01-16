@@ -49,16 +49,33 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         log.debug("Loading rules from fmn.rules")
         self.valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
-        self.cached_preferences = None
+        # Initialize our in-memory cache of the FMN preferences database
         self.cached_preferences_lock = threading.Lock()
+        self.cached_preferences = None
+        session = self.make_session()
+        self.refresh_cache(session)
+        session.close()
 
         log.debug("FMNConsumer initialized")
 
-    def refresh_cache(self, session, topic=None, msg=None):
-        log.info("Loading and caching preferences")
+    def refresh_cache(self, session, openid=None):
+        log.debug("Acquiring cached_preferences_lock")
         with self.cached_preferences_lock:
-            self.cached_preferences = fmn.lib.load_preferences(
-                session, self.hub.config, self.valid_paths, cull_disabled=True)
+            if not openid or self.cached_preferences is None:
+                log.info("Loading and caching all preferences for all users")
+                self.cached_preferences = fmn.lib.load_preferences(
+                    session, self.hub.config, self.valid_paths,
+                    cull_disabled=True)
+            else:
+                log.info("Loading and caching preferences for %r" % openid)
+                old_preferences = [p for p in self.cached_preferences
+                                   if p['user']['openid'] == openid]
+                new_preferences = fmn.lib.load_preferences(
+                    session, self.hub.config, self.valid_paths,
+                    cull_disabled=True, openid=openid)
+                self.cached_preferences.extend(new_preferences)
+                for old_preference in old_preferences:
+                    self.cached_preferences.remove(old_preference)
 
     def make_session(self):
         return fmn.lib.models.init(self.uri)
@@ -85,12 +102,13 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         # /etc/fedmsg.d/).  The dogpile.cache cache stores pkgdb2
         # package-ownership relations.  Both caches are held for a very long
         # time and update themselves dynamically here.
-        #
+
         # If the user has tweaked their preferences on the frontend, then
         # invalidate our entire in-memory cache of the fmn preferences
         # database.
-        if '.fmn.' in topic or not self.cached_preferences:
-            self.refresh_cache(session, topic, msg)
+        if '.fmn.' in topic:
+            openid = msg['msg']['openid']
+            self.refresh_cache(session, openid)
 
         # If a user has tweaked something in the pkgdb2 db, then invalidate our
         # dogpile cache.. but only the parts that have something to do with any
@@ -118,7 +136,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 if not username:
                     continue
                 log.info("Autocreating account for %r" % username)
-                openid='%s.id.fedoraproject.org' % username
+                openid = '%s.id.fedoraproject.org' % username
                 openid_url = 'https://%s.id.fedoraproject.org' % username
                 email = '%s@fedoraproject.org' % username
                 user = fmn.lib.models.User.get_or_create(
@@ -127,7 +145,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 )
                 session.add(user)
                 session.commit()
-                self.refresh_cache(session, topic, msg)
+                self.refresh_cache(session, openid)
 
         # Do the same dogpile.cache invalidation trick that we did above, but
         # here do it for fas group membership changes.  (This is important
