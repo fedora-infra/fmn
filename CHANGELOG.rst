@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.4.4
+-----
+
+- Turns out that this needs to be in the ``mutual`` section. `f8100dbe5 <https://github.com/fedora-infra/fmn.lib/commit/f8100dbe5876c803f65e3b045e2944c1258778ff>`_
+- Merge pull request #31 from fedora-infra/feature/summershum-defaults-tweak `d4e0cca42 <https://github.com/fedora-infra/fmn.lib/commit/d4e0cca424bfdd37b50eb45b2a59b709c0e91f25>`_
+- Only refresh the prefs cache for single users when we can. `2877f06d8 <https://github.com/fedora-infra/fmn.lib/commit/2877f06d8021019dce43f2fa4133f858bbee9e8f>`_
+- Merge pull request #32 from fedora-infra/feature/per-person-cache-refresh `36878ca86 <https://github.com/fedora-infra/fmn.lib/commit/36878ca86ea8746be17f5b42095d08d847b7d824>`_
+
 0.4.3
 -----
 
