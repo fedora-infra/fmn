@@ -1,6 +1,7 @@
 # An example fedmsg koji consumer
 
 import threading
+import random
 
 import fedmsg.consumers
 import fmn.lib
@@ -164,7 +165,15 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         # With cache management done, we can move on to the real work.
         # Compute, based on our in-memory cache of preferences, who we think
         # should receive this message.
-        results = fmn.lib.recipients(self.cached_preferences, msg,
+
+        # First, make a thread-local copy of our shared cached prefs
+        preferences = list(self.cached_preferences)
+        # Shuffle it so that not all threads step through the list in the same
+        # order.  This should cut down on competition for the dogpile lock when
+        # getting pkgdb info at startup.
+        random.shuffle(preferences)
+        # And do the real work of comparing every rule against the message.
+        results = fmn.lib.recipients(preferences, msg,
                                      self.valid_paths, self.hub.config)
 
         # Let's look at the results of our matching operation and send stuff
