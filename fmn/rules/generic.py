@@ -104,7 +104,7 @@ def regex_filter(config, message, pattern=None, *args, **kw):
     pattern = kw.get('pattern', pattern)
     if pattern:
         regex = re.compile(pattern)
-        return bool(regex.search(fedmsg.encoding.dumps(message)))
+        return bool(regex.search(fedmsg.encoding.dumps(message['msg'])))
 
 
 @hint(categories=['trac'], invertible=False)
