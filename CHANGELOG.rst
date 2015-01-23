@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.4.4
+-----
+
+- Fix regex. `1b9b2ee95 <https://github.com/fedora-infra/fmn.rules/commit/1b9b2ee95401051b23eb28dae7b6bf9d4c57d961>`_
+- Merge pull request #34 from fedora-infra/feature/fix-regex `00e8f4adc <https://github.com/fedora-infra/fmn.rules/commit/00e8f4adce65286c5b76468154486adccb8d8582>`_
+- Don't search certificate and signature with regex. `4b5cdee0b <https://github.com/fedora-infra/fmn.rules/commit/4b5cdee0b98b6b3c9a805fdd1397e1400f3f4e88>`_
+- Merge pull request #35 from fedora-infra/feature/one-thousand-percent `e4ffa62aa <https://github.com/fedora-infra/fmn.rules/commit/e4ffa62aa72b1854b54ed727d2d65224ba69907f>`_
+
 0.4.3
 -----
 
