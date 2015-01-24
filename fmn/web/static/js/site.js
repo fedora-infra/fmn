@@ -1,4 +1,4 @@
-var examples_loading_message = "Searching for example messages that match this filter";
+var examples_loading_message = "Searching for example messages that match this filter <img src='../../../static/img/spinner.gif'/>";
 
 var load_examples = function(page) {
     // First, destroy the more button if there is one.
