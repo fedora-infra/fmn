@@ -144,6 +144,7 @@ exclusion_mutual = [
     'koji_build_started',
 
     ## Lastly, we can hide all of this "behind the scenes" stuff from users.
+    'koji_rpm_sign',
     'koji_tag',
     'koji_untag',
     'koji_repo_done',
