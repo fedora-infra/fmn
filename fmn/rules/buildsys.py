@@ -244,3 +244,15 @@ def koji_untag(config, message):
     package.
     """
     return message['topic'].endswith('buildsys.untag')
+
+
+@hint(topics=[_('buildsys.rpm.sign')])
+def koji_rpm_sign(config, message):
+    """ Packages are gpg signed in koji.
+
+    This rule lets through messages that get published when the `koji build
+    system <http://koji.fedoraproject.org>`_ imports the gpg signature of an
+    rpm.  This is done *en masse* by the `sigul signing server
+    <https://fedorahosted.org/sigul>`_.
+    """
+    return message['topic'].endswith('buildsys.rpm.sign')
