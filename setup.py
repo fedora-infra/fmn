@@ -39,7 +39,7 @@ tests_require = [
 
 setup(
     name='fmn.lib',
-    version='0.4.4',
+    version='0.4.5',
     description='Internal API components and model for Fedora Notifications',
     long_description=get_description(),
     author='Ralph Bean',
