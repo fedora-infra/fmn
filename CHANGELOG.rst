@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.4.5
+-----
+
+- Add a new rule for the new koji rpm sign message. `6790673fb <https://github.com/fedora-infra/fmn.rules/commit/6790673fb3a1699d633f10b9c22ea192bc9d2c5c>`_
+- Merge pull request #36 from fedora-infra/feature/rpm-sign `e360a3df4 <https://github.com/fedora-infra/fmn.rules/commit/e360a3df476296a8edd6b82860c18e07da448367>`_
+
 0.4.4
 -----
 
