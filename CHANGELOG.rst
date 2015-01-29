@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.4.5
+-----
+
+- Add koji_rpm_sign to the ignored defaults. `5cb542988 <https://github.com/fedora-infra/fmn.lib/commit/5cb542988a0d5bf16da740af6ba829eba895050d>`_
+- Merge pull request #34 from fedora-infra/feature/rpm-sign `8b1b3c8a9 <https://github.com/fedora-infra/fmn.lib/commit/8b1b3c8a92fdb200209f5ef6adb82fbb8bf8cbf8>`_
+
 0.4.4
 -----
 
