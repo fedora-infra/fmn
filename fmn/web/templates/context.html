@@ -167,13 +167,13 @@
       <div class="panel-body">
         {% if confirmation %}
         <div class="alert alert-{{ {'pending': 'info', 'valid': 'info', 'accepted': 'success', 'rejected': 'danger', 'invalid': 'warning'}[confirmation.status] }}">
-          <p><strong>{{confirmation.status}}</strong> Your confirmation for
+          <p>Your {{ context.detail_name }} for
           {% if context.name == "android" %}
           {{confirmation.detail_value[0:30]}}...
           {% else %}
           {{confirmation.detail_value}}
           {% endif %}
-          is {{confirmation.status}}.
+          is <strong>{{confirmation.status}}</strong>.
           {% if confirmation.status in ["pending", "valid"] %}
           You should be contacted soon with confirmation details via {{context.name}}.
           {% endif %}
