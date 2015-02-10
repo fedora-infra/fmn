@@ -1,5 +1,5 @@
 import socket
-hostname = socket.gethostname().split('.')[-1]
+hostname = socket.gethostname().split('.')[0]
 
 
 config = {
