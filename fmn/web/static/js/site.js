@@ -72,7 +72,11 @@ var examples_success = function(data, status, jqXHR) {
 
 var examples_error = function(jqXHR, status, errorThrown) {
     data = jqXHR.responseJSON;
-    $('#examples-container .lead').html(data.reason);
+    if (data === undefined) {
+        $('#examples-container .lead').html("Unknown error getting examples.");
+    } else {
+        $('#examples-container .lead').html(data.reason);
+    }
     if (data.furthermore != undefined) {
         $('#examples-container').append('<p>' + data.furthermore + '</p>');
     }
