@@ -32,7 +32,8 @@ class EmailBackend(BaseBackend):
         self.mailserver = self.config['fmn.email.mailserver']
         self.from_address = self.config['fmn.email.from_address']
 
-    def send_mail(self, session, recipient, subject, content):
+    def send_mail(self, session, recipient, subject, content,
+                  topics=None, categories=None, usernames=None, packages=None):
         self.log.debug("Sending email")
 
         if 'email address' not in recipient:
@@ -46,6 +47,16 @@ class EmailBackend(BaseBackend):
         email_message = email.Message.Message()
         email_message.add_header('To', to_bytes(recipient['email address']))
         email_message.add_header('From', to_bytes(self.from_address))
+
+        # Assemble a menagerie of possibly useful headers
+        for topic in topics or []:
+            email_message.add_header('X-Fedmsg-Topic', to_bytes(topic))
+        for category in categories or []:
+            email_message.add_header('X-Fedmsg-Category', to_bytes(category))
+        for username in usernames or []:
+            email_message.add_header('X-Fedmsg-Username', to_bytes(username))
+        for package in packages or []:
+            email_message.add_header('X-Fedmsg-Package', to_bytes(package))
 
         subject_prefix = self.config.get('fmn.email.subject_prefix', '')
         if subject_prefix:
@@ -82,11 +93,18 @@ class EmailBackend(BaseBackend):
         self.log.debug("Email sent")
 
     def handle(self, session, recipient, msg):
+        topic = msg['topic']
+        category = topic.split('.')[3]
+
         link = fedmsg.meta.msg2link(msg, **self.config) or u''
         content = fedmsg.meta.msg2long_form(msg, **self.config) or u''
         subject = fedmsg.meta.msg2subtitle(msg, **self.config) or u''
 
-        self.send_mail(session, recipient, subject, content + "\n\t" + link)
+        usernames = fedmsg.meta.msg2usernames(msg, **self.config)
+        packages = fedmsg.meta.msg2packages(msg, **self.config)
+
+        self.send_mail(session, recipient, subject, content + "\n\t" + link,
+                       [topic], [category], usernames, packages)
 
     def handle_batch(self, session, recipient, queued_messages):
         def _format_line(msg):
@@ -101,7 +119,19 @@ class EmailBackend(BaseBackend):
             _format_line(queued_message.message)
             for queued_message in queued_messages])
 
-        self.send_mail(session, recipient, subject, content)
+        topics = set([q.message['topic'] for q in queued_messages])
+        categories = set([topic.split('.')[3] for topic in topics])
+
+        squash = lambda items: reduce(set.union, items, set())
+        usernames = squash([
+            fedmsg.meta.msg2usernames(q.message, **self.config)
+            for q in queued_messages])
+        packages = squash([
+            fedmsg.meta.msg2packages(q.message, **self.config)
+            for q in queued_messages])
+
+        self.send_mail(session, recipient, subject, content,
+                       topics, categories, usernames, packages)
 
 
     def handle_confirmation(self, session, confirmation):
