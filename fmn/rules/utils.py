@@ -1,7 +1,8 @@
 """ Fedora Notifications pkgdb client """
 
-import json
 import logging
+import time
+
 import requests
 import requests.exceptions
 
@@ -132,6 +133,7 @@ def invalidate_cache_for(config, fn, arg):
 
 def _get_pkgdb2_packages_for(config, username):
     log.debug("Requesting pkgdb2 packages for user %r" % username)
+    start = time.time()
 
     default = 'https://admin.fedoraproject.org/pkgdb/api'
     base = config.get('fmn.rules.utils.pkgdb_url', default)
@@ -148,7 +150,7 @@ def _get_pkgdb2_packages_for(config, username):
 
     packages_of_interest = data['point of contact'] + data['co-maintained']
     packages_of_interest = set([p['name'] for p in packages_of_interest])
-    log.debug("done talking with pkgdb2 for now.")
+    log.debug("done talking with pkgdb2 for now.  %0.2fs", time.time() - start)
     return packages_of_interest
 
 
@@ -164,7 +166,7 @@ def get_user_of_group(config, fas, groupname):
     '''
 
     if not hasattr(_cache, 'backend'):
-        cache.configure(**config['fmn.rules.cache'])
+        _cache.configure(**config['fmn.rules.cache'])
 
     key = cache_key_generator(get_user_of_group, groupname)
     creator = lambda: fas.group_members(groupname)
@@ -181,7 +183,7 @@ def get_groups_of_user(config, fas, username):
     '''
 
     if not hasattr(_cache, 'backend'):
-        cache.configure(**config['fmn.rules.cache'])
+        _cache.configure(**config['fmn.rules.cache'])
 
     key = cache_key_generator(get_groups_of_user, username)
 

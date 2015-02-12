@@ -1,6 +1,18 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['ansible'])
+def all_ansible(config, message):
+    """ An ansible action from Fedora-Infra
+
+    The `Fedora Infrastructure team
+    <https://fedoraproject.org/wiki/Infrastructure>`_ uses `ansible
+    <http://ansibleworks.com>`_ to manage resources and deploy services.
+    This rule will let through messages *all* the messages related to ansible.
+    """
+    return '.ansible.' in message['topic']
+
+
 @hint(topics=[_('ansible.playbook.complete')])
 def playbook_complete(config, message):
     """ Fedora-infra playbook runs finishing
