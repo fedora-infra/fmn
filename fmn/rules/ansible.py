@@ -1,6 +1,7 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(categories=['ansible'])
 def all_ansible(config, message):
     """ An ansible action from Fedora-Infra
 
