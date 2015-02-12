@@ -1,11 +1,20 @@
 # Generic rules for FMN
-import re
 
 import fedmsg
 import fedmsg.encoding
 
 import fmn.rules.utils
 from fmn.lib.hinting import hint
+
+
+import logging
+log = logging.getLogger('fedmsg')
+
+try:
+    import re2 as re
+except ImportError:
+    log.warning("Couldn't import the 're2' module.")
+    import re
 
 
 def user_filter(config, message, fasnick=None, *args, **kw):
