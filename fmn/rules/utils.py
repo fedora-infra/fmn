@@ -163,7 +163,7 @@ def get_user_of_group(config, fas, groupname):
     '''
 
     if not hasattr(_cache, 'backend'):
-        cache.configure(**config['fmn.rules.cache'])
+        _cache.configure(**config['fmn.rules.cache'])
 
     key = cache_key_generator(get_user_of_group, groupname)
     creator = lambda: fas.group_members(groupname)
@@ -180,7 +180,7 @@ def get_groups_of_user(config, fas, username):
     '''
 
     if not hasattr(_cache, 'backend'):
-        cache.configure(**config['fmn.rules.cache'])
+        _cache.configure(**config['fmn.rules.cache'])
 
     key = cache_key_generator(get_groups_of_user, username)
 
