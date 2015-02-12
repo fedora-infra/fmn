@@ -1,6 +1,18 @@
 Changelog
 =========
 
+0.4.5
+-----
+
+- Randomize preference list per-thread. `2aa92ed0d <https://github.com/fedora-infra/fmn.consumer/commit/2aa92ed0dd8004df33b3c6de62b047caa895f96a>`_
+- Merge pull request #43 from fedora-infra/feature/randomize `fab6f4dd5 <https://github.com/fedora-infra/fmn.consumer/commit/fab6f4dd54b0cc58546cff8c83eab97cbbbdbb94>`_
+- Use the first portion of the hostname here. `79ada97ae <https://github.com/fedora-infra/fmn.consumer/commit/79ada97ae9560ea1ba424c22cef76e52114d883e>`_
+- Add a zoo of X-Fedmsg-* headers to email messages. `1b5822dd4 <https://github.com/fedora-infra/fmn.consumer/commit/1b5822dd4079fc714a98d8487c742a39dc8c4f4f>`_
+- Merge pull request #45 from fedora-infra/feature/fedmsg-email-headers `025fa1667 <https://github.com/fedora-infra/fmn.consumer/commit/025fa1667304077d22bc59498f236247e52e54d0>`_
+- Drop junk suffixes and add some performance debugging. `9f7a1f3aa <https://github.com/fedora-infra/fmn.consumer/commit/9f7a1f3aaab0f43af3a3c9551a62b019499df90b>`_
+- Merge pull request #46 from fedora-infra/feature/debugging `89ae2c441 <https://github.com/fedora-infra/fmn.consumer/commit/89ae2c4418d64f95cad9d22cd23df2726a72b0d7>`_
+- Also junk. `5d62ff231 <https://github.com/fedora-infra/fmn.consumer/commit/5d62ff231a917dd673379b43621941a900bcf4ed>`_
+
 0.4.4
 -----
 
