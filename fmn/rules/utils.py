@@ -1,6 +1,5 @@
 """ Fedora Notifications pkgdb client """
 
-import json
 import logging
 import requests
 import requests.exceptions
