@@ -12,6 +12,7 @@ log = logging.getLogger('fedmsg')
 
 try:
     import re2 as re
+    re.set_fallback_notification(re.FALLBACK_WARNING)
 except ImportError:
     log.warning("Couldn't import the 're2' module.")
     import re
