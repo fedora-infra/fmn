@@ -1,6 +1,20 @@
 Changelog
 =========
 
+0.4.6
+-----
+
+- Use re2 if available. `60d4e2293 <https://github.com/fedora-infra/fmn.rules/commit/60d4e2293483dff8ab2b000ef6d1a1bf1bbfe4d9>`_
+- Add a filter to get all messages related to ansible `4313a044b <https://github.com/fedora-infra/fmn.rules/commit/4313a044b2fc064213cb1f24ff5dd54b2a2bec35>`_
+- Merge pull request #37 from fedora-infra/feature/use-re2-if-available `aa13a468e <https://github.com/fedora-infra/fmn.rules/commit/aa13a468e121f395ad46ee8e45797c4bd3cd184b>`_
+- Warn if RE2 falls back. `8f5af8615 <https://github.com/fedora-infra/fmn.rules/commit/8f5af861578db48ad3342d7892e7b05c6d4f4c1c>`_
+- Remove unused import. `fc37e1dfd <https://github.com/fedora-infra/fmn.rules/commit/fc37e1dfd5bf0a1a7eb957ccac6b42526ca6b2aa>`_
+- Typofix. `b07f8e2a7 <https://github.com/fedora-infra/fmn.rules/commit/b07f8e2a7507f37a988bd052f71fa9501f0345b8>`_
+- Log how long pkgdb2 queries take. `38c18657c <https://github.com/fedora-infra/fmn.rules/commit/38c18657c6be9ea217dc41c1a825dd88df92e64b>`_
+- Add a hint to the rule matching all ansible messages `e7ce96aa6 <https://github.com/fedora-infra/fmn.rules/commit/e7ce96aa627bd1c3333c0927d3a72522435b43ee>`_
+- Merge pull request #38 from fedora-infra/ansible_all `1dad3176f <https://github.com/fedora-infra/fmn.rules/commit/1dad3176fc6c7969b03e2055761e67613e2315ea>`_
+- Merge branch 'develop' of github.com:fedora-infra/fmn.rules into develop `68e5f0fbd <https://github.com/fedora-infra/fmn.rules/commit/68e5f0fbddd097716e61a60f8f004ab1daaadda2>`_
+
 0.4.5
 -----
 
