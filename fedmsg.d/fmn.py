@@ -12,6 +12,7 @@ config = {
         '.buildsys.tag',
         '.buildsys.untag',
         '.buildsys.repo.init',
+        '.buildsys.repo.done',
     ],
 
     # Some configuration for the rule processors
