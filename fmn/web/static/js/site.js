@@ -14,13 +14,6 @@ var load_examples = function(page, endtime) {
 var examples_success = function(data, status, jqXHR) {
     var stopping = false;
     if (data.results.length == 0) {
-
-        // Animate some dots while we search
-        $('#examples-container .lead').append('.');
-        var title = $('#examples-container .lead').html();
-        if (title.match('\.\.\.\.\.$') == '.....') {
-            $('#examples-container .lead').html(examples_loading_message);
-        }
         load_examples(data.next_page, data.endtime);
     } else {
         $('#examples-container .lead').html(
