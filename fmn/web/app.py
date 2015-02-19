@@ -54,6 +54,10 @@ if not db_url:
 
 fedmsg.meta.make_processors(**fedmsg_config)
 
+# Long, long ago
+# http://threebean.org/blog/datanommer-and-fedmsg-activity/
+before_fedmsg = datetime.datetime(2012, 10, 8)
+
 valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
 # Pick out the submodules so we can group rules nicely in the UI
@@ -505,11 +509,10 @@ def _get_filter(openid, context, filter_id):
     return filter
 
 
-@app.route('/<not_reserved:openid>/<context>/<int:filter_id>/ex/<int:page>')
-@app.route('/<not_reserved:openid>/<context>/<int:filter_id>/ex/<int:page>')
+@app.route('/<not_reserved:openid>/<context>/<int:filter_id>/ex/<int:page>/<int:endtime>')
 @api_method
 @login_required
-def example_messages(openid, context, filter_id, page):
+def example_messages(openid, context, filter_id, page, endtime):
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         flask.abort(403)
 
@@ -530,10 +533,20 @@ def example_messages(openid, context, filter_id, page):
     # Now, connect to datanommer and get the latest bazillion messages
     # (adjusting by any hinting the rules we're evalulating might provide).
     bazillion = 400
+
+    # Search in two month windows (to make things faster)
+    delta = datetime.timedelta(days=60)
+    end = datetime.datetime.fromtimestamp(endtime)
+    if end < before_fedmsg:
+        raise APIError(404, dict(
+            reason="No matching messages could be found.",
+            furthermore="",
+        ))
+
     try:
         total, pages, messages = datanommer.models.Message.grep(
-            start=datetime.datetime.fromtimestamp(1),
-            end=datetime.datetime.now(),
+            start=end-delta,
+            end=end,
             rows_per_page=bazillion,
             page=page,
             order='desc',
@@ -573,10 +586,14 @@ def example_messages(openid, context, filter_id, page):
 
     next_page = page + 1
     if page > pages:
-        next_page = None
+        # If we ran out of pages, then shift to the next time window
+        next_page = 1
+        endtime = endtime - delta.total_seconds()
+
     return dict(
         results=results,
         next_page=next_page,
+        endtime=endtime,
     )
 
 
