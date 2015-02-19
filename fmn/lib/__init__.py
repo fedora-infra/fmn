@@ -21,7 +21,7 @@ except ImportError:
 log = logging.getLogger(__name__)
 
 irc_regex = r'[a-zA-Z_\-\[\]\\^{}|`][a-zA-Z0-9_\-\[\]\\^{}|`]*'
-email_regex = r'^([a-zA-Z0-9_\-\.\+]+)@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$'
+email_regex = r'^([a-zA-Z0-9_\-\.\+]+)@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
 gcm_regex = r'^[\w-]+$'
 
 
