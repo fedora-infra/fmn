@@ -1,11 +1,11 @@
 var examples_loading_message = "Searching for example messages that match this filter <img src='../../../static/img/spinner.gif'/>";
 
-var load_examples = function(page) {
+var load_examples = function(page, endtime) {
     // First, destroy the more button if there is one.
     $('#more-button').remove();
 
     // Then, get the next page of data from the API (relative url)..
-    $.ajax("ex/" + page, {
+    $.ajax("ex/" + page + "/" + endtime, {
         success: examples_success,
         error: examples_error,
     });
@@ -14,14 +14,7 @@ var load_examples = function(page) {
 var examples_success = function(data, status, jqXHR) {
     var stopping = false;
     if (data.results.length == 0) {
-
-        // Animate some dots while we search
-        $('#examples-container .lead').append('.');
-        var title = $('#examples-container .lead').html();
-        if (title.match('\.\.\.\.\.$') == '.....') {
-            $('#examples-container .lead').html(examples_loading_message);
-        }
-        load_examples(data.next_page);
+        load_examples(data.next_page, data.endtime);
     } else {
         $('#examples-container .lead').html(
             "The following messages would have matched this filter");
@@ -59,7 +52,7 @@ var examples_success = function(data, status, jqXHR) {
     if (stopping) {
         var button = '<div id="more-button">' +
             '<button class="btn btn-default btn-lg center-block" ' +
-            'onclick="javascript:load_examples(' + data.next_page + ');">' +
+            'onclick="javascript:load_examples(' + data.next_page + ', ' + data.endtime + ');">' +
             '<span class="glyphicon glyphicon-cloud-download"></span>' +
             ' tap for more...' +
             '</button>' +
@@ -84,10 +77,12 @@ var examples_error = function(jqXHR, status, errorThrown) {
 }
 
 $(document).ready(function() {
-    // Kick it off, but only if we're on the right page.
+    // Kick it off, but only if we're on the right page and there are rules.
+    var rules = $("#rules");
     var container = $('#examples-container');
-    if (container.length > 0) {
+    if (container.length > 0 && rules.children().length > 0) {
         $('#examples-container .lead').html(examples_loading_message);
-        load_examples(1);
+        var now = Math.floor(new Date().getTime() / 1000.0);
+        load_examples(1, now);
     }
 });
