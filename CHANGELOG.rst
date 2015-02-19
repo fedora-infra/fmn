@@ -1,6 +1,23 @@
 Changelog
 =========
 
+0.4.4
+-----
+
+- Remove old no-longer-used logos. `08a14f5d5 <https://github.com/fedora-infra/fmn.web/commit/08a14f5d5928c6b2ba2a7569c776d7172793c014>`_
+- Spread the spinner.gif disease. `d04e8b160 <https://github.com/fedora-infra/fmn.web/commit/d04e8b160ea3a8896c5871ab459173a9767c16eb>`_
+- Indicate to users that they should check their email. `345f05cb6 <https://github.com/fedora-infra/fmn.web/commit/345f05cb6f5ffffd1752aa2477d6ffe108cbf22d>`_
+- Move **text** around for readability. `0a1c0a2c1 <https://github.com/fedora-infra/fmn.web/commit/0a1c0a2c1a833fa3d04005e9478f6aca1eb6d674>`_
+- Merge pull request #42 from fedora-infra/feature/ux-flow `a56ae1498 <https://github.com/fedora-infra/fmn.web/commit/a56ae149852f24227a695b969d36b7996ea27864>`_
+- Update Reset button intro text. `61e3e4397 <https://github.com/fedora-infra/fmn.web/commit/61e3e4397406f433594bb68f6eec84e9235719bc>`_
+- Merge pull request #43 from fedora-infra/feature/text-update `6861098e7 <https://github.com/fedora-infra/fmn.web/commit/6861098e74bfc2b09fc3dfe36169cdac180c923a>`_
+- Use the first portion of the hostname here. `a59f4200c <https://github.com/fedora-infra/fmn.web/commit/a59f4200cea462c1d4de813be82088f2a4c6acae>`_
+- Handle unhandled errors. `6f30d6b3a <https://github.com/fedora-infra/fmn.web/commit/6f30d6b3a178d80b80ed292f36fff7465a10651e>`_
+- Merge pull request #44 from fedora-infra/feature/js-error-handling `3055def7c <https://github.com/fedora-infra/fmn.web/commit/3055def7cc01d88daed60cb433e5518ce7d18598>`_
+- Break up searching for examples into 'time windows'. `395fdba8e <https://github.com/fedora-infra/fmn.web/commit/395fdba8ea49f5db64853458197f4618319a115b>`_
+- Remove animated dots now that we have spinner.gif. `d438121e2 <https://github.com/fedora-infra/fmn.web/commit/d438121e273f97a587383a7eff9eb01626a0eb28>`_
+- Merge pull request #45 from fedora-infra/feature/faster-examples `d5cf8e93d <https://github.com/fedora-infra/fmn.web/commit/d5cf8e93d50b6efee1126674e15b0ec701c7630e>`_
+
 0.4.3
 -----
 
