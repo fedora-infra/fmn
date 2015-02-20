@@ -18,6 +18,7 @@ except ImportError:
     import re
 
 
+@hint(callable=lambda _, fasnick: dict(usernames=[fasnick]))
 def user_filter(config, message, fasnick=None, *args, **kw):
     """ A particular user
 
@@ -30,6 +31,8 @@ def user_filter(config, message, fasnick=None, *args, **kw):
         return fasnick in fedmsg.meta.msg2usernames(message, **config)
 
 
+@hint(callable=lambda _, fasnick: dict(not_usernames=[fasnick]),
+      invertible=False)
 def not_user_filter(config, message, fasnick=None, *args, **kw):
     """ Everything except a particular user
 
@@ -51,6 +54,12 @@ def not_user_filter(config, message, fasnick=None, *args, **kw):
     return valid
 
 
+def _user_package_filter_hint(config, fasnick):
+    packages = fmn.rules.utils.get_packages_of_user(config, fasnick)
+    return dict(packages=packages)
+
+
+@hint(callable=_user_package_filter_hint)
 def user_package_filter(config, message, fasnick=None, *args, **kw):
     """ A particular user's packages
 
@@ -73,6 +82,7 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
     return False
 
 
+@hint(callable=lambda _, fasnick: dict(packages=[package]))
 def package_filter(config, message, package=None, *args, **kw):
     """ A particular package
 
@@ -85,6 +95,7 @@ def package_filter(config, message, package=None, *args, **kw):
         return package in fedmsg.meta.msg2packages(message, **config)
 
 
+# Can't hint this one.  Can't pass a regex on to postgres
 def package_regex_filter(config, message, pattern=None, *args, **kw):
     """ All packages matching a regular expression
 
@@ -100,6 +111,7 @@ def package_regex_filter(config, message, pattern=None, *args, **kw):
         return any([regex.search(package) for package in packages])
 
 
+# Can't hint this one.  Can't pass a regex on to postgres
 def regex_filter(config, message, pattern=None, *args, **kw):
     """ All messages matching a regular expression
 
