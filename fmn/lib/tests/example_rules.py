@@ -20,7 +20,7 @@ def hint_masked_rule(config, message, argument1):
     return True
 
 
-def _func(argument1):
+def _func(config, argument1):
     return {'the-hint-is': [argument1]}
 
 

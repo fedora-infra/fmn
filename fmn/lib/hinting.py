@@ -43,7 +43,7 @@ def prefixed(topic, prefix='org.fedoraproject'):
     return '.'.join([prefix, config['environment'], topic])
 
 
-def gather_hinting(filter, valid_paths):
+def gather_hinting(config, filter, valid_paths):
     """ Construct hint arguments for datanommer from a filter. """
 
     hinting = collections.defaultdict(list)
@@ -52,7 +52,7 @@ def gather_hinting(filter, valid_paths):
         info = valid_paths[root][name]
 
         if info['hints-callable']:
-            result = info['hints-callable'](**rule.arguments)
+            result = info['hints-callable'](config=config, **rule.arguments)
             for key, values in result.items():
                 hinting[key].extend(values)
 

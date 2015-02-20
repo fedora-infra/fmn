@@ -33,5 +33,6 @@ class TestHintDecoration(fmn.lib.tests.Base):
 
         filter_obj = MockFilter()
 
-        hints = fmn.lib.hinting.gather_hinting(filter_obj, self.valid_paths)
+        hints = fmn.lib.hinting.gather_hinting(
+            self.config, filter_obj, self.valid_paths)
         eq_(hints, {'the-hint-is': ['cowabunga']})
