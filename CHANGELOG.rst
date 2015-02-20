@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.4.7
+-----
+
+- Add new required argument to gather_hinting. `317543c64 <https://github.com/fedora-infra/fmn.web/commit/317543c6457f1ee3fd86f14939c70567ebba4478>`_
+- Merge pull request #46 from fedora-infra/feature/callable-hinting `22dd83fb7 <https://github.com/fedora-infra/fmn.web/commit/22dd83fb780470e76574459aeb78b39eca680bdc>`_
+
 0.4.4
 -----
 
