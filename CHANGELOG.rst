@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.4.7
+-----
+
+- Apply new callable hinting. `aa191dfdd <https://github.com/fedora-infra/fmn.rules/commit/aa191dfddbf1aeb9e80c268ae488ffb4457c9ea2>`_
+- The config argument needs to be named explicitly. `0ff84ddb6 <https://github.com/fedora-infra/fmn.rules/commit/0ff84ddb6b5835db5b038caff501546f3f57ee3d>`_
+- Datanommer's `grep` method is expecting `users` `c8974e756 <https://github.com/fedora-infra/fmn.rules/commit/c8974e75685a5984f17694de65ae4e15e808e444>`_
+- Merge pull request #39 from fedora-infra/feature/callable-hinting `a765b9228 <https://github.com/fedora-infra/fmn.rules/commit/a765b9228ec485500ebbe7229aab60385b524fdc>`_
+
 0.4.6
 -----
 
