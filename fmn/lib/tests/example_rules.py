@@ -18,3 +18,12 @@ def hint_masked_rule(config, message, argument1):
     For real, it is a docstring.
     """
     return True
+
+
+def _func(config, argument1):
+    return {'the-hint-is': [argument1]}
+
+
+@fmn.lib.hinting.hint(callable=_func)
+def callable_hint_masked_rule(config, message, argument1):
+    return True

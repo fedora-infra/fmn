@@ -20,7 +20,7 @@ import decorator
 import fedmsg.config
 
 
-def hint(invertible=True, **hints):
+def hint(invertible=True, callable=None, **hints):
     """ A decorator that can optionally hang datanommer hints on a rule. """
 
     @decorator.decorator
@@ -32,6 +32,7 @@ def hint(invertible=True, **hints):
         # Hang hints on the wrapped function.
         wrapped.hints = hints
         wrapped.hinting_invertible = invertible
+        wrapped.hinting_callable = callable
         return wrapped
 
     return wrapper_wrapper
@@ -42,13 +43,19 @@ def prefixed(topic, prefix='org.fedoraproject'):
     return '.'.join([prefix, config['environment'], topic])
 
 
-def gather_hinting(filter, valid_paths):
+def gather_hinting(config, filter, valid_paths):
     """ Construct hint arguments for datanommer from a filter. """
 
     hinting = collections.defaultdict(list)
     for rule in filter.rules:
         root, name = rule.code_path.split(':', 1)
         info = valid_paths[root][name]
+
+        if info['hints-callable']:
+            result = info['hints-callable'](config=config, **rule.arguments)
+            for key, values in result.items():
+                hinting[key].extend(values)
+
         for key, value in info['datanommer-hints'].items():
 
             # If the rule is inverted, but the hint is not invertible, then
