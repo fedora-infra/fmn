@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.4.7
+-----
+
+- Allow longer email TLDs. `1fda391ee <https://github.com/fedora-infra/fmn.lib/commit/1fda391ee21dbf2bbdf85296ef24e29bff9aad27>`_
+- Introduce callable hints. `f3ab3d983 <https://github.com/fedora-infra/fmn.lib/commit/f3ab3d983ff71092fa5bbbc333776626cb7eeb98>`_
+- Make that callable accept the config (so we can access caches, lookup packages of a packager, etc). `764047460 <https://github.com/fedora-infra/fmn.lib/commit/764047460fe5b29bfcaaf3e657d09c9ebad6c8c9>`_
+- Merge pull request #35 from fedora-infra/feature/callable-hinting `1a6a8339b <https://github.com/fedora-infra/fmn.lib/commit/1a6a8339b06d4d2d244469acf7dae08a953f0fe9>`_
+
 0.4.5
 -----
 
