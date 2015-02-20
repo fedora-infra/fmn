@@ -528,7 +528,8 @@ def example_messages(openid, context, filter_id, page, endtime):
 
     filter = pref.get_filter(SESSION, filter_id)
 
-    hinting = fmn.lib.hinting.gather_hinting(filter, valid_paths)
+    hinting = fmn.lib.hinting.gather_hinting(
+        fedmsg_config, filter, valid_paths)
 
     # Now, connect to datanommer and get the latest bazillion messages
     # (adjusting by any hinting the rules we're evalulating might provide).
