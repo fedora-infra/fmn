@@ -18,7 +18,7 @@ except ImportError:
     import re
 
 
-@hint(callable=lambda _, fasnick: dict(usernames=[fasnick]))
+@hint(callable=lambda config, fasnick: dict(usernames=[fasnick]))
 def user_filter(config, message, fasnick=None, *args, **kw):
     """ A particular user
 
@@ -31,7 +31,7 @@ def user_filter(config, message, fasnick=None, *args, **kw):
         return fasnick in fedmsg.meta.msg2usernames(message, **config)
 
 
-@hint(callable=lambda _, fasnick: dict(not_usernames=[fasnick]),
+@hint(callable=lambda config, fasnick: dict(not_usernames=[fasnick]),
       invertible=False)
 def not_user_filter(config, message, fasnick=None, *args, **kw):
     """ Everything except a particular user
@@ -82,7 +82,7 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
     return False
 
 
-@hint(callable=lambda _, fasnick: dict(packages=[package]))
+@hint(callable=lambda config, fasnick: dict(packages=[package]))
 def package_filter(config, message, package=None, *args, **kw):
     """ A particular package
 
