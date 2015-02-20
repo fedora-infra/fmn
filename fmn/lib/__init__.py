@@ -169,6 +169,7 @@ def load_rules(root='fmn.rules'):
             'args': inspect.getargspec(obj)[0],
             'datanommer-hints': getattr(obj, 'hints', {}),
             'hints-invertible': getattr(obj, 'hinting_invertible', True),
+            'hints-callable': getattr(obj, 'hinting_callable', None),
         }
 
     rules = OrderedDict(
