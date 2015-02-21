@@ -428,7 +428,9 @@ def context_json(openid, context):
         for rule in filter['rules']:
             prefix, key = rule['code_path'].split(':', 1)
             rule['info'] = copy.copy(valid_paths[prefix][key])
+            # Remove these.  They are not JSON-serializable.
             del rule['info']['func']
+            del rule['info']['hints-callable']
 
     return flask.jsonify(pref)
 
@@ -475,7 +477,9 @@ def filter_json(openid, context, filter_id):
     for rule in filter['rules']:
         prefix, key = rule['code_path'].split(':', 1)
         rule['info'] = copy.copy(valid_paths[prefix][key])
+        # Remove these.  They are not JSON-serializable.
         del rule['info']['func']
+        del rule['info']['hints-callable']
 
     return flask.jsonify(filter)
 
