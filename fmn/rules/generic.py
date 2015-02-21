@@ -44,7 +44,7 @@ def not_user_filter(config, message, fasnick=None, *args, **kw):
     if not fasnick:
         return False
 
-    fasnick = fasnick or [] and fasnick.split(',')
+    fasnick = (fasnick or []) and fasnick.split(',')
     valid = True
     for nick in fasnick:
         if nick.strip() in fedmsg.meta.msg2usernames(message, **config):
