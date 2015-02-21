@@ -19,6 +19,9 @@ import decorator
 
 import fedmsg.config
 
+import logging
+log = logging.getLogger('fmn.lib.hinting')
+
 
 def hint(invertible=True, callable=None, **hints):
     """ A decorator that can optionally hang datanommer hints on a rule. """
@@ -70,4 +73,5 @@ def gather_hinting(config, filter, valid_paths):
             # And tack it on.
             hinting[key] += value
 
+    log.debug('gathered hinting %r', hinting)
     return hinting
