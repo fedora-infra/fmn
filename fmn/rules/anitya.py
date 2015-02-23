@@ -1,6 +1,28 @@
 from fmn.lib.hinting import hint, prefixed as _
 
 
+@hint(topics=[_('anitya.project.version.update',
+                prefix='org.release-monitoring'), invertible=False])
+def anitya_unmapped_new_update(config, message):
+    """ New releases of upstream projects that have no mapping to Fedora
+
+    Adding this rule will let through events when new upstream releases are
+    detected, but only on upstream projects that have no mapping to Fedora
+    Packages.  This could be useful to you if you want to monitor
+    release-monitoring.org itself and watch for projects that might need help
+    adjusting their metadata.
+    """
+    if not anitya_new_update(config, message):
+        return False
+
+    for package in msg['msg']['message']['packages']:
+        if package['distro'] == 'Fedora':
+            return False
+
+    # If none of the packages were listed as Fedora, then this is unmapped.
+    return True
+
+
 @hint(categories=['anitya'])
 def anitya_catchall(config, message):
     """ All release-monitoring.org events
