@@ -133,6 +133,7 @@ class IRCBackend(BaseBackend):
 
         self.list_commands = {
             'categories': self.subcmd_categories,
+            'rules': self.subcmd_rules,
         }
 
         reactor.connectTCP(
@@ -173,25 +174,50 @@ class IRCBackend(BaseBackend):
         if message.strip() == 'list':
             self.commands['default'](nick, message)
         else:
-            subcmd_string = message.split(None, 1)[1].lower()
+            subcmd_string = message.split(None, 2)[1].strip().lower()
             self.list_commands.get(subcmd_string,
                     self.commands['default'])(nick, message)
 
     def subcmd_categories(self, nick, message):
         self.log.info("CMD list categories:  %r sent us %r" % (nick, message))
+
+        subcmd_string = message.rsplit(None, 1)[1].lower()
+
         valid_paths = fmn.lib.load_rules(root="fmn.rules")
+        if subcmd_string.strip() == 'categories':
 
-        # Pick out the submodules so we can group rules nicely in the UI
-        # Order them alphabetically, except for 'generic' which comes first.
-        rule_types = list(set([
-            d[path]['submodule'] for _, d in valid_paths.items() for path in d
-        ]))
+            rule_types = list(set([
+                d[path]['submodule'] for _, d in valid_paths.items() for path in d
+            ]))
 
-        if rule_types:
-            self.send(nick, "The list of categories are:")
+            if rule_types:
+                self.send(nick, "The list of categories are:")
 
-        for rule_type in rule_types:
-            self.send(nick, "  %s" % rule_type)
+            for rule_type in rule_types:
+                self.send(nick, "  %s" % rule_type)
+        else:
+            self.commands['default'](nick, message)
+
+    def subcmd_rules(self, nick, message):
+        self.log.info("CMD list rules:  %r sent us %r" % (nick, message))
+
+        valid_paths = fmn.lib.load_rules(root="fmn.rules")
+        subcmd_string = message.rsplit(None, 1)[1].lower()
+
+        if subcmd_string.strip() == 'rules':
+            self.commands['default'](nick, message)
+            return
+
+        subcmd_exists = False
+        for root in valid_paths:
+            for path in valid_paths[root]:
+                if valid_paths[root][path]['submodule'] != subcmd_string:
+                    continue
+                self.send(nick, valid_paths[root][path]['title'])
+                subcmd_exists = True
+
+        if not subcmd_exists:
+            self.send(nick, "Not a valid category.")
 
     def cmd_help(self, nick, message):
         self.log.info("CMD help:  %r sent us %r" % (nick, message))
