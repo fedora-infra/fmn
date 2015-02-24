@@ -2,7 +2,7 @@ from fmn.lib.hinting import hint, prefixed as _
 
 
 @hint(topics=[_('anitya.project.version.update',
-                prefix='org.release-monitoring'), invertible=False])
+                prefix='org.release-monitoring')], invertible=False)
 def anitya_unmapped_new_update(config, message):
     """ New releases of upstream projects that have no mapping to Fedora
 
