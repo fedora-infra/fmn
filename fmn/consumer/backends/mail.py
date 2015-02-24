@@ -8,7 +8,7 @@ import smtplib
 import email
 
 
-confirmation_template = u"""
+CONFIRMATION_TEMPLATE = u"""
 {username} has requested that notifications be sent to this email address
 * To accept, visit this address:
   {acceptance_url}
@@ -141,7 +141,9 @@ class EmailBackend(BaseBackend):
         rejection_url = self.config['fmn.rejection_url'].format(
             secret=confirmation.secret)
 
-        content = confirmation_template.format(
+        template = self.config.get('fmn.mail_confirmation_template',
+                                   CONFIRMATION_TEMPLATE)
+        content = template.format(
             acceptance_url=acceptance_url,
             rejection_url=rejection_url,
             support_email=self.config['fmn.support_email'],
