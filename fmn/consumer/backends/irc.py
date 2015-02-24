@@ -26,6 +26,7 @@ HELP_TEMPLATE = """
 I am a notifications bot run by Fedora Infrastructure.  My commands are:
   'stop'  -- stops all messages
   'start' -- starts sending messages again
+  'list categories' -- list all the categories
   'help'  -- produces this help message
 You can update your preferences at {base_url}
 You can contact {support_email} if you have any concerns/issues/abuse.
@@ -125,8 +126,13 @@ class IRCBackend(BaseBackend):
         self.commands = {
             'start': self.cmd_start,
             'stop': self.cmd_stop,
+            'list': self.cmd_list,
             'help': self.cmd_help,
             'default': self.cmd_default,
+        }
+
+        self.list_commands = {
+            'categories': self.subcmd_categories,
         }
 
         reactor.connectTCP(
@@ -161,6 +167,31 @@ class IRCBackend(BaseBackend):
             self.send(nick, "OK")
         sess.commit()
         sess.close()
+
+    def cmd_list(self, nick, message):
+        self.log.info("CMD list:  %r sent us %r" % (nick, message))
+        if message.strip() == 'list':
+            self.commands['default'](nick, message)
+        else:
+            subcmd_string = message.split(None, 1)[1].lower()
+            self.list_commands.get(subcmd_string,
+                    self.commands['default'])(nick, message)
+
+    def subcmd_categories(self, nick, message):
+        self.log.info("CMD list categories:  %r sent us %r" % (nick, message))
+        valid_paths = fmn.lib.load_rules(root="fmn.rules")
+
+        # Pick out the submodules so we can group rules nicely in the UI
+        # Order them alphabetically, except for 'generic' which comes first.
+        rule_types = list(set([
+            d[path]['submodule'] for _, d in valid_paths.items() for path in d
+        ]))
+
+        if rule_types:
+            self.send(nick, "The list of categories are:")
+
+        for rule_type in rule_types:
+            self.send(nick, "  %s" % rule_type)
 
     def cmd_help(self, nick, message):
         self.log.info("CMD help:  %r sent us %r" % (nick, message))
