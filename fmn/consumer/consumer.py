@@ -4,6 +4,7 @@ import threading
 import time
 import random
 
+import fedora.client
 import fedmsg.consumers
 import fmn.lib
 import fmn.rules.utils
@@ -147,7 +148,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 log.info("Autocreating account for %r" % username)
                 openid = '%s.id.fedoraproject.org' % username
                 openid_url = 'https://%s.id.fedoraproject.org' % username
-                email = '%s@fedoraproject.org' % username
+                email = self.get_fas_email(self.hub.config, username)
                 user = fmn.lib.models.User.get_or_create(
                     session, openid=openid, openid_url=openid_url,
                     create_defaults=True, detail_values=dict(email=email),
@@ -228,8 +229,27 @@ def new_packager(topic, msg):
             return msg['msg']['user']
     return None
 
+
 def new_badges_user(topic, msg):
     """ Returns a username if the message is about a new fedbadges user. """
     if '.fedbadges.person.login.first' in topic:
         return msg['msg']['user']['username']
     return None
+
+
+def get_fas_email(config, username):
+    """ Return FAS email associated with a username.
+
+    We use this to try and get the right email for new autocreated users.
+    We used to just use $USERNAME@fp.o, but when first created most users don't
+    have that alias available yet.
+    """
+    try:
+        fas = fedora.client.AccountSystem(**config['fas_credentials'])
+        person = fas.person_by_username(username)
+        if person.email:
+            return person.email
+        raise ValueError("No email found: %r, %r" % (person.email, username))
+    except Exception:
+        log.exception("Failed to get FAS email for %r" % username)
+        return '%s@fedoraproject.org' % username
