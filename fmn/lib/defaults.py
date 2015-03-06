@@ -57,9 +57,6 @@ exclusion_username = [
     # Ignore all of my own tagger stuff
     'fedoratagger_catchall',
 
-    # Ignore all of my own anitya stuff
-    'anitya_catchall',
-
     # Ignore all of my own wiki stuff.
     'wiki_catchall',
 
@@ -186,6 +183,12 @@ exclusion_mutual = [
     # Go ahead and ignore all summershum messages by default.  @jwboyer
     # complained rightly https://github.com/fedora-infra/fmn/issues/27
     'summershum_catchall',
+
+    # Ignore all anitya stuff:
+    # - don't notify me about my own actions there
+    # - don't notify me about updates to my packages, because the-new-hotness
+    #   will already do that if I enabled monitoring of my packages in pkgdb
+    'anitya_catchall',
 ]
 
 
