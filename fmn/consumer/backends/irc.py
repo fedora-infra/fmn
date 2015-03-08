@@ -203,7 +203,7 @@ class IRCBackend(BaseBackend):
                 self.send(nick, "The list of categories are:")
 
             for rule_type in rule_types:
-                self.send(nick, "  -{rule_type}".format(rule_type=rule_type))
+                self.send(nick, "  - {rule_type}".format(rule_type=rule_type))
 
         else:
             self.commands['default'](nick, message)
@@ -223,7 +223,8 @@ class IRCBackend(BaseBackend):
             for path in valid_paths[root]:
                 if valid_paths[root][path]['submodule'] != subcmd_string:
                     continue
-                self.send(nick, valid_paths[root][path]['title'])
+                self.send(nick, '  - {title}'.format(
+                    title=valid_paths[root][path]['title']))
                 subcmd_exists = True
 
         if not subcmd_exists:
@@ -235,11 +236,11 @@ class IRCBackend(BaseBackend):
 
         filters = self.get_filters(sess, nick)
 
-        self.send(nick, 'You have {num_filter} rule filters'.format(
+        self.send(nick, 'You have {num_filter} rule filter(s)'.format(
             num_filter=len(filters)))
 
         for filtr in filters:
-            self.send(nick, ' -{filtr_name}'.format(filtr_name=filtr.name))
+            self.send(nick, '  - {filtr_name}'.format(filtr_name=filtr.name))
 
     def cmd_help(self, nick, message):
         self.log.info("CMD help:  %r sent us %r" % (nick, message))
