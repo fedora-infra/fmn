@@ -27,6 +27,7 @@ I am a notifications bot run by Fedora Infrastructure.  My commands are:
   'stop'  -- stops all messages
   'start' -- starts sending messages again
   'list categories' -- list all the categories
+  'list preferences' -- list all the preferences
   'help'  -- produces this help message
 You can update your preferences at {base_url}
 You can contact {support_email} if you have any concerns/issues/abuse.
@@ -134,6 +135,7 @@ class IRCBackend(BaseBackend):
         self.list_commands = {
             'categories': self.subcmd_categories,
             'rules': self.subcmd_rules,
+            'preferences': self.subcmd_preferences,
         }
 
         reactor.connectTCP(
@@ -142,6 +144,9 @@ class IRCBackend(BaseBackend):
             factory,
             timeout=self.timeout,
         )
+
+    def get_filters(self, session, detail_value):
+        return self.preference_for(session, detail_value).filters
 
     def send(self, nick, line):
         for client in self.clients:
@@ -161,6 +166,7 @@ class IRCBackend(BaseBackend):
     def cmd_stop(self, nick, message):
         self.log.info("CMD stop:  %r sent us %r" % (nick, message))
         sess = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
+
         if self.disabled_for(sess, nick):
             self.send(nick, "Messages already stopped.  Nothing to do.")
         else:
@@ -175,8 +181,10 @@ class IRCBackend(BaseBackend):
             self.commands['default'](nick, message)
         else:
             subcmd_string = message.split(None, 2)[1].strip().lower()
-            self.list_commands.get(subcmd_string,
-                    self.commands['default'])(nick, message)
+            self.list_commands.get(
+                subcmd_string,
+                self.commands['default']
+            )(nick, message)
 
     def subcmd_categories(self, nick, message):
         self.log.info("CMD list categories:  %r sent us %r" % (nick, message))
@@ -187,14 +195,16 @@ class IRCBackend(BaseBackend):
         if subcmd_string.strip() == 'categories':
 
             rule_types = list(set([
-                d[path]['submodule'] for _, d in valid_paths.items() for path in d
+                d[path]['submodule'] for _, d in valid_paths.items()
+                for path in d
             ]))
 
             if rule_types:
                 self.send(nick, "The list of categories are:")
 
             for rule_type in rule_types:
-                self.send(nick, "  %s" % rule_type)
+                self.send(nick, "  -{rule_type}".format(rule_type=rule_type))
+
         else:
             self.commands['default'](nick, message)
 
@@ -218,6 +228,18 @@ class IRCBackend(BaseBackend):
 
         if not subcmd_exists:
             self.send(nick, "Not a valid category.")
+
+    def subcmd_preferences(self, nick, message):
+        self.log.info("CMD stop:  %r sent us %r" % (nick, message))
+        sess = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
+
+        filters = self.get_filters(sess, nick)
+
+        self.send(nick, 'You have {num_filter} rule filters'.format(
+            num_filter=len(filters)))
+
+        for filtr in filters:
+            self.send(nick, ' -{filtr_name}'.format(filtr_name=filtr.name))
 
     def cmd_help(self, nick, message):
         self.log.info("CMD help:  %r sent us %r" % (nick, message))
