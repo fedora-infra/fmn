@@ -10,6 +10,7 @@ import twisted.internet.protocol
 import twisted.words.protocols.irc
 
 from twisted.internet import reactor
+from bleach import clean
 
 CONFIRMATION_TEMPLATE = """
 {username} has requested that notifications be sent to this nick
@@ -31,6 +32,11 @@ I am a notifications bot run by Fedora Infrastructure.  My commands are:
   'help'  -- produces this help message
 You can update your preferences at {base_url}
 You can contact {support_email} if you have any concerns/issues/abuse.
+"""
+
+rule_template = """
+ - {rule_title}
+   {rule_doc}
 """
 
 mirc_colors = {
@@ -135,7 +141,7 @@ class IRCBackend(BaseBackend):
         self.list_commands = {
             'categories': self.subcmd_categories,
             'rules': self.subcmd_rules,
-            'preferences': self.subcmd_preferences,
+            'filters': self.subcmd_filters,
         }
 
         reactor.connectTCP(
@@ -145,8 +151,8 @@ class IRCBackend(BaseBackend):
             timeout=self.timeout,
         )
 
-    def get_filters(self, session, detail_value):
-        return self.preference_for(session, detail_value).filters
+    def get_preference(self, session, detail_value):
+        return self.preference_for(session, detail_value)
 
     def send(self, nick, line):
         for client in self.clients:
@@ -189,9 +195,9 @@ class IRCBackend(BaseBackend):
     def subcmd_categories(self, nick, message):
         self.log.info("CMD list categories:  %r sent us %r" % (nick, message))
 
+        valid_paths = fmn.lib.load_rules(root="fmn.rules")
         subcmd_string = message.rsplit(None, 1)[1].lower()
 
-        valid_paths = fmn.lib.load_rules(root="fmn.rules")
         if subcmd_string.strip() == 'categories':
 
             rule_types = list(set([
@@ -218,29 +224,66 @@ class IRCBackend(BaseBackend):
             self.commands['default'](nick, message)
             return
 
-        subcmd_exists = False
+        valid_subcmd = False
         for root in valid_paths:
             for path in valid_paths[root]:
                 if valid_paths[root][path]['submodule'] != subcmd_string:
                     continue
                 self.send(nick, '  - {title}'.format(
                     title=valid_paths[root][path]['title']))
-                subcmd_exists = True
+                valid_subcmd = True
 
-        if not subcmd_exists:
+        if not valid_subcmd:
             self.send(nick, "Not a valid category.")
 
-    def subcmd_preferences(self, nick, message):
-        self.log.info("CMD stop:  %r sent us %r" % (nick, message))
+    def subcmd_filters(self, nick, message):
+        self.log.info("CMD preferences:  %r sent us %r" % (nick, message))
+
+        valid_paths = fmn.lib.load_rules(root="fmn.rules")
         sess = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
+        pref = self.get_preference(sess, nick)
+        subcmd_string = message.rsplit(None, 1)[1].lower()
 
-        filters = self.get_filters(sess, nick)
+        if subcmd_string.strip() == 'filters':
+            filters = pref.filters
 
-        self.send(nick, 'You have {num_filter} rule filter(s)'.format(
-            num_filter=len(filters)))
+            self.send(nick, 'You have {num_filter} rule filter(s)'.format(
+                num_filter=len(filters)))
 
-        for filtr in filters:
-            self.send(nick, '  - {filtr_name}'.format(filtr_name=filtr.name))
+            for filtr in filters:
+                self.send(nick, '  - {filtr_name}'.format(
+                    filtr_name=filtr.name)
+                )
+        else:
+            filtr = pref.get_filter_name(sess, subcmd_string)
+
+            if not filtr:
+                self.send(nick, 'Not a valid filter')
+                return
+
+            rules = filtr.rules
+            self.send(nick,
+                      '{num_rule} matching rules for this filter'.format(
+                        num_rule=len(rules)))
+
+            for rule in rules:
+                rule_title = rule.title(valid_paths)
+                rule_doc = clean(rule.doc(
+                                valid_paths,
+                                no_links=True
+                            ).replace('\n', ' '), strip=True)
+                self.send(nick, rule_template.format(
+                    rule_title=rule_title,
+                    rule_doc=rule_doc
+                ))
+
+                if rule.arguments:
+                    for key, value in rule.arguments.iteritems():
+                        self.send(nick, '   {key} - {value}'.format(
+                            key=key,
+                            value=value
+                        ))
+                self.send(nick, '-*'*10)
 
     def cmd_help(self, nick, message):
         self.log.info("CMD help:  %r sent us %r" % (nick, message))
