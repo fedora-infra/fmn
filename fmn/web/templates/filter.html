@@ -21,6 +21,15 @@
 
         <span>
         {% if filter.active %}
+          {% if filter.oneshot %}
+            <button type="submit" class="btn btn-primary"
+              name="method" value="disable-oneshot">
+              <span class="glyphicon glyphicon-repeat"></span>Disable one-shot</button>
+          {% else %}
+            <button type="submit" class="btn btn-info"
+              name="method" value="enable-oneshot">
+              <span class="glyphicon glyphicon-play-circle"></span>Make one-shot</button>
+          {% endif %}
         <button type="submit" class="btn btn-warning"
           name="method" value="disable">
           <span class="glyphicon glyphicon-remove"></span>Disable</button>

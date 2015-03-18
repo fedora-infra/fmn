@@ -106,6 +106,15 @@
           <input name="filter_name" id="filter_name" value="{{fltr.name}}" type="hidden">
           <span class="pull-right">
             {% if fltr.active %}
+              {% if fltr.oneshot %}
+                <button type="submit" name="method" value="disable-oneshot" class="btn btn-primary">
+                  <span class="glyphicon glyphicon-repeat"></span>
+                  Disable one-shot</button>
+              {% else %}
+                <button type="submit" name="method" value="enable-oneshot" class="btn btn-info">
+                  <span class="glyphicon glyphicon-play-circle"></span>
+                  Make one-shot</button>
+              {% endif %}
             <button type="submit" name="method" value="disable" class="btn btn-warning">
               <span class="glyphicon glyphicon-remove"></span>
               Disable this filter</button>
