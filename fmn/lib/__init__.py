@@ -51,6 +51,7 @@ def recipients(preferences, message, valid_paths, config):
                         context['detail_name']: detail_value,
                         'filter_name': filter['name'],
                         'filter_id': filter['id'],
+                        'filter_oneshot': filter['oneshot'],
                         'markup_messages': preference['markup_messages'],
                         'triggered_by_links': preference['triggered_by_links'],
                         'shorten_links': preference['shorten_links'],

@@ -318,6 +318,7 @@ class Filter(BASE):
     created_on = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
     name = sa.Column(sa.String(50))
     active = sa.Column(sa.Boolean, default=True, nullable=False)
+    oneshot = sa.Column(sa.Boolean, default=False, nullable=False)
 
     preference_id = sa.Column(
         sa.Integer,
@@ -329,7 +330,8 @@ class Filter(BASE):
             'id': self.id,
             'name': self.name,
             'created_on': self.created_on,
-            'rules': [r.__json__(reify=reify) for r in self.rules]
+            'rules': [r.__json__(reify=reify) for r in self.rules],
+            'oneshot': self.oneshot
         }
 
     def __repr__(self):
@@ -342,6 +344,16 @@ class Filter(BASE):
         session.flush()
         session.commit()
         return filter
+
+    def fired(self, session):
+        if self.oneshot:
+            self.active = False
+            session.flush()
+            session.commit()
+
+            pref = self.preference
+            if pref:
+                self.notify(pref.openid, pref.context_name, "filters")
 
     def add_rule(self, session, paths, rule, **kw):
         if isinstance(rule, basestring):
@@ -632,7 +644,13 @@ class Preference(BASE):
 
     def set_filter_active(self, session, filter_name, active):
         filter = self.get_filter_name(session, filter_name)
-        filter.active = active;
+        filter.active = active
+        session.commit()
+        self.notify(self.openid, self.context_name, "filters")
+
+    def set_filter_oneshot(self, session, filter_name, oneshot):
+        filter = self.get_filter_name(session, filter_name)
+        filter.oneshot = oneshot
         session.commit()
         self.notify(self.openid, self.context_name, "filters")
 
