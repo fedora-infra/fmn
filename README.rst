@@ -15,3 +15,9 @@ want to read through, like an `overview
 and some `development instructions
 <https://github.com/fedora-infra/fmn/#hacking>`_ to help you get set up and
 coding.
+
+To run the test suite, make sure you have `fmn.rules
+<https://github.com/fedora-infra/fmn.rules>`_ checked out.
+Then cd into fmn/lib/tests, and run nosetests.
+If you have fmn.rules installed in a virtual environment,
+make sure you also run nosetests from the same venv.
