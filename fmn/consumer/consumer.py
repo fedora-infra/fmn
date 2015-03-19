@@ -210,6 +210,11 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                     log.debug("    Queueing msg for digest")
                     fmn.lib.models.QueuedMessage.enqueue(
                         session, user, context, msg)
+                if ('filter_oneshot' in recipient
+                        and recipient['filter_oneshot']):
+                    log.debug("    Marking one-shot filter as fired")
+                    fltr = fmn.lib.models.Filter.get(recipient['filter_id'])
+                    fltr.fired(session)
 
         log.debug("Done.  %0.2fs %s %s",
                   time.time() - start, msg['msg_id'], msg['topic'])
