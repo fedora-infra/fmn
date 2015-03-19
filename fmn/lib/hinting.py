@@ -55,10 +55,20 @@ def gather_hinting(config, filter, valid_paths):
         info = valid_paths[root][name]
 
         if info['hints-callable']:
+            # Call the callable hint to get its values
             result = info['hints-callable'](config=config, **rule.arguments)
+
+            # If the rule is inverted, but the hint is not invertible, then
+            # there is no hinting we can provide.  Carry on.
+            if rule.negated and not info['hints-invertible']:
+                continue
+
             for key, values in result.items():
+                # Negate the hint if necessary
+                key = 'not_' + key if rule.negated else key
                 hinting[key].extend(values)
 
+        # Then, finish off with all the other ordinary, non-callable hints
         for key, value in info['datanommer-hints'].items():
 
             # If the rule is inverted, but the hint is not invertible, then
@@ -67,8 +77,7 @@ def gather_hinting(config, filter, valid_paths):
                 continue
 
             # Otherwise, construct the inverse hint if necessary
-            if rule.negated:
-                key = 'not_' + key
+            key = 'not_' + key if rule.negated else key
 
             # And tack it on.
             hinting[key] += value

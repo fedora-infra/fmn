@@ -27,6 +27,7 @@ class TestHintDecoration(fmn.lib.tests.Base):
             arguments = {
                 'argument1': 'cowabunga',
             }
+            negated = False
 
         class MockFilter(object):
             rules = [MockRule()]
@@ -36,3 +37,25 @@ class TestHintDecoration(fmn.lib.tests.Base):
         hints = fmn.lib.hinting.gather_hinting(
             self.config, filter_obj, self.valid_paths)
         eq_(hints, {'the-hint-is': ['cowabunga']})
+
+    def test_inverted_hint_callable(self):
+        rules = self.valid_paths['fmn.lib.tests.example_rules']
+        rule = rules['callable_hint_masked_rule']
+        eq_(len(rule['args']), 3)
+        eq_(rule['datanommer-hints'], {})
+
+        class MockRule(object):
+            code_path = 'fmn.lib.tests.example_rules:callable_hint_masked_rule'
+            arguments = {
+                'argument1': 'cowabunga',
+            }
+            negated = True
+
+        class MockFilter(object):
+            rules = [MockRule()]
+
+        filter_obj = MockFilter()
+
+        hints = fmn.lib.hinting.gather_hinting(
+            self.config, filter_obj, self.valid_paths)
+        eq_(hints, {'not_the-hint-is': ['cowabunga']})
