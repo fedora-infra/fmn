@@ -646,8 +646,11 @@ def handle_filter():
         raise APIError(403, dict(reason="%r is not %r" % (
             flask.g.auth.openid, openid
         )))
-    if method not in ['POST', 'DISABLE', 'ENABLE', 'DELETE']:
-        raise APIError(405, dict(reason="Only POST, ENABLE, DISABLE, and DELETE accepted"))
+    if method not in ['POST', 'DISABLE', 'ENABLE', 'DELETE',
+                      'ENABLE-ONESHOT', 'DISABLE-ONESHOT']:
+        raise APIError(405, dict(reason="Only POST, ENABLE, DISABLE, DELETE,"
+                                        " ENABLE-ONESHOT and DISABLE-ONESHOT"
+                                        " accepted"))
 
     user = fmn.lib.models.User.by_openid(SESSION, openid)
     if not user:
@@ -691,6 +694,20 @@ def handle_filter():
             )
         elif method == 'DELETE':
             pref.delete_filter(SESSION, filter_name)
+            next_url = flask.url_for(
+                'context',
+                openid=openid,
+                context=context,
+            )
+        elif method == 'DISABLE-ONESHOT':
+            pref.set_filter_oneshot(SESSION, filter_name, False)
+            next_url = flask.url_for(
+                'context',
+                openid=openid,
+                context=context,
+            )
+        elif method == 'ENABLE-ONESHOT':
+            pref.set_filter_oneshot(SESSION, filter_name, True)
             next_url = flask.url_for(
                 'context',
                 openid=openid,
