@@ -60,6 +60,21 @@ class TestBasics(fmn.lib.tests.Base):
             detail_name="registration id", icon="phone")
         eq_(len(fmn.lib.models.Context.all(self.sess)), 2)
 
+    def test_filter_oneshot(self):
+        filter = fmn.lib.models.Filter.create(self.sess, name="test filter")
+        filter.oneshot = True
+        eq_(filter.active, True)
+        eq_(filter.oneshot, True)
+        filter.fired(self.sess)
+        eq_(filter.active, False)
+
+        filter = fmn.lib.models.Filter.create(self.sess, name="test filter 2")
+        filter.oneshot = False
+        eq_(filter.active, True)
+        eq_(filter.oneshot, False)
+        filter.fired(self.sess)
+        eq_(filter.active, True)
+
 
 class TestPreferences(fmn.lib.tests.Base):
     def setUp(self):
