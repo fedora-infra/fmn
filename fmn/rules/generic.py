@@ -82,7 +82,7 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
     return False
 
 
-@hint(callable=lambda config, fasnick: dict(packages=[package]))
+@hint(callable=lambda config, package: dict(packages=[package]))
 def package_filter(config, message, package=None, *args, **kw):
     """ A particular package
 
