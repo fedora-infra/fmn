@@ -67,8 +67,7 @@ def gather_hinting(config, filter, valid_paths):
                 continue
 
             # Otherwise, construct the inverse hint if necessary
-            if rule.negated:
-                key = 'not_' + key
+            key = 'not_' + key if rule.negated else key
 
             # And tack it on.
             hinting[key] += value
