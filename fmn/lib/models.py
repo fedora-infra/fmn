@@ -300,6 +300,17 @@ class Rule(BASE):
         session.commit()
         return rule
 
+    def set_argument(self, session, key, value):
+        args = self.arguments
+        args[key] = value
+        self.arguments = args
+        session.flush()
+        session.commit()
+        self.notify(
+            self.filter.preference.openid,
+            self.filter.preference.context.name,
+            "filters")
+
     def title(self, valid_paths):
         root, name = self.code_path.split(':', 1)
         return valid_paths[root][name]['title']
@@ -354,6 +365,18 @@ class Filter(BASE):
             pref = self.preference
             if pref:
                 self.notify(pref.openid, pref.context_name, "filters")
+
+    def get_rule(self, session, code_path, **kw):
+        for r in self.rules:
+            if r.code_path == code_path:
+                return r
+        raise ValueError("No such rule found: %r" % code_path)
+
+    def has_rule(self, session, code_path, **kw):
+        for r in self.rules:
+            if r.code_path == code_path:
+                return True
+        return False
 
     def add_rule(self, session, paths, rule, **kw):
         if isinstance(rule, basestring):
