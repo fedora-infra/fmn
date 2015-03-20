@@ -55,6 +55,7 @@ def recipients(preferences, message, valid_paths, config):
                         'markup_messages': preference['markup_messages'],
                         'triggered_by_links': preference['triggered_by_links'],
                         'shorten_links': preference['shorten_links'],
+                        'verbose': preference['verbose'],
                     })
                 notified.add((user['openid'], context['name']))
                 break
