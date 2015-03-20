@@ -453,6 +453,7 @@ class Preference(BASE):
     markup_messages = sa.Column(sa.Boolean, default=False)
     triggered_by_links = sa.Column(sa.Boolean, default=False)
     shorten_links = sa.Column(sa.Boolean, default=False)
+    verbose = sa.Column(sa.Boolean, default=True)
 
     openid = sa.Column(
         sa.Text,
@@ -478,6 +479,7 @@ class Preference(BASE):
             'markup_messages': self.markup_messages,
             'triggered_by_links': self.triggered_by_links,
             'shorten_links': self.shorten_links,
+            'verbose': self.verbose,
             'enabled': self.enabled,
             'context': self.context.__json__(reify=reify),
             'user': self.user.__json__(reify=reify),
@@ -533,6 +535,12 @@ class Preference(BASE):
         session.add(self)
         session.commit()
         self.notify(self.openid, self.context_name, "shorten_links")
+
+    def set_verbose(self, session, value):
+        self.verbose = value
+        session.add(self)
+        session.commit()
+        self.notify(self.openid, self.context_name, "verbose")
 
     @classmethod
     def by_user(cls, session, openid):
