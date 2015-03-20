@@ -16,7 +16,7 @@ import sqlalchemy as sa
 
 def upgrade():
     op.add_column('preferences',
-                  sa.Column('verbose', sa.Boolean(), default=True))
+                  sa.Column('verbose', sa.Boolean(), server_default="TRUE"))
 
 
 def downgrade():
