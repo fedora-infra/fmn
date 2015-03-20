@@ -640,6 +640,7 @@ def handle_filter():
     openid = form.openid.data
     context = form.context.data
     filter_name = form.filter_name.data
+    filter_id = form.filter_id.data
     method = (form.method.data or flask.request.method).upper()
 
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
@@ -665,13 +666,14 @@ def handle_filter():
 
     try:
         if method == 'POST':
-            # Ensure that a filter with this name doesn't already exist.
-            if pref.has_filter_name(SESSION, filter_name):
-                raise APIError(404, dict(
-                    reason="%r already exists" % filter_name))
+            if pref.has_filter(SESSION, filter_id):
+                filter = pref.get_filter(SESSION, filter_id)
+                filter.name = filter_name
+                SESSION.commit()
+            else:
+                filter = fmn.lib.models.Filter.create(SESSION, filter_name)
+                pref.add_filter(SESSION, filter)
 
-            filter = fmn.lib.models.Filter.create(SESSION, filter_name)
-            pref.add_filter(SESSION, filter)
             next_url = flask.url_for(
                 'filter',
                 openid=openid,

@@ -2,6 +2,7 @@ from wtforms import Form, TextField, IntegerField, validators
 
 
 class FilterForm(Form):
+    filter_id = IntegerField('filter_id')
     openid = TextField('openid', [validators.Required()])
     context = TextField('context', [validators.Required()])
     filter_name = TextField('filter_name', [validators.Required()])
