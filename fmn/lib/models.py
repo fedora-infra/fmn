@@ -292,13 +292,13 @@ class Rule(BASE):
         # This will raise an exception if invalid
         Rule.validate_code_path(valid_paths, code_path, **kw)
 
-        filt = cls(code_path=code_path, negated=negated)
-        filt.arguments = kw
+        rule = cls(code_path=code_path, negated=negated)
+        rule.arguments = kw
 
-        session.add(filt)
+        session.add(rule)
         session.flush()
         session.commit()
-        return filt
+        return rule
 
     def title(self, valid_paths):
         root, name = self.code_path.split(':', 1)
