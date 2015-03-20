@@ -36,3 +36,12 @@ class RuleForm(Form):
     filter_id = IntegerField('filter_id', [validators.Required()])
     rule_name = TextField('rule_name', [validators.Required()])
     method = TextField('method')
+
+
+class ArgumentForm(Form):
+    openid = TextField('openid', [validators.Required()])
+    context = TextField('context', [validators.Required()])
+    filter_id = IntegerField('filter_id', [validators.Required()])
+    rule_name = TextField('rule_name', [validators.Required()])
+    key = TextField('key', [validators.Required()])
+    value = TextField('value', [validators.Required()])

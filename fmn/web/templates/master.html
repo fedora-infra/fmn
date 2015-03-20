@@ -140,13 +140,16 @@
     <script>$('[data-toggle="tooltip"]').tooltip();</script>
     <script>
       $(document).ready(function() {
-          $("#edit").click(function(ev) {
-              $("#name-read").addClass('hidden');
-              $("#name-write").removeClass('hidden');
+          $(".btn-edit").click(function(ev) {
+              var sel = $(this).attr('data-parent');
+              console.log(sel);
+              $(sel + ' .read').addClass('hidden');
+              $(sel + ' .write').removeClass('hidden');
           });
-          $("#cancel").click(function(ev) {
-              $("#name-write").addClass('hidden');
-              $("#name-read").removeClass('hidden');
+          $(".btn-cancel").click(function(ev) {
+              var sel = $(this).attr('data-parent');
+              $(sel + ' .write').addClass('hidden');
+              $(sel + ' .read').removeClass('hidden');
           });
       });
     </script>
