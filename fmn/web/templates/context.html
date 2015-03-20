@@ -343,6 +343,40 @@
             </button>
             </p>
           </form>
+
+          {% if current == 'email' and (preference.batch_count is not none or preference.batch_delta is not none) %}
+
+          <div class="clearfix"></div><hr></hr>
+
+          <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+            method="post">
+            <p class="pull-left">By default, we'll try to cram as much detailed
+            information as we can into your digest messages (full patches,
+            koji build details, etc..) However, you might not want all of
+            that.</p>
+            <p class="pull-left">
+            I'm configured right now to send you <strong>
+              {% if preference.verbose %}full details{% else %}only summaries{% endif %}
+            </strong> of your messages in digest.</p>
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <p class="pull-right">
+            {% if preference.verbose %}
+            <button type="submit" class="btn btn-danger" name="toggle_verbose" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-volume-down"></span> Only Summaries
+            </button>
+            {% else %}
+            <button type="submit" class="btn btn-success" name="toggle_verbose" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-volume-up"></span> Full Details
+            </button>
+            {% endif %}
+            </p>
+          </form>
+          {% endif %}
+
+
         </div>
       </div> <!-- end panel -->
 

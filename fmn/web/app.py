@@ -754,6 +754,7 @@ def handle_details():
     toggle_triggered_by = form.toggle_triggered_by.data
     toggle_shorten = form.toggle_shorten.data
     toggle_markup = form.toggle_markup.data
+    toggle_verbose = form.toggle_verbose.data
     next_url = form.next_url.data
     reset_to_defaults = form.reset_to_defaults.data
 
@@ -833,6 +834,9 @@ def handle_details():
 
     if toggle_markup:
         pref.set_markup_messages(SESSION, not pref.markup_messages)
+
+    if toggle_verbose:
+        pref.set_verbose(SESSION, not pref.verbose)
 
     if reset_to_defaults:
         for flt in pref.filters:

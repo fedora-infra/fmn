@@ -23,6 +23,7 @@ class DetailsForm(Form):
     toggle_triggered_by = TextField('toggle_triggered_by')
     toggle_shorten = TextField('toggle_shorten')
     toggle_markup = TextField('toggle_markup')
+    toggle_verbose = TextField('toggle_verbose')
 
     next_url = TextField('next_url')
 
