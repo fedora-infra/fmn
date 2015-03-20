@@ -14,6 +14,10 @@ log = logging.getLogger(__name__)
 #                     filters)
 
 exclusion_packages = [
+    # Ignore cvsadmin batch stuff.
+    # See https://github.com/fedora-infra/fmn/issues/45
+    'git_pkgdb2branch_start',
+    'git_pkgdb2branch_complete',
 ]
 
 exclusion_username = [
