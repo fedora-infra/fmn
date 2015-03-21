@@ -142,7 +142,6 @@
       $(document).ready(function() {
           $(".btn-edit").click(function(ev) {
               var sel = $(this).attr('data-parent');
-              console.log(sel);
               $(sel + ' .read').addClass('hidden');
               $(sel + ' .write').removeClass('hidden');
           });
