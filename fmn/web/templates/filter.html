@@ -15,27 +15,36 @@
       <input name="filter_name" id="filter_name" value="{{filter.name}}" type="hidden">
       <div class="btn-group pull-right">
         <span>
-        <a class="btn btn-info" href="{{url_for('context_json', openid=openid, context=current)}}">
+        <a class="btn btn-info" href="{{url_for('context_json', openid=openid, context=current)}}"
+          data-toggle="tooltip" title="Export filter as JSON">
           <span class="glyphicon glyphicon-floppy-save"></span>Export</a>
         </span>
 
         <span>
         {% if filter.active %}
           {% if filter.oneshot %}
-            <button type="submit" class="btn btn-primary"
-              name="method" value="disable-oneshot">
-              <span class="glyphicon glyphicon-repeat"></span>Disable one-shot</button>
+            <button type="submit" class="btn btn-primary" name="method"
+              value="disable-oneshot" data-toggle="tooltip" title="One-shot
+              filters fire only once and then automatically disable themselves.
+              You can use this feature to watch for a single build, or a single
+              comment somewhere.  This is currently a one-shot filter.">
+              <span class="glyphicon glyphicon-star-empty"></span>Disable one-shot</button>
           {% else %}
-            <button type="submit" class="btn btn-info"
-              name="method" value="enable-oneshot">
-              <span class="glyphicon glyphicon-play-circle"></span>Make one-shot</button>
+            <button type="submit" class="btn btn-info" name="method"
+              value="enable-oneshot" data-toggle="tooltip" title="One-shot
+              filters fire only once and then automatically disable themselves.
+              You can use this feature to watch for a single build, or a single
+              comment somewhere.  This is not currently a one-shot filter.">
+              <span class="glyphicon glyphicon-star"></span>Enable one-shot</button>
           {% endif %}
-        <button type="submit" class="btn btn-warning"
-          name="method" value="disable">
+        <button type="submit" class="btn btn-warning" name="method"
+          value="disable" data-toggle="tooltip" title="This filter is active.
+          Use this button to temporarily it.">
           <span class="glyphicon glyphicon-remove"></span>Disable</button>
         {% else %}
-        <button type="submit" class="btn btn-success"
-          name="method" value="enable">
+        <button type="submit" class="btn btn-success" name="method"
+          value="enable" data-toggle="tooltip" title="This filter is not
+          currently enabled.  Use this button to re-enable it.">
           <span class="glyphicon glyphicon-ok"></span>Enable</button>
         {% endif %}
         </span>
@@ -43,8 +52,10 @@
         <span class="divider"></span>
 
         <span>
-        <button type="submit" class="btn btn-danger"
-          name="method" value="delete">
+        <button type="submit" class="btn btn-danger" name="method"
+          value="delete" data-toggle="tooltip" title="WARNING - Clicking this
+          button will permanently delete this filter.  Consider disabling it
+          instead.">
           <span class="glyphicon glyphicon-remove"></span>Delete</button>
         </span>
       </div>
