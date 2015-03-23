@@ -83,6 +83,12 @@
               </a></li>
               {% else %}
               <li>
+                {% if config['FMN_FEDORA_OPENID'] and config['FMN_ALLOW_FAS_OPENID'] and not config['FMN_ALLOW_GOOGLE_OPENID'] and not config['FMN_ALLOW_YAHOO_OPENID'] and not config['FMN_ALLOW_GENERIC_OPENID'] %}
+                  <a href="{{url_for('fedora_login')}}?next={{url_for('profile_redirect')}}">
+                      <span class="glyphicon glyphicon-log-in"></span>
+                      Login
+                  </a>
+                {% else %}
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                       <span class="glyphicon glyphicon-log-in"></span>
                       Login
@@ -102,6 +108,7 @@
                     <li><a href="{{url_for('login')}}?next={{url_for('profile_redirect')}}">Other OpenID</a></li>
                     {% endif %}
                   </ul>
+                {% endif %}
               </li>
               {% endif %}
             </ul>
