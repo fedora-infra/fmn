@@ -495,7 +495,7 @@
         </div> <!-- end panel-body -->
       </div> <!-- end panel -->
 
-      <div class="panel panel-default {{'hidden' if preference.can_send is sameas false}}">
+      <div class="panel panel-danger {{'hidden' if preference.can_send is sameas false}}">
         <div class="panel-heading">
           <h3 class="panel-title">
             Party Perished
@@ -517,6 +517,25 @@
             <button type="submit" class="btn btn-danger" name="reset_to_defaults" value="confirm"
               {{'disabled' if preference.enabled is sameas false}}>
               <span class="glyphicon glyphicon-repeat"></span> Reset
+            </button>
+            </p>
+          </form>
+
+          <div class="clearfix"></div><hr></hr>
+
+          <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+            method="post">
+            <p class="pull-left">Alternatively, you can start over with a
+            <em>tabula rasa</em>. Clicking this button will delete all of your
+            existing filters so you can build your own from the ground-up.</p>
+            <p><strong>Beware, there is no way to undo this operation.
+            </strong></p>
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <p class="pull-right">
+            <button type="submit" class="btn btn-danger" name="delete_all_filters" value="confirm"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-remove"></span> Purge
             </button>
             </p>
           </form>
