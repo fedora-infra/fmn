@@ -87,23 +87,16 @@
     {% for rule in filter.rules %}
       <span class="list-group-item">
         <h4 class="list-group-item-heading">
-          <form class="form-inline" role="form" action="{{url_for('handle_rule')}}" method="post">
-            <input name="rule_name" id="rule_name" value="{{rule.code_path}}" type="hidden">
-            <input name="openid" id="openid" value="{{openid}}" type="hidden">
-            <input name="context" id="context" value="{{current}}" type="hidden">
-            <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
-            <input name="method" id="method" value="negate" type="hidden">
             {% if rule.negated %}
-            <button type="submit" class="btn btn-danger btn-xs">
-                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                Ignore</button>
+            <span class="glyphicon glyphicon-exclamation-sign text-danger" data-toggle="tooltip"
+            title="(ignore) Messages matched by this rule count against a match by this filter">
+            </span>
             {% else %}
-            <button type="submit" class="btn btn-success btn-xs">
-                <span class="glyphicon glyphicon-ok-circle"></span>
-                Include</button>
+            <span class="glyphicon glyphicon-ok-circle text-success" data-toggle="tooltip"
+            title="(include) Messages matched by this rule contribute positively to a match by this filter">
+            </span>
             {% endif %}
             {{rule.title(valid_paths)}}
-          </form>
         </h4>
         <p class="list-group-item-text">{{rule.doc(valid_paths)}}
           <dl class="dl-horizontal">
@@ -131,17 +124,38 @@
         </p>
         <p class="list-group-item-text">
           <div class="row">
-            <div class="col-md-offset-9 col-md-2">
+            <div class="col-md-offset-8 col-md-4">
               <form class="form-inline" role="form" action="{{url_for('handle_rule')}}" method="post">
                 <input name="rule_name" id="rule_name" value="{{rule.code_path}}" type="hidden">
                 <input name="openid" id="openid" value="{{openid}}" type="hidden">
                 <input name="context" id="context" value="{{current}}" type="hidden">
                 <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
-                <input name="method" id="method" value="delete" type="hidden">
-                  <button type="submit" class="btn btn-danger btn-xs"
+                {% if rule.negated %}
+                <button type="submit" class="btn btn-success btn-xs"
+                  name="method" value="negate" data-toggle="tooltip"
+                  title="This rule currently contributes negatively to the
+                  filter.  That is to say that, messages that match this rule
+                  are immediately rejected and barred from further
+                  consideration for delivery.  Switching to 'include' mode
+                  means to toggle that behavior such that messages that match
+                  this rule will be further considered for delivery.">
+                    <span class="glyphicon glyphicon-ok-circle"></span>
+                    Include</button>
+                {% else %}
+                <button type="submit" class="btn btn-danger btn-xs"
+                  name="method" value="negate" data-toggle="tooltip"
+                  title="This rule currently contributes positively to the
+                  filter: messages that match this rule are further considered
+                  for delivery.  To 'negate' the rule means to toggle that
+                  behavior such that messages that match this rule will be excluded
+                  from any further consideration.">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Negate</button>
+                {% endif %}
+                <button type="submit" class="btn btn-danger btn-xs" name="method" value="delete"
                     onclick="return confirm('Are you sure you want to permanently delete this rule?');">
-                      <span class="glyphicon glyphicon-remove"></span>
-                      Delete This Rule</button>
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Delete</button>
               </form>
             </div>
           </div>
