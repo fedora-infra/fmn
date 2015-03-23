@@ -224,7 +224,7 @@ class IRCBackend(BaseBackend):
             self.commands['default'](nick, message)
             return
 
-        valid_subcmd = False
+        valid_category = False
         for root in valid_paths:
             for path in valid_paths[root]:
                 if valid_paths[root][path]['submodule'] != subcmd_string:
@@ -233,15 +233,21 @@ class IRCBackend(BaseBackend):
                     title=valid_paths[root][path]['title']))
                 valid_subcmd = True
 
-        if not valid_subcmd:
+        if not valid_category:
             self.send(nick, "Not a valid category.")
 
     def subcmd_filters(self, nick, message):
-        self.log.info("CMD preferences:  %r sent us %r" % (nick, message))
+        self.log.info("CMD list filters:  %r sent us %r" % (nick, message))
 
         valid_paths = fmn.lib.load_rules(root="fmn.rules")
         sess = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
         pref = self.get_preference(sess, nick)
+
+        if pref is None:
+            self.send(nick, 'The nick is not configured with Fedora
+                      Notifications')
+            return
+
         subcmd_string = message.rsplit(None, 1)[1].lower()
 
         if subcmd_string.strip() == 'filters':
