@@ -29,6 +29,7 @@ class DetailsForm(Form):
     next_url = TextField('next_url')
 
     reset_to_defaults = TextField('reset_to_defaults')
+    delete_all_filters = TextField('delete_all_filters')
 
 
 class RuleForm(Form):

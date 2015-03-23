@@ -811,6 +811,7 @@ def handle_details():
     toggle_verbose = form.toggle_verbose.data
     next_url = form.next_url.data
     reset_to_defaults = form.reset_to_defaults.data
+    delete_all_filters = form.delete_all_filters.data
 
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         raise APIError(403, dict(reason="%r is not %r" % (
@@ -897,6 +898,11 @@ def handle_details():
             SESSION.delete(flt)
         SESSION.flush()
         fmn.lib.defaults.create_defaults_for(SESSION, user, pref.context)
+
+    if delete_all_filters:
+        for flt in pref.filters:
+            SESSION.delete(flt)
+        SESSION.commit()
 
     next_url = next_url or flask.url_for(
         'context',
