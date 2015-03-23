@@ -24,6 +24,7 @@ requires = [
     'fedmsg',
     'requests',
     'arrow',
+    'bleach',
 ]
 
 tests_require = [
