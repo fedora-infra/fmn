@@ -1,9 +1,22 @@
 {% extends "master.html" %}
 
 {% block body %}
-<div class="page-header">
-  <h1>Rules for {{g.auth.email}}'s <em>{{filter.name}}</em> filter
-      <small>for the {{current}} messaging context</small></h1>
+<div id="title-header" class="page-header">
+  <h1 class="read"> {{filter.name}}
+    <a href="#" data-parent="#title-header" class="btn btn-xs btn-edit btn-default">Edit</a></h1>
+  <h2 class="write hidden">
+    <form class="form-inline" role="form"
+      action="{{url_for('handle_filter')}}" method="post">
+      <input name="openid" id="openid" value="{{openid}}" type="hidden">
+      <input name="context" id="context" value="{{current}}" type="hidden">
+      <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
+      <input name="filter_name" id="filter_name" value="{{filter.name}}">
+      <button type="submit" class="btn btn-xs btn-primary" name="method" value="post">
+        <span class="glyphicon glyphicon-ok-circle"></span>Save</button>
+      <a href="#" data-parent="#title-header" class="btn btn-xs btn-cancel btn-default">Cancel</a>
+    </form>
+  </h2>
+  <h3>sent to {{current}}</h3>
 </div>
 
 <div class="row-fluid">
@@ -13,6 +26,7 @@
       <input name="openid" id="openid" value="{{openid}}" type="hidden">
       <input name="context" id="context" value="{{current}}" type="hidden">
       <input name="filter_name" id="filter_name" value="{{filter.name}}" type="hidden">
+      <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
       <div class="btn-group pull-right">
         <span>
         <a class="btn btn-info" href="{{url_for('context_json', openid=openid, context=current)}}"
@@ -92,9 +106,26 @@
         </h4>
         <p class="list-group-item-text">{{rule.doc(valid_paths)}}
           <dl class="dl-horizontal">
+            <form class="form-inline" role="form" action="{{url_for('handle_argument')}}" method="post">
+              <input name="rule_name" id="rule_name" value="{{rule.code_path}}" type="hidden">
+              <input name="openid" id="openid" value="{{openid}}" type="hidden">
+              <input name="context" id="context" value="{{current}}" type="hidden">
+              <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
               {% for key, value in rule.arguments.iteritems() %}
-              <dt>{{key}}</dt><dd>{{value}}</dd>
+              <dt>{{key}}</dt><dd id="{{key}}{{rule.id}}">
+                <span class="read">{{value}}
+                  <a href="#" data-parent="#{{key}}{{rule.id}}" class="btn btn-xs btn-edit btn-default">Edit</a></h1>
+                </span>
+                <span class="write hidden">
+                  <input name="key" id="key" value="{{key}}" type="hidden">
+                  <input name="value" id="value" value="{{value}}">
+                  <button type="submit" class="btn btn-xs btn-primary" name="method" value="post">
+                    <span class="glyphicon glyphicon-ok-circle"></span>Save</button>
+                  <a href="#" data-parent="#{{key}}{{rule.id}}" class="btn btn-xs btn-cancel btn-default">Cancel</a></h1>
+                </span>
+              </dd>
               {% endfor %}
+            </form>
           </dl>
         </p>
         <p class="list-group-item-text">

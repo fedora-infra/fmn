@@ -640,6 +640,7 @@ def handle_filter():
     openid = form.openid.data
     context = form.context.data
     filter_name = form.filter_name.data
+    filter_id = form.filter_id.data
     method = (form.method.data or flask.request.method).upper()
 
     if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
@@ -665,13 +666,14 @@ def handle_filter():
 
     try:
         if method == 'POST':
-            # Ensure that a filter with this name doesn't already exist.
-            if pref.has_filter_name(SESSION, filter_name):
-                raise APIError(404, dict(
-                    reason="%r already exists" % filter_name))
+            if pref.has_filter(SESSION, filter_id):
+                filter = pref.get_filter(SESSION, filter_id)
+                filter.name = filter_name
+                SESSION.commit()
+            else:
+                filter = fmn.lib.models.Filter.create(SESSION, filter_name)
+                pref.add_filter(SESSION, filter)
 
-            filter = fmn.lib.models.Filter.create(SESSION, filter_name)
-            pref.add_filter(SESSION, filter)
             next_url = flask.url_for(
                 'filter',
                 openid=openid,
@@ -735,6 +737,58 @@ def int_or_none(value):
         return int(value)
     except TypeError:
         raise APIError(400, dict(batch_delta=["Not a valid integer value"]))
+
+
+@app.route('/api/argument', methods=['POST'])
+@api_method
+def handle_argument():
+    form = fmn.web.forms.ArgumentForm(flask.request.form)
+
+    if not form.validate():
+        raise APIError(400, form.errors)
+
+    openid = form.openid.data
+    context = form.context.data
+    filter_id = form.filter_id.data
+    rule_name = form.rule_name.data
+
+    key = form.key.data
+    value = form.value.data
+
+    if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
+        raise APIError(403, dict(reason="%r is not %r" % (
+            flask.g.auth.openid, openid
+        )))
+
+    user = fmn.lib.models.User.by_openid(SESSION, openid)
+    if not user:
+        raise APIError(403, dict(reason="%r is not a user" % openid))
+
+    ctx = fmn.lib.models.Context.by_name(SESSION, context)
+    if not ctx:
+        raise APIError(403, dict(reason="%r is not a context" % context))
+
+    pref = fmn.lib.models.Preference.get_or_create(
+        SESSION, openid=openid, context=ctx)
+
+    if not pref.has_filter(SESSION, filter_id):
+        raise APIError(404, dict(reason="%r is not a filter" % filter_id))
+
+    filter = pref.get_filter(SESSION, filter_id)
+
+    if not filter.has_rule(SESSION, rule_name):
+        raise APIError(404, dict(reason="%r is not a rule" % rule_name))
+
+    rule = filter.get_rule(SESSION, rule_name)
+    rule.set_argument(SESSION, key, value)
+
+    next_url = flask.url_for(
+        'filter',
+        openid=openid,
+        context=context,
+        filter_id=filter_id,
+    )
+    return dict(message="ok", url=next_url)
 
 
 @app.route('/api/details', methods=['POST'])
