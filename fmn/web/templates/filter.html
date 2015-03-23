@@ -69,7 +69,8 @@
         <button type="submit" class="btn btn-danger" name="method"
           value="delete" data-toggle="tooltip" title="WARNING - Clicking this
           button will permanently delete this filter.  Consider disabling it
-          instead.">
+          instead."
+          onclick="return confirm('Are you sure you want to permanently delete this filter?');">
           <span class="glyphicon glyphicon-remove"></span>Delete</button>
         </span>
       </div>
@@ -137,7 +138,8 @@
                 <input name="context" id="context" value="{{current}}" type="hidden">
                 <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
                 <input name="method" id="method" value="delete" type="hidden">
-                  <button type="submit" class="btn btn-danger btn-xs">
+                  <button type="submit" class="btn btn-danger btn-xs"
+                    onclick="return confirm('Are you sure you want to permanently delete this rule?');">
                       <span class="glyphicon glyphicon-remove"></span>
                       Delete This Rule</button>
               </form>
