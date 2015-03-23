@@ -10,7 +10,7 @@ import fmn.lib
 import fmn.rules.utils
 import backends as fmn_backends
 
-from fmn.consumer.utils import (
+from fmn.consumer.util import (
     new_packager,
     new_badges_user,
     get_fas_email,

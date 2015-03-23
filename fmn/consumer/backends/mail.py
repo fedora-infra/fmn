@@ -7,6 +7,8 @@ import datetime
 import smtplib
 import email
 
+from fmn.consumer.util import get_fas_email
+
 
 CONFIRMATION_TEMPLATE = u"""
 {username} has requested that notifications be sent to this email address
@@ -85,6 +87,8 @@ class EmailBackend(BaseBackend):
                 [to_bytes(recipient['email address'])],
                 to_bytes(email_message.as_string()),
             )
+        except smtplib.SMTPRecipientsRefused:
+            self.handle_bad_email_address(session, recipient)
         except:
             self.log.info("%r" % email_message.as_string())
             raise
@@ -157,3 +161,28 @@ class EmailBackend(BaseBackend):
         recipient = {'email address': confirmation.detail_value}
 
         self.send_mail(session, recipient, subject, content)
+
+    def handle_bad_email_address(self, session, recipient):
+        """ Handle a bad email address.
+        1) Look up the account in FAS.  Use their email there if possible.
+        2) If not, then just disable their account.
+
+        See https://github.com/fedora-infra/fmn/issues/28
+        """
+
+        address = recipient['email address']
+        user = recipient['user']
+        self.log.warning("Dealing with bad email %s, %s" % (address, user))
+        pref = self.preference_for(session, address)
+        if address.endswith('@fedoraproject.org'):
+            fas_email = get_fas_email(user, **self.config)
+            self.log.info("Got fas email as %r " % fas_email)
+            if fas_email != address:
+                pref.delete_details(address)
+                pref.update_details(fas_email)
+            else:
+                self.log.warning("Disabling %s for good..." % user)
+                pref.disable()
+        else:
+            self.log.warning("Disabling %s for good..." % user)
+            pref.disable()
