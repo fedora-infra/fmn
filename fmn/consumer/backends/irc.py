@@ -63,16 +63,20 @@ def _format_message(msg, recipient, config):
     # call to `fedmsg.meta.conglomerate(..)`
     if not 'subtitle' in msg:
         # This handles normal, 'raw' messages which get passed through msg2*.
-        template = u"{title} -- {subtitle} {delta}{link}{flt}"
         title = fedmsg.meta.msg2title(msg, **config)
         subtitle = fedmsg.meta.msg2subtitle(msg, **config)
         link = fedmsg.meta.msg2link(msg, **config)
+        # Only prefix with topic if we're "marking up" messages.
+        if recipient['markup_messages']:
+            template = u"{title} -- {subtitle} {delta}{link}{flt}"
+        else:
+            template = u"{subtitle} {delta}{link}{flt}"
     else:
         # This handles messages that have already been 'conglomerated'.
-        template = u"{subtitle} {delta}{link}{flt}"
         title = u""
         subtitle = msg['subtitle']
         link = msg['link']
+        template = u"{subtitle} {delta}{link}{flt}"
 
     if recipient['shorten_links']:
         link = _shorten(link)
