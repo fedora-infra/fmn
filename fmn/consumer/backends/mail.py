@@ -110,7 +110,7 @@ class EmailBackend(BaseBackend):
         def _format_line(msg):
             timestamp = datetime.datetime.fromtimestamp(msg['timestamp'])
             link = fedmsg.meta.msg2link(msg, **self.config) or u''
-            if recipient.get('verbose', False):
+            if recipient.get('verbose', True):
                 payload = fedmsg.meta.msg2long_form(msg, **self.config) or u''
             else:
                 payload = fedmsg.meta.msg2subtitle(msg, **self.config) or u''
