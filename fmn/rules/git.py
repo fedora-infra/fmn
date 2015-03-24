@@ -25,7 +25,7 @@ def git_branch(config, message):
 def git_lookaside_new(config, message):
     """ New tarballs uploaded to the lookaside cache
 
-    Include this rule to receive notifications of of new sources being uploaded
+    Include this rule to receive notifications of new sources being uploaded
     to the "lookaside cache" as when someone runs ``fedpkg new-sources
     <TARBALL>``.
     """
