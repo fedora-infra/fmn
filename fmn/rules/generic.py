@@ -44,7 +44,7 @@ def not_user_filter(config, message, fasnick=None, *args, **kw):
     if not fasnick:
         return False
 
-    fasnick = fasnick or [] and fasnick.split(',')
+    fasnick = (fasnick or []) and fasnick.split(',')
     valid = True
     for nick in fasnick:
         if nick.strip() in fedmsg.meta.msg2usernames(message, **config):
@@ -52,6 +52,29 @@ def not_user_filter(config, message, fasnick=None, *args, **kw):
             break
 
     return valid
+
+
+def _get_users_of_group(config, group):
+    """ Utility to query fas for users of a group. """
+    if not group:
+        return set()
+    fas = fmn.rules.utils.get_fas(config)
+    return fmn.rules.utils.get_user_of_group(config, fas, group)
+
+
+@hint(callable=_get_users_of_group)
+def fas_group_member_filter(config, message, group=None, *args, **kw):
+    """ Messages regarding any member of a FAS group
+
+    Use this rule to include messages that have anything to do with **any
+    user** belonging to a particular fas group.  You might want to use this
+    to monitor the activity of a group for which you are responsible.
+    """
+    if not group:
+        return False
+    fasusers = _get_users_of_group(config, group)
+    msgusers = fedmsg.meta.msg2usernames(message, **config)
+    return bool(fasusers.intersection(msgusers))
 
 
 def _user_package_filter_hint(config, fasnick):
@@ -82,7 +105,7 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
     return False
 
 
-@hint(callable=lambda config, fasnick: dict(packages=[package]))
+@hint(callable=lambda config, package: dict(packages=[package]))
 def package_filter(config, message, package=None, *args, **kw):
     """ A particular package
 

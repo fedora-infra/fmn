@@ -1,6 +1,26 @@
 Changelog
 =========
 
+0.5.0
+-----
+
+- Order of operations matters. `bb4e4d428 <https://github.com/fedora-infra/fmn.rules/commit/bb4e4d42882672080629f6ee6202ee2700c1c805>`_
+- Merge pull request #40 from fedora-infra/feature/bugfix `219f0c560 <https://github.com/fedora-infra/fmn.rules/commit/219f0c56041bb0aa27a8eb51dc7fa6e518dda70b>`_
+- Add a rule for finding unmapped anitya projects. `df6d5a809 <https://github.com/fedora-infra/fmn.rules/commit/df6d5a80928810122d3718fea61e57c1bf05ec4f>`_
+- Fix syntax error. `96ab24bfa <https://github.com/fedora-infra/fmn.rules/commit/96ab24bfa09412398a4fa05d5dc7d7554f82b74e>`_
+- Merge pull request #41 from fedora-infra/feature/unmapped-anitya-projects `f0000618f <https://github.com/fedora-infra/fmn.rules/commit/f0000618f1c033751ade024d1e01a8b2a4337234>`_
+- Improve findability of the hacking document `a7ab83219 <https://github.com/fedora-infra/fmn.rules/commit/a7ab832194db9e7ac30693f1ceebffea977f6f38>`_
+- Merge pull request #42 from fedora-infra/docs `ac68ccf18 <https://github.com/fedora-infra/fmn.rules/commit/ac68ccf18f5b0a1b9181ff98e777e94b5c3ffb71>`_
+- typofix. `ffc71ca99 <https://github.com/fedora-infra/fmn.rules/commit/ffc71ca991ddee5dbb02f610fb52972ad45e3213>`_
+- Add a rule to match members of a FAS group. `efcc105d2 <https://github.com/fedora-infra/fmn.rules/commit/efcc105d2c240e1d19a47cf3a1a4a12c61117b8c>`_
+- Merge pull request #43 from fedora-infra/feature/typofix `ed33664ec <https://github.com/fedora-infra/fmn.rules/commit/ed33664ec46b178ff1a84c75dfe587393d0cb4c2>`_
+- Merge pull request #44 from fedora-infra/feature/fas-group-member-rule `01d05566c <https://github.com/fedora-infra/fmn.rules/commit/01d05566c766524a88536bebf7181cb952762594>`_
+- Fix anitya links. `7d01fbae4 <https://github.com/fedora-infra/fmn.rules/commit/7d01fbae488d24443694b2b8a4ee525c66e301ae>`_
+- Merge pull request #45 from fedora-infra/feature/fix-anitya-links `fa9bef8c0 <https://github.com/fedora-infra/fmn.rules/commit/fa9bef8c0ff259b1c33b8532a2402fdf7bad3d3c>`_
+- Typofix. `46f2d97d7 <https://github.com/fedora-infra/fmn.rules/commit/46f2d97d7284b857288a1f0b630407b8ef22b631>`_
+- Disambiguate git messages. `8d9a282dd <https://github.com/fedora-infra/fmn.rules/commit/8d9a282ddb4f589d5ee25a78e07a1894d3da5c6c>`_
+- Merge pull request #46 from fedora-infra/feature/disambiguate-git `2688be1c8 <https://github.com/fedora-infra/fmn.rules/commit/2688be1c80d87b2b04a37562055c8a1ca93b5d0f>`_
+
 0.4.7
 -----
 

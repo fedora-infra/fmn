@@ -18,14 +18,14 @@ def git_branch(config, message):
     Include this rule to receive notifications of new branches being created
     for Fedora package git repos.
     """
-    return message['topic'].endswith('git.branch')
+    return message['topic'] == _('git.branch')
 
 
 @hint(topics=[_('git.lookaside.new')])
 def git_lookaside_new(config, message):
     """ New tarballs uploaded to the lookaside cache
 
-    Include this rule to receive notifications of of new sources being uploaded
+    Include this rule to receive notifications of new sources being uploaded
     to the "lookaside cache" as when someone runs ``fedpkg new-sources
     <TARBALL>``.
     """
@@ -98,4 +98,4 @@ def git_receive(config, message):
     Including this rule will produce notifications triggered when somebody runs
     ``fedpkg push`` on a package.
     """
-    return message['topic'].endswith('git.receive')
+    return message['topic'] == _('git.receive')
