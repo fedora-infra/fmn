@@ -305,7 +305,7 @@ def link_fedora_mobile(openid, api_key, registration_id):
         SESSION, openid=openid, context=ctx)
 
     try:
-        fmn.lib.validate_detail_value(ctx, registration_id)
+        fmn.lib.validate_detail_value(ctx, registration_id, fedmsg_config)
     except Exception as e:
         raise APIError(403, dict(reason=str(e)))
 
@@ -855,7 +855,7 @@ def handle_details():
     if detail_value:
         # Do some validation on the specifics of the value before we commit.
         try:
-            fmn.lib.validate_detail_value(ctx, detail_value)
+            fmn.lib.validate_detail_value(ctx, detail_value, fedmsg_config)
         except Exception as e:
             raise APIError(403, dict(reason=str(e)))
 
