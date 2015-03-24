@@ -35,15 +35,16 @@
         </span>
 
         <span>
+        {% if filter.oneshot %}
+          <button type="submit" class="btn btn-primary" name="method"
+            value="disable-oneshot" data-toggle="tooltip" title="One-shot
+            filters fire only once and then automatically disable themselves.
+            You can use this feature to watch for a single build, or a single
+            comment somewhere.  This is currently a one-shot filter.">
+            <span class="glyphicon glyphicon-star-empty"></span>Disable one-shot</button>
+        {% endif %}
         {% if filter.active %}
-          {% if filter.oneshot %}
-            <button type="submit" class="btn btn-primary" name="method"
-              value="disable-oneshot" data-toggle="tooltip" title="One-shot
-              filters fire only once and then automatically disable themselves.
-              You can use this feature to watch for a single build, or a single
-              comment somewhere.  This is currently a one-shot filter.">
-              <span class="glyphicon glyphicon-star-empty"></span>Disable one-shot</button>
-          {% else %}
+          {% if not filter.oneshot %}
             <button type="submit" class="btn btn-info" name="method"
               value="enable-oneshot" data-toggle="tooltip" title="One-shot
               filters fire only once and then automatically disable themselves.
