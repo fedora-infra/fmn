@@ -474,7 +474,7 @@ class Preference(BASE):
 
     # Various presentation booleans
     markup_messages = sa.Column(sa.Boolean, default=False)
-    triggered_by_links = sa.Column(sa.Boolean, default=False)
+    triggered_by_links = sa.Column(sa.Boolean, default=True)
     shorten_links = sa.Column(sa.Boolean, default=False)
     verbose = sa.Column(sa.Boolean, default=True)
 
