@@ -1,6 +1,38 @@
 Changelog
 =========
 
+0.5.0
+-----
+
+- fix typo (gcm -> android) for what fmn.lib expects `a3b0f6f2e <https://github.com/fedora-infra/fmn.lib/commit/a3b0f6f2e16c4061b8aae078d8ea845aaa4948ee>`_
+- Add some debugging for fedora-infra/fmn#60. `b900446a3 <https://github.com/fedora-infra/fmn.lib/commit/b900446a3dc9807bf20fd857192eeb673560949a>`_
+- Ignore all anitya notifications `22510225d <https://github.com/fedora-infra/fmn.lib/commit/22510225da963caa80a9c4134856a2e73bc95c9a>`_
+- Merge pull request #36 from fedora-infra/anitya-defaults `eb749e04d <https://github.com/fedora-infra/fmn.lib/commit/eb749e04d06a375f8678e4f76c74722f456f47ed>`_
+- Add some documentation on testing fmn.lib `6d107312c <https://github.com/fedora-infra/fmn.lib/commit/6d107312c1bcca56ead5b4cc27b89c028f2eafeb>`_
+- Merge pull request #38 from fedora-infra/test-docs `078091361 <https://github.com/fedora-infra/fmn.lib/commit/0780913611d90efdb8dddf8333b00c2c559acd2c>`_
+- Implement one-shot filters `940813fc9 <https://github.com/fedora-infra/fmn.lib/commit/940813fc9315618bb81fe5c425605caf952dcd62>`_
+- Merge pull request #37 from fedora-infra/oneshot-filters `09598b6f3 <https://github.com/fedora-infra/fmn.lib/commit/09598b6f3298c6094a4f6a7f13ecce89848c891b>`_
+- Improve findability of the hacking document `1bcaa2603 <https://github.com/fedora-infra/fmn.lib/commit/1bcaa26036791bef845225ace80c1c82d4431436>`_
+- Merge pull request #39 from fedora-infra/docs `e503c53c1 <https://github.com/fedora-infra/fmn.lib/commit/e503c53c1465f0350903984bf8adec6453214b6d>`_
+- Getting fancy. `2ac3feef7 <https://github.com/fedora-infra/fmn.lib/commit/2ac3feef7383065857b97b2d4960d3a050e6e2e4>`_
+- Allow callable hints to be inverted. `46e00afcf <https://github.com/fedora-infra/fmn.lib/commit/46e00afcf79b0c2d392fef958c1a6be929f2ce69>`_
+- Merge pull request #40 from fedora-infra/feature/invert-callable-hints `41d6b0a83 <https://github.com/fedora-infra/fmn.lib/commit/41d6b0a83e43dafefb2f65d45e3d0d87c19d8504>`_
+- Add forgotten alembic upgrade script. `99d790a76 <https://github.com/fedora-infra/fmn.lib/commit/99d790a76e83185cc9c1dc000b3161e346fbebc1>`_
+- Add a verbose column for fedora-infra/fmn#67. `575882099 <https://github.com/fedora-infra/fmn.lib/commit/575882099997251e7494af0415b0d7b452ffd765>`_
+- This needs to be a server default to affect our existing users. `4849d8b19 <https://github.com/fedora-infra/fmn.lib/commit/4849d8b1938ef5561df6570b16a8a9159250dad2>`_
+- Pass the verbose value on to fmn.consumer to be used at dispatch time. `35d344d56 <https://github.com/fedora-infra/fmn.lib/commit/35d344d56903c37d9d25254d543fe708c184db01>`_
+- Ignore pkgdb2branch stuff by default. `434a33e42 <https://github.com/fedora-infra/fmn.lib/commit/434a33e424c1fcb93e80fd36e380dc4bd0d503e0>`_
+- Typofix. `74775630f <https://github.com/fedora-infra/fmn.lib/commit/74775630f9d9b049de8d0f99e6b9bcb3d9c3ce78>`_
+- Add utilities for altering arguments to a rule. `d9e5960e7 <https://github.com/fedora-infra/fmn.lib/commit/d9e5960e7bb2d14b97ce2d94a5427025a032a640>`_
+- Merge pull request #41 from fedora-infra/feature/verbose-setting `af8286271 <https://github.com/fedora-infra/fmn.lib/commit/af8286271bfad188cb9bc99d91b8d2b337a8c5ac>`_
+- Merge pull request #42 from fedora-infra/feature/no-pkgdb2branch-in-defaults `bfdb09656 <https://github.com/fedora-infra/fmn.lib/commit/bfdb09656e520258a24c203944661b3771d10248>`_
+- Merge pull request #43 from fedora-infra/feature/alter-rule-args `23a3baaa2 <https://github.com/fedora-infra/fmn.lib/commit/23a3baaa2ee8350502f8d2a83700ae7a24a0ad17>`_
+- Ask an SMTP server to validate our email addresses. `1f69c0e54 <https://github.com/fedora-infra/fmn.lib/commit/1f69c0e5417eb3c27e0b3bfc222dcc7b1d392331>`_
+- Fix the test suite. `8828fb8ff <https://github.com/fedora-infra/fmn.lib/commit/8828fb8ffaef42e05ffb36ce9e780f056e782525>`_
+- Merge pull request #44 from fedora-infra/feature/ask-smtp-server-to-validate `0ed84eb5a <https://github.com/fedora-infra/fmn.lib/commit/0ed84eb5aae5b197f1227978fe60056775732313>`_
+- Default triggered-by-links to True. `ecd29a60c <https://github.com/fedora-infra/fmn.lib/commit/ecd29a60c03b81632bcd0de4bc7f582acb2a2b8c>`_
+- Merge pull request #45 from fedora-infra/feature/default-triggered-by `893db05ca <https://github.com/fedora-infra/fmn.lib/commit/893db05caa0e3f45a5ecb10401955799845f9dba>`_
+
 0.4.7
 -----
 
