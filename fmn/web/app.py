@@ -368,14 +368,25 @@ def profile(openid):
     if (not flask.g.auth.logged_in or (
         flask.g.auth.openid != openid and
             not admin(flask.g.auth.openid))):
-
         flask.abort(403)
 
-    user = fmn.lib.models.User.get_or_create(
-        SESSION,
-        openid=flask.g.auth.openid,
-        openid_url=flask.g.auth.openid_url,
-    )
+    user = fmn.lib.models.User.get(SESSION, openid=openid)
+
+    # Does this user exist, or is it a first visit?
+    if not user:
+
+        # If this is an admin looking at a user that doesn't exist, bail.
+        if flask.g.auth.openid != openid:
+            flask.abort(404)
+
+        # Otherwise, if you are looking at your own profile, and it doesn't
+        # exist, then create it.
+        user = fmn.lib.models.User.get_or_create(
+            SESSION,
+            openid=flask.g.auth.openid,
+            openid_url=flask.g.auth.openid_url,
+        )
+
     avatar = libravatar.libravatar_url(
         openid=user.openid_url,
         https=app.config.get('FMN_SSL', False),
@@ -395,7 +406,9 @@ def profile(openid):
         icons=icons,
         api_key=user.api_key,
         fedora_mobile=flask.request.args.get('fedora_mobile') == 'true',
-        openid_url=flask.g.auth.openid)
+        openid=user.openid,
+        openid_url=user.openid_url,
+    )
 
 
 @app.route('/reset-api-key')
