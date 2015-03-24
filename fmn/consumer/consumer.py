@@ -219,7 +219,8 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 if ('filter_oneshot' in recipient
                         and recipient['filter_oneshot']):
                     log.debug("    Marking one-shot filter as fired")
-                    fltr = fmn.lib.models.Filter.get(recipient['filter_id'])
+                    idx = recipient['filter_id']
+                    fltr = session.query(fmn.lib.models.Filter).get(idx)
                     fltr.fired(session)
 
         log.debug("Done.  %0.2fs %s %s",
