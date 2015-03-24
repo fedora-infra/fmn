@@ -69,7 +69,8 @@ class EmailBackend(BaseBackend):
         # before setting the payload.
         footer = to_unicode(self.config.get('fmn.email.footer', ''))
 
-        if 'filter_id' in recipient and 'user' in recipient:
+        triggered_by = recipient['triggered_by_links']
+        if 'filter_id' in recipient and 'user' in recipient and triggered_by:
             base_url = self.config['fmn.base_url']
             footer = reason.format(base_url=base_url, **recipient) + footer
 
