@@ -105,17 +105,18 @@
           <input name="context" id="context" value="{{current}}" type="hidden">
           <input name="filter_name" id="filter_name" value="{{fltr.name}}" type="hidden">
           <span class="pull-right">
+            {% if fltr.oneshot %}
+              <button type="submit" name="method" value="disable-oneshot"
+              class="btn btn-primary" data-toggle="tooltip" title="One-shot
+              filters fire only once and then automatically disable
+              themselves.  You can use this feature to watch for a single
+              build, or a single comment somewhere.  This is currently a
+              one-shot filter.">
+                <span class="glyphicon glyphicon-star-empty"></span>
+                Disable one-shot</button>
+            {% endif %}
             {% if fltr.active %}
-              {% if fltr.oneshot %}
-                <button type="submit" name="method" value="disable-oneshot"
-                class="btn btn-primary" data-toggle="tooltip" title="One-shot
-                filters fire only once and then automatically disable
-                themselves.  You can use this feature to watch for a single
-                build, or a single comment somewhere.  This is currently a
-                one-shot filter.">
-                  <span class="glyphicon glyphicon-star-empty"></span>
-                  Disable one-shot</button>
-              {% else %}
+              {% if not fltr.oneshot %}
                 <button type="submit" name="method" value="enable-oneshot"
                 class="btn btn-info" data-toggle="tooltip" title="One-shot
                 filters fire only once and then automatically disable
