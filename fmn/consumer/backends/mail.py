@@ -162,7 +162,11 @@ class EmailBackend(BaseBackend):
         ).strip()
         subject = u'Confirm notification email'
 
-        recipient = {'email address': confirmation.detail_value}
+        recipient = {
+            'user': confirmation.user.openid,
+            'email address': confirmation.detail_value,
+            'triggered_by_links': False,
+        }
 
         self.send_mail(session, recipient, subject, content)
 
