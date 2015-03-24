@@ -115,10 +115,13 @@ class EmailBackend(BaseBackend):
         def _format_line(msg):
             timestamp = datetime.datetime.fromtimestamp(msg['timestamp'])
             link = fedmsg.meta.msg2link(msg, **self.config) or u''
+            payload = fedmsg.meta.msg2subtitle(msg, **self.config) or u''
+
             if recipient.get('verbose', True):
-                payload = fedmsg.meta.msg2long_form(msg, **self.config) or u''
-            else:
-                payload = fedmsg.meta.msg2subtitle(msg, **self.config) or u''
+                longform = fedmsg.meta.msg2long_form(msg, **self.config) or u''
+                if longform:
+                    payload += "\n" + longform
+
             return timestamp.strftime("%c") + ", " + payload + "\n\t" + link
 
         n = len(queued_messages)
