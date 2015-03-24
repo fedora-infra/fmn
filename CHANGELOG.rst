@@ -1,6 +1,32 @@
 Changelog
 =========
 
+0.5.0
+-----
+
+- Make the help and confirmation templates for IRC configurable. `700b4da3f <https://github.com/fedora-infra/fmn.consumer/commit/700b4da3fd9f0182394178e1423cf6d8feeef489>`_
+- Make the help and confirmation templates for email configurable. `5a6223568 <https://github.com/fedora-infra/fmn.consumer/commit/5a62235682db75a851e2d84d435d070600729e98>`_
+- Merge pull request #47 from fedora-infra/feature/configurable-help-message `95b06b47d <https://github.com/fedora-infra/fmn.consumer/commit/95b06b47d0ce33794ef034f44316f26bb78c1e03>`_
+- Use a better default email address... `3b38543d3 <https://github.com/fedora-infra/fmn.consumer/commit/3b38543d35bba1a3fa42f571bb33f2bca4972854>`_
+- Merge pull request #48 from fedora-infra/feature/better-default-email `173804c4b <https://github.com/fedora-infra/fmn.consumer/commit/173804c4ba87b92cea38e895a512a34a541ab901>`_
+- Implement one-shot filters in the consumer `32b701b02 <https://github.com/fedora-infra/fmn.consumer/commit/32b701b0234b145dd418fd642d632563ded90a75>`_
+- Improve findability of the hacking document `e6b38542c <https://github.com/fedora-infra/fmn.consumer/commit/e6b38542ca360d32587d8526e17518d8fe18507c>`_
+- Merge pull request #49 from fedora-infra/oneshot `02d064d07 <https://github.com/fedora-infra/fmn.consumer/commit/02d064d07ef7b2f73feebd0cd6700a2749efafa9>`_
+- Merge pull request #50 from fedora-infra/docs `98f93a3d0 <https://github.com/fedora-infra/fmn.consumer/commit/98f93a3d00165d31f09bc10da94b81373468fd80>`_
+- Employ the verbose value to send more or less details in a digest email. `f932a05cf <https://github.com/fedora-infra/fmn.consumer/commit/f932a05cf9a017ba87f7e0501e335ac731185b8b>`_
+- Merge pull request #51 from fedora-infra/feature/verbosity `65f9e9bf8 <https://github.com/fedora-infra/fmn.consumer/commit/65f9e9bf8da4a8bd7d4d47986d3b5d644ccbe7bc>`_
+- Queued messages won't have this at first. `b97a8c05c <https://github.com/fedora-infra/fmn.consumer/commit/b97a8c05cee141cf30f9c951c8bb486db9c5ee20>`_
+- Default to True. `b7c656541 <https://github.com/fedora-infra/fmn.consumer/commit/b7c6565415fd34c0c7880adc55c93c08c6981562>`_
+- Move utils to their own file for re-use. `118ce38d1 <https://github.com/fedora-infra/fmn.consumer/commit/118ce38d103c1c14374fa24d0550de09f37db77b>`_
+- Make mail handler deal with bad emails. `e5716e65e <https://github.com/fedora-infra/fmn.consumer/commit/e5716e65e657a10ab138fe17db3e5c3b01739d5a>`_
+- Only prefix irc messages with topic if we're 'marking up' messages. `a7d71f540 <https://github.com/fedora-infra/fmn.consumer/commit/a7d71f5401ae0b6f9d2fd3cd8d9018e6295cbe07>`_
+- Merge pull request #52 from fedora-infra/feature/deal-with-bad-emails `1bafaea91 <https://github.com/fedora-infra/fmn.consumer/commit/1bafaea91505250721b95c7079eee47703f99e13>`_
+- Merge pull request #53 from fedora-infra/feature/simpler-irc-format `496b70148 <https://github.com/fedora-infra/fmn.consumer/commit/496b7014845995693992f44459228ab72f1b7bb0>`_
+- Only append the "triggered by" link to emails if the user wants it. `53a1a13f3 <https://github.com/fedora-infra/fmn.consumer/commit/53a1a13f30034843089802c55941a15c735ba143>`_
+- Merge pull request #55 from fedora-infra/feature/mail-footer `a58b5d736 <https://github.com/fedora-infra/fmn.consumer/commit/a58b5d736ac4ec560d565e70766cb587159b8460>`_
+- Manually prepend the subtitle to the longform `27740a6b5 <https://github.com/fedora-infra/fmn.consumer/commit/27740a6b5c618c71948367667e8159816c41d032>`_
+- Merge pull request #56 from fedora-infra/feature/de-duplicate-subtitle `6ba39eba0 <https://github.com/fedora-infra/fmn.consumer/commit/6ba39eba022ce8421cb1deccd1da202f252b59fe>`_
+
 0.4.5
 -----
 
