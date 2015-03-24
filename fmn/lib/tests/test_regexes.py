@@ -1,4 +1,5 @@
 import fmn.lib
+import smtplib
 
 
 class MockContext(object):
@@ -6,11 +7,38 @@ class MockContext(object):
         self.name = name
 
 
+# We rely on a running smtp server somewhere to actually validate our email
+# addresses, so we'll mock that out here for our tests.
+class MockSMTPServer(object):
+    def __init__(self, servername):
+        pass
+
+    def verify(self, value):
+        if value not in [
+            'awesome@fedoraproject.org',
+            'foo+fedora.org@bar.baz',
+        ]:
+            return 500, "failboat"
+        else:
+            return 250, "all good"
+
+
+
 email = MockContext('email')
 irc = MockContext('irc')
 
 
 class TestRegexes(fmn.lib.tests.Base):
+    def setUp(self):
+        super(TestRegexes, self).setUp()
+        self.config = {'fmn.email.mailserver': 'fudgeddaboudit'}
+        self.original_smtp = smtplib.SMTP
+        smtplib.SMTP = MockSMTPServer
+
+    def tearDown(self):
+        super(TestRegexes, self).tearDown()
+        smtplib.SMTP = self.original_smtp
+
     def test_valid_emails(self):
         values = [
             'awesome@fedoraproject.org',
@@ -19,7 +47,7 @@ class TestRegexes(fmn.lib.tests.Base):
 
         for value in values:
             # None of these should raise exceptions
-            fmn.lib.validate_detail_value(email, value)
+            fmn.lib.validate_detail_value(email, value, self.config)
 
     def test_invalid_emails(self):
         values = [
@@ -30,7 +58,7 @@ class TestRegexes(fmn.lib.tests.Base):
         for value in values:
             # All of these should raise exceptions
             try:
-                fmn.lib.validate_detail_value(email, value)
+                fmn.lib.validate_detail_value(email, value, self.config)
             except ValueError:
                 pass
             else:
@@ -44,7 +72,7 @@ class TestRegexes(fmn.lib.tests.Base):
 
         for value in values:
             # None of these should raise exceptions
-            fmn.lib.validate_detail_value(irc, value)
+            fmn.lib.validate_detail_value(irc, value, self.config)
 
     def test_invalid_ircnicks(self):
         values = [
@@ -54,7 +82,7 @@ class TestRegexes(fmn.lib.tests.Base):
         for value in values:
             # All of these should raise exceptions
             try:
-                fmn.lib.validate_detail_value(irc, value)
+                fmn.lib.validate_detail_value(irc, value, self.config)
             except ValueError:
                 pass
             else:

@@ -6,6 +6,7 @@ import fmn.lib.models
 import inspect
 import logging
 import re
+import smtplib
 
 import bs4
 import docutils.examples
@@ -21,7 +22,6 @@ except ImportError:
 log = logging.getLogger(__name__)
 
 irc_regex = r'[a-zA-Z_\-\[\]\\^{}|`][a-zA-Z0-9_\-\[\]\\^{}|`]*'
-email_regex = r'^([a-zA-Z0-9_\-\.\+]+)@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
 gcm_regex = r'^[\w-]+$'
 
 
@@ -192,13 +192,13 @@ def strip_anchor_tags(soup):
             yield tag
 
 
-def validate_detail_value(ctx, value):
+def validate_detail_value(ctx, value, config):
     if ctx.name == 'irc':
         if re.match(irc_regex, value) is None:
             raise ValueError("value must be a valid irc nick")
     elif ctx.name == 'email':
-        if re.match(email_regex, value) is None:
-            raise ValueError("value must be an email address")
+        mailserver = config['fmn.email.mailserver']
+        return _validate_email(value, mailserver)
     elif ctx.name == 'android':
         if re.match(gcm_regex, value) is None:
             raise ValueError("not a valid android registration id")
@@ -206,3 +206,12 @@ def validate_detail_value(ctx, value):
         raise NotImplementedError("No validation scheme for %r" % ctx.name)
     # Happy.
     return
+
+def _validate_email(value, mailserver):
+    server = smtplib.SMTP(mailserver)
+    code, reason = server.verify(value)
+    if code < 300:
+        return
+    else:
+        reason = reason.split(' ', 1)[-1]
+        raise ValueError(reason)
