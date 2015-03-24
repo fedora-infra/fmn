@@ -1,6 +1,41 @@
 Changelog
 =========
 
+0.5.0
+-----
+
+- Remove newly-added unserializable data from json export. `6fbc1cfe1 <https://github.com/fedora-infra/fmn.web/commit/6fbc1cfe1af3e6a58e8161da267c67408b93d098>`_
+- Merge pull request #47 from fedora-infra/feature/export-bugfix `2fdc6bd68 <https://github.com/fedora-infra/fmn.web/commit/2fdc6bd680021d229f779a6c4d05335ddd8ee774>`_
+- Implement one-shot toggling `30836f899 <https://github.com/fedora-infra/fmn.web/commit/30836f899e059acfedf49363149898531f93fe1a>`_
+- Merge pull request #48 from fedora-infra/oneshot `8a7205abd <https://github.com/fedora-infra/fmn.web/commit/8a7205abd379506b077a23afe1381e9119a84217>`_
+- Improve findability of the hacking document `e8379925a <https://github.com/fedora-infra/fmn.web/commit/e8379925a3b797a41293a1010dc77fbdfb091be7>`_
+- Merge pull request #49 from fedora-infra/docs `8aa53bc6d <https://github.com/fedora-infra/fmn.web/commit/8aa53bc6d4921755e2d0f67d6a433ac3093b365e>`_
+- Editable filter names. `55d3ae9cc <https://github.com/fedora-infra/fmn.web/commit/55d3ae9cc4f4e941beafd72784c12f7147ab22d9>`_
+- Switch this icon. `f8e9cad89 <https://github.com/fedora-infra/fmn.web/commit/f8e9cad89c92c563561eb159195326cc07a7656f>`_
+- Add lots of tooltips to help explain stuff. `5d63d7019 <https://github.com/fedora-infra/fmn.web/commit/5d63d70198c9d5550cf2fa7ad6ee53648c0a1709>`_
+- Toggle verbosity. `c5e6ea6b7 <https://github.com/fedora-infra/fmn.web/commit/c5e6ea6b71cd7a06b66023a73535564edcfb6cbf>`_
+- Expand editing to alter rule args also. `a34e0e313 <https://github.com/fedora-infra/fmn.web/commit/a34e0e313c8e1d366c4193c2617d5f6046b87ee7>`_
+- Remove debug statement. `52723f4d9 <https://github.com/fedora-infra/fmn.web/commit/52723f4d9a531f44e595132ba0b98dafecb56845>`_
+- Clarification. `76a62ba8f <https://github.com/fedora-infra/fmn.web/commit/76a62ba8fe19a9b2de117b328265fa8b65631f0c>`_
+- Merge pull request #51 from fedora-infra/feature/btn-tooltips `0f08f6328 <https://github.com/fedora-infra/fmn.web/commit/0f08f6328fa8ceaeb67ebaacaacff438aaa555e8>`_
+- Merge pull request #50 from fedora-infra/feature/editable-filter-names `5cf85b529 <https://github.com/fedora-infra/fmn.web/commit/5cf85b5294392b238b76427488f7645430ca9d72>`_
+- Merge pull request #52 from fedora-infra/feature/toggle-verbosity `5fae2014b <https://github.com/fedora-infra/fmn.web/commit/5fae2014bfbb8ef703f3f8e5c7ccb0ba49582803>`_
+- Add a way to delete all filters. `8c31fdd68 <https://github.com/fedora-infra/fmn.web/commit/8c31fdd68f86640235b13323125b6d548e07d78e>`_
+- Merge pull request #53 from fedora-infra/feature/delete-all `740b4fb9a <https://github.com/fedora-infra/fmn.web/commit/740b4fb9a49c0d372a9c71b2b5031849318446a9>`_
+- Add confirmation dialogs for all our "delete" actions. `bcd0e4cca <https://github.com/fedora-infra/fmn.web/commit/bcd0e4cca4a40d010064277bd0507e5edcbc01c2>`_
+- Clear up button inconsistency. `20964d732 <https://github.com/fedora-infra/fmn.web/commit/20964d732ef262368589a7b70e69ee5fe12cda2b>`_
+- Simplify login. `2024fd58e <https://github.com/fedora-infra/fmn.web/commit/2024fd58ec55af180a4cc5791ce9d684dea467ec>`_
+- Merge pull request #56 from fedora-infra/feature/simplify-login `42a12eec0 <https://github.com/fedora-infra/fmn.web/commit/42a12eec07f176fa5f786ba3ae781cb9a46fae87>`_
+- Merge pull request #55 from fedora-infra/feature/button-consistency `00f7b425c <https://github.com/fedora-infra/fmn.web/commit/00f7b425cb4db19e7823ea132341b9b067f7b92c>`_
+- Merge branch 'develop' into feature/confirmation `7e13a0ef6 <https://github.com/fedora-infra/fmn.web/commit/7e13a0ef6cbf4902f746bc841e7905511e198bd4>`_
+- Merge pull request #54 from fedora-infra/feature/confirmation `0f067a9a7 <https://github.com/fedora-infra/fmn.web/commit/0f067a9a747a693775e50b10fe38f39e1f36c63e>`_
+- Pass new required parameter to fmn.lib.validate_detail_value. `bef8d57cb <https://github.com/fedora-infra/fmn.web/commit/bef8d57cbfdb15cdd8b6da6a445f3955652a7e67>`_
+- Merge pull request #57 from fedora-infra/feature/ask-smtp-server-to-validate `d9a9d9a0e <https://github.com/fedora-infra/fmn.web/commit/d9a9d9a0ed21dddf013527b4c1266109c6b7e836>`_
+- Make some things more seamless for admins. `1f8a073b0 <https://github.com/fedora-infra/fmn.web/commit/1f8a073b0a869b86e76a8316b984df246ce0bbda>`_
+- Merge pull request #58 from fedora-infra/feature/admin-fixes `ecc314f10 <https://github.com/fedora-infra/fmn.web/commit/ecc314f108fc2fa222af84816382f568fea49343>`_
+- Fix not_reserved negative lookahead regex. `5e866f28f <https://github.com/fedora-infra/fmn.web/commit/5e866f28f4532e0759e29e57228bdde78e19df42>`_
+- Merge pull request #59 from fedora-infra/feature/api-is-a-substring-of-jcapik `af38ff1ab <https://github.com/fedora-infra/fmn.web/commit/af38ff1abbed30e526b201a815b3b93a9f7fca38>`_
+
 0.4.7
 -----
 
