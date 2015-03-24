@@ -28,7 +28,9 @@ I am a notifications bot run by Fedora Infrastructure.  My commands are:
   'stop'  -- stops all messages
   'start' -- starts sending messages again
   'list categories' -- list all the categories
-  'list preferences' -- list all the preferences
+  'list rules <category_name>' -- list all the rules for a category
+  'list filters' -- list all filters for sender's nick
+  'list filters <filter_name>' -- list all the rules for the filter
   'help'  -- produces this help message
 You can update your preferences at {base_url}
 You can contact {support_email} if you have any concerns/issues/abuse.
@@ -138,6 +140,9 @@ class IRCBackend(BaseBackend):
             'default': self.cmd_default,
         }
 
+        # These are callbacks we use when people try to message us with
+        # arguments for the `list` commands e.g. list categories,
+        # list filters etc.
         self.list_commands = {
             'categories': self.subcmd_categories,
             'rules': self.subcmd_rules,
@@ -198,6 +203,8 @@ class IRCBackend(BaseBackend):
         valid_paths = fmn.lib.load_rules(root="fmn.rules")
         subcmd_string = message.rsplit(None, 1)[1].lower()
 
+        # Check if the sub command is `categories` then it returns
+        # the list of categories else returns the default error message
         if subcmd_string.strip() == 'categories':
 
             rule_types = list(set([
@@ -220,10 +227,14 @@ class IRCBackend(BaseBackend):
         valid_paths = fmn.lib.load_rules(root="fmn.rules")
         subcmd_string = message.rsplit(None, 1)[1].lower()
 
+        # Returns the default error message if the rule is not in the format
+        # of `list rules <category_name>`
         if subcmd_string.strip() == 'rules':
             self.commands['default'](nick, message)
             return
 
+        # Returns the list of rules associated with the category name
+        # else an error message is returned
         valid_category = False
         for root in valid_paths:
             for path in valid_paths[root]:
@@ -231,7 +242,7 @@ class IRCBackend(BaseBackend):
                     continue
                 self.send(nick, '  - {title}'.format(
                     title=valid_paths[root][path]['title']))
-                valid_subcmd = True
+                valid_category = True
 
         if not valid_category:
             self.send(nick, "Not a valid category.")
@@ -250,6 +261,11 @@ class IRCBackend(BaseBackend):
 
         subcmd_string = message.rsplit(None, 1)[1].lower()
 
+        # Returns the list of filters associated with the rule if the sub
+        # command ends with `filters` else it is checked for the validity of
+        # the filter name. If the matching filter is found then the list of
+        # rules for the filter is returned. If the matching filter is not found
+        # then an error message is returned
         if subcmd_string.strip() == 'filters':
             filters = pref.filters
 
