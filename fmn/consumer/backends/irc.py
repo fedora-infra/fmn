@@ -255,8 +255,8 @@ class IRCBackend(BaseBackend):
         pref = self.get_preference(sess, nick)
 
         if pref is None:
-            self.send(nick, 'The nick is not configured with Fedora
-                      Notifications')
+            self.send(nick,
+                      'The nick is not configured with Fedora Notifications')
             return
 
         subcmd_string = message.rsplit(None, 1)[1].lower()
@@ -277,9 +277,9 @@ class IRCBackend(BaseBackend):
                     filtr_name=filtr.name)
                 )
         else:
-            filtr = pref.get_filter_name(sess, subcmd_string)
-
-            if not filtr:
+            try:
+                filtr = pref.get_filter_name(sess, subcmd_string)
+            except ValueError:
                 self.send(nick, 'Not a valid filter')
                 return
 
