@@ -257,6 +257,7 @@ class IRCBackend(BaseBackend):
         if pref is None:
             self.send(nick,
                       'The nick is not configured with Fedora Notifications')
+            sess.close()
             return
 
         subcmd_string = message.rsplit(None, 1)[1].lower()
@@ -269,7 +270,7 @@ class IRCBackend(BaseBackend):
         if subcmd_string.strip() == 'filters':
             filters = pref.filters
 
-            self.send(nick, 'You have {num_filter} rule filter(s)'.format(
+            self.send(nick, 'You have {num_filter} filter(s)'.format(
                 num_filter=len(filters)))
 
             for filtr in filters:
@@ -281,6 +282,7 @@ class IRCBackend(BaseBackend):
                 filtr = pref.get_filter_name(sess, subcmd_string)
             except ValueError:
                 self.send(nick, 'Not a valid filter')
+                sess.close()
                 return
 
             rules = filtr.rules
@@ -306,6 +308,7 @@ class IRCBackend(BaseBackend):
                             value=value
                         ))
                 self.send(nick, '-*'*10)
+        sess.close()
 
     def cmd_help(self, nick, message):
         self.log.info("CMD help:  %r sent us %r" % (nick, message))
