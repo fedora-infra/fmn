@@ -148,7 +148,10 @@ def _get_pkgdb2_packages_for(config, username):
 
     data = req.json()
 
-    packages_of_interest = data['point of contact'] + data['co-maintained']
+    packages_of_interest = \
+        data['point of contact'] + \
+        data['co-maintained'] + \
+        data['watch']
     packages_of_interest = set([p['name'] for p in packages_of_interest])
     log.debug("done talking with pkgdb2 for now.  %0.2fs", time.time() - start)
     return packages_of_interest
