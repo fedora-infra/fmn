@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.5.1
+-----
+
+- Make it possible to disable one-shot when disabled `ac239911a <https://github.com/fedora-infra/fmn.web/commit/ac239911a2bf23064ac98ed0c48179d180c7c12f>`_
+- Merge pull request #60 from fedora-infra/disable-oneshot-if-triggered `3c1b027dd <https://github.com/fedora-infra/fmn.web/commit/3c1b027dd3b3b43c186c3b72e07b6b19005cc493>`_
+- Promote this to h1. `bae017aaa <https://github.com/fedora-infra/fmn.web/commit/bae017aaabf8b356f0828c6bb0955725447fbe20>`_
+- Add a little indicator about oneshot status. `498c8fe58 <https://github.com/fedora-infra/fmn.web/commit/498c8fe5871471f096767cfbbe84de7c4752ee8a>`_
+- Merge pull request #61 from fedora-infra/feature/oneshot-indicators `151d54002 <https://github.com/fedora-infra/fmn.web/commit/151d54002b1a845e229ec5bfb18b76ae310b0a66>`_
+
 0.5.0
 -----
 
