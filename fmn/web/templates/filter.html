@@ -4,7 +4,7 @@
 <div id="title-header" class="page-header">
   <h1 class="read"> {{filter.name}}
     <a href="#" data-parent="#title-header" class="btn btn-xs btn-edit btn-default">Edit</a></h1>
-  <h2 class="write hidden">
+  <h1 class="write hidden">
     <form class="form-inline" role="form"
       action="{{url_for('handle_filter')}}" method="post">
       <input name="openid" id="openid" value="{{openid}}" type="hidden">
@@ -15,7 +15,7 @@
         <span class="glyphicon glyphicon-ok-circle"></span>Save</button>
       <a href="#" data-parent="#title-header" class="btn btn-xs btn-cancel btn-default">Cancel</a>
     </form>
-  </h2>
+  </h1>
   <h3>sent to {{current}}</h3>
 </div>
 
