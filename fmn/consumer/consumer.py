@@ -154,7 +154,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 log.info("Autocreating account for %r" % username)
                 openid = '%s.id.fedoraproject.org' % username
                 openid_url = 'https://%s.id.fedoraproject.org' % username
-                email = self.get_fas_email(self.hub.config, username)
+                email = get_fas_email(self.hub.config, username)
                 user = fmn.lib.models.User.get_or_create(
                     session, openid=openid, openid_url=openid_url,
                     create_defaults=True, detail_values=dict(email=email),
