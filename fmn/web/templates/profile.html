@@ -75,6 +75,7 @@
   {% endif %}
 </div>
 
+{% if 'android in g.fedmsg_config['fmn.backends'] %}
 <div class="row">
   <div class="col-md-4">
     <hr />
@@ -110,5 +111,6 @@
     {% endif %}
   </div>
 </div>
+{% endif %}
 
 {% endblock %}
