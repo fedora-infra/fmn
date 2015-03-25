@@ -183,7 +183,7 @@ class EmailBackend(BaseBackend):
         self.log.warning("Dealing with bad email %s, %s" % (address, user))
         pref = self.preference_for(session, address)
         if address.endswith('@fedoraproject.org'):
-            fas_email = get_fas_email(user, **self.config)
+            fas_email = get_fas_email(self.config, user)
             self.log.info("Got fas email as %r " % fas_email)
             if fas_email != address:
                 pref.delete_details(address)
