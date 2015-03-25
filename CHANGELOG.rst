@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.5.1
+-----
+
+- Oneshot bugfix. `cf777fe26 <https://github.com/fedora-infra/fmn.consumer/commit/cf777fe26bd38dba03b28e8d08f830066f152d86>`_
+- Merge pull request #57 from fedora-infra/feature/oneshot-bugfix `c412a46e4 <https://github.com/fedora-infra/fmn.consumer/commit/c412a46e47f16e12c1d7902a55752473089c2905>`_
+- When constructing fake recipient dict, make sure to populate all needed values. `ba1491709 <https://github.com/fedora-infra/fmn.consumer/commit/ba1491709709030c93c2068a9603ebf3820500b9>`_
+- Merge pull request #58 from fedora-infra/feature/flesh-out `be328ad72 <https://github.com/fedora-infra/fmn.consumer/commit/be328ad72d7f205b2c1bb0b47b48a0b33b734fa5>`_
+
 0.5.0
 -----
 
