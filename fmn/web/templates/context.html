@@ -72,7 +72,14 @@
 
       {% for fltr in preference.filters %}
       <a href="{{fltr.id}}" class="list-group-item">
-        <h4 class="list-group-item-heading">{{fltr.name}}</h4>
+        <h4 class="list-group-item-heading">
+          {% if fltr.oneshot %}
+            <span class="glyphicon glyphicon-star text-info"
+            data-toggle="tooltip" title="This is a one-shot filter which will
+            disable itself after the next time it matches a message."></span>
+          {% endif %}
+          {{fltr.name}}
+        </h4>
         {% if fltr.rules %}
         <dl class="list-group-item-text dl-horizontal">
           {% for rule in fltr.rules %}

@@ -2,11 +2,22 @@
 
 {% block body %}
 <div id="title-header" class="page-header">
-  <h1 class="read"> {{filter.name}}
+  <h1 class="read">
+    {% if filter.oneshot %}
+      <span class="glyphicon glyphicon-star text-info"
+      data-toggle="tooltip" title="This is a one-shot filter which will
+      disable itself after the next time it matches a message."></span>
+    {% endif %}
+    {{filter.name}}
     <a href="#" data-parent="#title-header" class="btn btn-xs btn-edit btn-default">Edit</a></h1>
   <h1 class="write hidden">
     <form class="form-inline" role="form"
       action="{{url_for('handle_filter')}}" method="post">
+      {% if filter.oneshot %}
+        <span class="glyphicon glyphicon-star text-info"
+        data-toggle="tooltip" title="This is a one-shot filter which will
+        disable itself after the next time it matches a message."></span>
+      {% endif %}
       <input name="openid" id="openid" value="{{openid}}" type="hidden">
       <input name="context" id="context" value="{{current}}" type="hidden">
       <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
