@@ -1,6 +1,17 @@
 Changelog
 =========
 
+0.5.2
+-----
+
+- Typofix. `75c8b6945 <https://github.com/fedora-infra/fmn.consumer/commit/75c8b6945d4cf3c7114f29ffd12eee3cf3a1fa7b>`_
+- Merge pull request #59 from fedora-infra/feature/typofix `ab230258f <https://github.com/fedora-infra/fmn.consumer/commit/ab230258f53ca0bb92cf5a507facc60823677454>`_
+- Another typofix. `4cde6763e <https://github.com/fedora-infra/fmn.consumer/commit/4cde6763e8e670873534d23fed887c178eef644d>`_
+- A third typofix. `823c18d51 <https://github.com/fedora-infra/fmn.consumer/commit/823c18d51d5a602b8bf5ffe077e9952a7a5f6051>`_
+- Use dict interface to bunch. `6c891692c <https://github.com/fedora-infra/fmn.consumer/commit/6c891692c5595f4cf9822bee6b42a33f141af5ed>`_
+- The base url has a trailing slash already. `6c1b6a0a5 <https://github.com/fedora-infra/fmn.consumer/commit/6c1b6a0a5c4cc15b693657edbfee0b0ed4315a27>`_
+- Merge pull request #60 from fedora-infra/feature/typofix2 `b9dfff68e <https://github.com/fedora-infra/fmn.consumer/commit/b9dfff68e0e1805e96916e7a47eae81ecfd9a666>`_
+
 0.5.1
 -----
 
