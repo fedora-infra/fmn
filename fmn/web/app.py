@@ -630,7 +630,8 @@ def handle_confirmation(action, secret):
     if not confirmation:
         flask.abort(404)
 
-    if flask.g.auth.openid != confirmation.openid:
+    if flask.g.auth.openid != confirmation.openid \
+            and not admin(flask.g.auth.openid):
         flask.abort(403)
 
     if action == 'accept':
