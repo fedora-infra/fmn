@@ -30,8 +30,8 @@ def get_fas_email(config, username):
     try:
         fas = fedora.client.AccountSystem(**config['fas_credentials'])
         person = fas.person_by_username(username)
-        if person.email:
-            return person.email
+        if person.get('email'):
+            return person['email']
         raise ValueError("No email found: %r, %r" % (person.email, username))
     except Exception:
         log.exception("Failed to get FAS email for %r" % username)
