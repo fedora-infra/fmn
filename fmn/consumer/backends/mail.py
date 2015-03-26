@@ -186,11 +186,11 @@ class EmailBackend(BaseBackend):
             fas_email = get_fas_email(self.config, user)
             self.log.info("Got fas email as %r " % fas_email)
             if fas_email != address:
-                pref.delete_details(address)
-                pref.update_details(fas_email)
+                pref.delete_details(session, address)
+                pref.update_details(session, fas_email)
             else:
                 self.log.warning("Disabling %s for good..." % user)
-                pref.disable()
+                pref.set_enabled(session, False)
         else:
             self.log.warning("Disabling %s for good..." % user)
-            pref.disable()
+            pref.set_enabled(session, False)
