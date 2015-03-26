@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.5.2
+-----
+
+- Only show android blurb if android is enabled. `a48e61bc2 <https://github.com/fedora-infra/fmn.web/commit/a48e61bc2355acee6f029a0fc405156c27fbeca6>`_
+- Serves me right.. `12a3a69c4 <https://github.com/fedora-infra/fmn.web/commit/12a3a69c488d5cf2984f125f2a2e1d2b627040d9>`_
+- Some more admin view fixes. `e4e83ecf3 <https://github.com/fedora-infra/fmn.web/commit/e4e83ecf392c0913de817d5841a96e93254e3be1>`_
+- Merge pull request #62 from fedora-infra/feature/admin-fixes2 `43f9ac84c <https://github.com/fedora-infra/fmn.web/commit/43f9ac84caf64c82240ee3b27235f04f61077147>`_
+
 0.5.1
 -----
 
