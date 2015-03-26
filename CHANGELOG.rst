@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.5.1
+-----
+
+- Add watchcommits/watchbugs to the package-ownership fmn rule. `5c9cee74f <https://github.com/fedora-infra/fmn.rules/commit/5c9cee74febea828db214333a4c39a6aaf0d3df1>`_
+- Merge pull request #47 from fedora-infra/feature/watchcommits `015d84019 <https://github.com/fedora-infra/fmn.rules/commit/015d84019de458c8db89624d6a496f0c1bea669e>`_
+
 0.5.0
 -----
 
