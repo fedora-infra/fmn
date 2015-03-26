@@ -22,7 +22,7 @@ email {support_email} if you have any concerns/issues/abuse.
 
 reason = u"""
 You received this message due to your preference settings at
-{base_url}/{user}/email/{filter_id}
+{base_url}{user}/email/{filter_id}
 """
 
 
