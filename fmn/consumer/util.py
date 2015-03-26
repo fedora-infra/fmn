@@ -32,7 +32,7 @@ def get_fas_email(config, username):
         person = fas.person_by_username(username)
         if person.get('email'):
             return person['email']
-        raise ValueError("No email found: %r, %r" % (person.email, username))
+        raise ValueError("No email found: %r" % username)
     except Exception:
         log.exception("Failed to get FAS email for %r" % username)
         return '%s@fedoraproject.org' % username
