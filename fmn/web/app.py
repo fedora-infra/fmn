@@ -224,7 +224,7 @@ def inject_variable():
     openid = None
     contexts = []
     if flask.g.auth.logged_in:
-        openid = flask.g.auth.openid
+        logged_in_user = flask.g.auth.openid
         contexts = fmn.lib.models.Context.all(SESSION)
 
     web_version = get_distribution('fmn.web').version
@@ -456,6 +456,7 @@ def context(openid, context):
     return flask.render_template(
         'context.html',
         current=context.name,
+        openid=openid,
         context=context,
         confirmation=context.get_confirmation(openid),
         preference=pref)
@@ -505,6 +506,7 @@ def filter(openid, context, filter_id):
     return flask.render_template(
         'filter.html',
         current=context,
+        openid=openid,
         filter=filter)
 
 
