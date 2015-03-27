@@ -159,6 +159,17 @@ class IRCBackend(BaseBackend):
     def get_preference(self, session, detail_value):
         return self.preference_for(session, detail_value)
 
+    def dequote(self, text):
+        """ Remove the beginning and the ending matching single
+        and double quotes. Returns unchanged string if beginning and
+        ending character don't match.
+
+        :args text: text in which the quotes need to removed.
+        """
+        if text and (text[0] == text[-1]) and text.startswith(("'", '"')):
+            return text[1:-1]
+        return text
+
     def send(self, nick, line):
         for client in self.clients:
             client.msg(nick.encode('utf-8'), line.encode('utf-8'))
@@ -201,7 +212,7 @@ class IRCBackend(BaseBackend):
         self.log.info("CMD list categories:  %r sent us %r" % (nick, message))
 
         valid_paths = fmn.lib.load_rules(root="fmn.rules")
-        subcmd_string = message.rsplit(None, 1)[1].lower()
+        subcmd_string = message.split(None, 2)[-1].lower()
 
         # Check if the sub command is `categories` then it returns
         # the list of categories else returns the default error message
@@ -225,7 +236,7 @@ class IRCBackend(BaseBackend):
         self.log.info("CMD list rules:  %r sent us %r" % (nick, message))
 
         valid_paths = fmn.lib.load_rules(root="fmn.rules")
-        subcmd_string = message.rsplit(None, 1)[1].lower()
+        subcmd_string = message.split(None, 2)[-1].lower()
 
         # Returns the default error message if the rule is not in the format
         # of `list rules <category_name>`
@@ -260,7 +271,7 @@ class IRCBackend(BaseBackend):
             sess.close()
             return
 
-        subcmd_string = message.rsplit(None, 1)[1].lower()
+        subcmd_string = message.split(None, 2)[-1].lower()
 
         # Returns the list of filters associated with the rule if the sub
         # command ends with `filters` else it is checked for the validity of
@@ -278,6 +289,8 @@ class IRCBackend(BaseBackend):
                     filtr_name=filtr.name)
                 )
         else:
+            subcmd_string = self.dequote(subcmd_string)
+
             try:
                 filtr = pref.get_filter_name(sess, subcmd_string)
             except ValueError:
