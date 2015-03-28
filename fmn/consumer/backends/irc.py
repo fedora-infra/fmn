@@ -10,6 +10,7 @@ import twisted.internet.protocol
 import twisted.words.protocols.irc
 
 from twisted.internet import reactor
+from bleach import clean
 
 CONFIRMATION_TEMPLATE = """
 {username} has requested that notifications be sent to this nick
@@ -26,9 +27,18 @@ HELP_TEMPLATE = """
 I am a notifications bot run by Fedora Infrastructure.  My commands are:
   'stop'  -- stops all messages
   'start' -- starts sending messages again
+  'list categories' -- list all the categories
+  'list rules <category_name>' -- list all the rules for a category
+  'list filters' -- list all filters for sender's nick
+  'list filters <filter_name>' -- list all the rules for the filter
   'help'  -- produces this help message
 You can update your preferences at {base_url}
 You can contact {support_email} if you have any concerns/issues/abuse.
+"""
+
+rule_template = """
+ - {rule_title}
+   {rule_doc}
 """
 
 mirc_colors = {
@@ -125,8 +135,18 @@ class IRCBackend(BaseBackend):
         self.commands = {
             'start': self.cmd_start,
             'stop': self.cmd_stop,
+            'list': self.cmd_list,
             'help': self.cmd_help,
             'default': self.cmd_default,
+        }
+
+        # These are callbacks we use when people try to message us with
+        # arguments for the `list` commands e.g. list categories,
+        # list filters etc.
+        self.list_commands = {
+            'categories': self.subcmd_categories,
+            'rules': self.subcmd_rules,
+            'filters': self.subcmd_filters,
         }
 
         reactor.connectTCP(
@@ -135,6 +155,20 @@ class IRCBackend(BaseBackend):
             factory,
             timeout=self.timeout,
         )
+
+    def get_preference(self, session, detail_value):
+        return self.preference_for(session, detail_value)
+
+    def dequote(self, text):
+        """ Remove the beginning and the ending matching single
+        and double quotes. Returns unchanged string if beginning and
+        ending character don't match.
+
+        :args text: text in which the quotes need to removed.
+        """
+        if text and (text[0] == text[-1]) and text.startswith(("'", '"')):
+            return text[1:-1]
+        return text
 
     def send(self, nick, line):
         for client in self.clients:
@@ -154,12 +188,139 @@ class IRCBackend(BaseBackend):
     def cmd_stop(self, nick, message):
         self.log.info("CMD stop:  %r sent us %r" % (nick, message))
         sess = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
+
         if self.disabled_for(sess, nick):
             self.send(nick, "Messages already stopped.  Nothing to do.")
         else:
             self.disable(sess, nick)
             self.send(nick, "OK")
         sess.commit()
+        sess.close()
+
+    def cmd_list(self, nick, message):
+        self.log.info("CMD list:  %r sent us %r" % (nick, message))
+        if message.strip() == 'list':
+            self.commands['default'](nick, message)
+        else:
+            subcmd_string = message.split(None, 2)[1].strip().lower()
+            self.list_commands.get(
+                subcmd_string,
+                self.commands['default']
+            )(nick, message)
+
+    def subcmd_categories(self, nick, message):
+        self.log.info("CMD list categories:  %r sent us %r" % (nick, message))
+
+        valid_paths = fmn.lib.load_rules(root="fmn.rules")
+        subcmd_string = message.split(None, 2)[-1].lower()
+
+        # Check if the sub command is `categories` then it returns
+        # the list of categories else returns the default error message
+        if subcmd_string.strip() == 'categories':
+
+            rule_types = list(set([
+                d[path]['submodule'] for _, d in valid_paths.items()
+                for path in d
+            ]))
+
+            if rule_types:
+                self.send(nick, "The list of categories are:")
+
+            for rule_type in rule_types:
+                self.send(nick, "  - {rule_type}".format(rule_type=rule_type))
+
+        else:
+            self.commands['default'](nick, message)
+
+    def subcmd_rules(self, nick, message):
+        self.log.info("CMD list rules:  %r sent us %r" % (nick, message))
+
+        valid_paths = fmn.lib.load_rules(root="fmn.rules")
+        subcmd_string = message.split(None, 2)[-1].lower()
+
+        # Returns the default error message if the rule is not in the format
+        # of `list rules <category_name>`
+        if subcmd_string.strip() == 'rules':
+            self.commands['default'](nick, message)
+            return
+
+        # Returns the list of rules associated with the category name
+        # else an error message is returned
+        valid_category = False
+        for root in valid_paths:
+            for path in valid_paths[root]:
+                if valid_paths[root][path]['submodule'] != subcmd_string:
+                    continue
+                self.send(nick, '  - {title}'.format(
+                    title=valid_paths[root][path]['title']))
+                valid_category = True
+
+        if not valid_category:
+            self.send(nick, "Not a valid category.")
+
+    def subcmd_filters(self, nick, message):
+        self.log.info("CMD list filters:  %r sent us %r" % (nick, message))
+
+        valid_paths = fmn.lib.load_rules(root="fmn.rules")
+        sess = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
+        pref = self.get_preference(sess, nick)
+
+        if pref is None:
+            self.send(nick,
+                      'The nick is not configured with Fedora Notifications')
+            sess.close()
+            return
+
+        subcmd_string = message.split(None, 2)[-1].lower()
+
+        # Returns the list of filters associated with the rule if the sub
+        # command ends with `filters` else it is checked for the validity of
+        # the filter name. If the matching filter is found then the list of
+        # rules for the filter is returned. If the matching filter is not found
+        # then an error message is returned
+        if subcmd_string.strip() == 'filters':
+            filters = pref.filters
+
+            self.send(nick, 'You have {num_filter} filter(s)'.format(
+                num_filter=len(filters)))
+
+            for filtr in filters:
+                self.send(nick, '  - {filtr_name}'.format(
+                    filtr_name=filtr.name)
+                )
+        else:
+            subcmd_string = self.dequote(subcmd_string)
+
+            try:
+                filtr = pref.get_filter_name(sess, subcmd_string)
+            except ValueError:
+                self.send(nick, 'Not a valid filter')
+                sess.close()
+                return
+
+            rules = filtr.rules
+            self.send(nick,
+                      '{num_rule} matching rules for this filter'.format(
+                        num_rule=len(rules)))
+
+            for rule in rules:
+                rule_title = rule.title(valid_paths)
+                rule_doc = clean(rule.doc(
+                                valid_paths,
+                                no_links=True
+                            ).replace('\n', ' '), strip=True)
+                self.send(nick, rule_template.format(
+                    rule_title=rule_title,
+                    rule_doc=rule_doc
+                ))
+
+                if rule.arguments:
+                    for key, value in rule.arguments.iteritems():
+                        self.send(nick, '   {key} - {value}'.format(
+                            key=key,
+                            value=value
+                        ))
+                self.send(nick, '-*'*10)
         sess.close()
 
     def cmd_help(self, nick, message):
