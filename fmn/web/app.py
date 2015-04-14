@@ -430,9 +430,8 @@ def reset_api_key():
 
 @app.route('/api/<openid>/<context>')
 @app.route('/api/<openid>/<context>/')
-@login_required
 def context_json(openid, context):
-    context, pref = _get_context(openid, context)
+    context, pref = _get_context(openid, context, authz=False)
 
     pref = pref.__json__()
 
@@ -462,8 +461,8 @@ def context(openid, context):
         preference=pref)
 
 
-def _get_context(openid, context):
-    if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
+def _get_context(openid, context, authz=True):
+    if authz and flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         flask.abort(403)
 
     context = fmn.lib.models.Context.by_name(SESSION, context)
@@ -483,9 +482,8 @@ def _get_context(openid, context):
 
 @app.route('/api/<openid>/<context>/<int:filter_id>')
 @app.route('/api/<openid>/<context>/<int:filter_id>/')
-@login_required
 def filter_json(openid, context, filter_id):
-    filter = _get_filter(openid, context, filter_id).__json__()
+    filter = _get_filter(openid, context, filter_id, authz=False).__json__()
 
     # Stuff nice extra info in there for human readability
     for rule in filter['rules']:
@@ -510,8 +508,8 @@ def filter(openid, context, filter_id):
         filter=filter)
 
 
-def _get_filter(openid, context, filter_id):
-    if flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
+def _get_filter(openid, context, filter_id, authz=True):
+    if authz and flask.g.auth.openid != openid and not admin(flask.g.auth.openid):
         flask.abort(403)
 
     context = fmn.lib.models.Context.by_name(SESSION, context)
