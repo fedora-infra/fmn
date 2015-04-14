@@ -31,4 +31,9 @@ if '--with-dev-data' in sys.argv:
         detail_name="registration id", icon="phone",
         placeholder="laksdjfasdlfkj183097falkfj109f"
     )
+    context4 = fmn.lib.models.Context.create(
+        session, name="desktop", description="fedmsg-notify",
+        detail_name="None", icon="console",
+        placeholder="There's no need to put a value here"
+    )
     session.commit()
