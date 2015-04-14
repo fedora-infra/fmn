@@ -41,6 +41,15 @@
     </p>
     {% endif %}
 
+    {% if current == 'desktop' %}
+    <p class="lead">Push-notifications to your desktop client.</p>
+    <p>You'll need to install <a href="https://apps.fedoraproject.org/packages/fedmsg-notify">fedmsg-notify
+      </a> on your system to take advantage of this.  <code>fedmsg-notify</code> will
+      grab its preferences from the JSON api of this webapp and use those to filter messages
+      locally on your box.  You can return here to update those preferences.
+    </p>
+    {% endif %}
+
     <p>You have {{preference.filters|length}} rule filters
     defined for the {{current}} messaging context.  You can add new ones and
     delete existing ones here.</p>
@@ -49,8 +58,10 @@
     way{% if preference.enabled %}.{% else %} (except that you currently have
     the {{current}} delivery mechanism disabled.  Enable it and
     <strong>then</strong> we'll send you notifications.){% endif %}
+    {% if context.detail_name != "None" %}
     We also need to know where you want your {{current}} messages delivered
     (a <em>{{context.detail_name}}</em>); you can set that up here.
+    {% endif %}
     </p>
 
     <div class="list-group {{'hidden' if preference.can_send is sameas false}}">
@@ -191,6 +202,7 @@
       </div>
     </div>
 
+    {% if context.detail_name != "None" %}
     <div class="panel panel-default {{'hidden' if preference.enabled is sameas false}}">
       <div class="panel-heading">
         <h3 class="panel-title">
@@ -404,6 +416,8 @@
 
         </div>
       </div> <!-- end panel -->
+
+      {% endif %}
 
       <div class="panel panel-default {{'hidden' if preference.can_send is sameas false}}">
         <div class="panel-heading">
