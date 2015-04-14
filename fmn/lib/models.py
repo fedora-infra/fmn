@@ -519,7 +519,10 @@ class Preference(BASE):
 
     @property
     def can_send(self):
-        return self.enabled and bool(self.detail_values)
+        return self.enabled and (
+            bool(self.detail_values) or
+            self.context.detail_name == "None"
+        )
 
     @property
     def should_batch(self):
