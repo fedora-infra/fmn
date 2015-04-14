@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.5.3
+-----
+
+- Let admins confirm details for other users. `e2b5f0240 <https://github.com/fedora-infra/fmn.web/commit/e2b5f02403ff4cc53eb69b07588b17fd5ce26a24>`_
+- Fix the about page when logged in. `2746bd2fd <https://github.com/fedora-infra/fmn.web/commit/2746bd2fdaa6f67a7bf37a1de044021c303173b4>`_
+- Merge pull request #63 from fedora-infra/feature/about-page-fix `d142479cf <https://github.com/fedora-infra/fmn.web/commit/d142479cfc374c7e11cdaa27c39884877244605b>`_
+- Make it so you don't have to be logged in to get your preferences via json. `b4c7d01ec <https://github.com/fedora-infra/fmn.web/commit/b4c7d01ec7ff90b464d06282a7ebbbf7be8ec31b>`_
+- Don't check authz in the case where we don't require login. `c55ed5aac <https://github.com/fedora-infra/fmn.web/commit/c55ed5aac0463f5333dbf4d7f21ae0628c9f7e76>`_
+- Merge pull request #64 from fedora-infra/feature/nologin `990277de9 <https://github.com/fedora-infra/fmn.web/commit/990277de91eada3e85cee42028a79ea098939e59>`_
+
 0.5.2
 -----
 
