@@ -430,7 +430,6 @@ def reset_api_key():
 
 @app.route('/api/<openid>/<context>')
 @app.route('/api/<openid>/<context>/')
-@login_required
 def context_json(openid, context):
     context, pref = _get_context(openid, context)
 
@@ -483,7 +482,6 @@ def _get_context(openid, context):
 
 @app.route('/api/<openid>/<context>/<int:filter_id>')
 @app.route('/api/<openid>/<context>/<int:filter_id>/')
-@login_required
 def filter_json(openid, context, filter_id):
     filter = _get_filter(openid, context, filter_id).__json__()
 
