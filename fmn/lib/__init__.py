@@ -94,7 +94,8 @@ def matches(filter, message, valid_paths, rule_cache, config):
 
 
 def load_preferences(session, config, valid_paths,
-                     cull_disabled=False, openid=None):
+                     cull_disabled=False, openid=None,
+                     cull_backends=None):
     """ Every rule for every filter for every context for every user.
 
     Any preferences in the DB that are for contexts that are disabled in the
@@ -105,6 +106,9 @@ def load_preferences(session, config, valid_paths,
     submitted, then only the preferences of that user are returned (and this is
     less expensive).
     """
+
+    cull_backends = cull_backends or []
+
     query = session.query(fmn.lib.models.Preference)
 
     if openid:
@@ -116,6 +120,7 @@ def load_preferences(session, config, valid_paths,
         for preference in preferences
         if (
             preference.context.name in config['fmn.backends']
+            and preference.context.name not in cull_backends
             and (not cull_disabled or preference.enabled)
         )
     ]
