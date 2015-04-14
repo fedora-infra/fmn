@@ -1,10 +1,12 @@
 import os
 import fmn.lib.models
 
+import unittest
+
 DB_PATH = 'sqlite:////var/tmp/test-fmn-lib.sqlite'
 
 
-class Base(object):
+class Base(unittest.TestCase):
     def setUp(self):
         dbfile = DB_PATH.split('///')[1]
         if os.path.exists(dbfile):
