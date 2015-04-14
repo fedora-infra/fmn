@@ -4,7 +4,6 @@ import threading
 import time
 import random
 
-import fedora.client
 import fedmsg.consumers
 import fmn.lib
 import fmn.rules.utils
@@ -75,14 +74,16 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 log.info("Loading and caching all preferences for all users")
                 self.cached_preferences = fmn.lib.load_preferences(
                     session, self.hub.config, self.valid_paths,
-                    cull_disabled=True)
+                    cull_disabled=True,
+                    cull_backends=['desktop'])
             else:
                 log.info("Loading and caching preferences for %r" % openid)
                 old_preferences = [p for p in self.cached_preferences
                                    if p['user']['openid'] == openid]
                 new_preferences = fmn.lib.load_preferences(
                     session, self.hub.config, self.valid_paths,
-                    cull_disabled=True, openid=openid)
+                    cull_disabled=True, openid=openid,
+                    cull_backends=['desktop'])
                 self.cached_preferences.extend(new_preferences)
                 for old_preference in old_preferences:
                     self.cached_preferences.remove(old_preference)
