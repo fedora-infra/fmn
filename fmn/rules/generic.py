@@ -87,7 +87,7 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
     """ A particular user's packages
 
     This rule includes messages that relate to packages where the
-    specified user has **commit** ACLs.
+    specified user has commit ACLs or the watchcommits flag.
     """
 
     fasnick = kw.get('fasnick', fasnick)
