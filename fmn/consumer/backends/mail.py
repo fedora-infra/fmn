@@ -97,7 +97,7 @@ class EmailBackend(BaseBackend):
             server.quit()
         self.log.debug("Email sent")
 
-    def handle(self, session, recipient, msg):
+    def handle(self, session, recipient, msg, streamline=False):
         topic = msg['topic']
         category = topic.split('.')[3]
 

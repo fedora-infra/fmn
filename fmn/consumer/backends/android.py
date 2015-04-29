@@ -49,7 +49,7 @@ class GCMBackend(BaseBackend):
           pref.update_details(sess, j.get("message_id").get("registration_id"))
 
 
-    def handle(self, session, recipient, msg):
+    def handle(self, session, recipient, msg, streamline=False):
         self.log.debug("Notifying via gcm/android %r" % recipient)
 
         if 'registration id' not in recipient:
