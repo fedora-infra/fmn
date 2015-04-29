@@ -160,5 +160,16 @@
       });
     </script>
 
+    {% if config['FEDMENU_URL'] %}
+    <script src="{{ config['FEDMENU_URL'] }}/js/fedmenu.js"></script>
+    <script>
+      fedmenu({
+          'url': '{{ config["FEDMENU_DATA_URL"] }}',
+          'mimeType': 'application/javascript',
+          'position': 'bottom-left',
+      });
+    </script>
+    {% endif %}
+
   </body>
 </html>
