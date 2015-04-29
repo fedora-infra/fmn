@@ -119,7 +119,14 @@ class DigestProducer(FMNProducerBase):
             log.info("* Found %r queued messages" % len(queued_messages))
 
         for recipient in recipients:
-            backend.handle_batch(session, recipient, queued_messages)
+            # If there's only a single message, then send it in "the usual way"
+            # See https://github.com/fedora-infra/fmn/issues/91
+            if len(queued_messages) == 1:
+                msg = queued_messages[0].message
+                backend.handle(session, recipient, msg, streamline=True)
+            else:
+                # Otherwise, send it as a batch/digest
+                backend.handle_batch(session, recipient, queued_messages)
 
         for message in queued_messages:
             message.dequeue(session)
