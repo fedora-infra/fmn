@@ -1,8 +1,11 @@
+import abc
+
 import logging
 import fmn.lib.models
 
 
 class BaseBackend(object):
+    __metaclass__ = abc.ABCMeta
     die = False
 
     def __init__(self, config, **kwargs):
@@ -10,14 +13,17 @@ class BaseBackend(object):
         self.log = logging.getLogger("fmn")
 
     # Some methods that must be implemented by backends.
-    def handle(self, session, recipient, msg):
-        raise NotImplementedError("BaseBackend must be extended")
+    @abc.abstractmethod
+    def handle(self, session, recipient, msg, streamline=False):
+        pass
 
+    @abc.abstractmethod
     def handle_batch(self, session, queued_messages):
-        raise NotImplementedError("BaseBackend must be extended")
+        pass
 
+    @abc.abstractmethod
     def handle_confirmation(self, session, confirmation):
-        raise NotImplementedError("BaseBackend must be extended")
+        pass
 
     # Some helper methods for our child classes.
     def context_object(self, session):
