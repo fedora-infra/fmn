@@ -91,7 +91,7 @@ def _get_pkgdb2_packagers_for(config, package):
     return packagers
 
 
-def get_packages_of_user(config, username):
+def get_packages_of_user(config, username, flags):
     """ Retrieve the list of packages where the specified user some acl.
 
     :arg config: a dict containing the fedmsg config
@@ -112,7 +112,7 @@ def get_packages_of_user(config, username):
 
     for owner in owners:
         key = cache_key_generator(get_packages_of_user, owner)
-        creator = lambda: _get_pkgdb2_packages_for(config, owner)
+        creator = lambda: _get_pkgdb2_packages_for(config, owner, flags)
         subset = _cache.get_or_create(key, creator)
         packages.extend(subset)
 
@@ -131,7 +131,7 @@ def invalidate_cache_for(config, fn, arg):
     return _cache.delete(key)
 
 
-def _get_pkgdb2_packages_for(config, username):
+def _get_pkgdb2_packages_for(config, username, flags):
     log.debug("Requesting pkgdb2 packages for user %r" % username)
     start = time.time()
 
@@ -148,10 +148,7 @@ def _get_pkgdb2_packages_for(config, username):
 
     data = req.json()
 
-    packages_of_interest = \
-        data['point of contact'] + \
-        data['co-maintained'] + \
-        data['watch']
+    packages_of_interest = sum([data[flag] for flag in flags], [])
     packages_of_interest = set([p['name'] for p in packages_of_interest])
     log.debug("done talking with pkgdb2 for now.  %0.2fs", time.time() - start)
     return packages_of_interest
