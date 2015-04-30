@@ -160,5 +160,20 @@
       });
     </script>
 
+    {% if config['FEDMENU_URL'] %}
+    <script src="{{ config['FEDMENU_URL'] }}/js/fedmenu.js"></script>
+    <script src="{{ config['FEDMENU_URL'] }}/js/fedora-libravatar.js"></script>
+    <script>
+      fedmenu({
+          'url': '{{ config["FEDMENU_DATA_URL"] }}',
+          'mimeType': 'application/javascript',
+          'position': 'bottom-right',
+          {% if openid and '.id.fedoraproject.org' in openid %}
+          'user': '{{ openid | replace(".id.fedoraproject.org", "") }}',
+          {% endif %}
+      });
+    </script>
+    {% endif %}
+
   </body>
 </html>
