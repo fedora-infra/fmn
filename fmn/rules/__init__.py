@@ -6,6 +6,7 @@ from fmn.rules.bugzilla import *
 from fmn.rules.buildsys import *
 from fmn.rules.compose import *
 from fmn.rules.coprs import *
+from fmn.rules.faf import *
 from fmn.rules.fas import *
 from fmn.rules.fedbadges import *
 from fmn.rules.fedimg import *
