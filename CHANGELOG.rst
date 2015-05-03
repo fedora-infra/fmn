@@ -1,6 +1,18 @@
 Changelog
 =========
 
+0.6.0
+-----
+
+- Fix watchcommits text. `bedff651c <https://github.com/fedora-infra/fmn.rules/commit/bedff651ce6a60b16eef2fc28c378799aeb335d8>`_
+- Add rules for FAF (ABRT server) `bf829d71e <https://github.com/fedora-infra/fmn.rules/commit/bf829d71e17e9a641f7b1b9b1afc3cf4828f570f>`_
+- Merge pull request #48 from mbrysa/faf `1483c7661 <https://github.com/fedora-infra/fmn.rules/commit/1483c766110da0aa378fb69c9d7f21a25d8c6309>`_
+- Allow our pkgdb query to be more flexible. `996059f00 <https://github.com/fedora-infra/fmn.rules/commit/996059f00998ee70b3832aa9bfca9fc1b51be3be>`_
+- Add two new rules.  One for watching packages with the acl commit and another for watching packages with the watchcommits flag. `2dc58bf6c <https://github.com/fedora-infra/fmn.rules/commit/2dc58bf6c641bd49480da6f15c02ef28fa6c81a1>`_
+- Merge pull request #49 from fedora-infra/feature/separate-ownership-rules `e1162935b <https://github.com/fedora-infra/fmn.rules/commit/e1162935b5b61be8fb2b565c748ecf53e8111d81>`_
+- Handle all the new line-item meetbot messages. `c31a82bfc <https://github.com/fedora-infra/fmn.rules/commit/c31a82bfc84ad10d124ada299bd166ef51c4daa5>`_
+- Merge pull request #50 from fedora-infra/feature/line-items `f52f29c5a <https://github.com/fedora-infra/fmn.rules/commit/f52f29c5ae70e8eb4a060fd69c47fb200083756e>`_
+
 0.5.1
 -----
 
