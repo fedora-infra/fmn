@@ -1,6 +1,28 @@
 Changelog
 =========
 
+0.6.0
+-----
+
+- add list categories command in irc backend `c18fda1c8 <https://github.com/fedora-infra/fmn.consumer/commit/c18fda1c8bbdfcdd52d7504d2b3d9b4ee0b944fb>`_
+- add list rules commands to list all the rules `67402154d <https://github.com/fedora-infra/fmn.consumer/commit/67402154d39cd54667a3985e79c1f76572a6393b>`_
+- add command `list preferences` to list all the preferences `dae7d8db3 <https://github.com/fedora-infra/fmn.consumer/commit/dae7d8db39a7304c03a9f0827294df0ed1779a95>`_
+- minor cosmetic fixes to the messages sent in IRC `da9430ab8 <https://github.com/fedora-infra/fmn.consumer/commit/da9430ab83decdfe460edf1ef4fc7096d8ebb300>`_
+- add functionality to see filter, rule details `f52b7b04c <https://github.com/fedora-infra/fmn.consumer/commit/f52b7b04cfbf1f5f69dc87a870f8e6ac220ecb85>`_
+- check if the nick is configured `d42ca7ea5 <https://github.com/fedora-infra/fmn.consumer/commit/d42ca7ea5166728b77bad06cd6a7e6c6ca5940e6>`_
+- add bleach to setup `504768bfc <https://github.com/fedora-infra/fmn.consumer/commit/504768bfc13f4d8fd76c8145f44bc3e8e2f7aebd>`_
+- add documentation and appropriate help text `cd7fda60d <https://github.com/fedora-infra/fmn.consumer/commit/cd7fda60d4cad12b1991e5a626231441b4c162c2>`_
+- PEP8 fixes and fix to catch an exception for get_filter_name `c8fac6813 <https://github.com/fedora-infra/fmn.consumer/commit/c8fac68130505daf2c05093c9b97463377f3e7e3>`_
+- close session and fix grammar `56720fff5 <https://github.com/fedora-infra/fmn.consumer/commit/56720fff5d2ee2442decef4c5da0926e800540a3>`_
+- Because if they don't have an email, then they don't have an email. `95a6b9bce <https://github.com/fedora-infra/fmn.consumer/commit/95a6b9bce783497d5c1565fd746bbf62450ea5d5>`_
+- fix to include filters with multiple words and quotation marks `4a736f671 <https://github.com/fedora-infra/fmn.consumer/commit/4a736f671114264645cd0e2fdd6b6b851f3bf2ea>`_
+- Merge pull request #54 from sayanchowdhury/irc-notifications `f75c57181 <https://github.com/fedora-infra/fmn.consumer/commit/f75c57181847b7d049bc8d61675b6ee94d7de079>`_
+- Ignore desktop client preferences in the fmn.consumer code. `fcb470d7b <https://github.com/fedora-infra/fmn.consumer/commit/fcb470d7b7c7d40966191a1903b1bba1095b331c>`_
+- Merge pull request #61 from fedora-infra/feature/desktop `b49bf2277 <https://github.com/fedora-infra/fmn.consumer/commit/b49bf2277472b83b660088d794db4f489fea98af>`_
+- Standardize the streamline=False argument. `c28721f5f <https://github.com/fedora-infra/fmn.consumer/commit/c28721f5f2e04471561d511d0473c556c3b499bf>`_
+- Use regular handling when batch contains only one message. `ddda2ce2d <https://github.com/fedora-infra/fmn.consumer/commit/ddda2ce2d44601c3dabbb7a6cfd43bb4bbb472d3>`_
+- Merge pull request #62 from fedora-infra/feature/one-is-exceptional `4992f7770 <https://github.com/fedora-infra/fmn.consumer/commit/4992f7770ae8ee08a06285ab9ad2d733c014a122>`_
+
 0.5.2
 -----
 
