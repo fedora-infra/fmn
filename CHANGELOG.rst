@@ -1,6 +1,18 @@
 Changelog
 =========
 
+0.6.0
+-----
+
+- Update to bootstrap 3.3.4. `f4fb4a1c1 <https://github.com/fedora-infra/fmn.web/commit/f4fb4a1c14259aec0977d9b9e6d8688185fa7501>`_
+- Add a desktop backend. `f42fc9faa <https://github.com/fedora-infra/fmn.web/commit/f42fc9faa1964ac95f5ef5b9f464c682cc289f21>`_
+- Add desktop bits to the context template. `b11e47f1f <https://github.com/fedora-infra/fmn.web/commit/b11e47f1fc56ade0ac34a15c893cc3d41ceda693>`_
+- Merge pull request #65 from fedora-infra/feature/desktop `531299538 <https://github.com/fedora-infra/fmn.web/commit/5312995382373ff5b8d5f12ac666c0ebc9d0feae>`_
+- Add fedmenu to the master template `bdc003ee8 <https://github.com/fedora-infra/fmn.web/commit/bdc003ee87b5ca98f702922ce0dec71a978534eb>`_
+- Place the icon the right side, looks better `2cc7e027d <https://github.com/fedora-infra/fmn.web/commit/2cc7e027d9af4343b736d703554cf375c5429edd>`_
+- Add the fedmenu user entry if there is a Fedora openid defined in the template `a10676d4e <https://github.com/fedora-infra/fmn.web/commit/a10676d4e196b0e0874eb1f6d1586461cd4a6627>`_
+- Merge pull request #66 from fedora-infra/fedmenu `305363ec8 <https://github.com/fedora-infra/fmn.web/commit/305363ec843b1718e08981361b3d45a88e84ecef>`_
+
 0.5.3
 -----
 
