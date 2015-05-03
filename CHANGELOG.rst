@@ -1,6 +1,19 @@
 Changelog
 =========
 
+0.6.0
+-----
+
+- Ignore fedoratagger by default `c26b4f6f0 <https://github.com/fedora-infra/fmn.lib/commit/c26b4f6f03551187c52ee9bd8e6ea0db179becb2>`_
+- Comment on the origin of the change `20361f6b6 <https://github.com/fedora-infra/fmn.lib/commit/20361f6b6e576378223691940267bb52ffb19e99>`_
+- Merge pull request #46 from fedora-infra/ignore_tagger `8dfc00eb1 <https://github.com/fedora-infra/fmn.lib/commit/8dfc00eb1781ccddb7919f97981b22902609185e>`_
+- Add the desktop context to the setup script. `f5c74e686 <https://github.com/fedora-infra/fmn.lib/commit/f5c74e6869b54bf6d16bb8493d3c76e9fb65bec5>`_
+- Make it so that you don't need to have detail values in the db in order for the desktop backend to work. `3859b1095 <https://github.com/fedora-infra/fmn.lib/commit/3859b1095ee677ef61b4d5360562be8979380384>`_
+- Allow to load only certain subsets of preferences (not desktop). `416262aad <https://github.com/fedora-infra/fmn.lib/commit/416262aada915408d2584e2ce647ad97213868a6>`_
+- Merge pull request #47 from fedora-infra/feature/desktop `d5623c36e <https://github.com/fedora-infra/fmn.lib/commit/d5623c36e11fbabd6b4e78a1af6168ba97c3407d>`_
+- Fix the tests (the defaults changed). `698a40afd <https://github.com/fedora-infra/fmn.lib/commit/698a40afd17c95e5b1d5853d069a21b76540c1c3>`_
+- Merge pull request #48 from fedora-infra/feature/fix-tests `bc7cf647b <https://github.com/fedora-infra/fmn.lib/commit/bc7cf647b5e21eac3e5bb3420d40369e48cafee7>`_
+
 0.5.0
 -----
 
