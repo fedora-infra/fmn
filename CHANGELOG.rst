@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.6.0
+0.6.1
 -----
 
 - Declare encoding for emails in their headers. `25194edb3 <https://github.com/fedora-infra/fmn.consumer/commit/25194edb35476bdbc0090309e25accb63efe896c>`_
@@ -10,6 +10,7 @@ Changelog
 - Remove the transfer encoding declaration, since we're not doing base64. `89408018a <https://github.com/fedora-infra/fmn.consumer/commit/89408018a05207de381e64b0aad6f0236c3b753f>`_
 - Fix typo and protect against KeyError. `f6f9eff3f <https://github.com/fedora-infra/fmn.consumer/commit/f6f9eff3f941ab9bf8d1191bd57df39d9ad3141c>`_
 - Merge pull request #63 from fedora-infra/feature/email-encoding `c1268034b <https://github.com/fedora-infra/fmn.consumer/commit/c1268034bf8d108eb62565aa5bfacad1c97a6af1>`_
+- 0.6.0 `e8f5e22dd <https://github.com/fedora-infra/fmn.consumer/commit/e8f5e22dd0c48b62d75bf830a7d72279f5e310e0>`_
 
 0.6.0
 -----
