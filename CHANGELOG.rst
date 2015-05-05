@@ -4,6 +4,16 @@ Changelog
 0.6.0
 -----
 
+- Declare encoding for emails in their headers. `25194edb3 <https://github.com/fedora-infra/fmn.consumer/commit/25194edb35476bdbc0090309e25accb63efe896c>`_
+- Drop batched messages if disabled. `1f63f6144 <https://github.com/fedora-infra/fmn.consumer/commit/1f63f61446ae59132440961f5c410e1288939f21>`_
+- Merge pull request #64 from fedora-infra/feature/drop-batch-if-disabled `aef5f9feb <https://github.com/fedora-infra/fmn.consumer/commit/aef5f9feb6475629a5c73d038f90b1c3525eb992>`_
+- Remove the transfer encoding declaration, since we're not doing base64. `89408018a <https://github.com/fedora-infra/fmn.consumer/commit/89408018a05207de381e64b0aad6f0236c3b753f>`_
+- Fix typo and protect against KeyError. `f6f9eff3f <https://github.com/fedora-infra/fmn.consumer/commit/f6f9eff3f941ab9bf8d1191bd57df39d9ad3141c>`_
+- Merge pull request #63 from fedora-infra/feature/email-encoding `c1268034b <https://github.com/fedora-infra/fmn.consumer/commit/c1268034bf8d108eb62565aa5bfacad1c97a6af1>`_
+
+0.6.0
+-----
+
 - add list categories command in irc backend `c18fda1c8 <https://github.com/fedora-infra/fmn.consumer/commit/c18fda1c8bbdfcdd52d7504d2b3d9b4ee0b944fb>`_
 - add list rules commands to list all the rules `67402154d <https://github.com/fedora-infra/fmn.consumer/commit/67402154d39cd54667a3985e79c1f76572a6393b>`_
 - add command `list preferences` to list all the preferences `dae7d8db3 <https://github.com/fedora-infra/fmn.consumer/commit/dae7d8db39a7304c03a9f0827294df0ed1779a95>`_
