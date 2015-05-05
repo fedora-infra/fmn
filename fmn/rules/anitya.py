@@ -35,6 +35,36 @@ def anitya_catchall(config, message):
     return message['topic'].split('.')[3] == 'anitya'
 
 
+@hint(categories=['anitya'], invertible=False)
+def anitya_specific_distro(config, message, distro=None, *args, **kw):
+    """ Distro-specific release-monitoring.org events
+
+    This rule will match all anitya events *only for a particular distro*.
+    """
+
+    if not distro:
+        return False
+
+    if not anitya_catchall(config, message):
+        return False
+
+    d = message['msg'].get('distro', {})
+    if d:  # Have to be careful for None here
+        if d.get('name') == distro:
+            return True
+
+    d = message['msg'].get('project', {}).get('distro', {})
+    if d:  # Have to be careful for None here
+        if d.get('name') == distro:
+            return True
+
+    for pkg in message['msg'].get('message', {}).get('packages', []):
+        if pkg['distro'] == distro:
+            return True
+
+    return False
+
+
 @hint(topics=[_('anitya.distro.add', prefix='org.release-monitoring')])
 def anitya_distro_add(config, message):
     """ New distributions added to release-monitoring.org
