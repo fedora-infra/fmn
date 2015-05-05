@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.6.1
+-----
+
+- Ignore faf threshold1 messages by default. `0a08b2772 <https://github.com/fedora-infra/fmn.lib/commit/0a08b277295ec6fe3b2e2fab4ade4d2b5008f9a2>`_
+- Adjust existing prefs to also ignore faf threshold1 messages. `4bfea2ed6 <https://github.com/fedora-infra/fmn.lib/commit/4bfea2ed62f9ac4d5eb962c69013546588324b5a>`_
+- Merge pull request #49 from fedora-infra/feature/ignore-faf `19e9930e2 <https://github.com/fedora-infra/fmn.lib/commit/19e9930e2306289809aefec7435e6fddd7685531>`_
+
 0.6.0
 -----
 
