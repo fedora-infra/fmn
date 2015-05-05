@@ -119,6 +119,13 @@ class DigestProducer(FMNProducerBase):
             log.info("* Found %r queued messages" % len(queued_messages))
 
         for recipient in recipients:
+
+            # If the preference is disabled, then drop all those queued
+            # messages.
+            if not pref.enabled:
+                log.info("* Pref %r inactive.  Dropping messages." % pref)
+                continue
+
             # If there's only a single message, then send it in "the usual way"
             # See https://github.com/fedora-infra/fmn/issues/91
             if len(queued_messages) == 1:
