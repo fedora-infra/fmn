@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.6.1
+-----
+
+- Bugfix. `941a9e238 <https://github.com/fedora-infra/fmn.rules/commit/941a9e238eeadbb8dd664b6d31cc89816a0d0fae>`_
+- Add a rule to match specific anitya distros. `0ada1ed31 <https://github.com/fedora-infra/fmn.rules/commit/0ada1ed31279f0aa78401d95e0bd19164a0d5385>`_
+- Use .lower() for distro comparisons, just like anitya does. `9417c9b6b <https://github.com/fedora-infra/fmn.rules/commit/9417c9b6bafa8e19785b3b98755f718eb6ed034b>`_
+- Merge pull request #51 from fedora-infra/feature/anitya-distro `c1f6f5cb6 <https://github.com/fedora-infra/fmn.rules/commit/c1f6f5cb6c2b95660b587f92913afe4afab6733b>`_
+
 0.6.0
 -----
 
