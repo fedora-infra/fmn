@@ -18,9 +18,14 @@ exclusion_packages = [
     # See https://github.com/fedora-infra/fmn/issues/45
     'git_pkgdb2branch_start',
     'git_pkgdb2branch_complete',
+
     # Ignore the fedora tagger message by default
     # See https://github.com/fedora-infra/fmn/issues/79
     'fedoratagger_catchall',
+
+    # Ignore the highest-frequency/lowest-occurence ABRT messages (spam)
+    'faf_report_threshold1',
+    'faf_problem_threshold1',
 ]
 
 exclusion_username = [
