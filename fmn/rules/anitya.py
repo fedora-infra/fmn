@@ -15,7 +15,7 @@ def anitya_unmapped_new_update(config, message):
     if not anitya_new_update(config, message):
         return False
 
-    for package in msg['msg']['message']['packages']:
+    for package in message['msg']['message']['packages']:
         if package['distro'] == 'Fedora':
             return False
 
