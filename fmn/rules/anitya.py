@@ -16,7 +16,7 @@ def anitya_unmapped_new_update(config, message):
         return False
 
     for package in message['msg']['message']['packages']:
-        if package['distro'] == 'Fedora':
+        if package['distro'].lower() == 'fedora':
             return False
 
     # If none of the packages were listed as Fedora, then this is unmapped.
@@ -50,16 +50,16 @@ def anitya_specific_distro(config, message, distro=None, *args, **kw):
 
     d = message['msg'].get('distro', {})
     if d:  # Have to be careful for None here
-        if d.get('name') == distro:
+        if d.get('name', '').lower() == distro.lower():
             return True
 
     d = message['msg'].get('project', {}).get('distro', {})
     if d:  # Have to be careful for None here
-        if d.get('name') == distro:
+        if d.get('name', '').lower() == distro.lower():
             return True
 
     for pkg in message['msg'].get('message', {}).get('packages', []):
-        if pkg['distro'] == distro:
+        if pkg['distro'].lower() == distro.lower():
             return True
 
     return False
