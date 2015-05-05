@@ -81,9 +81,10 @@ class EmailBackend(BaseBackend):
 
         email_message.set_payload(to_bytes(content), 'utf-8')
 
-        # Explicitly declare encoding
+        # Explicitly declare encoding, but remove the transfer encoding
         # https://github.com/fedora-infra/fmn/issues/94
         email_message.set_charset('utf-8')
+        del msg['Content-Transfer-Encoding']
 
         server = smtplib.SMTP(self.mailserver)
         try:
