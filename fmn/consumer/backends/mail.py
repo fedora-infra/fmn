@@ -59,7 +59,7 @@ class EmailBackend(BaseBackend):
             email_message.add_header('X-Fedmsg-Username', to_bytes(username))
         for package in packages or []:
             email_message.add_header('X-Fedmsg-Package', to_bytes(package))
-
+        
         subject_prefix = self.config.get('fmn.email.subject_prefix', '')
         if subject_prefix:
             subject = '{0} {1}'.format(
@@ -84,8 +84,8 @@ class EmailBackend(BaseBackend):
         # Explicitly declare encoding, but remove the transfer encoding
         # https://github.com/fedora-infra/fmn/issues/94
         email_message.set_charset('utf-8')
-        if 'Content-Transfer-Encoding' in email_message:
-            del email_message['Content-Transfer-Encoding']
+        #if 'Content-Transfer-Encoding' in email_message:
+        #    del email_message['Content-Transfer-Encoding']
 
         server = smtplib.SMTP(self.mailserver)
         try:
