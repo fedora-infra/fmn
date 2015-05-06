@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.6.2
+-----
+
+- Add Content-Transfer-Encoding header `740740d6e <https://github.com/fedora-infra/fmn.consumer/commit/740740d6e0f46200742c4941bdcaf131da534995>`_
+- Remove unneeded header `a13dc037b <https://github.com/fedora-infra/fmn.consumer/commit/a13dc037b89fcc6a1839ea0ec3891131f26a48c5>`_
+- Merge pull request #65 from fedora-infra/fix/transfer-encoding `f6b953aea <https://github.com/fedora-infra/fmn.consumer/commit/f6b953aeabb7b474ee5ae4988cab3d87f909953d>`_
+- Delete uneeded comments. `4d0ee5bb8 <https://github.com/fedora-infra/fmn.consumer/commit/4d0ee5bb86399451a550be57f5d46f992ae048e3>`_
+
 0.6.1
 -----
 
