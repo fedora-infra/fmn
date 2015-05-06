@@ -35,7 +35,7 @@ class EmailBackend(BaseBackend):
         self.from_address = self.config['fmn.email.from_address']
 
     def send_mail(self, session, recipient, subject, content,
-                  topics=None, categories=None, usernames=None, packages=None):
+                  topics=None, categories=None, usernames=None, packages=None, transfer_encoding="base64"):
         self.log.debug("Sending email")
 
         if 'email address' not in recipient:
@@ -59,7 +59,9 @@ class EmailBackend(BaseBackend):
             email_message.add_header('X-Fedmsg-Username', to_bytes(username))
         for package in packages or []:
             email_message.add_header('X-Fedmsg-Package', to_bytes(package))
-
+        
+        email_message.add_header('Content-Transfer-Encoding', to_bytes(transfer_encoding))
+        
         subject_prefix = self.config.get('fmn.email.subject_prefix', '')
         if subject_prefix:
             subject = '{0} {1}'.format(
@@ -84,8 +86,8 @@ class EmailBackend(BaseBackend):
         # Explicitly declare encoding, but remove the transfer encoding
         # https://github.com/fedora-infra/fmn/issues/94
         email_message.set_charset('utf-8')
-        if 'Content-Transfer-Encoding' in email_message:
-            del email_message['Content-Transfer-Encoding']
+        #if 'Content-Transfer-Encoding' in email_message:
+        #    del email_message['Content-Transfer-Encoding']
 
         server = smtplib.SMTP(self.mailserver)
         try:
