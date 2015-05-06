@@ -35,7 +35,7 @@ class EmailBackend(BaseBackend):
         self.from_address = self.config['fmn.email.from_address']
 
     def send_mail(self, session, recipient, subject, content,
-                  topics=None, categories=None, usernames=None, packages=None, transfer_encoding="base64"):
+                  topics=None, categories=None, usernames=None, packages=None):
         self.log.debug("Sending email")
 
         if 'email address' not in recipient:
@@ -59,8 +59,6 @@ class EmailBackend(BaseBackend):
             email_message.add_header('X-Fedmsg-Username', to_bytes(username))
         for package in packages or []:
             email_message.add_header('X-Fedmsg-Package', to_bytes(package))
-        
-        email_message.add_header('Content-Transfer-Encoding', to_bytes(transfer_encoding))
         
         subject_prefix = self.config.get('fmn.email.subject_prefix', '')
         if subject_prefix:
