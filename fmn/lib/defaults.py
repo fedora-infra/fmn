@@ -244,15 +244,6 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
             pref = fmn.lib.models.Preference.create(
                 session, user, context, detail_value=value)
 
-        # Add a special filter that looks for mentions like @ralph
-        filt = fmn.lib.models.Filter.create(
-            session, "Mentions of my @username")
-        pattern = '[!-~ ]*[^\w@]@%s[^\w@][!-~ ]*' % nick
-        filt.add_rule(session, valid_paths,
-                    "fmn.rules:regex_filter", pattern=pattern)
-        pref.add_filter(session, filt, notify=True)
-        # END @username filter
-
         # Add a filter that looks for packages of this user
         filt = fmn.lib.models.Filter.create(
             session, "Events on packages that I own")
