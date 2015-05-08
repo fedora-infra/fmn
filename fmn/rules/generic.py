@@ -12,7 +12,6 @@ log = logging.getLogger('fedmsg')
 
 try:
     import re2 as re
-    re.set_fallback_notification(re.FALLBACK_WARNING)
 except ImportError:
     log.warning("Couldn't import the 're2' module.")
     import re
@@ -183,8 +182,8 @@ def package_regex_filter(config, message, pattern=None, *args, **kw):
     pattern = kw.get('pattern', pattern)
     if pattern:
         packages = fedmsg.meta.msg2packages(message, **config)
-        regex = re.compile(pattern)
-        return any([regex.search(package) for package in packages])
+        regex = re.compile(pattern.encode('utf-8'))
+        return any([regex.search(p.encode('utf-8')) for p in packages])
 
 
 # Can't hint this one.  Can't pass a regex on to postgres
@@ -201,7 +200,7 @@ def regex_filter(config, message, pattern=None, *args, **kw):
 
     pattern = kw.get('pattern', pattern)
     if pattern:
-        regex = re.compile(pattern)
+        regex = re.compile(pattern.encode('utf-8'))
         return bool(regex.search(fedmsg.encoding.dumps(message['msg'])))
 
 
