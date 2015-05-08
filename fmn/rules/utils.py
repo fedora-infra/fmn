@@ -11,8 +11,28 @@ from fedora.client.fas2 import AccountSystem
 
 log = logging.getLogger(__name__)
 
+try:
+    import re2 as re
+except ImportError:
+    log.warning("Couldn't import the 're2' module.")
+    import re
+
+# We cache fancy stuff here from pkgdb, etc.. stuff that we want to expire.
 _cache = make_region()
 _FAS = None
+
+# This doesn't need any expiration.  Cache forever.
+# We do this because the compilation step for python-re2 is 16x slower than
+# stdlib, but the match is 10x faster.  So, cache the slow part once and use
+# the fast part at the tightest part of the loop.
+_regex_cache = {}
+
+
+def compile_regex(pattern):
+    if not pattern in _regex_cache:
+        # This is expensive with python-re2, so we cache it.  Forever.
+        _regex_cache[pattern] = re.compile(pattern)
+    return _regex_cache[pattern]
 
 
 def get_fas(config):
