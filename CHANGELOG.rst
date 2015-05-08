@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.6.2
+-----
+
+- Ditch old re2 warning hook. `cd809bb5a <https://github.com/fedora-infra/fmn.rules/commit/cd809bb5aa487e10360e75e677d4897783a979d2>`_
+- Pass only bytes to re2 (no unicode allowed). `1abb56192 <https://github.com/fedora-infra/fmn.rules/commit/1abb56192523b31db961bdcdea5c8afbf42ea588>`_
+- Merge pull request #53 from fedora-infra/feature/re2-compat `ad4971943 <https://github.com/fedora-infra/fmn.rules/commit/ad4971943b8bd87d82848dfd71c960b96af121e1>`_
+
 0.6.1
 -----
 
