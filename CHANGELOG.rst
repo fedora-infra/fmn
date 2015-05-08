@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.6.2
+-----
+
+- Remove regex usage from the defaults. `f015dae0f <https://github.com/fedora-infra/fmn.lib/commit/f015dae0f58787dece123b3c456dc4f8d9071891>`_
+- Alembic script to scrub the ``@mention`` rule from filters. `8fd0e292f <https://github.com/fedora-infra/fmn.lib/commit/8fd0e292fd1794a0d03369fbbeaa0a156b68fd72>`_
+- Merge pull request #50 from fedora-infra/feature/remove-regex-from-defaults `e3a1ad980 <https://github.com/fedora-infra/fmn.lib/commit/e3a1ad98035b901bb1256a4a33fa7926a18686b0>`_
+
 0.6.1
 -----
 
