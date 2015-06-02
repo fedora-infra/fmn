@@ -1,5 +1,7 @@
 from fmn.lib.hinting import hint, prefixed as _
 
+import fedmsg.meta
+
 
 @hint(categories=['pagure'])
 def pagure_catchall(config, message):
@@ -10,6 +12,33 @@ def pagure_catchall(config, message):
     fedmsg hook enabled).
     """
     return message['topic'].split('.')[3] == 'pagure'
+
+
+@hint(categories=['pagure'], invertible=False)
+def pagure_specific_project_filter(config, message, project=None, *args, **kw):
+    """ Particular pagure projects
+
+     Adding this rule allows you to get notifications for one or more
+     `pagure.io <https://pagure.io>`_ projects. Specify multiple
+     projects by separating them with a comma ','.
+     """
+
+    if not pagure_catchall(config, message):
+        return False
+
+    project = kw.get('project', project)
+    link = fedmsg.meta.msg2link(message, **config)
+    if not link:
+        return False
+
+    project = project or [] and project.split(',')
+
+    valid = False
+    for proj in project:
+        if '://pagure.io/%s/' % proj.strip() in link:
+            valid = True
+
+    return valid
 
 
 @hint(topics=[_('pagure.project.new', prefix='io.pagure')])
