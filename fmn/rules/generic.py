@@ -207,7 +207,7 @@ def trac_hosted_filter(config, message, project=None, *args, **kw):
     if not link:
         return False
 
-    project = project or [] and project.split(',')
+    project = project.split(',') if project else []
 
     valid = False
     for proj in project:
