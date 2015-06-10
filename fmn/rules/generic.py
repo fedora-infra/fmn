@@ -191,7 +191,9 @@ def regex_filter(config, message, pattern=None, *args, **kw):
     pattern = kw.get('pattern', pattern)
     if pattern:
         regex = fmn.rules.utils.compile_regex(pattern.encode('utf-8'))
-        return bool(regex.search(fedmsg.encoding.dumps(message['msg'])))
+        return bool(regex.search(
+            fedmsg.encoding.dumps(message['msg']).encode('utf-8')
+        ))
 
 
 @hint(categories=['trac'], invertible=False)

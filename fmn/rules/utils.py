@@ -65,7 +65,7 @@ def get_packagers_of_package(config, package):
     :return: a set listing all the fas usernames that have some ACL on package.
     """
 
-    if not hasattr(_cache, 'backend'):
+    if not _cache.is_configured:
         _cache.configure(**config['fmn.rules.cache'])
 
     key = cache_key_generator(get_packagers_of_package, package)
@@ -122,7 +122,7 @@ def get_packages_of_user(config, username, flags):
 
     """
 
-    if not hasattr(_cache, 'backend'):
+    if not _cache.is_configured:
         _cache.configure(**config['fmn.rules.cache'])
 
     packages = []
@@ -144,7 +144,7 @@ def cache_key_generator(fn, arg):
 
 
 def invalidate_cache_for(config, fn, arg):
-    if not hasattr(_cache, 'backend'):
+    if not _cache.is_configured:
         _cache.configure(**config['fmn.rules.cache'])
 
     key = cache_key_generator(fn, arg)
@@ -185,7 +185,7 @@ def get_user_of_group(config, fas, groupname):
     :return: a list of FAS user members of the specified group.
     '''
 
-    if not hasattr(_cache, 'backend'):
+    if not _cache.is_configured:
         _cache.configure(**config['fmn.rules.cache'])
 
     key = cache_key_generator(get_user_of_group, groupname)
@@ -202,7 +202,7 @@ def get_groups_of_user(config, fas, username):
     :return: a list of FAS groups to which the user belongs.
     '''
 
-    if not hasattr(_cache, 'backend'):
+    if not _cache.is_configured:
         _cache.configure(**config['fmn.rules.cache'])
 
     key = cache_key_generator(get_groups_of_user, username)
