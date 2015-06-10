@@ -46,11 +46,12 @@ def prefixed(topic, prefix='org.fedoraproject'):
     return '.'.join([prefix, config['environment'], topic])
 
 
-def gather_hinting(config, filter, valid_paths):
-    """ Construct hint arguments for datanommer from a filter. """
+def gather_hinting(config, rules, valid_paths):
+    """ Construct hint arguments for datanommer from a list of rules. """
+
 
     hinting = collections.defaultdict(list)
-    for rule in filter.rules:
+    for rule in rules:
         root, name = rule.code_path.split(':', 1)
         info = valid_paths[root][name]
 

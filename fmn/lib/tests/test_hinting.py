@@ -29,13 +29,10 @@ class TestHintDecoration(fmn.lib.tests.Base):
             }
             negated = False
 
-        class MockFilter(object):
-            rules = [MockRule()]
-
-        filter_obj = MockFilter()
+        rules = [MockRule()]
 
         hints = fmn.lib.hinting.gather_hinting(
-            self.config, filter_obj, self.valid_paths)
+            self.config, rules, self.valid_paths)
         eq_(hints, {'the-hint-is': ['cowabunga']})
 
     def test_inverted_hint_callable(self):
@@ -51,11 +48,8 @@ class TestHintDecoration(fmn.lib.tests.Base):
             }
             negated = True
 
-        class MockFilter(object):
-            rules = [MockRule()]
-
-        filter_obj = MockFilter()
+        rules = [MockRule()]
 
         hints = fmn.lib.hinting.gather_hinting(
-            self.config, filter_obj, self.valid_paths)
+            self.config, rules, self.valid_paths)
         eq_(hints, {'not_the-hint-is': ['cowabunga']})
