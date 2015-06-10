@@ -11,6 +11,7 @@ import smtplib
 import bs4
 import docutils.examples
 import markupsafe
+import six
 
 from collections import defaultdict
 
@@ -147,8 +148,8 @@ def load_rules(root='fmn.rules'):
 
         doc = inspect.getdoc(obj)
 
-        # It's crazy, but inspect (stdlib!) doesn't return unicode objs.
-        if doc:
+        # It's crazy, but inspect (stdlib!) doesn't return unicode objs on py2.
+        if doc and hasattr(doc, 'decode'):
             doc = doc.decode('utf-8')
 
         if doc:
@@ -159,7 +160,7 @@ def load_rules(root='fmn.rules'):
             title, doc_as_rst = doc.split('\n', 1)
             doc = docutils.examples.html_parts(doc_as_rst)['body']
             soup = bs4.BeautifulSoup(doc)
-            doc_no_links = ''.join(map(unicode, strip_anchor_tags(soup)))
+            doc_no_links = ''.join(map(six.text_type, strip_anchor_tags(soup)))
             doc = markupsafe.Markup(doc)
             doc_no_links = markupsafe.Markup(doc_no_links)
         else:
