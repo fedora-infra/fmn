@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.7.0
+-----
+
+- Adapt to changed gather_hinting interface. `db9d9b92f <https://github.com/fedora-infra/fmn.web/commit/db9d9b92fc8db1ff494079e783633f0a230059a9>`_
+- Merge pull request #68 from fedora-infra/feature/simplify-hinting-interface `aa675387a <https://github.com/fedora-infra/fmn.web/commit/aa675387aee2547c526ea071c6bdd3a6695412d1>`_
+
 0.6.0
 -----
 
