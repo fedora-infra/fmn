@@ -1,6 +1,18 @@
 Changelog
 =========
 
+0.7.0
+-----
+
+- Cache slow python-re2 compilation. `7f891427a <https://github.com/fedora-infra/fmn.rules/commit/7f891427a53bd11c4683d05ecbc8ee4a5b31778c>`_
+- Merge pull request #54 from fedora-infra/feature/cache-slow-re2-compilation `d1298c854 <https://github.com/fedora-infra/fmn.rules/commit/d1298c8545a0b8664b208ae51c7d83b22a9babad>`_
+- Add pagure rules. `5937d88dc <https://github.com/fedora-infra/fmn.rules/commit/5937d88dc4f061f2feb5a0cd1869dc48b5cf1900>`_
+- Include a filter for particular pagure projects. `e9835b63f <https://github.com/fedora-infra/fmn.rules/commit/e9835b63f7e7245eb336f0dff150547fc9ba18b0>`_
+- Fix incorrect ternary. `1dcd0bdbe <https://github.com/fedora-infra/fmn.rules/commit/1dcd0bdbe287798f4013b83bcc78bb531c1087c7>`_
+- Merge pull request #55 from fedora-infra/feature/pagure `4f924af1f <https://github.com/fedora-infra/fmn.rules/commit/4f924af1f064da12d093b1260a3692588cbea171>`_
+- Python3 support (for integration with fedora-hubs). `fcd2cd1d6 <https://github.com/fedora-infra/fmn.rules/commit/fcd2cd1d6a446fa836eafd4c3aa40e94f12b6fa8>`_
+- Merge pull request #56 from fedora-infra/feature/py3 `999bfe004 <https://github.com/fedora-infra/fmn.rules/commit/999bfe0041fc95ef68712c8e5d9e73e53455ab19>`_
+
 0.6.2
 -----
 
