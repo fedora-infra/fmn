@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.7.0
+-----
+
+- Allow python-2.6 tests to fail on travis. `a3b32bde4 <https://github.com/fedora-infra/fmn.lib/commit/a3b32bde4905f4cfe171bb84a5b4e4c226b11177>`_
+- Simplify the gather_hinting interface. `7a8757918 <https://github.com/fedora-infra/fmn.lib/commit/7a8757918be22f052986082674f84fd34b9c43b7>`_
+- Merge pull request #51 from fedora-infra/feature/simplify-hinting-interface `23f1c2d80 <https://github.com/fedora-infra/fmn.lib/commit/23f1c2d80004061a65020f3334f9ececca9dca6d>`_
+- Python3 support (for integration with fedora-hubs). `eef264bdd <https://github.com/fedora-infra/fmn.lib/commit/eef264bdde9f78b36ba48b0ec81d835b8b363c11>`_
+- Merge pull request #52 from fedora-infra/feature/py3 `c1dbc97ae <https://github.com/fedora-infra/fmn.lib/commit/c1dbc97aefd9f224c7064365d63e5918fae3a029>`_
+
 0.6.2
 -----
 
