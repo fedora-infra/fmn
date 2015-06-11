@@ -30,6 +30,8 @@ import json
 import logging
 import uuid
 
+import six
+
 import sqlalchemy as sa
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -262,9 +264,9 @@ class Rule(BASE):
 
     @property
     def cache_key(self):
-        return hashlib.sha256(
-            self.code_path + str(self.negated) + self._arguments
-        ).hexdigest()
+        return hashlib.sha256((
+            self.code_path + six.text_type(self.negated) + self._arguments
+        ).encode('utf-8')).hexdigest()
 
     @hybrid_property
     def arguments(self):
@@ -379,7 +381,7 @@ class Filter(BASE):
         return False
 
     def add_rule(self, session, paths, rule, **kw):
-        if isinstance(rule, basestring):
+        if isinstance(rule, six.string_types):
             rule = Rule.create_from_code_path(session, paths, rule, **kw)
         elif kw:
             raise ValueError("Cannot handle rule with non-empty kw")
@@ -719,7 +721,7 @@ class Preference(BASE):
 
 def hash_producer(*args, **kwargs):
     """ Returns a random hash for a confirmation secret. """
-    return hashlib.md5(str(uuid.uuid4())).hexdigest()
+    return hashlib.md5(six.text_type(uuid.uuid4()).encode('utf-8')).hexdigest()
 
 
 class Confirmation(BASE):
