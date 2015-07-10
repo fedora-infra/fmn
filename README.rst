@@ -17,3 +17,11 @@ HACKING
 -------
 
 Find development instructions here: https://github.com/fedora-infra/fmn/#hacking
+
+Handy Script
+------------
+
+There's a handy script in the ``scripts/`` dir for debugging why some user did
+or did not receive a message.  It takes a username and a fedmsg msg_id and
+tries to see if the two match up or not based on the production preferences for
+that user.
