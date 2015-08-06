@@ -43,7 +43,7 @@ def pagure_specific_project_filter(config, message, project=None, *args, **kw):
 
 @hint(categories=['pagure'], invertible=False)
 def pagure_specific_project_tag_filter(config, message, tags=None, *args, **kw):
-    """ Particular pagure tag projects
+    """ Particular pagure project tags
 
      Adding this rule allows you to get notifications for one or more
      `pagure.io <https://pagure.io>`_ projects having the specified tags.
