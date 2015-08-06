@@ -41,6 +41,33 @@ def pagure_specific_project_filter(config, message, project=None, *args, **kw):
     return valid
 
 
+@hint(categories=['pagure'], invertible=False)
+def pagure_specific_project_tag_filter(config, message, tags=None, *args, **kw):
+    """ Particular pagure tag projects
+
+     Adding this rule allows you to get notifications for one or more
+     `pagure.io <https://pagure.io>`_ projects having the specified tags.
+     Specify multiple tags by separating them with a comma ','.
+     """
+
+    if not pagure_catchall(config, message):
+        return False
+
+    tags = tags.split(',') if tags else []
+    tags = [tag.strip() for tag in tags if tag and tag.strip()]
+
+    project_tags = set()
+    project_tags.update(message.get('project', {}).get('tags', [])
+    project_tags.update(
+        message.get('pullrequest', {}).get('project', {}).get('tags', []))
+    project_tags.update(
+        message.get('commit', {}).get('repo', {}).get('tags', []))
+
+    valid = len(project_tags.intersection(set(tags)) > 0
+
+    return valid
+
+
 @hint(topics=[_('pagure.project.new', prefix='io.pagure')])
 def pagure_project_new(config, message):
     """ New pagure projects
