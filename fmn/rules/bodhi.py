@@ -131,3 +131,122 @@ def bodhi_update_fedora_sync(config, message):
     synced out to the mirror master.
     """
     return message['topic'].endswith('bodhi.updates.fedora.sync')
+
+
+@hint(topics=[_('bodhi.update.complete.stable')])
+def bodhi_update_complete_stable(config, message):
+    """ When updates complete their requested push to "stable"
+
+    This rule will let through messages from the backend of the `Bodhi Updates
+    System <https://admin.fedoraproject.org/updates>`_ when it **completes**
+    the process of mashing individual updates into a new stable repo.
+    Separate messages are generated here for each update in the mash.
+    """
+    return message['topic'].endswith('bodhi.update.complete.stable')
+
+
+@hint(topics=[_('bodhi.update.complete.testing')])
+def bodhi_update_complete_testing(config, message):
+    """ When updates complete their requested push to "testing"
+
+    This rule will let through messages from the backend of the `Bodhi Updates
+    System <https://admin.fedoraproject.org/updates>`_ when it **completes**
+    the process of mashing individual updates into a new testing repo.
+    Separate messages are generated here for each update in the mash.
+    """
+    return message['topic'].endswith('bodhi.update.complete.testing')
+
+
+@hint(topics=[_('bodhi.update.eject')])
+def bodhi_update_eject(config, message):
+    """ When an update is ejected from the bodhi mash
+
+    This rule will let through messages from the backend of the `Bodhi Updates
+    System <https://admin.fedoraproject.org/updates>`_ when it **ejects** an
+    update from the mash.  This is typically because something is determined
+    to be faulty about the update (the request is inconsistent or it is
+    failing some required taskotron checks).
+
+    """
+    return message['topic'].endswith('bodhi.update.eject')
+
+
+@hint(topics=[_('bodhi.errata.publish')])
+def bodhi_errata_publish(config, message):
+    """ New errata about updates being mashed
+
+    This rule will let through messages from the backend of the `Bodhi Updates
+    System <https://admin.fedoraproject.org/updates>`_ when it finishes
+    publishes errata about an update near the end of the mash.
+
+    """
+    return message['topic'].endswith('bodhi.errata.publish')
+
+
+@hint(topics=[_('bodhi.masher.start')])
+def bodhi_masher_start(config, message):
+    """ Requests for a new Bodhi mash
+
+    This rule will let through messages from the backend of the `Bodhi Updates
+    System <https://admin.fedoraproject.org/updates>`_ when an admin requests a
+    new run of the bodhi masher.
+    """
+    return message['topic'].endswith('bodhi.masher.start')
+
+
+@hint(topics=[_('bodhi.mashtask.start')])
+def bodhi_mashtask_start(config, message):
+    """ Starts of internal bodhi backend mash tasks
+
+    This rule will let through messages from the backend of the `Bodhi Updates
+    System <https://admin.fedoraproject.org/updates>`_ when it begins work on a
+    repo.
+    """
+    return message['topic'].endswith('bodhi.mashtask.start')
+
+
+@hint(topics=[_('bodhi.mashtask.complete')])
+def bodhi_mashtask_complete(config, message):
+    """ Ends of internal bodhi backend mash tasks
+
+    This rule will let through messages from the backend of the `Bodhi Updates
+    System <https://admin.fedoraproject.org/updates>`_ when it finishes work on
+    a repo.
+    """
+    return message['topic'].endswith('bodhi.mashtask.complete')
+
+
+@hint(topics=[_('bodhi.mashtask.mashing')])
+def bodhi_mashtask_mashing(config, message):
+    """ Starts of the mash phase of the mashtask
+
+    This rule will let through messages from the backend of the `Bodhi Updates
+    System <https://admin.fedoraproject.org/updates>`_ when it starts the
+    "mashing" phase of the mash task.
+
+    """
+    return message['topic'].endswith('bodhi.mashtask.mashing')
+
+
+@hint(topics=[_('bodhi.mashtask.sync.wait')])
+def bodhi_mashtask_sync_wait(config, message):
+    """ When the masher waits for content to sync to the mirrors
+
+    This rule will let through messages from the backend of the `Bodhi Updates
+    System <https://admin.fedoraproject.org/updates>`_ when it starts the
+    "sync.wait" phase of the mash task.
+
+    """
+    return message['topic'].endswith('bodhi.mashtask.sync.wait')
+
+
+@hint(topics=[_('bodhi.mashtask.sync.done')])
+def bodhi_mashtask_sync_done(config, message):
+    """ When the masher confirms content is on the master mirror
+
+    This rule will let through messages from the backend of the `Bodhi Updates
+    System <https://admin.fedoraproject.org/updates>`_ when it finishes the
+    "sync.wait" phase of the mash task.
+
+    """
+    return message['topic'].endswith('bodhi.mashtask.sync.done')
