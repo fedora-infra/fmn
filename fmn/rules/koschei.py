@@ -5,8 +5,8 @@ from fmn.lib.hinting import hint, prefixed as _
 def koschei_package_state_change(config, message):
     """ Continuous integration state changes for a package (koschei)
 
-    `Koschei <http://koschei.cloud.fedoraproject.org>`_ publishes this
-    message when package's build or resolution state changes.
+    `Koschei <https://apps.fedoraproject.org/koschei/>`_ publishes
+    this message when package's build or resolution state changes.
     """
     return message['topic'].endswith('koschei.package.state.change')
 
@@ -16,8 +16,8 @@ def koschei_group(config, message, group=None):
     """ Particular Koschei package groups
 
     This rule limits message to particular
-    `Koschei <http://koschei.cloud.fedoraproject.org>`_ groups. You can
-    specify more groups separated by commas.
+    `Koschei <https://apps.fedoraproject.org/koschei/>`_ groups.
+    You can specify more groups separated by commas.
     """
     if not group or 'koschei' not in message['topic']:
         return False

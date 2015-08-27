@@ -32,7 +32,7 @@ tests_require = [
 
 setup(
     name='fmn.rules',
-    version='0.7.0',
+    version='0.7.1',
     description='Message processing rules for Fedora Notifications',
     long_description=get_description(),
     author='Ralph Bean',
