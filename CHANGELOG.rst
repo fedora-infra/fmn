@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.7.1
+-----
+
+- @puiterwijk caught this.  POST needs to be an option. `9630a8b5a <https://github.com/fedora-infra/fmn.web/commit/9630a8b5a1cf722e8b3d2dbd74627276632c43d9>`_
+
 0.7.0
 -----
 
