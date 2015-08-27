@@ -1014,8 +1014,8 @@ def login():
         'login.html', next=oid.get_next_url(), error=oid.fetch_error())
 
 
-@app.route('/login/fedora/')
-@app.route('/login/fedora')
+@app.route('/login/fedora/', methods=('GET', 'POST'))
+@app.route('/login/fedora', methods=('GET', 'POST'))
 @oid.loginhandler
 def fedora_login():
     default = flask.url_for('profile_redirect')
