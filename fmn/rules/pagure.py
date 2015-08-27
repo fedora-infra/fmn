@@ -57,7 +57,7 @@ def pagure_specific_project_tag_filter(config, message, tags=None, *args, **kw):
     tags = [tag.strip() for tag in tags if tag and tag.strip()]
 
     project_tags = set()
-    project_tags.update(message.get('project', {}).get('tags', [])
+    project_tags.update(message.get('project', {}).get('tags', []))
     project_tags.update(
         message.get('pullrequest', {}).get('project', {}).get('tags', []))
     project_tags.update(
