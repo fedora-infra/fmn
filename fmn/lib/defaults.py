@@ -26,6 +26,10 @@ exclusion_packages = [
     # Ignore the highest-frequency/lowest-occurence ABRT messages (spam)
     'faf_report_threshold1',
     'faf_problem_threshold1',
+
+    # Ignore admin requests to start a new mash
+    # https://github.com/fedora-infra/fmn/issues/103
+    'bodhi_masher_start',
 ]
 
 exclusion_username = [
