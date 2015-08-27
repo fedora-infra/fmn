@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.7.3
+-----
+
+- Need fmn.lib for the test suite. `143a16e9c <https://github.com/fedora-infra/fmn.rules/commit/143a16e9c95dd92a401733507901f67f65fd3d46>`_
+- Fix another syntax error in pagure rule. `b6deee0d2 <https://github.com/fedora-infra/fmn.rules/commit/b6deee0d238c76dc717f841b5036c7429b1e335a>`_
+
 0.7.2
 -----
 
