@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.7.3
+-----
+
+- Add "ignore mash starts" to everybody's packages filter. `a3947ffe4 <https://github.com/fedora-infra/fmn.lib/commit/a3947ffe4ca2f68101b7e336ec73e2ee91baddcc>`_
+- Merge pull request #53 from fedora-infra/feature/mash-rules `cf681391a <https://github.com/fedora-infra/fmn.lib/commit/cf681391a1d3f7ea9508325a285f500a33567f33>`_
+
 0.7.0
 -----
 
