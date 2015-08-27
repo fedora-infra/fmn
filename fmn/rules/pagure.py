@@ -63,7 +63,7 @@ def pagure_specific_project_tag_filter(config, message, tags=None, *args, **kw):
     project_tags.update(
         message.get('commit', {}).get('repo', {}).get('tags', []))
 
-    valid = len(project_tags.intersection(set(tags)) > 0
+    valid = len(project_tags.intersection(set(tags))) > 0
 
     return valid
 
