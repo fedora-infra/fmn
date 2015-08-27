@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.7.2
+-----
+
+- Fix syntax error in pagure rule. `409b7bec7 <https://github.com/fedora-infra/fmn.rules/commit/409b7bec755b7b7be128c795c6e90bb4e4f2c20f>`_
+
 0.7.1
 -----
 
