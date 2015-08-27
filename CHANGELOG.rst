@@ -1,6 +1,17 @@
 Changelog
 =========
 
+0.7.1
+-----
+
+- Update Koschei URL `3662f3c3b <https://github.com/fedora-infra/fmn.rules/commit/3662f3c3b05af6a4b96685f9be6407a8014c6285>`_
+- Merge pull request #57 from mizdebsk/koschei `dc6f0753b <https://github.com/fedora-infra/fmn.rules/commit/dc6f0753b2994bee50b140bb8ac8db3c252d9976>`_
+- Add a new FMN rule to get notification about a project on pagure based on its tags `7f66b829e <https://github.com/fedora-infra/fmn.rules/commit/7f66b829e275e0f56b7792736d9520cf877bcb23>`_
+- Adjust title as per @ralphbean's suggestions `e995454bc <https://github.com/fedora-infra/fmn.rules/commit/e995454bcfe9ec418dfcb49e5e9b3e692efc0b27>`_
+- Merge pull request #59 from fedora-infra/pagure_project_tags `68dbc7ba1 <https://github.com/fedora-infra/fmn.rules/commit/68dbc7ba126c0da1b8b560f962f564712b04b458>`_
+- Add FMN rules for new bodhi2 messages. `bc44e0806 <https://github.com/fedora-infra/fmn.rules/commit/bc44e080608c32e2619a59522c07aa604090930e>`_
+- Merge pull request #60 from fedora-infra/feature/mash-rules `d6bd70a67 <https://github.com/fedora-infra/fmn.rules/commit/d6bd70a672983be4e42130b0fab6c34b267bb079>`_
+
 0.7.0
 -----
 
