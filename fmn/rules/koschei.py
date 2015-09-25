@@ -22,4 +22,4 @@ def koschei_group(config, message, group=None):
     if not group or 'koschei' not in message['topic']:
         return False
     groups = set([item.strip() for item in group.split(',')])
-    return bool(groups.intersection(message['msg'].get('groups')))
+    return bool(groups.intersection(message['msg'].get('groups', [])))
