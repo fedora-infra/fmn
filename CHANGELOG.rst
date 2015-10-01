@@ -1,3 +1,20 @@
+
+0.6.3
+-----
+
+Pull Requests
+
+- (@ralphbean)      #66, Add a handy script for debugging message matching.
+  https://github.com/fedora-infra/fmn.consumer/pull/66
+- (@ralphbean)      #67, Try a few times to connect to bastion.
+  https://github.com/fedora-infra/fmn.consumer/pull/67
+
+Commits
+
+- c90be0547 Add a handy script for debugging message matching.
+  https://github.com/fedora-infra/fmn.consumer/commit/c90be0547
+- 6f1e5263d Try a few times to connect to bastion.
+  https://github.com/fedora-infra/fmn.consumer/commit/6f1e5263d
 Changelog
 =========
 
