@@ -40,7 +40,7 @@ class EmailBackend(BaseBackend):
         """ Connect to our mailserver, but retry a few times if we fail. """
         try:
             # This usually just works
-            return smtplib.SMTP(self, address)
+            return smtplib.SMTP(address)
         except Exception:
             # However sometimes we get a gaierror (getaddrinfo error)
             # Give up if we tried and tried
