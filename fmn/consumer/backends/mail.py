@@ -6,6 +6,7 @@ from kitchen.text.converters import to_bytes, to_unicode
 import datetime
 import smtplib
 import email
+import time
 
 from fmn.consumer.util import get_fas_email
 
@@ -33,6 +34,23 @@ class EmailBackend(BaseBackend):
         super(EmailBackend, self).__init__(*args, **kwargs)
         self.mailserver = self.config['fmn.email.mailserver']
         self.from_address = self.config['fmn.email.from_address']
+
+
+    def _get_mailserver(self, address, tries=0):
+        """ Connect to our mailserver, but retry a few times if we fail. """
+        try:
+            # This usually just works
+            return smtplib.SMTP(self, address)
+        except Exception:
+            # However sometimes we get a gaierror (getaddrinfo error)
+            # Give up if we tried and tried
+            if tries > 3:
+                raise
+            # Otherwise, try again after sleeping for a moment.
+            msg = "Failed in getaddrinfo for %r.  Try #%i." % (address, tries)
+            self.log.warn(msg)
+            time.sleep(0.5)
+            return self._get_mailserver(self, address, tries + 1)
 
     def send_mail(self, session, recipient, subject, content,
                   topics=None, categories=None, usernames=None, packages=None):
@@ -85,7 +103,7 @@ class EmailBackend(BaseBackend):
         # https://github.com/fedora-infra/fmn/issues/94
         email_message.set_charset('utf-8')
 
-        server = smtplib.SMTP(self.mailserver)
+        server = self._get_mailserver(self.mailserver)
         try:
             server.sendmail(
                 to_bytes(self.from_address),
