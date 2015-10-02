@@ -40,7 +40,7 @@ class EmailBackend(BaseBackend):
         """ Connect to our mailserver, but retry a few times if we fail. """
         try:
             # This usually just works
-            return smtplib.SMTP(self, address)
+            return smtplib.SMTP(address)
         except Exception:
             # However sometimes we get a gaierror (getaddrinfo error)
             # Give up if we tried and tried
@@ -50,7 +50,7 @@ class EmailBackend(BaseBackend):
             msg = "Failed in getaddrinfo for %r.  Try #%i." % (address, tries)
             self.log.warn(msg)
             time.sleep(0.5)
-            return self._get_mailserver(self, address, tries + 1)
+            return self._get_mailserver(address, tries + 1)
 
     def send_mail(self, session, recipient, subject, content,
                   topics=None, categories=None, usernames=None, packages=None):
