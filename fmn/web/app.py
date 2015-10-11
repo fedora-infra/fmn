@@ -939,6 +939,7 @@ def handle_rule():
     context = form.context.data
     filter_id = form.filter_id.data
     code_path = form.rule_name.data
+    rule_id = form.rule_id.data
     method = (form.method.data or flask.request.method).upper()
     # Extract arguments to rules using the extra information provided
     known_args = ['openid', 'filter_id', 'context', 'rule_name']
@@ -976,9 +977,9 @@ def handle_rule():
         if method == 'POST':
             filter.add_rule(SESSION, valid_paths, code_path, **arguments)
         elif method == 'NEGATE':
-            filter.negate_rule(SESSION, code_path)
+            filter.negate_rule(SESSION, code_path, rule_id)
         elif method == 'DELETE':
-            filter.remove_rule(SESSION, code_path)  # , **arguments)
+            filter.remove_rule(SESSION, code_path, rule_id)  # , **arguments)
         else:
             raise NotImplementedError("This is impossible.")
     except (ValueError, KeyError) as e:

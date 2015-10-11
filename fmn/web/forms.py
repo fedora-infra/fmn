@@ -37,6 +37,7 @@ class RuleForm(Form):
     context = TextField('context', [validators.Required()])
     filter_id = IntegerField('filter_id', [validators.Required()])
     rule_name = TextField('rule_name', [validators.Required()])
+    rule_id = IntegerField('rule_id', [validators.Required()])
     method = TextField('method')
 
 
