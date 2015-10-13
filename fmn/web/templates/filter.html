@@ -117,6 +117,7 @@
               <input name="openid" id="openid" value="{{openid}}" type="hidden">
               <input name="context" id="context" value="{{current}}" type="hidden">
               <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
+              <input name="rule_id" id="rule_id" value="{{rule.id}}" type="hidden">
               {% for key, value in rule.arguments.iteritems() %}
               <dt>{{key}}</dt><dd id="{{key}}{{rule.id}}">
                 <span class="read">{{value}}
@@ -142,6 +143,7 @@
                 <input name="openid" id="openid" value="{{openid}}" type="hidden">
                 <input name="context" id="context" value="{{current}}" type="hidden">
                 <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
+                <input name="rule_id" id="rule_id" value="{{rule.id}}" type="hidden">
                 {% if rule.negated %}
                 <button type="submit" class="btn btn-success btn-xs"
                   name="method" value="negate" data-toggle="tooltip"
