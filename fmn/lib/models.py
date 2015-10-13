@@ -396,9 +396,9 @@ class Filter(BASE):
 
         return rule
 
-    def remove_rule(self, session, code_path, **kw):
+    def remove_rule(self, session, code_path, rule_id, **kw):
         for r in self.rules:
-            if r.code_path == code_path:
+            if r.code_path == code_path and r.id == rule_id:
                 session.delete(r)
                 session.commit()
 
@@ -408,11 +408,12 @@ class Filter(BASE):
 
                 return
 
-        raise ValueError("No such rule found: %r" % code_path)
+        raise ValueError("No such rule found: %r with id=%d"
+                         % (code_path, rule_id))
 
-    def negate_rule(self, session, code_path, **kw):
+    def negate_rule(self, session, code_path, rule_id, **kw):
         for r in self.rules:
-            if r.code_path == code_path:
+            if r.code_path == code_path and r.id == rule_id:
                 r.negated = not r.negated
                 session.commit()
 
@@ -422,7 +423,8 @@ class Filter(BASE):
 
                 return
 
-        raise ValueError("No such rule found: %r" % code_path)
+        raise ValueError("No such rule found: %r with id=%d"
+                         % (code_path, rule_id))
 
 
 class DetailValue(BASE):
