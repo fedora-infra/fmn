@@ -23,6 +23,7 @@ from fmn.rules.kerneltest import *
 from fmn.rules.koschei import *
 from fmn.rules.logger import *
 from fmn.rules.mailman import *
+from fmn.rules.mdapi import *
 from fmn.rules.meetbot import *
 from fmn.rules.nuancier import *
 from fmn.rules.pkgdb import *
