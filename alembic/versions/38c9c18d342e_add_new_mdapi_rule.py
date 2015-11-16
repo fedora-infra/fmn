@@ -23,7 +23,10 @@ import fedmsg
 
 # Running this script actually produces fedmsg messages (since the db changes.)
 # Start fedmsg in active mode so that it talks to a fedmsg-relay
-fedmsg.init(active=True)
+try:
+    fedmsg.init(active=True)
+except ValueError:
+    pass
 
 
 def upgrade():
