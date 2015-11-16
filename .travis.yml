@@ -9,8 +9,7 @@ install:
 script: nosetests -v
 notifications:
     email: false
-    irc:
-        - "irc.freenode.net#fedora-apps"
+    irc: false
     on_success: change
     on_failure: change
 
