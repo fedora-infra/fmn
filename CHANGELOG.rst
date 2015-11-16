@@ -1,4 +1,19 @@
 
+0.7.7
+-----
+
+Pull Requests
+
+- (@ralphbean)      #72, Fixes to rule_id handling.
+  https://github.com/fedora-infra/fmn.web/pull/72
+
+Commits
+
+- 9bf040a07 This rule_id should be optional for this form.
+  https://github.com/fedora-infra/fmn.web/commit/9bf040a07
+- 799bbd019 Furthermore, we do need the rule_id when updating arguments.
+  https://github.com/fedora-infra/fmn.web/commit/799bbd019
+
 0.7.4
 -----
 
