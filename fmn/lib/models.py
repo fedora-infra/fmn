@@ -368,15 +368,15 @@ class Filter(BASE):
             if pref:
                 self.notify(pref.openid, pref.context_name, "filters")
 
-    def get_rule(self, session, code_path, **kw):
+    def get_rule(self, session, code_path, rule_id, **kw):
         for r in self.rules:
-            if r.code_path == code_path:
+            if r.code_path == code_path and r.id == rule_id:
                 return r
         raise ValueError("No such rule found: %r" % code_path)
 
-    def has_rule(self, session, code_path, **kw):
+    def has_rule(self, session, code_path, rule_id, **kw):
         for r in self.rules:
-            if r.code_path == code_path:
+            if r.code_path == code_path and r.id == rule_id:
                 return True
         return False
 
