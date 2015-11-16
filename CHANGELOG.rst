@@ -1,4 +1,21 @@
 
+0.7.7
+-----
+
+Pull Requests
+
+- (@ralphbean)      #57, Accept a rule_id to these functions.
+  https://github.com/fedora-infra/fmn.lib/pull/57
+- (@ralphbean)      #56, Specify markup type to bs4 so it doesn't complain.
+  https://github.com/fedora-infra/fmn.lib/pull/56
+
+Commits
+
+- eac8736fc Specify markup type to bs4 so it doesn't complain.
+  https://github.com/fedora-infra/fmn.lib/commit/eac8736fc
+- bf2a6a0c9 Accept a rule_id to these functions.
+  https://github.com/fedora-infra/fmn.lib/commit/bf2a6a0c9
+
 0.7.6
 -----
 
