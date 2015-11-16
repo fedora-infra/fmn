@@ -765,6 +765,7 @@ def handle_argument():
     context = form.context.data
     filter_id = form.filter_id.data
     rule_name = form.rule_name.data
+    rule_id = form.rule_id.data
 
     key = form.key.data
     value = form.value.data
@@ -790,10 +791,11 @@ def handle_argument():
 
     filter = pref.get_filter(SESSION, filter_id)
 
-    if not filter.has_rule(SESSION, rule_name):
-        raise APIError(404, dict(reason="%r is not a rule" % rule_name))
+    if not filter.has_rule(SESSION, rule_name, rule_id):
+        raise APIError(404, dict(
+            reason="%r, %r is not a rule" % (rule_name, rule_id)))
 
-    rule = filter.get_rule(SESSION, rule_name)
+    rule = filter.get_rule(SESSION, rule_name, rule_id)
     rule.set_argument(SESSION, key, value)
 
     next_url = flask.url_for(
