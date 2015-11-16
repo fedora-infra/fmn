@@ -1,3 +1,16 @@
+
+0.7.4
+-----
+
+Pull Requests
+
+- (@acatton)        #71, Specify a rule_id when executing an action on a rule
+  https://github.com/fedora-infra/fmn.web/pull/71
+
+Commits
+
+- 9366459d0 Specify a rule_id when executing an action on a rule
+  https://github.com/fedora-infra/fmn.web/commit/9366459d0
 Changelog
 =========
 
