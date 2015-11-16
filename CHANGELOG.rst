@@ -1,3 +1,20 @@
+
+0.7.4
+-----
+
+Pull Requests
+
+- (@acatton)        #54, Specify the rule_id when deleting or negating a rule
+  https://github.com/fedora-infra/fmn.lib/pull/54
+- (@ralphbean)      #55, Add new mdapi rule to the defaults.
+  https://github.com/fedora-infra/fmn.lib/pull/55
+
+Commits
+
+- afeba2c9d Specify the rule_id when deleting or negating a rule
+  https://github.com/fedora-infra/fmn.lib/commit/afeba2c9d
+- c1c007c21 Add new mdapi rule to the defaults.
+  https://github.com/fedora-infra/fmn.lib/commit/c1c007c21
 Changelog
 =========
 
