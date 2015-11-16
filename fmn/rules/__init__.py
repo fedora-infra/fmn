@@ -23,10 +23,12 @@ from fmn.rules.kerneltest import *
 from fmn.rules.koschei import *
 from fmn.rules.logger import *
 from fmn.rules.mailman import *
+from fmn.rules.mdapi import *
 from fmn.rules.meetbot import *
 from fmn.rules.nuancier import *
 from fmn.rules.pkgdb import *
 from fmn.rules.planet import *
 from fmn.rules.summershum import *
+from fmn.rules.taskotron import *
 from fmn.rules.trac import *
 from fmn.rules.wiki import *
