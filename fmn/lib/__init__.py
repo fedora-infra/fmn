@@ -159,7 +159,7 @@ def load_rules(root='fmn.rules'):
             # else are we going to want HTML... we'll still want raw .rst.
             title, doc_as_rst = doc.split('\n', 1)
             doc = docutils.examples.html_parts(doc_as_rst)['body']
-            soup = bs4.BeautifulSoup(doc)
+            soup = bs4.BeautifulSoup(doc, 'html5lib')
             doc_no_links = ''.join(map(six.text_type, strip_anchor_tags(soup)))
             doc = markupsafe.Markup(doc)
             doc_no_links = markupsafe.Markup(doc_no_links)
