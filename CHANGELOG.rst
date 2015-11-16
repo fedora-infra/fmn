@@ -1,4 +1,12 @@
 
+0.7.6
+-----
+
+Commits
+
+- 9ea2da65f Careful about initializing fedmsg twice.
+  https://github.com/fedora-infra/fmn.lib/commit/9ea2da65f
+
 0.7.5
 -----
 
