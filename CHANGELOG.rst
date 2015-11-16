@@ -1,3 +1,26 @@
+
+0.7.4
+-----
+
+Pull Requests
+
+- (@puiterwijk)     #61, Work with broken Koschei rules
+  https://github.com/fedora-infra/fmn.rules/pull/61
+- (@mkrizek)        #62, Add taskotron
+  https://github.com/fedora-infra/fmn.rules/pull/62
+- (@ralphbean)      #63, Add mdapi rule.
+  https://github.com/fedora-infra/fmn.rules/pull/63
+
+Commits
+
+- 6977b25fa Work with broken Koschei rules
+  https://github.com/fedora-infra/fmn.rules/commit/6977b25fa
+- e53c8aaee Default to a list in case it is ever absent again.
+  https://github.com/fedora-infra/fmn.rules/commit/e53c8aaee
+- 9db78ed27 Add taskotron
+  https://github.com/fedora-infra/fmn.rules/commit/9db78ed27
+- f7a9791e8 Add mdapi rule.
+  https://github.com/fedora-infra/fmn.rules/commit/f7a9791e8
 Changelog
 =========
 
