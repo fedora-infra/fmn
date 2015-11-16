@@ -30,6 +30,9 @@ exclusion_packages = [
     # Ignore admin requests to start a new mash
     # https://github.com/fedora-infra/fmn/issues/103
     'bodhi_masher_start',
+
+    # Ignore mdapi repo changes (really spammy for the koji rawhide repo!)
+    'mdapi_repo_update',
 ]
 
 exclusion_username = [
