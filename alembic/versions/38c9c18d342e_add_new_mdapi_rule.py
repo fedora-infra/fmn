@@ -16,6 +16,15 @@ import sqlalchemy as sa
 path = 'fmn.rules:mdapi_repo_update'
 target = "Events on packages that I own"
 
+import fmn.lib
+import fmn.lib.models
+
+import fedmsg
+
+# Running this script actually produces fedmsg messages (since the db changes.)
+# Start fedmsg in active mode so that it talks to a fedmsg-relay
+fedmsg.init(active=True)
+
 
 def upgrade():
     engine = op.get_bind().engine
