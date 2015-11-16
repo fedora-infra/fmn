@@ -1,4 +1,12 @@
 
+0.7.5
+-----
+
+Commits
+
+- 5131723b5 Add forgotten boilerplate.
+  https://github.com/fedora-infra/fmn.lib/commit/5131723b5
+
 0.7.4
 -----
 
