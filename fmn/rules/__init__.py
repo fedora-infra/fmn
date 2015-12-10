@@ -18,6 +18,7 @@ from fmn.rules.generic import *
 from fmn.rules.github import *
 from fmn.rules.git import *
 from fmn.rules.hotness import *
+from fmn.rules.infragit import *
 from fmn.rules.jenkins import *
 from fmn.rules.kerneltest import *
 from fmn.rules.koschei import *
