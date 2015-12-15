@@ -15,7 +15,7 @@ def taskotron_task(config, message, task=None):
     """ Particular taskotron task
 
     With this rule, you can limit messages to only those of particular
-    `taskotron https://taskotron.fedoraproject.org/`_ task.
+    `taskotron <https://taskotron.fedoraproject.org/>`_ task.
 
     You can specify several tasks by separating them with a comma ',',
     i.e.: ``depcheck,rpmlint``.
