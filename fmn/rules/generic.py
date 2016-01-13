@@ -2,6 +2,7 @@
 
 import fedmsg
 import fedmsg.encoding
+import fedmsg.meta
 
 import fmn.rules.utils
 from fmn.lib.hinting import hint
@@ -17,7 +18,7 @@ def user_filter(config, message, fasnick=None, *args, **kw):
 
     fasnick = kw.get('fasnick', fasnick)
     if fasnick:
-        return fasnick in fedmsg.meta.msg2usernames(message, **config)
+        return fasnick in fmn.rules.utils.msg2usernames(message, **config)
 
 
 @hint(callable=lambda config, fasnick: dict(not_users=[fasnick]),
@@ -36,7 +37,7 @@ def not_user_filter(config, message, fasnick=None, *args, **kw):
     fasnick = (fasnick or []) and fasnick.split(',')
     valid = True
     for nick in fasnick:
-        if nick.strip() in fedmsg.meta.msg2usernames(message, **config):
+        if nick.strip() in fmn.rules.utils.msg2usernames(message, **config):
             valid = False
             break
 
@@ -62,7 +63,7 @@ def fas_group_member_filter(config, message, group=None, *args, **kw):
     if not group:
         return False
     fasusers = _get_users_of_group(config, group)
-    msgusers = fedmsg.meta.msg2usernames(message, **config)
+    msgusers = fmn.rules.utils.msg2usernames(message, **config)
     return bool(fasusers.intersection(msgusers))
 
 
@@ -84,7 +85,7 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
 
     fasnick = kw.get('fasnick', fasnick)
     if fasnick:
-        msg_packages = fedmsg.meta.msg2packages(message, **config)
+        msg_packages = fmn.rules.utils.msg2packages(message, **config)
         if not msg_packages:
             # If the message has no packages associated with it, there's no
             # way that "one of them" is going to happen to belong to this user,
@@ -108,7 +109,7 @@ def user_package_commit_filter(config, message, fasnick=None, *args, **kw):
 
     fasnick = kw.get('fasnick', fasnick)
     if fasnick:
-        msg_packages = fedmsg.meta.msg2packages(message, **config)
+        msg_packages = fmn.rules.utils.msg2packages(message, **config)
         if not msg_packages:
             # If the message has no packages associated with it, there's no
             # way that "one of them" is going to happen to belong to this user,
@@ -133,7 +134,7 @@ def user_package_watch_filter(config, message, fasnick=None, *args, **kw):
 
     fasnick = kw.get('fasnick', fasnick)
     if fasnick:
-        msg_packages = fedmsg.meta.msg2packages(message, **config)
+        msg_packages = fmn.rules.utils.msg2packages(message, **config)
         if not msg_packages:
             # If the message has no packages associated with it, there's no
             # way that "one of them" is going to happen to belong to this user,
@@ -157,7 +158,7 @@ def package_filter(config, message, package=None, *args, **kw):
 
     package = kw.get('package', package)
     if package:
-        return package in fedmsg.meta.msg2packages(message, **config)
+        return package in fmn.rules.utils.msg2packages(message, **config)
 
 
 # Can't hint this one.  Can't pass a regex on to postgres
@@ -171,7 +172,7 @@ def package_regex_filter(config, message, pattern=None, *args, **kw):
 
     pattern = kw.get('pattern', pattern)
     if pattern:
-        packages = fedmsg.meta.msg2packages(message, **config)
+        packages = fmn.rules.utils.msg2packages(message, **config)
         regex = fmn.rules.utils.compile_regex(pattern.encode('utf-8'))
         return any([regex.search(p.encode('utf-8')) for p in packages])
 
