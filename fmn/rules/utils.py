@@ -216,3 +216,24 @@ def get_groups_of_user(config, fas, username):
 
     return _cache.get_or_create(key, creator)
 
+
+def msg2usernames(msg, **config):
+    ''' Return cached fedmsg.meta.msg2usernames(...) '''
+
+    if not _cache.is_configured:
+        _cache.configure(**config['fmn.rules.cache'])
+
+    key = "|".join(['usernames', msg['msg_id']]).encode('utf-8')
+    creator = lambda: fedmsg.meta.msg2usernames(msg, **config)
+    return _cache.get_or_create(key, creator)
+
+
+def msg2packages(msg, **config):
+    ''' Return cached fedmsg.meta.msg2packages(...) '''
+
+    if not _cache.is_configured:
+        _cache.configure(**config['fmn.rules.cache'])
+
+    key = "|".join(['packages', msg['msg_id']]).encode('utf-8')
+    creator = lambda: fedmsg.meta.msg2packages(msg, **config)
+    return _cache.get_or_create(key, creator)
