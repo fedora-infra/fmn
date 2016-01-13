@@ -6,6 +6,8 @@ import time
 import requests
 import requests.exceptions
 
+import fedmsg.meta
+
 from dogpile.cache import make_region
 from fedora.client.fas2 import AccountSystem
 

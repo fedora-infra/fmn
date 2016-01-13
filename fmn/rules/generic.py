@@ -2,6 +2,7 @@
 
 import fedmsg
 import fedmsg.encoding
+import fedmsg.meta
 
 import fmn.rules.utils
 from fmn.lib.hinting import hint
