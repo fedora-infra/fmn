@@ -1,4 +1,29 @@
 
+0.7.5
+-----
+
+Pull Requests
+
+- (@ralphbean)      #64, Add a rule for infragit repos.
+  https://github.com/fedora-infra/fmn.rules/pull/64
+- (@mkrizek)        #66, Fix taskotron link
+  https://github.com/fedora-infra/fmn.rules/pull/66
+- (@ralphbean)      #67, Cache calls to fedmsg.meta.msg2packages.
+  https://github.com/fedora-infra/fmn.rules/pull/67
+
+Commits
+
+- af6d47859 No more irc, travis...
+  https://github.com/fedora-infra/fmn.rules/commit/af6d47859
+- 20be5c836 Add a rule for infragit repos.
+  https://github.com/fedora-infra/fmn.rules/commit/20be5c836
+- 56f7b7f99 Fix taskotron link
+  https://github.com/fedora-infra/fmn.rules/commit/56f7b7f99
+- 17afad28f Cache calls to fedmsg.meta.msg2packages.
+  https://github.com/fedora-infra/fmn.rules/commit/17afad28f
+- 248a85938 Imports.
+  https://github.com/fedora-infra/fmn.rules/commit/248a85938
+
 0.7.4
 -----
 
