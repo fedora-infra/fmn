@@ -11,7 +11,7 @@ def taskotron_result_new(config, message):
     return message['topic'].endswith('taskotron.result.new')
 
 
-@hint(categories=['taskotron'])
+@hint(categories=['taskotron'], invertible=False)
 def taskotron_task(config, message, task=None):
     """ Particular taskotron task
 
@@ -29,7 +29,7 @@ def taskotron_task(config, message, task=None):
     return message['msg']['task'].get('name').lower() in tasks
 
 
-@hint(categories=['taskotron'])
+@hint(categories=['taskotron'], invertible=False)
 def taskotron_changed_outcome(config, message):
     """ Taskotron task outcome changed
 
@@ -46,7 +46,7 @@ def taskotron_changed_outcome(config, message):
     return prev_outcome is not None and outcome != prev_outcome
 
 
-@hint(categories=['taskotron'])
+@hint(categories=['taskotron'], invertible=False)
 def taskotron_task_outcome(config, message, outcome=None):
     """ Particular taskotron task outcome
 
@@ -68,7 +68,7 @@ def taskotron_task_outcome(config, message, outcome=None):
     return message['msg']['result'].get('outcome').lower() in outcomes
 
 
-@hint(categories=['taskotron'])
+@hint(categories=['taskotron'], invertible=False)
 def taskotron_task_particular_or_changed_outcome(config, message,
                                                  outcome='FAILED'):
     """ Taskotron task any particular or changed outcome(s)
@@ -88,19 +88,11 @@ def taskotron_task_particular_or_changed_outcome(config, message,
     libtaskotron/latest/resultyaml.html#minimal-version>`_.
     """
 
-    if not outcome:
-        outcomes = []
-    else:
-        outcomes = [item.strip().lower() for item in outcome.split(',')]
-
-    outcome = message['msg']['result'].get('outcome').lower()
-    prev_outcome = message['msg']['result'].get('prev_outcome')
-
-    return outcome in outcomes or \
-           (prev_outcome is not None and outcome != prev_outcome.lower())
+    return taskotron_task_outcome(config, message, outcome) or \
+           taskotron_changed_outcome(config, message)
 
 
-@hint(categories=['taskotron'])
+@hint(categories=['taskotron'], invertible=False)
 def taskotron_release_critical_task(config, message):
     """ Release-critical taskotron tasks
 
