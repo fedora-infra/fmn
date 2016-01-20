@@ -102,4 +102,4 @@ def taskotron_release_critical_task(config, message):
 
     task = message['msg']['task'].get('name')
 
-    return task in ['depcheck', 'rpmlint']
+    return task in ['depcheck', 'upgradepath']
