@@ -43,7 +43,7 @@ def taskotron_changed_outcome(config, message):
     outcome = message['msg']['result'].get('outcome')
     prev_outcome = message['msg']['result'].get('prev_outcome')
 
-    return outcome != prev_outcome
+    return prev_outcome is not None and outcome != prev_outcome
 
 
 @hint(categories=['taskotron'])
@@ -69,21 +69,35 @@ def taskotron_task_outcome(config, message, outcome=None):
 
 
 @hint(categories=['taskotron'])
-def taskotron_task_failed_or_changed_outcome(config, message):
-    """ Taskotron task failed or changed outcome
+def taskotron_task_particular_or_changed_outcome(config, message,
+                                                 outcome='FAILED'):
+    """ Taskotron task any particular or changed outcome(s)
 
     With this rule, you can limit messages to only those task results
-    with FAILED outcome or those with changed outcomes. This rule is
-    a handy way of filtering a very useful use case - being notified
-    when either check failed for an item (a build, an update, etc),
-    or the item was fixed and the check now passes (i.e. changed
-    outcome).
+    with any particular outcome(s) (FAILED by default) or those with
+    changed outcomes. This rule is a handy way of filtering a very
+    useful use case - being notified when either task failed for an
+    item (a build, an update, etc), or the item was fixed and the
+    task now passes (i.e. changed outcome).
+
+    You can specify several outcomes by separating them with a comma ',',
+    i.e.: ``PASSED,FAILED``.
+
+    The full list of supported outcomes can be found in the libtaskotron
+    `documentation <https://docs.qadevel.cloud.fedoraproject.org/
+    libtaskotron/latest/resultyaml.html#minimal-version>`_.
     """
 
-    outcome = message['msg']['result'].get('outcome')
+    if not outcome:
+        return False
+
+    outcomes = [item.strip().lower() for item in outcome.split(',')]
+
+    outcome = message['msg']['result'].get('outcome').lower()
     prev_outcome = message['msg']['result'].get('prev_outcome')
 
-    return outcome == 'FAILED' or outcome != prev_outcome
+    return outcome in outcomes or \
+           (prev_outcome is not None and outcome != prev_outcome.lower())
 
 
 @hint(categories=['taskotron'])
@@ -94,9 +108,9 @@ def taskotron_release_critical_task(config, message):
     release-critical
     `taskotron <https://taskotron.fedoraproject.org/>`_ task.
 
-    These are the checks which are deemed extremely important
+    These are the tasks which are deemed extremely important
     by the distribution, and their failure should be carefully
-    inspected. Currently these checks are ``depcheck`` and
+    inspected. Currently these tasks are ``depcheck`` and
     ``upgradepath``.
     """
 
