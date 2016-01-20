@@ -89,9 +89,9 @@ def taskotron_task_particular_or_changed_outcome(config, message,
     """
 
     if not outcome:
-        return False
-
-    outcomes = [item.strip().lower() for item in outcome.split(',')]
+        outcomes = []
+    else:
+        outcomes = [item.strip().lower() for item in outcome.split(',')]
 
     outcome = message['msg']['result'].get('outcome').lower()
     prev_outcome = message['msg']['result'].get('prev_outcome')
