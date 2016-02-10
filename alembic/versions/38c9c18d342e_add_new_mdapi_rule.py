@@ -64,6 +64,6 @@ def downgrade():
     print "Found %i rules" % len(rules)
 
     for rule in rules:
-        rule.filter.remove_rule(session, path)
+        rule.filter.remove_rule(session, path, rule.id)
 
     session.commit()
