@@ -239,7 +239,7 @@ class Rule(BASE):
     # This is something of the form 'fmn.rules:some_function'
     # We need to do major validation to make sure only *our* code_paths
     # make it in the database.
-    code_path = sa.Column(sa.String(50), nullable=False)
+    code_path = sa.Column(sa.String(100), nullable=False)
     # JSON-encoded kw
     _arguments = sa.Column(sa.String(256))
     # Should we negate the output of the computed rule?
