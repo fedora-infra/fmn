@@ -14,6 +14,11 @@ log = logging.getLogger(__name__)
 #                     filters)
 
 exclusion_packages = [
+    # Ignore all taskotron messages (we have a separate filter for this).
+    # https://phab.qadevel.cloud.fedoraproject.org/T673
+    # https://github.com/fedora-infra/fmn.lib/pull/58
+    'taskotron_result_new',
+
     # Ignore cvsadmin batch stuff.
     # See https://github.com/fedora-infra/fmn/issues/45
     'git_pkgdb2branch_start',
