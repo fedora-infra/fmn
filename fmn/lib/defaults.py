@@ -14,6 +14,11 @@ log = logging.getLogger(__name__)
 #                     filters)
 
 exclusion_packages = [
+    # Ignore all taskotron messages (we have a separate filter for this).
+    # https://phab.qadevel.cloud.fedoraproject.org/T673
+    # https://github.com/fedora-infra/fmn.lib/pull/58
+    'taskotron_result_new',
+
     # Ignore cvsadmin batch stuff.
     # See https://github.com/fedora-infra/fmn/issues/45
     'git_pkgdb2branch_start',
@@ -297,3 +302,16 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
 
         pref.add_filter(session, filt, notify=True)
         # END "events references my username"
+
+        # Add a taskotron filter
+        filt = fmn.lib.models.Filter.create(
+            session, "Critical taskotron tasks on my packages")
+        filt.add_rule(session, valid_paths,
+                      "fmn.rules:user_package_filter",
+                      fasnick=nick)
+        filt.add_rule(session, valid_paths,
+                      "fmn.rules:taskotron_release_critical_task")
+        filt.add_rule(session, valid_paths,
+                      "fmn.rules:taskotron_task_particular_or_changed_outcome",
+                      outcome='FAILED')
+        pref.add_filter(session, filt, notify=True)

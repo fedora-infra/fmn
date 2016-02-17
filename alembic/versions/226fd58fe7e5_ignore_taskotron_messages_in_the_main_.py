@@ -1,20 +1,17 @@
-"""Add new mdapi rule.
+"""Ignore taskotron messages in the main filter.
 
-Revision ID: 38c9c18d342e
-Revises: 362efe8fd524
-Create Date: 2015-11-13 13:49:25.020563
+Revision ID: 226fd58fe7e5
+Revises: 5403906cbd9f
+Create Date: 2016-02-11 07:54:04.350712
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '38c9c18d342e'
-down_revision = '362efe8fd524'
+revision = '226fd58fe7e5'
+down_revision = '5403906cbd9f'
 
 from alembic import op
 import sqlalchemy as sa
-
-path = 'fmn.rules:mdapi_repo_update'
-target = "Events on packages that I own"
 
 import fmn.lib
 import fmn.lib.models
@@ -28,6 +25,8 @@ try:
 except ValueError:
     pass
 
+target = 'Events on packages that I own'
+path = 'fmn.rules:taskotron_result_new'
 
 def upgrade():
     engine = op.get_bind().engine
@@ -38,19 +37,10 @@ def upgrade():
     filters = session.query(fmn.lib.models.Filter).filter_by(name=target).all()
     print "Found %i filters" % len(filters)
 
-    modified = 0
     for filt in filters:
-        if len(filt.rules) < 15:
-            # Someone has changed this filter dramatically, so let's not mess
-            # with it.
-            print "Avoiding %r on %r.  Only %i rules present." % (
-                filt, filt.preference, len(filt.rules))
-            continue
-
-        modified += 1
+        print "%r has %r rules" % (filt, len(filt.rules))
         filt.add_rule(session, valid_paths, path, negated=True)
 
-    print "Modified %i filters, total" % modified
     session.commit()
 
 
@@ -58,12 +48,14 @@ def downgrade():
     engine = op.get_bind().engine
     session = sa.orm.scoped_session(sa.orm.sessionmaker(bind=engine))
 
-    valid_paths = fmn.lib.load_rules(root='fmn.rules')
+    filters = session.query(fmn.lib.models.Filter).filter_by(name=target).all()
+    print "Found %i filters" % len(filters)
 
-    rules = session.query(fmn.lib.models.Rule).filter_by(code_path=path).all()
-    print "Found %i rules" % len(rules)
-
-    for rule in rules:
-        rule.filter.remove_rule(session, path, rule.id)
+    for filt in filters:
+        for rule in filt.rules:
+            if rule.code_path == path:
+                print "Removing %r from %r" % (path, filt)
+                filt.remove_rule(session, path, rule.id)
+                break
 
     session.commit()
