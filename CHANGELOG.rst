@@ -1,4 +1,29 @@
 
+0.8.0
+-----
+
+Pull Requests
+
+- (@mkrizek)        #68, Add more taskotron rules
+  https://github.com/fedora-infra/fmn.rules/pull/68
+- (@pypingou)       #69, Add the pagure rules so they are taken into account
+  https://github.com/fedora-infra/fmn.rules/pull/69
+
+Commits
+
+- 412303f54 Add more taskotron rules
+  https://github.com/fedora-infra/fmn.rules/commit/412303f54
+- a37aab19f taskotron: fix release-critical tasks
+  https://github.com/fedora-infra/fmn.rules/commit/a37aab19f
+- 62c68b889 Fix taskotron_task_particular_or_changed_outcome rule
+  https://github.com/fedora-infra/fmn.rules/commit/62c68b889
+- 95a1b1f54 taskotron: Proceed with the rule even if outcome is cleared
+  https://github.com/fedora-infra/fmn.rules/commit/95a1b1f54
+- a8d3c4cca Make one of taskotron rules a combination of other two
+  https://github.com/fedora-infra/fmn.rules/commit/a8d3c4cca
+- 80d236f62 Add the pagure rules so they are taken into account
+  https://github.com/fedora-infra/fmn.rules/commit/80d236f62
+
 0.7.5
 -----
 
