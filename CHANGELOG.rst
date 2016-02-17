@@ -1,4 +1,27 @@
 
+0.8.0
+-----
+
+Pull Requests
+
+- (@ralphbean)      #59, Add new taskotron filter.
+  https://github.com/fedora-infra/fmn.lib/pull/59
+
+Commits
+
+- 4b3ce2966 No more irc, travis...
+  https://github.com/fedora-infra/fmn.lib/commit/4b3ce2966
+- 85aa29b95 Fix an older fmn downgrade script.
+  https://github.com/fedora-infra/fmn.lib/commit/85aa29b95
+- 0e546aca1 Make code_path longer.
+  https://github.com/fedora-infra/fmn.lib/commit/0e546aca1
+- 858410f07 Add new taskotron filter.
+  https://github.com/fedora-infra/fmn.lib/commit/858410f07
+- 23f71c5b3 Add to the defaults.
+  https://github.com/fedora-infra/fmn.lib/commit/23f71c5b3
+- 97fda7653 Ignore taskotron messages on the main filter.
+  https://github.com/fedora-infra/fmn.lib/commit/97fda7653
+
 0.7.7
 -----
 
