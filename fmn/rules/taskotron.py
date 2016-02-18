@@ -2,7 +2,7 @@ from fmn.lib.hinting import hint, prefixed as _
 
 
 @hint(topics=[_('taskotron.result.new')])
-def taskotron_result_new(config, message):
+def taskotron_result_new(config, message, **kwargs):
     """ New taskotron task result
 
     This rule lets through messages from the `taskotron
