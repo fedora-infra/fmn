@@ -22,6 +22,10 @@ def taskotron_task(config, message, task=None):
     i.e.: ``depcheck,rpmlint``.
     """
 
+    # We only operate on taskotron messages, first off.
+    if not taskotron_result_new(config, message):
+        return False
+
     if not task:
         return False
 
@@ -39,6 +43,10 @@ def taskotron_changed_outcome(config, message):
     environment changes and the task outcome is now different (e.g.
     FAILED -> PASSED).
     """
+
+    # We only operate on taskotron messages, first off.
+    if not taskotron_result_new(config, message):
+        return False
 
     outcome = message['msg']['result'].get('outcome')
     prev_outcome = message['msg']['result'].get('prev_outcome')
@@ -60,6 +68,10 @@ def taskotron_task_outcome(config, message, outcome=None):
     `documentation <https://docs.qadevel.cloud.fedoraproject.org/
     libtaskotron/latest/resultyaml.html#minimal-version>`_.
     """
+
+    # We only operate on taskotron messages, first off.
+    if not taskotron_result_new(config, message):
+        return False
 
     if not outcome:
         return False
@@ -105,6 +117,10 @@ def taskotron_release_critical_task(config, message):
     inspected. Currently these tasks are ``depcheck`` and
     ``upgradepath``.
     """
+
+    # We only operate on taskotron messages, first off.
+    if not taskotron_result_new(config, message):
+        return False
 
     task = message['msg']['task'].get('name')
 
