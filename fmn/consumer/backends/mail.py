@@ -148,7 +148,7 @@ class EmailBackend(BaseBackend):
 
         n = len(queued_messages)
         subject = u"Fedora Notifications Digest (%i updates)" % n
-        separator = "\n\n" + "-"*80 + "\n\n"
+        separator = "\n\n" + "-"*79 + "\n\n"
         content = separator.join([
             _format_line(queued_message.message)
             for queued_message in queued_messages])
