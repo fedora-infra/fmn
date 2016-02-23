@@ -26,6 +26,7 @@ from fmn.rules.logger import *
 from fmn.rules.mailman import *
 from fmn.rules.mdapi import *
 from fmn.rules.meetbot import *
+from fmn.rules.nagios import *
 from fmn.rules.nuancier import *
 from fmn.rules.pagure import *
 from fmn.rules.pkgdb import *
