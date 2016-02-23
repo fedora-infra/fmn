@@ -221,7 +221,7 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
 
     detail_values = detail_values or {}
 
-    if not user.openid.endswith('id.fedoraproject.org'):
+    if not user.openid.endswith('.fedoraproject.org'):
         log.warn("New user not from fedoraproject.org.  No defaults set.")
         return
 
