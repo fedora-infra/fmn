@@ -40,7 +40,7 @@
       <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
       <div class="btn-group pull-right">
         <span>
-        <a class="btn btn-info" href="{{url_for('context_json', openid=openid, context=current)}}"
+        <a class="btn btn-info" href="{{url_for('filter_json', openid=openid, context=current, filter_id=filter.id)}}"
           data-toggle="tooltip" title="Export filter as JSON">
           <span class="glyphicon glyphicon-floppy-save"></span>Export</a>
         </span>
