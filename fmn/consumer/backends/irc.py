@@ -12,6 +12,10 @@ import twisted.words.protocols.irc
 from twisted.internet import reactor
 from bleach import clean
 
+import logging
+log = logging.getLogger("fedmsg")
+
+
 CONFIRMATION_TEMPLATE = """
 {username} has requested that notifications be sent to this nick
 * To accept, visit this address:
@@ -64,7 +68,12 @@ mirc_colors = {
 def _shorten(link):
     if not link:
         return ''
-    return requests.get('http://da.gd/s', params=dict(url=link)).text.strip()
+    try:
+        response = requests.get('http://da.gd/s', params=dict(url=link))
+        return response.text.strip()
+    except Exception as e:
+        log.warn("Link shortening failed: %r" % e)
+        return link
 
 
 def _format_message(msg, recipient, config):
