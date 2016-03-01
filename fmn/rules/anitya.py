@@ -1,3 +1,5 @@
+import six
+
 from fmn.lib.hinting import hint, prefixed as _
 
 
@@ -177,3 +179,31 @@ def anitya_info_update(config, message):
     a project are **updated** in `anitya <https://release-monitoring.org>`_.
     """
     return message['topic'].endswith('anitya.project.update')
+
+
+def anitya_by_upstream_project(config, message, projects=None, *args, **kw):
+    """ Anything regarding a particular "upstream project"
+
+    Adding this rule will let through *any* anitya notification that pertains
+    to a particular "upstream project".  Note that the "project" name is often
+    different from the distro "package" name.  For instance, the package
+    python-requests in Fedora will have the upstream project name "requests".
+
+    You can specify a comma-separated list of upstream project names here.
+    """
+    # We only deal in anitya messages, first off.
+    if not anitya_catchall(config, message):
+        return False
+
+    if not projects or not isinstance(projects, six.string_types):
+        return False
+
+    # Get the project for the message.
+    project = message['msg'].get('project', {}).get('name', None)
+
+    # Split the string into a list of targets
+    targets = [p.strip() for p in projects.split(',')]
+    # Filter out empty strings if someone is putting ',,,' garbage in
+    targets = [target for target in targets if target]
+
+    return project in targets
