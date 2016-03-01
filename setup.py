@@ -24,6 +24,7 @@ requires = [
     'fedmsg',
     'fedmsg_meta_fedora_infrastructure',
     'dogpile.cache',
+    'six',
 ]
 
 tests_require = [
