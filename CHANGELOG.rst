@@ -1,4 +1,17 @@
 
+0.8.1
+-----
+
+Pull Requests
+
+-                   #60, Merge pull request #60 from fedora-infra/feature/stg-too
+  https://github.com/fedora-infra/fmn.lib/pull/60
+
+Commits
+
+- 6cf829cf1 Let this work in staging also.
+  https://github.com/fedora-infra/fmn.lib/commit/6cf829cf1
+
 0.8.0
 -----
 
