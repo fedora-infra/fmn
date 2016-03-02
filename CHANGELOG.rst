@@ -1,4 +1,35 @@
 
+0.8.1
+-----
+
+Pull Requests
+
+-                   #68, Merge pull request #68 from fedora-infra/feature/selfie
+  https://github.com/fedora-infra/fmn.consumer/pull/68
+-                   #69, Merge pull request #69 from mattiaverga/develop
+  https://github.com/fedora-infra/fmn.consumer/pull/69
+-                   #70, Merge pull request #70 from fedora-infra/feature/fail-whale
+  https://github.com/fedora-infra/fmn.consumer/pull/70
+-                   #71, Merge pull request #71 from mattiaverga/feature/summary
+  https://github.com/fedora-infra/fmn.consumer/pull/71
+
+Commits
+
+- c5bb5b24e Typofix.
+  https://github.com/fedora-infra/fmn.consumer/commit/c5bb5b24e
+- 176fa27e1 Yet another typo.
+  https://github.com/fedora-infra/fmn.consumer/commit/176fa27e1
+- c63f884e5 Add separator between messages in digest
+  https://github.com/fedora-infra/fmn.consumer/commit/c63f884e5
+- ffa9b02ec Reduce separator length to 79 cols
+  https://github.com/fedora-infra/fmn.consumer/commit/ffa9b02ec
+- 03b3dd365 Gracefully handle link-shortening failures.
+  https://github.com/fedora-infra/fmn.consumer/commit/03b3dd365
+- 0c81dfe5e Add a short summary at the start of the digest
+  https://github.com/fedora-infra/fmn.consumer/commit/0c81dfe5e
+- 47c7c8159 Merge branch 'develop' into feature/summary
+  https://github.com/fedora-infra/fmn.consumer/commit/47c7c8159
+
 0.6.3
 -----
 
