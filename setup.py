@@ -43,7 +43,7 @@ tests_require = [
 
 setup(
     name='fmn.web',
-    version='0.7.7',
+    version='0.8.1',
     description='Frontend Web Application for Fedora Notifications',
     long_description=get_description(),
     author='Ralph Bean',

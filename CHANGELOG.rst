@@ -1,4 +1,17 @@
 
+0.8.1
+-----
+
+Pull Requests
+
+- (@ralphbean)      #73, Fix export link on filter page.
+  https://github.com/fedora-infra/fmn.web/pull/73
+
+Commits
+
+- ac399ed98 Fix export link on filter page.
+  https://github.com/fedora-infra/fmn.web/commit/ac399ed98
+
 0.7.7
 -----
 
