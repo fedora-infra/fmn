@@ -1,4 +1,27 @@
 
+0.8.1
+-----
+
+Pull Requests
+
+-                   #70, Merge pull request #70 from fedora-infra/feature/only-taskotron
+  https://github.com/fedora-infra/fmn.rules/pull/70
+-                   #71, Merge pull request #71 from fedora-infra/feature/nagios
+  https://github.com/fedora-infra/fmn.rules/pull/71
+-                   #72, Merge pull request #72 from fedora-infra/feature/anitya-by-project
+  https://github.com/fedora-infra/fmn.rules/pull/72
+
+Commits
+
+- 0c0b98777 Only consider taskotron messages in the special taskotron rules.
+  https://github.com/fedora-infra/fmn.rules/commit/0c0b98777
+- 36f87e8a3 Add kwargs to this rule.
+  https://github.com/fedora-infra/fmn.rules/commit/36f87e8a3
+- 7ff5860a6 Add a nagios rule.
+  https://github.com/fedora-infra/fmn.rules/commit/7ff5860a6
+- 519bfa2cd Add a rule to allow filtering by anitya project.
+  https://github.com/fedora-infra/fmn.rules/commit/519bfa2cd
+
 0.8.0
 -----
 
