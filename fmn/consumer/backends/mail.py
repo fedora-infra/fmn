@@ -149,15 +149,16 @@ class EmailBackend(BaseBackend):
         n = len(queued_messages)
         subject = u"Fedora Notifications Digest (%i updates)" % n
         summary = u"Digest summary:\n"
-        for msg_number in range(len(queued_messages)):
-            summary += str(msg_number+1) + ".\t" + (fedmsg.meta.msg2subtitle(msg, **self.config) or u'') + "\n"
-        
+        for i, msg in enumerate(queued_messages):
+            line = fedmsg.meta.msg2subtitle(msg.message, **self.config) or u''
+            summary += str(i+1) + ".\t" + line + "\n"
+
         separator = "\n\n" + "-"*79 + "\n\n"
         if recipient.get('verbose', True):
             content = summary + separator
         else:
             content = u''
-        
+
         content += separator.join([
             _format_line(queued_message.message)
             for queued_message in queued_messages])
