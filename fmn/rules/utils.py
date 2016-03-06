@@ -45,7 +45,14 @@ def get_fas(config):
     if _FAS is not None:
         return _FAS
 
-    creds = config['fas_credentials']
+    # In some development environments, having fas_credentials around is a
+    # pain.. so, let things proceed here, but emit a warning.
+    try:
+        creds = config['fas_credentials']
+    except KeyError:
+        log.warn("No fas_credentials available.  Unable to query FAS.")
+        return None
+
     default_url = 'https://admin.fedoraproject.org/accounts/'
 
     _FAS = AccountSystem(
@@ -191,7 +198,10 @@ def get_user_of_group(config, fas, groupname):
         _cache.configure(**config['fmn.rules.cache'])
 
     key = cache_key_generator(get_user_of_group, groupname)
-    creator = lambda: fas.group_members(groupname)
+    def creator():
+        if not fas:
+            return []
+        return fas.group_members(groupname)
     return _cache.get_or_create(key, creator)
 
 def get_groups_of_user(config, fas, username):
@@ -210,6 +220,8 @@ def get_groups_of_user(config, fas, username):
     key = cache_key_generator(get_groups_of_user, username)
 
     def creator():
+        if not fas:
+            return []
         results = []
         for group in fas.person_by_username(username).get('memberships', []):
             if group['group_type'] == 'pkgdb':
