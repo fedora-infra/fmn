@@ -1,0 +1,38 @@
+ +-------------+      +-----------------+   +---------------+   +------------+
+ | users       |      | preferences     |   | filters       |   | rules      |
+ |-------------|      |-----------------|   |---------------|   |------------|
+ | openid      |<--+  | id              |   | Id            |   | Id         |
+ | created on  |   |  | created on      |   | created_on    |   | created on |
+ |             |   |  | openid          |   | name          |<--+ filter_id  |
+ +-------------+   +--+ context_name    |<--+ preference_id |   | code_path  |
+                   |  | batch_delta     |   |               |   | arguments  |
+                   |  | batch_count     |   +---------------+   |            |
+                   |  |                 |<----------+           +------------+
+                   |  |                 |           |
+ +-------------+   |  +-----------------+   +-------+-------+
+ | contexts    |   |                        | detail_values |
+ |-------------|   |                        |---------------|
+ | name        |<--+  +---------------+     | id            |
+ | description |   |  | confirmations |     | created_on    |
+ | created on  |   |  |---------------|     | value         |
+ | detail_name |   |  | Id            |     | preference_id |
+ +-------------+   |  | create on     |     |               |
+                   |  | status        |     +---------------+
+                   |  | secret        |
+                   |  | detail_value  |
+                   |  | openid        |
+                   +--+ context_name  |
+                   |  |               |
+                   |  +---------------+
+                   |
+                   |
+                   |  +-----------------+
+                   |  | queued_messages |
+                   |  |-----------------|
+                   |  | Id              |
+                   |  | created on      |
+                   |  | _message        |
+                   |  | openid          |
+                   +--+ context_name    |
+                      |                 |
+                      +-----------------+
