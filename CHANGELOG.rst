@@ -1,4 +1,19 @@
 
+0.8.2
+-----
+
+Pull Requests
+
+- (@ralphbean)      #73, Make FAS optional here.
+  https://github.com/fedora-infra/fmn.rules/pull/73
+
+Commits
+
+- bfa43e926 Remove html from this header.
+  https://github.com/fedora-infra/fmn.rules/commit/bfa43e926
+- 50dafe9ff Make FAS optional here.
+  https://github.com/fedora-infra/fmn.rules/commit/50dafe9ff
+
 0.8.1
 -----
 
