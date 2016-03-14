@@ -5,7 +5,7 @@ import fedmsg.meta
 
 @hint(categories=['pagure'])
 def pagure_catchall(config, message):
-    """ All <a href="https://pagure.io">pagure.io</a> activity
+    """ All pagure.io activity
 
     Adding this rule will indiscriminately match notifications of all types
     from `pagure <https://pagure.io>`_ (but only the repositories that have the
