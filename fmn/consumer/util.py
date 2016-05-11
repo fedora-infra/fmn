@@ -36,3 +36,12 @@ def get_fas_email(config, username):
     except Exception:
         log.exception("Failed to get FAS email for %r" % username)
         return '%s@fedoraproject.org' % username
+
+
+def load_preferences(args):
+    session, config, valid_paths = args
+    return fmn.lib.load_preferences(
+        session, config, valid_paths,
+        cull_disabled=True,
+        cull_backends=['desktop']
+    )
