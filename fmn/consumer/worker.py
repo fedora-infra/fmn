@@ -12,8 +12,6 @@ import fmn.rules.utils
 import fedmsg
 import fedmsg.meta
 
-from fmn.consumer.util import load_preferences
-
 from fedmsg_meta_fedora_infrastructure import fasshim
 
 import pika
@@ -22,6 +20,8 @@ log = logging.getLogger("fmn")
 log.setLevel('DEBUG')
 CONFIG = fedmsg.config.load_config()
 fedmsg.meta.make_processors(**CONFIG)
+
+DB_URI = CONFIG.get('fmn.sqlalchemy.uri', None)
 
 from dogpile.cache import make_region
 _cache = make_region(
@@ -40,6 +40,18 @@ print 'started at', ch.method.message_count
 valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
 
+def get_preferences():
+    print 'get_preferences'
+    session = fmn.lib.models.init(DB_URI)
+    prefs = fmn.lib.load_preferences(
+        session, CONFIG, valid_paths,
+        cull_disabled=True,
+        cull_backends=['desktop']
+    )
+    session.close()
+    _cache.set('preferences', get_preferences())
+
+
 def callback(ch, method, properties, body):
     start = time.time()
 
@@ -52,12 +64,8 @@ def callback(ch, method, properties, body):
     print topic
 
     # First, make a thread-local copy of our shared cached prefs
-    session = fmn.lib.models.init(CONFIG.get('fmn.sqlalchemy.uri', None))
-    preferences = _cache.get_or_create(
-        'preferences',
-        load_preferences,
-        (session, CONFIG, valid_paths)
-    )
+    session = fmn.lib.models.init(DB_URI)
+    preferences = _cache.get_or_create('preferences', get_preferences)
     session.close()
     # Shuffle it so that not all threads step through the list in the same
     # order.  This should cut down on competition for the dogpile lock when

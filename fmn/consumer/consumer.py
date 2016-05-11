@@ -18,7 +18,6 @@ from fmn.consumer.util import (
     new_packager,
     new_badges_user,
     get_fas_email,
-    load_preferences,
 )
 
 import logging
@@ -50,17 +49,33 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
             )
 
         session = self.make_session()
-        self.set_cache(session)
+        self.refresh_cache(session)
         session.close()
 
         log.debug("FMNConsumer initialized")
 
-    def set_cache(self, session, openid=None):
+    def refresh_cache(self, session, openid=None):
+        def get_preferences():
+            prefs = fmn.lib.load_preferences(
+                session, self.hub.config, self.valid_paths,
+                cull_disabled=True,
+                cull_backends=['desktop']
+            )
+            _cache.set('preferences', prefs)
         log.info("Loading and caching all preferences for all users")
-        return _cache.get_or_create(
-            'preferences', load_preferences,
-            (session, self.hub.config, self.valid_paths)
-        )
+        cache_output = _cache.get_or_create('preferences', get_preferences)
+        if openid:
+            log.info("Loading and caching preferences for %r" % openid)
+            old_preferences = [p for p in cache_output
+                               if p['user']['openid'] == openid]
+            new_preferences = fmn.lib.load_preferences(
+                session, self.hub.config, self.valid_paths,
+                cull_disabled=True, openid=openid,
+                cull_backends=['desktop'])
+            cache_output.extend(new_preferences)
+            for old_preference in old_preferences:
+                cache_output.remove(old_preference)
+            _cache.set('preferences', cache_output)
 
     def make_session(self):
         return fmn.lib.models.init(self.uri)
