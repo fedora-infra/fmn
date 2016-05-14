@@ -28,15 +28,6 @@ _cache = make_region(
     key_mangler=lambda key: "fmn.consumer:dogpile:" + key
 ).configure(**CONFIG['fmn.rules.cache'])
 
-fasshim.make_fas_cache(**CONFIG)
-
-CNT = 0
-connection = pika.BlockingConnection()
-channel = connection.channel()
-
-ch = channel.queue_declare('workers', durable=True)
-print 'started at', ch.method.message_count
-
 valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
 
@@ -50,6 +41,17 @@ def get_preferences():
     )
     session.close()
     _cache.set('preferences', get_preferences())
+
+
+fasshim.make_fas_cache(**CONFIG)
+get_preferences()
+
+CNT = 0
+connection = pika.BlockingConnection()
+channel = connection.channel()
+
+ch = channel.queue_declare('workers', durable=True)
+print 'started at', ch.method.message_count
 
 
 def callback(ch, method, properties, body):
