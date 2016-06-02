@@ -88,9 +88,9 @@ def taskotron_task_particular_or_changed_outcome(config, message,
     With this rule, you can limit messages to only those task results
     with any particular outcome(s) (FAILED and NEEDS_INSPECTION by default)
     or those with changed outcomes. This rule is a handy way of filtering
-    a very useful use case - being notified when either task failed for an
-    item (a build, an update, etc), or the item was fixed and the
-    task now passes (i.e. changed outcome).
+    a very useful use case - being notified when either task requires
+    your attention or the outcome has changed since the last time the task
+    ran for the same item (e.g. a koji build).
 
     You can specify several outcomes by separating them with a comma ',',
     i.e.: ``PASSED,FAILED``.
