@@ -11,10 +11,13 @@ import fmn.lib
 import fmn.rules.utils
 import fedmsg
 import fedmsg.meta
+import fedmsg_meta_fedora_infrastructure
 
 from fedmsg_meta_fedora_infrastructure import fasshim
 
 import pika
+
+import fmn.consumer.fmn_fasshim
 
 log = logging.getLogger("fmn")
 log.setLevel('DEBUG')
@@ -30,6 +33,11 @@ _cache = make_region(
 
 valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
+OPTS = pika.ConnectionParameters(
+    heartbeat_interval=10,
+    retry_delay=2,
+)
+
 
 def get_preferences():
     print 'get_preferences'
@@ -40,41 +48,92 @@ def get_preferences():
         cull_backends=['desktop']
     )
     session.close()
-    _cache.set('preferences', get_preferences())
+    print 'prefs retrieved'
+    return prefs
 
 
-fasshim.make_fas_cache(**CONFIG)
-get_preferences()
+def update_preferences(openid, prefs):
+    log.info("Loading and caching preferences for %r" % openid)
+    old_preferences = [
+        p for p in prefs if p['user']['openid'] == openid]
+    session = fmn.lib.models.init(DB_URI)
+    new_preferences = fmn.lib.load_preferences(
+        session, CONFIG, valid_paths,
+        cull_disabled=True,
+        openid=openid,
+        cull_backends=['desktop']
+    )
+    session.close()
+    prefs.extend(new_preferences)
+    for old_preference in old_preferences:
+        prefs.remove(old_preference)
+
+    return prefs
+
 
 CNT = 0
-connection = pika.BlockingConnection()
+PREFS = get_preferences()
+
+fmn.consumer.fmn_fasshim.make_fas_cache(**CONFIG)
+# Duck patch fedmsg_meta modules
+fasshim.nick2fas = fmn.consumer.fmn_fasshim.nick2fas
+fasshim.email2fas = fmn.consumer.fmn_fasshim.email2fas
+fedmsg_meta_fedora_infrastructure.supybot.nick2fas = \
+    fmn.consumer.fmn_fasshim.nick2fas
+fedmsg_meta_fedora_infrastructure.anitya.email2fas = \
+    fmn.consumer.fmn_fasshim.email2fas
+fedmsg_meta_fedora_infrastructure.bz.email2fas = \
+    fmn.consumer.fmn_fasshim.email2fas
+fedmsg_meta_fedora_infrastructure.mailman3.email2fas = \
+    fmn.consumer.fmn_fasshim.email2fas
+fedmsg_meta_fedora_infrastructure.pagure.email2fas = \
+    fmn.consumer.fmn_fasshim.email2fas
+
+queue = 'workers'
+connection = pika.BlockingConnection(OPTS)
 channel = connection.channel()
-
-ch = channel.queue_declare('workers', durable=True)
+channel.exchange_declare(exchange=queue, type='fanout')
+ch = channel.queue_declare(queue, durable=True)
+channel.queue_bind(exchange=queue, queue=queue)
 print 'started at', ch.method.message_count
-
+SEEN = []
 
 def callback(ch, method, properties, body):
     start = time.time()
 
-    global CNT
+    global CNT, connection, PREFS
     CNT += 1
     raw_msg = json.loads(body)
-
-    #print body
     topic, msg = raw_msg['topic'], raw_msg['body']
     print topic
 
-    # First, make a thread-local copy of our shared cached prefs
-    session = fmn.lib.models.init(DB_URI)
-    preferences = _cache.get_or_create('preferences', get_preferences)
-    session.close()
+    if msg['msg_id'] in SEEN:
+        print 'Already seen %s' % msg['msg_id']
+        channel.basic_cancel(delivery_tag=method.delivery_tag)
+        return
+
+    # If the user has tweaked their preferences on the frontend, then
+    # invalidate our entire in-memory cache of the fmn preferences
+    # database.
+    if '.fmn.' in topic:
+        openid = msg['msg']['openid']
+        PREFS = update_preferences(openid, PREFS)
+        if topic == 'consumer.fmn.prefs.update':
+            log.debug(
+                "Done with refreshing prefs.  %0.2fs %s",
+                time.time() - start,msg['topic'])
+            ch.basic_ack(delivery_tag=method.delivery_tag)
+            return
+
     # Shuffle it so that not all threads step through the list in the same
     # order.  This should cut down on competition for the dogpile lock when
     # getting pkgdb info at startup.
-    random.shuffle(preferences)
+    random.shuffle(PREFS)
+
     # And do the real work of comparing every rule against the message.
-    results = fmn.lib.recipients(preferences, msg, valid_paths, CONFIG)
+    t = time.time()
+    results = fmn.lib.recipients(PREFS, msg, valid_paths, CONFIG)
+    log.debug("results retrieved in: %0.2fs", time.time() - t)
 
     log.debug("Recipients found %i dt %0.2fs %s %s",
               len(results), time.time() - start,
@@ -82,38 +141,37 @@ def callback(ch, method, properties, body):
 
     # Let's look at the results of our matching operation and send stuff
     # where we need to.
-
     for context, recipients in results.items():
         if not recipients:
             continue
 
-        print context, recipients
-        backend_chan = connection.channel()
-        backend_chan.queue_declare('backends', durable=True)
-        backend_chan.basic_publish(
-            exchange='',
-            routing_key='backends',
-            body=json.dumps({
-                'context': context,
-                'recipients': recipients,
-                'raw_msg': raw_msg,
-            }),
-            properties=pika.BasicProperties(
-                delivery_mode=2
+        chan = connection.channel()
+        chan.exchange_declare(exchange=queue, type='fanout')
+        q = chan.queue_declare(queue, durable=True)
+        for i in range(q.method.consumer_count):
+            chan.basic_publish(
+                exchange='backends',
+                routing_key='',
+                body=json.dumps({
+                    'context': context,
+                    'recipients': recipients,
+                    'raw_msg': raw_msg,
+                }),
+                properties=pika.BasicProperties(
+                    delivery_mode=2
+                )
             )
-        )
-        backend_chan.close()
+        chan.close()
+    ch.basic_ack(delivery_tag=method.delivery_tag)
 
     log.debug("Done.  %0.2fs %s %s",
               time.time() - start, msg['msg_id'], msg['topic'])
 
-    channel.basic_ack(delivery_tag=method.delivery_tag)
-    chan = channel.queue_declare('workers', durable=True)
-    print chan.method.message_count
 
 # Make sure we leave any other messages in the queue
 channel.basic_qos(prefetch_count=1)
 channel.basic_consume(callback, queue='workers')
+
 
 try:
     print 'Starting consuming'
