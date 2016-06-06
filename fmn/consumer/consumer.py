@@ -3,16 +3,12 @@
 import threading
 import time
 import random
+import uuid
 
 import fedmsg.consumers
 import fmn.lib
 import fmn.rules.utils
 import backends as fmn_backends
-
-from dogpile.cache import make_region
-_cache = make_region(
-    key_mangler=lambda key: "fmn.consumer:dogpile:" + key
-)
 
 from fmn.consumer.util import (
     new_packager,
@@ -22,6 +18,39 @@ from fmn.consumer.util import (
 
 import logging
 log = logging.getLogger("fmn")
+
+
+def notify_prefs_change(openid):
+    import json
+    import pika
+    connection = pika.BlockingConnection()
+    msg_id = '2016-%s' % uuid.uuid4()
+    for queue in ['workers', 'backend']:
+        chan = connection.channel()
+        chan.exchange_declare(exchange=queue, type='fanout')
+        #q = chan.queue_declare(queue, durable=True)
+        #print 'sending %s messages' % q.method.consumer_count
+        for i in range(q.method.consumer_count):
+            chan.basic_publish(
+                exchange=queue,
+                routing_key='',
+                body=json.dumps({
+                    'topic': 'consumer.fmn.prefs.update',
+                    'body': {
+                        'topic': 'consumer.fmn.prefs.update',
+                        "msg_id": msg_id,
+                        'msg': {
+                            "openid": "ctubbsii.id.fedoraproject.org",
+                        },
+
+                    },
+                }),
+                properties=pika.BasicProperties(
+                    delivery_mode=2
+                )
+            )
+        chan.close()
+    connection.close()
 
 
 class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
@@ -42,40 +71,10 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         log.debug("Loading rules from fmn.rules")
         self.valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
-        # Initialize our dogpile cache of the FMN preferences database
-        if not _cache.is_configured:
-            _cache.configure(
-                **self.hub.config['fmn.rules.cache']
-            )
-
         session = self.make_session()
-        self.refresh_cache(session)
         session.close()
 
         log.debug("FMNConsumer initialized")
-
-    def refresh_cache(self, session, openid=None):
-        def get_preferences():
-            prefs = fmn.lib.load_preferences(
-                session, self.hub.config, self.valid_paths,
-                cull_disabled=True,
-                cull_backends=['desktop']
-            )
-            _cache.set('preferences', prefs)
-        log.info("Loading and caching all preferences for all users")
-        cache_output = _cache.get_or_create('preferences', get_preferences)
-        if openid:
-            log.info("Loading and caching preferences for %r" % openid)
-            old_preferences = [p for p in cache_output
-                               if p['user']['openid'] == openid]
-            new_preferences = fmn.lib.load_preferences(
-                session, self.hub.config, self.valid_paths,
-                cull_disabled=True, openid=openid,
-                cull_backends=['desktop'])
-            cache_output.extend(new_preferences)
-            for old_preference in old_preferences:
-                cache_output.remove(old_preference)
-            _cache.set('preferences', cache_output)
 
     def make_session(self):
         return fmn.lib.models.init(self.uri)
@@ -109,12 +108,9 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         # package-ownership relations.  Both caches are held for a very long
         # time and update themselves dynamically here.
 
-        # If the user has tweaked their preferences on the frontend, then
-        # invalidate our entire in-memory cache of the fmn preferences
-        # database.
         if '.fmn.' in topic:
             openid = msg['msg']['openid']
-            self.refresh_cache(session, openid)
+            notify_prefs_change(openid)
 
         # If a user has tweaked something in the pkgdb2 db, then invalidate our
         # dogpile cache.. but only the parts that have something to do with any
@@ -151,7 +147,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 )
                 session.add(user)
                 session.commit()
-                self.refresh_cache(session, openid)
+                notify_prefs_change(openid)
 
         # Do the same dogpile.cache invalidation trick that we did above, but
         # here do it for fas group membership changes.  (This is important
