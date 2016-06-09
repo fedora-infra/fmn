@@ -19,37 +19,37 @@ from fmn.consumer.util import (
 import logging
 log = logging.getLogger("fmn")
 
+import pika
+connection = pika.BlockingConnection()
+
 
 def notify_prefs_change(openid):
     import json
     import pika
     connection = pika.BlockingConnection()
     msg_id = '2016-%s' % uuid.uuid4()
-    for queue in ['workers', 'backend']:
-        chan = connection.channel()
-        chan.exchange_declare(exchange=queue, type='fanout')
-        #q = chan.queue_declare(queue, durable=True)
-        #print 'sending %s messages' % q.method.consumer_count
-        for i in range(q.method.consumer_count):
-            chan.basic_publish(
-                exchange=queue,
-                routing_key='',
-                body=json.dumps({
-                    'topic': 'consumer.fmn.prefs.update',
-                    'body': {
-                        'topic': 'consumer.fmn.prefs.update',
-                        "msg_id": msg_id,
-                        'msg': {
-                            "openid": "ctubbsii.id.fedoraproject.org",
-                        },
+    queue = 'refresh'
+    chan = connection.channel()
+    chan.exchange_declare(exchange=queue, type='fanout')
+    chan.basic_publish(
+        exchange=queue,
+        routing_key='',
+        body=json.dumps({
+            'topic': 'consumer.fmn.prefs.update',
+            'body': {
+                'topic': 'consumer.fmn.prefs.update',
+                "msg_id": msg_id,
+                'msg': {
+                    "openid": "ctubbsii.id.fedoraproject.org",
+                },
 
-                    },
-                }),
-                properties=pika.BasicProperties(
-                    delivery_mode=2
-                )
-            )
-        chan.close()
+            },
+        }),
+        properties=pika.BasicProperties(
+            delivery_mode=2
+        )
+    )
+    chan.close()
     connection.close()
 
 
@@ -168,9 +168,8 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         # should receive this message.
 
         import json
-        import pika
-        connection = pika.BlockingConnection()
         channel = connection.channel()
+        channel.exchange_declare(exchange='workers')
         channel.queue_declare('workers', durable=True)
         channel.basic_publish(
             exchange='',
@@ -181,7 +180,6 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
             )
         )
         channel.close()
-        connection.close()
 
         log.debug("Done.  %0.2fs %s %s",
                   time.time() - start, msg['msg_id'], msg['topic'])
@@ -189,3 +187,4 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
     def stop(self):
         log.info("Cleaning up FMNConsumer.")
         super(FMNConsumer, self).stop()
+        connection.close()
