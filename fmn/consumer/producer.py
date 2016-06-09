@@ -2,6 +2,7 @@
 
 import moksha.hub.api
 import fmn.lib
+import backends as fmn_backends
 
 import datetime
 import logging
@@ -41,7 +42,13 @@ class FMNProducerBase(moksha.hub.api.PollingProducer):
 
     @property
     def backends(self):
-        return self.sister.backends
+        backend_kwargs = dict(config=self.hub.config)
+        return {
+            'email': fmn_backends.EmailBackend(**backend_kwargs),
+            'irc': fmn_backends.IRCBackend(**backend_kwargs),
+            'android': fmn_backends.GCMBackend(**backend_kwargs),
+            #'rss': fmn_backends.RSSBackend,
+        }
 
     def poll(self):
         session = self.make_session()
