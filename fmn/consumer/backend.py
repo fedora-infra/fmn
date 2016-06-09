@@ -43,16 +43,6 @@ fedmsg_meta_fedora_infrastructure.pagure.email2fas = \
 
 CNT = 0
 
-queue = 'backends'
-connection = pika.BlockingConnection()
-channel = connection.channel()
-channel.exchange_declare(exchange=queue, type='fanout')
-ch = channel.queue_declare(queue, durable=True)
-channel.queue_bind(exchange=queue, queue=queue)
-
-print 'started at', ch.method.message_count
-
-
 log.debug("Instantiating FMN backends")
 backend_kwargs = dict(config=CONFIG)
 backends = {
@@ -161,9 +151,27 @@ def callback(ch, method, properties, body):
     chan = channel.queue_declare('backends', durable=True)
     print chan.method.message_count
 
+connection = pika.BlockingConnection()
+
+queue = 'refresh'
+channel = connection.channel()
+channel.exchange_declare(exchange=queue, type='fanout')
+refresh_q = channel.queue_declare(exclusive=True)
+refresh_q_name = refresh_q.method.queue
+channel.queue_bind(exchange=queue, queue=refresh_q_name)
+
+queue = 'backends'
+channel.exchange_declare(exchange=queue, type='direct')
+workers_q = channel.queue_declare(queue, durable=True)
+channel.queue_bind(exchange=queue, queue=queue)
+
+print 'started at %s backends' % workers_q.method.message_count
+print 'started at %s refresh' % refresh_q.method.message_count
+
 # Make sure we leave any other messages in the queue
 channel.basic_qos(prefetch_count=1)
-channel.basic_consume(callback, queue='backends')
+channel.basic_consume(callback, queue=queue)
+channel.basic_consume(callback, queue=refresh_q_name)
 
 try:
     print 'Starting consuming'
