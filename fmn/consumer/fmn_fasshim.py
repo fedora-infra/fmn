@@ -65,8 +65,6 @@ def make_fas_cache(**config):
 
         del request
 
-    del fasclient
-    del fedora.client.fas2
     _cache.set('fas_cache_built', True)
 
 
@@ -121,9 +119,9 @@ def update_email(username):
 def nick2fas(nickname, **config):
     result = _cache.get(nickname)
     if not result:
-        update_nick(username)
+        update_nick(nickname)
         result = _cache.get(nickname)
-    return result
+    return result or nickname
 
 
 def email2fas(email, **config):
@@ -134,4 +132,4 @@ def email2fas(email, **config):
     if not result:
         update_email(email)
         result = _cache.get(email)
-    return result
+    return result or email
