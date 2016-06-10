@@ -88,23 +88,27 @@ fedmsg_meta_fedora_infrastructure.mailman3.email2fas = \
 fedmsg_meta_fedora_infrastructure.pagure.email2fas = \
     fmn.consumer.fmn_fasshim.email2fas
 
+connection = pika.BlockingConnection(OPTS)
+
 def inform_workers(raw_msg, context, recipients):
+    queue = 'backends'
     chan = connection.channel()
-    chan.exchange_declare(exchange='backends', type='direct')
-    q = chan.queue_declare(queue, durable=True)
-    for i in range(q.method.consumer_count):
-        chan.basic_publish(
-            exchange='backends',
-            routing_key='',
-            body=json.dumps({
-                'context': context,
-                'recipients': recipients,
-                'raw_msg': raw_msg,
-            }),
-            properties=pika.BasicProperties(
-                delivery_mode=2
-            )
+    chan.exchange_declare(exchange=queue)
+    chan.queue_declare(queue, durable=True)
+
+    print 'backends', context, recipients
+    chan.basic_publish(
+        exchange='',
+        routing_key=queue,
+        body=json.dumps({
+            'context': context,
+            'recipients': recipients,
+            'raw_msg': raw_msg,
+        }),
+        properties=pika.BasicProperties(
+            delivery_mode=2
         )
+    )
     chan.close()
 
 
@@ -155,7 +159,7 @@ def callback(ch, method, properties, body):
                 inform_workers(raw_msg, context, recipients)
                 break
             except:
-                if attmpt == 2:
+                if attempt == 2:
                     raise
 
     ch.basic_ack(delivery_tag=method.delivery_tag)
@@ -163,8 +167,6 @@ def callback(ch, method, properties, body):
     log.debug("Done.  %0.2fs %s %s",
               time.time() - start, msg['msg_id'], msg['topic'])
 
-
-connection = pika.BlockingConnection(OPTS)
 
 queue = 'refresh'
 channel = connection.channel()
