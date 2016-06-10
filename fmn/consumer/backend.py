@@ -25,6 +25,7 @@ CONFIG = fedmsg.config.load_config()
 fedmsg.meta.make_processors(**CONFIG)
 
 DB_URI = CONFIG.get('fmn.sqlalchemy.uri', None)
+session = fmn.lib.models.init(DB_URI)
 
 fmn.consumer.fmn_fasshim.make_fas_cache(**CONFIG)
 # Duck patch fedmsg_meta modules
@@ -73,21 +74,17 @@ if CONFIG.get('fmn.backends.debug', False):
 
 def get_preferences():
     print 'get_preferences'
-    session = fmn.lib.models.init(DB_URI)
     prefs = {}
     for p in session.query(fmn.lib.models.Preference).all():
         prefs['%s__%s' % (p.openid, p.context_name)] = p
-    session.close()
     print 'prefs retrieved'
     return prefs
 
 
 def update_preferences(openid):
     log.info("Loading and caching preferences for %r" % openid)
-    session = fmn.lib.models.init(DB_URI)
     for p in fmn.lib.models.Preference.by_user(session, openid):
         PREFS['%s__%s' % (p.openid, p.context_name)] = p
-    session.close()
 
 
 PREFS = get_preferences()
@@ -102,22 +99,26 @@ def callback(ch, method, properties, body):
     start = time.time()
 
     data = json.loads(body)
-    recipients, context, raw_msg = data['recipients'], data['context'], data['raw_msg']
-    topic, msg = raw_msg['topic'], raw_msg['body']
-    print topic, context
+    print data.keys()
+    topic = data.get('topic', '')
+
+    if '.fmn.' in topic:
+        openid = data['body']['msg']['openid']
+        PREFS = update_preferences(openid)
+        if topic == 'consumer.fmn.prefs.update':  # msg from the consumer
+            log.debug(
+                "Done with refreshing prefs.  %0.2fs %s",
+                time.time() - start, data['topic'])
+            ch.basic_ack(delivery_tag=method.delivery_tag)
+            return
+
+    print data['raw_msg'].keys()
+    recipients, context, raw_msg = \
+        data['recipients'], data['context'], data['raw_msg']['body']
+
     log.debug("  Considering %r with %i recips" % (
         context, len(list(recipients))))
 
-    if '.fmn.' in topic:
-        openid = msg['msg']['openid']
-        PREFS = update_preferences(openid)
-        if topic == 'consumer.fmn.prefs.update':
-            log.debug(
-                "Done with refreshing prefs.  %0.2fs %s",
-                time.time() - start, msg['topic'])
-            return
-
-    session = fmn.lib.models.init(DB_URI)
     backend = backends[context]
     for recipient in recipients:
         user = recipient['user']
@@ -129,12 +130,13 @@ def callback(ch, method, properties, body):
             log.debug(
                 "    Calling backend %r with %r" % (backend, recipient))
             t = time.time()
-            backend.handle(session, recipient, msg)
+            print backend
+            backend.handle(session, recipient, raw_msg)
             log.debug("Handled by backend in: %0.2fs", time.time() - t)
         else:
             log.debug("    Queueing msg for digest")
             fmn.lib.models.QueuedMessage.enqueue(
-                session, user, context, msg)
+                session, user, context, raw_msg)
         if ('filter_oneshot' in recipient
                 and recipient['filter_oneshot']):
             log.debug("    Marking one-shot filter as fired")
@@ -142,14 +144,11 @@ def callback(ch, method, properties, body):
             fltr = session.query(fmn.lib.models.Filter).get(idx)
             fltr.fired(session)
     session.commit()
-    session.close()
-
-    log.debug("Done.  %0.2fs %s %s",
-              time.time() - start, msg['msg_id'], msg['topic'])
 
     channel.basic_ack(delivery_tag=method.delivery_tag)
-    chan = channel.queue_declare('backends', durable=True)
-    print chan.method.message_count
+    log.debug("Done.  %0.2fs %s %s",
+              time.time() - start, raw_msg['msg_id'], raw_msg['topic'])
+
 
 connection = pika.BlockingConnection()
 
@@ -162,10 +161,10 @@ channel.queue_bind(exchange=queue, queue=refresh_q_name)
 
 queue = 'backends'
 channel.exchange_declare(exchange=queue, type='direct')
-workers_q = channel.queue_declare(queue, durable=True)
+backends_q = channel.queue_declare(queue, durable=True)
 channel.queue_bind(exchange=queue, queue=queue)
 
-print 'started at %s backends' % workers_q.method.message_count
+print 'started at %s backends' % backends_q.method.message_count
 print 'started at %s refresh' % refresh_q.method.message_count
 
 # Make sure we leave any other messages in the queue
@@ -173,11 +172,14 @@ channel.basic_qos(prefetch_count=1)
 channel.basic_consume(callback, queue=queue)
 channel.basic_consume(callback, queue=refresh_q_name)
 
+
 try:
     print 'Starting consuming'
     channel.start_consuming()
 except KeyboardInterrupt:
+    pass
+finally:
     channel.cancel()
     connection.close()
-finally:
+    session.close()
     print '%s tasks proceeded' % CNT
