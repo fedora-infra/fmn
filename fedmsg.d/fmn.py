@@ -45,6 +45,7 @@ config = {
     # This is the list of enabled backends (so we can turn one off globally)
     #"fmn.backends": ['email', 'irc', 'android'],
     "fmn.backends": ['email', 'irc'],
+    "fmn.backends.debug": False,
 
     # Email
     "fmn.email.mailserver": "127.0.0.1:25",
