@@ -45,7 +45,10 @@ def make_fas_cache(**config):
             print key
             request = fasclient.send_request(
                 '/user/list',
-                req_params={'search': '%s*' % key},
+                req_params={
+                    'search': '%s*' % key,
+                    'status': 'active'
+                },
                 auth=True)
         except fedora.client.ServerError as e:
             log.warning("Failed to download fas cache for %s %r" % (key, e))
