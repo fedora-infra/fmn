@@ -55,6 +55,13 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 raise ValueError("%r in fmn.backends (%r) is invalid" % (
                     key, self.hub.config['fmn.backends']))
 
+        # If debug is enabled, use the debug backend everywhere
+        if self.hub.config.get('fmn.backends.debug', False):
+            for key in self.backends:
+                log.debug('Setting %s to use the DebugBackend' % key)
+                self.backends[key] = fmn_backends.DebugBackend(
+                    **backend_kwargs)
+
         log.debug("Loading rules from fmn.rules")
         self.valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
