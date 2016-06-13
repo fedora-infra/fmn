@@ -95,20 +95,23 @@ def update_nick(username):
             _cache.set(email, user['username'])
 
 
-def update_email(username):
+def update_email(email):
     global fasclient
     try:
-        log.info("Downloading FAS cache for %s*" % username)
+        log.info("Downloading FAS cache for %s*" % email)
         request = fasclient.send_request(
             '/user/list',
-            req_params={'search': '%s' % username},
+            req_params={
+                'search': '%s' % email,
+                'by_email': 1,
+            },
             auth=True)
     except fedora.client.ServerError as e:
         log.warning(
-            "Failed to download fas cache for %s: %r" % (username, e))
+            "Failed to download fas cache for %s: %r" % (email, e))
         return {}
 
-    log.info("Caching necessary data for %s" % username)
+    log.info("Caching necessary data for %s" % email)
     for user in request['people']:
         nick = user['ircnick']
         if nick:
