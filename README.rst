@@ -50,3 +50,43 @@ There's a handy script in the ``scripts/`` dir for debugging why some user did
 or did not receive a message.  It takes a username and a fedmsg msg_id and
 tries to see if the two match up or not based on the production preferences for
 that user.
+
+
+Architecture
+------------
+
+::
+
+                                                                +-------------+
+                                                         Read   |             |   Write
+                                                         +------+  prefs DB   |<------+
+                                                         |      |             |       |
+       +                                                 |      +-------------+       |
+       |                                                 |                            |      +------------------+        +--------+
+       |                                                 |                            |      |    |fmn.lib|     |        |        |
+       |                                                 v                            |      |    +-------+     <--------+  User  |
+       |                                           +----------+                       +------+                  |        |        |
+       |                                           |   fmn.lib|                              |  Central WebApp  |        +--------+
+       |                                           |          |                              +------------------+
+       |                                    +----->|  Worker  +--------+
+       |                                    |      |          |        |
+    fedmsg                                  |      +----------+        |
+       |                                    |                          |
+       |                                    |      +----------+        |
+       |          +------------------+      |      |   fmn.lib|        |       +--------------------+
+       |          | fedmsg consumer  |      |      |          |        |       | Backend            |
+       +----------+                  +------------>|  Worker  +---------------->                    |
+       |          |                  |      |      |          |        |       +-----+   +---+  +---+
+       |          +------------------+      |      +----------+        |       |email|   |IRC|  |SSE|
+       |                                    |                          |       +-----+---+---+--+---+
+       |                                    |      +----------+        |
+       |                                    |      |   fmn.lib|        |
+       |                                    |      |          |        |
+       |                                    +----->|  Worker  +--------+
+       |                                RabbitMQ   |          |    RabbitMQ
+       |                                           +----------+
+       |
+       |
+       |
+       |
+       v
