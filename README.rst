@@ -37,6 +37,7 @@ just do the IO: sending the email, posting to IRC and so on.
 To run these parts, simply call, in three different terminals:
 
 ::
+
     $ fedmsg-hub
     $ python fmn/consumer/worker.py
     $ python fmn/consumer/backend.py
