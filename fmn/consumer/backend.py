@@ -12,6 +12,9 @@ import fedmsg
 import fedmsg.meta
 import fedmsg_meta_fedora_infrastructure
 
+from pika.adapters import twisted_connection
+from twisted.internet import defer, reactor, protocol,task
+
 import fmn.lib
 import fmn.rules.utils
 import backends as fmn_backends
@@ -46,12 +49,23 @@ CNT = 0
 
 log.debug("Instantiating FMN backends")
 backend_kwargs = dict(config=CONFIG)
-backends = {
-    'email': fmn_backends.EmailBackend(**backend_kwargs),
-    'irc': fmn_backends.IRCBackend(**backend_kwargs),
-    'android': fmn_backends.GCMBackend(**backend_kwargs),
-    #'rss': fmn_backends.RSSBackend,
-}
+
+# If debug is enabled, use the debug backend everywhere
+if CONFIG.get('fmn.backends.debug', False):
+    log.debug(' ** Use the DebugBackend as all backends **')
+    backends = {
+        'email': fmn_backends.DebugBackend(**backend_kwargs),
+        'irc': fmn_backends.IRCBackend(**backend_kwargs),
+        'android': fmn_backends.DebugBackend(**backend_kwargs),
+        #'rss': fmn_backends.DebugBackend,
+    }
+else:
+    backends = {
+        'email': fmn_backends.EmailBackend(**backend_kwargs),
+        'irc': fmn_backends.IRCBackend(**backend_kwargs),
+        'android': fmn_backends.GCMBackend(**backend_kwargs),
+        #'rss': fmn_backends.RSSBackend,
+    }
 
 # But, disable any of those backends that don't appear explicitly in
 # our config.
@@ -65,12 +79,6 @@ for key in CONFIG['fmn.backends']:
         raise ValueError("%r in fmn.backends (%r) is invalid" % (
             key, CONFIG['fmn.backends']))
 
-# If debug is enabled, use the debug backend everywhere
-if CONFIG.get('fmn.backends.debug', False):
-    for key in backends:
-        log.debug('Setting %s to use the DebugBackend' % key)
-        backends[key] = fmn_backends.DebugBackend(**backend_kwargs)
-
 
 def get_preferences():
     print 'get_preferences'
@@ -81,17 +89,44 @@ def get_preferences():
     return prefs
 
 
-def update_preferences(openid):
-    log.info("Loading and caching preferences for %r" % openid)
-    for p in fmn.lib.models.Preference.by_user(session, openid):
-        PREFS['%s__%s' % (p.openid, p.context_name)] = p
-
-
 PREFS = get_preferences()
 
 
-def callback(ch, method, properties, body):
-    start = time.time()
+def update_preferences(openid, prefs):
+    log.info("Refreshing preferences for %r" % openid)
+    for p in fmn.lib.models.Preference.by_user(session, openid):
+        prefs['%s__%s' % (p.openid, p.context_name)] = p
+    return prefs
+
+
+@defer.inlineCallbacks
+def run(connection):
+
+    channel = yield connection.channel()
+    yield channel.basic_qos(prefetch_count=1)
+
+    queue = 'refresh'
+    yield channel.exchange_declare(exchange=queue, type='fanout')
+    result = yield channel.queue_declare(exclusive=False)
+    queue_name = result.method.queue
+    yield channel.queue_bind(exchange=queue, queue=queue_name)
+    queue_object, consumer_tag = yield channel.basic_consume(queue=queue_name)
+    l = task.LoopingCall(read, queue_object)
+    l.start(0.01)
+
+    queue = 'backends'
+    yield channel.exchange_declare(exchange=queue, type='direct')
+    yield channel.queue_declare(durable=True)
+    yield channel.queue_bind(exchange=queue, queue=queue)
+    queue_object2, consumer_tag2 = yield channel.basic_consume(queue=queue)
+    l2 = task.LoopingCall(read, queue_object2)
+    l2.start(0.01)
+
+
+@defer.inlineCallbacks
+def read(queue_object):
+
+    ch, method, properties, body = yield queue_object.get()
 
     global CNT, PREFS
     CNT += 1
@@ -104,7 +139,7 @@ def callback(ch, method, properties, body):
 
     if '.fmn.' in topic:
         openid = data['body']['msg']['openid']
-        PREFS = update_preferences(openid)
+        PREFS = update_preferences(openid, PREFS)
         if topic == 'consumer.fmn.prefs.update':  # msg from the consumer
             log.debug(
                 "Done with refreshing prefs.  %0.2fs %s",
@@ -145,41 +180,25 @@ def callback(ch, method, properties, body):
             fltr.fired(session)
     session.commit()
 
-    channel.basic_ack(delivery_tag=method.delivery_tag)
+    yield ch.basic_ack(delivery_tag=method.delivery_tag)
     log.debug("Done.  %0.2fs %s %s",
               time.time() - start, raw_msg['msg_id'], raw_msg['topic'])
 
 
-connection = pika.BlockingConnection()
-
-queue = 'refresh'
-channel = connection.channel()
-channel.exchange_declare(exchange=queue, type='fanout')
-refresh_q = channel.queue_declare(exclusive=True)
-refresh_q_name = refresh_q.method.queue
-channel.queue_bind(exchange=queue, queue=refresh_q_name)
-
-queue = 'backends'
-channel.exchange_declare(exchange=queue, type='direct')
-backends_q = channel.queue_declare(queue, durable=True)
-channel.queue_bind(exchange=queue, queue=queue)
-
-print 'started at %s backends' % backends_q.method.message_count
-print 'started at %s refresh' % refresh_q.method.message_count
-
-# Make sure we leave any other messages in the queue
-channel.basic_qos(prefetch_count=1)
-channel.basic_consume(callback, queue=queue)
-channel.basic_consume(callback, queue=refresh_q_name)
+parameters = pika.ConnectionParameters()
+cc = protocol.ClientCreator(
+    reactor, twisted_connection.TwistedProtocolConnection, parameters)
+d = cc.connectTCP('localhost', 5672)
+d.addCallback(lambda protocol: protocol.ready)
+d.addCallback(run)
 
 
 try:
     print 'Starting consuming'
-    channel.start_consuming()
+    reactor.run()
 except KeyboardInterrupt:
     pass
 finally:
-    channel.cancel()
     connection.close()
     session.close()
     print '%s tasks proceeded' % CNT
