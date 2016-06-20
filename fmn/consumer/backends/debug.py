@@ -3,6 +3,16 @@ import fedmsg.meta
 
 import datetime
 
+CONFIRMATION_TEMPLATE = u"""
+{username} has requested that notifications be sent to this email address
+* To accept, visit this address:
+  {acceptance_url}
+* Or, to reject you can visit this address:
+  {rejection_url}
+Alternatively, you can ignore this.  This is an automated message, please
+email {support_email} if you have any concerns/issues/abuse.
+"""
+
 
 class DebugBackend(BaseBackend):
     __context_name__ = "debug"
