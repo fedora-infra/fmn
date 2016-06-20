@@ -8,7 +8,6 @@ import uuid
 import fedmsg.consumers
 import fmn.lib
 import fmn.rules.utils
-import backends as fmn_backends
 
 from fmn.consumer.util import (
     new_packager,
@@ -40,7 +39,7 @@ def notify_prefs_change(openid):
                 'topic': 'consumer.fmn.prefs.update',
                 "msg_id": msg_id,
                 'msg': {
-                    "openid": "ctubbsii.id.fedoraproject.org",
+                    "openid": openid,
                 },
 
             },
