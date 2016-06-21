@@ -25,7 +25,6 @@ requires = [
     'fmn.rules',
     'docutils',
     'markupsafe',
-    'decorator',
     'six',
 ]
 
