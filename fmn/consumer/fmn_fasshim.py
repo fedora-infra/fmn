@@ -93,12 +93,17 @@ def update_nick(username):
         email = user['email']
         if email:
             _cache.set(email, user['username'])
+    else:
+        # If we couldn't find the nick in FAS, save it in the _cache as nick
+        # so that we avoid calling FAS for every single filter we have to
+        # run through
+        _cache.set(nick, nick)
 
 
 def update_email(email):
     global fasclient
     try:
-        log.info("Downloading FAS cache for %s*" % email)
+        log.info("Downloading FAS cache for %s" % email)
         request = fasclient.send_request(
             '/user/list',
             req_params={
@@ -120,6 +125,11 @@ def update_email(email):
         email = user['email']
         if email:
             _cache.set(email, user['username'])
+    else:
+        # If we couldn't find the email in FAS, save it in the _cache as
+        # email so that we avoid calling FAS for every single filter we
+        # have to run through
+        _cache.set(email, email)
 
 
 def nick2fas(nickname, **config):
