@@ -17,7 +17,8 @@ from twisted.internet import defer, reactor, protocol,task
 
 import fmn.lib
 import fmn.rules.utils
-import backends as fmn_backends
+import fmn.consumer.backends as fmn_backends
+import fmn.consumer.producer as fmn_producers
 
 import fmn.consumer.fmn_fasshim
 from fedmsg_meta_fedora_infrastructure import fasshim
@@ -111,16 +112,16 @@ def run(connection):
     queue_name = result.method.queue
     yield channel.queue_bind(exchange=queue, queue=queue_name)
     queue_object, consumer_tag = yield channel.basic_consume(queue=queue_name)
-    l = task.LoopingCall(read, queue_object)
-    l.start(0.01)
+    lc = task.LoopingCall(read, queue_object)
+    lc.start(0.01)
 
     queue = 'backends'
     yield channel.exchange_declare(exchange=queue, type='direct')
     yield channel.queue_declare(durable=True)
     yield channel.queue_bind(exchange=queue, queue=queue)
     queue_object2, consumer_tag2 = yield channel.basic_consume(queue=queue)
-    l2 = task.LoopingCall(read, queue_object2)
-    l2.start(0.01)
+    lc2 = task.LoopingCall(read, queue_object2)
+    lc2.start(0.01)
 
 
 @defer.inlineCallbacks
@@ -191,6 +192,23 @@ cc = protocol.ClientCreator(
 d = cc.connectTCP('localhost', 5672)
 d.addCallback(lambda protocol: protocol.ready)
 d.addCallback(run)
+
+# Here we schedule to producers to run periodically (with a default
+# frequency of 10 seconds.
+# Added value: Everything is nicely tight up with twisted in one app/place
+# Cons: if one of the producer suddenly takes a real while to run, it will
+# block the entire twisted reactor and thus all the backends with it.
+# TODO: move to cron?
+frequency = CONFIG.get('fmn.confirmation_frequency', 10)
+confirmation_producer = fmn_producers.ConfirmationProducer(
+    session, backends)
+lc3 = task.LoopingCall(confirmation_producer.work)
+lc3.start(frequency)
+
+digest_producer = fmn_producers.DigestProducer(
+    session, backends)
+lc4 = task.LoopingCall(digest_producer.work)
+lc4.start(frequency)
 
 
 try:
