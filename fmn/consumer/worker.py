@@ -35,7 +35,7 @@ _cache = make_region(
 valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
 OPTS = pika.ConnectionParameters(
-    heartbeat_interval=10,
+    heartbeat_interval=0,
     retry_delay=2,
 )
 
