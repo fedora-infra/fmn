@@ -97,7 +97,7 @@ def update_nick(username):
         # If we couldn't find the nick in FAS, save it in the _cache as nick
         # so that we avoid calling FAS for every single filter we have to
         # run through
-        _cache.set(nick, nick)
+        _cache.set(username, username)
 
 
 def update_email(email):
