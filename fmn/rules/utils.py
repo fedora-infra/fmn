@@ -200,8 +200,8 @@ def get_user_of_group(config, fas, groupname):
     key = cache_key_generator(get_user_of_group, groupname)
     def creator():
         if not fas:
-            return []
-        return fas.group_members(groupname)
+            return set()
+        return set(fas.group_members(groupname))
     return _cache.get_or_create(key, creator)
 
 def get_groups_of_user(config, fas, username):
