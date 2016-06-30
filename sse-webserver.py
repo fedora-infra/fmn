@@ -1,5 +1,7 @@
 import json
 import urllib2
+
+import simplejson
 from twisted.internet import interfaces, reactor, defer, task
 from FeedQueue import FeedQueue
 from twisted.web import server, resource
@@ -33,7 +35,9 @@ class Simple(resource.Resource):
     def write_messages(self, request):
         fq = FeedQueue()
         data = fq.receive_one_message()
-        request.write(data)
+        payload = {'msg': str(data), }
+        payload = json.dumps(payload)
+        request.write(payload)
 
 site = server.Site(Simple())
 reactor.listenTCP(8080, site)
