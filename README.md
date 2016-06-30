@@ -1,6 +1,20 @@
 #FMN.SSE
 
-## how to test
+## Install
+```
+mkvirtualenv sse
+workon sse
+pip install -r ./requirements.txt
+```
+
+## Running
+
+```
+workon sse
+python sse-webserver.py
+```
+
+## Manual Testing
 
 curl seems to work okay for me `curl http://localhost:8080`
 

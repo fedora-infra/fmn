@@ -1,7 +1,6 @@
 import json
 import urllib2
 
-import simplejson
 from twisted.internet import interfaces, reactor, defer, task
 from FeedQueue import FeedQueue
 from twisted.web import server, resource
