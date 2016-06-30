@@ -9,6 +9,8 @@ pip install -r ./requirements.txt
 
 ## Running
 
+There are two files `sse-webserver.py` and `sse-server.py`
+
 ```
 workon sse
 python sse-webserver.py
@@ -16,7 +18,9 @@ python sse-webserver.py
 
 ## Manual Testing
 
-curl seems to work okay for me `curl http://localhost:8080`
+`sse-webserver.py` curl seems to work okay for me `curl http://localhost:8080`
+
+`sse-server` telnet  `telnet localhost 1234` then hit enter once it asks you which you want to join
 
 ### Common issues
 
