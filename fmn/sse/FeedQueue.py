@@ -3,12 +3,16 @@ import pika
 
 class FeedQueue:
     def __init__(self, host='localhost',
+                 exchange='',
                  queue_name='skrzepto.id.fedoraproject.org',
-                 expire_ms=1*60*60*1000):
+                 expire_ms=1*60*60*1000,
+                 port=5672):
 
         self.host = host
+        self.exchange = exchange
         self.queue_name = queue_name
         self.expire_ms = expire_ms
+        self.port = port
 
         self.channel, self.connection = self._get_pika_channel_connection()
 
@@ -40,8 +44,8 @@ class FeedQueue:
     def push_message(self, msg):
         self._check_connection()
 
-        if self.channel.basic_publish(exchange='',
-                                      routing_key=self.queue_name,
+        if self.channel.basic_publish(exchange=self.exchange,
+                                      routing_key=self.exchange + '-' + self.queue_name,
                                       body=msg,
                                       properties=pika.BasicProperties(
                                           delivery_mode=2)):
@@ -51,9 +55,13 @@ class FeedQueue:
 
     def _get_pika_channel_connection(self):
         """ Connect to pika server and return channel and connection"""
-        parameters = pika.ConnectionParameters(host=self.host)
+        parameters = pika.ConnectionParameters(host=self.host, port=self.port)
         connection = pika.BlockingConnection(parameters)
         channel = connection.channel()
+        channel.exchange_declare(exchange=self.exchange)
         channel.queue_declare(queue=self.queue_name, durable=True,
                               arguments={'x-message-ttl': self.expire_ms, })
+        channel.queue_bind(queue=self.queue_name,
+                           exchange=self.exchange,
+                           routing_key=self.exchange + '-' + self.queue_name)
         return channel, connection
