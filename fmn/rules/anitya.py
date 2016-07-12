@@ -55,7 +55,10 @@ def anitya_specific_distro(config, message, distro=None, *args, **kw):
         if d.get('name', '').lower() == distro.lower():
             return True
 
-    d = message['msg'].get('project', {}).get('distro', {})
+    d = None
+    p = message['msg'].get('project', {})
+    if p:
+        d = p.get('distro', {})
     if d:  # Have to be careful for None here
         if d.get('name', '').lower() == distro.lower():
             return True
