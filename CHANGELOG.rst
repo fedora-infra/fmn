@@ -1,4 +1,43 @@
 
+0.9.0
+-----
+
+Pull Requests
+
+- (@ralphbean)      #75, rST syntax typofix.
+  https://github.com/fedora-infra/fmn.rules/pull/75
+- (@mkrizek)        #77, Update taskotron rules to reflect recent changes
+  https://github.com/fedora-infra/fmn.rules/pull/77
+- (@pypingou)       #79, For some reasons it seems that sometime we do not have 'msg' in some messages
+  https://github.com/fedora-infra/fmn.rules/pull/79
+- (@pypingou)       #80, Let get_user_of_group return a set()
+  https://github.com/fedora-infra/fmn.rules/pull/80
+- (@mkrizek)        #78, Update taskotron tasks namespace
+  https://github.com/fedora-infra/fmn.rules/pull/78
+- (@pypingou)       #82, When retrieving the users in a group we're only interested in their username
+  https://github.com/fedora-infra/fmn.rules/pull/82
+- (@pypingou)       #81, Fix processing messages from anitya
+  https://github.com/fedora-infra/fmn.rules/pull/81
+
+Commits
+
+- 89f6778e6 rST syntax typofix.
+  https://github.com/fedora-infra/fmn.rules/commit/89f6778e6
+- 8f5e6d0a8 Update taskotron rules to reflect recent changes
+  https://github.com/fedora-infra/fmn.rules/commit/8f5e6d0a8
+- bc7f19152 taskotron rules: make docstring more clear
+  https://github.com/fedora-infra/fmn.rules/commit/bc7f19152
+- ff74799ef Update taskotron tasks namespace
+  https://github.com/fedora-infra/fmn.rules/commit/ff74799ef
+- 47687c2d4 For some reasons it seems that sometime we do not have 'msg' in some messages
+  https://github.com/fedora-infra/fmn.rules/commit/47687c2d4
+- f6cf87065 Let get_user_of_group return a set()
+  https://github.com/fedora-infra/fmn.rules/commit/f6cf87065
+- 0374f3313 When retrieving the users in a group we're only interested in their username
+  https://github.com/fedora-infra/fmn.rules/commit/0374f3313
+- ac974ebc0 Fix processing messages from anitya
+  https://github.com/fedora-infra/fmn.rules/commit/ac974ebc0
+
 0.8.2
 -----
 

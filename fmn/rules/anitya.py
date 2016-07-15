@@ -55,7 +55,10 @@ def anitya_specific_distro(config, message, distro=None, *args, **kw):
         if d.get('name', '').lower() == distro.lower():
             return True
 
-    d = message['msg'].get('project', {}).get('distro', {})
+    d = None
+    p = message['msg'].get('project', {})
+    if p:
+        d = p.get('distro', {})
     if d:  # Have to be careful for None here
         if d.get('name', '').lower() == distro.lower():
             return True
@@ -199,7 +202,7 @@ def anitya_by_upstream_project(config, message, projects=None, *args, **kw):
         return False
 
     # Get the project for the message.
-    project = message['msg'].get('project', {}).get('name', None)
+    project = message.get('msg', {}).get('project', {}).get('name', None)
 
     # Split the string into a list of targets
     targets = [p.strip() for p in projects.split(',')]
