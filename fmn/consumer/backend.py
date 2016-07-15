@@ -32,7 +32,7 @@ DB_URI = CONFIG.get('fmn.sqlalchemy.uri', None)
 session = fmn.lib.models.init(DB_URI)
 
 fmn.consumer.fmn_fasshim.make_fas_cache(**CONFIG)
-# Duck patch fedmsg_meta modules
+# Monkey patch fedmsg_meta modules
 fasshim.nick2fas = fmn.consumer.fmn_fasshim.nick2fas
 fasshim.email2fas = fmn.consumer.fmn_fasshim.email2fas
 fedmsg_meta_fedora_infrastructure.supybot.nick2fas = \
@@ -195,7 +195,7 @@ d.addCallback(run)
 
 # Here we schedule to producers to run periodically (with a default
 # frequency of 10 seconds.
-# Added value: Everything is nicely tight up with twisted in one app/place
+# Added value: Everything is nicely tied up with twisted in one app/place
 # Cons: if one of the producer suddenly takes a real while to run, it will
 # block the entire twisted reactor and thus all the backends with it.
 # TODO: move to cron?

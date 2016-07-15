@@ -34,7 +34,8 @@ The worker(s) then send its results to the backend that receives them and
 just do the IO: sending the email, posting to IRC and so on.
 
 
-To run these parts, simply call, in three different terminals:
+To run these parts, simply, start ``rabbitmq-server`` and ``redis`` and call,
+in three different terminals (all running the same virtual-environment):
 
 ::
 

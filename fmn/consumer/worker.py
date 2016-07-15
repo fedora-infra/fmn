@@ -74,7 +74,7 @@ CNT = 0
 PREFS = get_preferences()
 
 fmn.consumer.fmn_fasshim.make_fas_cache(**CONFIG)
-# Duck patch fedmsg_meta modules
+# Monkey patch fedmsg_meta modules
 fasshim.nick2fas = fmn.consumer.fmn_fasshim.nick2fas
 fasshim.email2fas = fmn.consumer.fmn_fasshim.email2fas
 fedmsg_meta_fedora_infrastructure.supybot.nick2fas = \
