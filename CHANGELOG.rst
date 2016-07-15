@@ -1,3 +1,109 @@
+1.0.0
+-----
+
+Pull Requests
+
+- (@ralphbean)      #72, Fix some typoes in this summary construction.
+  https://github.com/fedora-infra/fmn.consumer/pull/72
+- (@pypingou)       #73, Add a debug backend
+  https://github.com/fedora-infra/fmn.consumer/pull/73
+- (@sayanchowdhury) #74, Add missing CONFIRMATION_TEMPLATE for DebugBackend
+  https://github.com/fedora-infra/fmn.consumer/pull/74
+- (@skrzepto)       #75, Adding faq content to the readme
+  https://github.com/fedora-infra/fmn.consumer/pull/75
+- (@pypingou)       #76, Redesign the architecture of fmn.consumer
+  https://github.com/fedora-infra/fmn.consumer/pull/76
+
+Commits
+
+- c7b358838 Fix some typoes in this summary construction.
+  https://github.com/fedora-infra/fmn.consumer/commit/c7b358838
+- ffeedbaab Access the message property of the QueuedMessage object.
+  https://github.com/fedora-infra/fmn.consumer/commit/ffeedbaab
+- a326caa24 Add a debug backend
+  https://github.com/fedora-infra/fmn.consumer/commit/a326caa24
+- 0a79df82b Make fmn.backends.debug to False by default in the config file as well
+  https://github.com/fedora-infra/fmn.consumer/commit/0a79df82b
+- 46312764a Add missing CONFIRMATION_TEMPLATE for DebugBackend
+  https://github.com/fedora-infra/fmn.consumer/commit/46312764a
+- 90aca5102 Add a load_preferences method in the util module
+  https://github.com/fedora-infra/fmn.consumer/commit/90aca5102
+- ffd192f9b Adjust the consumer so that all it does is sending messages to the workers
+  https://github.com/fedora-infra/fmn.consumer/commit/ffd192f9b
+- a8266c9ff Add the workers which compute who receive which notification and where
+  https://github.com/fedora-infra/fmn.consumer/commit/a8266c9ff
+- d34fe8c2d Add the backend process receiving messages from the workers and doing the IO
+  https://github.com/fedora-infra/fmn.consumer/commit/d34fe8c2d
+- 70057bbb6 Fix setting and getting the preferences from the cache
+  https://github.com/fedora-infra/fmn.consumer/commit/70057bbb6
+- 507c9c686 Drop load_preferences from the util module, not used, no longer needed
+  https://github.com/fedora-infra/fmn.consumer/commit/507c9c686
+- 5c9f69772 Declare the get_preferences method before calling it
+  https://github.com/fedora-infra/fmn.consumer/commit/5c9f69772
+- 80e5753fc Document the different part of fmn.consumer now and how to run them
+  https://github.com/fedora-infra/fmn.consumer/commit/80e5753fc
+- 0eca50870 Add a local, customized fasshim
+  https://github.com/fedora-infra/fmn.consumer/commit/0eca50870
+- 81c812a0f Rework the worker
+  https://github.com/fedora-infra/fmn.consumer/commit/81c812a0f
+- 360636cb6 Let the consumer inform the workers when someone's preferences have changed
+  https://github.com/fedora-infra/fmn.consumer/commit/360636cb6
+- cf9ba5563 Update the backend to work with the same principal as the workers
+  https://github.com/fedora-infra/fmn.consumer/commit/cf9ba5563
+- a9f284f39 Define the backend for the producer
+  https://github.com/fedora-infra/fmn.consumer/commit/a9f284f39
+- ef3a66180 Fix listening to two exchanges allowing to refresh the prefs when needed
+  https://github.com/fedora-infra/fmn.consumer/commit/ef3a66180
+- ef6316a11 Fix our local fasshim module
+  https://github.com/fedora-infra/fmn.consumer/commit/ef6316a11
+- c6291c92e Let the consumer send messages to either the workers or to signal prefs change
+  https://github.com/fedora-infra/fmn.consumer/commit/c6291c92e
+- ea13f7bf7 Let the backend listen to two exchanges one from the workers one from the consumer
+  https://github.com/fedora-infra/fmn.consumer/commit/ea13f7bf7
+- b13ff38d7 Adjust the backend
+  https://github.com/fedora-infra/fmn.consumer/commit/b13ff38d7
+- 75f2b7909 Let's only retrieve active accounts from FAS to speed things up
+  https://github.com/fedora-infra/fmn.consumer/commit/75f2b7909
+- 8114ae56e Fix sending messages to the backend from the worker
+  https://github.com/fedora-infra/fmn.consumer/commit/8114ae56e
+- de395699c Fix retrieving user's info by their email
+  https://github.com/fedora-infra/fmn.consumer/commit/de395699c
+- 3758e16e3 Fix syntax
+  https://github.com/fedora-infra/fmn.consumer/commit/3758e16e3
+- 6a5d3d2e4 Document the new architecture in the readme of fmn.consumer
+  https://github.com/fedora-infra/fmn.consumer/commit/6a5d3d2e4
+- 46e7cbda4 Try make the arch diagram narrower
+  https://github.com/fedora-infra/fmn.consumer/commit/46e7cbda4
+- 222619acf Try make the arch diagram narrower attempt #2
+  https://github.com/fedora-infra/fmn.consumer/commit/222619acf
+- 1f6235826 Make it clear the backends are sending messages
+  https://github.com/fedora-infra/fmn.consumer/commit/1f6235826
+- 1f2159f7d Small fix in the arch diagram
+  https://github.com/fedora-infra/fmn.consumer/commit/1f2159f7d
+- 24fa1561f Move the backend to a twisted reactor instead of what we had
+  https://github.com/fedora-infra/fmn.consumer/commit/24fa1561f
+- d7d0a61b8 Use the openid from the original message in the new message
+  https://github.com/fedora-infra/fmn.consumer/commit/d7d0a61b8
+- ab15200a8 Store something is redis even when we find nothing in FAS
+  https://github.com/fedora-infra/fmn.consumer/commit/ab15200a8
+- 2e4315ea0 Simplify the producers
+  https://github.com/fedora-infra/fmn.consumer/commit/2e4315ea0
+- 367341c81 Disable the heartbeat to rabbitmq
+  https://github.com/fedora-infra/fmn.consumer/commit/367341c81
+- 391136259 Drop the producers from the setup.py
+  https://github.com/fedora-infra/fmn.consumer/commit/391136259
+- 7a8dd8eab Add the producers to the backend
+  https://github.com/fedora-infra/fmn.consumer/commit/7a8dd8eab
+- da528604c Fix typo, nick is undefined while username isn't
+  https://github.com/fedora-infra/fmn.consumer/commit/da528604c
+- e5fa31f3e adding faq content to the readme
+  https://github.com/fedora-infra/fmn.consumer/commit/e5fa31f3e
+- 5f2a80ced Add systemd files to start the workers and the backend
+  https://github.com/fedora-infra/fmn.consumer/commit/5f2a80ced
+- 881ec55c5 Adjust documentations and instructions based on @puiterwijk's feedback
+  https://github.com/fedora-infra/fmn.consumer/commit/881ec55c5
+- e1ee451c7 Do not hard-code the year, retrieve it based on the UTC time
+  https://github.com/fedora-infra/fmn.consumer/commit/e1ee451c7
 
 0.8.1
 -----
