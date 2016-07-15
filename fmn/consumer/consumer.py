@@ -1,5 +1,6 @@
 # An example fedmsg koji consumer
 
+import datetime
 import threading
 import time
 import random
@@ -26,7 +27,7 @@ def notify_prefs_change(openid):
     import json
     import pika
     connection = pika.BlockingConnection()
-    msg_id = '2016-%s' % uuid.uuid4()
+    msg_id = '%s-%s' % (datetime.datetime.utcnow().year, uuid.uuid4())
     queue = 'refresh'
     chan = connection.channel()
     chan.exchange_declare(exchange=queue, type='fanout')
