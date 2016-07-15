@@ -1,4 +1,17 @@
 
+0.8.2
+-----
+
+Pull Requests
+
+- (@ralphbean)      #61, One less function call.
+  https://github.com/fedora-infra/fmn.lib/pull/61
+
+Commits
+
+- b4edbe1c6 One less function call.
+  https://github.com/fedora-infra/fmn.lib/commit/b4edbe1c6
+
 0.8.1
 -----
 
