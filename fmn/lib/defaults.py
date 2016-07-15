@@ -227,6 +227,7 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
 
     # the openid is of the form USERNAME.id.fedoraproject.org
     nick = user.openid.split('.')[0]
+    sse_feed = 'sse-' + nick
 
     # TODO -- make the root here configurable.
     valid_paths = fmn.lib.load_rules(root='fmn.rules')
@@ -237,7 +238,7 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
             session, valid_paths, path, **kw)
 
     def contexts():
-        names = ['email', 'irc']
+        names = ['email', 'irc', 'sse']
         if only_for:
             names = [only_for.name]
 
