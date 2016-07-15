@@ -2,6 +2,7 @@
 
 import moksha.hub.api
 import fmn.lib
+import backends as fmn_backends
 
 import datetime
 import logging
@@ -16,73 +17,53 @@ def total_seconds(dt):
     return dt.days * 24 * 60 * 60 + dt.seconds + dt.microseconds / 1000000.0
 
 
-class FMNProducerBase(moksha.hub.api.PollingProducer):
+class FMNProducerBase(object):
     """ An abstract base class for our other producers. """
-    def __init__(self, hub):
+    def __init__(self, session, backends):
         log.debug("%s initializing" % str(type(self)))
-        self.frequency = hub.config.get(
-            'fmn.confirmation_frequency',
-            datetime.timedelta(seconds=10))
-        super(FMNProducerBase, self).__init__(hub)
-        # Find and save the FMNConsumer instance already created by the hub.
-        # We are going to re-use its backends and db session.
-        self.sister = self._find_fmn_consumer(self.hub)
+        self.session = session
+        self.backends = backends
         log.debug("%s initialized" % str(type(self)))
-
-    def _find_fmn_consumer(self, hub):
-        for cons in hub.consumers:
-            if 'FMNConsumer' in str(type(cons)):
-                return cons
-
-        raise ValueError('FMNConsumer not found by ConfirmationProducer')
-
-    def make_session(self):
-        return self.sister.make_session()
-
-    @property
-    def backends(self):
-        return self.sister.backends
-
-    def poll(self):
-        session = self.make_session()
-        try:
-            self.work(session)
-            session.commit()
-        except:
-            log.exception('Error during routine work.')
-            session.rollback()
 
 
 class ConfirmationProducer(FMNProducerBase):
     """ Handle managing the pending confirmations. """
 
-    def work(self, session):
+    def work(self):
         # 1) Look for confirmations that need action in the db
-        pending = fmn.lib.models.Confirmation.list_pending(session)
+        pending = fmn.lib.models.Confirmation.list_pending(self.session)
 
         # 2) process each one.
         for confirmation in pending:
             log.info("Processing confirmation %r" % confirmation)
+
+            if not confirmation.context.name in self.backends:
+                return
+
             backend = self.backends[confirmation.context.name]
-            backend.handle_confirmation(session, confirmation)
+            backend.handle_confirmation(self.session, confirmation)
 
         # 3) clean up any old ones that need to be deleted.
-        fmn.lib.models.Confirmation.delete_expired(session)
+        fmn.lib.models.Confirmation.delete_expired(self.session)
 
 
 class DigestProducer(FMNProducerBase):
     """ Handle sending out digests of messages for various contexts. """
 
-    def work(self, session):
+    def work(self):
         # 1) Loop over all preferences in the db
-        for pref in fmn.lib.models.Preference.list_batching(session):
+        for pref in fmn.lib.models.Preference.list_batching(self.session):
+
+            if not pref.context.name in self.backends:
+                return
+
             # 2) Look for queued messages that need sent by time and count
             count = fmn.lib.models.QueuedMessage.count_for(
-                session, pref.user, pref.context)
+                self.session, pref.user, pref.context)
             if not count:
                 continue
             earliest = fmn.lib.models.QueuedMessage.earliest_for(
-                session, pref.user, pref.context)
+                self.session, pref.user, pref.context)
             now = datetime.datetime.utcnow()
             delta = now - earliest.created_on
             backend = self.backends[pref.context.name]
@@ -91,14 +72,14 @@ class DigestProducer(FMNProducerBase):
             if pref.batch_delta is not None:
                 if pref.batch_delta <= total_seconds(delta):
                     log.info("Sending digest for %r per time delta" % pref)
-                    self.manage_batch(session, backend, pref)
+                    self.manage_batch(self.session, backend, pref)
                     continue
 
             # 2.1) Send and dequeue those by count
             if pref.batch_count is not None:
                 if pref.batch_count <= count:
                     log.info("Sending digest for %r per msg count" % pref)
-                    self.manage_batch(session, backend, pref)
+                    self.manage_batch(self.session, backend, pref)
                     continue
 
     @staticmethod

@@ -1,13 +1,14 @@
 # An example fedmsg koji consumer
 
+import datetime
 import threading
 import time
 import random
+import uuid
 
 import fedmsg.consumers
 import fmn.lib
 import fmn.rules.utils
-import backends as fmn_backends
 
 from fmn.consumer.util import (
     new_packager,
@@ -17,6 +18,39 @@ from fmn.consumer.util import (
 
 import logging
 log = logging.getLogger("fmn")
+
+import pika
+connection = pika.BlockingConnection()
+
+
+def notify_prefs_change(openid):
+    import json
+    import pika
+    connection = pika.BlockingConnection()
+    msg_id = '%s-%s' % (datetime.datetime.utcnow().year, uuid.uuid4())
+    queue = 'refresh'
+    chan = connection.channel()
+    chan.exchange_declare(exchange=queue, type='fanout')
+    chan.basic_publish(
+        exchange=queue,
+        routing_key='',
+        body=json.dumps({
+            'topic': 'consumer.fmn.prefs.update',
+            'body': {
+                'topic': 'consumer.fmn.prefs.update',
+                "msg_id": msg_id,
+                'msg': {
+                    "openid": openid,
+                },
+
+            },
+        }),
+        properties=pika.BasicProperties(
+            delivery_mode=2
+        )
+    )
+    chan.close()
+    connection.close()
 
 
 class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
@@ -34,66 +68,13 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         if not self.uri:
             raise ValueError('fmn.sqlalchemy.uri must be present')
 
-        log.debug("Instantiating FMN backends")
-        backend_kwargs = dict(config=self.hub.config)
-        self.backends = {
-            'email': fmn_backends.EmailBackend(**backend_kwargs),
-            'irc': fmn_backends.IRCBackend(**backend_kwargs),
-            'android': fmn_backends.GCMBackend(**backend_kwargs),
-            #'rss': fmn_backends.RSSBackend,
-        }
-
-        # But, disable any of those backends that don't appear explicitly in
-        # our config.
-        for key, value in self.backends.items():
-            if key not in self.hub.config['fmn.backends']:
-                del self.backends[key]
-
-        # Also, check that we don't have something enabled that's not explicit
-        for key in self.hub.config['fmn.backends']:
-            if key not in self.backends:
-                raise ValueError("%r in fmn.backends (%r) is invalid" % (
-                    key, self.hub.config['fmn.backends']))
-
-        # If debug is enabled, use the debug backend everywhere
-        if self.hub.config.get('fmn.backends.debug', False):
-            for key in self.backends:
-                log.debug('Setting %s to use the DebugBackend' % key)
-                self.backends[key] = fmn_backends.DebugBackend(
-                    **backend_kwargs)
-
         log.debug("Loading rules from fmn.rules")
         self.valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
-        # Initialize our in-memory cache of the FMN preferences database
-        self.cached_preferences_lock = threading.Lock()
-        self.cached_preferences = None
         session = self.make_session()
-        self.refresh_cache(session)
         session.close()
 
         log.debug("FMNConsumer initialized")
-
-    def refresh_cache(self, session, openid=None):
-        log.debug("Acquiring cached_preferences_lock")
-        with self.cached_preferences_lock:
-            if not openid or self.cached_preferences is None:
-                log.info("Loading and caching all preferences for all users")
-                self.cached_preferences = fmn.lib.load_preferences(
-                    session, self.hub.config, self.valid_paths,
-                    cull_disabled=True,
-                    cull_backends=['desktop'])
-            else:
-                log.info("Loading and caching preferences for %r" % openid)
-                old_preferences = [p for p in self.cached_preferences
-                                   if p['user']['openid'] == openid]
-                new_preferences = fmn.lib.load_preferences(
-                    session, self.hub.config, self.valid_paths,
-                    cull_disabled=True, openid=openid,
-                    cull_backends=['desktop'])
-                self.cached_preferences.extend(new_preferences)
-                for old_preference in old_preferences:
-                    self.cached_preferences.remove(old_preference)
 
     def make_session(self):
         return fmn.lib.models.init(self.uri)
@@ -127,12 +108,9 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         # package-ownership relations.  Both caches are held for a very long
         # time and update themselves dynamically here.
 
-        # If the user has tweaked their preferences on the frontend, then
-        # invalidate our entire in-memory cache of the fmn preferences
-        # database.
         if '.fmn.' in topic:
             openid = msg['msg']['openid']
-            self.refresh_cache(session, openid)
+            notify_prefs_change(openid)
 
         # If a user has tweaked something in the pkgdb2 db, then invalidate our
         # dogpile cache.. but only the parts that have something to do with any
@@ -169,7 +147,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 )
                 session.add(user)
                 session.commit()
-                self.refresh_cache(session, openid)
+                notify_prefs_change(openid)
 
         # Do the same dogpile.cache invalidation trick that we did above, but
         # here do it for fas group membership changes.  (This is important
@@ -189,53 +167,24 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         # Compute, based on our in-memory cache of preferences, who we think
         # should receive this message.
 
-        # First, make a thread-local copy of our shared cached prefs
-        preferences = list(self.cached_preferences)
-        # Shuffle it so that not all threads step through the list in the same
-        # order.  This should cut down on competition for the dogpile lock when
-        # getting pkgdb info at startup.
-        random.shuffle(preferences)
-        # And do the real work of comparing every rule against the message.
-        results = fmn.lib.recipients(preferences, msg,
-                                     self.valid_paths, self.hub.config)
-
-        log.debug("Recipients found %i dt %0.2fs %s %s",
-                  len(results), time.time() - start,
-                  msg['msg_id'], msg['topic'])
-
-        # Let's look at the results of our matching operation and send stuff
-        # where we need to.
-        for context, recipients in results.items():
-            if not recipients:
-                continue
-            log.debug("  Considering %r with %i recips" % (
-                context, len(list(recipients))))
-            backend = self.backends[context]
-            for recipient in recipients:
-                user = recipient['user']
-                pref = fmn.lib.models.Preference.load(
-                    session, user, context)
-
-                if not pref.should_batch:
-                    log.debug("    Calling backend %r with %r" % (
-                        backend, recipient))
-                    backend.handle(session, recipient, msg)
-                else:
-                    log.debug("    Queueing msg for digest")
-                    fmn.lib.models.QueuedMessage.enqueue(
-                        session, user, context, msg)
-                if ('filter_oneshot' in recipient
-                        and recipient['filter_oneshot']):
-                    log.debug("    Marking one-shot filter as fired")
-                    idx = recipient['filter_id']
-                    fltr = session.query(fmn.lib.models.Filter).get(idx)
-                    fltr.fired(session)
+        import json
+        channel = connection.channel()
+        channel.exchange_declare(exchange='workers')
+        channel.queue_declare('workers', durable=True)
+        channel.basic_publish(
+            exchange='',
+            routing_key='workers',
+            body=json.dumps(raw_msg),
+            properties=pika.BasicProperties(
+                delivery_mode=2
+            )
+        )
+        channel.close()
 
         log.debug("Done.  %0.2fs %s %s",
                   time.time() - start, msg['msg_id'], msg['topic'])
 
     def stop(self):
         log.info("Cleaning up FMNConsumer.")
-        for context, backend in self.backends.iteritems():
-            backend.stop()
         super(FMNConsumer, self).stop()
+        connection.close()
