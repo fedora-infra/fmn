@@ -1,7 +1,19 @@
 import abc
-
 import logging
+import requests
 import fmn.lib.models
+log = logging.getLogger("fedmsg")
+
+
+def shorten(link):
+    if not link:
+        return ''
+    try:
+        response = requests.get('http://da.gd/s', params=dict(url=link))
+        return response.text.strip()
+    except Exception as e:
+        log.warn("Link shortening failed: %r" % e)
+        return link
 
 
 class BaseBackend(object):

@@ -23,10 +23,13 @@ config = {
     "fmn.rules.utils.use_pkgdb2": False,
     "fmn.rules.utils.pkgdb2_api_url": "http://209.132.184.188/api/",
     "fmn.rules.cache": {
-        "backend": "dogpile.cache.dbm",
-        "expiration_time": 300,
-        "arguments": {
-            "filename": "/var/tmp/fmn-cache.dbm",
+        'backend': 'dogpile.cache.redis',
+        'arguments': {
+            'host': 'localhost',
+            'port': 6379,
+            'db': 0,
+            'redis_expiration_time': 60*60*2,   # 2 hours
+            'distributed_lock': True
         },
     },
 
@@ -48,7 +51,7 @@ config = {
 
     # This is the list of enabled backends (so we can turn one off globally)
     # "fmn.backends": ['email', 'irc', 'android'],
-    "fmn.backends": ['email', 'irc'],
+    "fmn.backends": ['sse', 'email', 'irc'],
     "fmn.backends.debug": False,
 
     # Email

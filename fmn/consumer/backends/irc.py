@@ -1,5 +1,5 @@
 import fmn.lib.models
-from fmn.consumer.backends.base import BaseBackend
+from fmn.consumer.backends.base import BaseBackend, shorten
 import fedmsg.meta
 
 import arrow
@@ -66,17 +66,6 @@ mirc_colors = {
 }
 
 
-def _shorten(link):
-    if not link:
-        return ''
-    try:
-        response = requests.get('http://da.gd/s', params=dict(url=link))
-        return response.text.strip()
-    except Exception as e:
-        log.warn("Link shortening failed: %r" % e)
-        return link
-
-
 def _format_message(msg, recipient, config):
     # Here we have to distinguish between two different kinds of messages that
     # might arrive: the `raw` message from fedmsg itself and the product of a
@@ -99,7 +88,7 @@ def _format_message(msg, recipient, config):
         template = u"{subtitle} {delta}{link}{flt}"
 
     if recipient['shorten_links']:
-        link = _shorten(link)
+        link = shorten(link)
 
     # Tack a human-readable delta on the end so users know that fmn is
     # backlogged (if it is).
@@ -113,7 +102,7 @@ def _format_message(msg, recipient, config):
         flt_link = flt_template.format(
             base_url=config['fmn.base_url'], **recipient)
         if recipient['shorten_links']:
-            flt_link = _shorten(flt_link)
+            flt_link = shorten(flt_link)
         flt = "    ( triggered by %s )" % flt_link
 
     if recipient['markup_messages']:

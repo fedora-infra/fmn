@@ -57,12 +57,14 @@ backend_kwargs = dict(config=CONFIG)
 if CONFIG.get('fmn.backends.debug', False):
     log.debug(' ** Use the DebugBackend as all backends **')
     backends = {
+        'sse': fmn_backends.SSEBackend(**backend_kwargs),
         'email': fmn_backends.DebugBackend(**backend_kwargs),
         'irc': fmn_backends.IRCBackend(**backend_kwargs),
         'android': fmn_backends.DebugBackend(**backend_kwargs),
     }
 else:
     backends = {
+        'sse': fmn_backends.SSEBackend(**backend_kwargs),
         'email': fmn_backends.EmailBackend(**backend_kwargs),
         'irc': fmn_backends.IRCBackend(**backend_kwargs),
         'android': fmn_backends.GCMBackend(**backend_kwargs),
@@ -211,7 +213,9 @@ def read(queue_object):
 parameters = pika.ConnectionParameters()
 cc = protocol.ClientCreator(
     reactor, twisted_connection.TwistedProtocolConnection, parameters)
-d = cc.connectTCP('localhost', 5672)
+host = CONFIG.get('fmn.pika.host', 'localhost')
+port = int(CONFIG.get('fmn.pika.port', 5672))
+d = cc.connectTCP(host=host, port=port)
 d.addCallback(lambda protocol: protocol.ready)
 d.addCallback(run)
 
