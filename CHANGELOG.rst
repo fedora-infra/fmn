@@ -1,3 +1,19 @@
+
+1.0.1
+-----
+
+Pull Requests
+
+- (@pypingou)       #78, Fix missing dependencies and files
+  https://github.com/fedora-infra/fmn.consumer/pull/78
+
+Commits
+
+- 2b190b54c Include pika in the list of dependencies
+  https://github.com/fedora-infra/fmn.consumer/commit/2b190b54c
+- 4569803be Include the systemd files in the release tarballs
+  https://github.com/fedora-infra/fmn.consumer/commit/4569803be
+
 1.0.0
 -----
 
