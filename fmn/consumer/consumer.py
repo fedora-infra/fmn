@@ -64,6 +64,8 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         self.uri = self.hub.config.get('fmn.sqlalchemy.uri', None)
         self.autocreate = self.hub.config.get('fmn.autocreate', False)
         self.junk_suffixes = self.hub.config.get('fmn.junk_suffixes', [])
+        self.ignored_copr_owners = self.hub.config.get('ignored_copr_owners',
+                                                       [])
 
         if not self.uri:
             raise ValueError('fmn.sqlalchemy.uri must be present')
@@ -95,6 +97,12 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
             if topic.endswith(suffix):
                 log.debug("Dropping %r", topic)
                 return
+
+        # Ignore high-usage COPRs
+        if topic.startswith('org.fedoraproject.prod.copr.') and \
+                msg['msg']['owner'] in self.ignored_copr_owners:
+            log.debug('Dropping COPR %r by %r' % (topic, msg['msg']['owner']))
+            return
 
         start = time.time()
         log.debug("FMNConsumer received %s %s", msg['msg_id'], msg['topic'])
