@@ -25,6 +25,7 @@ requires = [
     'requests',
     'arrow',
     'bleach',
+    'pika',
 ]
 
 tests_require = [
