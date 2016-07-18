@@ -4,7 +4,7 @@ After=network.target
 Documentation=https://github.com/fedora-infra/fmn.consumer/
 
 [Service]
-ExecStart=/usr/lib/python2.7/site-packages/fmn/consumer/backend.py
+ExecStart=/usr/bin/python2 /usr/lib/python2.7/site-packages/fmn/consumer/backend.py
 Type=simple
 User=root
 Group=root
