@@ -26,6 +26,7 @@ requires = [
     'arrow',
     'bleach',
     'pika',
+    'redis',
 ]
 
 tests_require = [
