@@ -14,6 +14,10 @@ config = {
         '.buildsys.repo.init',
         '.buildsys.repo.done',
     ],
+    'ignored_copr_owners': [  # Some COPR repos with very high pressure
+        '@rubygems',
+        '@copr'
+    ],
 
     # Some configuration for the rule processors
     "fmn.rules.utils.use_pkgdb2": False,
