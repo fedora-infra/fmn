@@ -60,11 +60,11 @@ def make_fas_cache(**config):
         for user in request['people']:
             nick = user['ircnick']
             if nick:
-                _cache.set(nick, user['username'])
+                _cache.set(str(nick), user['username'])
 
             email = user['email']
             if email:
-                _cache.set(email, user['username'])
+                _cache.set(str(email), user['username'])
 
         del request
 
