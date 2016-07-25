@@ -20,13 +20,15 @@ import logging
 log = logging.getLogger("fmn")
 
 import pika
-connection = pika.BlockingConnection()
+OPTS = pika.ConnectionParameters(
+    heartbeat_interval=0,
+    retry_delay=2,
+)
 
 
 def notify_prefs_change(openid):
     import json
-    import pika
-    connection = pika.BlockingConnection()
+    connection = pika.BlockingConnection(OPTS)
     msg_id = '%s-%s' % (datetime.datetime.utcnow().year, uuid.uuid4())
     queue = 'refresh'
     chan = connection.channel()
@@ -176,6 +178,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         # should receive this message.
 
         import json
+        connection = pika.BlockingConnection(OPTS)
         channel = connection.channel()
         channel.exchange_declare(exchange='workers')
         channel.queue_declare('workers', durable=True)
@@ -188,6 +191,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
             )
         )
         channel.close()
+        connection.close()
 
         log.debug("Done.  %0.2fs %s %s",
                   time.time() - start, msg['msg_id'], msg['topic'])
@@ -195,4 +199,3 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
     def stop(self):
         log.info("Cleaning up FMNConsumer.")
         super(FMNConsumer, self).stop()
-        connection.close()
