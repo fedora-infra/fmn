@@ -1,4 +1,31 @@
 
+1.0.2
+-----
+
+Pull Requests
+
+- (@pypingou)       #79, Specify the dependency on redis
+  https://github.com/fedora-infra/fmn.consumer/pull/79
+- (@pypingou)       #80, Adjust the systemd service files to call python2 directly
+  https://github.com/fedora-infra/fmn.consumer/pull/80
+- (@puiterwijk)     #81, Ignore some very high pressure COPR repos
+  https://github.com/fedora-infra/fmn.consumer/pull/81
+- (@pypingou)       #82, Open/Close the connection to rabbitmq every time we need one
+  https://github.com/fedora-infra/fmn.consumer/pull/82
+
+Commits
+
+- 998726d69 Specify the dependency on redis
+  https://github.com/fedora-infra/fmn.consumer/commit/998726d69
+- 5e364e8db Adjust the systemd service files to call python2 directly
+  https://github.com/fedora-infra/fmn.consumer/commit/5e364e8db
+- ee2f4d6d7 Ignore some very high pressure COPR repos
+  https://github.com/fedora-infra/fmn.consumer/commit/ee2f4d6d7
+- 38f59ab22 Open/Close the connection to rabbitmq every time we need one
+  https://github.com/fedora-infra/fmn.consumer/commit/38f59ab22
+- f4b498dc4 converting unicode to str so dogpile cache wont complain anymore (#83)
+  https://github.com/fedora-infra/fmn.consumer/commit/f4b498dc4
+
 1.0.1
 -----
 
