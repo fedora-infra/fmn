@@ -217,6 +217,5 @@ try:
 except KeyboardInterrupt:
     pass
 finally:
-    connection.close()
     session.close()
     print '%s tasks proceeded' % CNT
