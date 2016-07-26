@@ -35,8 +35,8 @@ class SSEServer(resource.Resource):
         request.write("")
         if self.is_valid_path(request.postpath):
             self.handle_request(request)
-            request.notifyFinish().addErrback(self.responseFailed,
-                                              request, request.postpath)
+            request.notifyFinish().addBoth(self.responseFailed,
+                                           request, request.postpath)
             # reactor.callLater(10, request.finish)
             return server.NOT_DONE_YET
         else:
@@ -196,7 +196,7 @@ class SSEServer(resource.Resource):
         :param key:
         :return:
         '''
-        con.finish
+        logger.info("Removing connection")
         self.connections[key[0]][key[1]].remove(con)
         if not self.check_if_connections_exist_for_queue(key):
             self.stop_looping_call(key)
