@@ -128,8 +128,7 @@ def callback(ch, method, properties, body):
         openid = msg['msg']['openid']
         PREFS = update_preferences(openid, PREFS)
         if topic == 'consumer.fmn.prefs.update':  # msg from the consumer
-            log.debug(
-                "Done with refreshing prefs.  %0.2fs %s",
+            print "Done with refreshing prefs.  %0.2fs %s" % (
                 time.time() - start,msg['topic'])
             ch.basic_ack(delivery_tag=method.delivery_tag)
             return
@@ -142,9 +141,9 @@ def callback(ch, method, properties, body):
     # And do the real work of comparing every rule against the message.
     t = time.time()
     results = fmn.lib.recipients(PREFS, msg, valid_paths, CONFIG)
-    log.debug("results retrieved in: %0.2fs", time.time() - t)
+    print "results retrieved in: %0.2fs" % (time.time() - t)
 
-    log.debug("Recipients found %i dt %0.2fs %s %s",
+    print "Recipients found %i dt %0.2fs %s %s" % (
               len(results), time.time() - start,
               msg['msg_id'], msg['topic'])
 
@@ -164,8 +163,8 @@ def callback(ch, method, properties, body):
 
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
-    log.debug("Done.  %0.2fs %s %s",
-              time.time() - start, msg['msg_id'], msg['topic'])
+    print "Done.  %0.2fs %s %s" % (
+        time.time() - start, msg['msg_id'], msg['topic'])
 
 
 queue = 'refresh'
