@@ -135,7 +135,6 @@ def read(queue_object):
     start = time.time()
 
     data = json.loads(body)
-    print data.keys()
     topic = data.get('topic', '')
 
     if '.fmn.' in topic:
@@ -148,7 +147,6 @@ def read(queue_object):
             ch.basic_ack(delivery_tag=method.delivery_tag)
             return
 
-    print data['raw_msg'].keys()
     recipients, context, raw_msg = \
         data['recipients'], data['context'], data['raw_msg']['body']
 
@@ -166,7 +164,6 @@ def read(queue_object):
             log.debug(
                 "    Calling backend %r with %r" % (backend, recipient))
             t = time.time()
-            print backend
             backend.handle(session, recipient, raw_msg)
             log.debug("Handled by backend in: %0.2fs", time.time() - t)
         else:
