@@ -159,21 +159,27 @@ def read(queue_object):
         pref = PREFS.get('%s__%s' %(user, context))
         print "pref retrieved in: %0.2fs" % (time.time() - t)
 
-        if not pref.should_batch:
-            print "    Calling backend %r with %r" % (backend, recipient)
-            t = time.time()
-            backend.handle(session, recipient, raw_msg)
-            print "Handled by backend in: %0.2fs" % (time.time() - t)
-        else:
-            print "    Queueing msg for digest"
-            fmn.lib.models.QueuedMessage.enqueue(
-                session, user, context, raw_msg)
-        if ('filter_oneshot' in recipient
-                and recipient['filter_oneshot']):
-            print "    Marking one-shot filter as fired"
-            idx = recipient['filter_id']
-            fltr = session.query(fmn.lib.models.Filter).get(idx)
-            fltr.fired(session)
+        try:
+            if not pref.should_batch:
+                print "    Calling backend %r with %r" % (backend, recipient)
+                t = time.time()
+                backend.handle(session, recipient, raw_msg)
+                print "Handled by backend in: %0.2fs" % (time.time() - t)
+            else:
+                print "    Queueing msg for digest"
+                fmn.lib.models.QueuedMessage.enqueue(
+                    session, user, context, raw_msg)
+            if ('filter_oneshot' in recipient
+                    and recipient['filter_oneshot']):
+                print "    Marking one-shot filter as fired"
+                idx = recipient['filter_id']
+                fltr = session.query(fmn.lib.models.Filter).get(idx)
+                fltr.fired(session)
+        except:
+            # If anything happens, put the message back in the queue and bail
+            ch.cancel()
+            return
+
     session.commit()
 
     yield ch.basic_ack(delivery_tag=method.delivery_tag)
