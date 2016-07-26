@@ -94,7 +94,7 @@ PREFS = get_preferences()
 
 
 def update_preferences(openid, prefs):
-    log.info("Refreshing preferences for %r" % openid)
+    print "Refreshing preferences for %r" % openid
     for p in fmn.lib.models.Preference.by_user(session, openid):
         prefs['%s__%s' % (p.openid, p.context_name)] = p
     return prefs
@@ -135,54 +135,55 @@ def read(queue_object):
     start = time.time()
 
     data = json.loads(body)
-    print data.keys()
     topic = data.get('topic', '')
 
     if '.fmn.' in topic:
         openid = data['body']['msg']['openid']
         PREFS = update_preferences(openid, PREFS)
         if topic == 'consumer.fmn.prefs.update':  # msg from the consumer
-            log.debug(
-                "Done with refreshing prefs.  %0.2fs %s",
+            print "Done with refreshing prefs.  %0.2fs %s" % (
                 time.time() - start, data['topic'])
             ch.basic_ack(delivery_tag=method.delivery_tag)
             return
 
-    print data['raw_msg'].keys()
     recipients, context, raw_msg = \
         data['recipients'], data['context'], data['raw_msg']['body']
 
-    log.debug("  Considering %r with %i recips" % (
-        context, len(list(recipients))))
+    print "  Considering %r with %i recips" % (
+        context, len(list(recipients)))
 
     backend = backends[context]
     for recipient in recipients:
         user = recipient['user']
         t = time.time()
         pref = PREFS.get('%s__%s' %(user, context))
-        log.debug("pref retrieved in: %0.2fs", time.time() - t)
+        print "pref retrieved in: %0.2fs" % (time.time() - t)
 
-        if not pref.should_batch:
-            log.debug(
-                "    Calling backend %r with %r" % (backend, recipient))
-            t = time.time()
-            print backend
-            backend.handle(session, recipient, raw_msg)
-            log.debug("Handled by backend in: %0.2fs", time.time() - t)
-        else:
-            log.debug("    Queueing msg for digest")
-            fmn.lib.models.QueuedMessage.enqueue(
-                session, user, context, raw_msg)
-        if ('filter_oneshot' in recipient
-                and recipient['filter_oneshot']):
-            log.debug("    Marking one-shot filter as fired")
-            idx = recipient['filter_id']
-            fltr = session.query(fmn.lib.models.Filter).get(idx)
-            fltr.fired(session)
+        try:
+            if not pref.should_batch:
+                print "    Calling backend %r with %r" % (backend, recipient)
+                t = time.time()
+                backend.handle(session, recipient, raw_msg)
+                print "Handled by backend in: %0.2fs" % (time.time() - t)
+            else:
+                print "    Queueing msg for digest"
+                fmn.lib.models.QueuedMessage.enqueue(
+                    session, user, context, raw_msg)
+            if ('filter_oneshot' in recipient
+                    and recipient['filter_oneshot']):
+                print "    Marking one-shot filter as fired"
+                idx = recipient['filter_id']
+                fltr = session.query(fmn.lib.models.Filter).get(idx)
+                fltr.fired(session)
+        except:
+            # If anything happens, put the message back in the queue and bail
+            ch.cancel()
+            return
+
     session.commit()
 
     yield ch.basic_ack(delivery_tag=method.delivery_tag)
-    log.debug("Done.  %0.2fs %s %s",
+    print "Done.  %0.2fs %s %s" % (
               time.time() - start, raw_msg['msg_id'], raw_msg['topic'])
 
 
@@ -217,6 +218,5 @@ try:
 except KeyboardInterrupt:
     pass
 finally:
-    connection.close()
     session.close()
     print '%s tasks proceeded' % CNT
