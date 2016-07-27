@@ -189,3 +189,8 @@ class SSEWebServerTest(unittest.TestCase):
         # req2 is waiting for the next cycle for it to be sent a message so its
         # empty
         self.assertEqual(request2.written, [''])
+
+if __name__ == '__main__':
+    SUITE = unittest.TestLoader().loadTestsFromTestCase(
+        SSEWebServerTest)
+    unittest.TextTestRunner(verbosity=2).run(SUITE)

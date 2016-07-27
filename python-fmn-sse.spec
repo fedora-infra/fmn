@@ -20,7 +20,7 @@ fedmsg, the Fedora Federated Message bus.
 
 FMN.SSE allows fedora users to view their fedmsg feed in realtime.
 
-%package -n python2-%{pkgname}
+%package
 Summary:        %{sum}
 
 Requires:       python-pika
@@ -28,7 +28,6 @@ Requires:       python-twisted-web
 Requires:       fedmsg
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
-BuildRequires:  python-twisted
 BuildRequires:  python-mock
 
 Requires(post):     systemd
@@ -37,7 +36,7 @@ Requires(postun):   systemd
 
 %{?python_provide:%python_provide python2-%{pkgname}}
 
-%description -n python2-%{pkgname}
+%description
 FMN.SSE allows fedora users to view their fedmsg feed in realtime.
 
 %prep
@@ -58,9 +57,9 @@ install -m 644 systemd/fmn-sse@.service \
     $RPM_BUILD_ROOT/%{_unitdir}/fmn-sse@.service
 
 %check
-trial tests/*.py
+%{__python2} setup.py test
 
-%files -n python2-%{pkgname}
+%files
 %doc README.md
 %license LICENSE
 %{python2_sitelib}/%{pkgname}/
