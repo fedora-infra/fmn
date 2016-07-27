@@ -1,8 +1,6 @@
 import unittest
-
 from mock import patch, Mock
 from twisted.web.test.requesthelper import DummyRequest
-
 from fmn.sse.sse_webserver import SSEServer
 
 
@@ -171,8 +169,8 @@ class SSEWebServerTest(unittest.TestCase):
                                             "data: {'msg': 'unittest'}\r\n\r\n",
                                             ])
         self.assertEqual(request2.written, [
-                                            "data: {'msg': 'unittest'}\r\n\r\n",
-                                            ])
+            "data: {'msg': 'unittest'}\r\n\r\n",
+        ])
 
     @patch.object(SSEServer, 'get_payload', return_value={'msg': 'unittest'})
     def test_render_get(self, pay_mock):
@@ -191,4 +189,3 @@ class SSEWebServerTest(unittest.TestCase):
         # req2 is waiting for the next cycle for it to be sent a message so its
         # empty
         self.assertEqual(request2.written, [''])
-
