@@ -1,4 +1,25 @@
 
+1.0.3
+-----
+
+Pull Requests
+
+- (@pypingou)       #84, Miscellaneous fixes to the backend and worker
+  https://github.com/fedora-infra/fmn.consumer/pull/84
+
+Commits
+
+- 4dafdfe76 Drop the connection.close() line since we no longer use a connection
+  https://github.com/fedora-infra/fmn.consumer/commit/4dafdfe76
+- 11ae139e9 Drop debugging prints
+  https://github.com/fedora-infra/fmn.consumer/commit/11ae139e9
+- d6caee588 Replace logging with print statements
+  https://github.com/fedora-infra/fmn.consumer/commit/d6caee588
+- 7e9b594ba Replace logging with print statements in the worker
+  https://github.com/fedora-infra/fmn.consumer/commit/7e9b594ba
+- 5214234d8 If there is an error when processing a message, put it back in the queue and bail
+  https://github.com/fedora-infra/fmn.consumer/commit/5214234d8
+
 1.0.2
 -----
 
