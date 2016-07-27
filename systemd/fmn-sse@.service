@@ -1,0 +1,14 @@
+[Unit]
+Description=FMN.sse feed for real time feed of fedmsg #%i
+After=network.target
+Documentation=https://github.com/fedora-infra/fmn.sse/
+
+[Service]
+ExecStart=/usr/bin/python2 /usr/lib/python2.7/site-packages/fmn/sse/sse_webserver.py
+Type=simple
+User=root
+Group=root
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

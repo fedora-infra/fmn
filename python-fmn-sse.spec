@@ -1,4 +1,5 @@
 %global pkgname fmn-sse
+%global modname fmn.sse
 %global sum Realtime fedmsg feed for fedora users.
 
 Name:           python-%{pkgname}
@@ -7,8 +8,8 @@ Release:        1%{?dist}
 Summary:        %{sum}
 
 License:        GPL
-URL:            https://github.com/fedora-infra/fmn.sse
-Source0:        https://github.com/fedora-infra/fmn.sse/archive/master.zip
+URL:            https://github.com/fedora-infra/%{modname}
+Source0:        https://github.com/fedora-infra/%{modname}/archive/develop.zip
 
 BuildArch:      noarch
 BuildRequires:  python-devel
@@ -29,6 +30,10 @@ BuildRequires:  python-devel
 BuildRequires:  python-setuptools
 BuildRequires:  python-twisted
 BuildRequires:  python-mock
+
+Requires(post):     systemd
+Requires(preun):    systemd
+Requires(postun):   systemd
 
 %{?python_provide:%python_provide python2-%{pkgname}}
 
