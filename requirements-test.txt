@@ -1,2 +1,3 @@
-tabulate
 mock
+pytest
+faker

@@ -1,17 +1,16 @@
 #FMN.SSE
 
+FMN is a family of systems to manage end-user notifications triggered by
+fedmsg, the Fedora Federated Message bus.
+
+FMN.SSE allows fedora users to view their fedmsg feed in realtime.
+
 ## Install
 ```
 sudo dnf install python python-virtualenvwrapper rabbitmq-server python-pip 
 mkvirtualenv sse
 workon sse
-pip install -r ./requirements.txt
-```
-
-also install the requirements for dev-data and testing
-
-```
-pip install -r ./requirements-test.txt
+python setup.py install
 ```
 
 ## Running
@@ -37,36 +36,10 @@ and/or
 open up `sse_test_subscriber.html` in a browser and look at the JS console
 
 ## Running unittests
-Unfortuanately after converting the project to fmn structure the coverage does
-not work anymore.
-
-You can still run unittests but the percentage can't be determined at the moment.
-
-Please run in the root of the project
-
 ```
 workon sse
-trial tests/*.py
+python setup.py test
 ```
-
-*Deprecated*
-
-    cd to the root of the project
-    ```
-    workon sse
-    pip install -r ./requirements-test.txt
-    python run-test.py
-    ```
-
-    ------
-
-    #### Manual way
-
-    ```
-    workon sse
-    trial --coverage ./tests/test_sse_webserver.py
-    ```
-    Coverage results will be in root_project/_trial_temp/coverage/
 
 ### Common issues
 
