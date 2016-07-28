@@ -1,14 +1,12 @@
 """ Setup file for fmn.sse """
+import sys
 from setuptools import setup
+from setuptools.command.test import test as TestCommand
 
 
 def get_description():
     with open('README.md', 'r') as f:
         return ''.join(f.readlines()[2:])
-
-
-import sys
-from setuptools.command.test import test as TestCommand
 
 
 class PyTest(TestCommand):
