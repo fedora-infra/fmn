@@ -237,7 +237,7 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
             session, valid_paths, path, **kw)
 
     def contexts():
-        names = ['email', 'irc']
+        names = ['email', 'irc', 'sse']
         if only_for:
             names = [only_for.name]
 

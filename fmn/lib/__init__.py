@@ -208,6 +208,8 @@ def validate_detail_value(ctx, value, config):
     elif ctx.name == 'android':
         if re.match(gcm_regex, value) is None:
             raise ValueError("not a valid android registration id")
+    elif ctx.name == 'sse':
+        pass
     else:
         raise NotImplementedError("No validation scheme for %r" % ctx.name)
     # Happy.

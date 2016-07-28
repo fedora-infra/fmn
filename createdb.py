@@ -36,4 +36,9 @@ if '--with-dev-data' in sys.argv:
         detail_name="None", icon="console",
         placeholder="There's no need to put a value here"
     )
+    context5 = fmn.lib.models.Context.create(
+        session, name="sse", description="server sent events",
+        detail_name="None", icon="console",
+        placeholder="There's no need to put a value here"
+    )
     session.commit()
