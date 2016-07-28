@@ -1,5 +1,10 @@
 #FMN.SSE
 
+FMN is a family of systems to manage end-user notifications triggered by
+fedmsg, the Fedora Federated Message bus.
+
+FMN.SSE allows fedora users to view their fedmsg feed in realtime.
+
 ## Install
 ```
 sudo dnf install python python-virtualenvwrapper rabbitmq-server python-pip 
