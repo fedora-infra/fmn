@@ -227,7 +227,6 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
 
     # the openid is of the form USERNAME.id.fedoraproject.org
     nick = user.openid.split('.')[0]
-    sse_feed = 'sse-' + nick
 
     # TODO -- make the root here configurable.
     valid_paths = fmn.lib.load_rules(root='fmn.rules')

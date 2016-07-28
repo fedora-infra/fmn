@@ -33,7 +33,7 @@ if '--with-dev-data' in sys.argv:
     )
     context4 = fmn.lib.models.Context.create(
         session, name="desktop", description="fedmsg-notify",
-        detail_name="sse feed", icon="console",
+        detail_name="None", icon="console",
         placeholder="There's no need to put a value here"
     )
     context5 = fmn.lib.models.Context.create(
