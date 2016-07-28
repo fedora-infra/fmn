@@ -31,7 +31,6 @@ requires = [
 tests_require = [
     'mock',
     'pytest',
-    'faker'  # for dev-data.py
 ]
 
 setup(
@@ -46,7 +45,7 @@ setup(
     license='GPL',
     install_requires=requires,
     tests_require=tests_require,
-    packages=['fmn.sse'],
+    packages=['fmn', 'fmn.sse'],
     namespace_packages=[],
     include_package_data=True,
     zip_safe=False,
