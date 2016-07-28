@@ -8,12 +8,6 @@ workon sse
 python setup.py install
 ```
 
-also install the requirements for dev-data and testing
-
-```
-pip install -r ./requirements-test.txt
-```
-
 ## Running
 
 ```
