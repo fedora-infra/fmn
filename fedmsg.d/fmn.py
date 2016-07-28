@@ -26,7 +26,8 @@ config = {
 
     # This is the list of enabled backends (so we can turn one off globally)
     #"fmn.backends": ['email', 'irc', 'android', 'desktop'],
-    "fmn.backends": ['email', 'irc', 'desktop'],
+    #"fmn.backends": ['email', 'irc', 'desktop'],
+    "fmn.backends": ['email', 'irc', 'desktop', 'sse'],
 
     # Email
     "fmn.email.mailserver": "127.0.0.1:25",
@@ -37,6 +38,9 @@ config = {
     "fmn.irc.nickname": "pingoubot",
     "fmn.irc.port": 6667,
     "fmn.irc.timeout": 120,
+
+    # SSE
+    "fmn.sse.url": "http://localhost:8080/",
 
     # GCM - Android notifs
     "fmn.gcm.post_url": "wat",

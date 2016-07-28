@@ -50,6 +50,16 @@
     </p>
     {% endif %}
 
+    {% if current == 'sse' %}
+    <p class="lead">Server Sent Events</p>
+    <p> Allows you to get real time updates of what events you have subscribed too.
+    </p>
+    <p>
+      You can find the SSE at
+      <a href="{{context.extra['sse_url']}}">{{context.extra['sse_url']}}</a>
+    </p>
+    {% endif %}
+
     <p>You have {{preference.filters|length}} rule filters
     defined for the {{current}} messaging context.  You can add new ones and
     delete existing ones here.</p>

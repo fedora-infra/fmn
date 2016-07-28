@@ -452,6 +452,16 @@ def context_json(openid, context):
 @login_required
 def context(openid, context):
     context, pref = _get_context(openid, context)
+
+    # add sse url to the context to display to the user
+    if str(pref.context_name) == 'sse':
+        # set default value value
+        sse_url = fedmsg_config.get('fmn.sse.url', 'http://localhost:8080/')
+        # TODO: update below once fedora groups get their own fedmsg config
+        sse_route = sse_url + ('user/' if sse_url.endswith("/") else '/user/')
+        sse_route += openid.split(".", 1)[0]
+        context.extra = {'sse_url': sse_route}
+
     return flask.render_template(
         'context.html',
         current=context.name,
@@ -807,6 +817,13 @@ def handle_argument():
     return dict(message="ok", url=next_url)
 
 
+def activate_sse(con, openid):
+    if not con.detail_value:
+        detail_value = 'sse-' + openid
+        con.set_value(SESSION, detail_value)
+        con.set_status(SESSION, 'accepted')
+
+
 @app.route('/api/details', methods=['POST'])
 @api_method
 def handle_details():
@@ -866,6 +883,17 @@ def handle_details():
 
         # Finalize all of that.
         SESSION.commit()
+
+    # **Monkey Patch Starts**
+    # Activate sse automatically for the user
+    # this should be done in fmn.lib but when a context is created and
+    # detail_name is set to None it doesn't set detail_value which is needed
+    # by the backend
+    if ctx.name == 'sse' and not pref.enabled:
+        con = fmn.lib.models.Confirmation.get_or_create(
+            SESSION, openid=openid, context=ctx)
+        activate_sse(con=con, openid=user.openid)
+    # **Monkey Patch Ends**
 
     # Are they changing a delivery detail?
     if detail_value:
