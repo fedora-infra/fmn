@@ -2,21 +2,17 @@ import json
 import uuid
 from datetime import datetime
 from random import randint
-
 import six
-from faker import Factory
 
 from fmn.sse.FeedQueue import FeedQueue
 
-fake = Factory.create()
 
 
 def creat_fake_message(additional_text=''):
     dom_id = six.text_type(uuid.uuid4())
-    fake_date = fake.date_time_between(start_date='-7y', end_date='-1')
 
     output = {"dom_id": str(dom_id),
-              "human_time": str(fake_date),
+              "human_time": str(datetime.utcnow()),
               "icon": str('icon'),
               "link": str('localhost:8080'),
               "markup": str(
