@@ -18,7 +18,7 @@ BuildRequires:  python-mock
 BuildRequires:  python-twisted
 BuildRequires:  python-pika
 BuildRequires:  fedmsg
-BuildRequires:  python-pytest
+BuildRequires:  pytest
 BuildRequires:  systemd
 BuildRequires:  systemd-devel
 
