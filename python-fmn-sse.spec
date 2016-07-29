@@ -9,7 +9,7 @@ Summary:        %{sum}
 
 License:        GPL
 URL:            https://github.com/fedora-infra/%{modname}
-Source0:        https://github.com/fedora-infra/%{modname}/archive/v%{version}.zip
+Source0:        https://github.com/fedora-infra/%{modname}/archive/v%{version}.zip#/%{modname}-%{version}.zip
 
 BuildArch:      noarch
 BuildRequires:  python-devel
