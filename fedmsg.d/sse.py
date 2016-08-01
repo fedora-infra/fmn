@@ -9,4 +9,7 @@ config = {
     "fmn.sse.webserver.tcp_port": 8080,
     "fmn.sse.webserver.log": "sse.log",
 
+    'endpoints': {
+        # Just need this entry here for tests to pass on travis-ci.
+    }
 }
