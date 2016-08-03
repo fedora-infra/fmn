@@ -8,6 +8,8 @@ import smtplib
 import time
 import random
 
+logging.basicConfig(level=logging.DEBUG)
+
 import pika
 import fedmsg
 import fedmsg.meta
