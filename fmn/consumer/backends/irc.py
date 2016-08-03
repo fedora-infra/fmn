@@ -13,6 +13,7 @@ from twisted.internet import reactor
 from bleach import clean
 
 import logging
+logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger("fedmsg")
 
 
@@ -358,9 +359,7 @@ class IRCBackend(BaseBackend):
         if not self.clients:
             # This is usually the case if we are suffering a netsplit.
             self.log.warning("IRCBackend has no clients to work with; enqueue")
-            fmn.lib.models.QueuedMessage.enqueue(
-                session, user, 'irc', msg)
-            return
+            raise RuntimeError("IRCBackend has no clients to work with; enqueue")
 
         self.log.debug("Notifying via irc %r" % recipient)
 
