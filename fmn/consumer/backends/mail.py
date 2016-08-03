@@ -112,6 +112,8 @@ class EmailBackend(BaseBackend):
             )
         except smtplib.SMTPRecipientsRefused:
             self.handle_bad_email_address(session, recipient)
+        except smtplib.SMTPSenderRefused:
+            raise
         except:
             self.log.info("%r" % email_message.as_string())
             raise
