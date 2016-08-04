@@ -16,6 +16,7 @@ python setup.py install
 ## Running
 
 ```
+sudo systemctl start rabbitmq-server
 workon sse
 PYTHONPATH=. python fmn/sse/sse_webserver.py
 ```
@@ -39,6 +40,14 @@ open up `sse_test_subscriber.html` in a browser and look at the JS console
 ```
 workon sse
 python setup.py test
+```
+
+with coverage
+
+```
+workon sse
+pip install -r requirements-test.txt
+py.test --cov=fmn tests/
 ```
 
 ### Common issues
