@@ -25,6 +25,7 @@ PYTHONPATH=. python fmn/sse/sse_webserver.py
 
 ```
 workon sse
+pip install pytz
 python dev-data.py
 ```
 
