@@ -64,7 +64,7 @@
     defined for the {{current}} messaging context.  You can add new ones and
     delete existing ones here.</p>
     <p>If a message on the <a href="http://fedmsg.com">fedmsg bus</a> matches
-    any one of these criteria, then a notification will be sent your
+    any one of these filters, then a notification will be sent your
     way{% if preference.enabled %}.{% else %} (except that you currently have
     the {{current}} delivery mechanism disabled.  Enable it and
     <strong>then</strong> we'll send you notifications.){% endif %}
@@ -72,6 +72,13 @@
     We also need to know where you want your {{current}} messages delivered
     (a <em>{{context.detail_name}}</em>); you can set that up here.
     {% endif %}
+    </p>
+    <p>
+    Clicking on a filter will let you add or remove rules from it. You can also negate
+    a rule, so that instead of include messages matching it, they will be excluded.
+    For example, you might want a filter with 'a particular user' with your FAS username, 
+    but also a negated rule for 'all bugzilla messages', so that filter would match 
+    anything related to your FAS username, but not any bugzilla messages.
     </p>
 
     <div class="list-group {{'hidden' if preference.can_send is sameas false}}">
