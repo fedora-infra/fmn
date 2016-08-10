@@ -39,7 +39,7 @@ class FeedQueue:
             self.channel.basic_ack(delivery_tag=method_frame.delivery_tag)
             self.connection.close()
             # print body
-            return body
+            return body.decode('utf-8')
 
     def push_message(self, msg):
         self._check_connection()

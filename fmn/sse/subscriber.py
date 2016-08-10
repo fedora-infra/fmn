@@ -19,8 +19,13 @@ class SSESubscriber:
             self.logger = global_log
 
     def push_sse(self, msg, conn):
-        event_line = "data: {}\r\n".format(msg)
-        conn.write(event_line + '\r\n')
+        event_line = "data: {}\r\n\r\n".format(msg)
+        try:
+            event_line = event_line.encode('utf-8')
+        except:
+            pass
+
+        conn.write(event_line)
 
     def write_messages_all_connections(self, key):
         '''
@@ -43,8 +48,8 @@ class SSESubscriber:
         host = Config.get('fmn.sse.pika.host', 'localhost')
         exchange = key[0]  # Config.get('pika', 'exchange')
         queue_name = key[1]
-        expire_ms = int(Config.get('fmn.sse.pika.msg_expiration', 3600))
-        port = int(Config.get('fmn.sse.pika.port', None))
+        expire_ms = int(Config.get('fmn.sse.pika.msg_expiration', 3600000))
+        port = int(Config.get('fmn.sse.pika.port', 5672))
 
         fq = FeedQueue(host=host, exchange=exchange, expire_ms=expire_ms,
                        queue_name=queue_name, port=port)
