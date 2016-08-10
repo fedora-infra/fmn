@@ -31,11 +31,6 @@ class SSEWebServerTest(unittest.TestCase):
         path = ['user']
         self.assertFalse(self.sse.is_valid_path(path))
 
-    def test_handle_request_invalid_path(self):
-        request = DummyRequest(postpath=['not', 'valid'])
-        self.sse.handle_request(request)
-        self.assertFalse('not' in self.sse.subscribers.connections)
-
     @patch.object(SSESubscriber, 'add_looping_call')
     @patch.object(SSESubscriber, 'does_loopingcall_exist')
     def test_handle_request_valid(self, alc_mock, dlce_mock):
@@ -44,9 +39,9 @@ class SSEWebServerTest(unittest.TestCase):
 
         request = DummyRequest(postpath=['user', 'bob'])
         self.sse.handle_request(request)
-
+        # handle request does not format the path
         self.assertTrue('user' in self.sse.subscribers.connections)
-        self.assertTrue('bob.id.fedoraproject.org'
+        self.assertTrue('bob'
                         in self.sse.subscribers.connections['user'])
 
     @patch.object(SSESubscriber, 'get_payload', return_value={'msg': 'unittest'})

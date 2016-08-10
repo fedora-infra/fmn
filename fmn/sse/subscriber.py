@@ -1,6 +1,8 @@
 from twisted.internet import task
 import fedmsg
-from FeedQueue import FeedQueue
+
+from fmn.sse.FeedQueue import FeedQueue
+
 Config = fedmsg.config.load_config()
 
 import logging

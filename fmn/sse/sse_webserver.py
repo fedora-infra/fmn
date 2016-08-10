@@ -2,10 +2,10 @@ import json
 import logging
 
 import fedmsg
+from fmn.sse.subscriber import SSESubscriber
 from twisted.internet import reactor, task
 from twisted.web import server, resource
 
-from subscriber import SSESubscriber
 
 log = logging.getLogger("fmn")
 log.setLevel('DEBUG')
