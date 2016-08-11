@@ -1,6 +1,8 @@
 import unittest
 from mock import patch, Mock
 from twisted.web.test.requesthelper import DummyRequest
+
+from fmn.sse.FeedQueue import FeedQueue
 from fmn.sse.subscriber import SSESubscriber
 
 
@@ -13,6 +15,23 @@ class MockLoopingCall(object):
 
     def stop(self):
         self.running = False
+
+
+class MockChanCon(object):
+    def __init__(self):
+        pass
+
+    def close(self):
+        pass
+
+
+class MockFeedQueue(object):
+    def __init__(self):
+        self.channel = MockChanCon()
+        self.connection = MockChanCon()
+
+    def receive_one_message(self):
+        return 'one message'
 
 
 class SSESubscriberTest(unittest.TestCase):
@@ -93,6 +112,7 @@ class SSESubscriberTest(unittest.TestCase):
         # add the looping call and two connections
         lc_mock = MockLoopingCall(running=True)
         self.sse_sub.looping_calls['user'] = {'bob': lc_mock}
+        self.sse_sub.feedqueue['bob'] = MockFeedQueue()
 
         request = DummyRequest(postpath=['user', 'bob'])
         self.sse_sub.add_connection(request, request.postpath)
@@ -137,6 +157,14 @@ class SSESubscriberTest(unittest.TestCase):
         self.assertEqual(request2.written, [
             b"data: {'msg': 'unittest'}\r\n\r\n",
         ])
+
+    def test_get_fq_existing(self):
+        mock_fq = MockFeedQueue()
+        self.sse_sub.feedqueue['bob'] = mock_fq
+        self.assertEqual(self.sse_sub.get_feedqueue(['user', 'bob']), mock_fq)
+
+        msg = self.sse_sub.get_payload(['user', 'bob'])
+        self.assertEqual(msg, 'one message')
 
 
 if __name__ == '__main__':

@@ -29,16 +29,12 @@ class FeedQueue:
         method_frame, header_frame, body = self.channel.basic_get(
             queue=self.queue_name)
         if not method_frame:
-            self.connection.close()
             return ''
 
         if method_frame.NAME == 'Basic.GetEmpty':
-            self.connection.close()
             return ''
         else:
             self.channel.basic_ack(delivery_tag=method_frame.delivery_tag)
-            self.connection.close()
-            # print body
             return body.decode('utf-8')
 
     def push_message(self, msg):
