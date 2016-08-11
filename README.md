@@ -8,7 +8,8 @@ FMN.SSE allows fedora users to view their fedmsg feed in realtime.
 ## Install
 System dependencies
 ```
-sudo yum install python python-devel python-virtualenvwrapper rabbitmq-server python-pip gcc libffi-devel openssl-devel zeromq-devel
+sudo yum install python python-devel python-virtualenvwrapper rabbitmq-server \
+python-pip gcc libffi-devel openssl-devel zeromq-devel
 ```
 
 If running with python2
