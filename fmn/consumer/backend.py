@@ -4,8 +4,11 @@
 
 import json
 import logging
+import smtplib
 import time
 import random
+
+logging.basicConfig(level=logging.DEBUG)
 
 import pika
 import fedmsg
@@ -175,9 +178,11 @@ def read(queue_object):
                 idx = recipient['filter_id']
                 fltr = session.query(fmn.lib.models.Filter).get(idx)
                 fltr.fired(session)
-        except:
-            # If anything happens, put the message back in the queue and bail
-            ch.cancel()
+        except RuntimeError:
+            yield ch.basic_nack(delivery_tag=method.delivery_tag)
+            return
+        except smtplib.SMTPSenderRefused:
+            yield ch.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
             return
 
     session.commit()
