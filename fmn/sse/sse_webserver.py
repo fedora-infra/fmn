@@ -30,7 +30,7 @@ class SSEServer(resource.Resource):
 
     def render_GET(self, request):
         request = self.add_headers(request)
-        request.write("")
+        request.write(b"")
         if self.is_valid_path(request.postpath):
             self.handle_request(request)
             request.notifyFinish().addBoth(self.responseFailed,
@@ -68,7 +68,7 @@ class SSEServer(resource.Resource):
                 if not path[1].decode('utf-8').endswith(u'.id.fedoraproject.org'):
                     path[1] = path[1].decode('utf-8') + u'.id.fedoraproject.org'
                 return True
-            elif path[0] == 'group':
+            elif path[0].decode('utf-8') == u'group':
                 if path[1]:
                     return True
         return False
