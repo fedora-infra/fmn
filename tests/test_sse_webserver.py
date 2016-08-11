@@ -57,11 +57,11 @@ class SSEWebServerTest(unittest.TestCase):
 
         # req1 started the looping call so it gets an extra message
         self.assertEqual(request1.written, [b'',
-                                            'data: unittest\r\n\r\n',
+                                            b"data: unittest\r\n\r\n",
                                             ])
         # req2 is waiting for the next cycle for it to be sent a message so its
         # empty
-        self.assertEqual(request2.written, [''])
+        self.assertEqual(request2.written, [b''])
 
 if __name__ == '__main__':
     SUITE = unittest.TestLoader().loadTestsFromTestCase(

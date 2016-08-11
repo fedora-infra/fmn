@@ -21,6 +21,12 @@ class SSESubscriber:
             self.logger = global_log
 
     def push_sse(self, msg, conn):
+        try:
+            msg = bytes.decode(msg)
+        # This will raise in python2 where msg is a string, not bytes
+        except TypeError:
+            pass
+
         event_line = "data: {}\r\n\r\n".format(msg)
         try:
             event_line = event_line.encode('utf-8')

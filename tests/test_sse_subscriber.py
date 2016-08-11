@@ -131,11 +131,11 @@ class SSESubscriberTest(unittest.TestCase):
         self.sse_sub.write_messages_all_connections(['user', 'bob'])
 
         # req1 started the looping call so it gets an extra message
-        self.assertEqual(request1.written, ["data: {'msg': 'unittest'}\r\n\r\n",
-                                            "data: {'msg': 'unittest'}\r\n\r\n",
+        self.assertEqual(request1.written, [b"data: {'msg': 'unittest'}\r\n\r\n",
+                                            b"data: {'msg': 'unittest'}\r\n\r\n",
                                             ])
         self.assertEqual(request2.written, [
-            "data: {'msg': 'unittest'}\r\n\r\n",
+            b"data: {'msg': 'unittest'}\r\n\r\n",
         ])
 
 
