@@ -35,7 +35,7 @@ tests_require = [
 
 setup(
     name='fmn.sse',
-    version='0.1.0',
+    version='0.1.1',
     description='Real time feed for fedmsg',
     long_description=get_description(),
     author='Szymon M',
