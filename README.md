@@ -6,17 +6,42 @@ fedmsg, the Fedora Federated Message bus.
 FMN.SSE allows fedora users to view their fedmsg feed in realtime.
 
 ## Install
+System dependencies
 ```
-sudo dnf install python python-virtualenvwrapper rabbitmq-server python-pip 
-mkvirtualenv sse
-workon sse
+sudo yum install python python-devel python-virtualenvwrapper rabbitmq-server \
+python-pip gcc libffi-devel openssl-devel zeromq-devel
+```
+
+If running with python2
+```
+mkvirtualenv sse-py2
+workon sse-py2
+
+# If epel7
+pip install --upgrade setuptools
+
+python setup.py install
+```
+
+For python3
+
+*replace sse-py2 for sse-py3 in other notes*
+```
+sudo dnf install 
+mkvirtualenv --python=/usr/bin/python3 sse-py3
+workon sse-py3
+
+# If epel7
+pip install --upgrade setuptools
+
 python setup.py install
 ```
 
 ## Running
 
 ```
-workon sse
+sudo systemctl start rabbitmq-server
+workon sse-py2
 PYTHONPATH=. python fmn/sse/sse_webserver.py
 ```
 
@@ -24,6 +49,7 @@ PYTHONPATH=. python fmn/sse/sse_webserver.py
 
 ```
 workon sse
+pip install pytz
 python dev-data.py
 ```
 
@@ -39,6 +65,14 @@ open up `sse_test_subscriber.html` in a browser and look at the JS console
 ```
 workon sse
 python setup.py test
+```
+
+with coverage
+
+```
+workon sse
+pip install -r requirements-test.txt
+py.test --cov=fmn tests/
 ```
 
 ### Common issues

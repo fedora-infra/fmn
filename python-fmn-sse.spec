@@ -3,7 +3,7 @@
 %global sum FMN.SSE allows fedora users to view their fedmsg feed in realtime.
 
 Name:           python-%{pkgname}
-Version:        0.1.0
+Version:        0.1.1
 Release:        1%{?dist}
 Summary:        %{sum}
 
