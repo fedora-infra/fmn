@@ -16,25 +16,17 @@ If running with python2
 ```
 mkvirtualenv sse-py2
 workon sse-py2
-
-# If epel7
-pip install --upgrade setuptools
-
-python setup.py install
+pip install -r requirements.txt
 ```
 
 For python3
 
 *replace sse-py2 for sse-py3 in other notes*
 ```
-sudo dnf install 
+sudo dnf install python3-devel
 mkvirtualenv --python=/usr/bin/python3 sse-py3
 workon sse-py3
-
-# If epel7
-pip install --upgrade setuptools
-
-python setup.py install
+pip install -r requirements.txt
 ```
 
 ## Running
@@ -48,7 +40,7 @@ PYTHONPATH=. python fmn/sse/sse_webserver.py
 ## Test Data
 
 ```
-workon sse
+workon sse-py2
 pip install pytz
 python dev-data.py
 ```
@@ -63,14 +55,14 @@ open up `sse_test_subscriber.html` in a browser and look at the JS console
 
 ## Running unittests
 ```
-workon sse
+workon sse-py2
 python setup.py test
 ```
 
 with coverage
 
 ```
-workon sse
+workon sse-py2
 pip install -r requirements-test.txt
 py.test --cov=fmn tests/
 ```
