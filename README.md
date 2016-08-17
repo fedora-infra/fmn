@@ -95,3 +95,22 @@ Q: Nothing is being displayed on the curl
 A: Wait a few more seconds, it takes a moment to display the data. If it's more
 than a minute check to see if the queue has data via the web ui http://localhost:15672/
 
+
+## Vagrant
+
+#### Install
+```
+sudo dnf copr enable dustymabe/vagrant-sshfs
+sudo dnf install vagrant vagrant-libvirt vagrant-sshfs
+```
+
+#### Setup
+In the root of the project directory
+````
+vagrant up
+````
+
+#### Running
+```
+vagrant ssh -c "cd /vagrant/; python fmn/sse/sse_webserver.py"
+```
