@@ -19,7 +19,7 @@ def taskotron_task(config, message, task=None):
     `taskotron <https://taskotron.fedoraproject.org/>`_ task.
 
     You can specify several tasks by separating them with a comma ',',
-    i.e.: ``qa.depcheck,qa.rpmlint``.
+    i.e.: ``dist.depcheck,dist.rpmlint``.
     """
 
     # We only operate on taskotron messages, first off.
@@ -114,8 +114,8 @@ def taskotron_release_critical_task(config, message):
 
     These are the tasks which are deemed extremely important
     by the distribution, and their failure should be carefully
-    inspected. Currently these tasks are ``qa.depcheck`` and
-    ``qa.upgradepath``.
+    inspected. Currently these tasks are ``dist.depcheck`` and
+    ``dist.upgradepath``.
     """
 
     # We only operate on taskotron messages, first off.
@@ -124,4 +124,4 @@ def taskotron_release_critical_task(config, message):
 
     task = message['msg']['task'].get('name')
 
-    return task in ['qa.depcheck', 'qa.upgradepath']
+    return task in ['dist.depcheck', 'dist.upgradepath']
