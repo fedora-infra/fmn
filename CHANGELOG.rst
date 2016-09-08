@@ -1,4 +1,19 @@
 
+0.9.1
+-----
+
+Pull Requests
+
+- (@sayanchowdhury) #85, Add rules for Autocloud
+  https://github.com/fedora-infra/fmn.rules/pull/85
+
+Commits
+
+- 6191e4910 Add rules for Autocloud
+  https://github.com/fedora-infra/fmn.rules/commit/6191e4910
+- 5e448f324 Merge branch 'master' into develop
+  https://github.com/fedora-infra/fmn.rules/commit/5e448f324
+
 0.9.0
 -----
 
