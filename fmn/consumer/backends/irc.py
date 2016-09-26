@@ -390,8 +390,7 @@ class IRCBackend(BaseBackend):
                 message.encode('utf-8'),
             )
 
-    def handle_batch(self, session, recipient, queued_messages):
-        messages = [m.message for m in queued_messages]
+    def handle_batch(self, session, recipient, messages):
         # Squash some messages into one conglomerate message
         # https://github.com/fedora-infra/datagrepper/issues/132
         messages = fedmsg.meta.conglomerate(messages, **self.config)

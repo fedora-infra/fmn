@@ -62,7 +62,7 @@ class GCMBackend(BaseBackend):
 
         self._send_notification(session, recipient['registration id'], msg)
 
-    def handle_batch(self, session, recipient, queued_messages):
+    def handle_batch(self, session, recipient, messages):
         raise NotImplementedError()
 
     def handle_confirmation(self, session, confirmation):
