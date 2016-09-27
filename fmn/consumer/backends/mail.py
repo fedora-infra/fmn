@@ -151,9 +151,11 @@ class EmailBackend(BaseBackend):
         n = len(queued_messages)
         subject = u"Fedora Notifications Digest (%i updates)" % n
         summary = u"Digest summary:\n"
+        i = 0
         for msg in queued_messages:
+            i = i + 1
             line = fedmsg.meta.msg2subtitle(msg, **self.config) or u''
-            summary += str(i+1) + ".\t" + line + "\n"
+            summary += '%d.\t%s\n' % (i, line)
 
         separator = "\n\n" + "-"*79 + "\n\n"
         if recipient.get('verbose', True):
@@ -176,8 +178,18 @@ class EmailBackend(BaseBackend):
             fedmsg.meta.msg2packages(msg, **self.config)
             for msg in queued_messages])
 
-        self.send_mail(session, recipient, subject, content,
-                       topics, categories, usernames, packages)
+        logger.info('Breaking email')
+        logger.info('Length: %d' % len(content))
+
+        # Break email
+        split = 20000000
+        contents = [content[i:i+split] for i in range(0, len(content), split)]
+
+        logger.info('Broken email into %d parts' % len(contents))
+
+        for bodycnt in contents:
+            self.send_mail(session, recipient, subject, bodycnt,
+                           topics, categories, usernames, packages)
 
 
     def handle_confirmation(self, session, confirmation):
