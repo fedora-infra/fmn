@@ -178,8 +178,18 @@ class EmailBackend(BaseBackend):
             fedmsg.meta.msg2packages(msg, **self.config)
             for msg in queued_messages])
 
-        self.send_mail(session, recipient, subject, content,
-                       topics, categories, usernames, packages)
+        logger.info('Breaking email')
+        logger.info('Length: %d' % len(content))
+
+        # Break email
+        split = 20000000
+        contents = [content[i:i+split] for i in range(0, len(content), split)]
+
+        logger.info('Broken email into %d parts' % len(contents))
+
+        for bodycnt in contents:
+            self.send_mail(session, recipient, subject, bodycnt,
+                           topics, categories, usernames, packages)
 
 
     def handle_confirmation(self, session, confirmation):
