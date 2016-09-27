@@ -139,7 +139,7 @@ def read(queue_object):
 
     data = json.loads(body)
     topic = data.get('topic', '')
-    method = data.get('method', '')
+    function = data.get('function', '')
 
     if '.fmn.' in topic:
         openid = data['body']['msg']['openid']
@@ -151,22 +151,22 @@ def read(queue_object):
             return
 
     if method:
-        print "Got a method call to %s" % method
-        if method == 'handle':
+        print "Got a function call to %s" % method
+        if function == 'handle':
             backend = backends[data['backend']]
             backend.handle(session,
                            data['recipient'],
                            data['msg'],
                            data['streamline'])
             ch.basic_ack(delivery_tag=method.delivery_tag)
-        elif method == 'handle_batch':
+        elif function == 'handle_batch':
             backend = backends[data['backend']]
             backend.handle_batch(session,
                                  data['recipient'],
                                  data['queued_messages'])
             ch.basic_ack(delivery_tag=method.delivery_tag)
         else:
-            print "Unknown method"
+            print "Unknown function"
         return
 
     recipients, context, raw_msg = \
