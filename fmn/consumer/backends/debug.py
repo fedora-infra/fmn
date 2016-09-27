@@ -41,7 +41,7 @@ class DebugBackend(BaseBackend):
         print 'usernames:   ', usernames
         print 'packages:    ', packages
 
-    def handle_batch(self, session, recipient, queued_messages):
+    def handle_batch(self, session, recipient, messages):
         def _format_line(msg):
             timestamp = datetime.datetime.fromtimestamp(msg['timestamp'])
             link = fedmsg.meta.msg2link(msg, **self.config) or u''
@@ -57,8 +57,8 @@ class DebugBackend(BaseBackend):
         n = len(queued_messages)
         subject = u"Fedora Notifications Digest (%i updates)" % n
         summary = u"Digest summary:\n"
-        for i, msg in enumerate(queued_messages):
-            line = fedmsg.meta.msg2subtitle(msg.message, **self.config) or u''
+        for msg in queued_messages:
+            line = fedmsg.meta.msg2subtitle(msg, **self.config) or u''
             summary += str(i+1) + ".\t" + line + "\n"
 
         separator = "\n\n" + "-"*79 + "\n\n"
@@ -68,19 +68,19 @@ class DebugBackend(BaseBackend):
             content = u''
 
         content += separator.join([
-            _format_line(queued_message.message)
-            for queued_message in queued_messages])
+            _format_line(msg)
+            for msg in queued_messages])
 
-        topics = set([q.message['topic'] for q in queued_messages])
+        topics = set([msg['topic'] for msg in queued_messages])
         categories = set([topic.split('.')[3] for topic in topics])
 
         squash = lambda items: reduce(set.union, items, set())
         usernames = squash([
-            fedmsg.meta.msg2usernames(q.message, **self.config)
-            for q in queued_messages])
+            fedmsg.meta.msg2usernames(msg, **self.config)
+            for msg in queued_messages])
         packages = squash([
-            fedmsg.meta.msg2packages(q.message, **self.config)
-            for q in queued_messages])
+            fedmsg.meta.msg2packages(msg, **self.config)
+            for msg in queued_messages])
 
         print '  -- Batch --'
         print 'recipient:   ', recipient

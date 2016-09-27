@@ -114,7 +114,8 @@ class DigestProducer(FMNProducerBase):
                 backend.handle(session, recipient, msg, streamline=True)
             else:
                 # Otherwise, send it as a batch/digest
-                backend.handle_batch(session, recipient, queued_messages)
+                backend.handle_batch(session, recipient,
+                                     [q.msg for q in queued_messages])
 
         for message in queued_messages:
             message.dequeue(session)

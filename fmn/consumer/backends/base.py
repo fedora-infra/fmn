@@ -18,7 +18,7 @@ class BaseBackend(object):
         pass
 
     @abc.abstractmethod
-    def handle_batch(self, session, queued_messages):
+    def handle_batch(self, session, messages):
         pass
 
     @abc.abstractmethod

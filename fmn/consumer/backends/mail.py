@@ -151,8 +151,8 @@ class EmailBackend(BaseBackend):
         n = len(queued_messages)
         subject = u"Fedora Notifications Digest (%i updates)" % n
         summary = u"Digest summary:\n"
-        for i, msg in enumerate(queued_messages):
-            line = fedmsg.meta.msg2subtitle(msg.message, **self.config) or u''
+        for msg in queued_messages:
+            line = fedmsg.meta.msg2subtitle(msg, **self.config) or u''
             summary += str(i+1) + ".\t" + line + "\n"
 
         separator = "\n\n" + "-"*79 + "\n\n"
@@ -162,19 +162,19 @@ class EmailBackend(BaseBackend):
             content = u''
 
         content += separator.join([
-            _format_line(queued_message.message)
-            for queued_message in queued_messages])
+            _format_line(message)
+            for message in queued_messages])
 
-        topics = set([q.message['topic'] for q in queued_messages])
+        topics = set([message['topic'] for message in queued_messages])
         categories = set([topic.split('.')[3] for topic in topics])
 
         squash = lambda items: reduce(set.union, items, set())
         usernames = squash([
-            fedmsg.meta.msg2usernames(q.message, **self.config)
-            for q in queued_messages])
+            fedmsg.meta.msg2usernames(msg, **self.config)
+            for msg in queued_messages])
         packages = squash([
-            fedmsg.meta.msg2packages(q.message, **self.config)
-            for q in queued_messages])
+            fedmsg.meta.msg2packages(msg, **self.config)
+            for msg in queued_messages])
 
         self.send_mail(session, recipient, subject, content,
                        topics, categories, usernames, packages)
