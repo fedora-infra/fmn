@@ -150,8 +150,8 @@ def read(queue_object):
             ch.basic_ack(delivery_tag=method.delivery_tag)
             return
 
-    if method:
-        print "Got a function call to %s" % method
+    if function:
+        print "Got a function call to %s" % function
         if function == 'handle':
             backend = backends[data['backend']]
             backend.handle(session,
@@ -230,11 +230,6 @@ confirmation_producer = fmn_producers.ConfirmationProducer(
     session, backends)
 lc3 = task.LoopingCall(confirmation_producer.work)
 lc3.start(frequency)
-
-digest_producer = fmn_producers.DigestProducer(
-    session, backends)
-lc4 = task.LoopingCall(digest_producer.work)
-lc4.start(frequency)
 
 
 try:

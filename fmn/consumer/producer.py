@@ -55,7 +55,8 @@ class DigestProducer(FMNProducerBase):
         for pref in fmn.lib.models.Preference.list_batching(self.session):
 
             if not pref.context.name in self.backends:
-                return
+                log.error('Unknown backend in pref: %s' % pref)
+                continue
 
             # 2) Look for queued messages that need sent by time and count
             count = fmn.lib.models.QueuedMessage.count_for(
@@ -115,7 +116,7 @@ class DigestProducer(FMNProducerBase):
             else:
                 # Otherwise, send it as a batch/digest
                 backend.handle_batch(session, recipient,
-                                     [q.msg for q in queued_messages])
+                                     [q.message for q in queued_messages])
 
         for message in queued_messages:
             message.dequeue(session)

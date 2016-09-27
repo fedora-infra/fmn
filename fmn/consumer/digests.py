@@ -87,7 +87,7 @@ class FakeBackend(object):
             'function': 'handle',
             'recipient': recipient,
             'msg': msg,
-            'streamline': steamline})
+            'streamline': streamline})
 
     def handle_batch(self, session, recipient, queued_messages):
         self.inform_workers({
