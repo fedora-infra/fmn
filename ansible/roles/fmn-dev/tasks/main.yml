@@ -1,0 +1,133 @@
+---
+
+- name: Install helpful development packages
+  dnf: name={{ item }} state=present
+  with_items:
+    - git
+    - python-sphinx
+    - python-virtualenvwrapper
+    - vim-enhanced
+
+- name: Check out the FMN git repositories
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  git:
+    repo: https://github.com/fedora-infra/{{ item }}
+    dest: /home/{{ ansible_env.SUDO_USER }}/devel/{{ item }}
+  with_items:
+    - fmn.lib
+    - fmn.rules
+    - fmn.consumer
+    - fmn.web
+    - fmn.sse
+
+- name: Install fmn system dependencies
+  dnf: name={{ item }} state=present
+  with_items:
+    - gcc
+    - libffi-devel
+    - openssl-devel
+    - python2-devel
+    - python3-devel
+    - rabbitmq-server
+    - redhat-rpm-config
+    - redis
+    - swig
+    - zeromq-devel
+
+# Add various helpful configuration files
+- name: Install a custom bashrc
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  copy: src=bashrc dest=/home/{{ ansible_env.SUDO_USER }}/.bashrc
+
+- name: Install the message of the day
+  copy: src=motd dest=/etc/motd
+
+- name: Create fmn virtualenv
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  shell: "source ~/.bashrc && mkvirtualenv python2-fmn"
+  args:
+    creates: /home/{{ ansible_env.SUDO_USER }}/.virtualenvs/python2-fmn
+
+# For some reason, doing ``python setup.py develop`` fails to install
+# Flask, whereas doing it with pip works fine
+- name: Install Python runtime requirements
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  pip:
+    requirements: "{{ item }}/requirements.txt"
+    virtualenv: /home/{{ ansible_env.SUDO_USER }}/.virtualenvs/python2-fmn/
+    virtualenv_python: python2
+  with_items:
+    - "fmn.lib"
+    - "fmn.rules"
+    - "fmn.consumer"
+    - "fmn.web"
+    - "fmn.sse"
+  args:
+    chdir: /home/{{ ansible_env.SUDO_USER }}/devel
+
+- name: Install Python 2 tests requirements
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  pip:
+    requirements: "{{ item }}/tests-requirements.txt"
+    virtualenv: /home/{{ ansible_env.SUDO_USER }}/.virtualenvs/python2-fmn/
+    virtualenv_python: python2
+  with_items:
+    - "fmn.lib"
+    - "fmn.rules"
+    - "fmn.consumer"
+    - "fmn.web"
+    - "fmn.sse"
+  args:
+    chdir: /home/{{ ansible_env.SUDO_USER }}/devel
+
+- name: Install fmn packages
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  shell: "pushd {{ item }} && source ~/.bashrc && workon python2-fmn && python setup.py develop && popd"
+  with_items:
+    - "fmn.lib"
+    - "fmn.rules"
+    - "fmn.consumer"
+    - "fmn.web"
+    - "fmn.sse"
+  args:
+    chdir: /home/{{ ansible_env.SUDO_USER }}/devel
+
+- name: Enable the RabbitMQ management console
+  command: rabbitmq-plugins enable rabbitmq_management
+
+- name: Start and enable redis
+  service: name=redis state=started enabled=yes
+
+- name: Start and enable RabbitMQ
+  service: name=rabbitmq-server state=started enabled=yes
+
+- name: Create user systemd directory
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  file:
+    path: /home/{{ ansible_env.SUDO_USER }}/.config/systemd/user/
+    state: directory
+
+- name: Install a fmn service files
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  copy:
+    src: "{{ item }}"
+    dest: /home/{{ ansible_env.SUDO_USER }}/.config/systemd/user/{{ item }}
+  with_items:
+    - "fedmsg-hub.service"
+    - "fmn-backend.service"
+    - "fmn-digests.service"
+    - "fmn-sse.service"
+    - "fmn-worker.service"
+    - "fmn-web.service"
+
+- name: Install fedmsg config to ~/.fedmsg.d
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  copy:
+    src: fedmsg.d/
+    dest: /home/{{ ansible_env.SUDO_USER }}/.fedmsg.d
+
+- name: Create fmn database
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  shell: "source ~/.bashrc && workon python2-fmn && python ~/devel/fmn.lib/createdb.py --with-dev-data"
+  args:
+    creates: /var/tmp/fmn-dev-db.sqlite

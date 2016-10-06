@@ -1,0 +1,11 @@
+[Unit]
+Description=FMN.web server
+After=network.target
+Documentation=https://github.com/fedora-infra/fmn.web/
+
+[Service]
+ExecStart=/home/vagrant/.virtualenvs/python2-fmn/bin/python %h/devel/fmn.web/fmn/web/main.py
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

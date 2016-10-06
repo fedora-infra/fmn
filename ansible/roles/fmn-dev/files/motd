@@ -1,0 +1,35 @@
+
+Welcome to the FMN development environment!
+
+NOTE: Before you can run the services, you need to put valid FAS
+credentials in ~/.fedmsg.d/fas_credentials.py; failure to do so
+will cause some services to fail to start.
+
+Here are some tips:
+
+* ~/.fedmsg.d/ contains the application configuration; turn on
+  various backends in ~/.fedmsg.d/fmn.py
+
+* The code is located at ~/devel/
+
+* You can type `workon python2-fmn` to enter a configured Python virtualenv
+
+* Run `fstart` to start all the necessary services as systemd
+  user services. All output is logged by journald! You can see
+  all output with `journalctl` or a particular unit's log with
+  `journalctl --user-unit <unit-name>`
+
+* Run `fstop` to halt all the services
+
+* The RabbitMQ management console is enabled and available at
+  http://localhost:15672/ - the username is "guest" and the password
+  is "guest"
+
+* By default, only the SSE backend is enabled. To enable other backends,
+  turn them on in ~/.fedmsg/fmn.py
+
+Once you run `fstart` you can navigate to http://localhost:5000/
+in your browser to view the FMN web interface.
+
+Happy hacking!
+

@@ -1,0 +1,11 @@
+[Unit]
+Description=FMN.consumer backend
+After=network.target
+Documentation=https://github.com/fedora-infra/fmn.consumer/
+
+[Service]
+ExecStart=/home/vagrant/.virtualenvs/python2-fmn/bin/python %h/devel/fmn.consumer/fmn/consumer/backend.py
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
