@@ -1,0 +1,16 @@
+arrow
+bunch
+datanommer.models
+docutils
+Flask
+flask-openid>=1.2.4
+fmn.lib
+markupsafe
+pydns
+pylibravatar
+python-openid
+python-openid-cla
+python-openid-teams
+SQLAlchemy>=0.8
+urllib3
+wtforms
