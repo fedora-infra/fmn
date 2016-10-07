@@ -24,8 +24,8 @@ def get_requirements(filename='requirements.txt'):
     """
     Get the contents of a file listing the requirements.
 
-    :param requirements_file: path to a requirements file
-    :type  requirements_file: str
+    :param filename: path to a requirements file
+    :type  filename: str
 
     :returns: the list of requirements
     :return type: list
