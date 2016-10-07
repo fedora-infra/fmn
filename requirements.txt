@@ -1,0 +1,7 @@
+dogpile.cache
+fedmsg
+fedmsg_meta_fedora_infrastructure
+fmn.lib
+python-fedora
+requests
+six

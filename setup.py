@@ -19,17 +19,24 @@ def get_description():
     with open('README.rst', 'r') as f:
         return ''.join(f.readlines()[2:])
 
-requires = [
-    'python-fedora',
-    'fedmsg',
-    'fedmsg_meta_fedora_infrastructure',
-    'dogpile.cache',
-    'six',
-]
 
-tests_require = [
-    'nose',
-]
+def get_requirements(filename='requirements.txt'):
+    """
+    Get the contents of a file listing the requirements.
+
+    :param requirements_file: path to a requirements file
+    :type  requirements_file: str
+
+    :returns: the list of requirements
+    :return type: list
+    """
+    with open(filename) as f:
+        return [
+            line.rstrip().split('#')[0]
+            for line in f.readlines()
+            if not line.startswith('#')
+        ]
+
 
 setup(
     name='fmn.rules',
@@ -41,8 +48,8 @@ setup(
     url="https://github.com/fedora-infra/fmn.rules",
     download_url="https://pypi.python.org/pypi/fmn.rules/",
     license='LGPLv2+',
-    install_requires=requires,
-    tests_require=tests_require,
+    install_requires=get_requirements('requirements.txt'),
+    tests_require=get_requirements('tests-requirements.txt'),
     test_suite='nose.collector',
     packages=['fmn', 'fmn.rules'],
     namespace_packages=['fmn'],
