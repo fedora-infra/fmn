@@ -9,6 +9,24 @@ def get_description():
         return ''.join(f.readlines()[2:])
 
 
+def get_requirements(filename='requirements.txt'):
+    """
+    Get the contents of a file listing the requirements.
+
+    :param filename: path to a requirements file
+    :type  filename: str
+
+    :returns: the list of requirements
+    :return type: list
+    """
+    with open(filename) as f:
+        return [
+            line.rstrip().split('#')[0]
+            for line in f.readlines()
+            if not line.startswith('#')
+        ]
+
+
 class PyTest(TestCommand):
     user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
 
@@ -17,21 +35,11 @@ class PyTest(TestCommand):
         self.pytest_args = []
 
     def run_tests(self):
-        #import here, cause outside the eggs aren't loaded
+        # import here, cause outside the eggs aren't loaded
         import pytest
         errno = pytest.main(self.pytest_args)
         sys.exit(errno)
 
-requires = [
-    'fedmsg',
-    'pika',
-    'twisted',
-]
-
-tests_require = [
-    'mock',
-    'pytest',
-]
 
 setup(
     name='fmn.sse',
@@ -43,8 +51,8 @@ setup(
     url="https://github.com/fedora-infra/fmn.sse/",
     # download_url="https://pypi.python.org/pypi/fmn.sse/",# not yet configured
     license='GPL',
-    install_requires=requires,
-    tests_require=tests_require,
+    install_requires=get_requirements('requirements.txt'),
+    tests_require=get_requirements('tests-requirements.txt'),
     packages=['fmn', 'fmn.sse'],
     namespace_packages=[],
     include_package_data=True,
