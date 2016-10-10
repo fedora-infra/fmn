@@ -19,23 +19,28 @@ def get_description():
     with open('README.rst', 'r') as f:
         return ''.join(f.readlines()[2:])
 
-requires = [
-    'SQLAlchemy>=0.8',
-    'beautifulsoup4',
-    'fmn.rules',
-    'docutils',
-    'markupsafe',
-    'six',
-]
 
+def get_requirements(filename='requirements.txt'):
+    """
+    Get the contents of a file listing the requirements.
+
+    :param filename: path to a requirements file
+    :type  filename: str
+
+    :returns: the list of requirements
+    :return type: list
+    """
+    with open(filename) as f:
+        return [
+            line.rstrip().split('#')[0]
+            for line in f.readlines()
+            if not line.startswith('#')
+        ]
+
+requires = get_requirements()
 if sys.version_info[0] == 2 and sys.version_info[1] <= 6:
-    requires.extend([
-        "ordereddict",
-    ])
+    requires.append("ordereddict")
 
-tests_require = [
-    'nose',
-]
 
 setup(
     name='fmn.lib',
@@ -48,7 +53,7 @@ setup(
     download_url="https://pypi.python.org/pypi/fmn.lib/",
     license='LGPLv2+',
     install_requires=requires,
-    tests_require=tests_require,
+    tests_require=get_requirements('tests-requirements.txt'),
     test_suite='nose.collector',
     packages=['fmn', 'fmn.lib'],
     namespace_packages=['fmn'],

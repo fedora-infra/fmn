@@ -4,9 +4,9 @@ python:
  - "3.3"
 
 install:
- - pip install nose mock sqlalchemy unittest2 fmn.rules
+ - pip install --upgrade setuptools
  - python setup.py develop
-script: nosetests -v
+script: python setup.py test
 notifications:
     email: false
     irc: false
