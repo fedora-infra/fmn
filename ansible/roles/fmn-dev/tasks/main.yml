@@ -13,6 +13,7 @@
   git:
     repo: https://github.com/fedora-infra/{{ item }}
     dest: /home/{{ ansible_env.SUDO_USER }}/devel/{{ item }}
+    update: no
   with_items:
     - fmn.lib
     - fmn.rules
