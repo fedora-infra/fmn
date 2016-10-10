@@ -38,6 +38,28 @@ components can be found here:
 - `fmn.lib <https://github.com/fedora-infra/fmn.lib>`_
 - `fmn.consumer <https://github.com/fedora-infra/fmn.consumer>`_
 - `fmn.web <https://github.com/fedora-infra/fmn.web>`_
+- `fmn.sse <https://github.com/fedora-infra/fmn.sse>`_
+
+
+Vagrant
+^^^^^^^
+
+A Vagrantfile is provided as ``Vagrantfile.example``. You can get started by
+installing Vagrant and starting your own ``Vagrantfile`` from the example::
+
+    $ sudo dnf install ansible vagrant-libvirt vagrant-sshfs
+    $ cp Vagrantfile.example Vagrantfile
+    $ vagrant up
+
+There are several configurations in the Vagrantfile you may want to alter.
+documentation can be found inline. Note that performing ``vagrant up`` will
+check out ``fmn.rules``, ``fmn.lib``, ``fmn.consumer``, ``fmn.web``, and
+``fmn.sse`` out in the root of the ``fmn`` repository if you haven't already
+done so.
+
+
+Manual
+^^^^^^
 
 If you want to set up fmn for development, you could try something like this:
 

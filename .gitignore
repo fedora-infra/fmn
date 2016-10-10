@@ -1,2 +1,10 @@
 *.pyc
 *.egg*
+
+# Ignore the repos checked out within this repo
+fmn.*
+
+.dnf-cache/
+.vagrant/
+Vagrantfile
+*.retry
