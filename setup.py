@@ -19,19 +19,24 @@ def get_description():
     with open('README.rst', 'r') as f:
         return ''.join(f.readlines()[2:])
 
-requires = [
-    'fmn.lib',
-    'fedmsg',
-    'requests',
-    'arrow',
-    'bleach',
-    'pika',
-    'redis',
-]
 
-tests_require = [
-    'nose',
-]
+def get_requirements(filename='requirements.txt'):
+    """
+    Get the contents of a file listing the requirements.
+
+    :param filename: path to a requirements file
+    :type  filename: str
+
+    :returns: the list of requirements
+    :return type: list
+    """
+    with open(filename) as f:
+        return [
+            line.rstrip().split('#')[0]
+            for line in f.readlines()
+            if not line.startswith('#')
+        ]
+
 
 setup(
     name='fmn.consumer',
@@ -43,8 +48,8 @@ setup(
     url="https://github.com/fedora-infra/fmn.consumer/",
     download_url="https://pypi.python.org/pypi/fmn.consumer/",
     license='LGPLv2+',
-    install_requires=requires,
-    tests_require=tests_require,
+    install_requires=get_requirements(),
+    tests_require=get_requirements('tests-requirements.txt'),
     test_suite='nose.collector',
     packages=['fmn', 'fmn.consumer', 'fmn.consumer.backends'],
     namespace_packages=['fmn'],
