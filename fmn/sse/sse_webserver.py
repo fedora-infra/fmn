@@ -29,16 +29,16 @@ class SSEServer(resource.Resource):
     subscribers = SSESubscriber(log=logger)
 
     def render_GET(self, request):
-        request = self.add_headers(request)
-        request.write(b"")
         if self.is_valid_path(request.postpath):
+            request = self.add_headers(request)
             self.handle_request(request)
             request.notifyFinish().addBoth(self.responseFailed,
                                            request, request.postpath)
             return server.NOT_DONE_YET
         else:
+            request.setResponseCode(404)
             return self.invalid_request(request=request,
-                                        code=403,
+                                        code=404,
                                         reason='Invalid Path')
 
     def add_headers(self, request):

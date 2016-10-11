@@ -56,12 +56,17 @@ class SSEWebServerTest(unittest.TestCase):
                 ['bob.id.fedoraproject.org']), 2)
 
         # req1 started the looping call so it gets an extra message
-        self.assertEqual(request1.written, [b'',
-                                            b"data: unittest\r\n\r\n",
+        self.assertEqual(request1.written, [b"data: unittest\r\n\r\n",
                                             ])
         # req2 is waiting for the next cycle for it to be sent a message so its
         # empty
-        self.assertEqual(request2.written, [b''])
+        self.assertEqual(request2.written, [])
+
+    def test_render_invalid_path(self):
+        pp = [b'turtle', b'turtle', b'turtle', b'turtle']
+        req = DummyRequest(postpath=pp)
+        self.sse.render_GET(request=req)
+        self.assertEqual(req.responseCode, 404)
 
 if __name__ == '__main__':
     SUITE = unittest.TestLoader().loadTestsFromTestCase(
