@@ -56,6 +56,14 @@ class SSESubscriber:
                 self.push_sse(sse_msg, req)
 
     def get_feedqueue(self, key):
+        """
+        Return a feed queue based on the given key, which is in the format
+        (exchange, queue_name).
+
+        If the feed queue already exists, it is retrieved from the dictionary
+        that caches feed queues, otherwise it created and added to the
+        dictionary.
+        """
         exchange = key[0]
         queue_name = key[1]
 
@@ -70,6 +78,10 @@ class SSESubscriber:
             return fq
 
     def remove_feedqueue(self, key):
+        """
+        Remove a feedquee from the ``self.feedqueue`` dictionary and perform
+        cleanup.
+        """
         fq = self.feedqueue.pop(key[1])
         fq.channel.close()
         fq.connection.close()

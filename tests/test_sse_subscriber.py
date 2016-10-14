@@ -17,23 +17,6 @@ class MockLoopingCall(object):
         self.running = False
 
 
-class MockChanCon(object):
-    def __init__(self):
-        pass
-
-    def close(self):
-        pass
-
-
-class MockFeedQueue(object):
-    def __init__(self):
-        self.channel = MockChanCon()
-        self.connection = MockChanCon()
-
-    def receive_one_message(self):
-        return 'one message'
-
-
 class SSESubscriberTest(unittest.TestCase):
     def setUp(self):
         self.sse_sub = SSESubscriber()
@@ -112,7 +95,7 @@ class SSESubscriberTest(unittest.TestCase):
         # add the looping call and two connections
         lc_mock = MockLoopingCall(running=True)
         self.sse_sub.looping_calls['user'] = {'bob': lc_mock}
-        self.sse_sub.feedqueue['bob'] = MockFeedQueue()
+        self.sse_sub.feedqueue['bob'] = Mock()
 
         request = DummyRequest(postpath=['user', 'bob'])
         self.sse_sub.add_connection(request, request.postpath)
@@ -159,7 +142,8 @@ class SSESubscriberTest(unittest.TestCase):
         ])
 
     def test_get_fq_existing(self):
-        mock_fq = MockFeedQueue()
+        mock_fq = Mock()
+        mock_fq.receive_one_message.return_value = 'one message'
         self.sse_sub.feedqueue['bob'] = mock_fq
         self.assertEqual(self.sse_sub.get_feedqueue(['user', 'bob']), mock_fq)
 
