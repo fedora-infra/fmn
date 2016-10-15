@@ -2,9 +2,11 @@ import json
 import logging
 
 import fedmsg
-from fmn.sse.subscriber import SSESubscriber
-from twisted.internet import reactor, task
+import six
+from twisted.internet import reactor
 from twisted.web import server, resource
+
+from fmn.sse.subscriber import SSESubscriber
 
 
 log = logging.getLogger("fmn")
@@ -36,10 +38,8 @@ class SSEServer(resource.Resource):
                                            request, request.postpath)
             return server.NOT_DONE_YET
         else:
-            request.setResponseCode(404)
-            return self.invalid_request(request=request,
-                                        code=404,
-                                        reason='Invalid Path')
+            response = JsonNotFound()
+            return response.render(request)
 
     def add_headers(self, request):
         request.setHeader('Content-Type', 'text/event-stream; charset=utf-8')
@@ -77,9 +77,49 @@ class SSEServer(resource.Resource):
         p = request.postpath
         self.subscribers.add_connection(con=request, key=p)
 
-    def invalid_request(self, request, code=404, reason="Invalid Request"):
-        request.setResponseCode(code, str.encode(reason))
-        return json.dumps({"error": str(code) + ": " + reason})
+
+class JsonNotFound(resource.ErrorPage):
+    """
+    An HTTP 404 resource that optionally returns a JSON body with error details.
+    """
+
+    def __init__(self, status=404, brief=u'Not Found', detail=None):
+        """
+        Initialize the resource.
+
+        If `detail` is a dictionary it will be JSON-serialized and returned
+        as the response body.
+        """
+        # The parent class saves these values as self.code, self.brief,
+        # and self.detail.
+        resource.ErrorPage.__init__(self, status, brief, detail)
+
+    def render(self, request):
+        """
+        Render a response for the request and return the UTF-8-encoded body.
+        """
+        request.setResponseCode(self.code, self.brief.encode('utf-8'))
+
+        if self.detail and isinstance(self.detail, dict):
+            request.setHeader(
+                u'content-type'.encode('utf-8'),
+                u'application/json; charset=utf-8'.encode('utf-8')
+            )
+            body = json.dumps(self.detail)
+        else:
+            request.setHeader(
+                u'content-type'.encode('utf-8'),
+                u'text/html; charset=utf-8'.encode('utf-8')
+            )
+            body = self.template % {
+                u'code': self.code,
+                u'brief': self.brief,
+                u'detail': self.detail or u'Resource not found',
+            }
+
+        if isinstance(body, six.text_type):
+            body = body.encode('utf-8')
+        return body
 
 
 if __name__ == "__main__":

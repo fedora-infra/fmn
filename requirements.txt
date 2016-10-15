@@ -1,3 +1,4 @@
 fedmsg
 pika
+six
 twisted
