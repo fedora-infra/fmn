@@ -53,8 +53,6 @@ class SSEServer(resource.Resource):
         :param request:  which connection disconnected or failed
         :return: remove the connection from the data structure
         '''
-        logger.error('Connection was disconnected from ' + str(request) +
-                     'removing from active connections')
         self.subscribers.remove_connection(request, key=key)
 
     def is_valid_path(self, path):
