@@ -5,9 +5,9 @@ import logging
 
 import fedmsg
 import six
-from pika import ConnectionParameters
+from pika import ConnectionParameters, exceptions as pika_exceptions
 from pika.adapters import twisted_connection
-from twisted.internet import reactor, defer, protocol
+from twisted.internet import reactor, defer, protocol, error
 from twisted.web import server, resource
 
 
@@ -15,34 +15,49 @@ _log = logging.getLogger(__name__)
 app_config = fedmsg.config.load_config()
 
 
+# Create a few namedtuples to make the various tuples used throughout
+# this module slightly clearer.
 RabbitQueue = namedtuple(u'RabbitQueue', [u'queue', u'consumer_tag'])
+SubscriptionEntry = namedtuple(u'SubscriptionEntry', [u'queue', u'requests'])
+RequestKey = namedtuple(u'RequestKey', [u'exchange', u'queue'])
 
 
-class TwistedRabbitConsumer(object):
+class SSEServer(resource.Resource):
     """
-    Sets up a connection to a RabbitMQ server using pika and Twisted.
+    A Twisted Server-Sent Event server that consumes its messages from RabbitMQ.
+
+    There is only one endpoint for this server. Clients can request resources
+    in the format ``/<RabbitMQ exchange>/<RabbitMQ queue>/``. An HTTP response
+    with the SSE headers announcing it is an event stream are immediately
+    returned. As messages are pushed to the RabbitMQ consumer, they are in turn
+    pushed to all HTTP clients.
+
+    The response is never closed from the server's side. It continues to push
+    events until the client disconnects.
     """
+    isLeaf = True
 
-    def __init__(self, parameters):
-        """
-        Create and configure a connection to RabbitMQ using pika's
-        TwistedProtocolConnection.
-
-        :param parameters:  The pika connection parameters to use
-        :type  parameters:  pika.ConnectionParameters or pika.URLParameters
-        """
-        # TODO handle all pika parameters, namely SSL/TLS related settings.
-        self.parameters = parameters
-        self.channel = None
+    def __init__(self, *args, **kwargs):
+        resource.Resource.__init__(self, *args, **kwargs)
+        self.expire_ms = int(app_config.get('fmn.sse.pika.msg_expiration', 3600000))
+        self.amqp_host = app_config.get('fmn.sse.pika.host', 'localhost')
+        self.amqp_port = int(app_config.get('fmn.sse.pika.port', 5672))
+        self.amqp_parameters = ConnectionParameters(self.amqp_host, self.amqp_port)
         cc = protocol.ClientCreator(
             reactor,
             twisted_connection.TwistedProtocolConnection,
-            parameters,
+            self.amqp_parameters,
         )
-        self._deferred_connection = cc.connectTCP(parameters.host, parameters.port)
+        self._deferred_connection = cc.connectTCP(self.amqp_host, self.amqp_port)
         self._deferred_connection.addCallback(lambda conn: conn.ready)
         self.connection = None
-        self.expire_ms = int(app_config.get('fmn.sse.pika.msg_expiration', 3600000))
+        self.channel = None
+
+        # Maps queues to open requests. The datastructure is in the format
+        # {
+        #   RequestKey: {'queue': RabbitQueue, 'requests': []},
+        # }
+        self.subscribers = {}
 
     @defer.inlineCallbacks
     def queue(self, exchange=None, queue=None, routing_key=None,
@@ -75,6 +90,7 @@ class TwistedRabbitConsumer(object):
                  messages from and a consumer tag.
         :rtype: Deferred of (pika.ClosableDeferredQueue, unicode str)
         """
+        # TODO Handle errors appropriately
         if not self.connection:
             self.connection = yield self._deferred_connection
         if not self.channel:
@@ -109,33 +125,10 @@ class TwistedRabbitConsumer(object):
         queue = RabbitQueue(queue=deferred_queue, consumer_tag=consumer_tag)
         defer.returnValue(queue)
 
-
-class SSEServer(resource.Resource):
-    """
-    A Twisted Server-Sent Event server that consumes its messages from RabbitMQ.
-
-    There is only one endpoint for this server. Clients can request resources
-    in the format ``/<RabbitMQ exchange>/<RabbitMQ queue>/``. An HTTP response
-    with the SSE headers announcing it is an event stream are immediately
-    returned. As messages are pushed to the RabbitMQ consumer, they are in turn
-    pushed to all HTTP clients.
-
-    The response is never closed from the server's side. It continues to push
-    events until the client disconnects.
-    """
-    isLeaf = True
-
-    def __init__(self, *args, **kwargs):
-        resource.Resource.__init__(self, *args, **kwargs)
-        self.amqp_host = app_config.get('fmn.sse.pika.host', 'localhost')
-        self.amqp_port = int(app_config.get('fmn.sse.pika.port', 5672))
-        self.rabbit_consumer = TwistedRabbitConsumer(
-            ConnectionParameters(self.amqp_host, self.amqp_port))
-        # Maps queues to open requests
-        self.subscribers = {}
-
     def render_GET(self, request):
         """
+        Handle GET requests to this endpoint. Requests should be to
+        ``/<exchange>/<queue.name>/``.
         """
         # If the request ended in a trailing / the final path section is ''.
         # This allows the trailing / on /<exchange>/<queue>/ to be optional.
@@ -145,6 +138,9 @@ class SSEServer(resource.Resource):
             response = JsonNotFound()
             return response.render(request)
 
+        # TODO add checks here for a set of whitelisted exchanges and queues
+        # or anyone can connect and drain, for example, the worker queue.
+
         # TODO set access control origin
         request.setHeader(u'Content-Type', u'text/event-stream; charset=utf-8')
         request.setHeader(u'Access-Control-Allow-Origin', u'*')
@@ -152,24 +148,32 @@ class SSEServer(resource.Resource):
         # The queue the request subscribes to may be empty, and it may not have
         # anything in it for a long time. Calling ``request.write`` here
         # ensures the response headers are written to the client immediately.
+        # TODO can't do this here, we need to check if Rabbit is alive and the
+        # queue exists. If it doesn't we should 503/404 etc.
         request.write(b'')
 
-        exchange, queue = request.postpath
-        queue_key = exchange + queue
-        request.notifyFinish().addBoth(self.request_closed, request, queue_key)
+        request_key = RequestKey(exchange=request.postpath[0], queue=request.postpath[1])
+        request.notifyFinish().addBoth(self.request_closed, request, request_key)
 
-        if queue_key not in self.subscribers:
-            self.request_queue(exchange, queue)
-
-        self.subscribers.setdefault(queue_key, []).append(request)
+        if request_key not in self.subscribers:
+            # This is the first request for a particular queue
+            subscription = {'queue': None, 'requests': [request]}
+            self.subscribers[request_key] = subscription
+            self.new_subscription(request_key)
+        else:
+            self.subscribers[request_key]['requests'].append(request)
         return server.NOT_DONE_YET
 
-    def request_queue(self, exchange, queue):
-        deferred_queue = self.rabbit_consumer.queue(exchange, queue)
+    def new_subscription(self, request_key):
+        """
+        Subscribe to a RabbitMQ queue.
 
-        # TODO add subscription key or something
-        queue_key = exchange + queue
+        An entry will be made in the ``self.subscribers`` dictionary using the
+        ``request_key`` provided as the dictionary key.
 
+        :param request_key: A namedtuple containing the exchange and queue.
+        :type  request_key: RequestKey
+        """
         @defer.inlineCallbacks
         def write_requests(rabbit_queue):
             """
@@ -177,20 +181,43 @@ class SSEServer(resource.Resource):
             ``queue`` method. This is called once the queue is create and is
             responsible for writing new messages to requests.
 
+            :param rabbit_queue: A namedtuple containing the queue and consumer tag.
+            :type  rabbit_queue: RabbitQueue
             """
+            subscription = self.subscribers[request_key]
+            subscription['queue'] = rabbit_queue
+
             while True:
                 channel, method, properties, body = yield rabbit_queue.queue.get()
-                if body:
-                    if queue_key in self.subscribers:
-                        for request in self.subscribers[queue_key]:
-                            msg = u'data: ' + body.decode('utf-8') + u'\r\n\r\n'
-                            request.write(msg.encode('utf-8'))
+                for request in subscription['requests']:
+                    msg = u'data: ' + body.decode('utf-8') + u'\r\n\r\n'
+                    request.write(msg.encode('utf-8'))
                 yield channel.basic_ack(delivery_tag=method.delivery_tag)
 
+        deferred_queue = self.queue(request_key.exchange, request_key.queue)
         deferred_queue.addCallback(write_requests)
+        deferred_queue.addErrback(self.queue_error_handler, request_key)
         return deferred_queue
 
-    def request_closed(self, err, request, queue_key):
+    def queue_error_handler(self, err, request_key):
+        """
+        Handle possible errors that occur in ``self.queue``
+        """
+        _log.info(str(err))
+        if isinstance(err.value, error.ConnectionRefusedError):
+            # RabbitMQ is down or refusing connections for some other reason;
+            # Perform cleanup.
+            for request in self.subscribers[request_key]['requests']:
+                # TODO finish with 503
+                request.finish()
+        elif isinstance(err.value, pika_exceptions.ChannelClosed):
+            # Return the reason the channel was closed, try to restart the channel
+            for request in self.subscribers[request_key]['requests']:
+                request.finish()
+        else:
+            _log.warning('Unhandled error: ' + str(err))
+
+    def request_closed(self, err, request, request_key):
         """
         Remove a request from the map of queues to open requests.
 
@@ -198,13 +225,20 @@ class SSEServer(resource.Resource):
         It can be added to a request by using ``request.notifyFinish``.
 
         :param err:       unused
-        :param queue_key: The queue the request is attached to in
+        :param request_key: The queue the request is attached to in
                           self.subscribers
         :param request: The request to remove from self.subscribers
         """
-        _log.debug('Removing ' + str(request) + ' from ' + str(queue_key))
+        _log.debug('Removing ' + str(request) + ' from ' + str(request_key))
         try:
-            self.subscribers[queue_key].remove(request)
+            subscriber = self.subscribers[request_key]
+            subscriber['requests'].remove(request)
+            if not self.subscribers[request_key]['requests']:
+                # The last request for this queue is finished so clean
+                # up everything else.
+                if subscriber['queue']:
+                    subscriber['queue'].queue.close()
+                self.subscribers.pop(request_key)
         except (ValueError, KeyError):
             pass
 
@@ -228,6 +262,12 @@ class JsonNotFound(resource.ErrorPage):
     def render(self, request):
         """
         Render a response for the request and return the UTF-8-encoded body.
+
+        :param request: The request to reponse to.
+        :type  request: twisted.web.http.Request
+
+        :return: The body of the HTTP response to the request
+        :rtype:  bytes
         """
         request.setResponseCode(self.code, self.brief.encode('utf-8'))
 
@@ -254,6 +294,7 @@ class JsonNotFound(resource.ErrorPage):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
     site = server.Site(SSEServer())
     port = int(app_config.get('fmn.sse.webserver.tcp_port', 8080))
     reactor.listenTCP(port, site)
