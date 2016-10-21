@@ -237,7 +237,8 @@ class SSEServer(resource.Resource):
                 # The last request for this queue is finished so clean
                 # up everything else.
                 if subscriber['queue']:
-                    subscriber['queue'].queue.close()
+                    msg = 'Queue closed because there are no more open requests'
+                    subscriber['queue'].queue.close(msg)
                 self.subscribers.pop(request_key)
         except (ValueError, KeyError):
             pass
