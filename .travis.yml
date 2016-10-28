@@ -1,0 +1,18 @@
+language: python
+python:
+ - "2.7"
+ - "3.3"
+ - "3.4"
+ - "3.5"
+install:
+ - sudo apt-get install swig -y
+ - pip install --upgrade setuptools
+ - pip install -r requirements.txt
+ - pip install -r tests-requirements.txt
+ - python setup.py develop
+script: python setup.py test
+notifications:
+    email: false
+    irc: false
+    on_success: change
+    on_failure: change

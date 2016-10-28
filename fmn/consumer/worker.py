@@ -8,6 +8,7 @@ import random
 
 from dogpile.cache import make_region
 from fedmsg_meta_fedora_infrastructure import fasshim
+
 import fmn.lib
 import fmn.rules.utils
 import fedmsg
@@ -90,6 +91,28 @@ connection = pika.BlockingConnection(OPTS)
 
 
 def inform_workers(raw_msg, context, recipients):
+    """
+    Publish a message to the backends exchange for workers to consume
+
+    :param raw_msg: The original fedmsg that triggered this event.
+    :type  raw_msg: dict
+    :param context: The type of backend to use (e.g. 'irc' or 'sse')
+    :type  context: str
+    :param recipients: A list of recipients. The recipient is a dictionary
+                       in the format:
+                       {
+                         "triggered_by_links": true,
+                         "None": "sse-jcline.id.fedoraproject.org",
+                         "markup_messages": false,
+                         "user": "jcline.id.fedoraproject.org",
+                         "filter_name": "hose",
+                         "filter_oneshot": false,
+                         "filter_id": 7,
+                         "shorten_links": false,
+                         "verbose": true,
+                       }
+    :type  recipients: list of dict
+    """
     queue = 'backends'
     chan = connection.channel()
     chan.exchange_declare(exchange=queue)

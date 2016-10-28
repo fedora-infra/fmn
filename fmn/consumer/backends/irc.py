@@ -3,7 +3,6 @@ from fmn.consumer.backends.base import BaseBackend, shorten
 import fedmsg.meta
 
 import arrow
-import requests
 import time
 
 import twisted.internet.protocol

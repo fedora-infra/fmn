@@ -1,8 +1,12 @@
 import abc
 import logging
+
 import requests
+
 import fmn.lib.models
-log = logging.getLogger("fedmsg")
+
+
+log = logging.getLogger(__name__)
 
 
 def shorten(link):
@@ -27,10 +31,32 @@ class BaseBackend(object):
     # Some methods that must be implemented by backends.
     @abc.abstractmethod
     def handle(self, session, recipient, msg, streamline=False):
+        """
+        Handle sending a single message to one recipient.
+
+        :param session:     The SQLAlchemy database session to use.
+        :type  session:     sqlalchemy.orm.session.Session
+        :param recipient:   The recipient of the message and their settings.
+        :type recipient:    dict
+        :param msg:         The message to send to the user.
+        :type  msg:         dict
+        :param streamline:  ?
+        :param streamline:  boolean
+        """
         pass
 
     @abc.abstractmethod
     def handle_batch(self, session, messages):
+        """
+        Handle sending a set of one or more messages to one recipient.
+
+        :param session:     The SQLAlchemy database session to use.
+        :type  session:     sqlalchemy.orm.session.Session
+        :param recipient:   The recipient of the messages and their settings.
+        :type recipient:    dict
+        :param msg:         The messages to send to the user.
+        :type  msg:         dict
+        """
         pass
 
     @abc.abstractmethod

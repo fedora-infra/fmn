@@ -1,178 +1,242 @@
+from __future__ import absolute_import, unicode_literals
+
+from gettext import gettext as _
 import json
 import logging
 import uuid
 import datetime
+
 import pika
 import pytz
 import six
-from fmn.consumer.backends.base import BaseBackend, shorten
 import fedmsg.meta
+from pika.adapters import twisted_connection
+from twisted.internet import reactor, protocol, defer
+
+from fmn.consumer.backends.base import BaseBackend, shorten
 
 
-def _format_message(msg, recipient, config):
-    """
-    Here we have to distinguish between two different kinds of messages that
-    might arrive: the `raw` message from fedmsg itself and the product of a
-    call to `fedmsg.meta.conglomerate(..)`
-
-    example output from sse.py is below
-
-      {
-        "dom_id": "d38b2b6c-a3c9-4772-b6aa-0a70a6bee517",
-        "date_time": "2008-09-03T20:56:35.450686Z",
-        "icon": "https://apps.fedoraproject.org/packages/images/icons/package_128x128.png",
-        "link": "https://pagure.io/<repo>/issue/148703615",
-        "markup": "<a href="pagure.io/atelic">@atelic</a> opened a new ticket #148703615: \"Things are broken wat do\"",
-        "secondary_icon": null,
-      }
-    """
-
-    dom_id = six.text_type(uuid.uuid4())
-    date_time = ''
-    icon = ''
-    link = ''
-    markup = ''
-    secondary_icon = ''
-    username = ''
-    subtitle = ''
-    if not 'subtitle' in msg:
-        # This handles normal, 'raw' messages which get passed through msg2*.
-        # Tack a human-readable delta on the end so users know that fmn is
-        # backlogged (if it is).
-        if msg['timestamp']:
-            date_time = msg['timestamp']
-            date_time = datetime.datetime.fromtimestamp(date_time)
-            date_time = date_time.replace(tzinfo=pytz.utc).isoformat()
-        else:
-            date_time = datetime.datetime.utcnow().replace(tzinfo=pytz.utc).isoformat()
-
-        icon = fedmsg.meta.msg2icon(msg, **config)
-        link = fedmsg.meta.msg2link(msg, **config)
-        secondary_icon = fedmsg.meta.msg2secondary_icon(msg, **config)
-        username = fedmsg.meta.msg2agent(msg, **config)
-        title = fedmsg.meta.msg2title(msg, **config)
-        subtitle = fedmsg.meta.msg2subtitle(msg, **config)
-
-    else:
-        # This handles messages that have already been 'conglomerated'.
-        title = u""
-        subtitle = msg['subtitle']
-        link = msg['link']
-
-    if recipient['shorten_links']:
-        link = shorten(link)
-    event_link = ''
-    if title and link:
-        event_link = '<a href="' + link + '">' + title + '</a>'
-    user_link = ''
-    if username:
-        user_link = '<a href="/'+username.encode('utf-8').replace("@", "")+'">'+username.encode('utf-8')+'</a>'
-
-    markup = ''
-    if user_link:
-        markup += user_link.encode('utf-8')
-    if event_link:
-        markup += ' ' + event_link.encode('utf-8')
-    if subtitle:
-        markup += ' ' + subtitle.encode('utf-8')
-
-    output = {"dom_id": str(dom_id),
-              "date_time": str(date_time),
-              "icon": str(icon),
-              "link": str(link),
-              "markup": str(markup),
-              "secondary_icon": str(secondary_icon)
-              }
-
-    return json.dumps(output)
+_log = logging.getLogger(__name__)
 
 
 class SSEBackend(BaseBackend):
+    """
+    This backend is responsible for the creation of RabbitMQ exchanges and
+    queues and the re-publication of messages for consumption by the Server-
+    Sent Events server.
+
+    Messages are pulled off the "backend" queue and passed to this class, which
+    formats them appropriately and pushes them back onto the appropriate
+    exchange.
+    """
     __context_name__ = "sse"
 
-    def __init__(self, *args, **kwargs):
-        super(SSEBackend, self).__init__(*args, **kwargs)
+    def __init__(self, config):
+        super(SSEBackend, self).__init__(config)
 
-    def send_msg(self, msg="hello world", username="user.id.fedoraproject.org"):
-        username = username.encode('utf-8')
-        self.log.debug("SSE: \t Sending msg to pika to queue " + username)
-        CONFIG = fedmsg.config.load_config()
-        host = CONFIG.get('fmn.pika.host', 'localhost')
-        exchange = 'user'
-        queue_name = username
-        expire_ms = int(CONFIG.get('fmn.pika.msg_expiration', 3600))
-        port = int(CONFIG.get('fmn.pika.port', 5672))
+        self.expire_ms = int(self.config.get('fmn.pika.msg_expiration', 3600000))
+        self.amqp_host = self.config.get('fmn.pika.host', 'localhost')
+        self.amqp_port = int(self.config.get('fmn.pika.port', 5672))
+        self.amqp_parameters = pika.ConnectionParameters(self.amqp_host, self.amqp_port)
+        cc = protocol.ClientCreator(
+            reactor,
+            twisted_connection.TwistedProtocolConnection,
+            self.amqp_parameters,
+        )
+        self._deferred_connection = cc.connectTCP(self.amqp_host, self.amqp_port)
+        self._deferred_connection.addCallback(lambda conn: conn.ready)
+        self.connection = None
+        self.channel = None
 
-        fq = FeedQueue(host=host, exchange=exchange, expire_ms=expire_ms,
-                       queue_name=queue_name, port=port, log=self.log)
-
-        fq.push_message(msg)
-
+    @defer.inlineCallbacks
     def handle(self, session, recipient, msg, streamline=False):
-        self.log.debug("SSE: \t handle")
-        short_message = _format_message(msg=msg, recipient=recipient, config=self.config)
+        """
+        Handle sending a single message to one recipient.
+
+        :param session:     The SQLAlchemy database session to use.
+        :type  session:     sqlalchemy.orm.session.Session
+        :param recipient:   The recipient of the message and their settings.
+                            This controls what RabbitMQ queue the message ends
+                            up in.
+        :type recipient:    dict
+        :param msg:         The message to send to the user.
+        :type  msg:         dict
+        :param streamline:  unused
+        :param streamline:  boolean
+        """
+        short_message = self._format_message(msg, recipient)
         user = recipient['user']
-        self.send_msg(short_message, user)
+        # TODO figure out when it's a group message
+        queue = 'user-' + user
+        _log.debug(_('Handling a message for {user} via server-sent '
+                     'events').format(user=user))
+
+        if not self.connection:
+            self.connection = yield self._deferred_connection
+        if not self.channel:
+            self.channel = yield self.connection.channel()
+        yield self.channel.queue_declare(
+                queue=queue, durable=True, auto_delete=False,
+                arguments={'x-message-ttl': self.expire_ms})
+
+        # TODO consider confirming message delivery and retrying
+        # on failure
+        yield self.channel.basic_publish(
+            exchange='',  # Publish to the default exchange
+            routing_key=queue,
+            body=short_message,
+            properties=pika.BasicProperties(delivery_mode=2),
+        )
 
     def handle_batch(self, session, recipient, queued_messages):
-        self.log.debug("SSE: \t handle batch")
+        """
+        Handle sending a set of one or more messages to one recipient.
+
+        :param session:     The SQLAlchemy database session to use.
+        :type  session:     sqlalchemy.orm.session.Session
+        :param recipient:   The recipient of the messages and their settings.
+                            This controls what RabbitMQ queue the message ends
+                            up in.
+        :type recipient:    dict
+        :param msg:         The messages to send to the user.
+        :type  msg:         dict
+        """
+        message = _('Batching {count} messages for delivery via server-sent'
+                    ' events').format(count=len(queued_messages))
+        _log.debug(message)
         messages = [m.message for m in queued_messages]
         # Squash some messages into one conglomerate message
         # https://github.com/fedora-infra/datagrepper/issues/132
         messages = fedmsg.meta.conglomerate(messages, **self.config)
         for message in messages:
-            self.handle(session, recipient, message, streamline=True)
+            self.handle(session, recipient, message)
 
     def handle_confirmation(self, session, confirmation):
+        """
+        This is an unimplemented method required by the parent class.
+        """
         pass
 
-class FeedQueue:
-    def __init__(self, host='localhost',
-                 exchange='',
-                 queue_name='skrzepto.id.fedoraproject.org',
-                 expire_ms=1*60*60*1000,
-                 port=5672,
-                 log=None):
+    def _format_message(self, msg, recipient):
+        """
+        Here we have to distinguish between two different kinds of messages that
+        might arrive: the `raw` message from fedmsg itself and the product of a
+        call to `fedmsg.meta.conglomerate(..)` by way of ``handle_batch``.
 
-        self.host = host
-        self.exchange = exchange
-        self.queue_name = queue_name
-        self.expire_ms = expire_ms
-        self.port = port
+        The format from `fedmsg.meta.conglomerate(..)` should be::
 
-        if log:
-            self.log = log
+          {
+            'subtitle': 'relrod pushed commits to ghc and 487 other packages',
+            'link': None,  # This could be something.
+            'icon': 'https://that-git-logo',
+            'secondary_icon': 'https://that-relrod-avatar',
+            'start_time': some_timestamp,
+            'end_time': some_other_timestamp,
+            'human_time': '5 minutes ago',
+            'usernames': ['relrod'],
+            'packages': ['ghc', 'nethack', ... ],
+            'topics': ['org.fedoraproject.prod.git.receive'],
+            'categories': ['git'],
+            'msg_ids': {
+                '2014-abcde': {
+                    'subtitle': 'relrod pushed some commits to ghc',
+                    'title': 'git.receive',
+                    'link': 'http://...',
+                    'icon': 'http://...',
+                },
+                '2014-bcdef': {
+                    'subtitle': 'relrod pushed some commits to nethack',
+                    'title': 'git.receive',
+                    'link': 'http://...',
+                    'icon': 'http://...',
+                },
+            },
+          }
+
+        We assume that if the ``msg_ids`` key is present, the message is a
+        conglomerated message. If this key is not present, the message will
+        be handed to ``fedmsg.meta.msg2*`` methods to extract the necessary
+        information.
+
+        The formatted message is a dictionary in the following form:
+
+        {
+          "dom_id": "d38b2b6c-a3c9-4772-b6aa-0a70a6bee517",
+          "date_time": "2008-09-03T20:56:35.450686Z",
+          "icon": "https://apps.fedoraproject.org/packages/images/icons/package_128x128.png",
+          "link": "https://pagure.io/<repo>/issue/148703615",
+          "markup": "<a href="http://example.com/">Marked up message summary</a>",
+          "secondary_icon": null,
+        }
+
+        :param msg:         The messages to send to the user.
+        :type  msg:         dict
+        :param recipient:   The recipient of the messages and their settings.
+                            This controls what RabbitMQ queue the message ends
+                            up in.
+        :type recipient:    dict
+
+        :return: A UTF-8-encoded JSON-serialized message.
+        :rtype:  bytes
+        """
+        conglomerated = 'msg_ids' in msg
+        dom_id = six.text_type(uuid.uuid4())
+        date_time = ''
+        icon = ''
+        link = ''
+        markup = ''
+        secondary_icon = ''
+        username = ''
+        subtitle = ''
+
+        if conglomerated:
+            # This handles messages that have already been 'conglomerated'.
+            title = ''
+            subtitle = msg['subtitle']
+            link = msg['link']
         else:
-            self.log = logging.getLogger("fmn")
+            # This handles normal, 'raw' messages which get passed through msg2*.
+            # Tack a human-readable delta on the end so users know that fmn is
+            # backlogged (if it is).
+            if msg['timestamp']:
+                date_time = msg['timestamp']
+                date_time = datetime.datetime.fromtimestamp(date_time)
+                date_time = date_time.replace(tzinfo=pytz.utc).isoformat()
+            else:
+                date_time = datetime.datetime.utcnow().replace(tzinfo=pytz.utc).isoformat()
 
-        self.channel, self.connection = self._get_pika_channel_connection()
+            icon = fedmsg.meta.msg2icon(msg, **self.config)
+            link = fedmsg.meta.msg2link(msg, **self.config)
+            secondary_icon = fedmsg.meta.msg2secondary_icon(msg, **self.config)
+            username = fedmsg.meta.msg2agent(msg, **self.config)
+            title = fedmsg.meta.msg2title(msg, **self.config)
+            subtitle = fedmsg.meta.msg2subtitle(msg, **self.config)
 
-    def _check_connection(self):
-        if self.connection.is_closed:
-            self.channel, self.connection = self._get_pika_channel_connection()
+        if recipient['shorten_links']:
+            link = shorten(link)
+        event_link = ''
+        if title and link:
+            event_link = '<a href="' + link + '">' + title + '</a>'
+        user_link = ''
+        if username:
+            user_link = '<a href="/' + username.replace("@", "") + '">' + username + '</a>'
 
-    def push_message(self, msg):
-        self._check_connection()
+        markup = ''
+        if user_link:
+            markup += user_link
+        if event_link:
+            markup += ' ' + event_link
+        if subtitle:
+            markup += ' ' + subtitle
+        markup = markup.strip()
 
-        if self.channel.basic_publish(exchange=self.exchange,
-                                      routing_key=self.exchange + '-' + self.queue_name,
-                                      body=msg,
-                                      properties=pika.BasicProperties(
-                                          delivery_mode=2)):
-            self.log.debug('SSE: FEEDQUE: \t message sent')
-        else:
-            self.log.debug('SSE: FEEDQUE: ERROR: \t message failed to send')
+        output = {
+            'dom_id': dom_id,
+            'date_time': date_time,
+            'icon': icon,
+            'link': link,
+            'markup': markup,
+            'secondary_icon': secondary_icon
+        }
 
-    def _get_pika_channel_connection(self):
-        """ Connect to pika server and return channel and connection"""
-        parameters = pika.ConnectionParameters(host=self.host, port=self.port)
-        connection = pika.BlockingConnection(parameters)
-        channel = connection.channel()
-        channel.exchange_declare(exchange=self.exchange)
-        channel.queue_declare(queue=self.queue_name, durable=True,
-                              arguments={'x-message-ttl': self.expire_ms, })
-        channel.queue_bind(queue=self.queue_name,
-                           exchange=self.exchange,
-                           routing_key=self.exchange + '-' + self.queue_name)
-        return channel, connection
-
+        return json.dumps(output)
