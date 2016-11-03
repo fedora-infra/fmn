@@ -35,7 +35,6 @@ class EmailBackend(BaseBackend):
         self.mailserver = self.config['fmn.email.mailserver']
         self.from_address = self.config['fmn.email.from_address']
 
-
     def _get_mailserver(self, address, tries=0):
         """ Connect to our mailserver, but retry a few times if we fail. """
         try:
@@ -170,7 +169,9 @@ class EmailBackend(BaseBackend):
         topics = set([message['topic'] for message in queued_messages])
         categories = set([topic.split('.')[3] for topic in topics])
 
-        squash = lambda items: reduce(set.union, items, set())
+        def squash(items):
+            return reduce(set.union, items, set())
+
         usernames = squash([
             fedmsg.meta.msg2usernames(msg, **self.config)
             for msg in queued_messages])
@@ -178,19 +179,18 @@ class EmailBackend(BaseBackend):
             fedmsg.meta.msg2packages(msg, **self.config)
             for msg in queued_messages])
 
-        logger.info('Breaking email')
-        logger.info('Length: %d' % len(content))
+        self.log.info('Breaking email')
+        self.log.info('Length: %d' % len(content))
 
         # Break email
         split = 20000000
-        contents = [content[i:i+split] for i in range(0, len(content), split)]
+        contents = [content[x:x+split] for x in range(0, len(content), split)]
 
-        logger.info('Broken email into %d parts' % len(contents))
+        self.log.info('Broken email into %d parts' % len(contents))
 
         for bodycnt in contents:
             self.send_mail(session, recipient, subject, bodycnt,
                            topics, categories, usernames, packages)
-
 
     def handle_confirmation(self, session, confirmation):
         confirmation.set_status(session, 'valid')

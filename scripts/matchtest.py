@@ -53,7 +53,6 @@ def rehydrate_preference(preference):
     return preference
 
 
-
 @click.command()
 @click.option('--context', default="email", help="fmn delivery context")
 @click.argument('username')

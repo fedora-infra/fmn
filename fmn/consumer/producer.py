@@ -1,11 +1,10 @@
 # An example fedmsg koji consumer
-
-import moksha.hub.api
-import fmn.lib
-import backends as fmn_backends
-
 import datetime
 import logging
+
+import fmn.lib
+
+
 log = logging.getLogger("fmn")
 
 
@@ -37,7 +36,7 @@ class ConfirmationProducer(FMNProducerBase):
         for confirmation in pending:
             log.info("Processing confirmation %r" % confirmation)
 
-            if not confirmation.context.name in self.backends:
+            if confirmation.context.name not in self.backends:
                 return
 
             backend = self.backends[confirmation.context.name]
@@ -54,7 +53,7 @@ class DigestProducer(FMNProducerBase):
         # 1) Loop over all preferences in the db
         for pref in fmn.lib.models.Preference.list_batching(self.session):
 
-            if not pref.context.name in self.backends:
+            if pref.context.name not in self.backends:
                 log.error('Unknown backend in pref: %s' % pref)
                 continue
 

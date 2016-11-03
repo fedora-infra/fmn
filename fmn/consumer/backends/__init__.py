@@ -1,4 +1,4 @@
-from mail import EmailBackend
-from irc import IRCBackend
-from android import GCMBackend
-from debug import DebugBackend
+from mail import EmailBackend  # noqa
+from irc import IRCBackend  # noqa
+from android import GCMBackend  # noqa
+from debug import DebugBackend  # noqa

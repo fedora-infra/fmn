@@ -1,9 +1,6 @@
-import collections
 import logging
 import socket
 import string
-import threading
-from hashlib import sha256, md5
 
 import fedmsg
 import fedmsg.meta

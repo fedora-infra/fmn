@@ -44,10 +44,10 @@ config = {
         "fmn": "purple",
     },
 
-    ## Backend stuff ##
+    # Backend stuff #
 
     # This is the list of enabled backends (so we can turn one off globally)
-    #"fmn.backends": ['email', 'irc', 'android'],
+    # "fmn.backends": ['email', 'irc', 'android'],
     "fmn.backends": ['email', 'irc'],
     "fmn.backends.debug": False,
 

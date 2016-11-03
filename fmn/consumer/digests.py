@@ -3,20 +3,16 @@
 
 import json
 import logging
-import time
-import random
 
 import pika
 import fedmsg
 import fedmsg.meta
 import fedmsg_meta_fedora_infrastructure
 
-from pika.adapters import twisted_connection
-from twisted.internet import defer, reactor, protocol,task
+from twisted.internet import reactor, task
 
 import fmn.lib
 import fmn.rules.utils
-import fmn.consumer.backends as fmn_backends
 import fmn.consumer.producer as fmn_producers
 
 import fmn.consumer.fmn_fasshim
@@ -56,7 +52,6 @@ OPTS = pika.ConnectionParameters(
     retry_delay=2,
 )
 connection = pika.BlockingConnection(OPTS)
-
 
 
 class FakeBackend(object):
@@ -99,7 +94,6 @@ backends = {
     'email': FakeBackend('email', connection),
     'irc': FakeBackend('irc', connection),
     'android': FakeBackend('android', connection),
-    #'rss': fmn_backends.RSSBackend,
 }
 
 # But, disable any of those backends that don't appear explicitly in
