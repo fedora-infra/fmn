@@ -1,25 +1,24 @@
 # An example fedmsg koji consumer
 
 import datetime
-import threading
+import logging
 import time
-import random
 import uuid
 
 import fedmsg.consumers
+import pika
+
 import fmn.lib
 import fmn.rules.utils
-
 from fmn.consumer.util import (
     new_packager,
     new_badges_user,
     get_fas_email,
 )
 
-import logging
+
 log = logging.getLogger("fmn")
 
-import pika
 OPTS = pika.ConnectionParameters(
     heartbeat_interval=0,
     retry_delay=2,

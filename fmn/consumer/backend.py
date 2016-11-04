@@ -6,9 +6,6 @@ import json
 import logging
 import smtplib
 import time
-import random
-
-logging.basicConfig(level=logging.DEBUG)
 
 import pika
 import fedmsg
@@ -16,7 +13,7 @@ import fedmsg.meta
 import fedmsg_meta_fedora_infrastructure
 
 from pika.adapters import twisted_connection
-from twisted.internet import defer, reactor, protocol,task
+from twisted.internet import defer, reactor, protocol, task
 
 import fmn.lib
 import fmn.rules.utils
@@ -26,6 +23,8 @@ import fmn.consumer.producer as fmn_producers
 import fmn.consumer.fmn_fasshim
 from fedmsg_meta_fedora_infrastructure import fasshim
 
+
+logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger("fmn")
 log.setLevel('DEBUG')
 CONFIG = fedmsg.config.load_config()
@@ -61,14 +60,12 @@ if CONFIG.get('fmn.backends.debug', False):
         'email': fmn_backends.DebugBackend(**backend_kwargs),
         'irc': fmn_backends.IRCBackend(**backend_kwargs),
         'android': fmn_backends.DebugBackend(**backend_kwargs),
-        #'rss': fmn_backends.DebugBackend,
     }
 else:
     backends = {
         'email': fmn_backends.EmailBackend(**backend_kwargs),
         'irc': fmn_backends.IRCBackend(**backend_kwargs),
         'android': fmn_backends.GCMBackend(**backend_kwargs),
-        #'rss': fmn_backends.RSSBackend,
     }
 
 # But, disable any of those backends that don't appear explicitly in
@@ -179,7 +176,7 @@ def read(queue_object):
     for recipient in recipients:
         user = recipient['user']
         t = time.time()
-        pref = PREFS.get('%s__%s' %(user, context))
+        pref = PREFS.get('%s__%s' % (user, context))
         print "pref retrieved in: %0.2fs" % (time.time() - t)
 
         try:
@@ -192,8 +189,7 @@ def read(queue_object):
                 print "    Queueing msg for digest"
                 fmn.lib.models.QueuedMessage.enqueue(
                     session, user, context, raw_msg)
-            if ('filter_oneshot' in recipient
-                    and recipient['filter_oneshot']):
+            if ('filter_oneshot' in recipient and recipient['filter_oneshot']):
                 print "    Marking one-shot filter as fired"
                 idx = recipient['filter_id']
                 fltr = session.query(fmn.lib.models.Filter).get(idx)

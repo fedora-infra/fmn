@@ -1,23 +1,22 @@
 # FMN worker figuring out for a fedmsg message the list of recipient and
 # contexts
 
-
 import json
 import logging
 import time
 import random
 
+from dogpile.cache import make_region
+from fedmsg_meta_fedora_infrastructure import fasshim
 import fmn.lib
 import fmn.rules.utils
 import fedmsg
 import fedmsg.meta
 import fedmsg_meta_fedora_infrastructure
-
-from fedmsg_meta_fedora_infrastructure import fasshim
-
 import pika
 
 import fmn.consumer.fmn_fasshim
+
 
 log = logging.getLogger("fmn")
 log.setLevel('DEBUG')
@@ -27,7 +26,6 @@ fedmsg.meta.make_processors(**CONFIG)
 DB_URI = CONFIG.get('fmn.sqlalchemy.uri', None)
 session = fmn.lib.models.init(DB_URI)
 
-from dogpile.cache import make_region
 _cache = make_region(
     key_mangler=lambda key: "fmn.consumer:dogpile:" + key
 ).configure(**CONFIG['fmn.rules.cache'])
@@ -90,6 +88,7 @@ fedmsg_meta_fedora_infrastructure.pagure.email2fas = \
 
 connection = pika.BlockingConnection(OPTS)
 
+
 def inform_workers(raw_msg, context, recipients):
     queue = 'backends'
     chan = connection.channel()
@@ -129,7 +128,7 @@ def callback(ch, method, properties, body):
         PREFS = update_preferences(openid, PREFS)
         if topic == 'consumer.fmn.prefs.update':  # msg from the consumer
             print "Done with refreshing prefs.  %0.2fs %s" % (
-                time.time() - start,msg['topic'])
+                time.time() - start, msg['topic'])
             ch.basic_ack(delivery_tag=method.delivery_tag)
             return
 

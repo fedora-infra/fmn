@@ -1,18 +1,6 @@
 """ Setup file for fmn.consumer """
 
-import sys
-import os
-import logging
-
 from setuptools import setup
-
-# Ridiculous as it may seem, we need to import multiprocessing and logging here
-# in order to get tests to pass smoothly on python 2.7.
-try:
-    import multiprocessing
-    import logging
-except:
-    pass
 
 
 def get_description():
@@ -50,7 +38,7 @@ setup(
     license='LGPLv2+',
     install_requires=get_requirements(),
     tests_require=get_requirements('tests-requirements.txt'),
-    test_suite='nose.collector',
+    test_suite='tests',
     packages=['fmn', 'fmn.consumer', 'fmn.consumer.backends'],
     namespace_packages=['fmn'],
     include_package_data=True,

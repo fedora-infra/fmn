@@ -1,7 +1,9 @@
-from fmn.consumer.backends.base import BaseBackend
+import datetime
+
 import fedmsg.meta
 
-import datetime
+from fmn.consumer.backends.base import BaseBackend
+
 
 CONFIRMATION_TEMPLATE = u"""
 {username} has requested that notifications be sent to this email address
@@ -19,7 +21,6 @@ class DebugBackend(BaseBackend):
 
     def __init__(self, *args, **kwargs):
         super(DebugBackend, self).__init__(*args, **kwargs)
-
 
     def handle(self, session, recipient, msg, streamline=False):
         topic = msg['topic']
@@ -54,12 +55,12 @@ class DebugBackend(BaseBackend):
 
             return timestamp.strftime("%c") + ", " + payload + "\n\t" + link
 
-        n = len(queued_messages)
+        n = len(messages)
         subject = u"Fedora Notifications Digest (%i updates)" % n
         summary = u"Digest summary:\n"
-        for msg in queued_messages:
+        for i, msg in enumerate(messages):
             line = fedmsg.meta.msg2subtitle(msg, **self.config) or u''
-            summary += str(i+1) + ".\t" + line + "\n"
+            summary += str(i + 1) + ".\t" + line + "\n"
 
         separator = "\n\n" + "-"*79 + "\n\n"
         if recipient.get('verbose', True):
@@ -69,18 +70,20 @@ class DebugBackend(BaseBackend):
 
         content += separator.join([
             _format_line(msg)
-            for msg in queued_messages])
+            for msg in messages])
 
-        topics = set([msg['topic'] for msg in queued_messages])
+        topics = set([msg['topic'] for msg in messages])
         categories = set([topic.split('.')[3] for topic in topics])
 
-        squash = lambda items: reduce(set.union, items, set())
+        def squash(items):
+            reduce(set.union, items, set())
+
         usernames = squash([
             fedmsg.meta.msg2usernames(msg, **self.config)
-            for msg in queued_messages])
+            for msg in messages])
         packages = squash([
             fedmsg.meta.msg2packages(msg, **self.config)
-            for msg in queued_messages])
+            for msg in messages])
 
         print '  -- Batch --'
         print 'recipient:   ', recipient
@@ -90,7 +93,6 @@ class DebugBackend(BaseBackend):
         print 'category:    ', categories
         print 'usernames:   ', usernames
         print 'packages:    ', packages
-
 
     def handle_confirmation(self, session, confirmation):
         confirmation.set_status(session, 'valid')
@@ -117,4 +119,3 @@ class DebugBackend(BaseBackend):
         print '  -- Confirmation --'
         print 'recipient:   ', recipient
         print 'content:     ', content
-

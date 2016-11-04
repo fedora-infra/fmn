@@ -81,7 +81,7 @@ def _format_message(msg, recipient, config):
     # Here we have to distinguish between two different kinds of messages that
     # might arrive: the `raw` message from fedmsg itself and the product of a
     # call to `fedmsg.meta.conglomerate(..)`
-    if not 'subtitle' in msg:
+    if 'subtitle' not in msg:
         # This handles normal, 'raw' messages which get passed through msg2*.
         title = fedmsg.meta.msg2title(msg, **config)
         subtitle = fedmsg.meta.msg2subtitle(msg, **config)
@@ -117,7 +117,9 @@ def _format_message(msg, recipient, config):
         flt = "    ( triggered by %s )" % flt_link
 
     if recipient['markup_messages']:
-        markup = lambda s, color: "\x03%i%s\x03" % (mirc_colors[color], s)
+        def markup(s, color):
+            return "\x03%i%s\x03" % (mirc_colors[color], s)
+
         color_lookup = config.get('irc_color_lookup', {})
         title_color = color_lookup.get(title.split('.')[0], "light grey")
         title = markup(title, title_color)
