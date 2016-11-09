@@ -1,50 +1,79 @@
-#FMN.SSE
+# FMN Server-Sent Events
 
 FMN is a family of systems to manage end-user notifications triggered by
-fedmsg, the Fedora Federated Message bus.
+fedmsg, the Federated Message bus.
 
-FMN.SSE allows fedora users to view their fedmsg feed in realtime.
+The FMN Server-Sent Events server allows users to view their fedmsg feed in realtime
+using [server-sent events](https://html.spec.whatwg.org/multipage/comms.html#server-sent-events).
+It relies on a service to populate the RabbitMQ message queues for it. Typically, this is
+done with the FMN core services.
 
 ## Install
+
+To get ``fmn.sse`` directly from PyPi you can use pip:
+
+```
+pip install fmn.sse
+```
+
+If you're using Fedora, you can install it with DNF:
+
+```
+sudo dnf install python-fmn-sse
+```
+
+If you're using CentOS 7, you can install it from EPEL 7 with yum:
+
+```
+sudo yum install python-fmn-sse
+```
+
+## Development Environment
+
+To set up the development environment, you can either use Vagrant to provision
+a virtual machine and automatically configure it, or you can manually set up
+the environment.
 
 ### Vagrant
 
 The easiest way to get a development environment set up is with Vagrant. Refer
 to the [fmn repository](https://github.com/fedora-infra/fmn) for the Vagrantfile
-and instructions on how to set upVagrant.
+and instructions on how to set up Vagrant.
 
 
 ### Manual
 
-System dependencies
+1. Install the system dependencies. For Fedora:
 ```
-sudo yum install python python-devel python-virtualenvwrapper rabbitmq-server \
-python-pip gcc libffi-devel openssl-devel zeromq-devel
+sudo dnf install python python-devel python3-devel python-virtualenvwrapper \
+rabbitmq-server python-pip gcc libffi-devel openssl-devel zeromq-devel
 ```
 
-If running with python2
+2. Install the Python dependencies:
 ```
-mkvirtualenv sse-py2
-workon sse-py2
 pip install -r requirements.txt
 ```
 
-For python3
-
-*replace sse-py2 for sse-py3 in other notes*
+3. Install the ``fmn.sse`` package:
 ```
-sudo dnf install python3-devel
-mkvirtualenv --python=/usr/bin/python3 sse-py3
-workon sse-py3
-pip install -r requirements.txt
+pip install -e .
 ```
 
 ## Running
 
+1. Ensure RabbitMQ is running:
 ```
 sudo systemctl start rabbitmq-server
-workon sse-py2
-PYTHONPATH=. python fmn/sse/sse_webserver.py
+```
+
+2. Start the SSE server:
+```
+twistd -n -l - -y usr/share/fmn.sse/server.tac
+```
+
+3. Make sure the server is available. This should return a HTTP 404:
+```
+curl -v http://localhost:8080/
 ```
 
 ## Test Data
