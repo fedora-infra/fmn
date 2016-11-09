@@ -4,7 +4,7 @@ After=network.target
 Documentation=https://github.com/fedora-infra/fmn.sse/
 
 [Service]
-ExecStart=/usr/bin/python2 /usr/lib/python2.7/site-packages/fmn/sse/sse_webserver.py
+ExecStart=/usr/bin/twistd -n -l - -y /usr/lib/share/fmn.sse/sse_server.tac
 Type=simple
 User=root
 Group=root
