@@ -16,8 +16,8 @@
 
 from __future__ import absolute_import, unicode_literals
 
-from gettext import gettext as _
 from collections import namedtuple
+from gettext import gettext as _
 import json
 import logging
 import re
@@ -206,11 +206,18 @@ class SSEServer(resource.Resource):
             subscription['queue'] = rabbit_queue
 
             while True:
-                channel, method, properties, body = yield rabbit_queue.queue.get()
-                for request in subscription['requests']:
-                    msg = u'data: ' + body.decode('utf-8') + u'\r\n\r\n'
-                    request.write(msg.encode('utf-8'))
-                yield channel.basic_ack(delivery_tag=method.delivery_tag)
+                try:
+                    channel, method, properties, body = yield rabbit_queue.queue.get()
+                    for request in subscription['requests']:
+                        msg = u'data: ' + body.decode('utf-8') + u'\r\n\r\n'
+                        request.write(msg.encode('utf-8'))
+                    yield channel.basic_ack(delivery_tag=method.delivery_tag)
+                except pika_exceptions.ConsumerCancelled:
+                    _log.info(_('The server has cancelled the AMQP consumer for '
+                                'the {0} queue').format(queue_name))
+                    for request in subscription['requests']:
+                        request.finish()
+                    break
 
         deferred_queue = self.queue(queue_name)
         deferred_queue.addCallback(write_requests)
@@ -235,6 +242,7 @@ class SSEServer(resource.Resource):
         else:
             _log.warning('Unhandled error: ' + str(err))
 
+    @defer.inlineCallbacks
     def request_closed(self, err, request, queue_name):
         """
         Remove a request from the map of queues to open requests.
@@ -249,18 +257,14 @@ class SSEServer(resource.Resource):
         :param request:     The request to remove from self.subscribers
         """
         _log.debug('Removing ' + str(request) + ' from ' + str(queue_name))
-        try:
-            subscriber = self.subscribers[queue_name]
-            subscriber['requests'].remove(request)
-            if len(subscriber['requests']) == 0:
-                # The last request for this queue is finished so clean
-                # up everything else.
-                if subscriber['queue']:
-                    msg = 'Queue closed because there are no more open requests'
-                    subscriber['queue'].queue.close(msg)
-                self.subscribers.pop(queue_name)
-        except (ValueError, KeyError):
-            pass
+        subscriber = self.subscribers[queue_name]
+        subscriber['requests'].remove(request)
+        if len(subscriber['requests']) == 0 and subscriber['queue']:
+            # We need to notify the AMQP server so it stops pushing messages
+            subscription = subscriber['queue']
+            yield self.channel.basic_cancel(consumer_tag=subscription.consumer_tag)
+            subscription.queue.close(pika_exceptions.ConsumerCancelled())
+            self.subscribers.pop(queue_name)
 
 
 class JsonErrorPage(resource.ErrorPage):
@@ -317,7 +321,7 @@ class JsonForbidden(JsonErrorPage):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
     site = server.Site(SSEServer())
     port = int(app_config.get('fmn.sse.webserver.tcp_port', 8080))
     reactor.listenTCP(port, site)
