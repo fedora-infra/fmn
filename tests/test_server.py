@@ -14,25 +14,25 @@ class TestSSEServer(unittest.TestCase):
 
     def test_render_GET(self):
         """Assert a "good" request is handled without error"""
-        request = mock.Mock(postpath=['myexchange', 'myqueue'])
-        request_key = server.RequestKey('myexchange', 'myqueue')
+        request = mock.Mock(postpath=['myqueue'])
+        queue_name = 'myqueue'
 
         result = self.sse.render_GET(request)
         self.assertEqual(result, twisted_server.NOT_DONE_YET)
         # TODO some asserts about headers
         request.write.assert_called_once_with(b'')
         request.notifyFinish.return_value.addBoth.assert_called_once_with(
-            self.sse.request_closed, request, request_key)
-        self.assertTrue(request_key in self.sse.subscribers)
+            self.sse.request_closed, request, queue_name)
+        self.assertTrue(queue_name in self.sse.subscribers)
 
     def test_render_GET_trailing_slash(self):
         """Assert a "good" request is handled without error"""
-        request = mock.Mock(postpath=['myexchange', 'myqueue', ''])
-        request_key = server.RequestKey('myexchange', 'myqueue')
+        request = mock.Mock(postpath=['myqueue', ''])
+        queue_name = 'myqueue'
 
         result = self.sse.render_GET(request)
         self.assertEqual(result, twisted_server.NOT_DONE_YET)
-        self.assertTrue(request_key in self.sse.subscribers)
+        self.assertTrue(queue_name in self.sse.subscribers)
 
     def test_render_GET_no_exchange(self):
         """Assert that requesting an exchange that doesn't exist is a 404"""
@@ -51,11 +51,11 @@ class TestSSEServer(unittest.TestCase):
 
     def test_new_subscription(self):
         """Assert SSEServer.new_subscription adds a subscription entry"""
-        request_key = server.RequestKey('myexchange', 'myqueue')
+        queue_name = 'myqueue'
         self.sse.queue = mock.Mock()
 
-        self.sse.new_subscription(request_key)
-        self.sse.queue.assert_called_once_with(*request_key)
+        self.sse.new_subscription(queue_name)
+        self.sse.queue.assert_called_once_with(queue_name)
 
 
 class TestJsonNotFound(unittest.TestCase):

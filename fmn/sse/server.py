@@ -19,7 +19,6 @@ app_config = fedmsg.config.load_config()
 # this module slightly clearer.
 RabbitQueue = namedtuple(u'RabbitQueue', [u'queue', u'consumer_tag'])
 SubscriptionEntry = namedtuple(u'SubscriptionEntry', [u'queue', u'requests'])
-RequestKey = namedtuple(u'RequestKey', [u'exchange', u'queue'])
 
 
 class SSEServer(resource.Resource):
@@ -60,13 +59,11 @@ class SSEServer(resource.Resource):
         self.subscribers = {}
 
     @defer.inlineCallbacks
-    def queue(self, exchange=None, queue=None, routing_key=None,
-              queue_arguments=None):
+    def queue(self, queue, queue_arguments=None):
         """
         Construct and retrieve a queue from RabbitMQ.
 
-        This will declare the exchange and queue in RabbitMQ if they don't
-        already exist.
+        This will declare the queue in RabbitMQ if it doesn't already exist.
 
         The queue returned is a subclass of twisted.internet.defer.DeferredQueue.
         Calling ``get`` on the queue returns a ``Deferred`` that fires with
@@ -76,13 +73,9 @@ class SSEServer(resource.Resource):
         Afterwards you can do channel.basic_ack(delivery_tag=method.delivery_tag)
         to acknowledge message reciept.
 
-        :param exchange:        The exchange to declare and bind the queue to.
-        :type  exchange:        unicode str
         :param queue:           The queue to declare, bind to the exchange,
                                 and consume from.
         :type  queue:           unicode str
-        :param routing_key:     The queue routing key.
-        :type  routing_key:     unicode str
         :param queue_arguments: custom arguments for the queue's construction
         :type  queue_agrements: dict
 
@@ -101,18 +94,11 @@ class SSEServer(resource.Resource):
         # already exist, which we could then turn into a HTTP 404. Allowing
         # requests to cause exchanges or queues to be created seems like an easy
         # DoS attack.
-        yield self.channel.exchange_declare(exchange=exchange)
         yield self.channel.queue_declare(
             queue=queue,
             durable=True,
             auto_delete=False,
             arguments={'x-message-ttl': self.expire_ms}
-        )
-        # TODO investigate why this routing_key is used
-        yield self.channel.queue_bind(
-            exchange=exchange,
-            queue=queue,
-            routing_key=exchange + '-' + queue,
         )
         # TODO Maybe prefetch_count/size should be configurable
         yield self.channel.basic_qos(prefetch_count=5)
@@ -120,7 +106,6 @@ class SSEServer(resource.Resource):
             queue=queue,
             no_ack=False,
             exclusive=False,
-            consumer_tag=None,
         )
         queue = RabbitQueue(queue=deferred_queue, consumer_tag=consumer_tag)
         defer.returnValue(queue)
@@ -128,13 +113,13 @@ class SSEServer(resource.Resource):
     def render_GET(self, request):
         """
         Handle GET requests to this endpoint. Requests should be to
-        ``/<exchange>/<queue.name>/``.
+        ``/<queue.name>/``.
         """
         # If the request ended in a trailing / the final path section is ''.
         # This allows the trailing / on /<exchange>/<queue>/ to be optional.
         if request.postpath[-1] == '':
             request.postpath.pop()
-        if len(request.postpath) != 2:
+        if len(request.postpath) != 1:
             response = JsonNotFound()
             return response.render(request)
 
@@ -152,27 +137,27 @@ class SSEServer(resource.Resource):
         # queue exists. If it doesn't we should 503/404 etc.
         request.write(b'')
 
-        request_key = RequestKey(exchange=request.postpath[0], queue=request.postpath[1])
-        request.notifyFinish().addBoth(self.request_closed, request, request_key)
+        queue_name = request.postpath[0]
+        request.notifyFinish().addBoth(self.request_closed, request, queue_name)
 
-        if request_key not in self.subscribers:
+        if queue_name not in self.subscribers:
             # This is the first request for a particular queue
             subscription = {'queue': None, 'requests': [request]}
-            self.subscribers[request_key] = subscription
-            self.new_subscription(request_key)
+            self.subscribers[queue_name] = subscription
+            self.new_subscription(queue_name)
         else:
-            self.subscribers[request_key]['requests'].append(request)
+            self.subscribers[queue_name]['requests'].append(request)
         return server.NOT_DONE_YET
 
-    def new_subscription(self, request_key):
+    def new_subscription(self, queue_name):
         """
         Subscribe to a RabbitMQ queue.
 
         An entry will be made in the ``self.subscribers`` dictionary using the
-        ``request_key`` provided as the dictionary key.
+        ``queue_name`` provided as the dictionary key.
 
-        :param request_key: A namedtuple containing the exchange and queue.
-        :type  request_key: RequestKey
+        :param queue_name: The name of the queue to bind the request to.
+        :type  queue_name: str
         """
         @defer.inlineCallbacks
         def write_requests(rabbit_queue):
@@ -184,7 +169,7 @@ class SSEServer(resource.Resource):
             :param rabbit_queue: A namedtuple containing the queue and consumer tag.
             :type  rabbit_queue: RabbitQueue
             """
-            subscription = self.subscribers[request_key]
+            subscription = self.subscribers[queue_name]
             subscription['queue'] = rabbit_queue
 
             while True:
@@ -194,12 +179,12 @@ class SSEServer(resource.Resource):
                     request.write(msg.encode('utf-8'))
                 yield channel.basic_ack(delivery_tag=method.delivery_tag)
 
-        deferred_queue = self.queue(request_key.exchange, request_key.queue)
+        deferred_queue = self.queue(queue_name)
         deferred_queue.addCallback(write_requests)
-        deferred_queue.addErrback(self.queue_error_handler, request_key)
+        deferred_queue.addErrback(self.queue_error_handler, queue_name)
         return deferred_queue
 
-    def queue_error_handler(self, err, request_key):
+    def queue_error_handler(self, err, queue_name):
         """
         Handle possible errors that occur in ``self.queue``
         """
@@ -207,39 +192,40 @@ class SSEServer(resource.Resource):
         if isinstance(err.value, error.ConnectionRefusedError):
             # RabbitMQ is down or refusing connections for some other reason;
             # Perform cleanup.
-            for request in self.subscribers[request_key]['requests']:
+            for request in self.subscribers[queue_name]['requests']:
                 # TODO finish with 503
                 request.finish()
         elif isinstance(err.value, pika_exceptions.ChannelClosed):
             # Return the reason the channel was closed, try to restart the channel
-            for request in self.subscribers[request_key]['requests']:
+            for request in self.subscribers[queue_name]['requests']:
                 request.finish()
         else:
             _log.warning('Unhandled error: ' + str(err))
 
-    def request_closed(self, err, request, request_key):
+    def request_closed(self, err, request, queue_name):
         """
         Remove a request from the map of queues to open requests.
 
         This is intended to be called when a request is finished or closed.
         It can be added to a request by using ``request.notifyFinish``.
 
-        :param err:       unused
-        :param request_key: The queue the request is attached to in
-                          self.subscribers
-        :param request: The request to remove from self.subscribers
+        :param err:         unused
+        :param queue_name:  The name of the queue the request is attached to in
+                            self.subscribers
+        :type  queue_name:  str
+        :param request:     The request to remove from self.subscribers
         """
-        _log.debug('Removing ' + str(request) + ' from ' + str(request_key))
+        _log.debug('Removing ' + str(request) + ' from ' + str(queue_name))
         try:
-            subscriber = self.subscribers[request_key]
+            subscriber = self.subscribers[queue_name]
             subscriber['requests'].remove(request)
-            if not self.subscribers[request_key]['requests']:
+            if len(subscriber['requests']) == 0:
                 # The last request for this queue is finished so clean
                 # up everything else.
                 if subscriber['queue']:
                     msg = 'Queue closed because there are no more open requests'
                     subscriber['queue'].queue.close(msg)
-                self.subscribers.pop(request_key)
+                self.subscribers.pop(queue_name)
         except (ValueError, KeyError):
             pass
 
