@@ -1,7 +1,5 @@
 """ Setup file for fmn.sse """
-import sys
 from setuptools import setup
-from setuptools.command.test import test as TestCommand
 
 
 def get_description():
@@ -27,20 +25,6 @@ def get_requirements(filename='requirements.txt'):
         ]
 
 
-class PyTest(TestCommand):
-    user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
-
-    def initialize_options(self):
-        TestCommand.initialize_options(self)
-        self.pytest_args = []
-
-    def run_tests(self):
-        # import here, cause outside the eggs aren't loaded
-        import pytest
-        errno = pytest.main(self.pytest_args)
-        sys.exit(errno)
-
-
 setup(
     name='fmn.sse',
     version='0.1.1',
@@ -53,6 +37,7 @@ setup(
     license='GPL',
     install_requires=get_requirements('requirements.txt'),
     tests_require=get_requirements('tests-requirements.txt'),
+    test_suite='tests',
     packages=['fmn', 'fmn.sse'],
     namespace_packages=[],
     include_package_data=True,
@@ -69,5 +54,4 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
-    cmdclass={'test': PyTest},
 )

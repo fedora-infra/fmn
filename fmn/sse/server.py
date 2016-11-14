@@ -1,7 +1,26 @@
+# -*- coding: utf-8 -*-
+
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 from __future__ import absolute_import, unicode_literals
+
+from gettext import gettext as _
 from collections import namedtuple
 import json
 import logging
+import re
 
 import fedmsg
 import six
@@ -42,6 +61,15 @@ class SSEServer(resource.Resource):
         self.amqp_host = app_config.get('fmn.sse.pika.host', 'localhost')
         self.amqp_port = int(app_config.get('fmn.sse.pika.port', 5672))
         self.amqp_parameters = ConnectionParameters(self.amqp_host, self.amqp_port)
+
+        whitelist = app_config.get('fmn.sse.webserver.queue_whitelist')
+        self.whitelist = re.compile(whitelist) if whitelist else None
+        blacklist = app_config.get('fmn.sse.webserver.queue_blacklist')
+        self.blacklist = re.compile(blacklist) if blacklist else None
+
+        self.allow_origin = app_config.get('fmn.sse.webserver.allow_origin', '*')
+        self.prefetch_count = app_config.get('fmn.sse.pika.prefetch_count',  5)
+
         cc = protocol.ClientCreator(
             reactor,
             twisted_connection.TwistedProtocolConnection,
@@ -54,7 +82,7 @@ class SSEServer(resource.Resource):
 
         # Maps queues to open requests. The datastructure is in the format
         # {
-        #   RequestKey: {'queue': RabbitQueue, 'requests': []},
+        #   '<queue_name>': {'queue': RabbitQueue, 'requests': []},
         # }
         self.subscribers = {}
 
@@ -100,8 +128,7 @@ class SSEServer(resource.Resource):
             auto_delete=False,
             arguments={'x-message-ttl': self.expire_ms}
         )
-        # TODO Maybe prefetch_count/size should be configurable
-        yield self.channel.basic_qos(prefetch_count=5)
+        yield self.channel.basic_qos(prefetch_count=self.prefetch_count)
         deferred_queue, consumer_tag = yield self.channel.basic_consume(
             queue=queue,
             no_ack=False,
@@ -123,12 +150,19 @@ class SSEServer(resource.Resource):
             response = JsonNotFound()
             return response.render(request)
 
-        # TODO add checks here for a set of whitelisted exchanges and queues
-        # or anyone can connect and drain, for example, the worker queue.
+        # Only serve queues that are on the whitelist and not on the blacklist.
+        # This is to avoid serving private queues used by FMN to dispatch work
+        # to clients.
+        queue_name = request.postpath[0]
+        if self.whitelist and not self.whitelist.match(queue_name):
+            response = JsonForbidden()
+            return response.render(request)
+        if self.blacklist and self.blacklist.match(queue_name):
+            response = JsonForbidden()
+            return response.render(request)
 
-        # TODO set access control origin
         request.setHeader(u'Content-Type', u'text/event-stream; charset=utf-8')
-        request.setHeader(u'Access-Control-Allow-Origin', u'*')
+        request.setHeader(u'Access-Control-Allow-Origin', self.allow_origin)
 
         # The queue the request subscribes to may be empty, and it may not have
         # anything in it for a long time. Calling ``request.write`` here
@@ -137,7 +171,6 @@ class SSEServer(resource.Resource):
         # queue exists. If it doesn't we should 503/404 etc.
         request.write(b'')
 
-        queue_name = request.postpath[0]
         request.notifyFinish().addBoth(self.request_closed, request, queue_name)
 
         if queue_name not in self.subscribers:
@@ -230,21 +263,10 @@ class SSEServer(resource.Resource):
             pass
 
 
-class JsonNotFound(resource.ErrorPage):
+class JsonErrorPage(resource.ErrorPage):
     """
-    An HTTP 404 resource that optionally returns a JSON body with error details.
+    A resource that optionally returns a JSON body with error details.
     """
-
-    def __init__(self, status=404, brief=u'Not Found', detail=None):
-        """
-        Initialize the resource.
-
-        If `detail` is a dictionary it will be JSON-serialized and returned
-        as the response body.
-        """
-        # The parent class saves these values as self.code, self.brief,
-        # and self.detail.
-        resource.ErrorPage.__init__(self, status, brief, detail)
 
     def render(self, request):
         """
@@ -272,12 +294,26 @@ class JsonNotFound(resource.ErrorPage):
             body = self.template % {
                 u'code': self.code,
                 u'brief': self.brief,
-                u'detail': self.detail or u'Resource not found',
+                u'detail': self.detail,
             }
 
         if isinstance(body, six.text_type):
             body = body.encode('utf-8')
         return body
+
+
+class JsonNotFound(JsonErrorPage):
+    """A class to render a 404 Not Found page in either HTML or JSON."""
+
+    def __init__(self, detail=_(u'Resource not found')):
+        JsonErrorPage.__init__(self, 404, _(u'Not Found'), detail)
+
+
+class JsonForbidden(JsonErrorPage):
+    """A class to render a 403 Forbidden page in either HTML or JSON."""
+
+    def __init__(self, detail=_(u'You are not allowed to access this resource')):
+        JsonErrorPage.__init__(self, 403, _(u'Forbidden'), detail)
 
 
 if __name__ == "__main__":
