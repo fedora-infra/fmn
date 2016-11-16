@@ -69,14 +69,6 @@ class SSEServer(resource.Resource):
 
         self.allow_origin = app_config.get('fmn.sse.webserver.allow_origin', '*')
         self.prefetch_count = app_config.get('fmn.sse.pika.prefetch_count',  5)
-
-        cc = protocol.ClientCreator(
-            reactor,
-            twisted_connection.TwistedProtocolConnection,
-            self.amqp_parameters,
-        )
-        self._deferred_connection = cc.connectTCP(self.amqp_host, self.amqp_port)
-        self._deferred_connection.addCallback(lambda conn: conn.ready)
         self.connection = None
         self.channel = None
 
@@ -113,7 +105,13 @@ class SSEServer(resource.Resource):
         """
         # TODO Handle errors appropriately
         if not self.connection:
-            self.connection = yield self._deferred_connection
+            cc = protocol.ClientCreator(
+                reactor,
+                twisted_connection.TwistedProtocolConnection,
+                self.amqp_parameters,
+            )
+            tcp_connection = yield cc.connectTCP(self.amqp_host, self.amqp_port)
+            self.connection = yield tcp_connection.ready
         if not self.channel:
             self.channel = yield self.connection.channel()
 
