@@ -5,9 +5,11 @@ config = {
     "fmn.sse.pika.port": 5672,
     "fmn.sse.pika.msg_expiration": 3600000,  # 1 hour in ms
 
-    # SSE WebServer
+    # SSE Web server configuration
     "fmn.sse.webserver.tcp_port": 8080,
-    "fmn.sse.webserver.log": "sse.log",
+    # A list of interfaces to listen to ('127.0.0.1', for example); if none
+    # are specified the server listens on all available interfaces.
+    'fmn.sse.webserver.interfaces': [],
 
     # A regular expression using the standard Python re syntax that defines a
     # whitelist of queues exposed by the SSE server.

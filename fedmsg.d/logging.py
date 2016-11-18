@@ -3,10 +3,11 @@
 config = dict(
     logging=dict(
         version=1,
+        disable_existing_loggers=False,
         formatters=dict(
             bare={
-                "datefmt": "%Y-%m-%d %H:%M:%S",
-                "format": "[%(asctime)s][%(name)10s %(levelname)7s] %(message)s"
+                "datefmt": "%Y-%m-%dT%H:%M:%S%z",
+                "format": "%(asctime)s [%(name)s#%(levelname)s] %(message)s"
             },
         ),
         handlers=dict(
@@ -23,11 +24,23 @@ config = dict(
                 "propagate": False,
                 "handlers": ["console"],
             },
+            fmn={
+                "level": "DEBUG",
+                "propagate": False,
+                "handlers": ["console"],
+            },
             moksha={
                 "level": "DEBUG",
                 "propagate": False,
                 "handlers": ["console"],
             },
+
         ),
+        # The root logger configuration; this is a catch-all configuration
+        # that applies to all log messages not handled by a different logger
+        root={
+            'level': 'INFO',
+            'handlers': ['console'],
+        },
     ),
 )
