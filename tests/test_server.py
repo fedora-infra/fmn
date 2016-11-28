@@ -21,15 +21,18 @@ import mock
 import six
 from twisted.web.test.requesthelper import DummyRequest
 from twisted.web import server as twisted_server
+from twisted.trial import unittest as twisted_unittest
 
 from fmn.sse import server
 
 
-class TestSSEServer(unittest.TestCase):
+class TestSSEServer(twisted_unittest.TestCase):
     def setUp(self):
         self.sse = server.SSEServer()
         self.sse.whitelist = None
         self.sse.blacklist = None
+        self.sse.channel = mock.Mock()
+        self.sse.connection = mock.Mock()
 
     def test_render_GET(self):
         """Assert a "good" request is handled without error"""
@@ -107,6 +110,24 @@ class TestSSEServer(unittest.TestCase):
 
         self.sse.new_subscription(queue_name)
         self.sse.queue.assert_called_once_with(queue_name)
+
+    def test_request_closed(self):
+        """
+        Assert that when the request is finished we clean up the subscriber's list
+        """
+        mock_request = mock.Mock()
+        self.sse.subscribers['myqueue'] = {
+            'queue': server.RabbitQueue(mock.Mock(), 'mytag'),
+            'requests': [mock_request]
+        }
+
+        def assertions(*args, **kwargs):
+            self.assertEqual(self.sse.subscribers, {})
+            self.sse.channel.basic_cancel.assert_called_once_with(consumer_tag='mytag')
+
+        d = self.sse.request_closed(None, mock_request, 'myqueue')
+        d.addCallback(assertions)
+        return d
 
 
 class TestJsonNotFound(unittest.TestCase):
