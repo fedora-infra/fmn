@@ -349,7 +349,9 @@ class IRCBackend(BaseBackend):
         if not self.clients:
             # This is usually the case if we are suffering a netsplit.
             self.log.warning("IRCBackend has no clients to work with; enqueue")
-            raise RuntimeError("IRCBackend has no clients to work with; enqueue")
+            fmn.lib.models.QueuedMessage.enqueue(
+                session, user, 'irc', msg)
+            return
 
         self.log.debug("Notifying via irc %r" % recipient)
 
