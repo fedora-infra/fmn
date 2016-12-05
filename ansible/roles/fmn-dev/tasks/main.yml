@@ -4,7 +4,6 @@
   dnf: name={{ item }} state=present
   with_items:
     - git
-    - python-sphinx
     - python-virtualenvwrapper
     - vim-enhanced
 
@@ -22,7 +21,9 @@
   dnf: name={{ item }} state=present
   with_items:
     - gcc
+    - graphviz
     - libffi-devel
+    - make
     - openssl-devel
     - python2-devel
     - python3-devel
@@ -40,15 +41,21 @@
 - name: Install the message of the day
   copy: src=motd dest=/etc/motd
 
-- name: Create fmn virtualenv
+- name: Create python2-fmn virtualenv
   become_user: "{{ ansible_env.SUDO_USER }}"
   shell: "source ~/.bashrc && mkvirtualenv python2-fmn"
   args:
     creates: /home/{{ ansible_env.SUDO_USER }}/.virtualenvs/python2-fmn
 
+- name: Create python3-fmn virtualenv
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  shell: "source ~/.bashrc && mkvirtualenv --python=python3 python3-fmn"
+  args:
+    creates: /home/{{ ansible_env.SUDO_USER }}/.virtualenvs/python3-fmn
+
 # For some reason, doing ``python setup.py develop`` fails to install
 # Flask, whereas doing it with pip works fine
-- name: Install Python runtime requirements
+- name: Install Python 2 runtime requirements
   become_user: "{{ ansible_env.SUDO_USER }}"
   pip:
     requirements: "{{ item }}/requirements.txt"
@@ -57,6 +64,17 @@
   with_items:
     - "."
     - "fmn.web"
+    - "fmn.sse"
+  args:
+    chdir: /home/{{ ansible_env.SUDO_USER }}/devel
+
+# Ansible with Pip and Python 3 seems to try to install to the global site-packages
+# NOTE: Sadly fmn.web isn't Python 3 compatible yet
+- name: Install Python 3 runtime requirements
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  shell: "source ~/.bashrc && workon python3-fmn && pip install -r {{ item }}/requirements.txt"
+  with_items:
+    - "."
     - "fmn.sse"
   args:
     chdir: /home/{{ ansible_env.SUDO_USER }}/devel
@@ -74,13 +92,33 @@
   args:
     chdir: /home/{{ ansible_env.SUDO_USER }}/devel
 
-- name: Install fmn packages
+# NOTE: Sadly fmn.web isn't Python 3 compatible yet
+- name: Install Python 3 tests requirements
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  shell: "source ~/.bashrc && workon python3-fmn && pip install -r {{ item }}/tests-requirements.txt"
+  with_items:
+    - "."
+    - "fmn.sse"
+  args:
+    chdir: /home/{{ ansible_env.SUDO_USER }}/devel
+
+- name: Install packages necessary to build the documentation
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  shell: "source ~/.bashrc && workon python3-fmn && pip install sphinx sqlalchemy_schemadisplay"
+
+- name: Install fmn packages into the Python 2 virtualenv
   become_user: "{{ ansible_env.SUDO_USER }}"
   shell: "pushd {{ item }} && source ~/.bashrc && workon python2-fmn && python setup.py develop && popd"
   with_items:
     - "."
     - "fmn.web"
     - "fmn.sse"
+  args:
+    chdir: /home/{{ ansible_env.SUDO_USER }}/devel
+
+- name: Install fmn packages into the Python 3 virtualenv
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  shell: "source ~/.bashrc && workon python3-fmn && pip install -e ."
   args:
     chdir: /home/{{ ansible_env.SUDO_USER }}/devel
 
