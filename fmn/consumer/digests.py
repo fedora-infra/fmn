@@ -90,6 +90,7 @@ class FakeBackend(object):
             'recipient': recipient,
             'queued_messages': queued_messages})
 
+
 backends = {
     'email': FakeBackend('email', connection),
     'irc': FakeBackend('irc', connection),
