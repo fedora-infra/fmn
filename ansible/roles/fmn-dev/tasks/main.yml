@@ -8,16 +8,13 @@
     - python-virtualenvwrapper
     - vim-enhanced
 
-- name: Check out the FMN git repositories
+- name: Check out additional FMN git repositories
   become_user: "{{ ansible_env.SUDO_USER }}"
   git:
     repo: https://github.com/fedora-infra/{{ item }}
     dest: /home/{{ ansible_env.SUDO_USER }}/devel/{{ item }}
     update: no
   with_items:
-    - fmn.lib
-    - fmn.rules
-    - fmn.consumer
     - fmn.web
     - fmn.sse
 
@@ -58,9 +55,7 @@
     virtualenv: /home/{{ ansible_env.SUDO_USER }}/.virtualenvs/python2-fmn/
     virtualenv_python: python2
   with_items:
-    - "fmn.lib"
-    - "fmn.rules"
-    - "fmn.consumer"
+    - "."
     - "fmn.web"
     - "fmn.sse"
   args:
@@ -73,9 +68,7 @@
     virtualenv: /home/{{ ansible_env.SUDO_USER }}/.virtualenvs/python2-fmn/
     virtualenv_python: python2
   with_items:
-    - "fmn.lib"
-    - "fmn.rules"
-    - "fmn.consumer"
+    - "."
     - "fmn.web"
     - "fmn.sse"
   args:
@@ -85,9 +78,7 @@
   become_user: "{{ ansible_env.SUDO_USER }}"
   shell: "pushd {{ item }} && source ~/.bashrc && workon python2-fmn && python setup.py develop && popd"
   with_items:
-    - "fmn.lib"
-    - "fmn.rules"
-    - "fmn.consumer"
+    - "."
     - "fmn.web"
     - "fmn.sse"
   args:
@@ -121,6 +112,10 @@
     - "fmn-worker.service"
     - "fmn-web.service"
 
+- name: Reload the systemd daemon
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  command: systemctl --user daemon-reload
+
 - name: Install fedmsg config to ~/.fedmsg.d
   become_user: "{{ ansible_env.SUDO_USER }}"
   copy:
@@ -129,6 +124,6 @@
 
 - name: Create fmn database
   become_user: "{{ ansible_env.SUDO_USER }}"
-  shell: "source ~/.bashrc && workon python2-fmn && python ~/devel/fmn.lib/createdb.py --with-dev-data"
+  shell: "source ~/.bashrc && workon python2-fmn && python ~/devel/createdb.py --with-dev-data"
   args:
     creates: /var/tmp/fmn-dev-db.sqlite

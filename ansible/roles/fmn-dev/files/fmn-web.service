@@ -4,7 +4,7 @@ After=network.target
 Documentation=https://github.com/fedora-infra/fmn.web/
 
 [Service]
-ExecStart=/home/vagrant/.virtualenvs/python2-fmn/bin/python %h/devel/fmn.web/fmn/web/main.py
+ExecStart=/home/vagrant/.virtualenvs/python2-fmn/bin/python %h/devel/fmn.web/runserver.py --host 0.0.0.0
 Type=simple
 
 [Install]

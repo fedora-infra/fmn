@@ -7,3 +7,5 @@ build
 .vagrant/
 Vagrantfile
 *.retry
+fmn.sse
+fmn.web

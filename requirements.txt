@@ -5,10 +5,6 @@ docutils
 dogpile.cache
 fedmsg[all]
 fedmsg_meta_fedora_infrastructure
-# html5lib is required because lib currently contains the code that does
-# markup for the web app. It should be moved to fmn.web and this dependency
-# can then be removed.
-html5lib
 markupsafe
 moksha.hub
 pika
