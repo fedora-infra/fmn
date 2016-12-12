@@ -22,7 +22,7 @@ class TestHinting(unittest.TestCase):
                 continue
             if not rule['hints-invertible']:
                 continue
-            if not 'topics' in rule['datanommer-hints']:
+            if 'topics' not in rule['datanommer-hints']:
                 continue
             topics = rule['datanommer-hints']['topics']
             for topic in topics:

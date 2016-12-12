@@ -29,7 +29,14 @@ class TestStyle(unittest.TestCase):
 
     def test_code_with_flake8(self):
         """Assert the code is PEP8-compliant"""
-        flake8_command = ['flake8', '--max-line-length', '100', REPO_PATH]
+        enforced_paths = [
+            'fmn/consumer/',
+            'tests/',
+        ]
+
+        enforced_paths = [os.path.join(REPO_PATH, p) for p in enforced_paths]
+
+        flake8_command = ['flake8', '--max-line-length', '100'] + enforced_paths
         self.assertEqual(subprocess.call(flake8_command), 0)
 
 
