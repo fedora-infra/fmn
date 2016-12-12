@@ -1,0 +1,4 @@
+include README.rst
+include COPYING
+include COPYING.LESSER
+include CHANGELOG.rst
