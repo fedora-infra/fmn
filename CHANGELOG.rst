@@ -1,6 +1,5 @@
-
-0.10.0
-======
+1.0.0
+=====
 
 * Merge the fmn.lib, fmn.consumer, and fmn.rules repositories. For changelogs
   of those projects prior to this merge, consult the following repositories:

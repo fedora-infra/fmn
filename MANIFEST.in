@@ -1,7 +1,9 @@
-include README.rst
+graft fedmsg.d/
+include alembic.ini
+include CHANGELOG.rst
 include COPYING
 include COPYING.LESSER
-include CHANGELOG.rst
 include createdb.py
-include alembic.ini
+include README.rst
 recursive-include alembic *
+recursive-include systemd *

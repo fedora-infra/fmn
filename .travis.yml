@@ -1,3 +1,4 @@
+sudo: required
 language: python
 python:
  - "2.6"
@@ -7,6 +8,7 @@ python:
  - "3.5"
 
 install:
+ - sudo apt-get install swig -y
  - pip install --upgrade setuptools pip
  - pip install -r tests-requirements.txt
  - pip install -e .

@@ -35,7 +35,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] <= 6:
 
 setup(
     name='fmn',
-    version='0.10.0',
+    version='1.0.0',
     description='Library for Fedora Notifications',
     long_description=get_description(),
     author='Ralph Bean',
@@ -45,8 +45,8 @@ setup(
     license='LGPLv2+',
     install_requires=requires,
     tests_require=get_requirements('tests-requirements.txt'),
-    test_suite='nose.collector',
-    packages=['fmn', 'fmn.rules', 'fmn.lib'],
+    test_suite='tests',
+    packages=['fmn', 'fmn.rules', 'fmn.lib', 'fmn.consumer', 'fmn.consumer.backends'],
     namespace_packages=['fmn'],
     include_package_data=True,
     zip_safe=False,
@@ -56,4 +56,9 @@ setup(
         'Intended Audience :: Developers',
         'Programming Language :: Python',
     ],
+    entry_points={
+        'moksha.consumer': [
+            "fedmsg_notifications_consumer = fmn.consumer:FMNConsumer",
+        ],
+    },
 )

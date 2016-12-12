@@ -1,0 +1,14 @@
+[Unit]
+Description=FMN.consumer digester #%i
+After=network.target
+Documentation=https://github.com/fedora-infra/fmn.consumer/
+
+[Service]
+ExecStart=/usr/bin/python2 /usr/lib/python2.7/site-packages/fmn/consumer/digests.py
+Type=simple
+User=root
+Group=root
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
