@@ -2,3 +2,6 @@ include README.rst
 include COPYING
 include COPYING.LESSER
 include CHANGELOG.rst
+include createdb.py
+include alembic.ini
+recursive-include alembic *
