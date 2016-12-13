@@ -1,0 +1,15 @@
+arrow
+beautifulsoup4
+bleach
+docutils
+dogpile.cache
+fedmsg[all]
+fedmsg_meta_fedora_infrastructure
+markupsafe
+moksha.hub
+pika
+python-fedora
+redis
+requests
+six
+SQLAlchemy>=0.8
