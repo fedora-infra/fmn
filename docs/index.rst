@@ -6,16 +6,6 @@
 FedMSG Notifications
 ====================
 
-Table of Contents:
-
-.. toctree::
-   :maxdepth: 2
-
-   contributing
-   architecture
-   glossary
-
-
 FedMSG Notifications is a family of systems built to manage end-user
 notifications triggered by `fedmsg <http://fedmsg.com>`_, the FEDerated
 MeSsaGe bus.
@@ -25,12 +15,24 @@ email, Internet Relay Chat (IRC), and Server-Sent Events (SSE). Users can
 configure their notification preferences for all these media in a single place.
 
 
+Table of Contents
+-----------------
+
+.. toctree::
+   :maxdepth: 2
+
+   contributing
+   architecture
+   glossary
+
+
 Usage
 -----
 
 In a nutshell, here's the way this application works:
 
-- You login and set up some preferences here, in this webapp.
+- You login and set up some preferences in the
+  `fmn.web <https://github.com/fedora-infra/fmn.web/>`_ webapp.
 - Events occur in Fedora Infrastructure and are broadcast over fedmsg.
 - This application receives those events and compares them against your
   preferences. If there's a match, then it forwards you a notification.
@@ -48,6 +50,15 @@ You can report `issues
 `source <https://github.com/fedora-infra/fmn/>`_ on github.
 The development team hangs out in ``#fedora-apps``. Please do stop by and say
 hello.
+
+
+Package Reference
+=================
+
+.. toctree::
+   :maxdepth: 2
+
+   reference/index
 
 
 Indices and tables

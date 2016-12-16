@@ -1,3 +1,44 @@
+"""
+FMN uses rules to determine whether or not to dispatch a message. A filter is
+composed of one or more rules. A rule is something like: "is a bodhi message"
+or "pertains to a package owned by me." They are implemented as python functions.
+The database model refers to them as ``fmn.rules:pertains_to_me`` or
+``fmn.rules:is_a_bodhi_message``. They can optionally take arguments.
+
+A user can have zero or more filters for a particular messaging context.
+
+For example::
+
+  User ---+-------------------------+------------------+
+          |                         |                  |
+          V                         V                  V
+         Email                     IRC               Android
+          |                         |                  |
+          +--->Filter1               +--->Filter1        +----->Filter1
+          |       |                        |                    |
+          |       +-> is a koji build      +-> pertains to a    +-> pertains
+          |       |   completed message        package owned        to the
+          |       |                            by me                package
+          |       +-> pertains to a package                         'nethack'
+          |       |   owned by me
+          |       |
+          |       +-> does not pertain to
+          |           package 'nethack'
+          |
+          +--->Filter2
+                  |
+                  +-> is a bodhi message
+                  |
+                  +-> pertains to a package
+                      owned by 'lmacken'
+
+If *all* the rules match for *any* filter in a given context, a notification
+is deployed for that context.  In other words, the filters are OR'd together
+and the rules that make up a filter are AND'd together.  If multiple contexts
+have a filter that succeeds, notifications are deployed for all of those
+contexts.
+"""
+
 from fmn.rules.anitya import *
 from fmn.rules.ansible import *
 from fmn.rules.askbot import *

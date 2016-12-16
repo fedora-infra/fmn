@@ -14,13 +14,7 @@ FMN is deployed in `Fedora <https://apps.fedoraproject.org/notifications/>`_.
 Documentation
 -------------
 
-Documentation is available in the docs/ directory. It is easiest to build them
-in the Vagrant environment::
-
-    $ vagrant ssh
-    $ workon python3-fmn
-    $ cd devel/docs
-    $ make html
+Documentation is available in the docs/ directory or `online <https://fedora-infra.github.io/fmn/>`_
 
 You need sphinx, sqlalchemy_schemadisplay, and graphviz to build the
 documentation.
@@ -29,4 +23,5 @@ documentation.
 Contributing
 ------------
 
-Consult the contribution guide in our documentation!
+Consult the `contribution guide <https://fedora-infra.github.io/fmn/contributing.html>`_
+in our documentation!
