@@ -79,32 +79,40 @@
   args:
     chdir: /home/{{ ansible_env.SUDO_USER }}/devel
 
-- name: Install Python 2 tests requirements
+- name: Install Python 2 dev requirements for fmn
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  pip:
+    requirements: "dev-requirements.txt"
+    virtualenv: /home/{{ ansible_env.SUDO_USER }}/.virtualenvs/python2-fmn/
+    virtualenv_python: python2
+  args:
+    chdir: /home/{{ ansible_env.SUDO_USER }}/devel
+
+
+- name: Install Python 2 dev requirements for fmn.web and fmn.sse
   become_user: "{{ ansible_env.SUDO_USER }}"
   pip:
     requirements: "{{ item }}/tests-requirements.txt"
     virtualenv: /home/{{ ansible_env.SUDO_USER }}/.virtualenvs/python2-fmn/
     virtualenv_python: python2
   with_items:
-    - "."
     - "fmn.web"
     - "fmn.sse"
   args:
     chdir: /home/{{ ansible_env.SUDO_USER }}/devel
 
 # NOTE: Sadly fmn.web isn't Python 3 compatible yet
-- name: Install Python 3 tests requirements
+- name: Install Python 3 dev requirements for fmn
   become_user: "{{ ansible_env.SUDO_USER }}"
-  shell: "source ~/.bashrc && workon python3-fmn && pip install -r {{ item }}/tests-requirements.txt"
-  with_items:
-    - "."
-    - "fmn.sse"
+  shell: "source ~/.bashrc && workon python3-fmn && pip install -r dev-requirements.txt"
   args:
     chdir: /home/{{ ansible_env.SUDO_USER }}/devel
 
-- name: Install packages necessary to build the documentation
+- name: Install Python 3 dev requirements for fmn.sse
   become_user: "{{ ansible_env.SUDO_USER }}"
-  shell: "source ~/.bashrc && workon python3-fmn && pip install sphinx sqlalchemy_schemadisplay"
+  shell: "source ~/.bashrc && workon python3-fmn && pip install -r tests-requirements.txt"
+  args:
+    chdir: /home/{{ ansible_env.SUDO_USER }}/devel/fmn.sse
 
 - name: Install fmn packages into the Python 2 virtualenv
   become_user: "{{ ansible_env.SUDO_USER }}"
