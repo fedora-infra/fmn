@@ -36,10 +36,10 @@ if sys.version_info[0] == 2 and sys.version_info[1] <= 6:
 setup(
     name='fmn',
     version='1.0.0',
-    description='Library for Fedora Notifications',
+    description='Library for fedmsg Notifications',
     long_description=get_description(),
-    author='Ralph Bean',
-    author_email='rbean@redhat.com',
+    author='Fedora Infrastructure Team',
+    author_email='infrastructure@lists.fedoraproject.org',
     url="https://github.com/fedora-infra/fmn",
     download_url="https://pypi.python.org/pypi/fmn/",
     license='LGPLv2+',
@@ -52,9 +52,12 @@ setup(
     zip_safe=False,
     classifiers=[
         'Environment :: Web Environment',
+        'License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Intended Audience :: Developers',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
     ],
     entry_points={
         'moksha.consumer': [
