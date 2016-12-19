@@ -1,4 +1,5 @@
 import fmn.lib
+import fmn.tests
 import smtplib
 
 
@@ -23,12 +24,11 @@ class MockSMTPServer(object):
             return 250, "all good"
 
 
-
 email = MockContext('email')
 irc = MockContext('irc')
 
 
-class TestRegexes(fmn.lib.tests.Base):
+class TestRegexes(fmn.tests.Base):
     def setUp(self):
         super(TestRegexes, self).setUp()
         self.config = {'fmn.email.mailserver': 'fudgeddaboudit'}

@@ -2,7 +2,7 @@
 
 import sys
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def get_description():
@@ -45,8 +45,8 @@ setup(
     license='LGPLv2+',
     install_requires=requires,
     tests_require=get_requirements('tests-requirements.txt'),
-    test_suite='tests',
-    packages=['fmn', 'fmn.rules', 'fmn.lib', 'fmn.consumer', 'fmn.consumer.backends'],
+    test_suite='fmn.tests',
+    packages=find_packages(exclude=('fmn.tests', 'fmn.tests.*')),
     namespace_packages=['fmn'],
     include_package_data=True,
     zip_safe=False,
