@@ -1,5 +1,6 @@
 # FMN worker figuring out for a fedmsg message the list of recipient and
 # contexts
+from __future__ import print_function
 
 import json
 import logging
@@ -40,7 +41,7 @@ OPTS = pika.ConnectionParameters(
 
 
 def get_preferences():
-    print 'get_preferences'
+    print('get_preferences')
     session = fmn.lib.models.init(DB_URI)
     prefs = fmn.lib.load_preferences(
         session, CONFIG, valid_paths,
@@ -48,7 +49,7 @@ def get_preferences():
         cull_backends=['desktop']
     )
     session.close()
-    print 'prefs retrieved'
+    print('prefs retrieved')
     return prefs
 
 
@@ -118,7 +119,7 @@ def inform_workers(raw_msg, context, recipients):
     chan.exchange_declare(exchange=queue)
     chan.queue_declare(queue, durable=True)
 
-    print 'backends', context, recipients
+    print('backends', context, recipients)
     chan.basic_publish(
         exchange='',
         routing_key=queue,
@@ -141,7 +142,7 @@ def callback(ch, method, properties, body):
     CNT += 1
     raw_msg = json.loads(body)
     topic, msg = raw_msg['topic'], raw_msg['body']
-    print topic
+    print(topic)
 
     # If the user has tweaked their preferences on the frontend, then
     # invalidate our entire in-memory cache of the fmn preferences
@@ -150,8 +151,8 @@ def callback(ch, method, properties, body):
         openid = msg['msg']['openid']
         PREFS = update_preferences(openid, PREFS)
         if topic == 'consumer.fmn.prefs.update':  # msg from the consumer
-            print "Done with refreshing prefs.  %0.2fs %s" % (
-                time.time() - start, msg['topic'])
+            print("Done with refreshing prefs.  %0.2fs %s" % (
+                time.time() - start, msg['topic']))
             ch.basic_ack(delivery_tag=method.delivery_tag)
             return
 
@@ -163,11 +164,11 @@ def callback(ch, method, properties, body):
     # And do the real work of comparing every rule against the message.
     t = time.time()
     results = fmn.lib.recipients(PREFS, msg, valid_paths, CONFIG)
-    print "results retrieved in: %0.2fs" % (time.time() - t)
+    print("results retrieved in: %0.2fs" % (time.time() - t))
 
-    print "Recipients found %i dt %0.2fs %s %s" % (
+    print("Recipients found %i dt %0.2fs %s %s" % (
               len(results), time.time() - start,
-              msg['msg_id'], msg['topic'])
+              msg['msg_id'], msg['topic']))
 
     # Let's look at the results of our matching operation and send stuff
     # where we need to.
@@ -185,8 +186,8 @@ def callback(ch, method, properties, body):
 
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
-    print "Done.  %0.2fs %s %s" % (
-        time.time() - start, msg['msg_id'], msg['topic'])
+    print("Done.  %0.2fs %s %s" % (
+        time.time() - start, msg['msg_id'], msg['topic']))
 
 
 queue = 'refresh'
@@ -201,8 +202,8 @@ channel.exchange_declare(exchange=queue, type='direct')
 workers_q = channel.queue_declare(queue, durable=True)
 channel.queue_bind(exchange=queue, queue=queue)
 
-print 'started at %s workers' % workers_q.method.message_count
-print 'started at %s refresh' % refresh_q.method.message_count
+print('started at %s workers' % workers_q.method.message_count)
+print('started at %s refresh' % refresh_q.method.message_count)
 
 # Make sure we leave any other messages in the queue
 channel.basic_qos(prefetch_count=1)
@@ -211,11 +212,11 @@ channel.basic_consume(callback, queue=refresh_q_name)
 
 
 try:
-    print 'Starting consuming'
+    print('Starting consuming')
     channel.start_consuming()
 except KeyboardInterrupt:
     channel.cancel()
     connection.close()
     session.close()
 finally:
-    print '%s tasks proceeded' % CNT
+    print('%s tasks proceeded' % CNT)

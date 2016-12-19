@@ -1,5 +1,6 @@
 # FMN worker figuring out for a fedmsg message the list of recipient and
 # contexts
+from __future__ import print_function
 
 
 import json
@@ -84,11 +85,11 @@ for key in CONFIG['fmn.backends']:
 
 
 def get_preferences():
-    print 'get_preferences'
+    print('get_preferences')
     prefs = {}
     for p in session.query(fmn.lib.models.Preference).all():
         prefs['%s__%s' % (p.openid, p.context_name)] = p
-    print 'prefs retrieved'
+    print('prefs retrieved')
     return prefs
 
 
@@ -96,7 +97,7 @@ PREFS = get_preferences()
 
 
 def update_preferences(openid, prefs):
-    print "Refreshing preferences for %r" % openid
+    print("Refreshing preferences for %r" % openid)
     for p in fmn.lib.models.Preference.by_user(session, openid):
         prefs['%s__%s' % (p.openid, p.context_name)] = p
     return prefs
@@ -144,13 +145,13 @@ def read(queue_object):
         openid = data['body']['msg']['openid']
         PREFS = update_preferences(openid, PREFS)
         if topic == 'consumer.fmn.prefs.update':  # msg from the consumer
-            print "Done with refreshing prefs.  %0.2fs %s" % (
-                time.time() - start, data['topic'])
+            print("Done with refreshing prefs.  %0.2fs %s" % (
+                time.time() - start, data['topic']))
             ch.basic_ack(delivery_tag=method.delivery_tag)
             return
 
     if function:
-        print "Got a function call to %s" % function
+        print("Got a function call to %s" % function)
         if function == 'handle':
             backend = backends[data['backend']]
             backend.handle(session,
@@ -165,34 +166,34 @@ def read(queue_object):
                                  data['queued_messages'])
             ch.basic_ack(delivery_tag=method.delivery_tag)
         else:
-            print "Unknown function"
+            print("Unknown function")
         return
 
     recipients, context, raw_msg = \
         data['recipients'], data['context'], data['raw_msg']['body']
 
-    print "  Considering %r with %i recips" % (
-        context, len(list(recipients)))
+    print("  Considering %r with %i recips" % (
+        context, len(list(recipients))))
 
     backend = backends[context]
     for recipient in recipients:
         user = recipient['user']
         t = time.time()
         pref = PREFS.get('%s__%s' % (user, context))
-        print "pref retrieved in: %0.2fs" % (time.time() - t)
+        print("pref retrieved in: %0.2fs" % (time.time() - t))
 
         try:
             if not pref.should_batch:
-                print "    Calling backend %r with %r" % (backend, recipient)
+                print("    Calling backend %r with %r" % (backend, recipient))
                 t = time.time()
                 backend.handle(session, recipient, raw_msg)
-                print "Handled by backend in: %0.2fs" % (time.time() - t)
+                print("Handled by backend in: %0.2fs" % (time.time() - t))
             else:
-                print "    Queueing msg for digest"
+                print("    Queueing msg for digest")
                 fmn.lib.models.QueuedMessage.enqueue(
                     session, user, context, raw_msg)
             if ('filter_oneshot' in recipient and recipient['filter_oneshot']):
-                print "    Marking one-shot filter as fired"
+                print("    Marking one-shot filter as fired")
                 idx = recipient['filter_id']
                 fltr = session.query(fmn.lib.models.Filter).get(idx)
                 fltr.fired(session)
@@ -206,8 +207,8 @@ def read(queue_object):
     session.commit()
 
     yield ch.basic_ack(delivery_tag=method.delivery_tag)
-    print "Done.  %0.2fs %s %s" % (
-              time.time() - start, raw_msg['msg_id'], raw_msg['topic'])
+    print("Done.  %0.2fs %s %s" % (
+              time.time() - start, raw_msg['msg_id'], raw_msg['topic']))
 
 
 parameters = pika.ConnectionParameters()
@@ -233,10 +234,10 @@ lc3.start(frequency)
 
 
 try:
-    print 'Starting consuming'
+    print('Starting consuming')
     reactor.run()
 except KeyboardInterrupt:
     pass
 finally:
     session.close()
-    print '%s tasks proceeded' % CNT
+    print('%s tasks proceeded' % CNT)

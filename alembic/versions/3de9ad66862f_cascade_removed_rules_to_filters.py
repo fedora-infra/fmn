@@ -5,6 +5,7 @@ Revises: 2136a1f22f1f
 Create Date: 2015-01-12 15:47:02.778152
 
 """
+from __future__ import print_function
 
 # revision identifiers, used by Alembic.
 revision = '3de9ad66862f'
@@ -34,9 +35,9 @@ def upgrade():
         for fltr in filters:
             while fltr.rules:
                 rule = fltr.rules.pop()
-                print "* Deleting rule %r." % rule
+                print("* Deleting rule %r." % rule)
                 session.delete(rule)
-            print "Deleting filter %r." % fltr
+            print("Deleting filter %r." % fltr)
             session.delete(fltr)
     session.commit()
 

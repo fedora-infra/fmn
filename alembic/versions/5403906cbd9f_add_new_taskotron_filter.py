@@ -5,6 +5,7 @@ Revises: 167e0e6dd4e5
 Create Date: 2016-02-10 07:55:27.687188
 
 """
+from __future__ import print_function
 
 # revision identifiers, used by Alembic.
 revision = '5403906cbd9f'
@@ -37,7 +38,7 @@ def upgrade():
 
     for pref in prefs:
         fasnick = pref.openid.split('.')[0]
-        print "* Handling", fasnick
+        print("* Handling", fasnick)
         filt = fmn.lib.models.Filter.create(session, filter_name)
         filt.add_rule(session, paths,
                       "fmn.rules:user_package_filter",
@@ -59,9 +60,9 @@ def downgrade():
     for fltr in filters:
         while fltr.rules:
             rule = fltr.rules.pop()
-            print "* Deleting rule %r." % rule
+            print("* Deleting rule %r." % rule)
             session.delete(rule)
-        print "Deleting filter %r." % fltr
+        print("Deleting filter %r." % fltr)
         session.delete(fltr)
 
     session.commit()

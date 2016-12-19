@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import logging
 import socket
 import string
@@ -39,7 +41,7 @@ def make_fas_cache(**config):
         socket.setdefaulttimeout(600)
         try:
             log.info("Downloading FAS cache for %s*" % key)
-            print key
+            print(key)
             request = fasclient.send_request(
                 '/user/list',
                 req_params={

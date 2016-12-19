@@ -5,6 +5,7 @@ Revises: 5403906cbd9f
 Create Date: 2016-02-11 07:54:04.350712
 
 """
+from __future__ import print_function
 
 # revision identifiers, used by Alembic.
 revision = '226fd58fe7e5'
@@ -35,10 +36,10 @@ def upgrade():
     valid_paths = fmn.lib.load_rules(root='fmn.rules')
 
     filters = session.query(fmn.lib.models.Filter).filter_by(name=target).all()
-    print "Found %i filters" % len(filters)
+    print("Found %i filters" % len(filters))
 
     for filt in filters:
-        print "%r has %r rules" % (filt, len(filt.rules))
+        print("%r has %r rules" % (filt, len(filt.rules)))
         filt.add_rule(session, valid_paths, path, negated=True)
 
     session.commit()
@@ -49,12 +50,12 @@ def downgrade():
     session = sa.orm.scoped_session(sa.orm.sessionmaker(bind=engine))
 
     filters = session.query(fmn.lib.models.Filter).filter_by(name=target).all()
-    print "Found %i filters" % len(filters)
+    print("Found %i filters" % len(filters))
 
     for filt in filters:
         for rule in filt.rules:
             if rule.code_path == path:
-                print "Removing %r from %r" % (path, filt)
+                print("Removing %r from %r" % (path, filt))
                 filt.remove_rule(session, path, rule.id)
                 break
 
