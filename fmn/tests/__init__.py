@@ -17,7 +17,7 @@ class Base(unittest.TestCase):
             'fmn.backends': ['irc', 'email', 'android'],
         }
         self.valid_paths = fmn.lib.load_rules(
-            root='fmn.lib.tests.example_rules')
+            root='fmn.tests.example_rules')
 
         def mock_notify(self, openid, context, changed):
             if not hasattr(self, 'notified'):

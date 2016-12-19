@@ -1,28 +1,25 @@
-from nose.tools import eq_, assert_not_equals
-
-import os
 import fmn.lib.models
-import fmn.lib.tests
+import fmn.tests
 
 
-class TestRecipients(fmn.lib.tests.Base):
+class TestRecipients(fmn.tests.Base):
     def setUp(self):
         super(TestRecipients, self).setUp()
 
     def create_user_and_context_data(self):
-        user1 = fmn.lib.models.User.get_or_create(
+        fmn.lib.models.User.get_or_create(
             self.sess, openid="ralph.id.fedoraproject.org",
             openid_url="http://ralph.id.fedoraproject.org/",
         )
-        user2 = fmn.lib.models.User.get_or_create(
+        fmn.lib.models.User.get_or_create(
             self.sess, openid="toshio.id.fedoraproject.org",
             openid_url="http://toshio.id.fedoraproject.org/",
         )
-        context1 = fmn.lib.models.Context.create(
+        fmn.lib.models.Context.create(
             self.sess, name="irc", description="Internet Relay Chat",
             detail_name="irc nick", icon="user",
         )
-        context2 = fmn.lib.models.Context.create(
+        fmn.lib.models.Context.create(
             self.sess, name="android", description="Google Cloud Messaging",
             detail_name="registration id", icon="phone",
         )
@@ -77,13 +74,13 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess, self.config, self.valid_paths)
         recipients = fmn.lib.recipients(
             preferences, msg, self.valid_paths, self.config)
-        eq_(recipients, {})
+        self.assertEqual(recipients, {})
 
     def test_basic_recipients_list(self):
         self.create_user_and_context_data()
         self.create_preference_data_empty()
 
-        code_path = "fmn.lib.tests.example_rules:wat_rule"
+        code_path = "fmn.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
 
         msg = {
@@ -109,7 +106,7 @@ class TestRecipients(fmn.lib.tests.Base):
         self.create_user_and_context_data()
         self.create_preference_data_empty()
 
-        code_path = "fmn.lib.tests.example_rules:not_wat_rule"
+        code_path = "fmn.tests.example_rules:not_wat_rule"
         self.create_preference_data_basic(code_path)
 
         msg = {
@@ -119,21 +116,21 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess, self.config, self.valid_paths)
         recipients = fmn.lib.recipients(
             preferences, msg, self.valid_paths, self.config)
-        eq_(recipients, {})
+        self.assertEqual(recipients, {})
 
     def test_multiple_identical_filters_miss(self):
         self.create_user_and_context_data()
         self.create_preference_data_empty()
 
         # Tack two identical filters onto the preferenced
-        code_path = "fmn.lib.tests.example_rules:not_wat_rule"
+        code_path = "fmn.tests.example_rules:not_wat_rule"
         self.create_preference_data_basic(code_path)
-        code_path = "fmn.lib.tests.example_rules:not_wat_rule"
+        code_path = "fmn.tests.example_rules:not_wat_rule"
         self.create_preference_data_basic(code_path)
 
         preference = fmn.lib.models.Preference.load(
             self.sess, "ralph.id.fedoraproject.org", "irc")
-        eq_(len(preference.filters), 2)
+        self.assertEqual(len(preference.filters), 2)
 
         msg = {
             "wat": "blah",
@@ -142,21 +139,21 @@ class TestRecipients(fmn.lib.tests.Base):
             self.sess, self.config, self.valid_paths)
         recipients = fmn.lib.recipients(
             preferences, msg, self.valid_paths, self.config)
-        eq_(recipients, {})
+        self.assertEqual(recipients, {})
 
     def test_multiple_identical_filters_hit(self):
         self.create_user_and_context_data()
         self.create_preference_data_empty()
 
         # Tack two identical filters onto the preferenced
-        code_path = "fmn.lib.tests.example_rules:wat_rule"
+        code_path = "fmn.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
-        code_path = "fmn.lib.tests.example_rules:wat_rule"
+        code_path = "fmn.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
 
         preference = fmn.lib.models.Preference.load(
             self.sess, "ralph.id.fedoraproject.org", "irc")
-        eq_(len(preference.filters), 2)
+        self.assertEqual(len(preference.filters), 2)
 
         msg = {
             "wat": "blah",
@@ -183,14 +180,14 @@ class TestRecipients(fmn.lib.tests.Base):
         self.create_preference_data_empty()
 
         # Tack two identical filters onto the preferenced
-        code_path = "fmn.lib.tests.example_rules:wat_rule"
+        code_path = "fmn.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
-        code_path = "fmn.lib.tests.example_rules:not_wat_rule"
+        code_path = "fmn.tests.example_rules:not_wat_rule"
         self.create_preference_data_basic(code_path)
 
         preference = fmn.lib.models.Preference.load(
             self.sess, "ralph.id.fedoraproject.org", "irc")
-        eq_(len(preference.filters), 2)
+        self.assertEqual(len(preference.filters), 2)
 
         msg = {
             "wat": "blah",
@@ -214,31 +211,31 @@ class TestRecipients(fmn.lib.tests.Base):
     def test_load_preferences(self):
         self.create_user_and_context_data()
         self.create_preference_data_empty()
-        code_path = "fmn.lib.tests.example_rules:wat_rule"
+        code_path = "fmn.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
 
         preferences = fmn.lib.load_preferences(
             self.sess, self.config, self.valid_paths)
 
-        eq_(len(preferences), 2)
+        self.assertEqual(len(preferences), 2)
         pref = preferences[0]
-        eq_(pref['enabled'], False)
-        eq_(pref['user']['openid'], u'ralph.id.fedoraproject.org')
-        eq_(pref['context']['name'], u'irc')
-        eq_(len(pref['filters']), 1)
+        self.assertEqual(pref['enabled'], False)
+        self.assertEqual(pref['user']['openid'], u'ralph.id.fedoraproject.org')
+        self.assertEqual(pref['context']['name'], u'irc')
+        self.assertEqual(len(pref['filters']), 1)
 
     def test_load_preferences_sans_disabled(self):
         self.create_user_and_context_data()
         self.create_preference_data_empty()
-        code_path = "fmn.lib.tests.example_rules:wat_rule"
+        code_path = "fmn.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
 
         preferences = fmn.lib.load_preferences(
             self.sess, self.config, self.valid_paths, cull_disabled=True)
 
-        eq_(len(preferences), 1)
+        self.assertEqual(len(preferences), 1)
         pref = preferences[0]
-        eq_(pref['enabled'], True)
-        eq_(pref['user']['openid'], u'toshio.id.fedoraproject.org')
-        eq_(pref['context']['name'], u'irc')
-        eq_(len(pref['filters']), 1)
+        self.assertEqual(pref['enabled'], True)
+        self.assertEqual(pref['user']['openid'], u'toshio.id.fedoraproject.org')
+        self.assertEqual(pref['context']['name'], u'irc')
+        self.assertEqual(len(pref['filters']), 1)

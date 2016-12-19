@@ -1,10 +1,8 @@
-from nose.tools import eq_, assert_not_equals
-import os
 import fmn.lib.models
-import fmn.lib.tests
+import fmn.tests
 
 
-class TestBasics(fmn.lib.tests.Base):
+class TestBasics(fmn.tests.Base):
     def test_setup_and_teardown(self):
         pass
 
@@ -21,9 +19,9 @@ class TestBasics(fmn.lib.tests.Base):
             self.sess, openid="toshio.id.fedoraproject",
             openid_url="http://toshio.id.fedoraproject.org/",
         )
-        eq_(user1.openid, user2.openid)
-        eq_(user1, user2)
-        assert_not_equals(user1, user3)
+        self.assertEqual(user1.openid, user2.openid)
+        self.assertEqual(user1, user2)
+        self.assertNotEqual(user1, user3)
 
     def test_context_create(self):
         context1 = fmn.lib.models.Context.create(
@@ -33,50 +31,50 @@ class TestBasics(fmn.lib.tests.Base):
         context3 = fmn.lib.models.Context.create(
             self.sess, name="android", description="Google Cloud Messaging",
             detail_name="registration id", icon="phone")
-        eq_(context1, context2)
-        assert_not_equals(context1, context3)
+        self.assertEqual(context1, context2)
+        self.assertNotEqual(context1, context3)
 
     def test_user_all(self):
-        user1 = fmn.lib.models.User.get_or_create(
+        fmn.lib.models.User.get_or_create(
             self.sess, openid="ralph.id.fedoraproject",
             openid_url="http://ralph.id.fedoraproject.org/",
         )
-        user2 = fmn.lib.models.User.get_or_create(
+        fmn.lib.models.User.get_or_create(
             self.sess, openid="ralph.id.fedoraproject",
             openid_url="http://ralph.id.fedoraproject.org/",
         )
-        user3 = fmn.lib.models.User.get_or_create(
+        fmn.lib.models.User.get_or_create(
             self.sess, openid="toshio.id.fedoraproject",
             openid_url="http://toshio.id.fedoraproject.org/",
         )
-        eq_(len(fmn.lib.models.User.all(self.sess)), 2)
+        self.assertEqual(len(fmn.lib.models.User.all(self.sess)), 2)
 
     def test_context_all(self):
-        context1 = fmn.lib.models.Context.create(
+        fmn.lib.models.Context.create(
             self.sess, name="irc", description="Internet Relay Chat",
             detail_name="irc nick", icon="user")
-        context2 = fmn.lib.models.Context.create(
+        fmn.lib.models.Context.create(
             self.sess, name="android", description="Google Cloud Messaging",
             detail_name="registration id", icon="phone")
-        eq_(len(fmn.lib.models.Context.all(self.sess)), 2)
+        self.assertEqual(len(fmn.lib.models.Context.all(self.sess)), 2)
 
     def test_filter_oneshot(self):
         filter = fmn.lib.models.Filter.create(self.sess, name="test filter")
         filter.oneshot = True
-        eq_(filter.active, True)
-        eq_(filter.oneshot, True)
+        self.assertEqual(filter.active, True)
+        self.assertEqual(filter.oneshot, True)
         filter.fired(self.sess)
-        eq_(filter.active, False)
+        self.assertEqual(filter.active, False)
 
         filter = fmn.lib.models.Filter.create(self.sess, name="test filter 2")
         filter.oneshot = False
-        eq_(filter.active, True)
-        eq_(filter.oneshot, False)
+        self.assertEqual(filter.active, True)
+        self.assertEqual(filter.oneshot, False)
         filter.fired(self.sess)
-        eq_(filter.active, True)
+        self.assertEqual(filter.active, True)
 
 
-class TestPreferences(fmn.lib.tests.Base):
+class TestPreferences(fmn.tests.Base):
     def setUp(self):
         super(TestPreferences, self).setUp()
         self.user1 = fmn.lib.models.User.get_or_create(
@@ -119,11 +117,11 @@ class TestPreferences(fmn.lib.tests.Base):
 
     def test_list_batching(self):
         batching = fmn.lib.models.Preference.list_batching(self.sess)
-        eq_(len(batching), 2)
-        eq_(set([self.pref1, self.pref4]), set(batching))
+        self.assertEqual(len(batching), 2)
+        self.assertEqual(set([self.pref1, self.pref4]), set(batching))
 
 
-class TestQueuedMessages(fmn.lib.tests.Base):
+class TestQueuedMessages(fmn.tests.Base):
     def setUp(self):
         super(TestQueuedMessages, self).setUp()
         self.user1 = fmn.lib.models.User.get_or_create(
@@ -158,21 +156,21 @@ class TestQueuedMessages(fmn.lib.tests.Base):
         assert self.obj1 != self.obj2
         assert self.obj2 != self.obj3
         assert self.obj1 != self.obj3
-        eq_(fmn.lib.models.QueuedMessage.count_for(
+        self.assertEqual(fmn.lib.models.QueuedMessage.count_for(
             self.sess, self.user1, self.context1), 3)
 
     def test_queued_message_earliest(self):
-        eq_(fmn.lib.models.QueuedMessage.earliest_for(
+        self.assertEqual(fmn.lib.models.QueuedMessage.earliest_for(
             self.sess, self.user1, self.context1), self.obj1)
 
     def test_queued_message_list(self):
         queued_messages = fmn.lib.models.QueuedMessage.list_for(
             self.sess, self.user1, self.context1)
-        eq_(queued_messages, [self.obj1, self.obj2, self.obj3])
+        self.assertEqual(queued_messages, [self.obj1, self.obj2, self.obj3])
 
     def test_queued_message_dequeue(self):
         self.obj1.dequeue(self.sess)
-        eq_(fmn.lib.models.QueuedMessage.count_for(
+        self.assertEqual(fmn.lib.models.QueuedMessage.count_for(
             self.sess, self.user1, self.context1), 2)
-        eq_(fmn.lib.models.QueuedMessage.earliest_for(
+        self.assertEqual(fmn.lib.models.QueuedMessage.earliest_for(
             self.sess, self.user1, self.context1), self.obj2)

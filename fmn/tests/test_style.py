@@ -21,7 +21,7 @@ import unittest
 
 
 REPO_PATH = os.path.abspath(
-    os.path.dirname(os.path.join(os.path.dirname(__file__), '../')))
+    os.path.dirname(os.path.join(os.path.dirname(__file__), '../../')))
 
 
 class TestStyle(unittest.TestCase):
@@ -31,7 +31,7 @@ class TestStyle(unittest.TestCase):
         """Assert the code is PEP8-compliant"""
         enforced_paths = [
             'fmn/consumer/',
-            'tests/',
+            'fmn/tests/',
         ]
 
         enforced_paths = [os.path.join(REPO_PATH, p) for p in enforced_paths]
