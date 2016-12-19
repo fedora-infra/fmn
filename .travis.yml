@@ -1,7 +1,6 @@
 sudo: required
 language: python
 python:
- - "2.6"
  - "2.7"
  - "3.3"
  - "3.4"
@@ -12,9 +11,10 @@ install:
  - pip install --upgrade setuptools pip
  - pip install -r tests-requirements.txt
  - pip install -e .
-script: python setup.py test
+script: python -m unittest discover
 
 matrix:
   allow_failures:
     - python: "3.3"
-    - python: "2.6"
+    - python: "3.4"
+    - python: "3.5"
