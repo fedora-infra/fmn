@@ -44,7 +44,7 @@ setup(
     download_url="https://pypi.python.org/pypi/fmn/",
     license='LGPLv2+',
     install_requires=requires,
-    tests_require=get_requirements('tests-requirements.txt'),
+    tests_require=get_requirements('dev-requirements.txt'),
     test_suite='fmn.tests',
     packages=find_packages(exclude=('fmn.tests', 'fmn.tests.*')),
     namespace_packages=['fmn'],

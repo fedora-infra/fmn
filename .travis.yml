@@ -9,7 +9,7 @@ python:
 install:
  - sudo apt-get install swig -y
  - pip install --upgrade setuptools pip
- - pip install -r tests-requirements.txt
+ - pip install -r dev-requirements.txt
  - pip install -e .
 script: python -m unittest discover
 
