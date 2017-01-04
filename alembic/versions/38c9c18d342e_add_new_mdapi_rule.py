@@ -5,6 +5,7 @@ Revises: 362efe8fd524
 Create Date: 2015-11-13 13:49:25.020563
 
 """
+from __future__ import print_function
 
 # revision identifiers, used by Alembic.
 revision = '38c9c18d342e'
@@ -36,21 +37,21 @@ def upgrade():
     valid_paths = fmn.lib.load_rules(root='fmn.rules')
 
     filters = session.query(fmn.lib.models.Filter).filter_by(name=target).all()
-    print "Found %i filters" % len(filters)
+    print("Found %i filters" % len(filters))
 
     modified = 0
     for filt in filters:
         if len(filt.rules) < 15:
             # Someone has changed this filter dramatically, so let's not mess
             # with it.
-            print "Avoiding %r on %r.  Only %i rules present." % (
-                filt, filt.preference, len(filt.rules))
+            print("Avoiding %r on %r.  Only %i rules present." % (
+                filt, filt.preference, len(filt.rules)))
             continue
 
         modified += 1
         filt.add_rule(session, valid_paths, path, negated=True)
 
-    print "Modified %i filters, total" % modified
+    print("Modified %i filters, total" % modified)
     session.commit()
 
 
@@ -61,7 +62,7 @@ def downgrade():
     valid_paths = fmn.lib.load_rules(root='fmn.rules')
 
     rules = session.query(fmn.lib.models.Rule).filter_by(code_path=path).all()
-    print "Found %i rules" % len(rules)
+    print("Found %i rules" % len(rules))
 
     for rule in rules:
         rule.filter.remove_rule(session, path, rule.id)

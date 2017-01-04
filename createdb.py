@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from __future__ import print_function
+
 import sys
 
 import fedmsg.config
@@ -10,7 +12,7 @@ if not uri:
     raise ValueError("fmn.sqlalchemy.uri must be present")
 
 if '-h' in sys.argv or '--help'in sys.argv:
-    print "createdb.py [--with-dev-data]"
+    print("createdb.py [--with-dev-data]")
     sys.exit(0)
 
 session = fmn.lib.models.init(uri, debug=True, create=True)

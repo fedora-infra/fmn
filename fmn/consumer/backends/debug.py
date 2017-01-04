@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import datetime
 
 import fedmsg.meta
@@ -33,14 +35,14 @@ class DebugBackend(BaseBackend):
         usernames = fedmsg.meta.msg2usernames(msg, **self.config)
         packages = fedmsg.meta.msg2packages(msg, **self.config)
 
-        print '  -- Single message --'
-        print 'recipient:   ', recipient
-        print 'subject:     ', subject,
-        print 'content:     ', content + "\n\t" + link
-        print 'topic:       ', [topic]
-        print 'category:    ', [category]
-        print 'usernames:   ', usernames
-        print 'packages:    ', packages
+        print('  -- Single message --')
+        print('recipient:   ' + str(recipient))
+        print('subject:     ' + str(subject))
+        print('content:     ' + content + "\n\t" + link)
+        print('topic:       ' + str([topic]))
+        print('category:    ' + str([category]))
+        print('usernames:   ' + str(usernames))
+        print('packages:    ' + str(packages))
 
     def handle_batch(self, session, recipient, messages):
         def _format_line(msg):
@@ -85,14 +87,14 @@ class DebugBackend(BaseBackend):
             fedmsg.meta.msg2packages(msg, **self.config)
             for msg in messages])
 
-        print '  -- Batch --'
-        print 'recipient:   ', recipient
-        print 'subject:     ', subject,
-        print 'content:     ', content
-        print 'topic:       ', topics
-        print 'category:    ', categories
-        print 'usernames:   ', usernames
-        print 'packages:    ', packages
+        print('  -- Batch --')
+        print('recipient:   ' + str(recipient))
+        print('subject:     ' + str(subject))
+        print('content:     ' + content)
+        print('topic:       ' + str(topics))
+        print('category:    ' + str(categories))
+        print('usernames:   ' + str(usernames))
+        print('packages:    ' + str(packages))
 
     def handle_confirmation(self, session, confirmation):
         confirmation.set_status(session, 'valid')
@@ -116,6 +118,6 @@ class DebugBackend(BaseBackend):
             'triggered_by_links': False,
         }
 
-        print '  -- Confirmation --'
-        print 'recipient:   ', recipient
-        print 'content:     ', content
+        print('  -- Confirmation --')
+        print('recipient:   ', recipient)
+        print('content:     ', content)

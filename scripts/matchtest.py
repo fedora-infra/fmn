@@ -9,6 +9,7 @@ Requires:
 - python-fedmsg-meta-fedora-infrastructure
 
 """
+from __future__ import print_function
 
 import munch
 import requests
@@ -64,9 +65,9 @@ def main(context, username, msg_id):
 
     matches = fmn.lib.recipients(preferences, message, valid_paths, config)
 
-    print "-" * 60
-    print len(matches), "matches for", subtitle
-    print matches
+    print("-" * 60)
+    print(len(matches), "matches for", subtitle)
+    print(matches)
 
 
 if __name__ == '__main__':

@@ -5,6 +5,7 @@ Revises: 2ea9623b21fa
 Create Date: 2015-01-08 12:23:51.829172
 
 """
+from __future__ import print_function
 
 # revision identifiers, used by Alembic.
 revision = '2136a1f22f1f'
@@ -32,7 +33,7 @@ def upgrade():
         rules = session.query(fmn.lib.models.Rule)\
             .filter_by(code_path=path).all()
         for rule in rules:
-            print "Deleting %r." % rule
+            print("Deleting %r." % rule)
             session.delete(rule)
 
     # And one of them wasn't actually removed, it was just renamed.

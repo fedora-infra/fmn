@@ -1,4 +1,5 @@
 # FMN worker calculating and sending digests
+from __future__ import print_function
 
 
 import json
@@ -118,7 +119,7 @@ lc4.start(frequency)
 
 
 try:
-    print 'Starting producing'
+    print('Starting producing')
     reactor.run()
 finally:
     connection.close()
