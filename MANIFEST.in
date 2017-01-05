@@ -5,5 +5,7 @@ include COPYING
 include COPYING.LESSER
 include createdb.py
 include README.rst
+include requirements.txt
+include dev-requirements.txt
 recursive-include alembic *
 recursive-include systemd *
