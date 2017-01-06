@@ -1,0 +1,8 @@
+graft fedmsg.d/
+include CHANGELOG.rst
+include LICENSE
+include README.md
+include requirements.txt
+include tests-requirements.txt
+include usr/share/fmn.sse/sse_server.tac
+recursive-include systemd *

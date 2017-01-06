@@ -27,13 +27,13 @@ def get_requirements(filename='requirements.txt'):
 
 setup(
     name='fmn.sse',
-    version='0.1.1',
+    version='0.2.0',
     description='Real time feed for fedmsg',
     long_description=get_description(),
-    author='Szymon M',
-    author_email='skrzepto@gmail.com',
+    author='Fedora Infrastructure Team and Szymon M',
+    author_email='infrastructure@lists.fedoraproject.org',
     url="https://github.com/fedora-infra/fmn.sse/",
-    # download_url="https://pypi.python.org/pypi/fmn.sse/",# not yet configured
+    download_url="https://pypi.python.org/pypi/fmn.sse/",
     license='GPL',
     install_requires=get_requirements('requirements.txt'),
     tests_require=get_requirements('tests-requirements.txt'),
@@ -43,8 +43,9 @@ setup(
     include_package_data=True,
     zip_safe=False,
     classifiers=[
+        'Development Status :: 3 - Alpha'
         'Environment :: Web Environment',
-        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Framework :: Twisted',
         'Intended Audience :: Developers',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
@@ -53,5 +54,6 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Topic :: Software Development :: Libraries :: Python Modules',
     ],
 )
