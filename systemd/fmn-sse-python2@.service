@@ -1,5 +1,5 @@
 [Unit]
-Description=FMN.sse feed for real time feed of fedmsg #%i
+Description=FMN.sse feed using Python 2 for real time feed of fedmsg #%i
 After=network.target
 Documentation=https://github.com/fedora-infra/fmn.sse/
 
