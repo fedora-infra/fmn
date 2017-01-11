@@ -26,20 +26,19 @@ def get_requirements(filename='requirements.txt'):
 
 
 setup(
-    name='fmn.sse',
+    name='fmn_sse',
     version='0.2.0',
     description='Real time feed for fedmsg',
     long_description=get_description(),
     author='Fedora Infrastructure Team and Szymon M',
     author_email='infrastructure@lists.fedoraproject.org',
     url="https://github.com/fedora-infra/fmn.sse/",
-    download_url="https://pypi.python.org/pypi/fmn.sse/",
+    download_url="https://pypi.python.org/pypi/fmn_sse/",
     license='GPLv2+',
     install_requires=get_requirements('requirements.txt'),
     tests_require=get_requirements('tests-requirements.txt'),
     test_suite='tests',
-    packages=['fmn', 'fmn.sse'],
-    namespace_packages=[],
+    packages=['fmn_sse'],
     include_package_data=True,
     zip_safe=False,
     classifiers=[

@@ -23,7 +23,7 @@ from twisted.web.test.requesthelper import DummyRequest
 from twisted.web import server as twisted_server
 from twisted.trial import unittest as twisted_unittest
 
-from fmn.sse import server
+from fmn_sse import server
 
 
 class TestSSEServer(twisted_unittest.TestCase):
