@@ -27,7 +27,7 @@ def get_requirements(filename='requirements.txt'):
 
 setup(
     name='fmn_sse',
-    version='0.2.0',
+    version='0.2.1',
     description='Real time feed for fedmsg',
     long_description=get_description(),
     author='Fedora Infrastructure Team and Szymon M',
@@ -42,7 +42,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     classifiers=[
-        'Development Status :: 3 - Alpha'
+        'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
         'Framework :: Twisted',
         'Intended Audience :: Developers',
