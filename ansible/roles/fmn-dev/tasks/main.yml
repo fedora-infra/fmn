@@ -170,6 +170,6 @@
 
 - name: Create fmn database
   become_user: "{{ ansible_env.SUDO_USER }}"
-  shell: "source ~/.bashrc && workon python2-fmn && python ~/devel/createdb.py --with-dev-data"
+  shell: "source ~/.bashrc && workon python2-fmn && fmn-createdb --with-dev-data"
   args:
     creates: /var/tmp/fmn-dev-db.sqlite

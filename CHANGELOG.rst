@@ -1,3 +1,9 @@
+1.1.0
+=====
+
+* Introduce an fmn-createdb script
+
+
 1.0.0
 =====
 
