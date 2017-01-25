@@ -101,7 +101,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
 
         # Ignore high-usage COPRs
         if topic.startswith('org.fedoraproject.prod.copr.') and \
-                msg['msg']['owner'] in self.ignored_copr_owners:
+                msg['msg'].get('owner') in self.ignored_copr_owners:
             log.debug('Dropping COPR %r by %r' % (topic, msg['msg']['owner']))
             return
 
