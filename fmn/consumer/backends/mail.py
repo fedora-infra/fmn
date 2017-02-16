@@ -51,21 +51,36 @@ class EmailBackend(BaseBackend):
             time.sleep(0.5)
             return self._get_mailserver(address, tries + 1)
 
-    def send_mail(self, session, recipient, subject, content,
-                  topics=None, categories=None, usernames=None, packages=None):
-        self.log.debug("Sending email")
+    def _create_message(self, recipient, subject, content, topics=None, categories=None,
+                        usernames=None, packages=None):
+        """
+        Create a Python email Message that's ready for delivery.
 
-        if 'email address' not in recipient:
-            self.log.warning("No email address found.  Bailing.")
-            return
+        This handles setting all the headers and formatting.
 
-        if self.disabled_for(session, detail_value=recipient['email address']):
-            self.log.debug("Messages stopped for %r, not sending." % recipient)
-            return
+        Args:
+            recipient (dict): A dictionary containing (at a minimum) the
+                `email_address` (str) and `triggered_by_links` (bool) keys.
+            subject (str): The email's subject.
+            content (str): The email's body.
+            topics (list): A list of fedmsg topics. This list is added to a
+                header field called `X-Fedmsg-Topic`.
+            categories (list): A list of fedmsg categories. This list is added
+                to a header field called `X-Fedmsg-Category`
+            usernames (list): A list of fedmsg usernames. This list is added to
+                a header field called `X-Fedmsg-Username`
+            packages (list): A list of fedmsg packages. This list is added to
+                a header field called `X-Fedmsg-Package`
 
+        """
         email_message = email.Message.Message()
         email_message.add_header('To', to_bytes(recipient['email address']))
         email_message.add_header('From', to_bytes(self.from_address))
+        # Although this is a non-standard header and RFC 2076 discourages it, some
+        # old clients don't honour RFC 3834 and will auto-respond unless this is set.
+        email_message.add_header('Precendence', 'Bulk')
+        # Mark this mail as auto-generated so auto-responders don't respond; see RFC 3834
+        email_message.add_header('Auto-Submitted', 'auto-generated')
 
         # Assemble a menagerie of possibly useful headers
         for topic in topics or []:
@@ -101,6 +116,23 @@ class EmailBackend(BaseBackend):
         # Explicitly declare encoding, but remove the transfer encoding
         # https://github.com/fedora-infra/fmn/issues/94
         email_message.set_charset('utf-8')
+
+        return email_message
+
+    def send_mail(self, session, recipient, subject, content,
+                  topics=None, categories=None, usernames=None, packages=None):
+        self.log.debug("Sending email")
+
+        if 'email address' not in recipient:
+            self.log.warning("No email address found.  Bailing.")
+            return
+
+        if self.disabled_for(session, detail_value=recipient['email address']):
+            self.log.debug("Messages stopped for %r, not sending." % recipient)
+            return
+
+        email_message = self._create_message(
+            recipient, subject, content, topics, categories, usernames, packages)
 
         server = self._get_mailserver(self.mailserver)
         try:
