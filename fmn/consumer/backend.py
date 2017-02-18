@@ -152,22 +152,33 @@ def read(queue_object):
 
     if function:
         print("Got a function call to %s" % function)
-        if function == 'handle':
-            backend = backends[data['backend']]
-            backend.handle(session,
-                           data['recipient'],
-                           data['msg'],
-                           data['streamline'])
+        try:
+            if function == 'handle':
+                backend = backends[data['backend']]
+                backend.handle(session,
+                               data['recipient'],
+                               data['msg'],
+                               data['streamline'])
+                ch.basic_ack(delivery_tag=method.delivery_tag)
+            elif function == 'handle_batch':
+                backend = backends[data['backend']]
+                backend.handle_batch(session,
+                                     data['recipient'],
+                                     data['queued_messages'])
+                ch.basic_ack(delivery_tag=method.delivery_tag)
+            else:
+                print("Unknown function")
+            return
+        except Exception:
+            logging.error('Message failed, requeueing', exc_info=True)
+            ch.basic_publish(exchange='',
+                             routing_key='backends',
+                             body=body,
+                             properties=pika.BasicProperties(
+                                 delivery_mode=2
+                            ))
             ch.basic_ack(delivery_tag=method.delivery_tag)
-        elif function == 'handle_batch':
-            backend = backends[data['backend']]
-            backend.handle_batch(session,
-                                 data['recipient'],
-                                 data['queued_messages'])
-            ch.basic_ack(delivery_tag=method.delivery_tag)
-        else:
-            print("Unknown function")
-        return
+            return
 
     recipients, context, raw_msg = \
         data['recipients'], data['context'], data['raw_msg']['body']
