@@ -6,8 +6,11 @@ python:
  - "3.4"
  - "3.5"
 
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y swig
+
 install:
- - sudo apt-get install swig -y
  - pip install --upgrade setuptools pip
  - pip install -r dev-requirements.txt
  - pip install -e .
