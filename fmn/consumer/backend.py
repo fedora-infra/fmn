@@ -1,5 +1,11 @@
-# FMN worker figuring out for a fedmsg message the list of recipient and
-# contexts
+# -*- coding: utf-8 -*-
+"""
+The FMN backend is a `Twisted`_ application that consumes messages that have
+been queued by FMN workers and sends them to the user over the configured
+medium (IRC, email, etc) by using "backends".
+
+.. _Twisted: https://twistedmatrix.com/
+"""
 from __future__ import print_function
 
 
@@ -139,7 +145,6 @@ def read(queue_object):
 
     data = json.loads(body)
     topic = data.get('topic', '')
-    function = data.get('function', '')
 
     if '.fmn.' in topic:
         openid = data['body']['msg']['openid']
@@ -150,24 +155,46 @@ def read(queue_object):
             ch.basic_ack(delivery_tag=method.delivery_tag)
             return
 
+    # This is a special handler for messages placed in the ``backends`` queue by
+    # the :mod:`fmn.consumer.digests` module.
+
+    # This module places messages in the queue in two different formats. The
+    # first format is used when there is only one message in the digest, and
+    # the second is used when there are multiple messages in the digest.
+
+    # This is in dire need of refactoring, but for the moment this is used to
+    # check to see if this is a special message by checking for the existence of
+    # the ``function`` key which has a string value set to either ``handle`` or
+    # ``handle_batch``, and then calling the appropriate backend function.
+    function = data.get('function', '')
     if function:
         print("Got a function call to %s" % function)
-        if function == 'handle':
-            backend = backends[data['backend']]
-            backend.handle(session,
-                           data['recipient'],
-                           data['msg'],
-                           data['streamline'])
+        try:
+            if function == 'handle':
+                backend = backends[data['backend']]
+                backend.handle(session,
+                               data['recipient'],
+                               data['msg'],
+                               data['streamline'])
+                ch.basic_ack(delivery_tag=method.delivery_tag)
+            elif function == 'handle_batch':
+                backend = backends[data['backend']]
+                backend.handle_batch(session,
+                                     data['recipient'],
+                                     data['queued_messages'])
+                ch.basic_ack(delivery_tag=method.delivery_tag)
+            else:
+                print("Unknown function")
+            return
+        except Exception:
+            # Republishing the message will place the message at the back of
+            # work queue so the message doesn't get lost, but also doesn't hold
+            # up new messages.
+            logging.exception('Message failed, requeueing')
+            ch.basic_publish(exchange='', routing_key='backends', body=body,
+                             properties=pika.BasicProperties(delivery_mode=2))
             ch.basic_ack(delivery_tag=method.delivery_tag)
-        elif function == 'handle_batch':
-            backend = backends[data['backend']]
-            backend.handle_batch(session,
-                                 data['recipient'],
-                                 data['queued_messages'])
-            ch.basic_ack(delivery_tag=method.delivery_tag)
-        else:
-            print("Unknown function")
-        return
+            return
 
     recipients, context, raw_msg = \
         data['recipients'], data['context'], data['raw_msg']['body']
