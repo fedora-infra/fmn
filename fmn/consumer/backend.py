@@ -91,6 +91,12 @@ for key in CONFIG['fmn.backends']:
 
 
 def get_preferences():
+    """
+    Load all preferences from the FMN database and return them.
+
+    Returns:
+        dict: A big dictionary of user preferences.
+    """
     print('get_preferences')
     prefs = {}
     for p in session.query(fmn.lib.models.Preference).all():
@@ -103,6 +109,17 @@ PREFS = get_preferences()
 
 
 def update_preferences(openid, prefs):
+    """
+    Update an existing preference dictionary loaded by :func:`get_preferences`
+    with the latest preferences for the provided openid.
+
+    Args:
+        openid (str): The openid of the user to fetch the new preferences for.
+        prefs (dict): The dictionary of existing preferences.
+
+    Returns:
+        dict: A big dictionary of user preferences.
+    """
     print("Refreshing preferences for %r" % openid)
     for p in fmn.lib.models.Preference.by_user(session, openid):
         prefs['%s__%s' % (p.openid, p.context_name)] = p
@@ -111,6 +128,15 @@ def update_preferences(openid, prefs):
 
 @defer.inlineCallbacks
 def run(connection):
+    """
+    Ensure the various exchanges and queues are configured and set up a looping
+    call in the reactor for :func:`.read` on the ``refresh`` and ``backends``
+    queues.
+
+    Args:
+        connection (twisted_connection.TwistedProtocolConnection): The Pika
+            RabbitMQ connection to use.
+    """
 
     channel = yield connection.channel()
     yield channel.basic_qos(prefetch_count=1)
@@ -135,7 +161,15 @@ def run(connection):
 
 @defer.inlineCallbacks
 def read(queue_object):
+    """
+    Read a single message from the queue and dispatch it to the proper backend.
 
+    This is meant to be used with the looping call functionality of Twisted.
+
+    Args:
+        queue_object (twisted_connection.ClosableDeferredQueue): A queue of
+            messages to consume.
+    """
     ch, method, properties, body = yield queue_object.get()
 
     global CNT, PREFS

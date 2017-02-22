@@ -1,4 +1,16 @@
-# An example fedmsg koji consumer
+"""
+This is a `fedmsg consumer`_ that subscribes to every topic on the message bus
+it is connected to. It has two tasks. The first is to place all incoming
+messages into a RabbitMQ message queue. The second is to manage the FMN caches.
+
+FMN makes heavy use of caches since it needs to know who owns what packages and
+what user notification preferences are, both of which require expensive API
+queries to `FAS`_, `pkgdb`_, or the database.
+
+.. _fedmsg consumer: http://www.fedmsg.com/en/latest/consuming/#the-hub-consumer-approach
+.. _FAS: https://admin.fedoraproject.org/accounts/
+.. _pkgdb: https://admin.fedoraproject.org/pkgdb/
+"""
 
 import datetime
 import logging
@@ -26,6 +38,29 @@ OPTS = pika.ConnectionParameters(
 
 
 def notify_prefs_change(openid):
+    """
+    Publish a message to a fanout exchange notifying consumers about preference
+    updates.
+
+    Consumers can use these messages to refresh the process-local caches on a
+    user-by-user basis. To recieve these messages, just bind the RabbitMQ
+    queue you're using to the ``refresh`` fanout exchange.
+
+    Messages are JSON-serialized and UTF-8 encoded.
+
+    Example::
+
+        {
+            "topic": "consumer.fmn.prefs.update",
+            "body": {
+                "topic": "consumer.fmn.prefs.update",
+                "msg_id": "<year>-<random-uuid>",
+                "msg": {
+                    "openid": "<user's openid who updated their preferences>"
+                }
+            }
+        }
+    """
     import json
     connection = pika.BlockingConnection(OPTS)
     msg_id = '%s-%s' % (datetime.datetime.utcnow().year, uuid.uuid4())
@@ -55,6 +90,16 @@ def notify_prefs_change(openid):
 
 
 class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
+    """
+    A `fedmsg consumer`_ that subscribes to all topics and re-publishes all
+    messages to the ``workers`` exchange.
+
+    Attributes:
+        topic (str): The topics this consumer is subscribed to. Set to ``*``
+            (all topics).
+        config_key (str): The key to set to ``True`` in the fedmsg config to
+            enable this consumer. The key is ``fmn.consumer.enabled``.
+    """
     topic = '*'
     config_key = 'fmn.consumer.enabled'
 
@@ -80,9 +125,23 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         log.debug("FMNConsumer initialized")
 
     def make_session(self):
+        """
+        Initialize the database session and return it.
+
+        Returns:
+            sqlalchemy.orm.scoping.scoped_session: An SQLAlchemy scoped session.
+                Calling it returns the current Session, creating it using the
+                scoped_session.session_factory if not present.
+        """
         return fmn.lib.models.init(self.uri)
 
     def consume(self, raw_msg):
+        """
+        This method is called when a message arrives on the fedmsg bus.
+
+        Args:
+            raw_msg (dict): The raw fedmsg deserialized to a Python dictionary.
+        """
         session = self.make_session()
         try:
             self.work(session, raw_msg)
@@ -92,6 +151,14 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
             raise
 
     def work(self, session, raw_msg):
+        """
+        This method is called when a message arrives on the fedmsg bus by the
+        :meth:`.consume` method.
+
+        Args:
+            session (sqlalchemy.orm.session.Session): The SQLAlchemy session to use.
+            raw_msg (dict): The raw fedmsg deserialized to a Python dictionary.
+        """
         topic, msg = raw_msg['topic'], raw_msg['body']
 
         for suffix in self.junk_suffixes:
@@ -196,5 +263,8 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                   time.time() - start, msg['msg_id'], msg['topic'])
 
     def stop(self):
+        """
+        Gracefully halt this fedmsg consumer.
+        """
         log.info("Cleaning up FMNConsumer.")
         super(FMNConsumer, self).stop()
