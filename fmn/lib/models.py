@@ -59,6 +59,16 @@ Session = scoped_session(sessionmaker(bind=engine))
 
 
 class FMNBase(object):
+    """
+    Base class for the SQLAlchemy model base class.
+
+    Attributes:
+        query (sqlalchemy.orm.query.Query): a class property which produces a
+            Query object against the class and the current Session when called.
+    """
+
+    query = Session.query_property()
+
     def notify(self, openid, context, changed):
         obj = type(self).__name__.lower()
         topic = obj + ".update"

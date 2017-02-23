@@ -20,6 +20,7 @@
 
 import unittest
 
+from sqlalchemy.orm.query import Query
 import mock
 
 import fmn.lib.models
@@ -43,6 +44,11 @@ class TestFMNBase(unittest.TestCase):
             topic='base.update',
             msg={'openid': 'jcline', 'context': 'email', 'changed': 'change'},
         )
+
+    def test_has_query_property(self):
+        """Assert that models inheriting from the base class have a query propery"""
+        pref = fmn.lib.models.Preference()
+        self.assertTrue(isinstance(pref.query, Query))
 
 
 class TestBasics(fmn.tests.Base):
