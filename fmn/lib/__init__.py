@@ -1,8 +1,6 @@
 """ Fedora Notifications internal API """
 
-import fmn.lib.hinting
-import fmn.lib.models
-
+from collections import defaultdict
 import inspect
 import logging
 import re
@@ -10,10 +8,12 @@ import smtplib
 
 import bs4
 import docutils.examples
+import fedmsg
 import markupsafe
 import six
 
-from collections import defaultdict
+from fmn.lib.models import Preference
+import fmn.lib.hinting
 
 try:
     from collections import OrderedDict
@@ -24,6 +24,9 @@ log = logging.getLogger(__name__)
 
 irc_regex = r'[a-zA-Z_\-\[\]\\^{}|`][a-zA-Z0-9_\-\[\]\\^{}|`]*'
 gcm_regex = r'^[\w-]+$'
+
+
+CONFIG = fedmsg.config.load_config()
 
 
 def recipients(preferences, message, valid_paths, config):
@@ -38,7 +41,7 @@ def recipients(preferences, message, valid_paths, config):
     results = defaultdict(list)
     notified = set()
 
-    for preference in preferences:
+    for preference in preferences.values():
         user = preference['user']
         context = preference['context']
         if (user['openid'], context['name']) in notified:
@@ -94,10 +97,9 @@ def matches(filter, message, valid_paths, rule_cache, config):
     return True
 
 
-def load_preferences(session, config, valid_paths,
-                     cull_disabled=False, openid=None,
-                     cull_backends=None):
-    """ Every rule for every filter for every context for every user.
+def load_preferences(openid=None, cull_disabled=False, cull_backends=None):
+    """
+    Every rule for every filter for every context for all or one user.
 
     Any preferences in the DB that are for contexts that are disabled in the
     config are omitted here.
@@ -106,25 +108,50 @@ def load_preferences(session, config, valid_paths,
     loads, practically, the whole database.  However, if an openid string is
     submitted, then only the preferences of that user are returned (and this is
     less expensive).
-    """
 
+    Args:
+        openid (str): If provided, only the preferences of that user are loaded, rather
+            than all preferences for all users.
+        cull_disabled (bool): Remove preferences that are configured to be disabled.
+        cull_backends (list): Remove preferences related to the specified backends.
+
+    Returns:
+        dict: A dictionary of dictionaries from the :meth:`fmn.lib.models.Preference.__json__`
+            method. The keys are in the format ``<openid>_<context_name>``.
+    """
     cull_backends = cull_backends or []
 
-    query = session.query(fmn.lib.models.Preference)
-
     if openid:
-        query = query.filter(fmn.lib.models.Preference.openid==openid)
+        log.info('Loading the latest preferences for %s', openid)
+        preferences = Preference.query.filter(Preference.openid == openid).all()
+    else:
+        log.info('Loading the latest preferences for all users')
+        preferences = Preference.query.all()
 
-    preferences = query.all()
-    return [
-        preference.__json__(reify=True)
-        for preference in preferences
-        if (
-            preference.context.name in config['fmn.backends']
-            and preference.context.name not in cull_backends
-            and (not cull_disabled or preference.enabled)
-        )
-    ]
+    prefs = {}
+    for p in preferences:
+        if p.context.name in CONFIG['fmn.backends'] and p.context.name not in cull_backends\
+                and (not cull_disabled or p.enabled):
+            key = '{openid}_{context}'.format(openid=p.openid, context=p.context_name)
+            prefs[key] = p.__json__(reify=True)
+
+    return prefs
+
+
+def update_preferences(openid, existing_preferences):
+    """
+    Update an existing preferences dictionary for the given openid.
+
+    Args:
+        openid (str): The user to get fresh preferences for.
+        existing_preferences (dict): The existing preferences dictionary to
+            update. This is expected to be in the format returned by
+            :func:`load_preferences`.
+    """
+    user_prefs = load_preferences(openid=openid, cull_disabled=True)
+    for key, value in user_prefs.items():
+        existing_preferences[key] = value
+    return existing_preferences
 
 
 def load_rules(root='fmn.rules'):
