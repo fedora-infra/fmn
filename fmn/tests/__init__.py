@@ -1,7 +1,11 @@
+import unittest
 import os
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
+
 import fmn.lib.models
 
-import unittest
 
 DB_PATH = 'sqlite:////var/tmp/test-fmn-lib.sqlite'
 
@@ -11,7 +15,13 @@ class Base(unittest.TestCase):
         dbfile = DB_PATH.split('///')[1]
         if os.path.exists(dbfile):
             os.unlink(dbfile)
-        self.sess = fmn.lib.models.init(DB_PATH, debug=False, create=True)
+
+        self._old_engine = fmn.lib.models.engine
+        self._old_session = fmn.lib.models.Session
+        fmn.lib.models.engine = create_engine(DB_PATH, echo=False)
+        fmn.lib.models.Session = scoped_session(sessionmaker(bind=fmn.lib.models.engine))
+        fmn.lib.models.BASE.metadata.create_all(fmn.lib.models.engine)
+        self.sess = fmn.lib.models.Session
 
         self.config = {
             'fmn.backends': ['irc', 'email', 'android'],
@@ -33,6 +43,10 @@ class Base(unittest.TestCase):
         if os.path.exists(dbfile):
             os.unlink(dbfile)
 
-        self.sess.rollback()
+        # Remove the session from the session registry and roll back any
+        # transaction state.
+        fmn.lib.models.Session.remove()
 
         fmn.lib.models.FMNBase.notify = self.original_notify
+        fmn.lib.models.engine = self._old_engine
+        fmn.lib.models.Session = self._old_session

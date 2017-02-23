@@ -20,50 +20,68 @@ This module provides a command to configure a database for FMN.
 """
 from __future__ import print_function, unicode_literals
 
-import sys
+import argparse
 
-import fedmsg.config
-import fmn.lib.models
+from fmn.lib import models
+
 
 def main():
     """
     The entry point for the database commands.
     """
-    config = fedmsg.config.load_config()
-    uri = config.get('fmn.sqlalchemy.uri')
-    if not uri:
-        raise ValueError("fmn.sqlalchemy.uri must be present")
+    parser = argparse.ArgumentParser(description='FMN database manager')
+    parser.add_argument(
+        '--create',
+        '-c',
+        dest='create',
+        action='store_true',
+        help='Create the database tables'
+    )
+    parser.add_argument(
+        '--with-dev-data',
+        '-d',
+        dest='dev',
+        action='store_true',
+        help='Add some development sample data'
+    )
+    args = parser.parse_args()
 
-    if '-h' in sys.argv or '--help'in sys.argv:
-        print(sys.argv[0] + " [--with-dev-data]")
-        sys.exit(0)
+    if args.create:
+        models.BASE.metadata.create_all(models.engine)
 
-    session = fmn.lib.models.init(uri, debug=True, create=True)
+    if args.dev:
+        dev_data()
 
-    if '--with-dev-data' in sys.argv:
-        context1 = fmn.lib.models.Context.create(
-            session, name="irc", description="Internet Relay Chat",
-            detail_name="irc nick", icon="user",
-            placeholder="z3r0_c00l",
-        )
-        context2 = fmn.lib.models.Context.create(
-            session, name="email", description="Electronic Mail",
-            detail_name="email address", icon="envelope",
-            placeholder="jane@fedoraproject.org",
-        )
-        context3 = fmn.lib.models.Context.create(
-            session, name="android", description="Google Cloud Messaging",
-            detail_name="registration id", icon="phone",
-            placeholder="laksdjfasdlfkj183097falkfj109f"
-        )
-        context4 = fmn.lib.models.Context.create(
-            session, name="desktop", description="fedmsg-notify",
-            detail_name="None", icon="console",
-            placeholder="There's no need to put a value here"
-        )
-        context5 = fmn.lib.models.Context.create(
-            session, name="sse", description="server sent events",
-            detail_name="None", icon="console",
-            placeholder="There's no need to put a value here"
-        )
-        session.commit()
+
+def dev_data():
+    """
+    Populate the database with some development data
+    """
+    session = models.Session()
+    models.Context.create(
+        session, name="irc", description="Internet Relay Chat",
+        detail_name="irc nick", icon="user",
+        placeholder="z3r0_c00l",
+    )
+    models.Context.create(
+        session, name="email", description="Electronic Mail",
+        detail_name="email address", icon="envelope",
+        placeholder="jane@fedoraproject.org",
+    )
+    models.Context.create(
+        session, name="android", description="Google Cloud Messaging",
+        detail_name="registration id", icon="phone",
+        placeholder="laksdjfasdlfkj183097falkfj109f"
+    )
+    models.Context.create(
+        session, name="desktop", description="fedmsg-notify",
+        detail_name="None", icon="console",
+        placeholder="There's no need to put a value here"
+    )
+    models.Context.create(
+        session, name="sse", description="server sent events",
+        detail_name="None", icon="console",
+        placeholder="There's no need to put a value here"
+    )
+    session.commit()
+    models.Session.remove()
