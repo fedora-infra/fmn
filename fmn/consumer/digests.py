@@ -1,4 +1,13 @@
-# FMN worker calculating and sending digests
+"""
+This module is responsible for creating message digests.
+
+Users can opt to receive digests based on time or the number of messages. When
+a user has opted to receive a digest, the messages are placed in the database
+by the :mod:`fmn.consumer.backend` Twisted app. This then queries the database
+and creates the digest messages and then re-publishes those messages to the
+``backend`` exchange. The :mod:`fmn.consumer.backend` application then receives
+the messages _again_ and sends them.
+"""
 from __future__ import print_function
 
 
@@ -56,7 +65,26 @@ connection = pika.BlockingConnection(OPTS)
 
 
 class FakeBackend(object):
+    """
+    This class implements part of the backend interface defined in the
+    :class:`fmn.backends.base.BaseBackend` class.
+
+    Used in conjunction with :class:`fmn_producers.DigestProducer`, this
+    will send batch messages to the ``backends`` message queue.
+
+    Args:
+        name (str): The backend name. This should correspond to a real backend
+            name.
+        connection (pika.BlockingConnection): The connection to use when
+            communicating with RabbitMQ.
+    """
     def inform_workers(self, body):
+        """
+        Queue a message in RabbitMQ.
+
+        Args:
+            body (dict): A JSON-serializable dictionary to send.
+        """
         queue = 'backends'
         chan = self.connection.channel()
         chan.exchange_declare(exchange=queue)
@@ -79,6 +107,21 @@ class FakeBackend(object):
         self.connection = connection
 
     def handle(self, session, recipient, msg, streamline=False):
+        """
+        Called when a digest is composed of a single message.
+
+        This occurs when the time between digests has been reached and there
+        is only one message to send. In those cases, we should send it like a
+        normal message.
+
+        Args:
+            session (None): An unused argument.
+            recipient (dict): The recipient of the message and their settings.
+            msg (dict): The original message body.
+            streamline (bool): If false, it triggers a call to
+                :meth:`fmn.consumer.producer.DigestProducer.manage_batch` in
+                IRC backend and only the IRC backend.
+        """
         self.inform_workers({
             'function': 'handle',
             'recipient': recipient,
@@ -86,6 +129,14 @@ class FakeBackend(object):
             'streamline': streamline})
 
     def handle_batch(self, session, recipient, queued_messages):
+        """
+        Called when a digest has more than one message in it.
+
+        Args:
+            session (None): An unused argument.
+            recipient (dict): The recipient of the message and their settings.
+            queued_messages (list): List of the original message bodies.
+        """
         self.inform_workers({
             'function': 'handle_batch',
             'recipient': recipient,

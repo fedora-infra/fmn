@@ -1,5 +1,16 @@
-# FMN worker figuring out for a fedmsg message the list of recipient and
-# contexts
+"""
+This is a runnable Python module that uses Twisted to consume AMQP messages
+processed by the :class:`fmn.consumer.consumer.FMNConsumer` `fedmsg consumer`_.
+
+It determines a list of recipients and contexts for each fedmsg and constructs
+a new message using the initial fedmsg and the recipient and context list.
+
+It then publishes these messages to the ``backends`` exchange which is consumed
+by the :mod:`fmn.consumer.backend` module's Twisted application.
+
+.. _fedmsg consumer:
+    http://www.fedmsg.com/en/latest/consuming/#the-hub-consumer-approach
+"""
 from __future__ import print_function
 
 import json
@@ -41,6 +52,12 @@ OPTS = pika.ConnectionParameters(
 
 
 def get_preferences():
+    """
+    Load all preferences from the FMN database and return them.
+
+    Returns:
+        dict: A big dictionary of user preferences.
+    """
     print('get_preferences')
     session = fmn.lib.models.init(DB_URI)
     prefs = fmn.lib.load_preferences(
@@ -54,6 +71,17 @@ def get_preferences():
 
 
 def update_preferences(openid, prefs):
+    """
+    Update an existing preference dictionary loaded by :func:`get_preferences`
+    with the latest preferences for the provided openid.
+
+    Args:
+        openid (str): The openid of the user to fetch the new preferences for.
+        prefs (dict): The dictionary of existing preferences.
+
+    Returns:
+        dict: A big dictionary of user preferences.
+    """
     log.info("Loading and caching preferences for %r" % openid)
     old_preferences = [
         p for p in prefs if p['user']['openid'] == openid]
@@ -93,26 +121,28 @@ connection = pika.BlockingConnection(OPTS)
 
 def inform_workers(raw_msg, context, recipients):
     """
-    Publish a message to the backends exchange for workers to consume
+    Publish a message to the backends exchange for the backend to send to
+    users.
 
-    :param raw_msg: The original fedmsg that triggered this event.
-    :type  raw_msg: dict
-    :param context: The type of backend to use (e.g. 'irc' or 'sse')
-    :type  context: str
-    :param recipients: A list of recipients. The recipient is a dictionary
-                       in the format:
-                       {
-                         "triggered_by_links": true,
-                         "None": "sse-jcline.id.fedoraproject.org",
-                         "markup_messages": false,
-                         "user": "jcline.id.fedoraproject.org",
-                         "filter_name": "hose",
-                         "filter_oneshot": false,
-                         "filter_id": 7,
-                         "shorten_links": false,
-                         "verbose": true,
-                       }
-    :type  recipients: list of dict
+    Args:
+        raw_msg (dict): The original fedmsg that triggered this event.
+        context (str): The type of backend to use (e.g. 'irc' or 'sse')
+        recipients (list): A list of recipients. The recipient is a dictionary
+            in the format::
+
+                {
+                  "triggered_by_links": true,
+                  "None": "sse-jcline.id.fedoraproject.org",
+                  "markup_messages": false,
+                  "user": "jcline.id.fedoraproject.org",
+                  "filter_name": "hose",
+                  "filter_oneshot": false,
+                  "filter_id": 7,
+                  "shorten_links": false,
+                  "verbose": true,
+                }
+
+            The values of these keys will vary based on user settings.
     """
     queue = 'backends'
     chan = connection.channel()
@@ -136,6 +166,16 @@ def inform_workers(raw_msg, context, recipients):
 
 
 def callback(ch, method, properties, body):
+    """
+    The callback attached to the Pika consumer.
+
+    This callback is called when a new message is pushed to the consumer by
+    RabbitMQ. The message is from the :class:`fmn.consumer.consumer.FMNConsumer`
+    and its format will either be the raw fedmsg or a notification to update the
+    local caches. This message is dispatched by
+    :func:`fmn.consumer.consumer.notify_prefs_change` and its format is documented
+    on the function.
+    """
     start = time.time()
 
     global CNT, connection, PREFS
