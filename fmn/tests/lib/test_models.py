@@ -1,5 +1,48 @@
+# -*- coding: utf-8 -*-
+#
+# This file is part of the FMN project.
+# Copyright (C) 2017 Red Hat, Inc.
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+"""Unit tests for the :mod:`fmn.lib.models` module."""
+
+import unittest
+
+import mock
+
 import fmn.lib.models
 import fmn.tests
+
+
+class TestFMNBase(unittest.TestCase):
+
+    def test_scoped_session(self):
+        """Assert the module creates a scoped session"""
+        session1 = fmn.lib.models.Session()
+        session2 = fmn.lib.models.Session()
+
+        self.assertTrue(session1 is session2)
+
+    @mock.patch('fmn.lib.models.fedmsg.publish')
+    def test_base_has_notify(self, mock_publish):
+        """Assert the model base class has a notify method"""
+        fmn.lib.models.BASE.notify(fmn.lib.models.BASE(), 'jcline', 'email', 'change')
+        mock_publish.assert_called_once_with(
+            topic='base.update',
+            msg={'openid': 'jcline', 'context': 'email', 'changed': 'change'},
+        )
 
 
 class TestBasics(fmn.tests.Base):

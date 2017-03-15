@@ -36,15 +36,26 @@ import sqlalchemy as sa
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import scoped_session
-from sqlalchemy.orm import relation
-from sqlalchemy.orm import backref
+from sqlalchemy.orm import sessionmaker, scoped_session, backref, relation
 
 import fedmsg
 import fedmsg.utils
 
 import fmn.lib.defaults
+
+_config = fedmsg.config.load_config()
+
+#: The SQLAlchemy database engine, initialized with the URL in the fedmsg config key
+#: ``fmn.sqlalchemy.uri`` and ``fmn.sqlalchemy.debug`` (bool). If the debug setting is
+#: true, SQLAlchemy will log all the raw SQL statements it generates.
+engine = create_engine(
+    _config.get('fmn.sqlalchemy.uri'), echo=_config.get('fmn.sqlalchemy.debug', False))
+
+#: An SQLAlchemy scoped session. This session can be optionally called to return
+#: the thread-local session or used directly (in which case it creates or uses the
+#: existing thread-local session). Call ``Session.remove()`` to remove the session
+#: once you are done with it. A new one will be created on next use.
+Session = scoped_session(sessionmaker(bind=engine))
 
 
 class FMNBase(object):
@@ -70,27 +81,24 @@ def init(db_url, alembic_ini=None, debug=False, create=False):
     """ Create the tables in the database using the information from the
     url obtained.
 
-    :arg db_url, URL used to connect to the database. The URL contains
-        information with regards to the database engine, the host to
-        connect to, the user and password and the database name.
-          ie: <engine>://<user>:<password>@<host>/<dbname>
-    :kwarg alembic_ini, path to the alembic ini file. This is necessary
-        to be able to use alembic correctly, but not for the unit-tests.
-    :kwarg debug, a boolean specifying wether we should have the verbose
-        output of sqlalchemy or not.
-    :return a session that can be used to query the database.
+    .. deprecated:: 1.2.0
+       Use the session created in this module and the fmn-createdb script instead
 
+    Args:
+        db_url (str): URL used to connect to the database. The URL contains
+            information with regards to the database engine, the host to
+            connect to, the user and password and the database name.
+            ie: <engine>://<user>:<password>@<host>/<dbname>
+        alembic_ini (str): path to the alembic ini file. This is necessary
+            to be able to use alembic correctly, but not for the unit-tests.
+        debug (bool): a boolean specifying wether we should have the verbose
+            output of sqlalchemy or not.
+
+    Returns:
+        scopedsession: An SQLAlchemy scoped session.
     """
-    engine = create_engine(db_url, echo=debug)
-
     if create:
         BASE.metadata.create_all(engine)
-
-    # This... "causes problems"
-    #if db_url.startswith('sqlite:'):
-    #    def _fk_pragma_on_connect(dbapi_con, con_record):
-    #        dbapi_con.execute('pragma foreign_keys=ON')
-    #    sa.event.listen(engine, 'connect', _fk_pragma_on_connect)
 
     if alembic_ini is not None:  # pragma: no cover
         # then, load the Alembic configuration and generate the
@@ -100,8 +108,9 @@ def init(db_url, alembic_ini=None, debug=False, create=False):
         alembic_cfg = Config(alembic_ini)
         command.stamp(alembic_cfg, "head")
 
-    scopedsession = scoped_session(sessionmaker(bind=engine))
-    return scopedsession
+    # Return the scoped session created in the db module for code still using
+    # this funciton
+    return Session
 
 
 class Context(BASE):
