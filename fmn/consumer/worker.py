@@ -20,14 +20,13 @@ import random
 
 from dogpile.cache import make_region
 from fedmsg_meta_fedora_infrastructure import fasshim
-
-import fmn.lib
-import fmn.rules.utils
 import fedmsg
 import fedmsg.meta
 import fedmsg_meta_fedora_infrastructure
 import pika
 
+import fmn.lib
+import fmn.rules.utils
 import fmn.consumer.fmn_fasshim
 
 
@@ -51,55 +50,11 @@ OPTS = pika.ConnectionParameters(
 )
 
 
-def get_preferences():
-    """
-    Load all preferences from the FMN database and return them.
-
-    Returns:
-        dict: A big dictionary of user preferences.
-    """
-    print('get_preferences')
-    session = fmn.lib.models.init(DB_URI)
-    prefs = fmn.lib.load_preferences(
-        session, CONFIG, valid_paths,
-        cull_disabled=True,
-        cull_backends=['desktop']
-    )
-    session.close()
-    print('prefs retrieved')
-    return prefs
-
-
-def update_preferences(openid, prefs):
-    """
-    Update an existing preference dictionary loaded by :func:`get_preferences`
-    with the latest preferences for the provided openid.
-
-    Args:
-        openid (str): The openid of the user to fetch the new preferences for.
-        prefs (dict): The dictionary of existing preferences.
-
-    Returns:
-        dict: A big dictionary of user preferences.
-    """
-    log.info("Loading and caching preferences for %r" % openid)
-    old_preferences = [
-        p for p in prefs if p['user']['openid'] == openid]
-    new_preferences = fmn.lib.load_preferences(
-        session, CONFIG, valid_paths,
-        cull_disabled=True,
-        openid=openid,
-        cull_backends=['desktop']
-    )
-    prefs.extend(new_preferences)
-    for old_preference in old_preferences:
-        prefs.remove(old_preference)
-
-    return prefs
-
-
 CNT = 0
-PREFS = get_preferences()
+
+#: The entire set of user preferences from the database as a Python dictionary
+#: in the format returned from :meth:`fmn.lib.models.Preference.__json__`.
+PREFS = fmn.lib.load_preferences(cull_disabled=True, cull_backends=['desktop'])
 
 fmn.consumer.fmn_fasshim.make_fas_cache(**CONFIG)
 # Monkey patch fedmsg_meta modules
@@ -189,7 +144,7 @@ def callback(ch, method, properties, body):
     # database.
     if '.fmn.' in topic:
         openid = msg['msg']['openid']
-        PREFS = update_preferences(openid, PREFS)
+        fmn.lib.update_preferences(openid, PREFS)
         if topic == 'consumer.fmn.prefs.update':  # msg from the consumer
             print("Done with refreshing prefs.  %0.2fs %s" % (
                 time.time() - start, msg['topic']))

@@ -21,6 +21,8 @@ class Base(unittest.TestCase):
         fmn.lib.models.engine = create_engine(DB_PATH, echo=False)
         fmn.lib.models.Session = scoped_session(sessionmaker(bind=fmn.lib.models.engine))
         fmn.lib.models.BASE.metadata.create_all(fmn.lib.models.engine)
+        # Be sure to use the new session on the query property
+        fmn.lib.models.BASE.query = fmn.lib.models.Session.query_property()
         self.sess = fmn.lib.models.Session
 
         self.config = {

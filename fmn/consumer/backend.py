@@ -14,21 +14,19 @@ import logging
 import smtplib
 import time
 
+from fedmsg_meta_fedora_infrastructure import fasshim
+from pika.adapters import twisted_connection
+from twisted.internet import defer, reactor, protocol, task
 import pika
 import fedmsg
 import fedmsg.meta
 import fedmsg_meta_fedora_infrastructure
 
-from pika.adapters import twisted_connection
-from twisted.internet import defer, reactor, protocol, task
-
 import fmn.lib
 import fmn.rules.utils
 import fmn.consumer.backends as fmn_backends
 import fmn.consumer.producer as fmn_producers
-
 import fmn.consumer.fmn_fasshim
-from fedmsg_meta_fedora_infrastructure import fasshim
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -89,41 +87,9 @@ for key in CONFIG['fmn.backends']:
         raise ValueError("%r in fmn.backends (%r) is invalid" % (
             key, CONFIG['fmn.backends']))
 
-
-def get_preferences():
-    """
-    Load all preferences from the FMN database and return them.
-
-    Returns:
-        dict: A big dictionary of user preferences.
-    """
-    print('get_preferences')
-    prefs = {}
-    for p in session.query(fmn.lib.models.Preference).all():
-        prefs['%s__%s' % (p.openid, p.context_name)] = p
-    print('prefs retrieved')
-    return prefs
-
-
-PREFS = get_preferences()
-
-
-def update_preferences(openid, prefs):
-    """
-    Update an existing preference dictionary loaded by :func:`get_preferences`
-    with the latest preferences for the provided openid.
-
-    Args:
-        openid (str): The openid of the user to fetch the new preferences for.
-        prefs (dict): The dictionary of existing preferences.
-
-    Returns:
-        dict: A big dictionary of user preferences.
-    """
-    print("Refreshing preferences for %r" % openid)
-    for p in fmn.lib.models.Preference.by_user(session, openid):
-        prefs['%s__%s' % (p.openid, p.context_name)] = p
-    return prefs
+#: The entire set of user preferences from the database as a Python dictionary
+#: in the format returned from :meth:`fmn.lib.models.Preference.__json__`.
+PREFS = fmn.lib.load_preferences()
 
 
 @defer.inlineCallbacks
@@ -182,7 +148,7 @@ def read(queue_object):
 
     if '.fmn.' in topic:
         openid = data['body']['msg']['openid']
-        PREFS = update_preferences(openid, PREFS)
+        fmn.lib.update_preferences(openid, PREFS)
         if topic == 'consumer.fmn.prefs.update':  # msg from the consumer
             print("Done with refreshing prefs.  %0.2fs %s" % (
                 time.time() - start, data['topic']))

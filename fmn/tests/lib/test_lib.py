@@ -1,34 +1,113 @@
-import fmn.lib.models
-import fmn.tests
+# -*- coding: utf-8 -*-
+#
+# This file is part of the FMN project.
+# Copyright (C) 2017 Red Hat, Inc.
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+"""
+Unit tests for the :mod:`fmn.lib` module
+"""
+
+import unittest
+
+import mock
+
+from fmn.lib import load_preferences, models, recipients as get_recipients
+from fmn.tests import Base as BaseTestCase
 
 
-class TestRecipients(fmn.tests.Base):
+@mock.patch('fmn.lib.CONFIG', {'fmn.backends': ['post', 'pidgeon']})
+class LoadPreferenceTests(BaseTestCase):
+
     def setUp(self):
-        super(TestRecipients, self).setUp()
+        super(LoadPreferenceTests, self).setUp()
+        user = models.User(openid='jcline', openid_url='http://jcline.id.fedoraproject.org/')
+        user2 = models.User(
+            openid='bowlofeggs', openid_url='http://bowlofeggs.id.fedoraproject.org/')
+        context = models.Context(name='pidgeon', description='A bird', detail_name='Bird', icon='?')
+        context2 = models.Context(
+            name='post', description='Old school', detail_name='The Post', icon='?')
+        pref = models.Preference(openid='jcline', enabled=True, context_name='pidgeon')
+        pref2 = models.Preference(openid='jcline', enabled=False, context_name='post')
+        pref3 = models.Preference(openid='bowlofeggs', enabled=False, context_name='post')
+        for obj in (user, user2, context, context2, pref, pref2, pref3):
+            self.sess.add(obj)
+        self.sess.commit()
+
+    def test_load_all_preferences(self):
+        """Assert all preferences including disabled are loaded by default"""
+        preferences = load_preferences()
+        self.assertEqual(3, len(preferences))
+
+        for key in ('jcline_pidgeon', 'jcline_post', 'bowlofeggs_post'):
+            self.assertTrue(key in preferences)
+            openid, context = key.split('_')
+            pref = models.Preference.query.filter(
+                models.Preference.openid == openid,
+                models.Preference.context_name == context).first()
+            self.assertEqual(pref.__json__(reify=True), preferences[key])
+
+    def test_load_preferences_cull_backends(self):
+        """Assert all preferences are loaded, excepting specified backends"""
+        preferences = load_preferences(cull_backends=['pidgeon'])
+        self.assertEqual(2, len(preferences))
+
+        for key in ('jcline_post', 'bowlofeggs_post'):
+            self.assertTrue(key in preferences)
+            openid, context = key.split('_')
+            pref = models.Preference.query.filter(
+                models.Preference.openid == openid,
+                models.Preference.context_name == context).first()
+            self.assertEqual(pref.__json__(reify=True), preferences[key])
+
+    def test_load_preferences_skip_disabled(self):
+        """Assert all preferences are loaded, excepting disabled preferences"""
+        preferences = load_preferences(cull_disabled=True)
+        self.assertEqual(1, len(preferences))
+
+        pref = models.Preference.query.filter(
+            models.Preference.openid == 'jcline',
+            models.Preference.context_name == 'pidgeon').first()
+        self.assertEqual(pref.__json__(reify=True), preferences['jcline_pidgeon'])
+
+
+class TestRecipients(BaseTestCase):
 
     def create_user_and_context_data(self):
-        fmn.lib.models.User.get_or_create(
+        models.User.get_or_create(
             self.sess, openid="ralph.id.fedoraproject.org",
             openid_url="http://ralph.id.fedoraproject.org/",
         )
-        fmn.lib.models.User.get_or_create(
+        models.User.get_or_create(
             self.sess, openid="toshio.id.fedoraproject.org",
             openid_url="http://toshio.id.fedoraproject.org/",
         )
-        fmn.lib.models.Context.create(
+        models.Context.create(
             self.sess, name="irc", description="Internet Relay Chat",
             detail_name="irc nick", icon="user",
         )
-        fmn.lib.models.Context.create(
+        models.Context.create(
             self.sess, name="android", description="Google Cloud Messaging",
             detail_name="registration id", icon="phone",
         )
 
     def create_preference_data_empty(self):
-        user = fmn.lib.models.User.get(
+        user = models.User.get(
             self.sess, openid="ralph.id.fedoraproject.org")
-        context = fmn.lib.models.Context.get(self.sess, name="irc")
-        preference = fmn.lib.models.Preference.create(
+        context = models.Context.get(self.sess, name="irc")
+        preference = models.Preference.create(
             self.sess,
             user=user,
             context=context,
@@ -36,10 +115,10 @@ class TestRecipients(fmn.tests.Base):
         )
         preference.enabled = False
 
-        user = fmn.lib.models.User.get(
+        user = models.User.get(
             self.sess, openid="toshio.id.fedoraproject.org")
-        context = fmn.lib.models.Context.get(self.sess, name="irc")
-        preference = fmn.lib.models.Preference.create(
+        context = models.Context.get(self.sess, name="irc")
+        preference = models.Preference.create(
             self.sess,
             user=user,
             context=context,
@@ -47,19 +126,19 @@ class TestRecipients(fmn.tests.Base):
         )
 
     def create_preference_data_basic(self, code_path):
-        user = fmn.lib.models.User.get(
+        user = models.User.get(
             self.sess, openid="ralph.id.fedoraproject.org")
-        context = fmn.lib.models.Context.get(self.sess, name="irc")
-        preference = fmn.lib.models.Preference.load(self.sess, user, context)
-        filter = fmn.lib.models.Filter.create(self.sess, name="test filter")
+        context = models.Context.get(self.sess, name="irc")
+        preference = models.Preference.load(self.sess, user, context)
+        filter = models.Filter.create(self.sess, name="test filter")
         filter.add_rule(self.sess, self.valid_paths, code_path)
         preference.add_filter(self.sess, filter)
 
-        user = fmn.lib.models.User.get(
+        user = models.User.get(
             self.sess, openid="toshio.id.fedoraproject.org")
-        context = fmn.lib.models.Context.get(self.sess, name="irc")
-        preference = fmn.lib.models.Preference.load(self.sess, user, context)
-        filter = fmn.lib.models.Filter.create(self.sess, name="test filter 2")
+        context = models.Context.get(self.sess, name="irc")
+        preference = models.Preference.load(self.sess, user, context)
+        filter = models.Filter.create(self.sess, name="test filter 2")
         filter.add_rule(self.sess, self.valid_paths, code_path)
         preference.add_filter(self.sess, filter)
 
@@ -70,9 +149,8 @@ class TestRecipients(fmn.tests.Base):
         msg = {
             "wat": "blah",
         }
-        preferences = fmn.lib.load_preferences(
-            self.sess, self.config, self.valid_paths)
-        recipients = fmn.lib.recipients(
+        preferences = load_preferences()
+        recipients = get_recipients(
             preferences, msg, self.valid_paths, self.config)
         self.assertEqual(recipients, {})
 
@@ -86,9 +164,8 @@ class TestRecipients(fmn.tests.Base):
         msg = {
             "wat": "blah",
         }
-        preferences = fmn.lib.load_preferences(
-            self.sess, self.config, self.valid_paths)
-        recipients = fmn.lib.recipients(
+        preferences = load_preferences()
+        recipients = get_recipients(
             preferences, msg, self.valid_paths, self.config)
         self.assertDictEqual(recipients['irc'][0], {
             'triggered_by_links': True,
@@ -112,9 +189,8 @@ class TestRecipients(fmn.tests.Base):
         msg = {
             "wat": "blah",
         }
-        preferences = fmn.lib.load_preferences(
-            self.sess, self.config, self.valid_paths)
-        recipients = fmn.lib.recipients(
+        preferences = load_preferences()
+        recipients = get_recipients(
             preferences, msg, self.valid_paths, self.config)
         self.assertEqual(recipients, {})
 
@@ -128,16 +204,15 @@ class TestRecipients(fmn.tests.Base):
         code_path = "fmn.tests.example_rules:not_wat_rule"
         self.create_preference_data_basic(code_path)
 
-        preference = fmn.lib.models.Preference.load(
+        preference = models.Preference.load(
             self.sess, "ralph.id.fedoraproject.org", "irc")
         self.assertEqual(len(preference.filters), 2)
 
         msg = {
             "wat": "blah",
         }
-        preferences = fmn.lib.load_preferences(
-            self.sess, self.config, self.valid_paths)
-        recipients = fmn.lib.recipients(
+        preferences = load_preferences()
+        recipients = get_recipients(
             preferences, msg, self.valid_paths, self.config)
         self.assertEqual(recipients, {})
 
@@ -151,16 +226,15 @@ class TestRecipients(fmn.tests.Base):
         code_path = "fmn.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
 
-        preference = fmn.lib.models.Preference.load(
+        preference = models.Preference.load(
             self.sess, "ralph.id.fedoraproject.org", "irc")
         self.assertEqual(len(preference.filters), 2)
 
         msg = {
             "wat": "blah",
         }
-        preferences = fmn.lib.load_preferences(
-            self.sess, self.config, self.valid_paths)
-        recipients = fmn.lib.recipients(
+        preferences = load_preferences()
+        recipients = get_recipients(
             preferences, msg, self.valid_paths, self.config)
         expected = {
             'triggered_by_links': True,
@@ -185,16 +259,15 @@ class TestRecipients(fmn.tests.Base):
         code_path = "fmn.tests.example_rules:not_wat_rule"
         self.create_preference_data_basic(code_path)
 
-        preference = fmn.lib.models.Preference.load(
+        preference = models.Preference.load(
             self.sess, "ralph.id.fedoraproject.org", "irc")
         self.assertEqual(len(preference.filters), 2)
 
         msg = {
             "wat": "blah",
         }
-        preferences = fmn.lib.load_preferences(
-            self.sess, self.config, self.valid_paths)
-        recipients = fmn.lib.recipients(
+        preferences = load_preferences()
+        recipients = get_recipients(
             preferences, msg, self.valid_paths, self.config)
         self.assertDictEqual(recipients['irc'][0], {
             'triggered_by_links': True,
@@ -208,34 +281,6 @@ class TestRecipients(fmn.tests.Base):
             'verbose': True,
         })
 
-    def test_load_preferences(self):
-        self.create_user_and_context_data()
-        self.create_preference_data_empty()
-        code_path = "fmn.tests.example_rules:wat_rule"
-        self.create_preference_data_basic(code_path)
 
-        preferences = fmn.lib.load_preferences(
-            self.sess, self.config, self.valid_paths)
-
-        self.assertEqual(len(preferences), 2)
-        pref = preferences[0]
-        self.assertEqual(pref['enabled'], False)
-        self.assertEqual(pref['user']['openid'], u'ralph.id.fedoraproject.org')
-        self.assertEqual(pref['context']['name'], u'irc')
-        self.assertEqual(len(pref['filters']), 1)
-
-    def test_load_preferences_sans_disabled(self):
-        self.create_user_and_context_data()
-        self.create_preference_data_empty()
-        code_path = "fmn.tests.example_rules:wat_rule"
-        self.create_preference_data_basic(code_path)
-
-        preferences = fmn.lib.load_preferences(
-            self.sess, self.config, self.valid_paths, cull_disabled=True)
-
-        self.assertEqual(len(preferences), 1)
-        pref = preferences[0]
-        self.assertEqual(pref['enabled'], True)
-        self.assertEqual(pref['user']['openid'], u'toshio.id.fedoraproject.org')
-        self.assertEqual(pref['context']['name'], u'irc')
-        self.assertEqual(len(pref['filters']), 1)
+if __name__ == '__main__':
+    unittest.main(verbosity=2)
