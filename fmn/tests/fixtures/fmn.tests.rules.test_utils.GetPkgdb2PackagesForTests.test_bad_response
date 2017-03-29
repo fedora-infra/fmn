@@ -1,0 +1,31 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.13.0]
+    method: GET
+    uri: https://admin.fedoraproject.org/pkgdb/api/packager/package/thisisnotausername123
+  response:
+    body: {string: !!python/unicode "{\n  \"co-maintained\": [],\n  \"error\": \"\
+        No ACLs found for that user\",\n  \"output\": \"notok\",\n  \"point of contact\"\
+        : [],\n  \"watch\": []\n}"}
+    headers:
+      age: ['0']
+      appserver: [proxy14.fedoraproject.org]
+      apptime: [D=315492]
+      connection: [Keep-Alive]
+      content-length: ['129']
+      content-type: [application/json]
+      date: ['Wed, 29 Mar 2017 16:06:56 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.4.6 (Red Hat Enterprise Linux) mod_wsgi/3.4 Python/2.7.5]
+      set-cookie: ['pkgdb=eyJfcGVybWFuZW50Ijp0cnVlfQ.C71tIA.d-BCyNvycXXWHrD8lAnQQKZ6vMw;
+          Expires=Wed, 29-Mar-2017 17:06:56 GMT; Secure; HttpOnly; Path=/pkgdb/']
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+      via: [1.1 varnish-v4]
+      x-varnish: ['6842355']
+    status: {code: 404, message: NOT FOUND}
+version: 1

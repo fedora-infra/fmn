@@ -3,6 +3,7 @@ import os
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+import vcr
 
 import fmn.lib.models
 
@@ -24,6 +25,11 @@ class Base(unittest.TestCase):
         # Be sure to use the new session on the query property
         fmn.lib.models.BASE.query = fmn.lib.models.Session.query_property()
         self.sess = fmn.lib.models.Session
+
+        cwd = os.path.dirname(os.path.realpath(__file__))
+        context_manager = vcr.use_cassette(os.path.join(cwd, 'fixtures/', self.id()))
+        self.vcr = context_manager.__enter__()
+        self.addCleanup(context_manager.__exit__)
 
         self.config = {
             'fmn.backends': ['irc', 'email', 'android'],
