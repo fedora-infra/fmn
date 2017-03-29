@@ -94,7 +94,11 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
             return False
         usr_packages = fmn.rules.utils.get_packages_of_user(
             config, fasnick, all_acls)
-        return usr_packages.intersection(msg_packages)
+        for namespace, packages in usr_packages.items():
+            namespaced_msg_packages = fmn.rules.utils.msg2packages(
+                message, namespace=namespace, **config)
+            if packages.intersection(namespaced_msg_packages):
+                return True
 
     return False
 
@@ -118,7 +122,11 @@ def user_package_commit_filter(config, message, fasnick=None, *args, **kw):
             return False
         usr_packages = fmn.rules.utils.get_packages_of_user(
             config, fasnick, only_commit)
-        return usr_packages.intersection(msg_packages)
+        for namespace, packages in usr_packages.items():
+            namespaced_msg_packages = fmn.rules.utils.msg2packages(
+                message, namespace=namespace, **config)
+            if packages.intersection(namespaced_msg_packages):
+                return True
 
     return False
 
@@ -143,7 +151,11 @@ def user_package_watch_filter(config, message, fasnick=None, *args, **kw):
             return False
         usr_packages = fmn.rules.utils.get_packages_of_user(
             config, fasnick, only_watchcommits)
-        return usr_packages.intersection(msg_packages)
+        for namespace, packages in usr_packages.items():
+            namespaced_msg_packages = fmn.rules.utils.msg2packages(
+                message, namespace=namespace, **config)
+            if packages.intersection(namespaced_msg_packages):
+                return True
 
     return False
 
