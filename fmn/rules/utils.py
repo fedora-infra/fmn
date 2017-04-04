@@ -264,6 +264,7 @@ def msg2packages(msg, **config):
     if not _cache.is_configured:
         _cache.configure(**config['fmn.rules.cache'])
 
-    key = "|".join(['packages', msg['msg_id']]).encode('utf-8')
+    namespace = config.get('namespace', u'')
+    key = u'|'.join([u'packages', namespace, msg['msg_id']]).encode('utf-8')
     creator = lambda: fedmsg.meta.msg2packages(msg, **config)
     return _cache.get_or_create(key, creator)

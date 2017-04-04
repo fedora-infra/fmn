@@ -19,8 +19,9 @@
 """Tests for the :mod:`fmn.rules.generic` module."""
 from __future__ import unicode_literals
 
-from fedmsg.meta import make_processors
 import unittest
+
+from fedmsg.meta import make_processors
 
 from fmn.rules import generic
 from fmn.tests import Base
@@ -163,7 +164,7 @@ class UserPackageFilterTests(Base):
 
     def test_different_namespaces(self):
         """Assert packages with the same name in a different namespace results in False."""
-        # remi owns the php RPM, but no the module.
+        # remi owns the php RPM, but not the module.
         self.assertFalse(generic.user_package_filter(self.config, self.module_msg, fasnick='remi'))
 
     def test_namespaces(self):
