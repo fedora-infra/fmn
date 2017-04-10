@@ -1,3 +1,29 @@
+=========
+Changelog
+=========
+
+
+1.2.0
+=====
+
+Features
+--------
+
+* Emails now contain headers to indicate to clients that they are auto-
+  generated. This should stop them from auto-responding (#165).
+
+* New rules for the Module Build Service (#174).
+
+Bugfixes
+--------
+
+* Be fault-tolerant towards missing 'owner' field in copr msgs (commit d46464e06).
+
+* Messages that can't be sent are now requeued (#169).
+
+* Update to the generic rule for packages to account for namespaces in pkgdb2 (#177).
+
+
 1.1.0
 =====
 
