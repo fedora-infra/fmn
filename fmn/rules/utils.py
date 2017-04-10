@@ -1,5 +1,6 @@
 """ Fedora Notifications pkgdb client """
 
+from collections import defaultdict
 import logging
 import time
 
@@ -134,7 +135,7 @@ def get_packages_of_user(config, username, flags):
     if not _cache.is_configured:
         _cache.configure(**config['fmn.rules.cache'])
 
-    packages = []
+    packages = defaultdict(set)
 
     groups = get_groups_of_user(config, get_fas(config), username)
     owners = [username] + ['group::' + group for group in groups]
@@ -143,9 +144,10 @@ def get_packages_of_user(config, username, flags):
         key = cache_key_generator(get_packages_of_user, owner)
         creator = lambda: _get_pkgdb2_packages_for(config, owner, flags)
         subset = _cache.get_or_create(key, creator)
-        packages.extend(subset)
+        for namespace in subset:
+            packages[namespace].update(subset[namespace])
 
-    return set(packages)
+    return dict(packages)
 
 
 def cache_key_generator(fn, arg):
@@ -161,6 +163,16 @@ def invalidate_cache_for(config, fn, arg):
 
 
 def _get_pkgdb2_packages_for(config, username, flags):
+    """
+    Get the packages a user is associated with from pkgdb2.
+
+    Args:
+        config (dict): The application configuration.
+        username (str): The FAS username to fetch the packages for.
+        flags (list): The type of relationship the user should have to the
+            package (e.g. "watch", "point of contact", etc.). See the pkgdb2
+            API for details.
+    """
     log.debug("Requesting pkgdb2 packages for user %r" % username)
     start = time.time()
 
@@ -173,14 +185,17 @@ def _get_pkgdb2_packages_for(config, username, flags):
 
     if not req.status_code == 200:
         log.debug('URL %s returned code %s', req.url, req.status_code)
-        return set()
+        return {}
 
     data = req.json()
 
+    packages = defaultdict(set)
+
     packages_of_interest = sum([data[flag] for flag in flags], [])
-    packages_of_interest = set([p['name'] for p in packages_of_interest])
+    for package in packages_of_interest:
+        packages[package.get('namespace', 'rpms')].add(package['name'])
     log.debug("done talking with pkgdb2 for now.  %0.2fs", time.time() - start)
-    return packages_of_interest
+    return dict(packages)
 
 
 def get_user_of_group(config, fas, groupname):
@@ -249,6 +264,7 @@ def msg2packages(msg, **config):
     if not _cache.is_configured:
         _cache.configure(**config['fmn.rules.cache'])
 
-    key = "|".join(['packages', msg['msg_id']]).encode('utf-8')
+    namespace = config.get('namespace', u'')
+    key = u'|'.join([u'packages', namespace, msg['msg_id']]).encode('utf-8')
     creator = lambda: fedmsg.meta.msg2packages(msg, **config)
     return _cache.get_or_create(key, creator)

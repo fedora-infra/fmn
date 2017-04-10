@@ -52,6 +52,26 @@ def _get_users_of_group(config, group):
     return fmn.rules.utils.get_user_of_group(config, fas, group)
 
 
+def _user_package_intersection(fasnick, message, config, acls):
+    """
+    Returns true if the user has one of the packages mentioned in the message.
+
+    Args:
+        fasnick (str): The user's FAS name.
+        message (dict): The fedmsg that might mention packages.
+        config (dict): The fedmsg configuration dictionary.
+        acls (list): A list of acls use to determine if the user is related to
+            the package (e.g. "watch" "commit", etc).
+    """
+    usr_packages = fmn.rules.utils.get_packages_of_user(
+        config, fasnick, acls)
+    for namespace, packages in usr_packages.items():
+        namespaced_msg_packages = fmn.rules.utils.msg2packages(
+            message, namespace=namespace, **config)
+        if packages.intersection(namespaced_msg_packages):
+            return True
+
+
 @hint(callable=_get_users_of_group)
 def fas_group_member_filter(config, message, group=None, *args, **kw):
     """ Messages regarding any member of a FAS group
@@ -82,20 +102,9 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
     This rule includes messages that relate to packages where the
     specified user has *either* commit ACLs or the watchcommits flag.
     """
-
     fasnick = kw.get('fasnick', fasnick)
     if fasnick:
-        msg_packages = fmn.rules.utils.msg2packages(message, **config)
-        if not msg_packages:
-            # If the message has no packages associated with it, there's no
-            # way that "one of them" is going to happen to belong to this user,
-            # so let's not waste our time doing the somewhat expensive call out
-            # to pkgdb on the next line to check.
-            return False
-        usr_packages = fmn.rules.utils.get_packages_of_user(
-            config, fasnick, all_acls)
-        return usr_packages.intersection(msg_packages)
-
+        return _user_package_intersection(fasnick, message, config, all_acls)
     return False
 
 only_commit = ['point of contact', 'co-maintained']
@@ -109,17 +118,7 @@ def user_package_commit_filter(config, message, fasnick=None, *args, **kw):
 
     fasnick = kw.get('fasnick', fasnick)
     if fasnick:
-        msg_packages = fmn.rules.utils.msg2packages(message, **config)
-        if not msg_packages:
-            # If the message has no packages associated with it, there's no
-            # way that "one of them" is going to happen to belong to this user,
-            # so let's not waste our time doing the somewhat expensive call out
-            # to pkgdb on the next line to check.
-            return False
-        usr_packages = fmn.rules.utils.get_packages_of_user(
-            config, fasnick, only_commit)
-        return usr_packages.intersection(msg_packages)
-
+        return _user_package_intersection(fasnick, message, config, only_commit)
     return False
 
 
@@ -134,17 +133,7 @@ def user_package_watch_filter(config, message, fasnick=None, *args, **kw):
 
     fasnick = kw.get('fasnick', fasnick)
     if fasnick:
-        msg_packages = fmn.rules.utils.msg2packages(message, **config)
-        if not msg_packages:
-            # If the message has no packages associated with it, there's no
-            # way that "one of them" is going to happen to belong to this user,
-            # so let's not waste our time doing the somewhat expensive call out
-            # to pkgdb on the next line to check.
-            return False
-        usr_packages = fmn.rules.utils.get_packages_of_user(
-            config, fasnick, only_watchcommits)
-        return usr_packages.intersection(msg_packages)
-
+        return _user_package_intersection(fasnick, message, config, only_watchcommits)
     return False
 
 

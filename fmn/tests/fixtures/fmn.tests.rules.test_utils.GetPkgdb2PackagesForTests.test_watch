@@ -1,0 +1,505 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.12.5]
+    method: GET
+    uri: https://admin.fedoraproject.org/pkgdb/api/packager/package/jcline
+  response:
+    body: {string: !!python/unicode "{\n  \"co-maintained\": [\n    {\n      \"acls\"\
+        : [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"Bodhi\
+        \ is a web application that facilitates the process of publishing\\nupdates\
+        \ for a software distribution.\\n\\nA modular piece of the Fedora Infrastructure\
+        \ stack\\n* Utilizes the Koji Buildsystem for tracking RPMs\\n* Creates the\
+        \ update repositories using Mash, which composes a repository based\\n  on\
+        \ tagged builds in Koji.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
+        : true,\n      \"name\": \"bodhi\",\n      \"namespace\": \"rpms\",\n    \
+        \  \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
+        : \"A modular framework that facilitates publishing software updates\",\n\
+        \      \"upstream_url\": \"https://github.com/fedora-infra/bodhi\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"ejabberd is a Free and Open Source distributed fault-tolerant\\\
+        nJabber/XMPP server. It is mostly written in Erlang, and runs on many\\nplatforms\
+        \ (tested on Linux, FreeBSD, NetBSD, Solaris, Mac OS X and\\nWindows NT/2000/XP).\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"ejabberd\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
+        \      \"status\": \"Approved\",\n      \"summary\": \"A distributed, fault-tolerant\
+        \ Jabber/XMPP server\",\n      \"upstream_url\": \"http://www.ejabberd.im/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1461430105.0,\n\
+        \      \"description\": \"ProcessOne SIP server component in Erlang.\",\n\
+        \      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"erlang-esip\",\n      \"namespace\": \"rpms\",\n      \"review_url\":\
+        \ \"https://bugzilla.redhat.com/1329441\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"ProcessOne SIP server component in Erlang\",\n   \
+        \   \"upstream_url\": \"https://github.com/processone/esip/\"\n    },\n  \
+        \  {\n      \"acls\": [],\n      \"creation_date\": 1459274896.0,\n      \"\
+        description\": \"A native zlib driver for Erlang / Elixir, used by ejabberd.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"erlang-ezlib\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1315134\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Native zlib driver for Erlang\",\n      \"upstream_url\"\
+        : \"https://github.com/processone/ezlib/\"\n    },\n    {\n      \"acls\"\
+        : [],\n      \"creation_date\": 1460378527.0,\n      \"description\": \"TLS\
+        \ / SSL native driver for Erlang / Elixir. This is used by ejabberd.\",\n\
+        \      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"erlang-fast_tls\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1316767\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"TLS / SSL native driver for Erlang / Elixir\",\n \
+        \     \"upstream_url\": \"https://github.com/processone/fast_tls/\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1460475617.0,\n    \
+        \  \"description\": \"Fast Expat based Erlang XML parsing and manipulation\
+        \ library, with a strong\\nfocus on XML stream parsing from network. It supports\
+        \ full XML structure\\nparsing, suitable for small but complete XML chunks,\
+        \ and XML stream parsing\\nsuitable for large XML document, or infinite network\
+        \ XML stream like XMPP.\\nThis module can parse files much faster than built-in\
+        \ module xmerl. Depending\\non file complexity and size xml_stream:parse_element/1\
+        \ can be 8-18 times faster\\nthan calling xmerl_scan:string/2.\",\n      \"\
+        koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\": \"erlang-fast_xml\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1317182\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Fast Expat based\
+        \ Erlang XML parsing and manipulation library\",\n      \"upstream_url\":\
+        \ \"https://github.com/processone/fast_xml/\"\n    },\n    {\n      \"acls\"\
+        : [],\n      \"creation_date\": 1459274717.0,\n      \"description\": \"P1\
+        \ YAML is an Erlang wrapper for libyaml \\\"C\\\" library.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"erlang-fast_yaml\",\n\
+        \      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1317184\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"An Erlang wrapper\
+        \ for libyaml \\\"C\\\" library\",\n      \"upstream_url\": \"https://github.com/processone/fast_yaml/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1455917846.0,\n\
+        \      \"description\": \"A small Erlang app that provides fast event stream\
+        \ processing.\",\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n\
+        \      \"name\": \"erlang-goldrush\",\n      \"namespace\": \"rpms\",\n  \
+        \    \"review_url\": \"https://bugzilla.redhat.com/1309939\",\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Small, fast event processing and monitoring\
+        \ for Erlang/OTP applications\",\n      \"upstream_url\": \"https://github.com/DeadZen/goldrush\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1459968632.0,\n\
+        \      \"description\": \"Erlang bindings for libiconv. This is used by ejabberd.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"erlang-iconv\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1316762\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Fast encoding conversion library for Erlang / Elixir\"\
+        ,\n      \"upstream_url\": \"https://github.com/processone/iconv/\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1458136455.0,\n    \
+        \  \"description\": \"An experimental implementation of Lua 5.2 written solely\
+        \ in pure Erlang.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
+        : true,\n      \"name\": \"erlang-luerl\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1317345\",\n      \"\
+        status\": \"Approved\",\n      \"summary\": \"Lua in Erlang\",\n      \"upstream_url\"\
+        : \"https://github.com/rvirding/luerl\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1455034950.0,\n      \"description\": \"This library\
+        \ is designed to simplify the implementation of the server side of\\nOAuth2.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"erlang-oauth2\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1294331\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"An Oauth2 implementation for Erlang\",\n      \"upstream_url\"\
+        : \"https://github.com/kivra/oauth2\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1454706689.0,\n      \"description\": \"Erlang bindings\
+        \ for iconv. This is used by ejabberd.\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": true,\n      \"name\": \"erlang-p1_iconv\",\n      \"\
+        namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1294368\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Fast encoding conversion\
+        \ library for Erlang / Elixir\",\n      \"upstream_url\": \"https://github.com/processone/iconv/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1454706783.0,\n\
+        \      \"description\": \"This is an Erlang MySQL driver, used by ejabberd.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"erlang-p1_mysql\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1295011\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Pure Erlang MySQL driver\",\n      \"upstream_url\"\
+        : \"https://github.com/processone/p1_mysql/\"\n    },\n    {\n      \"acls\"\
+        : [],\n      \"creation_date\": 1458568963.0,\n      \"description\": \"This\
+        \ library is designed to simplify the implementation of the server side of\\\
+        nOAuth2. It is a fork of erlang-oauth2 by processone, and is needed by ejabberd.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"erlang-p1_oauth2\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1317336\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"An Oauth2 implementation for Erlang\",\n      \"upstream_url\"\
+        : \"https://github.com/processone/p1_oauth2\"\n    },\n    {\n      \"acls\"\
+        : [],\n      \"creation_date\": 1454870042.0,\n      \"description\": \"An\
+        \ Erlang library for ejabberd that helps with PAM authentication.\",\n   \
+        \   \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\":\
+        \ \"erlang-p1_pam\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1295035\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Library for ejabberd for PAM authentication support\"\
+        ,\n      \"upstream_url\": \"https://github.com/processone/epam/\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1454706762.0,\n    \
+        \  \"description\": \"Pure Erlang PostgreSQL driver.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"erlang-p1_pgsql\",\n\
+        \      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1294730\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Pure Erlang PostgreSQL\
+        \ driver\",\n      \"upstream_url\": \"https://github.com/processone/p1_pgsql\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1451836021.0,\n\
+        \      \"description\": \"p1_utils is an application containing ProcessOne\
+        \ modules and tools that are\\nleveraged in other development projects.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"erlang-p1_utils\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1294587\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Erlang utility modules from ProcessOne\",\n      \"\
+        upstream_url\": \"https://github.com/processone/p1_utils/\"\n    },\n    {\n\
+        \      \"acls\": [],\n      \"creation_date\": 1458659356.0,\n      \"description\"\
+        : \"This is an HTTP 1.1 compliant XML-RPC library for Erlang. It is designed\
+        \ to make\\nit easy to write XML-RPC Erlang clients and/or servers. The library\
+        \ is compliant\\nwith the XML-RPC specification published by http://www.xmlrpc.org/.\
+        \ It is a fork\\nof erlang-xmlrpc maintained by processone for ejabberd.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"erlang-p1_xmlrpc\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1317341\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Erlang XMLRPC implementation with SSL, cookies, Authentication\"\
+        ,\n      \"upstream_url\": \"https://github.com/processone/p1_xmlrpc\"\n \
+        \   },\n    {\n      \"acls\": [],\n      \"creation_date\": 1454870064.0,\n\
+        \      \"description\": \"A native zlib driver for Erlang, used by ejabberd.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"erlang-p1_zlib\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1295009\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Native zlib driver for Erlang\",\n      \"upstream_url\"\
+        : \"https://github.com/processone/ezlib/\"\n    },\n    {\n      \"acls\"\
+        : [],\n      \"creation_date\": 1452180599.0,\n      \"description\": \"PropEr\
+        \ (PROPerty-based testing tool for ERlang) is a QuickCheck-inspired\\nopen-source\
+        \ property-based testing tool for Erlang.\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": true,\n      \"name\": \"erlang-proper\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1295667\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"A QuickCheck-inspired\
+        \ property-based testing tool for Erlang\",\n      \"upstream_url\": \"https://github.com/manopapad/proper\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1460378560.0,\n\
+        \      \"description\": \"Stringprep is a framework for preparing Unicode\
+        \ test strings in order to\\nincrease the likelihood that string input and\
+        \ string comparison work. The\\nprinciple are defined in RFC-3454: Preparation\
+        \ of Internationalized Strings.\\nThis library is leverage Erlang native NIF\
+        \ mechanism to provide extremely fast\\nand efficient processing.\",\n   \
+        \   \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\":\
+        \ \"erlang-stringprep\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1316772\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"A framework for preparing Unicode strings to help\
+        \ input and comparison\",\n      \"upstream_url\": \"https://github.com/processone/stringprep/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1460475644.0,\n\
+        \      \"description\": \"STUN and TURN library for Erlang / Elixir. Both\
+        \ STUN (Session Traversal\\nUtilities for NAT) and TURN standards are used\
+        \ as techniques to establish media\\nconnection between peers for VoIP (for\
+        \ example using SIP or Jingle) and WebRTC.\",\n      \"koschei_monitor\":\
+        \ true,\n      \"monitor\": true,\n      \"name\": \"erlang-stun\",\n    \
+        \  \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1317183\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"STUN and TURN library\
+        \ for Erlang / Elixir\",\n      \"upstream_url\": \"https://github.com/processone/stun/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1483391539.0,\n\
+        \      \"description\": \"XMPP is an Erlang XMPP parsing and serialization\
+        \ library, built on top of Fast\\nXML.\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": true,\n      \"name\": \"erlang-xmpp\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1409326\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Erlang/Elixir XMPP\
+        \ parsing and serialization library\",\n      \"upstream_url\": \"https://github.com/processone/xmpp/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1484067733.0,\n\
+        \      \"description\": \"Fegistry is the container registry endpoint for\
+        \ Fedora's users. It will answer\\nthe initial requests when users docker\
+        \ pull Fedora containers.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
+        : true,\n      \"name\": \"fegistry\",\n      \"namespace\": \"rpms\",\n \
+        \     \"review_url\": \"https://bugzilla.redhat.com/1411462\",\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"The Fedora registry endpoint\",\n  \
+        \    \"upstream_url\": \"https://pagure.io/fegistry\"\n    },\n    {\n   \
+        \   \"acls\": [],\n      \"creation_date\": 1453388826.0,\n      \"description\"\
+        : \"This WSGI application exposes a read-only API similar to\\ndocker-registry,\
+        \ which docker can use for \\\"docker pull\\\" operations.\\nRequests for\
+        \ actual image files are responded to with 302 redirects to\\na URL formed\
+        \ with per-repository settings.\",\n      \"koschei_monitor\": true,\n   \
+        \   \"monitor\": true,\n      \"name\": \"python-crane\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1297629\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"A WSGI app providing\
+        \ a docker-registry-like API with redirection\",\n      \"upstream_url\":\
+        \ \"https://github.com/pulp/crane\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1419871778.0,\n      \"description\": \"A library\
+        \ to support the Internationalised Domain Names in Applications (IDNA)\\nprotocol\
+        \ as specified in RFC 5891 <http://tools.ietf.org/html/rfc5891>.  This\\nversion\
+        \ of the protocol is often referred to as \\\"IDNA2008\\\" and can produce\\\
+        ndifferent results from the earlier standard from 2003.\\n\\nThe library is\
+        \ also intended to act as a suitable drop-in replacement for the\\n\\\"encodings.idna\\\
+        \" module that comes with the Python standard library but\\ncurrently only\
+        \ supports the older 2003 specification.\",\n      \"koschei_monitor\": false,\n\
+        \      \"monitor\": true,\n      \"name\": \"python-idna\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1119056\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Internationalized\
+        \ Domain Names in Applications (IDNA)\",\n      \"upstream_url\": \"https://github.com/kjd/idna\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"IPython features (tab completion, syntax highlighting,\
+        \ better tracebacks,\\nbetter introspection) right in pdb.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"python-ipdb\",\n    \
+        \  \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"IPython enabled Python debugger\",\n\
+        \      \"upstream_url\": \"https://github.com/gotcha/ipdb/\"\n    },\n   \
+        \ {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"\
+        description\": \"This module implements ISO 8601 date, time and duration parsing.\
+        \ The\\nimplementation follows ISO8601:2004 standard, and implements only\
+        \ date/time\\nrepresentations mentioned in the standard. If something is not\
+        \ mentioned there,\\nthen it is treated as non existent, and not as an allowed\
+        \ option.\\n\\nFor instance, ISO8601:2004 never mentions 2 digit years. So,\
+        \ it is not intended\\nby this module to support 2 digit years. (while it\
+        \ may still be valid as ISO\\ndate, because it is not explicitly forbidden.)\
+        \ Another example is, when no time\\nzone information is given for a time,\
+        \ then it should be interpreted as local\\ntime, and not UTC.\\n\\nAs this\
+        \ module maps ISO 8601 dates/times to standard Python data types, like\\ndate,\
+        \ time, datetime and timedelta, it is not possible to convert all possible\\\
+        nISO 8601 dates/times. For instance, dates before 0001-01-01 are not allowed\
+        \ by\\nthe Python date and datetime classes. Additionally fractional seconds\
+        \ are\\nlimited to microseconds. That means if the parser finds for instance\\\
+        nnanoseconds it will round it to microseconds.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"python-isodate\",\n \
+        \     \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"An ISO 8601 date/time/duration parser\
+        \ and formatter\",\n      \"upstream_url\": \"http://pypi.python.org/pypi/isodate\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1483389591.0,\n\
+        \      \"description\": \"configuration parser.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"python-kaptan\",\n  \
+        \    \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1405742\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Configuration parser\"\
+        ,\n      \"upstream_url\": \"https://pypi.python.org/pypi/kaptan\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"The Python driver for MongoDB.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"python-pymongo\",\n \
+        \     \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Python driver for MongoDB\",\n     \
+        \ \"upstream_url\": \"http://api.mongodb.org/python\"\n    },\n    {\n   \
+        \   \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        : \"Most existing Python modules for sending HTTP requests are extremely verbose\
+        \ and\\ncumbersome. Python\\u2019s built-in urllib2 module provides most of\
+        \ the HTTP\\ncapabilities you should need, but the API is thoroughly broken.\
+        \ This library is\\ndesigned to make HTTP requests easy for developers.\"\
+        ,\n      \"koschei_monitor\": false,\n      \"monitor\": true,\n      \"name\"\
+        : \"python-requests\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"HTTP library,\
+        \ written in Python, for human beings\",\n      \"upstream_url\": \"https://pypi.io/project/requests\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1448383568.0,\n\
+        \      \"description\": \"A wrapper around pdb allowing remote debugging via\
+        \ netcat or telnet.\\nThis is especially useful in a Tomcat/Jython environment\
+        \ where little\\ndebugging tools are available.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"python-rpdb\",\n    \
+        \  \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1284155\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"A wrapper around\
+        \ pdb allowing remote debugging\",\n      \"upstream_url\": \"https://github.com/tamentis/rpdb\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"Python HTTP module with connection pooling and file\
+        \ POST abilities.\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
+        : true,\n      \"name\": \"python-urllib3\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"\
+        summary\": \"Python HTTP library with thread-safe connection pooling and file\
+        \ post\",\n      \"upstream_url\": \"https://github.com/shazow/urllib3\"\n\
+        \    }\n  ],\n  \"output\": \"ok\",\n  \"point of contact\": [\n    {\n  \
+        \    \"acls\": [],\n      \"creation_date\": 1452379737.0,\n      \"description\"\
+        : \"This application is intended to proxy back-end operations for Key-Value\
+        \ insert,\\nlookup and delete and maintain a cache of those Key-Values in-memory,\
+        \ to save\\nback-end operations. Operations are intended to be atomic between\
+        \ back-end and\\ncache tables. The lifetime of the cache object and the max\
+        \ size of the cache\\ncan be defined as table parameters to limit the size\
+        \ of the in-memory tables.\",\n      \"koschei_monitor\": true,\n      \"\
+        monitor\": true,\n      \"name\": \"erlang-cache_tab\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1295075\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Erlang cache table\
+        \ application\",\n      \"upstream_url\": \"https://github.com/processone/cache_tab/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1454421370.0,\n\
+        \      \"description\": \"ProcessOne SIP server component in Erlang.\",\n\
+        \      \"koschei_monitor\": false,\n      \"monitor\": true,\n      \"name\"\
+        : \"erlang-p1_sip\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1303434\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"ProcessOne SIP server component in Erlang\",\n   \
+        \   \"upstream_url\": \"https://github.com/processone/p1_sip/\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1454521406.0,\n    \
+        \  \"description\": \"Stringprep is a framework for preparing Unicode test\
+        \ strings in order to\\nincrease the likelihood that string input and string\
+        \ comparison work. The\\nprinciple are defined in RFC-3454: Preparation of\
+        \ Internationalized Strings.\\nThis library is leverage Erlang native NIF\
+        \ mechanism to provide extremely fast\\nand efficient processing.\",\n   \
+        \   \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\":\
+        \ \"erlang-p1_stringprep\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1296792\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"A framework for preparing Unicode strings to help\
+        \ input and comparison\",\n      \"upstream_url\": \"https://github.com/processone/stringprep/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1453840458.0,\n\
+        \      \"description\": \"STUN and TURN library for Erlang / Elixir. Both\
+        \ STUN (Session Traversal\\nUtilities for NAT) and TURN standards are used\
+        \ as techniques to establish media\\nconnection between peers for VoIP (for\
+        \ example using SIP or Jingle) and WebRTC.\",\n      \"koschei_monitor\":\
+        \ false,\n      \"monitor\": true,\n      \"name\": \"erlang-p1_stun\",\n\
+        \      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1301316\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"STUN and TURN library\
+        \ for Erlang / Elixir\",\n      \"upstream_url\": \"https://github.com/processone/stun/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1453389245.0,\n\
+        \      \"description\": \"TLS / SSL native driver for Erlang / Elixir. This\
+        \ is used by ejabberd.\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
+        : true,\n      \"name\": \"erlang-p1_tls\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1299305\",\n      \"\
+        status\": \"Approved\",\n      \"summary\": \"TLS / SSL native driver for\
+        \ Erlang / Elixir\",\n      \"upstream_url\": \"https://github.com/processone/tls/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1454593209.0,\n\
+        \      \"description\": \"Fast Expat based Erlang XML parsing and manipulation\
+        \ library, with a strong\\nfocus on XML stream parsing from network. It supports\
+        \ full XML structure\\nparsing, suitable for small but complete XML chunks,\
+        \ and XML stream parsing\\nsuitable for large XML document, or infinite network\
+        \ XML stream like XMPP.\\nThis module can parse files much faster than built-in\
+        \ module xmerl. Depending\\non file complexity and size xml_stream:parse_element/1\
+        \ can be 8-18 times faster\\nthan calling xmerl_scan:string/2.\",\n      \"\
+        koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\": \"erlang-p1_xml\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1297150\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Fast Expat based\
+        \ Erlang XML parsing and manipulation library\",\n      \"upstream_url\":\
+        \ \"https://github.com/processone/xml/\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1453730519.0,\n      \"description\": \"P1 YAML\
+        \ is an Erlang wrapper for libyaml \\\"C\\\" library.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"erlang-p1_yaml\",\n \
+        \     \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1297094\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"An Erlang wrapper\
+        \ for libyaml \\\"C\\\" library\",\n      \"upstream_url\": \"https://github.com/processone/p1_yaml/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1467902264.0,\n\
+        \      \"description\": \"Argument Parsing for Humans.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"python-args\",\n    \
+        \  \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1352993\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Argument Parsing\
+        \ for Humans\",\n      \"upstream_url\": \"https://github.com/kennethreitz/args\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1468427737.0,\n\
+        \      \"description\": \"Clint is a module filled with a set of awesome tools\
+        \ for developing commandline\\napplications. It supports colors, but detects\
+        \ if the session is a TTY, so\\ndoesn't render the colors if you're piping\
+        \ stuff around. Automagically.\",\n      \"koschei_monitor\": true,\n    \
+        \  \"monitor\": true,\n      \"name\": \"python-clint\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1355871\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"A set of awesome\
+        \ tools for developing commandline applications\",\n      \"upstream_url\"\
+        : \"https://github.com/kennethreitz/clint\"\n    },\n    {\n      \"acls\"\
+        : [],\n      \"creation_date\": 1452266443.0,\n      \"description\": \"A\
+        \ web based tool for monitoring and administrating Celery clusters. It offers\\\
+        nreal-time monitoring using Celery events, remote control of workers and tasks,\\\
+        nbroker monitoring, and an HTTP API.\",\n      \"koschei_monitor\": false,\n\
+        \      \"monitor\": true,\n      \"name\": \"python-flower\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1285941\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"A web based tool\
+        \ for monitoring and administrating Celery clusters\",\n      \"upstream_url\"\
+        : \"https://github.com/mher/flower\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1486055679.0,\n      \"description\": \"fmn is a\
+        \ family of systems to manage end-user notifications triggered by\\nfedmsg,\
+        \ the FEDerated MESsage bus. fmn provides a single place for all\\napplications\
+        \ using fedmsg to notify users of events. Notifications can be\\ndelivered\
+        \ by email, IRC, and server-sent events. Users can configure their\\nnotifications\
+        \ for all the applications they use in one place.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"python-fmn\",\n     \
+        \ \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1410901\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"A system for generic\
+        \ fedmsg-driven notifications for end users\",\n      \"upstream_url\": \"\
+        https://github.com/fedora-infra/fmn\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1485179561.0,\n      \"description\": \"fmn is a\
+        \ family of systems to manage end-user notifications triggered by\\nfedmsg,\
+        \ the FEDerated MESsage bus. The FMN Server-Sent Events server allows\\nusers\
+        \ to view their fedmsg feed in real-time using server-sent events. It relies\\\
+        non a service to populate the RabbitMQ message queues for it. Typically, this\
+        \ is\\ndone with the FMN core services.\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": true,\n      \"name\": \"python-fmn-sse\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1412798\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"A server-sent events\
+        \ server that integrates with FMN\",\n      \"upstream_url\": \"https://github.com/fedora-infra/fmn.sse\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1467055928.0,\n\
+        \      \"description\": \"Invocations is a collection of reusable Invoke tasks/task\
+        \ modules, including\\n(but not limited to) Python project management tools\
+        \ such as documentation\\nbuilding and dependency organization. It has no\
+        \ stand-alone components and is\\ndesigned to be imported into your pre-existing\
+        \ Invoke task files.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
+        : true,\n      \"name\": \"python-invocations\",\n      \"namespace\": \"\
+        rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1349121\",\n\
+        \      \"status\": \"Approved\",\n      \"summary\": \"Invocations is a collection\
+        \ of reusable Invoke tasks/task modules\",\n      \"upstream_url\": \"https://github.com/pyinvoke/invocations\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1489158551.0,\n\
+        \      \"description\": \"Allows synapse to use LDAP as a password provider.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"python-matrix-synapse-ldap3\",\n      \"namespace\": \"rpms\",\n     \
+        \ \"review_url\": \"https://bugzilla.redhat.com/1430170\",\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Allows synapse to use LDAP as a password\
+        \ provider\",\n      \"upstream_url\": \"https://github.com/matrix-org/matrix-synapse-ldap3\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1467054202.0,\n\
+        \      \"description\": \"This package provides an API for querying the distutils\
+        \ metadata written in the\\nPKG-INFO file inside a source distribution (an\
+        \ sdist) or a binary distribution\\n(e.g., created by running bdist_egg).\
+        \ It can also query the EGG-INFO directory\\nof an installed distribution,\
+        \ and the *.egg-info stored in a \\\"development\\ncheckout\\\" (e.g, created\
+        \ by running setup.py develop).\",\n      \"koschei_monitor\": true,\n   \
+        \   \"monitor\": true,\n      \"name\": \"python-pkginfo\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1349026\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Query metadata from\
+        \ sdists / bdists / installed packages\",\n      \"upstream_url\": \"https://pypi.python.org/pypi/pkginfo\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1489425664.0,\n\
+        \      \"description\": \"This is a Python re-implementation of the libmacaroons\
+        \ C library.\\nMacaroons, like cookies, are a form of bearer credential. Unlike\\\
+        nopaque tokens, macaroons embed caveats that define specific authorization\\\
+        nrequirements for the target service, the service that issued the root macaroon\\\
+        nand which is capable of verifying the integrity of macaroons it receives.\\\
+        n\\nMacaroons allow for delegation and attenuation of authorization. They\
+        \ are\\nsimple and fast to verify, and decouple authorization policy from\
+        \ the\\nenforcement of that policy.\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": true,\n      \"name\": \"python-pymacaroons-pynacl\",\n\
+        \      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1430107\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Library providing\
+        \ non-opaque cookies for authorization\",\n      \"upstream_url\": \"https://github.com/matrix-org/pymacaroons\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1467389346.0,\n\
+        \      \"description\": \"Releases is a Sphinx extension designed to help\
+        \ you keep a source control\\nfriendly, merge friendly changelog file & turn\
+        \ it into useful, human readable\\nHTML output.\\n\\nSpecifically:\\n\\n*\
+        \ The source format (kept in your Sphinx tree as changelog.rst) is a stream-like\\\
+        ntimeline that plays well with source control & only requires one entry per\\\
+        nchange (even for changes that exist in multiple release lines).\\n* The output\
+        \ (when you have the extension installed and run your Sphinx build\\ncommand)\
+        \ is a traditional looking changelog page with a section for every\\nrelease;\
+        \ multi-release issues are copied automatically into each release.\\n* By\
+        \ default, feature and support issues are only displayed under feature\\nreleases,\
+        \ and bugs are only displayed under bugfix releases. This can be\\noverridden\
+        \ on a per-issue basis.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
+        : true,\n      \"name\": \"python-releases\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1350943\",\n      \"\
+        status\": \"Approved\",\n      \"summary\": \"A Sphinx extension for changelog\
+        \ manipulation\",\n      \"upstream_url\": \"https://github.com/bitprophet/releases\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1450359898.0,\n\
+        \      \"description\": \"sphinxcontrib-fulltoc is an extension for the Sphinx\
+        \ documentation system that\\nchanges the HTML output to include a more detailed\
+        \ table of contents in the\\nsidebar. By default Sphinx only shows the local\
+        \ headers for the current page.\\nWith the extension installed, all of the\
+        \ page titles are included, and the\\nlocal headers for the current page are\
+        \ also included in the appropriate place\\nwithin the document.\",\n     \
+        \ \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\": \"\
+        python-sphinxcontrib-fulltoc\",\n      \"namespace\": \"rpms\",\n      \"\
+        review_url\": \"https://bugzilla.redhat.com/1291007\",\n      \"status\":\
+        \ \"Approved\",\n      \"summary\": \"Include a full table of contents in\
+        \ your Sphinx HTML sidebar\",\n      \"upstream_url\": \"https://github.com/dreamhost/sphinxcontrib-fulltoc\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1484077565.0,\n\
+        \      \"description\": \"Turn SQLAlchemy DB Model into a graph.\",\n    \
+        \  \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\": \"\
+        python-sqlalchemy_schemadisplay\",\n      \"namespace\": \"rpms\",\n     \
+        \ \"review_url\": \"https://bugzilla.redhat.com/1409929\",\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Turn SQLAlchemy DB Model into a graph\"\
+        ,\n      \"upstream_url\": \"https://github.com/fschulze/sqlalchemy_schemadisplay\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1469020897.0,\n\
+        \      \"description\": \"Twine is a utility for interacting with PyPI.\\\
+        nCurrently it only supports registering projects and uploading distributions.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"python-twine\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1352972\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Collection of utilities for interacting with PyPI\"\
+        ,\n      \"upstream_url\": \"https://github.com/pypa/twine\"\n    }\n  ],\n\
+        \  \"watch\": [\n    {\n      \"acls\": [],\n      \"creation_date\": 1468428962.0,\n\
+        \      \"description\": \"A parser for TOML-0.4.0\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"python-pytoml\",\n  \
+        \    \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1353606\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Parser for TOML\"\
+        ,\n      \"upstream_url\": \"https://github.com/avakar/pytoml\"\n    }\n \
+        \ ]\n}"}
+    headers:
+      accept-ranges: [bytes]
+      age: ['0']
+      appserver: [proxy09.fedoraproject.org]
+      apptime: [D=1775546]
+      connection: [Keep-Alive]
+      content-length: ['33867']
+      content-type: [application/json]
+      date: ['Wed, 29 Mar 2017 18:10:29 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.4.6 (Red Hat Enterprise Linux) mod_wsgi/3.4 Python/2.7.5]
+      set-cookie: ['pkgdb=eyJfcGVybWFuZW50Ijp0cnVlfQ.C72KFg.w07dcFks-rm1tla9CXUZiEC4jhA;
+          Expires=Wed, 29-Mar-2017 19:10:30 GMT; Secure; HttpOnly; Path=/pkgdb/']
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+      via: [1.1 varnish-v4]
+      x-varnish: ['19470670']
+    status: {code: 200, message: OK}
+version: 1

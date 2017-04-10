@@ -4,7 +4,7 @@ bleach
 docutils
 dogpile.cache
 fedmsg[consumers, commands]
-fedmsg_meta_fedora_infrastructure
+fedmsg_meta_fedora_infrastructure>=0.18.0
 markupsafe
 moksha.hub
 pika

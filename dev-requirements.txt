@@ -3,6 +3,7 @@ flake8
 html5lib
 mock
 nose
+vcrpy
 # Docs requirements
 sphinx
 sqlalchemy_schemadisplay
