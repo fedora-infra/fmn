@@ -2,6 +2,16 @@
 Changelog
 =========
 
+1.2.1
+=====
+
+1.2.1 is a bug fix release.
+
+Bugfixes
+--------
+
+* Stop trying to shuffle preferences in the worker consumer (#181)
+
 
 1.2.0
 =====
