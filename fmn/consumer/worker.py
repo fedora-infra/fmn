@@ -16,7 +16,6 @@ from __future__ import print_function
 import json
 import logging
 import time
-import random
 
 from dogpile.cache import make_region
 from fedmsg_meta_fedora_infrastructure import fasshim
@@ -150,11 +149,6 @@ def callback(ch, method, properties, body):
                 time.time() - start, msg['topic']))
             ch.basic_ack(delivery_tag=method.delivery_tag)
             return
-
-    # Shuffle it so that not all threads step through the list in the same
-    # order.  This should cut down on competition for the dogpile lock when
-    # getting pkgdb info at startup.
-    random.shuffle(PREFS)
 
     # And do the real work of comparing every rule against the message.
     t = time.time()
