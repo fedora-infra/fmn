@@ -227,17 +227,13 @@ def inject_variable():
         logged_in_user = flask.g.auth.openid
         contexts = fmn.lib.models.Context.all(SESSION)
 
-    web_version = get_distribution('fmn.web').version
-    lib_version = get_distribution('fmn.lib').version
-    rules_version = get_distribution('fmn.rules').version
+    fmn_version = get_distribution('fmn').version
 
     return dict(openid=openid,
                 contexts=contexts,
                 valid_paths=valid_paths,
                 rule_types=rule_types,
-                web_version=web_version,
-                lib_version=lib_version,
-                rules_version=rules_version)
+                fmn_version=fmn_version)
 
 
 @app.route('/_heartbeat')
