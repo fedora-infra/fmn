@@ -47,7 +47,6 @@ setup(
     tests_require=get_requirements('dev-requirements.txt'),
     test_suite='fmn.tests',
     packages=find_packages(exclude=('fmn.tests', 'fmn.tests.*')),
-    namespace_packages=['fmn'],
     include_package_data=True,
     zip_safe=False,
     classifiers=[
