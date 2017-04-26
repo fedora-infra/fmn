@@ -5,6 +5,11 @@ build
 _trial_temp/*
 sse.log
 fedmsg.d/fas_credentials.py
+htmlcov/
+.cache/
+.coverage
+.tox/
+coverage.xml
 
 # Images are generated as part of the docs build process
 docs/images/*

@@ -1,10 +1,5 @@
 sudo: required
 language: python
-python:
- - "2.7"
- - "3.3"
- - "3.4"
- - "3.5"
 
 before_install:
   - sudo apt-get -qq update
@@ -12,13 +7,29 @@ before_install:
 
 install:
  - pip install --upgrade setuptools pip
- - pip install -r dev-requirements.txt
- - pip install -r requirements.txt
- - pip install -e .
-script: python -m unittest discover
+ - pip install tox
 
+script:
+  - tox
+
+after_success:
+  - source .tox/${TOXENV}/bin/activate && pip install codecov && codecov --env TRAVIS_OS_NAME,TOXENV
+
+env:
+  global:
+    - PYTHONWARNINGS=always::DeprecationWarning
+  matrix:
+    - TOXENV=lint
+    - TOXENV=py27
 matrix:
+  include:
+    - python: "3.4"
+      env: TOXENV=py34
+    - python: "3.5"
+      env: TOXENV=py35
+    - python: "3.6"
+      env: TOXENV=py36
   allow_failures:
-    - python: "3.3"
     - python: "3.4"
     - python: "3.5"
+    - python: "3.6"
