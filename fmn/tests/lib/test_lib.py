@@ -157,6 +157,30 @@ class TestRecipients(BaseTestCase):
     def test_basic_recipients_list(self):
         self.create_user_and_context_data()
         self.create_preference_data_empty()
+        expected_recipients = sorted([
+            {
+                'triggered_by_links': True,
+                'markup_messages': False,
+                'shorten_links': False,
+                'irc nick': 'threebean',
+                'user': 'ralph.id.fedoraproject.org',
+                'filter_name': 'test filter',
+                'filter_id': 1,
+                'filter_oneshot': False,
+                'verbose': True,
+            },
+            {
+                'triggered_by_links': True,
+                'markup_messages': False,
+                'shorten_links': False,
+                'irc nick': 'abadger1999',
+                'user': 'toshio.id.fedoraproject.org',
+                'filter_name': 'test filter 2',
+                'filter_id': 2,
+                'filter_oneshot': False,
+                'verbose': True,
+            },
+        ])
 
         code_path = "fmn.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
@@ -167,17 +191,7 @@ class TestRecipients(BaseTestCase):
         preferences = load_preferences()
         recipients = get_recipients(
             preferences, msg, self.valid_paths, self.config)
-        self.assertDictEqual(recipients['irc'][0], {
-            'triggered_by_links': True,
-            'markup_messages': False,
-            'shorten_links': False,
-            'irc nick': 'threebean',
-            'user': 'ralph.id.fedoraproject.org',
-            'filter_name': 'test filter',
-            'filter_id': 1,
-            'filter_oneshot': False,
-            'verbose': True,
-        })
+        self.assertEqual(expected_recipients, sorted(recipients['irc']))
 
     def test_miss_recipients_list(self):
         self.create_user_and_context_data()
@@ -236,18 +250,31 @@ class TestRecipients(BaseTestCase):
         preferences = load_preferences()
         recipients = get_recipients(
             preferences, msg, self.valid_paths, self.config)
-        expected = {
-            'triggered_by_links': True,
-            'markup_messages': False,
-            'shorten_links': False,
-            'irc nick': 'threebean',
-            'user': 'ralph.id.fedoraproject.org',
-            'filter_name': 'test filter',
-            'filter_id': 1,
-            'filter_oneshot': False,
-            'verbose': True,
-        }
-        self.assertDictEqual(recipients['irc'][0], expected)
+        expected_recipients = sorted([
+            {
+                'triggered_by_links': True,
+                'markup_messages': False,
+                'shorten_links': False,
+                'irc nick': 'threebean',
+                'user': 'ralph.id.fedoraproject.org',
+                'filter_name': 'test filter',
+                'filter_id': 1,
+                'filter_oneshot': False,
+                'verbose': True,
+            },
+            {
+                'triggered_by_links': True,
+                'markup_messages': False,
+                'shorten_links': False,
+                'irc nick': 'abadger1999',
+                'user': 'toshio.id.fedoraproject.org',
+                'filter_name': 'test filter 2',
+                'filter_id': 2,
+                'filter_oneshot': False,
+                'verbose': True,
+            },
+        ])
+        self.assertEqual(expected_recipients, sorted(recipients['irc']))
 
     def test_multiple_different_filters_hit(self):
         self.create_user_and_context_data()
@@ -269,17 +296,31 @@ class TestRecipients(BaseTestCase):
         preferences = load_preferences()
         recipients = get_recipients(
             preferences, msg, self.valid_paths, self.config)
-        self.assertDictEqual(recipients['irc'][0], {
-            'triggered_by_links': True,
-            'markup_messages': False,
-            'shorten_links': False,
-            'irc nick': 'threebean',
-            'user': 'ralph.id.fedoraproject.org',
-            'filter_name': 'test filter',
-            'filter_id': 1,
-            'filter_oneshot': False,
-            'verbose': True,
-        })
+        expected_recipients = sorted([
+            {
+                'triggered_by_links': True,
+                'markup_messages': False,
+                'shorten_links': False,
+                'irc nick': 'threebean',
+                'user': 'ralph.id.fedoraproject.org',
+                'filter_name': 'test filter',
+                'filter_id': 1,
+                'filter_oneshot': False,
+                'verbose': True,
+            },
+            {
+                'triggered_by_links': True,
+                'markup_messages': False,
+                'shorten_links': False,
+                'irc nick': 'abadger1999',
+                'user': 'toshio.id.fedoraproject.org',
+                'filter_name': 'test filter 2',
+                'filter_id': 2,
+                'filter_oneshot': False,
+                'verbose': True,
+            },
+        ])
+        self.assertEqual(expected_recipients, sorted(recipients['irc']))
 
 
 if __name__ == '__main__':
