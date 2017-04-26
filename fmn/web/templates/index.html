@@ -1,0 +1,29 @@
+{% extends "master.html" %}
+
+{% block body %}
+<div class="container marketing masthead">
+    <h1>Notifications</h1>
+    <p class="lead">Centrally managed preferences for Fedora Infrastructure
+    notifications to your inbox, irc client, and mobile device.  </p>
+    <p>
+      {% if config['FMN_FEDORA_OPENID'] and config['FMN_ALLOW_FAS_OPENID'] %}
+      <a class="btn btn-default btn-lg"
+        href="{{url_for('fedora_login')}}?next={{url_for('profile_redirect')}}">Login with FAS</a>
+      {% endif %}
+      {% if config['FMN_ALLOW_GOOGLE_OPENID'] %}
+      <a class="btn btn-default btn-lg"
+        href="{{url_for('google_login')}}?next={{url_for('profile_redirect')}}">Login with Google</a>
+      {% endif %}
+      {% if config['FMN_ALLOW_YAHOO_OPENID'] %}
+      <a class="btn btn-default btn-lg"
+        href="{{url_for('yahoo_login')}}?next={{url_for('profile_redirect')}}">Login with Yahoo</a>
+      {% endif %}
+      {% if config['FMN_ALLOW_GENERIC_OPENID'] %}
+      <a class="btn btn-default btn-lg"
+        href="{{url_for('login')}}?next={{url_for('profile_redirect')}}">Login with OpenID</a>
+      {% endif %}
+      <a href="https://github.com/fedora-infra"
+        class="btn btn-default btn-lg">Contribute</a>
+    </p>
+</div>
+{% endblock %}

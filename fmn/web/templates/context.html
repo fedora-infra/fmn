@@ -1,0 +1,606 @@
+{% extends "master.html" %}
+
+{% block body %}
+<div class="page-header">
+  <h1>{{current}} preferences
+    {% if preference.enabled %}
+    <small>{{context.description}}</small>
+    {% else %}
+    <small>(disabled)</small>
+    {% endif %}
+  </h1>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    {% if current == 'email' %}
+    <p class="lead">We all get too much email.</p>
+    <p>You probably don't want any more email.  I'm sorry..  but we can
+    help!  This application is an attempt at a robust filtering system, built
+    so you can avoid receiving 2000 emails from the pkgdb about stuff you
+    already know.</p>
+    {% endif %}
+
+    {% if current == 'irc' %}
+    <p class="lead">We have a bot...</p>
+    <p>...on the <a href="https://freenode.net">freenode</a> network that can
+    direct messages to you with notifications you care about.  Simply login,
+    confirm your IRC nick, set up some filters, and wait for the magic.</p>
+    <p>Note that messages will only be sent to you when you are actually
+    connected to the freenode network as your registered nick.  If you are
+    offline, messages destined for you will just be dropped (and not queued for
+    later delivery).</p>
+    {% endif %}
+
+    {% if current == 'android' %}
+    <p class="lead">Push-notifications to your mobile device.</p>
+    <p>You'll need to install <a href="https://fedoraproject.org/mobile">Fedora
+      Mobile</a> on your phone for this wiz-biz to fly.  You'll also need to use
+    the API key (available on your <a
+      href="{{ url_for('profile', openid=openid)}}">profile page</a>) to link
+    everything together and transmit your <em>registration ids</em>.
+    </p>
+    {% endif %}
+
+    {% if current == 'desktop' %}
+    <p class="lead">Push-notifications to your desktop client.</p>
+    <p>You'll need to install <a href="https://apps.fedoraproject.org/packages/fedmsg-notify">fedmsg-notify
+      </a> on your system to take advantage of this.  <code>fedmsg-notify</code> will
+      grab its preferences from the JSON api of this webapp and use those to filter messages
+      locally on your box.  You can return here to update those preferences.
+    </p>
+    {% endif %}
+
+    {% if current == 'sse' %}
+    <p class="lead">Server Sent Events</p>
+    <p> Allows you to get real time updates of what events you have subscribed too.
+    </p>
+    <p>
+      You can find the SSE at
+      <a href="{{context.extra['sse_url']}}">{{context.extra['sse_url']}}</a>
+    </p>
+    {% endif %}
+
+    <p>You have {{preference.filters|length}} rule filters
+    defined for the {{current}} messaging context.  You can add new ones and
+    delete existing ones here.</p>
+    <p>If a message on the <a href="http://fedmsg.com">fedmsg bus</a> matches
+    any one of these filters, then a notification will be sent your
+    way{% if preference.enabled %}.{% else %} (except that you currently have
+    the {{current}} delivery mechanism disabled.  Enable it and
+    <strong>then</strong> we'll send you notifications.){% endif %}
+    {% if context.detail_name != "None" %}
+    We also need to know where you want your {{current}} messages delivered
+    (a <em>{{context.detail_name}}</em>); you can set that up here.
+    {% endif %}
+    </p>
+    <p>
+    Clicking on a filter will let you add or remove rules from it. You can also negate
+    a rule, so that instead of include messages matching it, they will be excluded.
+    For example, you might want a filter with 'a particular user' with your FAS username, 
+    but also a negated rule for 'all bugzilla messages', so that filter would match 
+    anything related to your FAS username, but not any bugzilla messages.
+    </p>
+
+    <div class="list-group {{'hidden' if preference.can_send is sameas false}}">
+
+      <div class="list-group-item">
+        <form class="form-inline" role="form" action="{{url_for('handle_filter')}}"
+          method="post">
+          <div class="form-group">
+            <label class="sr-only" for="filter_name">Filter Name</label>
+            <input type="text" class="form-control" name="filter_name" id="filter_name" required=required placeholder="New Filter Name">
+          </div>
+          <input name="openid" id="openid" value="{{openid}}" type="hidden">
+          <input name="context" id="context" value="{{current}}" type="hidden">
+          <button type="submit" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span>
+            Create a new filter</button>
+        </form>
+      </div>
+
+      {% for fltr in preference.filters %}
+      <a href="{{fltr.id}}" class="list-group-item">
+        <h4 class="list-group-item-heading">
+          {% if fltr.oneshot %}
+            <span class="glyphicon glyphicon-star text-info"
+            data-toggle="tooltip" title="This is a one-shot filter which will
+            disable itself after the next time it matches a message."></span>
+          {% endif %}
+          {{fltr.name}}
+        </h4>
+        {% if fltr.rules %}
+        <dl class="list-group-item-text dl-horizontal">
+          {% for rule in fltr.rules %}
+          <dt style='white-space: normal;' data-toggle="tooltip"
+            {% if rule.negated %}
+              title="(ignore) {{rule.title(valid_paths)}}">
+            <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
+            {% else %}
+              title="(include) {{rule.title(valid_paths)}}">
+            <span class="glyphicon glyphicon-ok-circle text-success"></span>
+            {% endif %}
+            {{rule.title(valid_paths)}}
+          </dt>
+          <dd>{{rule.doc(valid_paths, no_links=True)}}
+          {% if rule.arguments %}
+          <table class="table">
+            {% for key, value in rule.arguments.iteritems() %}
+            <tr><th>{{key}}</th><td>{{value}}</td></tr>
+            {% endfor %}
+          </table>
+          {% endif %}
+          </dd>
+          {% endfor %}
+        </dl>
+        {% else %}
+        <p class="list-group-item-text">This filter has zero rules</p>
+        {% endif %}
+        <form role="form" action="{{url_for('handle_filter')}}" method="post">
+          <input name="openid" id="openid" value="{{openid}}" type="hidden">
+          <input name="context" id="context" value="{{current}}" type="hidden">
+          <input name="filter_name" id="filter_name" value="{{fltr.name}}" type="hidden">
+          <span class="pull-right">
+            {% if fltr.oneshot %}
+              <button type="submit" name="method" value="disable-oneshot"
+              class="btn btn-primary" data-toggle="tooltip" title="One-shot
+              filters fire only once and then automatically disable
+              themselves.  You can use this feature to watch for a single
+              build, or a single comment somewhere.  This is currently a
+              one-shot filter.">
+                <span class="glyphicon glyphicon-star-empty"></span>
+                Disable one-shot</button>
+            {% endif %}
+            {% if fltr.active %}
+              {% if not fltr.oneshot %}
+                <button type="submit" name="method" value="enable-oneshot"
+                class="btn btn-info" data-toggle="tooltip" title="One-shot
+                filters fire only once and then automatically disable
+                themselves.  You can use this feature to watch for a single
+                build, or a single comment somewhere.  This is not currently a
+                one-shot filter.">
+                  <span class="glyphicon glyphicon-star"></span>
+                  Enable one-shot</button>
+              {% endif %}
+            <button type="submit" name="method" value="disable" class="btn
+            btn-warning" data-toggle="tooltip" title="This filter is active.
+            Use this button to temporarily it.">
+              <span class="glyphicon glyphicon-remove"></span>
+              Disable this filter</button>
+            {% else %}
+            <button type="submit" name="method" value="enable" class="btn
+            btn-success" data-toggle="tooltip" title="This filter is not
+            currently enabled.  Use this button to re-enable it.">
+              <span class="glyphicon glyphicon-ok"></span>
+              Enable this filter</button>
+            {% endif %}
+            <button type="submit" name="method" value="delete" class="btn
+            btn-danger" data-toggle="tooltip" title="WARNING - Clicking this
+            button will permanently delete this filter.  Consider disabling it
+            instead." onclick="return confirm('Are you sure you want to permanently delete this filter?');">
+              <span class="glyphicon glyphicon-remove"></span>
+              Delete this filter</button>
+          </span>
+        </form>
+        <div class="clearfix"></div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="col-md-5">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          Should we send you messages?
+        </h3>
+      </div> <!-- end panel-heading -->
+
+      <div class="panel-body">
+        <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+          method="post">
+          <p class="pull-left">
+          This message delivery mechanism is currently <strong>
+            {% if preference.enabled %}active{% else %}inactive{% endif %}.
+          </strong></p>
+          <input name="openid" id="openid" value="{{openid}}" type="hidden">
+          <input name="context" id="context" value="{{current}}" type="hidden">
+          <p class="pull-right">
+          {% if preference.enabled %}
+          <button type="submit" class="btn btn-danger" name="toggle_enable" value="toggle">
+            <span class="glyphicon glyphicon-off"></span> Disable
+          </button>
+          {% else %}
+          <button type="submit" class="btn btn-success" name="toggle_enable" value="toggle">
+            <span class="glyphicon glyphicon-ok-circle"></span> Enable
+          </button>
+          {% endif %}
+          </p>
+        </form>
+      </div>
+    </div>
+
+    {% if context.detail_name != "None" %}
+    <div class="panel panel-default {{'hidden' if preference.enabled is sameas false}}">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          Where should we send your messages?
+        </h3>
+      </div> <!-- end panel-heading -->
+
+      <div class="panel-body">
+        {% if confirmation %}
+        <div class="alert alert-{{ {'pending': 'info', 'valid': 'info', 'accepted': 'success', 'rejected': 'danger', 'invalid': 'warning'}[confirmation.status] }}">
+          <p>Your {{ context.detail_name }} for
+          {% if context.name == "android" %}
+          {{confirmation.detail_value[0:30]}}...
+          {% else %}
+          {{confirmation.detail_value}}
+          {% endif %}
+          is <strong>{{confirmation.status}}</strong>.
+          {% if confirmation.status in ["pending", "valid"] %}
+          You should be contacted soon with confirmation details via {{context.name}}.
+          {% endif %}
+          </p>
+        </div>
+        {% elif preference.detail_values.__len__() == 0 %}
+        <div class="alert alert-info">
+          <p><strong>Next</strong>-- we need to know where to send your messages.</p>
+          {% if context.name == "irc" %}
+          <p>Note that we will try to private message you on the freenode irc
+          network.  For this to work you need to be:
+          <ul>
+            <li>signed in to freenode right now</li>
+            <li><em>identified</em> with <code>NickServ</code></li>
+          </ul>
+          If that's not the case already, you should go do those things
+          first.</p>
+          {% elif context.name == "email" %}
+          <p>Note that we will try to email you with a confirmation link.
+          You will need to check your email and follow that link to
+          proceed.</p>
+          {% endif %}
+        </div>
+        {% endif %}
+        {% if context.name == "android" %}
+        <p>
+        Follow the instructions in the Fedora Mobile Android app to register
+        for Fedora Notifications on your Android device.
+        </p>
+        {% else %}
+        <form class="form-horizontal" role="form"
+          action="{{url_for('handle_details')}}" method="post">
+          <fieldset {{'disabled' if preference.enabled is sameas false}}>
+            <div class="form-group">
+              <input name="openid" id="openid" value="{{openid}}" type="hidden">
+              <input name="context" id="context" value="{{current}}" type="hidden">
+              <table class="table">
+                {% if confirmation %}
+                <tr>
+                  <td>
+                    <label class="control-label" for="detail_value">
+                      {{confirmation.status}} {{context.detail_name}}</label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control input-sm"
+                    name="detail_value" id="detail_value" required=required
+                    value='{{ confirmation.detail_value }}' disabled>
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-sm btn-danger"
+                      name="delete" value="{{confirmation.detail_value}}"
+                      {{'disabled' if preference.enabled is sameas false}}>
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </td>
+                </tr>
+                {% endif %}
+
+                {% if preference.detail_values %}
+                <tr>
+                  <td>
+                    <label class="control-label" for="detail_value">
+                      confirmed {{context.detail_name}}</label>
+                  </td>
+                  {% for value in preference.detail_values %}
+                  <td>
+                    <input type="text" class="form-control input-sm"
+                    name="detail_value" id="detail_value" required=required
+                    value='{{ value.value }}' disabled>
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-sm btn-danger"
+                      name="delete" value="{{value.value}}"
+                      {{'disabled' if preference.enabled is sameas false}}>
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+                <tr>
+                  <td>
+                    <label class="control-label" for="detail_value">
+                      new {{context.detail_name}}</label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control input-sm"
+                    name="detail_value" id="detail_value"
+                    placeholder="{{context.placeholder}}">
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-sm btn-success"
+                      name="save"
+                      {{'disabled' if preference.enabled is sameas false}}>
+                      <span class="glyphicon glyphicon-plus">
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </fieldset>
+          </form>
+          {% endif %}
+        </div> <!-- end panel-body -->
+      </div> <!-- end panel -->
+
+      <div class="panel panel-default {{'hidden' if preference.can_send is sameas false}}">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            How often should we send you messages?
+          </h3>
+        </div> <!-- end panel-heading -->
+
+        <div class="panel-body">
+          <p class="help-block text-left"> If you leave these <code>&lt;disabled&gt;</code>
+          then we'll just forward you your notifications in real time.  </p>
+          <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+            method="post">
+            <fieldset {{'disabled' if preference.enabled is sameas false}}>
+              <div class="form-group">
+                <label class="col-sm-1 control-label" for="batch_delta">Wait</label>
+                <div class="col-sm-4">
+                  <select name="batch_delta" class="form-control">
+                    <option {{'selected' if preference.batch_delta is none}}>&lt;disabled&gt;</option>
+                    <option {{'selected' if preference.batch_delta is equalto 20}} value="20">20 seconds</option>
+                    <option {{'selected' if preference.batch_delta is equalto 120}} value="120">2 minutes</option>
+                    <option {{'selected' if preference.batch_delta is equalto 300}} value="300">5 minutes</option>
+                    <option {{'selected' if preference.batch_delta is equalto 600}} value="600">10 minutes</option>
+                    <option {{'selected' if preference.batch_delta is equalto 1200}} value="1200">20 minutes</option>
+                    <option {{'selected' if preference.batch_delta is equalto 3600}} value="3600">1 hour</option>
+                    <option {{'selected' if preference.batch_delta is equalto 18000}} value="18000">5 hours</option>
+                    <option {{'selected' if preference.batch_delta is equalto 86400}} value="86400">1 day</option>
+                  </select>
+                </div>
+                <label class="col-sm-2 control-label" for="batch_count">or for</label>
+                <div class="col-sm-4">
+                  <select name="batch_count" class="form-control">
+                    <option {{'selected' if preference.batch_count is none}}>&lt;disabled&gt;</option>
+                    <option {{'selected' if preference.batch_count is equalto 5}} value="5">5 messages</option>
+                    <option {{'selected' if preference.batch_count is equalto 10}} value="10">10 messages</option>
+                    <option {{'selected' if preference.batch_count is equalto 50}} value="50">50 messages</option>
+                    <option {{'selected' if preference.batch_count is equalto 100}} value="100">100 messages</option>
+                    <option {{'selected' if preference.batch_count is equalto 250}} value="250">250 messages</option>
+                  </select>
+                </div>
+                <div class="col-sm-11">
+                  <p class="help-block text-right">..whichever comes first.</p>
+                </div>
+              </div>
+
+            </fieldset>
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <p class="pull-right">
+            <button type="submit" class="btn btn-success" name="save"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-{{context.icon}}"></span> Save
+            </button>
+            </p>
+          </form>
+
+          {% if current == 'email' and (preference.batch_count is not none or preference.batch_delta is not none) %}
+
+          <div class="clearfix"></div><hr></hr>
+
+          <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+            method="post">
+            <p class="pull-left">By default, we'll try to cram as much detailed
+            information as we can into your digest messages (full patches,
+            koji build details, etc..) However, you might not want all of
+            that.</p>
+            <p class="pull-left">
+            I'm configured right now to send you <strong>
+              {% if preference.verbose %}full details{% else %}only summaries{% endif %}
+            </strong> of your messages in digest.</p>
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <p class="pull-right">
+            {% if preference.verbose %}
+            <button type="submit" class="btn btn-danger" name="toggle_verbose" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-volume-down"></span> Only Summaries
+            </button>
+            {% else %}
+            <button type="submit" class="btn btn-success" name="toggle_verbose" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-volume-up"></span> Full Details
+            </button>
+            {% endif %}
+            </p>
+          </form>
+          {% endif %}
+
+
+        </div>
+      </div> <!-- end panel -->
+
+      {% endif %}
+
+      <div class="panel panel-default {{'hidden' if preference.can_send is sameas false}}">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Should we do extra stuff to your messages?
+          </h3>
+        </div> <!-- end panel-heading -->
+
+        <div class="panel-body">
+
+          <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+            method="post">
+            <p class="pull-left">We can annotate your messages with a
+            "triggered by" link that will let you know which filter was
+            responsible for triggering each message.  This can be useful if you
+            are actively tuning your profile, or even if you just  want to
+            track down why you're getting certain messages.  On the other hand,
+            some people find it annoying to have extra links tacked onto their
+            messages.  It's up to you...</p>
+            <p class="pull-left">
+            I'm configured right now to <strong>
+              {% if preference.triggered_by_links %}append{% else %}not append{% endif %}
+            </strong> those links.</p>
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <p class="pull-right">
+            {% if preference.triggered_by_links %}
+            <button type="submit" class="btn btn-danger" name="toggle_triggered_by" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-off"></span> Disable
+            </button>
+            {% else %}
+            <button type="submit" class="btn btn-success" name="toggle_triggered_by" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-ok-circle"></span> Enable
+            </button>
+            {% endif %}
+            </p>
+          </form>
+
+          <div class="clearfix"></div><hr></hr>
+
+          <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+            method="post">
+            <p class="pull-left">We can pass all links through a url shortener to make your
+            delivered messages cute and manageable.  Some people don't like the
+            indirection that link shortening introduces, so we give you the
+            option here to turn it off.</p>
+            <p class="pull-left">
+            I'm configured right now to <strong>
+              {% if preference.shorten_links %}shorten{% else %}not shorten{% endif %}
+            </strong> your links.</p>
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <p class="pull-right">
+            {% if preference.shorten_links %}
+            <button type="submit" class="btn btn-danger" name="toggle_shorten" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-off"></span> Disable
+            </button>
+            {% else %}
+            <button type="submit" class="btn btn-success" name="toggle_shorten" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-ok-circle"></span> Enable
+            </button>
+            {% endif %}
+            </p>
+          </form>
+
+          <div class="clearfix"></div><hr></hr>
+
+          <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+            method="post">
+            <p class="pull-left">In some cases, we can try to enrich your
+            messages with markup and color.  Want to try it out?</p>
+            <p class="pull-left">
+            I'm configured right now to <strong>
+              {% if preference.markup_messages %}markup{% else %}not markup{% endif %}
+            </strong> your messages.</p>
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <p class="pull-right">
+            {% if preference.markup_messages %}
+            <button type="submit" class="btn btn-danger" name="toggle_markup" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-off"></span> Disable
+            </button>
+            {% else %}
+            <button type="submit" class="btn btn-success" name="toggle_markup" value="toggle"
+              {{'disabled' if preference.enabled is sameas false}}>
+              <span class="glyphicon glyphicon-ok-circle"></span> Enable
+            </button>
+            {% endif %}
+            </p>
+          </form>
+
+        </div> <!-- end panel-body -->
+      </div> <!-- end panel -->
+
+      <div class="panel panel-danger {{'hidden' if preference.can_send is sameas false}}">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Party Perished
+          </h3>
+        </div> <!-- end panel-heading -->
+
+        <div class="panel-body">
+          <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+            method="post">
+            <p class="pull-left">If you like, we can destroy all your existing
+            filters for the {{current}} context and restore the "factory
+            defaults": the settings that we think are the best for new users, a
+            nice blank slate that you can customize as you please. </p>
+            <p><strong>Beware, there is no way to undo this operation.
+            </strong></p>
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <p class="pull-right">
+            <button type="submit" class="btn btn-danger" name="reset_to_defaults" value="confirm"
+              {{'disabled' if preference.enabled is sameas false}}
+              onclick="return confirm('Are you sure you want to reset your {{current}} filters to the defaults?');">
+              <span class="glyphicon glyphicon-repeat"></span> Reset
+            </button>
+            </p>
+          </form>
+
+          <div class="clearfix"></div><hr></hr>
+
+          <form class="form-horizontal" role="form" action="{{url_for('handle_details')}}"
+            method="post">
+            <p class="pull-left">Alternatively, you can start over with a
+            <em>tabula rasa</em>. Clicking this button will delete all of your
+            existing filters so you can build your own from the ground-up.</p>
+            <p><strong>Beware, there is no way to undo this operation.
+            </strong></p>
+            <input name="openid" id="openid" value="{{openid}}" type="hidden">
+            <input name="context" id="context" value="{{current}}" type="hidden">
+            <p class="pull-right">
+            <button type="submit" class="btn btn-danger" name="delete_all_filters" value="confirm"
+              {{'disabled' if preference.enabled is sameas false}}
+              onclick="return confirm('Are you sure you want to delete all your existing {{current}} filters?');">
+              <span class="glyphicon glyphicon-remove"></span> Purge
+            </button>
+            </p>
+          </form>
+
+        </div> <!-- end panel-body -->
+      </div> <!-- end panel -->
+
+      <div class="panel panel-default {{'hidden' if preference.can_send is sameas false}}">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            JSON API
+          </h3>
+        </div> <!-- end panel-heading -->
+
+        <div class="panel-body">
+          <p class="pull-left">If you know what you're doing, or just want to
+          hack it, you can export your profile as
+            <a href="{{url_for('context_json', openid=openid, context=current)}}">
+              <span class="glyphicon glyphicon-floppy-save"></span>JSON</a>.
+          </p>
+        </div> <!-- end panel-body -->
+      </div> <!-- end panel -->
+
+    </div>
+  </div>
+
+  {% endblock %}

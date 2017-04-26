@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="management of fedmsg end user notifications" />
+    <meta name="author" content="Ralph Bean" />
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='ico/favicon.ico') }}">
+
+    <title>Fedora Notifications</title>
+
+    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/text.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/navbar.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/footer.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/avatars.css') }}" rel="stylesheet" />
+  </head>
+
+  <body>
+
+    <div id="wrap" class="container{{ ' max-width' if current is equalto 'index' }}">
+
+      <!-- Static navbar -->
+      <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                  data-target=".navbar-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{url_for('index')}}">
+              Fedora Notifications</a>
+          </div>
+
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                {% if 'about' == current %}
+                <li class="active">
+                {% else %}
+                <li>
+                {% endif %}
+                <a href="{{url_for('about')}}">
+                  <span class="glyphicon glyphicon-question-sign"></span>
+                  About</a>
+                <li>
+
+              {% if g.auth.logged_in %}
+                {% if 'profile' == current %}
+                <li class="active">
+                {% else %}
+                <li>
+                {% endif %}
+                <a href="{{url_for('profile', openid=openid or logged_in_user)}}">
+                  <span class="glyphicon glyphicon-user"></span>
+                  Profile
+                </a>
+                </li>
+
+                {% for ctx in contexts %}
+                  {% if ctx.name in g.fedmsg_config['fmn.backends'] %}
+                    {% if ctx.name == current %}
+                    <li class="active">
+                    {% else %}
+                    <li>
+                    {% endif %}
+                    <a href="{{url_for('context', openid=openid or logged_in_user, context=ctx.name)}}">
+                        <span class="glyphicon glyphicon-{{ctx.icon}}"></span>
+                        {{ctx.name}}
+                    </a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              {% if g.auth.logged_in %}
+              <li><a href="{{url_for('logout')}}">
+                <span class="glyphicon glyphicon-log-out"></span>
+                Logout
+              </a></li>
+              {% else %}
+              <li>
+                {% if config['FMN_FEDORA_OPENID'] and config['FMN_ALLOW_FAS_OPENID'] and not config['FMN_ALLOW_GOOGLE_OPENID'] and not config['FMN_ALLOW_YAHOO_OPENID'] and not config['FMN_ALLOW_GENERIC_OPENID'] %}
+                  <a href="{{url_for('fedora_login')}}?next={{url_for('profile_redirect')}}">
+                      <span class="glyphicon glyphicon-log-in"></span>
+                      Login
+                  </a>
+                {% else %}
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      <span class="glyphicon glyphicon-log-in"></span>
+                      Login
+                  </a>
+                  <ul class="dropdown-menu">
+                    {% if config['FMN_FEDORA_OPENID'] and config['FMN_ALLOW_FAS_OPENID'] %}
+                    <li><a href="{{url_for('fedora_login')}}?next={{url_for('profile_redirect')}}">Fedora</a></li>
+                    <li class="divider"></li>
+                    {% endif %}
+                    {% if config['FMN_ALLOW_GOOGLE_OPENID'] %}
+                    <li><a href="{{url_for('google_login')}}?next={{url_for('profile_redirect')}}">Google</a></li>
+                    {% endif %}
+                    {% if config['FMN_ALLOW_YAHOO_OPENID'] %}
+                    <li><a href="{{url_for('yahoo_login')}}?next={{url_for('profile_redirect')}}">Yahoo</a></li>
+                    {% endif %}
+                    {% if config['FMN_ALLOW_GENERIC_OPENID'] %}
+                    <li><a href="{{url_for('login')}}?next={{url_for('profile_redirect')}}">Other OpenID</a></li>
+                    {% endif %}
+                  </ul>
+                {% endif %}
+              </li>
+              {% endif %}
+            </ul>
+
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+
+      {% block body %}{% endblock %}
+
+    </div> <!-- /container -->
+
+    <div id="footer">
+      <div class="container">
+        <p class="text-muted credit">
+        Fedora Notifications is powered by
+        <a href="http://fedmsg.com">fedmsg</a>.  The
+        <a href="https://github.com/fedora-infra/fmn">source</a>
+        and
+        <a href="https://github.com/fedora-infra/fmn/issues">issue tracker</a>
+        are available on github.
+        ©2013-2015 Red Hat, Inc., <a href="http://threebean.org">Ralph Bean</a>.
+        </p>
+        <p class="text-muted">
+          Running <code>fmn.web-{{web_version}}</code>,
+          <code>fmn.lib-{{lib_version}}</code>, and
+          <code>fmn.rules-{{rules_version}}</code>.
+        </p>
+      </div>
+    </div>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{{ url_for('static', filename='js/jquery-1.10.2.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/site.js')}}"></script>
+    <script>$('[data-toggle="tooltip"]').tooltip();</script>
+    <script>
+      $(document).ready(function() {
+          $(".btn-edit").click(function(ev) {
+              var sel = $(this).attr('data-parent');
+              $(sel + ' .read').addClass('hidden');
+              $(sel + ' .write').removeClass('hidden');
+          });
+          $(".btn-cancel").click(function(ev) {
+              var sel = $(this).attr('data-parent');
+              $(sel + ' .write').addClass('hidden');
+              $(sel + ' .read').removeClass('hidden');
+          });
+      });
+    </script>
+
+    {% if config['FEDMENU_URL'] %}
+    <script src="{{ config['FEDMENU_URL'] }}/js/fedmenu.js"></script>
+    <script src="{{ config['FEDMENU_URL'] }}/js/fedora-libravatar.js"></script>
+    <script>
+      fedmenu({
+          'url': '{{ config["FEDMENU_DATA_URL"] }}',
+          'mimeType': 'application/javascript',
+          'position': 'bottom-right',
+          {% if openid and '.id.fedoraproject.org' in openid %}
+          'user': '{{ openid | replace(".id.fedoraproject.org", "") }}',
+          {% endif %}
+      });
+    </script>
+    {% endif %}
+
+  </body>
+</html>

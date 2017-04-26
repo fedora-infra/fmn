@@ -1,0 +1,240 @@
+{% extends "master.html" %}
+
+{% block body %}
+<div id="title-header" class="page-header">
+  <h1 class="read">
+    {% if filter.oneshot %}
+      <span class="glyphicon glyphicon-star text-info"
+      data-toggle="tooltip" title="This is a one-shot filter which will
+      disable itself after the next time it matches a message."></span>
+    {% endif %}
+    {{filter.name}}
+    <a href="#" data-parent="#title-header" class="btn btn-xs btn-edit btn-default">Edit</a></h1>
+  <h1 class="write hidden">
+    <form class="form-inline" role="form"
+      action="{{url_for('handle_filter')}}" method="post">
+      {% if filter.oneshot %}
+        <span class="glyphicon glyphicon-star text-info"
+        data-toggle="tooltip" title="This is a one-shot filter which will
+        disable itself after the next time it matches a message."></span>
+      {% endif %}
+      <input name="openid" id="openid" value="{{openid}}" type="hidden">
+      <input name="context" id="context" value="{{current}}" type="hidden">
+      <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
+      <input name="filter_name" id="filter_name" value="{{filter.name}}">
+      <button type="submit" class="btn btn-xs btn-primary" name="method" value="post">
+        <span class="glyphicon glyphicon-ok-circle"></span>Save</button>
+      <a href="#" data-parent="#title-header" class="btn btn-xs btn-cancel btn-default">Cancel</a>
+    </form>
+  </h1>
+  <h3>sent to {{current}}</h3>
+</div>
+
+<div class="row-fluid">
+  <div class="col-md-6 col-md-offset-6">
+    <form class="form-inline" role="form"
+      action="{{url_for('handle_filter')}}" method="post">
+      <input name="openid" id="openid" value="{{openid}}" type="hidden">
+      <input name="context" id="context" value="{{current}}" type="hidden">
+      <input name="filter_name" id="filter_name" value="{{filter.name}}" type="hidden">
+      <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
+      <div class="btn-group pull-right">
+        <span>
+        <a class="btn btn-info" href="{{url_for('filter_json', openid=openid, context=current, filter_id=filter.id)}}"
+          data-toggle="tooltip" title="Export filter as JSON">
+          <span class="glyphicon glyphicon-floppy-save"></span>Export</a>
+        </span>
+
+        <span>
+        {% if filter.oneshot %}
+          <button type="submit" class="btn btn-primary" name="method"
+            value="disable-oneshot" data-toggle="tooltip" title="One-shot
+            filters fire only once and then automatically disable themselves.
+            You can use this feature to watch for a single build, or a single
+            comment somewhere.  This is currently a one-shot filter.">
+            <span class="glyphicon glyphicon-star-empty"></span>Disable one-shot</button>
+        {% endif %}
+        {% if filter.active %}
+          {% if not filter.oneshot %}
+            <button type="submit" class="btn btn-info" name="method"
+              value="enable-oneshot" data-toggle="tooltip" title="One-shot
+              filters fire only once and then automatically disable themselves.
+              You can use this feature to watch for a single build, or a single
+              comment somewhere.  This is not currently a one-shot filter.">
+              <span class="glyphicon glyphicon-star"></span>Enable one-shot</button>
+          {% endif %}
+        <button type="submit" class="btn btn-warning" name="method"
+          value="disable" data-toggle="tooltip" title="This filter is active.
+          Use this button to temporarily it.">
+          <span class="glyphicon glyphicon-remove"></span>Disable</button>
+        {% else %}
+        <button type="submit" class="btn btn-success" name="method"
+          value="enable" data-toggle="tooltip" title="This filter is not
+          currently enabled.  Use this button to re-enable it.">
+          <span class="glyphicon glyphicon-ok"></span>Enable</button>
+        {% endif %}
+        </span>
+
+        <span class="divider"></span>
+
+        <span>
+        <button type="submit" class="btn btn-danger" name="method"
+          value="delete" data-toggle="tooltip" title="WARNING - Clicking this
+          button will permanently delete this filter.  Consider disabling it
+          instead."
+          onclick="return confirm('Are you sure you want to permanently delete this filter?');">
+          <span class="glyphicon glyphicon-remove"></span>Delete</button>
+        </span>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-7">
+    <p class="lead">Rules defined for this filter:</p>
+    <p>(all these rules must be satisfied for the notification to be sent)</p>
+    <div id="rules" class="list-group">
+    {% for rule in filter.rules %}
+      <span class="list-group-item">
+        <h4 class="list-group-item-heading">
+            {% if rule.negated %}
+            <span class="glyphicon glyphicon-exclamation-sign text-danger" data-toggle="tooltip"
+            title="(ignore) Messages matched by this rule count against a match by this filter">
+            </span>
+            {% else %}
+            <span class="glyphicon glyphicon-ok-circle text-success" data-toggle="tooltip"
+            title="(include) Messages matched by this rule contribute positively to a match by this filter">
+            </span>
+            {% endif %}
+            {{rule.title(valid_paths)}}
+        </h4>
+        <p class="list-group-item-text">{{rule.doc(valid_paths)}}
+          <dl class="dl-horizontal">
+            <form class="form-inline" role="form" action="{{url_for('handle_argument')}}" method="post">
+              <input name="rule_name" id="rule_name" value="{{rule.code_path}}" type="hidden">
+              <input name="openid" id="openid" value="{{openid}}" type="hidden">
+              <input name="context" id="context" value="{{current}}" type="hidden">
+              <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
+              <input name="rule_id" id="rule_id" value="{{rule.id}}" type="hidden">
+              {% for key, value in rule.arguments.iteritems() %}
+              <dt>{{key}}</dt><dd id="{{key}}{{rule.id}}">
+                <span class="read">{{value}}
+                  <a href="#" data-parent="#{{key}}{{rule.id}}" class="btn btn-xs btn-edit btn-default">Edit</a></h1>
+                </span>
+                <span class="write hidden">
+                  <input name="key" id="key" value="{{key}}" type="hidden">
+                  <input name="value" id="value" value="{{value}}">
+                  <button type="submit" class="btn btn-xs btn-primary" name="method" value="post">
+                    <span class="glyphicon glyphicon-ok-circle"></span>Save</button>
+                  <a href="#" data-parent="#{{key}}{{rule.id}}" class="btn btn-xs btn-cancel btn-default">Cancel</a></h1>
+                </span>
+              </dd>
+              {% endfor %}
+            </form>
+          </dl>
+        </p>
+        <p class="list-group-item-text">
+          <div class="row">
+            <div class="col-md-offset-8 col-md-4">
+              <form class="form-inline" role="form" action="{{url_for('handle_rule')}}" method="post">
+                <input name="rule_name" id="rule_name" value="{{rule.code_path}}" type="hidden">
+                <input name="openid" id="openid" value="{{openid}}" type="hidden">
+                <input name="context" id="context" value="{{current}}" type="hidden">
+                <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
+                <input name="rule_id" id="rule_id" value="{{rule.id}}" type="hidden">
+                {% if rule.negated %}
+                <button type="submit" class="btn btn-success btn-xs"
+                  name="method" value="negate" data-toggle="tooltip"
+                  title="This rule currently contributes negatively to the
+                  filter.  That is to say that, messages that match this rule
+                  are immediately rejected and barred from further
+                  consideration for delivery.  Switching to 'include' mode
+                  means to toggle that behavior such that messages that match
+                  this rule will be further considered for delivery.">
+                    <span class="glyphicon glyphicon-ok-circle"></span>
+                    Include</button>
+                {% else %}
+                <button type="submit" class="btn btn-danger btn-xs"
+                  name="method" value="negate" data-toggle="tooltip"
+                  title="This rule currently contributes positively to the
+                  filter: messages that match this rule are further considered
+                  for delivery.  To 'negate' the rule means to toggle that
+                  behavior such that messages that match this rule will be excluded
+                  from any further consideration.">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Negate</button>
+                {% endif %}
+                <button type="submit" class="btn btn-danger btn-xs" name="method" value="delete"
+                    onclick="return confirm('Are you sure you want to permanently delete this rule?');">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Delete</button>
+              </form>
+            </div>
+          </div>
+        </p>
+      </span>
+    {% endfor %}
+    </div>
+
+    <!-- A place to hold examples that match these rules.
+    We'll populate this with javascript to make the page load more quickly.
+    -->
+    <div id="examples-container">
+      <p class="lead"></p>
+      <ul class="list-group"></ul>
+    </div>
+
+  </div>
+
+  <div class="col-md-5">
+    <p class="lead">Possible rules:</p>
+    <p> You can add a new rule to this filter by selecting one from this
+    pre-defined list.  Click on any rule to check it out.</p>
+
+    {% for kind in rule_types %}
+    <div class="panel-group" id="accordion-{{kind}}">
+      <h4>{{kind.capitalize()}} Rules</h4>
+      {% for root in valid_paths %}
+      {% for path in valid_paths[root] %}
+
+      {%- if valid_paths[root][path]['submodule'] != kind %} {% continue %} {% endif %}
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h5 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion-{{kind}}" href="#collapse{{path}}">
+              {{ valid_paths[root][path]['title'] }}
+            </a>
+          </h5>
+        </div>
+        <div id="collapse{{path}}" class="panel-collapse collapse">
+          <div class="panel-body">
+              {{ valid_paths[root][path]['doc'] }}
+              <form class="form-inline" role="form" action="{{url_for('handle_rule')}}" method="post">
+                  {% for arg in valid_paths[root][path]['args'] %}
+                    {% if arg not in ['config', 'message'] %}
+                      {{arg}}
+                      <input name="{{arg}}" id="arg_{{arg}}" type="text" />
+                    {% endif %}
+                  {% endfor %}
+                <input name="rule_name" id="rule_name" value="{{root}}:{{path}}" type="hidden">
+                <input name="openid" id="openid" value="{{openid}}" type="hidden">
+                <input name="context" id="context" value="{{current}}" type="hidden">
+                <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
+                <button type="submit" class="btn btn-success">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Add this rule</button>
+              </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

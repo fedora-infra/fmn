@@ -1,16 +1,27 @@
 arrow
 beautifulsoup4
 bleach
+bunch
+datanommer.models
 docutils
 dogpile.cache
 fedmsg[consumers, commands]
 fedmsg_meta_fedora_infrastructure>=0.18.0
+Flask
+flask-openid>=1.2.4
 markupsafe
 moksha.hub
 pika
+pydns
+pylibravatar
 python-fedora
+python-openid
+python-openid-cla
+python-openid-teams
 redis
 requests
 six
 SQLAlchemy>=0.8
 twisted
+urllib3
+wtforms

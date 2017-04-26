@@ -7,6 +7,8 @@ Changelog
 
 * Merge the fmn.sse repository into the fmn repository.
 
+* Merge the fmn.web repository into the fmn repository.
+
 
 1.2.1
 =====

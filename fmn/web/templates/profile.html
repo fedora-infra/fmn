@@ -1,0 +1,116 @@
+{% extends "master.html" %}
+
+{% block body %}
+<div class="row">
+
+  <div class="col-md-4">
+    <form method="POST" action="https://www.libravatar.org/openid/login/">
+      <input type="hidden" name="openid_identifier" value="{{openid_url}}"/>
+      <input type="image" class="img-circle centered" src="{{avatar}}" style="outline: none;"
+             alt="{{openid}}'s avatar"/>
+    </form>
+
+    <p>From your profile here, you can manage different notification
+    preferences for <a href="https://apps.fedoraproject.org">Fedora Apps</a>.
+    We support the following notification contexts currently and hope to add
+    more in time.
+    </p>
+
+    <dl class="dl-horizontal">
+    {% for ctx in contexts %}
+      {% if ctx.name in g.fedmsg_config['fmn.backends'] %}
+      <dt><a href="{{ctx.name}}">{{ctx.name}}</a></dt>
+      <dd>{{ctx.description}}</dd>
+      {% endif %}
+    {% endfor %}
+    </dl>
+  </div>
+
+  {% if prefs %}
+  <div class="col-md-7">
+    <h3>Current settings</h3>
+    <div class="list-group">
+      {% for pref in prefs %}
+      {% if pref.context.name in g.fedmsg_config['fmn.backends'] %}
+        <span class="list-group-item">
+          <h4 class="list-group-item-heading">
+            {{pref.context_name}}
+            <small><strong>
+              {% if pref.enabled %} (enabled) {% else %}(disabled){% endif %}
+            </strong> </small>
+          </h4>
+          <p class="list-group-item-text">
+            {% for value in pref.detail_values %}
+              {{ value.value }}
+            {% endfor %}
+
+            <form action="{{url_for('handle_details')}}" method="post">
+              <input name="next_url" id="next_url" value="{{url_for('profile_redirect')}}" type="hidden">
+              <input name="openid" id="openid" value="{{openid}}" type="hidden">
+              <input name="context" id="context" value="{{pref.context_name}}" type="hidden">
+              <span class="pull-right">
+                {% if pref.enabled %}
+                <button type="submit" class="btn btn-danger" name="toggle_enable" value="toggle">
+                    <span class="glyphicon glyphicon-off"></span> Disable
+                </button>
+                {% else %}
+                <button type="submit" class="btn btn-success" name="toggle_enable" value="toggle">
+                    <span class="glyphicon glyphicon-ok-circle"></span> Enable
+                </button>
+                {% endif %}
+                <a class="btn btn-success" role="button"
+                   href="{{url_for('context', openid=openid,
+                                   context=pref.context_name)}}">
+                    <span class="glyphicon glyphicon-{{icons[pref.context_name]}}"></span> Update
+                </a>
+              </span>
+            </form>
+            <div class="clearfix"></div>
+          </p>
+        </span>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+{% if 'android' in g.fedmsg_config['fmn.backends'] %}
+<div class="row">
+  <div class="col-md-4">
+    <hr />
+    <p>
+      Your API key is used to link your Fedora Notifications account to
+      <a href="https://github.com/fedora-infra/mobile">Fedora Mobile</a>.
+    </p>
+    <p>
+      This is a temporary key, which should not be relied upon for anything
+      except Android notifications. This (API key generation) functionality will
+      be removed from Fedora Notifications in the future, though Fedora Mobile
+      notifications will remain.
+    </p>
+    <p>
+      Your current API key is:
+      <code>{{ api_key }}</code>
+    </p>
+    <p>
+      You can
+      <a href="{{ url_for('reset_api_key') }}"
+         onclick="return confirm('You are about to reset your API key. Are you sure you wish to do this?');">reset your key</a>.
+      If you do this, you'll need to re-register your Android device to continue
+      receiving notifications.
+    </p>
+    {% if fedora_mobile %}
+    <p>
+      Since it appears that you came to this page from the Fedora Mobile app,
+      you should be able to
+      <a href="fedoramobile://org.fedoraproject.mobile/register_fmn?api_key={{ api_key }}&openid={{ openid }}">click here</a>
+      to configure the app with your API credentials. You'll have to do this
+      again if you ever reset your API key above.
+    </p>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}
