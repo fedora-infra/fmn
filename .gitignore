@@ -2,10 +2,8 @@ dist
 build
 *.pyc
 *.egg*
-
-# Ignore the repos checked out within this repo
-fmn.web
-fmn.sse
+_trial_temp/*
+sse.log
 
 # Images are generated as part of the docs build process
 docs/images/*

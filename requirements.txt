@@ -13,3 +13,4 @@ redis
 requests
 six
 SQLAlchemy>=0.8
+twisted

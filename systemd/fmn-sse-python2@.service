@@ -1,0 +1,12 @@
+[Unit]
+Description=FMN.sse feed using Python 2 for real time feed of fedmsg #%i
+After=network.target
+Documentation=https://github.com/fedora-infra/fmn.sse/
+
+[Service]
+ExecStart=/usr/bin/twistd -n -l - -y /usr/lib/share/fmn_sse/sse_server.tac
+Type=simple
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

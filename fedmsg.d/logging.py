@@ -23,11 +23,22 @@ config = dict(
                 "propagate": False,
                 "handlers": ["console"],
             },
+            fmn={
+                "level": "DEBUG",
+                "propagate": False,
+                "handlers": ["console"],
+            },
             moksha={
                 "level": "DEBUG",
                 "propagate": False,
                 "handlers": ["console"],
             },
         ),
+        # The root logger configuration; this is a catch-all configuration
+        # that applies to all log messages not handled by a different logger
+        root={
+            'level': 'INFO',
+            'handlers': ['console'],
+        },
     ),
 )

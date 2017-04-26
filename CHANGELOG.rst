@@ -2,6 +2,12 @@
 Changelog
 =========
 
+1.3.0
+=====
+
+* Merge the fmn.sse repository into the fmn repository.
+
+
 1.2.1
 =====
 

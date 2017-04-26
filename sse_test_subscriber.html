@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+</head>
+<body>
+    <script>
+        var server_sse_path = prompt("Please enter server http://ip:port/route of the sse server", "http://localhost:8080/user/bob");
+
+        if (server_sse_path != null) {
+            if(typeof(EventSource) !== "undefined") {
+               var source = new EventSource(server_sse_path);
+               source.onopen = function(){
+                 alert('connection is opened.'+source.readyState);
+               };
+
+               source.onerror = function(){
+                   alert('error: '+source.readyState);
+                   source.close();
+               };
+
+               source.onmessage = function(datalist){
+                   // alert("message: "+datalist.data);
+                   var js_msg = JSON.parse(datalist.data);
+                   console.log("message: "+ datalist.data);
+                   console.log("JSON");
+                   console.log(js_msg);
+               };
+
+            } else {
+                alert("Sorry, your browser does not support server-sent events...");
+            }
+        } else {
+            console.log('sse client is NOT running');
+        }
+    </script>
+
+</body>
+</html>

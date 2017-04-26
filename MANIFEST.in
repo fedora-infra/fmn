@@ -7,4 +7,5 @@ include README.rst
 include requirements.txt
 include dev-requirements.txt
 recursive-include alembic *
+include usr/share/fmn.sse/sse_server.tac
 recursive-include systemd *
