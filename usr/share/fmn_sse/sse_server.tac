@@ -25,7 +25,7 @@ from fedmsg import config as fedmsg_config
 from twisted.application import internet, service
 from twisted.web import server
 
-from fmn_sse.server import SSEServer
+from fmn.sse.server import SSEServer
 
 
 app_config = fedmsg_config.load_config()

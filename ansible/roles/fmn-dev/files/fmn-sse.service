@@ -1,10 +1,10 @@
 [Unit]
 Description=FMN.sse feed for real time feed of fedmsg
 After=network.target
-Documentation=https://github.com/fedora-infra/fmn.sse/
+Documentation=https://github.com/fedora-infra/fmn/
 
 [Service]
-ExecStart=/home/vagrant/.virtualenvs/python2-fmn/bin/python %h/devel/fmn.sse/fmn/sse/server.py
+ExecStart=/home/vagrant/.virtualenvs/fmn/bin/twistd -n -l - -y %h/devel/usr/share/fmn_sse/sse_server.tac
 Type=simple
 
 [Install]

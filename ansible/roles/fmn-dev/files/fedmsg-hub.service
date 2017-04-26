@@ -4,7 +4,7 @@ After=network.target
 Documentation=https://github.com/fedora-infra/fmn.consumer/
 
 [Service]
-ExecStart=/home/vagrant/.virtualenvs/python2-fmn/bin/fedmsg-hub
+ExecStart=/home/vagrant/.virtualenvs/fmn/bin/fedmsg-hub
 Type=simple
 
 [Install]

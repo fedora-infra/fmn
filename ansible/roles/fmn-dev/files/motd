@@ -12,7 +12,7 @@ Here are some tips:
 
 * The code is located at ~/devel/
 
-* You can type `workon python2-fmn` to enter a configured Python virtualenv
+* You can type `workon fmn` to enter a configured Python virtualenv
 
 * Run `fstart` to start all the necessary services as systemd
   user services. All output is logged by journald! You can see
