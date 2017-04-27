@@ -2,7 +2,8 @@
 flake8
 html5lib
 mock
-nose
+pytest
+pytest-cov
 vcrpy
 # Docs requirements
 sphinx
