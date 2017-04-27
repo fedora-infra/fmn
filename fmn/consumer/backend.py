@@ -206,11 +206,11 @@ def read(queue_object):
     for recipient in recipients:
         user = recipient['user']
         t = time.time()
-        pref = PREFS.get('%s__%s' % (user, context))
+        pref = PREFS.get('%s_%s' % (user, context))
         print("pref retrieved in: %0.2fs" % (time.time() - t))
 
         try:
-            if not pref.should_batch:
+            if pref.get('batch_delta') is None and pref.get('batch_count') is None:
                 print("    Calling backend %r with %r" % (backend, recipient))
                 t = time.time()
                 backend.handle(session, recipient, raw_msg)
