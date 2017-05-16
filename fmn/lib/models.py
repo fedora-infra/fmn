@@ -33,6 +33,7 @@ import uuid
 import six
 
 import sqlalchemy as sa
+from dogpile.cache import make_region
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -244,6 +245,38 @@ class User(BASE):
         return user
 
 
+#: A dictionary-backed cache that maps Python paths to the objects
+#: themselves. Although this cache is never expired, that's not problematic
+#: since the total number of rules is on the order of a few hundred.
+_rule_class_cache = make_region().configure('dogpile.cache.memory')
+
+
+@_rule_class_cache.cache_on_arguments()
+def _cached_load_class(load_path):
+    """
+    Wrap the expensive fedmsg load_class utility to cache results.
+
+    This is a short-term work-around to the problem of slow initial preference
+    loading. When a preference is loaded, all its filters are fetched and the
+    rules are converted to dictionaries via ``__json__``. This triggers the
+    ``code_path`` string to be loaded via ``__import__`` repeatedly for every
+    rule. A new rule row is added for every rule in every preference for every
+    user.
+
+    The longer-term work-around is probably to adjust the database models and
+    rule-loading design so this is not a problem, but that is a significant
+    amount of work.
+
+    Args:
+        rule_path (str): A string that maps to a Python class to import. For
+            example, "fmn.lib.models:Rule".
+
+    Return:
+        object: The class pointed to by ``rule_path``.
+    """
+    return fedmsg.utils.load_class(load_path)
+
+
 class Rule(BASE):
     __tablename__ = 'rules'
     id = sa.Column(sa.Integer, primary_key=True)
@@ -273,7 +306,7 @@ class Rule(BASE):
             'negated': self.negated,
         }
         if reify:
-            result['fn'] = fedmsg.utils.load_class(str(self.code_path))
+            result['fn'] = _cached_load_class(str(self.code_path))
         return result
 
     def __repr__(self):

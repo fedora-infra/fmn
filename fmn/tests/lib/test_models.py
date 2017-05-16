@@ -23,6 +23,7 @@ import unittest
 from sqlalchemy.orm.query import Query
 import mock
 
+from fmn.rules import user_package_filter
 import fmn.lib.models
 import fmn.tests
 
@@ -223,3 +224,32 @@ class TestQueuedMessages(fmn.tests.Base):
             self.sess, self.user1, self.context1), 2)
         self.assertEqual(fmn.lib.models.QueuedMessage.earliest_for(
             self.sess, self.user1, self.context1), self.obj2)
+
+
+class CachedLoadClassTests(unittest.TestCase):
+    """Tests for the :func:`fmn.lib.models._cached_load_class`."""
+
+    @mock.patch('fmn.lib.models.fedmsg.utils.load_class',
+                wraps=fmn.lib.models.fedmsg.utils.load_class)
+    def test_results_cached_on_args(self, mock_load_class):
+        """Assert multiple calls with the same path result in a single load."""
+        # First, reset the cache to make sure there's no previous results.
+        fmn.lib.models._rule_class_cache.backend._cache = {}
+
+        fmn.lib.models._cached_load_class('fmn.rules:user_package_filter')
+        fmn.lib.models._cached_load_class('fmn.rules:user_package_filter')
+
+        mock_load_class.assert_called_once_with('fmn.rules:user_package_filter')
+
+    def test_results_same_object(self):
+        """Assert that the exact same object is returned from multiple calls."""
+        r1 = fmn.lib.models._cached_load_class('fmn.rules:user_package_filter')
+        r2 = fmn.lib.models._cached_load_class('fmn.rules:user_package_filter')
+
+        self.assertTrue(r1 is r2)
+
+    def test_results_expected_object(self):
+        """Assert the object loaded is what we expect it to be."""
+        r1 = fmn.lib.models._cached_load_class('fmn.rules:user_package_filter')
+
+        self.assertTrue(r1 is user_package_filter)
