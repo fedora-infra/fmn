@@ -76,7 +76,7 @@ def get_packagers_of_package(config, package):
     """
 
     if not _cache.is_configured:
-        _cache.configure(**config['fmn.rules.cache'])
+        _cache.configure(**config['fmn.rules.cache'].copy())
 
     key = cache_key_generator(get_packagers_of_package, package)
     creator = lambda: _get_pkgdb2_packagers_for(config, package)
@@ -133,7 +133,7 @@ def get_packages_of_user(config, username, flags):
     """
 
     if not _cache.is_configured:
-        _cache.configure(**config['fmn.rules.cache'])
+        _cache.configure(**config['fmn.rules.cache'].copy())
 
     packages = defaultdict(set)
 
@@ -156,7 +156,7 @@ def cache_key_generator(fn, arg):
 
 def invalidate_cache_for(config, fn, arg):
     if not _cache.is_configured:
-        _cache.configure(**config['fmn.rules.cache'])
+        _cache.configure(**config['fmn.rules.cache'].copy())
 
     key = cache_key_generator(fn, arg)
     return _cache.delete(key)
@@ -210,7 +210,7 @@ def get_user_of_group(config, fas, groupname):
     '''
 
     if not _cache.is_configured:
-        _cache.configure(**config['fmn.rules.cache'])
+        _cache.configure(**config['fmn.rules.cache'].copy())
 
     key = cache_key_generator(get_user_of_group, groupname)
     def creator():
@@ -231,7 +231,7 @@ def get_groups_of_user(config, fas, username):
     '''
 
     if not _cache.is_configured:
-        _cache.configure(**config['fmn.rules.cache'])
+        _cache.configure(**config['fmn.rules.cache'].copy())
 
     key = cache_key_generator(get_groups_of_user, username)
 
@@ -251,7 +251,7 @@ def msg2usernames(msg, **config):
     ''' Return cached fedmsg.meta.msg2usernames(...) '''
 
     if not _cache.is_configured:
-        _cache.configure(**config['fmn.rules.cache'])
+        _cache.configure(**config['fmn.rules.cache'].copy())
 
     key = "|".join(['usernames', msg['msg_id']]).encode('utf-8')
     creator = lambda: fedmsg.meta.msg2usernames(msg, **config)
@@ -262,7 +262,7 @@ def msg2packages(msg, **config):
     ''' Return cached fedmsg.meta.msg2packages(...) '''
 
     if not _cache.is_configured:
-        _cache.configure(**config['fmn.rules.cache'])
+        _cache.configure(**config['fmn.rules.cache'].copy())
 
     namespace = config.get('namespace', u'')
     key = u'|'.join([u'packages', namespace, msg['msg_id']]).encode('utf-8')

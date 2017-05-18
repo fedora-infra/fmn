@@ -39,7 +39,7 @@ session = fmn.lib.models.init(DB_URI)
 
 _cache = make_region(
     key_mangler=lambda key: "fmn.consumer:dogpile:" + key
-).configure(**CONFIG['fmn.rules.cache'])
+).configure(**CONFIG['fmn.rules.cache'].copy())
 
 valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
