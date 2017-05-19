@@ -15,7 +15,7 @@ fedmsg.meta.make_processors(**CONFIG)
 
 _cache = make_region(
     key_mangler=lambda key: "fmn.consumer:dogpile:" + key
-).configure(**CONFIG['fmn.rules.cache'])
+).configure(**CONFIG['fmn.rules.cache'].copy())
 
 log = logging.getLogger("moksha.hub")
 
