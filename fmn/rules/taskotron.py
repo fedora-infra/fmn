@@ -5,7 +5,7 @@ import fnmatch
 RELEASE_CRITICAL_TASKS = [
     # if you update this, don't forget to also update the docstring for
     # taskotron_release_critical_task()
-    'dist.depcheck',
+    'dist.rpmdeplint',
     'dist.upgradepath',
 ]
 
@@ -36,7 +36,7 @@ def taskotron_task(config, message, task=None):
     subresults (like ``dist.rpmgrill.man-pages``).
 
     You can specify several tasks by separating them with a comma ``,``,
-    e.g.: ``dist.depcheck,dist.rpmlint``.
+    e.g.: ``dist.upgradepath,dist.rpmlint``.
     """
 
     # We only operate on taskotron messages, first off.
@@ -139,7 +139,7 @@ def taskotron_release_critical_task(config, message):
     by the distribution, and their failure should be carefully
     inspected. Currently these tasks include::
 
-    * ``dist.depcheck``
+    * ``dist.rpmdeplint``
     * ``dist.upgradepath``
     """
 
