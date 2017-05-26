@@ -5,6 +5,7 @@ import fnmatch
 RELEASE_CRITICAL_TASKS = [
     # if you update this, don't forget to also update the docstring for
     # taskotron_release_critical_task()
+    'dist.abicheck',
     'dist.rpmdeplint',
     'dist.upgradepath',
 ]
@@ -139,6 +140,7 @@ def taskotron_release_critical_task(config, message):
     by the distribution, and their failure should be carefully
     inspected. Currently these tasks include::
 
+    * ``dist.abicheck``
     * ``dist.rpmdeplint``
     * ``dist.upgradepath``
     """
