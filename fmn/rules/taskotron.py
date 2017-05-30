@@ -1,4 +1,13 @@
 from fmn.lib.hinting import hint, prefixed as _
+import fnmatch
+
+
+RELEASE_CRITICAL_TASKS = [
+    # if you update this, don't forget to also update the docstring for
+    # taskotron_release_critical_task()
+    'dist.depcheck',
+    'dist.upgradepath',
+]
 
 
 @hint(topics=[_('taskotron.result.new')])
@@ -8,7 +17,7 @@ def taskotron_result_new(config, message, **kwargs):
     This rule lets through messages from the `taskotron
     <https://taskotron.fedoraproject.org>`_ about new task result.
     """
-    return message['topic'].endswith('taskotron.result.new')
+    return message['topic'].endswith('.taskotron.result.new')
 
 
 @hint(categories=['taskotron'], invertible=False)
@@ -16,10 +25,18 @@ def taskotron_task(config, message, task=None):
     """ Particular taskotron task
 
     With this rule, you can limit messages to only those of particular
-    `taskotron <https://taskotron.fedoraproject.org/>`_ task.
+    `taskotron <https://taskotron.fedoraproject.org/>`_ task. Some tasks are
+    documented on the `wiki <https://fedoraproject.org/wiki/Taskotron/Tasks>`_,
+    and a full list of testcases (on which you can match) is visible in
+    `resultsdb <https://taskotron.fedoraproject.org/resultsdb/testcases>`_.
 
-    You can specify several tasks by separating them with a comma ',',
-    i.e.: ``dist.depcheck,dist.rpmlint``.
+    The match is case insensitive, and you can use shell-style wildcards (see
+    `fnmatch <https://docs.python.org/2.7/library/fnmatch.html>`_), e.g.
+    ``dist.rpmgrill*`` to match both ``dist.rpmgrill`` and all of its
+    subresults (like ``dist.rpmgrill.man-pages``).
+
+    You can specify several tasks by separating them with a comma ``,``,
+    e.g.: ``dist.depcheck,dist.rpmlint``.
     """
 
     # We only operate on taskotron messages, first off.
@@ -29,8 +46,14 @@ def taskotron_task(config, message, task=None):
     if not task:
         return False
 
+    name = message['msg']['task'].get('name').lower()
     tasks = [item.strip().lower() for item in task.split(',')]
-    return message['msg']['task'].get('name').lower() in tasks
+
+    for task in tasks:
+        if task and fnmatch.fnmatchcase(name, task):
+            return True
+
+    return False
 
 
 @hint(categories=['taskotron'], invertible=False)
@@ -51,7 +74,7 @@ def taskotron_changed_outcome(config, message):
     outcome = message['msg']['result'].get('outcome')
     prev_outcome = message['msg']['result'].get('prev_outcome')
 
-    return prev_outcome is not None and outcome != prev_outcome
+    return prev_outcome and outcome != prev_outcome
 
 
 @hint(categories=['taskotron'], invertible=False)
@@ -65,8 +88,8 @@ def taskotron_task_outcome(config, message, outcome=None):
     i.e.: ``PASSED,FAILED``.
 
     The full list of supported outcomes can be found in the libtaskotron
-    `documentation <https://docs.qadevel.cloud.fedoraproject.org/
-    libtaskotron/latest/resultyaml.html#minimal-version>`_.
+    `documentation <https://qa.fedoraproject.org/docs/libtaskotron/
+    latest/resultyaml.html#minimal-version>`_.
     """
 
     # We only operate on taskotron messages, first off.
@@ -96,8 +119,8 @@ def taskotron_task_particular_or_changed_outcome(config, message,
     i.e.: ``PASSED,FAILED``.
 
     The full list of supported outcomes can be found in the libtaskotron
-    `documentation <https://docs.qadevel.cloud.fedoraproject.org/
-    libtaskotron/latest/resultyaml.html#minimal-version>`_.
+    `documentation <https://qa.fedoraproject.org/docs/libtaskotron/
+    latest/resultyaml.html#minimal-version>`_.
     """
 
     return taskotron_task_outcome(config, message, outcome) or \
@@ -114,8 +137,10 @@ def taskotron_release_critical_task(config, message):
 
     These are the tasks which are deemed extremely important
     by the distribution, and their failure should be carefully
-    inspected. Currently these tasks are ``dist.depcheck`` and
-    ``dist.upgradepath``.
+    inspected. Currently these tasks include::
+
+    * ``dist.depcheck``
+    * ``dist.upgradepath``
     """
 
     # We only operate on taskotron messages, first off.
@@ -124,4 +149,4 @@ def taskotron_release_critical_task(config, message):
 
     task = message['msg']['task'].get('name')
 
-    return task in ['dist.depcheck', 'dist.upgradepath']
+    return task in RELEASE_CRITICAL_TASKS
