@@ -6,6 +6,8 @@ import logging
 import re
 import smtplib
 
+from dogpile.cache import make_region
+from dogpile.cache.util import kwarg_function_key_generator
 import bs4
 import docutils.examples
 import fedmsg
@@ -154,6 +156,12 @@ def update_preferences(openid, existing_preferences):
     return existing_preferences
 
 
+#: A dictionary-backed cache that maps Python paths to a set of rules.
+_rule_cache = make_region(function_key_generator=kwarg_function_key_generator)
+_rule_cache.configure('dogpile.cache.memory')
+
+
+@_rule_cache.cache_on_arguments()
 def load_rules(root='fmn.rules'):
     """ Load the big list of allowed callable rules. """
 
