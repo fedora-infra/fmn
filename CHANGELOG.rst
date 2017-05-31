@@ -5,9 +5,35 @@ Changelog
 1.3.0
 =====
 
+Refactors
+---------
+
 * Merge the fmn.sse repository into the fmn repository.
 
 * Merge the fmn.web repository into the fmn repository.
+
+Rule Changes
+------------
+
+* Taskotron rules: Particular tasks can now be matched using wildcards (PR #197).
+
+* Taskotron rules: add abicheck as a critical task (PR #198).
+
+Performance Improvements
+------------------------
+
+* Loading rules is now cached in memory which speeds up user creation by several
+  orders of magnitude: creating 100 users went from 221 seconds to 3.3
+  (Issue #191).
+
+* The map of rule strings to rule Python objects is now cached which improves
+  preference loading time by approximately an order of magnitude.
+
+Bugfixes
+--------
+
+* Fix a bug where cache regions were configured to never expire cached keys
+  (Issue #194).
 
 
 1.2.1
