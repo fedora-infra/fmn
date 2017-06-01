@@ -7,7 +7,10 @@ import re
 import smtplib
 
 from dogpile.cache import make_region
-from dogpile.cache.util import kwarg_function_key_generator
+try:
+    from dogpile.cache.util import kwarg_function_key_generator
+except ImportError:
+    from fmn.dogpile_backports import kwarg_function_key_generator
 import bs4
 import docutils.examples
 import fedmsg

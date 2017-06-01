@@ -2,6 +2,17 @@
 Changelog
 =========
 
+1.3.1
+=====
+
+Bugfixes
+--------
+
+* Fixes compatibility with old versions of dogpile.cache (less than 0.6.3) by
+  backporting the function being used. This backport is available under the
+  BSD license.
+
+
 1.3.0
 =====
 

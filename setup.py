@@ -42,7 +42,7 @@ setup(
     author_email='infrastructure@lists.fedoraproject.org',
     url="https://github.com/fedora-infra/fmn",
     download_url="https://pypi.python.org/pypi/fmn/",
-    license='LGPLv2+',
+    license='LGPLv2+ and BSD',
     install_requires=requires,
     tests_require=get_requirements('dev-requirements.txt'),
     test_suite='fmn.tests',
