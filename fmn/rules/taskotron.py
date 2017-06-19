@@ -138,7 +138,7 @@ def taskotron_release_critical_task(config, message):
 
     These are the tasks which are deemed extremely important
     by the distribution, and their failure should be carefully
-    inspected. Currently these tasks include::
+    inspected. Currently these tasks include:
 
     * ``dist.abicheck``
     * ``dist.rpmdeplint``
