@@ -229,11 +229,17 @@ def inject_variable():
 
     fmn_version = get_distribution('fmn').version
 
-    return dict(openid=openid,
-                contexts=contexts,
-                valid_paths=valid_paths,
-                rule_types=rule_types,
-                fmn_version=fmn_version)
+    default = flask.url_for('static', filename='bootstrap/css/bootstrap.css')
+    theme_css_url = fedmsg_config.get('fmn.web.theme_css_url', default)
+
+    return dict(
+        openid=openid,
+        contexts=contexts,
+        valid_paths=valid_paths,
+        rule_types=rule_types,
+        fmn_version=fmn_version,
+        theme_css_url=theme_css_url,
+    )
 
 
 @app.route('/_heartbeat')
