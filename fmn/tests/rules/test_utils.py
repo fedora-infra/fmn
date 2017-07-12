@@ -26,10 +26,13 @@ from fmn.tests import Base
 
 
 class GetPkgdb2PackagesForTests(Base):
+    maxDiff = None
 
     def setUp(self):
         super(GetPkgdb2PackagesForTests, self).setUp()
-        self.config['fmn.rules.utils.pkgdb_url'] = 'https://admin.fedoraproject.org/pkgdb/api'
+        self.config['fmn.rules.utils.use_pagure_for_ownership'] = False
+        self.config['fmn.rules.utils.pkgdb_url'] = \
+            'https://admin.fedoraproject.org/pkgdb/api'
         self.expected_point_of_contact = {
             'rpms': set([
                 'erlang-cache_tab',
@@ -119,6 +122,115 @@ class GetPkgdb2PackagesForTests(Base):
 
     def test_all(self):
         packages = utils._get_pkgdb2_packages_for(
+            self.config, 'jcline', ['point of contact', 'watch', 'co-maintained'])
+        self.assertEqual(self.expected_all, packages)
+
+
+class GetPagurePackagesForTests(Base):
+    maxDiff = None
+
+    def setUp(self):
+        super(GetPagurePackagesForTests, self).setUp()
+        self.config['fmn.rules.utils.use_pagure_for_ownership'] = True
+        self.config['fmn.rules.utils.pagure_api_url'] = \
+            'https://src.stg.fedoraproject.org/pagure/api'
+        self.expected_point_of_contact = {
+            'rpms': set([
+                'erlang-cache_tab',
+                'erlang-p1_sip',
+                'erlang-p1_stringprep',
+                'erlang-p1_stun',
+                'erlang-p1_tls',
+                'erlang-p1_xml',
+                'erlang-p1_yaml',
+                'python-args',
+                'python-clint',
+                'python-flower',
+                'python-invocations',
+                'python-pkginfo',
+                'python-releases',
+                'python-sphinxcontrib-fulltoc',
+                'python-twine',
+            ])
+        }
+        self.expected_comaintained = {
+            'rpms': set([
+                'ejabberd',
+                'erlang-cache_tab',
+                'erlang-esip',
+                'erlang-ezlib',
+                'erlang-fast_tls',
+                'erlang-fast_xml',
+                'erlang-fast_yaml',
+                'erlang-goldrush',
+                'erlang-iconv',
+                'erlang-luerl',
+                'erlang-oauth2',
+                'erlang-p1_iconv',
+                'erlang-p1_mysql',
+                'erlang-p1_oauth2',
+                'erlang-p1_pam',
+                'erlang-p1_pgsql',
+                'erlang-p1_sip',
+                'erlang-p1_stringprep',
+                'erlang-p1_stun',
+                'erlang-p1_tls',
+                'erlang-p1_utils',
+                'erlang-p1_xml',
+                'erlang-p1_xmlrpc',
+                'erlang-p1_yaml',
+                'erlang-p1_zlib',
+                'erlang-proper',
+                'erlang-stringprep',
+                'erlang-stun',
+                'pulp',
+                'pulp-docker',
+                'pulp-ostree',
+                'pulp-puppet',
+                'pulp-python',
+                'pulp-rpm',
+                'python-args',
+                'python-clint',
+                'python-crane',
+                'python-flower',
+                'python-invocations',
+                'python-isodate',
+                'python-pkginfo',
+                'python-pymongo',
+                'python-releases',
+                'python-rpdb',
+                'python-sphinxcontrib-fulltoc',
+                'python-twine',
+            ])
+        }
+        self.expected_watch = {}
+        self.expected_all = {
+            'rpms': self.expected_comaintained['rpms'].union(
+                self.expected_point_of_contact['rpms']),
+        }
+
+    def test_bad_response(self):
+        """Assert a bad response results in an empty result."""
+        packages = utils._get_pagure_packages_for(self.config, 'thisisnotausername123', [])
+        self.assertEqual(dict(), packages)
+
+    def test_watch(self):
+        """Assert watch results from pagure works."""
+        packages = utils._get_pagure_packages_for(self.config, 'jcline', ['watch'])
+        self.assertEqual(self.expected_watch, packages)
+
+    def test_comaintained(self):
+        """Assert co-maintained results from pagure works."""
+        packages = utils._get_pagure_packages_for(self.config, 'jcline', ['co-maintained'])
+        self.assertEqual(self.expected_comaintained, packages)
+
+    def test_point_of_contact(self):
+        """Assert point of contact results from pagure works."""
+        packages = utils._get_pagure_packages_for(self.config, 'jcline', ['point of contact'])
+        self.assertEqual(self.expected_point_of_contact, packages)
+
+    def test_all(self):
+        packages = utils._get_pagure_packages_for(
             self.config, 'jcline', ['point of contact', 'watch', 'co-maintained'])
         self.assertEqual(self.expected_all, packages)
 

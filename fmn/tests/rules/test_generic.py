@@ -31,6 +31,7 @@ class UserPackageFilterTests(Base):
 
     def setUp(self):
         super(UserPackageFilterTests, self).setUp()
+        self.config['fmn.rules.utils.use_pagure_for_ownership'] = False
         self.config['fmn.rules.cache'] = {'backend': 'dogpile.cache.memory'}
         self.config['topic_prefix_re'] = r'org.fedoraproject.prod.*'
         make_processors(**self.config)
