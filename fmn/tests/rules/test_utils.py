@@ -26,6 +26,7 @@ from fmn.tests import Base
 
 
 class GetPkgdb2PackagesForTests(Base):
+    maxDiff = None
 
     def setUp(self):
         super(GetPkgdb2PackagesForTests, self).setUp()
@@ -39,19 +40,24 @@ class GetPkgdb2PackagesForTests(Base):
                 'erlang-p1_tls',
                 'erlang-p1_xml',
                 'erlang-p1_yaml',
+                'matrix-synapse',
                 'python-args',
                 'python-clint',
+                'python-cryptography',
+                'python-cryptography-vectors',
                 'python-flower',
                 'python-fmn',
                 'python-fmn-sse',
                 'python-invocations',
                 'python-matrix-synapse-ldap3',
+                'python-phonenumbers',
                 'python-pkginfo',
                 'python-pymacaroons-pynacl',
                 'python-releases',
                 'python-sphinxcontrib-fulltoc',
                 'python-sqlalchemy_schemadisplay',
                 'python-twine',
+                'the-new-hotness',
             ])
         }
         self.expected_comaintained = {
@@ -80,21 +86,23 @@ class GetPkgdb2PackagesForTests(Base):
                 'erlang-stun',
                 'erlang-xmpp',
                 'fegistry',
+                'python-chardet',
                 'python-crane',
                 'python-idna',
                 'python-ipdb',
                 'python-isodate',
                 'python-kaptan',
                 'python-pymongo',
+                'python-pytoml',
                 'python-requests',
                 'python-rpdb',
                 'python-urllib3',
             ])
         }
-        self.expected_watch = {'rpms': set(['python-pytoml'])}
+        self.expected_watch = {}
         self.expected_all = {
-            'rpms': self.expected_watch['rpms'].union(self.expected_comaintained['rpms'].union(
-                self.expected_point_of_contact['rpms'])),
+            'rpms': self.expected_comaintained['rpms'].union(
+                self.expected_point_of_contact['rpms']),
         }
 
     def test_bad_response(self):
