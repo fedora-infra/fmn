@@ -61,6 +61,19 @@
   args:
     chdir: /home/{{ ansible_env.SUDO_USER }}/devel
 
+- name: Install datanommer packages
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  pip:
+    name: "{{ item }}"
+    virtualenv: /home/{{ ansible_env.SUDO_USER }}/.virtualenvs/fmn/
+    virtualenv_python: python2
+  with_items:
+    - "datanommer.models"
+    - "datanommer.consumer"
+    - "psycopg2"
+  args:
+    chdir: /home/{{ ansible_env.SUDO_USER }}/devel
+
 - name: Enable the RabbitMQ management console
   command: rabbitmq-plugins enable rabbitmq_management
 
@@ -104,3 +117,6 @@
   shell: "source ~/.bashrc && workon fmn && fmn-createdb -c --with-dev-data"
   args:
     creates: /var/tmp/fmn-dev-db.sqlite
+
+
+- include: db.yml

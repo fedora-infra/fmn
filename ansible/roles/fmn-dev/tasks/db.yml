@@ -1,0 +1,72 @@
+---
+- name: Install database packages
+  dnf:
+      name: "{{ item }}"
+      state: present
+  with_items:
+      - postgresql-server
+      - postgresql-devel
+      - postgresql
+      - python-psycopg2
+
+- name: Install datanommer
+  dnf:
+      name: "{{ item }}"
+      state: present
+  with_items:
+      - datanommer-commands
+      - python-datanommer-models
+      - python-datanommer-consumer
+
+- name: Set up postgresql database
+  command: postgresql-setup --initdb
+  args:
+      creates: /var/lib/pgsql/data/base
+
+- replace:
+    dest: /var/lib/pgsql/data/pg_hba.conf
+    regexp: "host    all             all             127.0.0.1/32            ident"
+    replace: "host    all             all             127.0.0.1/32            trust"
+
+- replace:
+    dest: /var/lib/pgsql/data/pg_hba.conf
+    regexp: "host    all             all             ::1/128                 ident"
+    replace: "host    all             all             ::1/128                 trust"
+
+
+- name: Start and enable postgresql
+  service: name=postgresql state=restarted enabled=yes
+
+- name: Set up the DB user
+  postgresql_user:
+      name: datanommer
+  become_user: postgres
+
+- name: Create the database
+  postgresql_db:
+      name: datanommer
+      owner: datanommer
+  register: db_creation
+  become_user: postgres
+
+- name: Create /home/vagrant/alembic.ini
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  copy: src=/home/vagrant/devel/alembic.ini dest=/home/vagrant/alembic.ini remote_src=True
+
+- name: Fix the migration location
+  replace:
+    dest: /home/vagrant/alembic.ini
+    regexp: "^script_location = alembic*$"
+    replace: "script_location = devel/alembic"
+
+- name: Switch the database connection to postgres
+  replace:
+    dest: /home/vagrant/alembic.ini
+    regexp: "^sqlalchemy.url = sqlite.*$"
+    replace: "sqlalchemy.url = postgresql://postgres:anypasswordworkslocally@localhost/datanommer"
+
+- name: Create the database schema
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  command: /usr/bin/datanommer-create-db
+  args:
+      chdir: /home/vagrant/
