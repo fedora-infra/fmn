@@ -1,0 +1,28 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.2]
+    method: GET
+    uri: https://admin.fedoraproject.org/pkgdb/api/package/notanamespace/orapackage
+  response:
+    body: {string: !!python/unicode "{\n  \"error\": \"Package: notanamespace/orapackage\
+        \ not found\",\n  \"output\": \"notok\"\n}"}
+    headers:
+      age: ['0']
+      appserver: [proxy03.fedoraproject.org]
+      apptime: [D=62401]
+      connection: [Keep-Alive]
+      content-length: ['81']
+      content-type: [application/json]
+      date: ['Mon, 31 Jul 2017 14:33:00 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.4.6 (Red Hat Enterprise Linux) mod_wsgi/3.4 Python/2.7.5]
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+      via: [1.1 varnish-v4]
+      x-varnish: ['71665427']
+    status: {code: 404, message: NOT FOUND}
+version: 1

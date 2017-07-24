@@ -1,0 +1,73 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.2]
+    method: GET
+    uri: https://src.stg.fedoraproject.org/pagure/api/0/rpms/python-urllib3
+  response:
+    body: {string: !!python/unicode "{\n  \"access_groups\": {\n    \"admin\": [],\n\
+        \    \"commit\": [\n      \"infra-sig\"\n    ],\n    \"ticket\": []\n  },\n\
+        \  \"access_users\": {\n    \"admin\": [],\n    \"commit\": [\n      \"ralph\"\
+        ,\n      \"abompard\",\n      \"jcline\"\n    ],\n    \"owner\": [\n     \
+        \ \"sagarun\"\n    ],\n    \"ticket\": []\n  },\n  \"close_status\": [],\n\
+        \  \"custom_keys\": [],\n  \"date_created\": \"1501277141\",\n  \"date_modified\"\
+        : \"1501277142\",\n  \"description\": \"The python-urllib3 rpms\",\n  \"fullname\"\
+        : \"rpms/python-urllib3\",\n  \"id\": 18233,\n  \"milestones\": {},\n  \"\
+        name\": \"python-urllib3\",\n  \"namespace\": \"rpms\",\n  \"parent\": null,\n\
+        \  \"priorities\": {},\n  \"tags\": [],\n  \"user\": {\n    \"fullname\":\
+        \ \"sagarun\",\n    \"name\": \"sagarun\"\n  }\n}"}
+    headers:
+      appserver: [proxy01.stg.phx2.fedoraproject.org]
+      apptime: [D=3191414]
+      connection: [Keep-Alive]
+      content-length: ['664']
+      content-type: [application/json]
+      date: ['Mon, 31 Jul 2017 13:48:51 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.4.6 (Red Hat Enterprise Linux) OpenSSL/1.0.1e-fips mod_auth_gssapi/1.4.0
+          mod_wsgi/3.4 Python/2.7.5]
+      set-cookie: ['disgit_pagure=eyJfcGVybWFuZW50Ijp0cnVlfQ.DGDGxg.Y0o6FLtBjF2dSJ3ovCcsHxaJa1s;
+          Expires=Thu, 31-Aug-2017 13:48:54 GMT; Secure; HttpOnly; Path=/pagure']
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode 'login=Login&password=supersecret&user_name=jcline'
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['98']
+      Content-Type: [application/x-www-form-urlencoded]
+      User-agent: [Fedora Account System Client/0.9.0]
+    method: POST
+    uri: https://admin.fedoraproject.org/accounts/group/dump/infra-sig
+  response:
+    body: {string: "{\"people\": [[\"abompard\", \"aurelien@bompard.org\", \"Aurelien\
+        \ Bompard\", \"user\", 0], [\"bochecha\", \"bochecha@daitauha.fr\", \"Mathieu\
+        \ Bridon\", \"user\", 0], [\"bowlofeggs\", \"randy@electronsweatshop.com\"\
+        , \"Randy Barlow\", \"user\", 0], [\"codeblock\", \"codeblock@elrod.me\",\
+        \ \"Ricky Elrod\", \"sponsor\", 0], [\"jcline\", \"jeremy@jcline.org\", \"\
+        Jeremy Cline\", \"user\", 0], [\"kevin\", \"kevin@scrye.com\", \"Kevin Fenzi\"\
+        , \"sponsor\", 4], [\"lmacken\", \"lewk@openmailbox.org\", \"Luke Macken\"\
+        , \"sponsor\", 0], [\"pingou\", \"pingou@pingoured.fr\", \"Pierre-YvesChibon\"\
+        , \"administrator\", 7], [\"puiterwijk\", \"puiterwijk@redhat.com\", \"Patrick\
+        \ \\\"\u30DE\u30EB\u30BF\u30A4\u30F3\u30A2\u30F3\u30C9\u30EC\u30A2\u30B9\\\
+        \" Uiterwijk\", \"sponsor\", 0], [\"sayanchowdhury\", \"sayan.chowdhury2012@gmail.com\"\
+        , \"Sayan Chowdhury\", \"user\", 0], [\"toshio\", \"a.badger@gmail.com\",\
+        \ \"Toshio \u304F\u3089\u3068\u307F\", \"sponsor\", 0]], \"tg_flash\": null}"}
+    headers:
+      appserver: [proxy14.fedoraproject.org]
+      apptime: [D=355685]
+      connection: [Keep-Alive]
+      content-length: ['835']
+      content-type: [application/json]
+      date: ['Mon, 31 Jul 2017 13:48:54 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.2.15 (Red Hat)]
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+    status: {code: 200, message: OK}
+version: 1

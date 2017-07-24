@@ -5,592 +5,71 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.1]
+      User-Agent: [python-requests/2.18.2]
     method: GET
-    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?owner=jcline&namespace=rpms
+    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?owner=jcline&short=True&page=1
   response:
-    body: {string: !!python/unicode "{\n  \"args\": {\n    \"fork\": null,\n    \"namespace\":
-        \"rpms\",\n    \"owner\": \"jcline\",\n    \"pattern\": null,\n    \"short\":
-        false,\n    \"tags\": [],\n    \"username\": null\n  },\n  \"projects\": [\n
-        \   {\n      \"access_groups\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"ticket\": []\n      },\n      \"access_users\": {\n        \"admin\":
-        [],\n        \"commit\": [\n          \"bowlofeggs\"\n        ],\n        \"owner\":
-        [\n          \"jcline\"\n        ],\n        \"ticket\": []\n      },\n      \"close_status\":
-        [],\n      \"custom_keys\": [],\n      \"date_created\": \"1499784743\",\n
-        \     \"description\": \"The erlang-cache_tab rpms\",\n      \"fullname\":
-        \"rpms/erlang-cache_tab\",\n      \"id\": 3207,\n      \"milestones\": {},\n
-        \     \"name\": \"erlang-cache_tab\",\n      \"namespace\": \"rpms\",\n      \"parent\":
-        null,\n      \"priorities\": {},\n      \"tags\": [],\n      \"user\": {\n
-        \       \"fullname\": \"jcline\",\n        \"name\": \"jcline\"\n      }\n
-        \   },\n    {\n      \"access_groups\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"ticket\": []\n      },\n      \"access_users\": {\n        \"admin\":
-        [],\n        \"commit\": [\n          \"bowlofeggs\"\n        ],\n        \"owner\":
-        [\n          \"jcline\"\n        ],\n        \"ticket\": []\n      },\n      \"close_status\":
-        [],\n      \"custom_keys\": [],\n      \"date_created\": \"1499784748\",\n
-        \     \"description\": \"The erlang-p1_sip rpms\",\n      \"fullname\": \"rpms/erlang-p1_sip\",\n
-        \     \"id\": 3271,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_sip\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499784748\",\n      \"description\":
-        \"The erlang-p1_stringprep rpms\",\n      \"fullname\": \"rpms/erlang-p1_stringprep\",\n
-        \     \"id\": 3272,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_stringprep\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499784748\",\n      \"description\":
-        \"The erlang-p1_stun rpms\",\n      \"fullname\": \"rpms/erlang-p1_stun\",\n
-        \     \"id\": 3273,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_stun\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499784749\",\n      \"description\":
-        \"The erlang-p1_tls rpms\",\n      \"fullname\": \"rpms/erlang-p1_tls\",\n
-        \     \"id\": 3274,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_tls\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499784749\",\n      \"description\":
-        \"The erlang-p1_xml rpms\",\n      \"fullname\": \"rpms/erlang-p1_xml\",\n
-        \     \"id\": 3276,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_xml\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499784749\",\n      \"description\":
-        \"The erlang-p1_yaml rpms\",\n      \"fullname\": \"rpms/erlang-p1_yaml\",\n
-        \     \"id\": 3278,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_yaml\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"owner\": [\n          \"jcline\"\n        ],\n        \"ticket\":
-        []\n      },\n      \"close_status\": [],\n      \"custom_keys\": [],\n      \"date_created\":
-        \"1499785955\",\n      \"description\": \"The python-args rpms\",\n      \"fullname\":
-        \"rpms/python-args\",\n      \"id\": 16563,\n      \"milestones\": {},\n      \"name\":
-        \"python-args\",\n      \"namespace\": \"rpms\",\n      \"parent\": null,\n
-        \     \"priorities\": {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\":
-        \"jcline\",\n        \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"owner\": [\n          \"jcline\"\n        ],\n        \"ticket\":
-        []\n      },\n      \"close_status\": [],\n      \"custom_keys\": [],\n      \"date_created\":
-        \"1499785966\",\n      \"description\": \"The python-clint rpms\",\n      \"fullname\":
-        \"rpms/python-clint\",\n      \"id\": 16685,\n      \"milestones\": {},\n
-        \     \"name\": \"python-clint\",\n      \"namespace\": \"rpms\",\n      \"parent\":
-        null,\n      \"priorities\": {},\n      \"tags\": [],\n      \"user\": {\n
-        \       \"fullname\": \"jcline\",\n        \"name\": \"jcline\"\n      }\n
-        \   },\n    {\n      \"access_groups\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"ticket\": []\n      },\n      \"access_users\": {\n        \"admin\":
-        [],\n        \"commit\": [],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499785992\",\n      \"description\":
-        \"The python-flower rpms\",\n      \"fullname\": \"rpms/python-flower\",\n
-        \     \"id\": 16983,\n      \"milestones\": {},\n      \"name\": \"python-flower\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"pcreech17\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499786002\",\n      \"description\":
-        \"The python-invocations rpms\",\n      \"fullname\": \"rpms/python-invocations\",\n
-        \     \"id\": 17115,\n      \"milestones\": {},\n      \"name\": \"python-invocations\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"pcreech17\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499786034\",\n      \"description\":
-        \"The python-pkginfo rpms\",\n      \"fullname\": \"rpms/python-pkginfo\",\n
-        \     \"id\": 17492,\n      \"milestones\": {},\n      \"name\": \"python-pkginfo\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"owner\": [\n          \"jcline\"\n        ],\n        \"ticket\":
-        []\n      },\n      \"close_status\": [],\n      \"custom_keys\": [],\n      \"date_created\":
-        \"1499786043\",\n      \"description\": \"The python-releases rpms\",\n      \"fullname\":
-        \"rpms/python-releases\",\n      \"id\": 17658,\n      \"milestones\": {},\n
-        \     \"name\": \"python-releases\",\n      \"namespace\": \"rpms\",\n      \"parent\":
-        null,\n      \"priorities\": {},\n      \"tags\": [],\n      \"user\": {\n
-        \       \"fullname\": \"jcline\",\n        \"name\": \"jcline\"\n      }\n
-        \   },\n    {\n      \"access_groups\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"ticket\": []\n      },\n      \"access_users\": {\n        \"admin\":
-        [],\n        \"commit\": [\n          \"bowlofeggs\",\n          \"williamjmorenor\"\n
-        \       ],\n        \"owner\": [\n          \"jcline\"\n        ],\n        \"ticket\":
-        []\n      },\n      \"close_status\": [],\n      \"custom_keys\": [],\n      \"date_created\":
-        \"1499786055\",\n      \"description\": \"The python-sphinxcontrib-fulltoc
-        rpms\",\n      \"fullname\": \"rpms/python-sphinxcontrib-fulltoc\",\n      \"id\":
-        17808,\n      \"milestones\": {},\n      \"name\": \"python-sphinxcontrib-fulltoc\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499786064\",\n      \"description\":
-        \"The python-twine rpms\",\n      \"fullname\": \"rpms/python-twine\",\n      \"id\":
-        17942,\n      \"milestones\": {},\n      \"name\": \"python-twine\",\n      \"namespace\":
-        \"rpms\",\n      \"parent\": null,\n      \"priorities\": {},\n      \"tags\":
-        [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n        \"name\":
-        \"jcline\"\n      }\n    }\n  ],\n  \"total_projects\": 15\n}"}
+    body: {string: !!python/unicode "{\n  \"args\": {\n    \"fork\": null,\n    \"\
+        namespace\": null,\n    \"owner\": \"jcline\",\n    \"page\": 1,\n    \"pattern\"\
+        : null,\n    \"per_page\": 20,\n    \"short\": true,\n    \"tags\": [],\n\
+        \    \"username\": null\n  },\n  \"pagination\": {\n    \"first\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?owner=jcline&per_page=20&short=True&page=1\"\
+        ,\n    \"last\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?owner=jcline&per_page=20&short=True&page=1\"\
+        ,\n    \"next\": null,\n    \"page\": 1,\n    \"pages\": 1,\n    \"per_page\"\
+        : 20,\n    \"prev\": null\n  },\n  \"projects\": [\n    {\n      \"description\"\
+        : \"The erlang-cache_tab rpms\",\n      \"fullname\": \"rpms/erlang-cache_tab\"\
+        ,\n      \"name\": \"erlang-cache_tab\",\n      \"namespace\": \"rpms\"\n\
+        \    },\n    {\n      \"description\": \"The erlang-p1_sip rpms\",\n     \
+        \ \"fullname\": \"rpms/erlang-p1_sip\",\n      \"name\": \"erlang-p1_sip\"\
+        ,\n      \"namespace\": \"rpms\"\n    },\n    {\n      \"description\": \"\
+        The erlang-p1_stringprep rpms\",\n      \"fullname\": \"rpms/erlang-p1_stringprep\"\
+        ,\n      \"name\": \"erlang-p1_stringprep\",\n      \"namespace\": \"rpms\"\
+        \n    },\n    {\n      \"description\": \"The erlang-p1_stun rpms\",\n   \
+        \   \"fullname\": \"rpms/erlang-p1_stun\",\n      \"name\": \"erlang-p1_stun\"\
+        ,\n      \"namespace\": \"rpms\"\n    },\n    {\n      \"description\": \"\
+        The erlang-p1_tls rpms\",\n      \"fullname\": \"rpms/erlang-p1_tls\",\n \
+        \     \"name\": \"erlang-p1_tls\",\n      \"namespace\": \"rpms\"\n    },\n\
+        \    {\n      \"description\": \"The erlang-p1_xml rpms\",\n      \"fullname\"\
+        : \"rpms/erlang-p1_xml\",\n      \"name\": \"erlang-p1_xml\",\n      \"namespace\"\
+        : \"rpms\"\n    },\n    {\n      \"description\": \"The erlang-p1_yaml rpms\"\
+        ,\n      \"fullname\": \"rpms/erlang-p1_yaml\",\n      \"name\": \"erlang-p1_yaml\"\
+        ,\n      \"namespace\": \"rpms\"\n    },\n    {\n      \"description\": \"\
+        The python-args rpms\",\n      \"fullname\": \"rpms/python-args\",\n     \
+        \ \"name\": \"python-args\",\n      \"namespace\": \"rpms\"\n    },\n    {\n\
+        \      \"description\": \"The python-clint rpms\",\n      \"fullname\": \"\
+        rpms/python-clint\",\n      \"name\": \"python-clint\",\n      \"namespace\"\
+        : \"rpms\"\n    },\n    {\n      \"description\": \"The python-cryptography\
+        \ rpms\",\n      \"fullname\": \"rpms/python-cryptography\",\n      \"name\"\
+        : \"python-cryptography\",\n      \"namespace\": \"rpms\"\n    },\n    {\n\
+        \      \"description\": \"The python-cryptography-vectors rpms\",\n      \"\
+        fullname\": \"rpms/python-cryptography-vectors\",\n      \"name\": \"python-cryptography-vectors\"\
+        ,\n      \"namespace\": \"rpms\"\n    },\n    {\n      \"description\": \"\
+        The python-flower rpms\",\n      \"fullname\": \"rpms/python-flower\",\n \
+        \     \"name\": \"python-flower\",\n      \"namespace\": \"rpms\"\n    },\n\
+        \    {\n      \"description\": \"The python-invocations rpms\",\n      \"\
+        fullname\": \"rpms/python-invocations\",\n      \"name\": \"python-invocations\"\
+        ,\n      \"namespace\": \"rpms\"\n    },\n    {\n      \"description\": \"\
+        The python-pkginfo rpms\",\n      \"fullname\": \"rpms/python-pkginfo\",\n\
+        \      \"name\": \"python-pkginfo\",\n      \"namespace\": \"rpms\"\n    },\n\
+        \    {\n      \"description\": \"The python-releases rpms\",\n      \"fullname\"\
+        : \"rpms/python-releases\",\n      \"name\": \"python-releases\",\n      \"\
+        namespace\": \"rpms\"\n    },\n    {\n      \"description\": \"The python-sphinxcontrib-fulltoc\
+        \ rpms\",\n      \"fullname\": \"rpms/python-sphinxcontrib-fulltoc\",\n  \
+        \    \"name\": \"python-sphinxcontrib-fulltoc\",\n      \"namespace\": \"\
+        rpms\"\n    },\n    {\n      \"description\": \"The python-twine rpms\",\n\
+        \      \"fullname\": \"rpms/python-twine\",\n      \"name\": \"python-twine\"\
+        ,\n      \"namespace\": \"rpms\"\n    }\n  ],\n  \"total_projects\": 17\n}"}
     headers:
       appserver: [proxy01.stg.phx2.fedoraproject.org]
-      apptime: [D=708673]
+      apptime: [D=135713]
       connection: [Keep-Alive]
-      content-length: ['10797']
+      content-length: ['3399']
       content-type: [application/json]
-      date: ['Wed, 12 Jul 2017 18:32:23 GMT']
+      date: ['Mon, 31 Jul 2017 13:23:28 GMT']
       keep-alive: ['timeout=15, max=500']
       server: [Apache/2.4.6 (Red Hat Enterprise Linux) OpenSSL/1.0.1e-fips mod_auth_gssapi/1.4.0
           mod_wsgi/3.4 Python/2.7.5]
-      set-cookie: ['disgit_pagure=eyJfcGVybWFuZW50Ijp0cnVlfQ.DEf8uA.hlmGiJSYzxwukW6vLYgS4s3778U;
-          Expires=Sat, 12-Aug-2017 18:32:24 GMT; Secure; HttpOnly; Path=/pagure']
-      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.1]
-    method: GET
-    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?owner=jcline
-  response:
-    body: {string: !!python/unicode "{\n  \"args\": {\n    \"fork\": null,\n    \"namespace\":
-        null,\n    \"owner\": \"jcline\",\n    \"pattern\": null,\n    \"short\":
-        false,\n    \"tags\": [],\n    \"username\": null\n  },\n  \"projects\": [\n
-        \   {\n      \"access_groups\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"ticket\": []\n      },\n      \"access_users\": {\n        \"admin\":
-        [],\n        \"commit\": [\n          \"bowlofeggs\"\n        ],\n        \"owner\":
-        [\n          \"jcline\"\n        ],\n        \"ticket\": []\n      },\n      \"close_status\":
-        [],\n      \"custom_keys\": [],\n      \"date_created\": \"1499784743\",\n
-        \     \"description\": \"The erlang-cache_tab rpms\",\n      \"fullname\":
-        \"rpms/erlang-cache_tab\",\n      \"id\": 3207,\n      \"milestones\": {},\n
-        \     \"name\": \"erlang-cache_tab\",\n      \"namespace\": \"rpms\",\n      \"parent\":
-        null,\n      \"priorities\": {},\n      \"tags\": [],\n      \"user\": {\n
-        \       \"fullname\": \"jcline\",\n        \"name\": \"jcline\"\n      }\n
-        \   },\n    {\n      \"access_groups\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"ticket\": []\n      },\n      \"access_users\": {\n        \"admin\":
-        [],\n        \"commit\": [\n          \"bowlofeggs\"\n        ],\n        \"owner\":
-        [\n          \"jcline\"\n        ],\n        \"ticket\": []\n      },\n      \"close_status\":
-        [],\n      \"custom_keys\": [],\n      \"date_created\": \"1499784748\",\n
-        \     \"description\": \"The erlang-p1_sip rpms\",\n      \"fullname\": \"rpms/erlang-p1_sip\",\n
-        \     \"id\": 3271,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_sip\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499784748\",\n      \"description\":
-        \"The erlang-p1_stringprep rpms\",\n      \"fullname\": \"rpms/erlang-p1_stringprep\",\n
-        \     \"id\": 3272,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_stringprep\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499784748\",\n      \"description\":
-        \"The erlang-p1_stun rpms\",\n      \"fullname\": \"rpms/erlang-p1_stun\",\n
-        \     \"id\": 3273,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_stun\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499784749\",\n      \"description\":
-        \"The erlang-p1_tls rpms\",\n      \"fullname\": \"rpms/erlang-p1_tls\",\n
-        \     \"id\": 3274,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_tls\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499784749\",\n      \"description\":
-        \"The erlang-p1_xml rpms\",\n      \"fullname\": \"rpms/erlang-p1_xml\",\n
-        \     \"id\": 3276,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_xml\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499784749\",\n      \"description\":
-        \"The erlang-p1_yaml rpms\",\n      \"fullname\": \"rpms/erlang-p1_yaml\",\n
-        \     \"id\": 3278,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_yaml\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"owner\": [\n          \"jcline\"\n        ],\n        \"ticket\":
-        []\n      },\n      \"close_status\": [],\n      \"custom_keys\": [],\n      \"date_created\":
-        \"1499785955\",\n      \"description\": \"The python-args rpms\",\n      \"fullname\":
-        \"rpms/python-args\",\n      \"id\": 16563,\n      \"milestones\": {},\n      \"name\":
-        \"python-args\",\n      \"namespace\": \"rpms\",\n      \"parent\": null,\n
-        \     \"priorities\": {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\":
-        \"jcline\",\n        \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"owner\": [\n          \"jcline\"\n        ],\n        \"ticket\":
-        []\n      },\n      \"close_status\": [],\n      \"custom_keys\": [],\n      \"date_created\":
-        \"1499785966\",\n      \"description\": \"The python-clint rpms\",\n      \"fullname\":
-        \"rpms/python-clint\",\n      \"id\": 16685,\n      \"milestones\": {},\n
-        \     \"name\": \"python-clint\",\n      \"namespace\": \"rpms\",\n      \"parent\":
-        null,\n      \"priorities\": {},\n      \"tags\": [],\n      \"user\": {\n
-        \       \"fullname\": \"jcline\",\n        \"name\": \"jcline\"\n      }\n
-        \   },\n    {\n      \"access_groups\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"ticket\": []\n      },\n      \"access_users\": {\n        \"admin\":
-        [],\n        \"commit\": [],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499785992\",\n      \"description\":
-        \"The python-flower rpms\",\n      \"fullname\": \"rpms/python-flower\",\n
-        \     \"id\": 16983,\n      \"milestones\": {},\n      \"name\": \"python-flower\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"pcreech17\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499786002\",\n      \"description\":
-        \"The python-invocations rpms\",\n      \"fullname\": \"rpms/python-invocations\",\n
-        \     \"id\": 17115,\n      \"milestones\": {},\n      \"name\": \"python-invocations\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"pcreech17\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499786034\",\n      \"description\":
-        \"The python-pkginfo rpms\",\n      \"fullname\": \"rpms/python-pkginfo\",\n
-        \     \"id\": 17492,\n      \"milestones\": {},\n      \"name\": \"python-pkginfo\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"owner\": [\n          \"jcline\"\n        ],\n        \"ticket\":
-        []\n      },\n      \"close_status\": [],\n      \"custom_keys\": [],\n      \"date_created\":
-        \"1499786043\",\n      \"description\": \"The python-releases rpms\",\n      \"fullname\":
-        \"rpms/python-releases\",\n      \"id\": 17658,\n      \"milestones\": {},\n
-        \     \"name\": \"python-releases\",\n      \"namespace\": \"rpms\",\n      \"parent\":
-        null,\n      \"priorities\": {},\n      \"tags\": [],\n      \"user\": {\n
-        \       \"fullname\": \"jcline\",\n        \"name\": \"jcline\"\n      }\n
-        \   },\n    {\n      \"access_groups\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"ticket\": []\n      },\n      \"access_users\": {\n        \"admin\":
-        [],\n        \"commit\": [\n          \"bowlofeggs\",\n          \"williamjmorenor\"\n
-        \       ],\n        \"owner\": [\n          \"jcline\"\n        ],\n        \"ticket\":
-        []\n      },\n      \"close_status\": [],\n      \"custom_keys\": [],\n      \"date_created\":
-        \"1499786055\",\n      \"description\": \"The python-sphinxcontrib-fulltoc
-        rpms\",\n      \"fullname\": \"rpms/python-sphinxcontrib-fulltoc\",\n      \"id\":
-        17808,\n      \"milestones\": {},\n      \"name\": \"python-sphinxcontrib-fulltoc\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1499786064\",\n      \"description\":
-        \"The python-twine rpms\",\n      \"fullname\": \"rpms/python-twine\",\n      \"id\":
-        17942,\n      \"milestones\": {},\n      \"name\": \"python-twine\",\n      \"namespace\":
-        \"rpms\",\n      \"parent\": null,\n      \"priorities\": {},\n      \"tags\":
-        [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n        \"name\":
-        \"jcline\"\n      }\n    }\n  ],\n  \"total_projects\": 15\n}"}
-    headers:
-      appserver: [proxy01.stg.phx2.fedoraproject.org]
-      apptime: [D=873071]
-      connection: [Keep-Alive]
-      content-length: ['10795']
-      content-type: [application/json]
-      date: ['Wed, 12 Jul 2017 18:51:02 GMT']
-      keep-alive: ['timeout=15, max=500']
-      server: [Apache/2.4.6 (Red Hat Enterprise Linux) OpenSSL/1.0.1e-fips mod_auth_gssapi/1.4.0
-          mod_wsgi/3.4 Python/2.7.5]
-      set-cookie: ['disgit_pagure=eyJfcGVybWFuZW50Ijp0cnVlfQ.DEgBFg.lM5huOORpa55M0ButUDvPwrSPhA;
-          Expires=Sat, 12-Aug-2017 18:51:02 GMT; Secure; HttpOnly; Path=/pagure']
-      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.1]
-    method: GET
-    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?page=1&owner=jcline
-  response:
-    body: {string: !!python/unicode "{\n  \"args\": {\n    \"fork\": null,\n    \"namespace\":
-        null,\n    \"owner\": \"jcline\",\n    \"page\": 1,\n    \"pattern\": null,\n
-        \   \"per_page\": 20,\n    \"short\": false,\n    \"tags\": [],\n    \"username\":
-        null\n  },\n  \"pagination\": {\n    \"first\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?owner=jcline&per_page=20&page=1\",\n
-        \   \"last\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?owner=jcline&per_page=20&page=1\",\n
-        \   \"next\": null,\n    \"page\": 1,\n    \"pages\": 1,\n    \"per_page\":
-        20,\n    \"prev\": null\n  },\n  \"projects\": [\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1500069208\",\n      \"description\":
-        \"The erlang-cache_tab rpms\",\n      \"fullname\": \"rpms/erlang-cache_tab\",\n
-        \     \"id\": 3207,\n      \"milestones\": {},\n      \"name\": \"erlang-cache_tab\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1500069213\",\n      \"description\":
-        \"The erlang-p1_sip rpms\",\n      \"fullname\": \"rpms/erlang-p1_sip\",\n
-        \     \"id\": 3271,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_sip\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1500069213\",\n      \"description\":
-        \"The erlang-p1_stringprep rpms\",\n      \"fullname\": \"rpms/erlang-p1_stringprep\",\n
-        \     \"id\": 3272,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_stringprep\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1500069213\",\n      \"description\":
-        \"The erlang-p1_stun rpms\",\n      \"fullname\": \"rpms/erlang-p1_stun\",\n
-        \     \"id\": 3273,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_stun\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1500069214\",\n      \"description\":
-        \"The erlang-p1_tls rpms\",\n      \"fullname\": \"rpms/erlang-p1_tls\",\n
-        \     \"id\": 3274,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_tls\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1500069214\",\n      \"description\":
-        \"The erlang-p1_xml rpms\",\n      \"fullname\": \"rpms/erlang-p1_xml\",\n
-        \     \"id\": 3276,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_xml\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1500069214\",\n      \"description\":
-        \"The erlang-p1_yaml rpms\",\n      \"fullname\": \"rpms/erlang-p1_yaml\",\n
-        \     \"id\": 3278,\n      \"milestones\": {},\n      \"name\": \"erlang-p1_yaml\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"owner\": [\n          \"jcline\"\n        ],\n        \"ticket\":
-        []\n      },\n      \"close_status\": [],\n      \"custom_keys\": [],\n      \"date_created\":
-        \"1500070924\",\n      \"description\": \"The python-args rpms\",\n      \"fullname\":
-        \"rpms/python-args\",\n      \"id\": 16563,\n      \"milestones\": {},\n      \"name\":
-        \"python-args\",\n      \"namespace\": \"rpms\",\n      \"parent\": null,\n
-        \     \"priorities\": {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\":
-        \"jcline\",\n        \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"owner\": [\n          \"jcline\"\n        ],\n        \"ticket\":
-        []\n      },\n      \"close_status\": [],\n      \"custom_keys\": [],\n      \"date_created\":
-        \"1500070941\",\n      \"description\": \"The python-clint rpms\",\n      \"fullname\":
-        \"rpms/python-clint\",\n      \"id\": 16685,\n      \"milestones\": {},\n
-        \     \"name\": \"python-clint\",\n      \"namespace\": \"rpms\",\n      \"parent\":
-        null,\n      \"priorities\": {},\n      \"tags\": [],\n      \"user\": {\n
-        \       \"fullname\": \"jcline\",\n        \"name\": \"jcline\"\n      }\n
-        \   },\n    {\n      \"access_groups\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"ticket\": []\n      },\n      \"access_users\": {\n        \"admin\":
-        [],\n        \"commit\": [],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1500070977\",\n      \"description\":
-        \"The python-flower rpms\",\n      \"fullname\": \"rpms/python-flower\",\n
-        \     \"id\": 16983,\n      \"milestones\": {},\n      \"name\": \"python-flower\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"pcreech17\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1500070991\",\n      \"description\":
-        \"The python-invocations rpms\",\n      \"fullname\": \"rpms/python-invocations\",\n
-        \     \"id\": 17115,\n      \"milestones\": {},\n      \"name\": \"python-invocations\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"pcreech17\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1500071033\",\n      \"description\":
-        \"The python-pkginfo rpms\",\n      \"fullname\": \"rpms/python-pkginfo\",\n
-        \     \"id\": 17492,\n      \"milestones\": {},\n      \"name\": \"python-pkginfo\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"owner\": [\n          \"jcline\"\n        ],\n        \"ticket\":
-        []\n      },\n      \"close_status\": [],\n      \"custom_keys\": [],\n      \"date_created\":
-        \"1500071049\",\n      \"description\": \"The python-releases rpms\",\n      \"fullname\":
-        \"rpms/python-releases\",\n      \"id\": 17658,\n      \"milestones\": {},\n
-        \     \"name\": \"python-releases\",\n      \"namespace\": \"rpms\",\n      \"parent\":
-        null,\n      \"priorities\": {},\n      \"tags\": [],\n      \"user\": {\n
-        \       \"fullname\": \"jcline\",\n        \"name\": \"jcline\"\n      }\n
-        \   },\n    {\n      \"access_groups\": {\n        \"admin\": [],\n        \"commit\":
-        [],\n        \"ticket\": []\n      },\n      \"access_users\": {\n        \"admin\":
-        [],\n        \"commit\": [\n          \"williamjmorenor\",\n          \"bowlofeggs\"\n
-        \       ],\n        \"owner\": [\n          \"jcline\"\n        ],\n        \"ticket\":
-        []\n      },\n      \"close_status\": [],\n      \"custom_keys\": [],\n      \"date_created\":
-        \"1500071066\",\n      \"description\": \"The python-sphinxcontrib-fulltoc
-        rpms\",\n      \"fullname\": \"rpms/python-sphinxcontrib-fulltoc\",\n      \"id\":
-        17808,\n      \"milestones\": {},\n      \"name\": \"python-sphinxcontrib-fulltoc\",\n
-        \     \"namespace\": \"rpms\",\n      \"parent\": null,\n      \"priorities\":
-        {},\n      \"tags\": [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n
-        \       \"name\": \"jcline\"\n      }\n    },\n    {\n      \"access_groups\":
-        {\n        \"admin\": [],\n        \"commit\": [],\n        \"ticket\": []\n
-        \     },\n      \"access_users\": {\n        \"admin\": [],\n        \"commit\":
-        [\n          \"bowlofeggs\"\n        ],\n        \"owner\": [\n          \"jcline\"\n
-        \       ],\n        \"ticket\": []\n      },\n      \"close_status\": [],\n
-        \     \"custom_keys\": [],\n      \"date_created\": \"1500071080\",\n      \"description\":
-        \"The python-twine rpms\",\n      \"fullname\": \"rpms/python-twine\",\n      \"id\":
-        17942,\n      \"milestones\": {},\n      \"name\": \"python-twine\",\n      \"namespace\":
-        \"rpms\",\n      \"parent\": null,\n      \"priorities\": {},\n      \"tags\":
-        [],\n      \"user\": {\n        \"fullname\": \"jcline\",\n        \"name\":
-        \"jcline\"\n      }\n    }\n  ],\n  \"total_projects\": 15\n}"}
-    headers:
-      appserver: [proxy01.stg.phx2.fedoraproject.org]
-      apptime: [D=897482]
-      connection: [Keep-Alive]
-      content-length: ['11146']
-      content-type: [application/json]
-      date: ['Thu, 20 Jul 2017 19:00:25 GMT']
-      keep-alive: ['timeout=15, max=500']
-      server: [Apache/2.4.6 (Red Hat Enterprise Linux) OpenSSL/1.0.1e-fips mod_auth_gssapi/1.4.0
-          mod_wsgi/3.4 Python/2.7.5]
-      set-cookie: ['disgit_pagure=eyJfcGVybWFuZW50Ijp0cnVlfQ.DFKPSg.0gK6hfUQO4_XIUPHP9BRmYXVrlc;
-          Expires=Sun, 20-Aug-2017 19:00:26 GMT; Secure; HttpOnly; Path=/pagure']
-      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.1]
-    method: GET
-    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?short=true&owner=jcline&page=1
-  response:
-    body: {string: !!python/unicode "{\n  \"args\": {\n    \"fork\": null,\n    \"namespace\":
-        null,\n    \"owner\": \"jcline\",\n    \"page\": 1,\n    \"pattern\": null,\n
-        \   \"per_page\": 20,\n    \"short\": true,\n    \"tags\": [],\n    \"username\":
-        null\n  },\n  \"pagination\": {\n    \"first\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?owner=jcline&per_page=20&short=true&page=1\",\n
-        \   \"last\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?owner=jcline&per_page=20&short=true&page=1\",\n
-        \   \"next\": null,\n    \"page\": 1,\n    \"pages\": 1,\n    \"per_page\":
-        20,\n    \"prev\": null\n  },\n  \"projects\": [\n    {\n      \"description\":
-        \"The erlang-cache_tab rpms\",\n      \"fullname\": \"rpms/erlang-cache_tab\",\n
-        \     \"name\": \"erlang-cache_tab\",\n      \"namespace\": \"rpms\"\n    },\n
-        \   {\n      \"description\": \"The erlang-p1_sip rpms\",\n      \"fullname\":
-        \"rpms/erlang-p1_sip\",\n      \"name\": \"erlang-p1_sip\",\n      \"namespace\":
-        \"rpms\"\n    },\n    {\n      \"description\": \"The erlang-p1_stringprep
-        rpms\",\n      \"fullname\": \"rpms/erlang-p1_stringprep\",\n      \"name\":
-        \"erlang-p1_stringprep\",\n      \"namespace\": \"rpms\"\n    },\n    {\n
-        \     \"description\": \"The erlang-p1_stun rpms\",\n      \"fullname\": \"rpms/erlang-p1_stun\",\n
-        \     \"name\": \"erlang-p1_stun\",\n      \"namespace\": \"rpms\"\n    },\n
-        \   {\n      \"description\": \"The erlang-p1_tls rpms\",\n      \"fullname\":
-        \"rpms/erlang-p1_tls\",\n      \"name\": \"erlang-p1_tls\",\n      \"namespace\":
-        \"rpms\"\n    },\n    {\n      \"description\": \"The erlang-p1_xml rpms\",\n
-        \     \"fullname\": \"rpms/erlang-p1_xml\",\n      \"name\": \"erlang-p1_xml\",\n
-        \     \"namespace\": \"rpms\"\n    },\n    {\n      \"description\": \"The
-        erlang-p1_yaml rpms\",\n      \"fullname\": \"rpms/erlang-p1_yaml\",\n      \"name\":
-        \"erlang-p1_yaml\",\n      \"namespace\": \"rpms\"\n    },\n    {\n      \"description\":
-        \"The python-args rpms\",\n      \"fullname\": \"rpms/python-args\",\n      \"name\":
-        \"python-args\",\n      \"namespace\": \"rpms\"\n    },\n    {\n      \"description\":
-        \"The python-clint rpms\",\n      \"fullname\": \"rpms/python-clint\",\n      \"name\":
-        \"python-clint\",\n      \"namespace\": \"rpms\"\n    },\n    {\n      \"description\":
-        \"The python-flower rpms\",\n      \"fullname\": \"rpms/python-flower\",\n
-        \     \"name\": \"python-flower\",\n      \"namespace\": \"rpms\"\n    },\n
-        \   {\n      \"description\": \"The python-invocations rpms\",\n      \"fullname\":
-        \"rpms/python-invocations\",\n      \"name\": \"python-invocations\",\n      \"namespace\":
-        \"rpms\"\n    },\n    {\n      \"description\": \"The python-pkginfo rpms\",\n
-        \     \"fullname\": \"rpms/python-pkginfo\",\n      \"name\": \"python-pkginfo\",\n
-        \     \"namespace\": \"rpms\"\n    },\n    {\n      \"description\": \"The
-        python-releases rpms\",\n      \"fullname\": \"rpms/python-releases\",\n      \"name\":
-        \"python-releases\",\n      \"namespace\": \"rpms\"\n    },\n    {\n      \"description\":
-        \"The python-sphinxcontrib-fulltoc rpms\",\n      \"fullname\": \"rpms/python-sphinxcontrib-fulltoc\",\n
-        \     \"name\": \"python-sphinxcontrib-fulltoc\",\n      \"namespace\": \"rpms\"\n
-        \   },\n    {\n      \"description\": \"The python-twine rpms\",\n      \"fullname\":
-        \"rpms/python-twine\",\n      \"name\": \"python-twine\",\n      \"namespace\":
-        \"rpms\"\n    }\n  ],\n  \"total_projects\": 15\n}"}
-    headers:
-      appserver: [proxy01.stg.phx2.fedoraproject.org]
-      apptime: [D=150513]
-      connection: [Keep-Alive]
-      content-length: ['3025']
-      content-type: [application/json]
-      date: ['Fri, 21 Jul 2017 16:47:04 GMT']
-      keep-alive: ['timeout=15, max=500']
-      server: [Apache/2.4.6 (Red Hat Enterprise Linux) OpenSSL/1.0.1e-fips mod_auth_gssapi/1.4.0
-          mod_wsgi/3.4 Python/2.7.5]
-      set-cookie: ['disgit_pagure=eyJfcGVybWFuZW50Ijp0cnVlfQ.DFPBiA.odChespeDQib-YUtlyGhStzkz-g;
-          Expires=Mon, 21-Aug-2017 16:47:04 GMT; Secure; HttpOnly; Path=/pagure']
+      set-cookie: ['disgit_pagure=eyJfcGVybWFuZW50Ijp0cnVlfQ.DGDA0A.lHdfvgjM0o3ywuyk0qxIVvhHd5M;
+          Expires=Thu, 31-Aug-2017 13:23:28 GMT; Secure; HttpOnly; Path=/pagure']
       strict-transport-security: [max-age=15768000; includeSubDomains; preload]
     status: {code: 200, message: OK}
 version: 1

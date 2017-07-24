@@ -1,0 +1,627 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.2]
+    method: GET
+    uri: https://admin.fedoraproject.org/pkgdb/api/package/rpms/python-urllib3
+  response:
+    body: {string: !!python/unicode "{\n  \"output\": \"ok\",\n  \"packages\": [\n\
+        \    {\n      \"acls\": [\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"ralph\",\n          \"status\": \"Approved\"\n\
+        \        },\n        {\n          \"acl\": \"watchbugzilla\",\n          \"\
+        fas_name\": \"ralph\",\n          \"status\": \"Approved\"\n        },\n \
+        \       {\n          \"acl\": \"commit\",\n          \"fas_name\": \"ralph\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"approveacls\",\n          \"fas_name\": \"ralph\",\n          \"\
+        status\": \"Approved\"\n        },\n        {\n          \"acl\": \"watchbugzilla\"\
+        ,\n          \"fas_name\": \"sagarun\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"sagarun\",\n          \"status\": \"Approved\"\n        },\n        {\n\
+        \          \"acl\": \"watchcommits\",\n          \"fas_name\": \"sagarun\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"commit\",\n          \"fas_name\": \"toshio\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"approveacls\"\
+        ,\n          \"fas_name\": \"toshio\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"toshio\",\n          \"status\": \"Obsolete\"\n        },\n\
+        \        {\n          \"acl\": \"watchbugzilla\",\n          \"fas_name\"\
+        : \"toshio\",\n          \"status\": \"Obsolete\"\n        },\n        {\n\
+        \          \"acl\": \"watchcommits\",\n          \"fas_name\": \"terminalmage\"\
+        ,\n          \"status\": \"Obsolete\"\n        },\n        {\n          \"\
+        acl\": \"watchbugzilla\",\n          \"fas_name\": \"terminalmage\",\n   \
+        \       \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\"\
+        : \"commit\",\n          \"fas_name\": \"group::infra-sig\",\n          \"\
+        status\": \"Approved\"\n        },\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"group::infra-sig\",\n          \"status\": \"\
+        Approved\"\n        },\n        {\n          \"acl\": \"watchbugzilla\",\n\
+        \          \"fas_name\": \"group::infra-sig\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"jcline\",\n          \"status\": \"Approved\"\n        },\n\
+        \        {\n          \"acl\": \"watchbugzilla\",\n          \"fas_name\"\
+        : \"jcline\",\n          \"status\": \"Approved\"\n        },\n        {\n\
+        \          \"acl\": \"commit\",\n          \"fas_name\": \"jcline\",\n   \
+        \       \"status\": \"Approved\"\n        },\n        {\n          \"acl\"\
+        : \"commit\",\n          \"fas_name\": \"cstratak\",\n          \"status\"\
+        : \"Denied\"\n        },\n        {\n          \"acl\": \"commit\",\n    \
+        \      \"fas_name\": \"group::provenpackager\",\n          \"status\": \"\
+        Approved\"\n        }\n      ],\n      \"collection\": {\n        \"allow_retire\"\
+        : true,\n        \"branchname\": \"master\",\n        \"date_created\": \"\
+        2014-05-14 12:36:15\",\n        \"date_updated\": \"2017-02-28 20:24:14\"\
+        ,\n        \"dist_tag\": \".fc27\",\n        \"koji_name\": \"rawhide\",\n\
+        \        \"name\": \"Fedora\",\n        \"status\": \"Under Development\"\
+        ,\n        \"version\": \"devel\"\n      },\n      \"critpath\": true,\n \
+        \     \"package\": {\n        \"acls\": [],\n        \"creation_date\": 1400070978.0,\n\
+        \        \"description\": \"Python HTTP module with connection pooling and\
+        \ file POST abilities.\",\n        \"koschei_monitor\": false,\n        \"\
+        monitor\": true,\n        \"name\": \"python-urllib3\",\n        \"namespace\"\
+        : \"rpms\",\n        \"review_url\": null,\n        \"status\": \"Approved\"\
+        ,\n        \"summary\": \"Python HTTP library with thread-safe connection\
+        \ pooling and file post\",\n        \"upstream_url\": \"https://github.com/shazow/urllib3\"\
+        \n      },\n      \"point_of_contact\": \"group::infra-sig\",\n      \"status\"\
+        : \"Approved\",\n      \"status_change\": 1476977100.0\n    },\n    {\n  \
+        \    \"acls\": [\n        {\n          \"acl\": \"commit\",\n          \"\
+        fas_name\": \"sagarun\",\n          \"status\": \"Obsolete\"\n        },\n\
+        \        {\n          \"acl\": \"watchbugzilla\",\n          \"fas_name\"\
+        : \"sagarun\",\n          \"status\": \"Obsolete\"\n        },\n        {\n\
+        \          \"acl\": \"commit\",\n          \"fas_name\": \"toshio\",\n   \
+        \       \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\"\
+        : \"approveacls\",\n          \"fas_name\": \"toshio\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"toshio\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"watchbugzilla\",\n         \
+        \ \"fas_name\": \"toshio\",\n          \"status\": \"Obsolete\"\n        },\n\
+        \        {\n          \"acl\": \"watchcommits\",\n          \"fas_name\":\
+        \ \"sagarun\",\n          \"status\": \"Obsolete\"\n        },\n        {\n\
+        \          \"acl\": \"watchcommits\",\n          \"fas_name\": \"ralph\",\n\
+        \          \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\"\
+        : \"watchcommits\",\n          \"fas_name\": \"terminalmage\",\n         \
+        \ \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\": \"watchbugzilla\"\
+        ,\n          \"fas_name\": \"terminalmage\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"watchbugzilla\",\n         \
+        \ \"fas_name\": \"ralph\",\n          \"status\": \"Obsolete\"\n        },\n\
+        \        {\n          \"acl\": \"commit\",\n          \"fas_name\": \"ralph\"\
+        ,\n          \"status\": \"Obsolete\"\n        },\n        {\n          \"\
+        acl\": \"approveacls\",\n          \"fas_name\": \"ralph\",\n          \"\
+        status\": \"Obsolete\"\n        },\n        {\n          \"acl\": \"commit\"\
+        ,\n          \"fas_name\": \"group::infra-sig\",\n          \"status\": \"\
+        Approved\"\n        },\n        {\n          \"acl\": \"watchcommits\",\n\
+        \          \"fas_name\": \"group::infra-sig\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"watchbugzilla\",\n         \
+        \ \"fas_name\": \"group::infra-sig\",\n          \"status\": \"Approved\"\n\
+        \        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"cstratak\",\n          \"status\": \"Awaiting Review\"\n        },\n \
+        \       {\n          \"acl\": \"commit\",\n          \"fas_name\": \"group::provenpackager\"\
+        ,\n          \"status\": \"Approved\"\n        }\n      ],\n      \"collection\"\
+        : {\n        \"allow_retire\": true,\n        \"branchname\": \"el6\",\n \
+        \       \"date_created\": \"2014-05-14 12:36:15\",\n        \"date_updated\"\
+        : \"2015-12-08 15:17:58\",\n        \"dist_tag\": \".el6\",\n        \"koji_name\"\
+        : \"dist-6E-epel\",\n        \"name\": \"Fedora EPEL\",\n        \"status\"\
+        : \"Active\",\n        \"version\": \"6\"\n      },\n      \"critpath\": false,\n\
+        \      \"package\": {\n        \"acls\": [],\n        \"creation_date\": 1400070978.0,\n\
+        \        \"description\": \"Python HTTP module with connection pooling and\
+        \ file POST abilities.\",\n        \"koschei_monitor\": false,\n        \"\
+        monitor\": true,\n        \"name\": \"python-urllib3\",\n        \"namespace\"\
+        : \"rpms\",\n        \"review_url\": null,\n        \"status\": \"Approved\"\
+        ,\n        \"summary\": \"Python HTTP library with thread-safe connection\
+        \ pooling and file post\",\n        \"upstream_url\": \"https://github.com/shazow/urllib3\"\
+        \n      },\n      \"point_of_contact\": \"orphan\",\n      \"status\": \"\
+        Retired\",\n      \"status_change\": 1442348140.0\n    },\n    {\n      \"\
+        acls\": [\n        {\n          \"acl\": \"watchcommits\",\n          \"fas_name\"\
+        : \"sagarun\",\n          \"status\": \"Approved\"\n        },\n        {\n\
+        \          \"acl\": \"watchbugzilla\",\n          \"fas_name\": \"sagarun\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"approveacls\",\n          \"fas_name\": \"sagarun\",\n          \"\
+        status\": \"Approved\"\n        },\n        {\n          \"acl\": \"commit\"\
+        ,\n          \"fas_name\": \"sagarun\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"toshio\",\n          \"status\": \"Obsolete\"\n        },\n\
+        \        {\n          \"acl\": \"watchbugzilla\",\n          \"fas_name\"\
+        : \"toshio\",\n          \"status\": \"Obsolete\"\n        },\n        {\n\
+        \          \"acl\": \"commit\",\n          \"fas_name\": \"toshio\",\n   \
+        \       \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\"\
+        : \"approveacls\",\n          \"fas_name\": \"toshio\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"ralph\",\n          \"status\": \"Approved\"\n\
+        \        },\n        {\n          \"acl\": \"watchbugzilla\",\n          \"\
+        fas_name\": \"ralph\",\n          \"status\": \"Approved\"\n        },\n \
+        \       {\n          \"acl\": \"approveacls\",\n          \"fas_name\": \"\
+        ralph\",\n          \"status\": \"Approved\"\n        },\n        {\n    \
+        \      \"acl\": \"commit\",\n          \"fas_name\": \"ralph\",\n        \
+        \  \"status\": \"Approved\"\n        },\n        {\n          \"acl\": \"\
+        watchcommits\",\n          \"fas_name\": \"terminalmage\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"watchbugzilla\"\
+        ,\n          \"fas_name\": \"terminalmage\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"group::infra-sig\",\n          \"status\": \"Approved\"\n        },\n\
+        \        {\n          \"acl\": \"watchcommits\",\n          \"fas_name\":\
+        \ \"group::infra-sig\",\n          \"status\": \"Approved\"\n        },\n\
+        \        {\n          \"acl\": \"watchbugzilla\",\n          \"fas_name\"\
+        : \"group::infra-sig\",\n          \"status\": \"Approved\"\n        },\n\
+        \        {\n          \"acl\": \"commit\",\n          \"fas_name\": \"abompard\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"watchbugzilla\",\n          \"fas_name\": \"abompard\",\n       \
+        \   \"status\": \"Approved\"\n        },\n        {\n          \"acl\": \"\
+        watchcommits\",\n          \"fas_name\": \"abompard\",\n          \"status\"\
+        : \"Approved\"\n        },\n        {\n          \"acl\": \"approveacls\"\
+        ,\n          \"fas_name\": \"abompard\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"cstratak\",\n          \"status\": \"Denied\"\n        },\n        {\n\
+        \          \"acl\": \"commit\",\n          \"fas_name\": \"group::provenpackager\"\
+        ,\n          \"status\": \"Approved\"\n        }\n      ],\n      \"collection\"\
+        : {\n        \"allow_retire\": true,\n        \"branchname\": \"epel7\",\n\
+        \        \"date_created\": \"2014-05-14 12:36:15\",\n        \"date_updated\"\
+        : \"2015-12-08 15:16:41\",\n        \"dist_tag\": \".el7\",\n        \"koji_name\"\
+        : \"epel7\",\n        \"name\": \"Fedora EPEL\",\n        \"status\": \"Active\"\
+        ,\n        \"version\": \"7\"\n      },\n      \"critpath\": false,\n    \
+        \  \"package\": {\n        \"acls\": [],\n        \"creation_date\": 1400070978.0,\n\
+        \        \"description\": \"Python HTTP module with connection pooling and\
+        \ file POST abilities.\",\n        \"koschei_monitor\": false,\n        \"\
+        monitor\": true,\n        \"name\": \"python-urllib3\",\n        \"namespace\"\
+        : \"rpms\",\n        \"review_url\": null,\n        \"status\": \"Approved\"\
+        ,\n        \"summary\": \"Python HTTP library with thread-safe connection\
+        \ pooling and file post\",\n        \"upstream_url\": \"https://github.com/shazow/urllib3\"\
+        \n      },\n      \"point_of_contact\": \"abompard\",\n      \"status\": \"\
+        Approved\",\n      \"status_change\": 1473855839.0\n    },\n    {\n      \"\
+        acls\": [\n        {\n          \"acl\": \"watchcommits\",\n          \"fas_name\"\
+        : \"ralph\",\n          \"status\": \"Approved\"\n        },\n        {\n\
+        \          \"acl\": \"watchbugzilla\",\n          \"fas_name\": \"ralph\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"commit\",\n          \"fas_name\": \"ralph\",\n          \"status\"\
+        : \"Approved\"\n        },\n        {\n          \"acl\": \"approveacls\"\
+        ,\n          \"fas_name\": \"ralph\",\n          \"status\": \"Approved\"\n\
+        \        },\n        {\n          \"acl\": \"watchbugzilla\",\n          \"\
+        fas_name\": \"sagarun\",\n          \"status\": \"Approved\"\n        },\n\
+        \        {\n          \"acl\": \"commit\",\n          \"fas_name\": \"sagarun\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"watchcommits\",\n          \"fas_name\": \"sagarun\",\n         \
+        \ \"status\": \"Approved\"\n        },\n        {\n          \"acl\": \"commit\"\
+        ,\n          \"fas_name\": \"toshio\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"approveacls\",\n          \"\
+        fas_name\": \"toshio\",\n          \"status\": \"Obsolete\"\n        },\n\
+        \        {\n          \"acl\": \"watchcommits\",\n          \"fas_name\":\
+        \ \"toshio\",\n          \"status\": \"Obsolete\"\n        },\n        {\n\
+        \          \"acl\": \"watchbugzilla\",\n          \"fas_name\": \"toshio\"\
+        ,\n          \"status\": \"Obsolete\"\n        },\n        {\n          \"\
+        acl\": \"watchcommits\",\n          \"fas_name\": \"terminalmage\",\n    \
+        \      \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\"\
+        : \"watchbugzilla\",\n          \"fas_name\": \"terminalmage\",\n        \
+        \  \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\": \"\
+        commit\",\n          \"fas_name\": \"group::infra-sig\",\n          \"status\"\
+        : \"Approved\"\n        },\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"group::infra-sig\",\n          \"status\": \"\
+        Approved\"\n        },\n        {\n          \"acl\": \"watchbugzilla\",\n\
+        \          \"fas_name\": \"group::infra-sig\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"jcline\",\n          \"status\": \"Approved\"\n        },\n\
+        \        {\n          \"acl\": \"watchbugzilla\",\n          \"fas_name\"\
+        : \"jcline\",\n          \"status\": \"Approved\"\n        },\n        {\n\
+        \          \"acl\": \"commit\",\n          \"fas_name\": \"jcline\",\n   \
+        \       \"status\": \"Approved\"\n        },\n        {\n          \"acl\"\
+        : \"commit\",\n          \"fas_name\": \"cstratak\",\n          \"status\"\
+        : \"Denied\"\n        },\n        {\n          \"acl\": \"commit\",\n    \
+        \      \"fas_name\": \"group::provenpackager\",\n          \"status\": \"\
+        Approved\"\n        }\n      ],\n      \"collection\": {\n        \"allow_retire\"\
+        : false,\n        \"branchname\": \"f24\",\n        \"date_created\": \"2016-02-23\
+        \ 22:57:55\",\n        \"date_updated\": \"2016-06-21 13:54:27\",\n      \
+        \  \"dist_tag\": \".fc24\",\n        \"koji_name\": \"f24\",\n        \"name\"\
+        : \"Fedora\",\n        \"status\": \"Active\",\n        \"version\": \"24\"\
+        \n      },\n      \"critpath\": true,\n      \"package\": {\n        \"acls\"\
+        : [],\n        \"creation_date\": 1400070978.0,\n        \"description\":\
+        \ \"Python HTTP module with connection pooling and file POST abilities.\"\
+        ,\n        \"koschei_monitor\": false,\n        \"monitor\": true,\n     \
+        \   \"name\": \"python-urllib3\",\n        \"namespace\": \"rpms\",\n    \
+        \    \"review_url\": null,\n        \"status\": \"Approved\",\n        \"\
+        summary\": \"Python HTTP library with thread-safe connection pooling and file\
+        \ post\",\n        \"upstream_url\": \"https://github.com/shazow/urllib3\"\
+        \n      },\n      \"point_of_contact\": \"group::infra-sig\",\n      \"status\"\
+        : \"Approved\",\n      \"status_change\": 1493740960.0\n    },\n    {\n  \
+        \    \"acls\": [\n        {\n          \"acl\": \"commit\",\n          \"\
+        fas_name\": \"group::infra-sig\",\n          \"status\": \"Approved\"\n  \
+        \      },\n        {\n          \"acl\": \"watchbugzilla\",\n          \"\
+        fas_name\": \"group::infra-sig\",\n          \"status\": \"Approved\"\n  \
+        \      },\n        {\n          \"acl\": \"watchcommits\",\n          \"fas_name\"\
+        : \"group::infra-sig\",\n          \"status\": \"Approved\"\n        },\n\
+        \        {\n          \"acl\": \"watchbugzilla\",\n          \"fas_name\"\
+        : \"jcline\",\n          \"status\": \"Approved\"\n        },\n        {\n\
+        \          \"acl\": \"watchcommits\",\n          \"fas_name\": \"jcline\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"approveacls\",\n          \"fas_name\": \"ralph\",\n          \"\
+        status\": \"Approved\"\n        },\n        {\n          \"acl\": \"commit\"\
+        ,\n          \"fas_name\": \"ralph\",\n          \"status\": \"Approved\"\n\
+        \        },\n        {\n          \"acl\": \"watchbugzilla\",\n          \"\
+        fas_name\": \"ralph\",\n          \"status\": \"Approved\"\n        },\n \
+        \       {\n          \"acl\": \"watchcommits\",\n          \"fas_name\": \"\
+        ralph\",\n          \"status\": \"Approved\"\n        },\n        {\n    \
+        \      \"acl\": \"commit\",\n          \"fas_name\": \"sagarun\",\n      \
+        \    \"status\": \"Approved\"\n        },\n        {\n          \"acl\": \"\
+        watchbugzilla\",\n          \"fas_name\": \"sagarun\",\n          \"status\"\
+        : \"Approved\"\n        },\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"sagarun\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"watchbugzilla\",\n         \
+        \ \"fas_name\": \"terminalmage\",\n          \"status\": \"Obsolete\"\n  \
+        \      },\n        {\n          \"acl\": \"watchcommits\",\n          \"fas_name\"\
+        : \"terminalmage\",\n          \"status\": \"Obsolete\"\n        },\n    \
+        \    {\n          \"acl\": \"approveacls\",\n          \"fas_name\": \"toshio\"\
+        ,\n          \"status\": \"Obsolete\"\n        },\n        {\n          \"\
+        acl\": \"commit\",\n          \"fas_name\": \"toshio\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"watchbugzilla\"\
+        ,\n          \"fas_name\": \"toshio\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"toshio\",\n          \"status\": \"Obsolete\"\n        },\n\
+        \        {\n          \"acl\": \"commit\",\n          \"fas_name\": \"jcline\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"commit\",\n          \"fas_name\": \"cstratak\",\n          \"status\"\
+        : \"Denied\"\n        },\n        {\n          \"acl\": \"commit\",\n    \
+        \      \"fas_name\": \"group::provenpackager\",\n          \"status\": \"\
+        Approved\"\n        }\n      ],\n      \"collection\": {\n        \"allow_retire\"\
+        : false,\n        \"branchname\": \"f25\",\n        \"date_created\": \"2016-07-26\
+        \ 13:50:32\",\n        \"date_updated\": \"2016-11-22 14:31:43\",\n      \
+        \  \"dist_tag\": \".fc25\",\n        \"koji_name\": \"f25\",\n        \"name\"\
+        : \"Fedora\",\n        \"status\": \"Active\",\n        \"version\": \"25\"\
+        \n      },\n      \"critpath\": true,\n      \"package\": {\n        \"acls\"\
+        : [],\n        \"creation_date\": 1400070978.0,\n        \"description\":\
+        \ \"Python HTTP module with connection pooling and file POST abilities.\"\
+        ,\n        \"koschei_monitor\": false,\n        \"monitor\": true,\n     \
+        \   \"name\": \"python-urllib3\",\n        \"namespace\": \"rpms\",\n    \
+        \    \"review_url\": null,\n        \"status\": \"Approved\",\n        \"\
+        summary\": \"Python HTTP library with thread-safe connection pooling and file\
+        \ post\",\n        \"upstream_url\": \"https://github.com/shazow/urllib3\"\
+        \n      },\n      \"point_of_contact\": \"group::infra-sig\",\n      \"status\"\
+        : \"Approved\",\n      \"status_change\": 1476969598.0\n    },\n    {\n  \
+        \    \"acls\": [\n        {\n          \"acl\": \"commit\",\n          \"\
+        fas_name\": \"cstratak\",\n          \"status\": \"Denied\"\n        },\n\
+        \        {\n          \"acl\": \"commit\",\n          \"fas_name\": \"group::infra-sig\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"watchbugzilla\",\n          \"fas_name\": \"group::infra-sig\",\n\
+        \          \"status\": \"Approved\"\n        },\n        {\n          \"acl\"\
+        : \"watchcommits\",\n          \"fas_name\": \"group::infra-sig\",\n     \
+        \     \"status\": \"Approved\"\n        },\n        {\n          \"acl\":\
+        \ \"commit\",\n          \"fas_name\": \"jcline\",\n          \"status\":\
+        \ \"Approved\"\n        },\n        {\n          \"acl\": \"watchbugzilla\"\
+        ,\n          \"fas_name\": \"jcline\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"jcline\",\n          \"status\": \"Approved\"\n        },\n\
+        \        {\n          \"acl\": \"approveacls\",\n          \"fas_name\": \"\
+        ralph\",\n          \"status\": \"Approved\"\n        },\n        {\n    \
+        \      \"acl\": \"commit\",\n          \"fas_name\": \"ralph\",\n        \
+        \  \"status\": \"Approved\"\n        },\n        {\n          \"acl\": \"\
+        watchbugzilla\",\n          \"fas_name\": \"ralph\",\n          \"status\"\
+        : \"Approved\"\n        },\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"ralph\",\n          \"status\": \"Approved\"\n\
+        \        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"sagarun\",\n          \"status\": \"Approved\"\n        },\n        {\n\
+        \          \"acl\": \"watchbugzilla\",\n          \"fas_name\": \"sagarun\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"watchcommits\",\n          \"fas_name\": \"sagarun\",\n         \
+        \ \"status\": \"Approved\"\n        },\n        {\n          \"acl\": \"watchbugzilla\"\
+        ,\n          \"fas_name\": \"terminalmage\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"terminalmage\",\n          \"status\": \"Obsolete\"\n      \
+        \  },\n        {\n          \"acl\": \"approveacls\",\n          \"fas_name\"\
+        : \"toshio\",\n          \"status\": \"Obsolete\"\n        },\n        {\n\
+        \          \"acl\": \"commit\",\n          \"fas_name\": \"toshio\",\n   \
+        \       \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\"\
+        : \"watchbugzilla\",\n          \"fas_name\": \"toshio\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"toshio\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"group::provenpackager\",\n          \"status\": \"Approved\"\n       \
+        \ }\n      ],\n      \"collection\": {\n        \"allow_retire\": false,\n\
+        \        \"branchname\": \"f26\",\n        \"date_created\": \"2017-02-28\
+        \ 20:24:57\",\n        \"date_updated\": \"2017-07-11 14:04:59\",\n      \
+        \  \"dist_tag\": \".fc26\",\n        \"koji_name\": \"f26\",\n        \"name\"\
+        : \"Fedora\",\n        \"status\": \"Active\",\n        \"version\": \"26\"\
+        \n      },\n      \"critpath\": true,\n      \"package\": {\n        \"acls\"\
+        : [],\n        \"creation_date\": 1400070978.0,\n        \"description\":\
+        \ \"Python HTTP module with connection pooling and file POST abilities.\"\
+        ,\n        \"koschei_monitor\": false,\n        \"monitor\": true,\n     \
+        \   \"name\": \"python-urllib3\",\n        \"namespace\": \"rpms\",\n    \
+        \    \"review_url\": null,\n        \"status\": \"Approved\",\n        \"\
+        summary\": \"Python HTTP library with thread-safe connection pooling and file\
+        \ post\",\n        \"upstream_url\": \"https://github.com/shazow/urllib3\"\
+        \n      },\n      \"point_of_contact\": \"group::infra-sig\",\n      \"status\"\
+        : \"Approved\",\n      \"status_change\": 1493738712.0\n    }\n  ]\n}"}
+    headers:
+      accept-ranges: [bytes]
+      age: ['0']
+      appserver: [proxy12.fedoraproject.org]
+      apptime: [D=3139608]
+      connection: [Keep-Alive]
+      content-length: ['20838']
+      content-type: [application/json]
+      date: ['Mon, 31 Jul 2017 14:33:00 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.4.6 (Red Hat Enterprise Linux) mod_wsgi/3.4 Python/2.7.5]
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+      via: [1.1 varnish-v4]
+      x-varnish: ['65576363']
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode 'password=supersecret&login=Login&user_name=jcline'
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['98']
+      Content-Type: [application/x-www-form-urlencoded]
+      User-agent: [Fedora Account System Client/0.9.0]
+    method: POST
+    uri: https://admin.fedoraproject.org/accounts/group/dump/provenpackager
+  response:
+    body: {string: "{\"tg_flash\": null, \"people\": [[\"abompard\", \"aurelien@bompard.org\"\
+        , \"Aurelien Bompard\", \"user\", 0], [\"adamwill\", \"awilliam@redhat.com\"\
+        , \"Adam Williamson\", \"user\", 0], [\"adrian\", \"adrian@lisas.de\", \"\
+        Adrian Reber\", \"user\", 0], [\"airlied\", \"airlied@redhat.com\", \"Dave\
+        \ Airlie\", \"user\", 0], [\"ajax\", \"ajax@redhat.com\", \"Adam Jackson\"\
+        , \"user\", 0], [\"akurtakov\", \"akurtako@redhat.com\", \"Alexander Kurtakov\"\
+        , \"user\", 0], [\"alexl\", \"alexl@redhat.com\", \"Alexander Larsson\", \"\
+        user\", 0], [\"alexlan\", \"alexl@users.sourceforge.net\", \"\", \"user\"\
+        , 0], [\"amigadave\", \"amigadave@amigadave.com\", \"David King\", \"user\"\
+        , 0], [\"arg\", \"agrimm@gmail.com\", \"Andy Grimm\", \"user\", 0], [\"athimm\"\
+        , \"Axel.Thimm@ATrpms.net\", \"Axel Thimm\", \"user\", 0], [\"atkac\", \"\
+        vonsch@gmail.com\", \"Adam Tkac\", \"user\", 0], [\"ausil\", \"dennis@ausil.us\"\
+        , \"Dennis Gilmore\", \"administrator\", 0], [\"averi\", \"andrea.veri@gmail.com\"\
+        , \"\", \"user\", 0], [\"awjb\", \"andreas.bierfert@lowlatency.de\", \"Andreas\
+        \ Bierfert\", \"user\", 0], [\"bernie\", \"bernie+fedora@codewiz.org\", \"\
+        Bernie Innocenti\", \"user\", 0], [\"besser82\", \"fedora@besser82.io\", \"\
+        Bj\xF6rn Esser\", \"user\", 0], [\"bkabrda\", \"bkabrda@redhat.com\", \"Bohuslav\
+        \ Kabrda\", \"user\", 0], [\"bpepple\", \"bdpepple@gmail.com\", \"Brian Pepple\"\
+        , \"administrator\", 1], [\"bruno\", \"bruno@wolff.to\", \"Bruno Wolff III\"\
+        , \"user\", 0], [\"c4chris\", \"Christian.Iseli@unil.ch\", \"Christian Iseli\"\
+        , \"user\", 0], [\"caillon\", \"caillon+fedoraproject@gmail.com\", \"Christopher\
+        \ Aillon\", \"user\", 0], [\"caolanm\", \"caolanm@redhat.com\", \"Caol\xE1\
+        n McNamara\", \"user\", 0], [\"cebbert\", \"cebbert@redhat.com\", \"Chuck\
+        \ Ebbert\", \"user\", 0], [\"chitlesh\", \"chitlesh@gmail.com\", \"Chitlesh\
+        \ GOORAH\", \"user\", 0], [\"chkr\", \"chkr@plauener.de\", \"Christian Krause\"\
+        , \"user\", 0], [\"churchyard\", \"mhroncok@redhat.com\", \"Miro Hron\u010D\
+        ok\", \"user\", 0], [\"codeblock\", \"codeblock@elrod.me\", \"Ricky Elrod\"\
+        , \"user\", 0], [\"corsepiu\", \"rc040203@freenet.de\", \"\", \"user\", 0],\
+        \ [\"crobinso\", \"crobinso@redhat.com\", \"Cole Robinson\", \"user\", 0],\
+        \ [\"cstratak\", \"cstratak@redhat.com\", \"\", \"user\", 0], [\"cweyl\",\
+        \ \"cweyl@alumni.drew.edu\", \"Chris Weyl\", \"user\", 0], [\"cwickert\",\
+        \ \"christoph.wickert@gmail.com\", \"Christoph Wickert\", \"user\", 0], [\"\
+        davej\", \"davej@codemonkey.org.uk\", \"Dave Jones\", \"user\", 0], [\"dbhole\"\
+        , \"dbhole@redhat.com\", \"Deepak Bhole\", \"user\", 0], [\"dcbw\", \"dcbw@redhat.com\"\
+        , \"Daniel Williams\", \"user\", 0], [\"denis\", \"denis@poolshark.org\",\
+        \ \"Denis Leroy\", \"user\", 0], [\"denisarnaud\", \"denis.arnaud_fedora@m4x.org\"\
+        , \"Denis Arnaud\", \"user\", 0], [\"devrim\", \"devrim@gunduz.org\", \"Devrim\
+        \ G\xDCND\xDCZ\", \"user\", 0], [\"dgregor\", \"dgregor@redhat.com\", \"Dennis\
+        \ Gregorovic\", \"user\", 0], [\"dmalcolm\", \"dmalcolm@redhat.com\", \"\"\
+        , \"user\", 0], [\"drago01\", \"adel.gadllah@gmail.com\", \"\", \"user\",\
+        \ 0], [\"dsd\", \"dsd@laptop.org\", \"Daniel Drake\", \"user\", 0], [\"dtardon\"\
+        , \"dtardon@redhat.com\", \"David Tardon\", \"user\", 0], [\"dwmw2\", \"dwmw2@infradead.org\"\
+        , \"David Woodhouse\", \"administrator\", 0], [\"echevemaster\", \"echevemaster@gmail.com\"\
+        , \"Eduardo Javier Echeverria Alvarado\", \"user\", 0], [\"ecik\", \"mr.ecik@gmail.com\"\
+        , \"Micha\u0142 Bentkowski\", \"user\", 0], [\"ensc\", \"rh-bugzilla@ensc.de\"\
+        , \"\", \"user\", 0], [\"epienbro\", \"erik-fedora@vanpienbroek.nl\", \"Erik\
+        \ van Pienbroek\", \"user\", 0], [\"filiperosset\", \"rosset.filipe@gmail.com\"\
+        , \"Filipe Rosset\", \"user\", 0], [\"fitzsim\", \"fitzsim@fitzsim.org\",\
+        \ \"Thomas Fitzsimmons\", \"user\", 0], [\"fweimer\", \"fweimer@redhat.com\"\
+        , \"Florian Weimer\", \"user\", 0], [\"gdk\", \"greg.dekoenigsberg@gmail.com\"\
+        , \"Greg DeKoenigsberg\", \"user\", 0], [\"gemi\", \"gemi@bluewin.ch\", \"\
+        G\xE9rard Milmeister\", \"user\", 0], [\"goldmann\", \"mgoldman@redhat.com\"\
+        , \"Marek Goldmann\", \"user\", 0], [\"hadess\", \"bnocera@redhat.com\", \"\
+        Bastien Nocera\", \"user\", 0], [\"harald\", \"harald@redhat.com\", \"Harald\
+        \ Hoyer\", \"user\", 0], [\"hguemar\", \"karlthered@gmail.com\", \"Ha\xEF\
+        kel Gu\xE9mar\", \"user\", 0], [\"hobbes1069\", \"hobbes1069@gmail.com\",\
+        \ \"Richard Shaw\", \"user\", 0], [\"hubbitus\", \"pahan@hubbitus.info\",\
+        \ \"Pavel Alexeev\", \"user\", 0], [\"huzaifas\", \"huzaifas@redhat.com\"\
+        , \"Huzaifa Sidhpurwala\", \"user\", 0], [\"ianweller\", \"ian@ianweller.org\"\
+        , \"Ian Weller\", \"user\", 0], [\"iarnell\", \"iarnell@gmail.com\", \"Iain\
+        \ Arnell\", \"user\", 0], [\"ignatenkobrain\", \"ignatenko@redhat.com\", \"\
+        Igor Gnatenko\", \"user\", 0], [\"ilianaw\", \"ilianaw@buttslol.net\", \"\
+        Iliana Weller\", \"user\", 0], [\"ivazquez\", \"ivazqueznet@gmail.com\", \"\
+        Ignacio Vazquez-Abrams\", \"user\", 0], [\"ixs\", \"andreas@bawue.net\", \"\
+        Andreas Thienemann\", \"user\", 0], [\"jamatos\", \"jamatos@fc.up.pt\", \"\
+        Jos\xE9 Ab\xEDlio Oliveira Matos\", \"user\", 0], [\"jcapik\", \"jaromir.capik@email.cz\"\
+        , \"Jarom\xEDr C\xE1p\xEDk\", \"user\", 0], [\"jerboaa\", \"jerboaa@gmail.com\"\
+        , \"\", \"user\", 0], [\"jforbes\", \"jforbes@redhat.com\", \"Justin M. Forbes\"\
+        , \"user\", 0], [\"jgrulich\", \"jgrulich@redhat.com\", \"Jan Grulich\", \"\
+        user\", 0], [\"jhogarth\", \"james.hogarth@gmail.com\", \"James Hogarth\"\
+        , \"user\", 0], [\"jjames\", \"loganjerry@gmail.com\", \"Jerry James\", \"\
+        user\", 0], [\"jkeating\", \"jkeating@j2solutions.net\", \"Jesse Keating\"\
+        , \"user\", 0], [\"jnovy\", \"novyjindrich@gmail.com\", \"Jindrich Novy\"\
+        , \"user\", 0], [\"johnp\", \"john.j5live@gmail.com\", \"\", \"user\", 0],\
+        \ [\"jorton\", \"jorton@redhat.com\", \"\", \"user\", 0], [\"jplesnik\", \"\
+        jplesnik@redhat.com\", \"Jitka Plesnikova\", \"user\", 0], [\"jpo\", \"jose.p.oliveira.oss@gmail.com\"\
+        , \"Jose Pedro Oliveira\", \"user\", 0], [\"jreznik\", \"jreznik@redhat.com\"\
+        , \"Jaroslav Reznik\", \"user\", 0], [\"jskarvad\", \"jskarvad@redhat.com\"\
+        , \"Jaroslav \u0160karvada\", \"user\", 0], [\"jsmith\", \"jsmith.fedora@gmail.com\"\
+        , \"Jared Smith\", \"user\", 0], [\"jspaleta\", \"jspaleta@gmail.com\", \"\
+        Jef Spaleta\", \"user\", 0], [\"jstanley\", \"jonstanley@gmail.com\", \"Jon\
+        \ Stanley\", \"administrator\", 53], [\"jsteffan\", \"jonathansteffan@gmail.com\"\
+        , \"Jonathan Steffan\", \"user\", 0], [\"jussilehtola\", \"susi.lehtola@iki.fi\"\
+        , \"Susi Lehtola\", \"user\", 0], [\"jvanek\", \"jvanek@redhat.com\", \"jiri\
+        \ vanek\", \"user\", 0], [\"jwakely\", \"jwakely@redhat.com\", \"Jonathan\
+        \ Wakely\", \"user\", 0], [\"jwboyer\", \"jwboyer@gmail.com\", \"Josh Boyer\"\
+        , \"administrator\", 1], [\"jwilson\", \"jarodwilson@gmail.com\", \"Jarod\
+        \ Wilson\", \"administrator\", 0], [\"jwrdegoede\", \"hdegoede@redhat.com\"\
+        , \"Hans de Goede\", \"user\", 0], [\"kalev\", \"klember@redhat.com\", \"\
+        Kalev Lember\", \"user\", 0], [\"kanarip\", \"vanmeeuwen+fedora@kolabsys.com\"\
+        , \"Jeroen van Meeuwen\", \"user\", 0], [\"karsten\", \"karsten@redhat.com\"\
+        , \"Karsten Hopp\", \"user\", 0], [\"kasal\", \"kasal@ucw.cz\", \"\u0160t\u011B\
+        p\xE1n Kasal\", \"user\", 0], [\"katzj\", \"jeremy@katzbox.net\", \"\", \"\
+        user\", 0], [\"kay\", \"kay@redhat.com\", \"Kay Sievers\", \"user\", 0], [\"\
+        ke4qqq\", \"david@gnsa.us\", \"David Nalley\", \"user\", 0], [\"kengert\"\
+        , \"kengert@redhat.com\", \"Kai Engert\", \"user\", 0], [\"kevin\", \"kevin@scrye.com\"\
+        , \"Kevin Fenzi\", \"administrator\", 75], [\"kkofler\", \"kevin@tigcc.ticalc.org\"\
+        , \"Kevin Kofler\", \"user\", 0], [\"kyle\", \"kyle@infradead.org\", \"Kyle\
+        \ McMartin\", \"user\", 0], [\"kylev\", \"kylev@kylev.com\", \"Kyle VanderBeek\"\
+        , \"user\", 0], [\"laxathom\", \"lxtnow@gmail.com\", \"Xavier \u30C8\u30FC\
+        \u30DE\u30B9 Lamien\", \"user\", 0], [\"leigh123linux\", \"leigh123linux@googlemail.com\"\
+        , \"\", \"user\", 0], [\"lennart\", \"lpoetter@redhat.com\", \"Lennart Poettering\"\
+        , \"user\", 0], [\"limb\", \"limburgher@gmail.com\", \"Gwyn Ciesla\", \"user\"\
+        , 0], [\"linville\", \"linville@redhat.com\", \"John W. Linville\", \"user\"\
+        , 0], [\"lkundrak\", \"lkundrak@v3.sk\", \"Lubomir Rintel\", \"user\", 0],\
+        \ [\"lmacken\", \"lewk@openmailbox.org\", \"Luke Macken\", \"user\", 0], [\"\
+        lupinix\", \"lupinix@mailbox.org\", \"Christian Dersch\", \"user\", 0], [\"\
+        lutter\", \"lutter@watzmann.net\", \"David Lutterkort\", \"user\", 0], [\"\
+        markmc\", \"markmc@redhat.com\", \"Mark McLoughlin\", \"user\", 0], [\"maxamillion\"\
+        , \"maxamillion@gmail.com\", \"Adam Miller\", \"user\", 0], [\"mbarnes\",\
+        \ \"mbarnes@fastmail.com\", \"Matthew Barnes\", \"user\", 0], [\"mbooth\"\
+        , \"mat.booth@redhat.com\", \"Mat Booth\", \"user\", 0], [\"mcepl\", \"mcepl@redhat.com\"\
+        , \"Matej Cepl\", \"user\", 0], [\"mclasen\", \"mclasen@redhat.com\", \"Matthias\
+        \ Clasen\", \"user\", 0], [\"mdomsch\", \"matt@domsch.com\", \"Matt Domsch\"\
+        , \"user\", 0], [\"mef\", \"mefoster@gmail.com\", \"\", \"user\", 0], [\"\
+        mgieseki\", \"martin.gieseking@uos.de\", \"Martin Gieseking\", \"user\", 0],\
+        \ [\"michich\", \"mschmidt@redhat.com\", \"Michal Schmidt\", \"user\", 0],\
+        \ [\"mizdebsk\", \"mizdebsk@redhat.com\", \"Mikolaj Izdebski\", \"user\",\
+        \ 0], [\"mjakubicek\", \"xjakub@fi.muni.cz\", \"Milo\u0161 Jakub\xED\u010D\
+        ek\", \"user\", 0], [\"mjg59\", \"mjg59@srcf.ucam.org\", \"Matthew Garrett\"\
+        , \"user\", 0], [\"mkasik\", \"mkasik@redhat.com\", \"\", \"user\", 0], [\"\
+        mmahut\", \"mmahut@redhat.com\", \"Marek Mahut\", \"user\", 0], [\"mmaslano\"\
+        , \"mmaslano@redhat.com\", \"Marcela Ma\u0161l\xE1\u0148ov\xE1\", \"user\"\
+        , 0], [\"mmcgrath\", \"imlinux+fedora@gmail.com\", \"Mike McGrath\", \"user\"\
+        , 0], [\"mooninite\", \"mike@cchtml.com\", \"\", \"user\", 0], [\"mrunge\"\
+        , \"mrunge@redhat.com\", \"Matthias Runge\", \"user\", 0], [\"mschwendt\"\
+        , \"bugs.michael@gmx.net\", \"Michael Schwendt\", \"user\", 0], [\"msimacek\"\
+        , \"msimacek@redhat.com\", \"Michael \u0160im\xE1\u010Dek\", \"user\", 0],\
+        \ [\"msrb\", \"msrb@redhat.com\", \"Michal Srb\", \"user\", 0], [\"mstuchli\"\
+        , \"matej.stuchlik@gmail.com\", \"Matej Stuchlik\", \"user\", 0], [\"msuchy\"\
+        , \"msuchy@redhat.com\", \"Miroslav Such\xFD\", \"user\", 0], [\"mtasaka\"\
+        , \"mtasaka@tbz.t-com.ne.jp\", \"Mamoru TASAKA\", \"user\", 0], [\"nalin\"\
+        , \"nalin@redhat.com\", \"Nalin Dahyabhai\", \"user\", 0], [\"nb\", \"nb@nb.zone\"\
+        , \"Nick Bebout\", \"user\", 0], [\"ngompa\", \"ngompa13@gmail.com\", \"Neal\
+        \ Gompa\", \"user\", 0], [\"nhorman\", \"nhorman@redhat.com\", \"Neil Horman\"\
+        , \"user\", 0], [\"nim\", \"nicolas.mailhot@laposte.net\", \"\", \"user\"\
+        , 0], [\"nonamedotc\", \"nonamedotc@gmail.com\", \"Mukundan Ragavan\", \"\
+        user\", 0], [\"notting\", \"notting@splat.cc\", \"Bill Nottingham\", \"administrator\"\
+        , 32], [\"nphilipp\", \"nphilipp@redhat.com\", \"Nils Philippsen\", \"user\"\
+        , 0], [\"npmccallum\", \"npmccallum@redhat.com\", \"Nathaniel McCallum\",\
+        \ \"user\", 0], [\"oget\", \"oget.fedora@gmail.com\", \"Orcan Ogetbil\", \"\
+        user\", 0], [\"oliver\", \"oliver@linux-kernel.at\", \"Oliver Falk\", \"user\"\
+        , 0], [\"ondrejj\", \"ondrejj@salstar.sk\", \"J\xE1n ONDREJ\", \"user\", 0],\
+        \ [\"orion\", \"orion@cora.nwra.com\", \"Orion Poplawski\", \"user\", 0],\
+        \ [\"otaylor\", \"otaylor@redhat.com\", \"Owen Taylor\", \"user\", 0], [\"\
+        overholt\", \"overholt@gmail.com\", \"Andrew Overholt\", \"user\", 0], [\"\
+        paragn\", \"panemade@gmail.com\", \"\", \"user\", 0], [\"patches\", \"tchollingsworth@gmail.com\"\
+        , \"T.C. Hollingsworth\", \"user\", 0], [\"pbrady\", \"P@draigBrady.com\"\
+        , \"P\xE1draig Brady\", \"user\", 0], [\"pbrobinson\", \"pbrobinson@gmail.com\"\
+        , \"Peter Robinson\", \"user\", 0], [\"pertusus\", \"pertusus@free.fr\", \"\
+        \", \"user\", 0], [\"peter\", \"lemenkov@gmail.com\", \"Peter Lemenkov\",\
+        \ \"user\", 0], [\"petersen\", \"petersen@redhat.com\", \"Jens Petersen\"\
+        , \"user\", 0], [\"pghmcfc\", \"paul@city-fan.org\", \"Paul Howarth\", \"\
+        user\", 0], [\"pingou\", \"pingou@pingoured.fr\", \"Pierre-YvesChibon\", \"\
+        user\", 0], [\"pjones\", \"pjones@redhat.com\", \"Peter Jones\", \"user\"\
+        , 0], [\"pjp\", \"pj.pandit@yahoo.co.in\", \"\", \"user\", 0], [\"pmachata\"\
+        , \"pmachata@gmail.com\", \"Petr Machata\", \"user\", 0], [\"pnemade\", \"\
+        pnemade@redhat.com\", \"Parag Nemade\", \"user\", 0], [\"ppisar\", \"ppisar@redhat.com\"\
+        , \"Petr Pisar\", \"user\", 0], [\"praiskup\", \"praiskup@redhat.com\", \"\
+        Pavel Raiskup\", \"user\", 0], [\"praveenp\", \"praveenpk8484@gmail.com\"\
+        , \"Praveen K Paladugu\", \"user\", 0], [\"pravins\", \"psatpute@redhat.com\"\
+        , \"Pravin Satpute\", \"user\", 0], [\"psabata\", \"psabata@redhat.com\",\
+        \ \"Petr \u0160abata\", \"user\", 0], [\"puiterwijk\", \"puiterwijk@redhat.com\"\
+        , \"Patrick \\\"\u30DE\u30EB\u30BF\u30A4\u30F3\u30A2\u30F3\u30C9\u30EC\u30A2\
+        \u30B9\\\" Uiterwijk\", \"user\", 0], [\"pwouters\", \"pwouters@redhat.com\"\
+        , \"Paul Wouters\", \"user\", 0], [\"rakesh\", \"rakesh.pandit@gmail.com\"\
+        , \"Rakesh Pandit\", \"user\", 0], [\"rathann\", \"dominik@greysector.net\"\
+        , \"Dominik Mierzejewski\", \"user\", 0], [\"rdieter\", \"rdieter@gmail.com\"\
+        , \"Rex Dieter\", \"user\", 0], [\"remi\", \"Fedora@FamilleCollet.com\", \"\
+        Remi Collet\", \"user\", 0], [\"rhughes\", \"rhughes@redhat.com\", \"Richard\
+        \ Hughes\", \"user\", 0], [\"rishi\", \"debarshir@redhat.com\", \"Debarshi\
+        \ Ray\", \"user\", 0], [\"rjones\", \"rjones@redhat.com\", \"Richard W.M.\
+        \ Jones\", \"user\", 0], [\"rkuska\", \"rkuska@gmail.com\", \"Robert Kuska\"\
+        , \"user\", 0], [\"rmattes\", \"richmattes@gmail.com\", \"\", \"user\", 0],\
+        \ [\"robert\", \"redhat@linuxnetz.de\", \"Robert Scheck\", \"user\", 0], [\"\
+        rstrode\", \"rstrode@redhat.com\", \"Ray Strode\", \"user\", 0], [\"ruben\"\
+        , \"ruben@rubenkerkhof.com\", \"Ruben Kerkhof\", \"user\", 0], [\"rvokal\"\
+        , \"rvokal@redhat.com\", \"\", \"user\", 0], [\"s4504kr\", \"Jochen@herr-schmitt.de\"\
+        , \"Jochen Schmitt\", \"user\", 0], [\"salimma\", \"michel@michel-slm.name\"\
+        , \"Michel Alexandre Salim\", \"user\", 0], [\"scop\", \"ville.skytta@iki.fi\"\
+        , \"Ville Skytt\xE4\", \"user\", 0], [\"sdake\", \"steven.dake@gmail.com\"\
+        , \"Steven Dake\", \"user\", 0], [\"sdz\", \"sebastian@sdziallas.com\", \"\
+        Sebastian Dziallas\", \"user\", 0], [\"sgallagh\", \"sgallagh@redhat.com\"\
+        , \"Stephen Gallagher\", \"user\", 0], [\"sharkcz\", \"dan@danny.cz\", \"\
+        Dan Hor\xE1k\", \"administrator\", 0], [\"skvidal\", \"skvidal@sethdot.org\"\
+        , \"Seth Vidal\", \"user\", 0], [\"slaanesh\", \"negativo17@gmail.com\", \"\
+        Simone Caronni\", \"user\", 0], [\"smani\", \"manisandro@gmail.com\", \"Sandro\
+        \ Mani\", \"user\", 0], [\"sochotni\", \"sochotni@redhat.com\", \"Stanislav\
+        \ Ochotnicky\", \"user\", 0], [\"spot\", \"tcallawa@redhat.com\", \"Tom Callaway\"\
+        , \"user\", 0], [\"stahnma\", \"mastahnke@gmail.com\", \"Michael Stahnke\"\
+        , \"user\", 0], [\"steve\", \"steve@silug.org\", \"Steven Pritchard\", \"\
+        user\", 0], [\"stevetraylen\", \"steve.traylen@cern.ch\", \"\", \"user\",\
+        \ 0], [\"stransky\", \"stransky@redhat.com\", \"Martin Stransky\", \"user\"\
+        , 0], [\"sundaram\", \"metherid@gmail.com\", \"Rahul Sundaram\", \"user\"\
+        , 0], [\"tagoh\", \"tagoh@redhat.com\", \"Akira TAGOH\", \"user\", 0], [\"\
+        tbzatek\", \"tbzatek@redhat.com\", \"Tomas Bzatek\", \"user\", 0], [\"tdawson\"\
+        , \"tdawson@redhat.com\", \"\", \"user\", 0], [\"tflink\", \"tflink@redhat.com\"\
+        , \"Tim Flink\", \"user\", 0], [\"than\", \"than@redhat.com\", \"Than Ngo\"\
+        , \"user\", 0], [\"thias\", \"matthias@saou.eu\", \"Matthias Saou\", \"user\"\
+        , 0], [\"thl\", \"fedora@leemhuis.info\", \"Thorsten Leemhuis\", \"user\"\
+        , 0], [\"thomasvs\", \"thomas@apestaart.org\", \"Thomas Vander Stichele\"\
+        , \"user\", 0], [\"thozza\", \"thozza@redhat.com\", \"Tomas Hozza\", \"user\"\
+        , 0], [\"tibbs\", \"tibbs@math.uh.edu\", \"Jason \u30C6\u30A3\u30D3\u30C4\"\
+        , \"user\", 0], [\"till\", \"opensource@till.name\", \"Till Maas\", \"user\"\
+        , 0], [\"tmraz\", \"tmraz@redhat.com\", \"Tom\xE1\u0161 Mr\xE1z\", \"user\"\
+        , 0], [\"tomspur\", \"thomas.spura@googlemail.com\", \"Thomas Spura\", \"\
+        user\", 0], [\"torsava\", \"torsava@redhat.com\", \"Tomas Orsava\", \"user\"\
+        , 0], [\"toshio\", \"a.badger@gmail.com\", \"Toshio \u304F\u3089\u3068\u307F\
+        \", \"user\", 1], [\"tradej\", \"tradej@redhat.com\", \"Tomas Radej\", \"\
+        user\", 0], [\"tremble\", \"tremble@tremble.org.uk\", \"Mark Chappell\", \"\
+        user\", 0], [\"tstclair\", \"tstclair@heptio.com\", \"\", \"user\", 0], [\"\
+        ttomecek\", \"ttomecek@redhat.com\", \"Tomas Tomecek\", \"user\", 0], [\"\
+        tuxbrewr\", \"smparrish@gmail.com\", \"Steven M. Parrish\", \"user\", 0],\
+        \ [\"vakwetu\", \"alee@redhat.com\", \"Ade Lee\", \"user\", 0], [\"vicodan\"\
+        , \"mashalda@hotmail.com\", \"Dan Mashal\", \"user\", 0], [\"vondruch\", \"\
+        vondruch@redhat.com\", \"V\xEDt Ondruch\", \"user\", 0], [\"walters\", \"\
+        walters@redhat.com\", \"Colin Walters\", \"user\", 0], [\"wart\", \"wart@kobold.org\"\
+        , \"Michael Thomas\", \"user\", 0], [\"whot\", \"peter.hutterer@redhat.com\"\
+        , \"Peter Hutterer\", \"user\", 0], [\"willb\", \"willb@redhat.com\", \"William\
+        \ Benton\", \"user\", 0], [\"wolfy\", \"wolfy@nobugconsulting.ro\", \"\",\
+        \ \"user\", 0], [\"wtogami\", \"wtogami@gmail.com\", \"Warren Togami\", \"\
+        user\", 0], [\"xhorak\", \"jhorak@redhat.com\", \"Jan Horak\", \"user\", 0],\
+        \ [\"yselkowitz\", \"yselkowi@redhat.com\", \"Yaakov Selkowitz\", \"user\"\
+        , 0], [\"zbyszek\", \"zbyszek@in.waw.pl\", \"Zbigniew J\u0119drzejewski-Szmek\"\
+        , \"user\", 0]]}"}
+    headers:
+      appserver: [proxy10.phx2.fedoraproject.org]
+      apptime: [D=195298]
+      connection: [Keep-Alive]
+      content-length: ['15031']
+      content-type: [application/json]
+      date: ['Mon, 31 Jul 2017 14:33:04 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.2.15 (Red Hat)]
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '_csrf_token=98e8d0e36d4b7c4fcb85293e95b8ad9ef7888768&password=supersecret&login=Login&user_name=jcline'
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['151']
+      Content-Type: [application/x-www-form-urlencoded]
+      User-agent: [Fedora Account System Client/0.9.0]
+    method: POST
+    uri: https://admin.fedoraproject.org/accounts/group/dump/infra-sig
+  response:
+    body: {string: "{\"tg_flash\": null, \"people\": [[\"abompard\", \"aurelien@bompard.org\"\
+        , \"Aurelien Bompard\", \"user\", 0], [\"bochecha\", \"bochecha@daitauha.fr\"\
+        , \"Mathieu Bridon\", \"user\", 0], [\"bowlofeggs\", \"randy@electronsweatshop.com\"\
+        , \"Randy Barlow\", \"user\", 0], [\"codeblock\", \"codeblock@elrod.me\",\
+        \ \"Ricky Elrod\", \"sponsor\", 0], [\"jcline\", \"jeremy@jcline.org\", \"\
+        Jeremy Cline\", \"user\", 0], [\"kevin\", \"kevin@scrye.com\", \"Kevin Fenzi\"\
+        , \"sponsor\", 4], [\"lmacken\", \"lewk@openmailbox.org\", \"Luke Macken\"\
+        , \"sponsor\", 0], [\"pingou\", \"pingou@pingoured.fr\", \"Pierre-YvesChibon\"\
+        , \"administrator\", 7], [\"puiterwijk\", \"puiterwijk@redhat.com\", \"Patrick\
+        \ \\\"\u30DE\u30EB\u30BF\u30A4\u30F3\u30A2\u30F3\u30C9\u30EC\u30A2\u30B9\\\
+        \" Uiterwijk\", \"sponsor\", 0], [\"sayanchowdhury\", \"sayan.chowdhury2012@gmail.com\"\
+        , \"Sayan Chowdhury\", \"user\", 0], [\"toshio\", \"a.badger@gmail.com\",\
+        \ \"Toshio \u304F\u3089\u3068\u307F\", \"sponsor\", 0]]}"}
+    headers:
+      appserver: [proxy01.phx2.fedoraproject.org]
+      apptime: [D=205150]
+      connection: [Keep-Alive]
+      content-length: ['835']
+      content-type: [application/json]
+      date: ['Mon, 31 Jul 2017 14:33:04 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.2.15 (Red Hat)]
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+    status: {code: 200, message: OK}
+version: 1
