@@ -1,0 +1,28 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.2]
+    method: GET
+    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?short=True&page=1&username=thisisnotausername123
+  response:
+    body: {string: !!python/unicode "{\n  \"error\": \"No projects found\",\n  \"\
+        error_code\": \"ENOPROJECTS\"\n}"}
+    headers:
+      appserver: [proxy01.stg.phx2.fedoraproject.org]
+      apptime: [D=255695]
+      connection: [Keep-Alive]
+      content-length: ['65']
+      content-type: [application/json]
+      date: ['Mon, 31 Jul 2017 13:23:22 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.4.6 (Red Hat Enterprise Linux) OpenSSL/1.0.1e-fips mod_auth_gssapi/1.4.0
+          mod_wsgi/3.4 Python/2.7.5]
+      set-cookie: ['disgit_pagure=eyJfcGVybWFuZW50Ijp0cnVlfQ.DGDAyw.AIfh3SfRoN9TICzszmaw-wr4ttg;
+          Expires=Thu, 31-Aug-2017 13:23:23 GMT; Secure; HttpOnly; Path=/pagure']
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+    status: {code: 404, message: NOT FOUND}
+version: 1

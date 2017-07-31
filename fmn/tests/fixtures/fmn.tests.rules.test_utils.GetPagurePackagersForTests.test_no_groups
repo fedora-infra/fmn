@@ -1,0 +1,37 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.2]
+    method: GET
+    uri: https://src.stg.fedoraproject.org/pagure/api/0/rpms/ejabberd
+  response:
+    body: {string: !!python/unicode "{\n  \"access_groups\": {\n    \"admin\": [],\n\
+        \    \"commit\": [],\n    \"ticket\": []\n  },\n  \"access_users\": {\n  \
+        \  \"admin\": [],\n    \"commit\": [\n      \"jcline\",\n      \"xavierb\"\
+        ,\n      \"martinlanghoff\",\n      \"bowlofeggs\"\n    ],\n    \"owner\"\
+        : [\n      \"peter\"\n    ],\n    \"ticket\": []\n  },\n  \"close_status\"\
+        : [],\n  \"custom_keys\": [],\n  \"date_created\": \"1501274592\",\n  \"date_modified\"\
+        : \"1501274592\",\n  \"description\": \"The ejabberd rpms\",\n  \"fullname\"\
+        : \"rpms/ejabberd\",\n  \"id\": 3070,\n  \"milestones\": {},\n  \"name\":\
+        \ \"ejabberd\",\n  \"namespace\": \"rpms\",\n  \"parent\": null,\n  \"priorities\"\
+        : {},\n  \"tags\": [],\n  \"user\": {\n    \"fullname\": \"peter\",\n    \"\
+        name\": \"peter\"\n  }\n}"}
+    headers:
+      appserver: [proxy01.stg.phx2.fedoraproject.org]
+      apptime: [D=232120]
+      connection: [Keep-Alive]
+      content-length: ['644']
+      content-type: [application/json]
+      date: ['Mon, 31 Jul 2017 13:23:31 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.4.6 (Red Hat Enterprise Linux) OpenSSL/1.0.1e-fips mod_auth_gssapi/1.4.0
+          mod_wsgi/3.4 Python/2.7.5]
+      set-cookie: ['disgit_pagure=eyJfcGVybWFuZW50Ijp0cnVlfQ.DGDA0w.RPRdyUgS7qcDGrZrMrOYJBKt2r8;
+          Expires=Thu, 31-Aug-2017 13:23:31 GMT; Secure; HttpOnly; Path=/pagure']
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+    status: {code: 200, message: OK}
+version: 1

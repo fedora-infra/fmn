@@ -4,6 +4,7 @@ from collections import defaultdict
 import logging
 import time
 
+from six.moves.urllib.parse import urlencode
 import requests
 import requests.exceptions
 
@@ -67,6 +68,40 @@ def get_fas(config):
     return _FAS
 
 
+def _paginate_pagure_data(url, params):
+    """
+    Paginate over a Pagure URL.
+
+    Args:
+        url (str): The URL to paginate over, without any parameters.
+        params (dict): A dictionary of URL parameters to use when querying Pagure.
+
+    Yields:
+        dict: The deserialized JSON response for a given page.
+    """
+
+    # Set up the first page query
+    params['page'] = 1
+    next_page_url = url + "?" + urlencode(params)
+
+    while next_page_url:
+        try:
+            response = requests.get(next_page_url, timeout=25)
+            if response.status_code == 200:
+                data = response.json()
+                # When we run out of pages, this will be None
+                next_page_url = data['pagination']['next']
+                yield data
+            else:
+                log.error('Querying Pagure at %s returned code %s',
+                          response.url, response.status_code)
+                next_page_url = None
+
+        except requests.exceptions.Timeout as e:
+            log.warn('URL %s timed out %r', next_page_url, e)
+            next_page_url = None
+
+
 def get_packagers_of_package(config, package):
     """ Retrieve the list of users who have commit on a package.
 
@@ -79,18 +114,90 @@ def get_packagers_of_package(config, package):
         _cache.configure(**config['fmn.rules.cache'].copy())
 
     key = cache_key_generator(get_packagers_of_package, package)
-    creator = lambda: _get_pkgdb2_packagers_for(config, package)
+    creator = lambda: _get_packagers_for(config, package)
     return _cache.get_or_create(key, creator)
 
 
+def _get_packagers_for(config, package):
+    """ Get the packagers (users) associated with a given package.
+
+    The list is gathered from either pkgdb2 (old) or pagure (new) depending on
+    the configuration value of ``fmn.rules.utils.use_pagure_for_ownership``.
+
+    Args:
+        config (dict): The application configuration.
+        package (str): The package name.
+    Returns:
+        set:  A `set` of packager usernames.
+    """
+    if config['fmn.rules.utils.use_pagure_for_ownership']:
+        return _get_pagure_packagers_for(config, package)
+    else:
+        return _get_pkgdb2_packagers_for(config, package)
+
+
+def _get_pagure_packagers_for(config, package):
+    """ Get the packagers (users) associated with a given package in pagure.
+
+    Args:
+        config (dict): The application configuration.
+        package (str): The package name.
+    Returns:
+        set:  A `set` of packager usernames.
+    """
+    base = config.get('fmn.rules.utils.pagure_api_url',
+                      'https://src.fedoraproject.org/pagure/api')
+
+    # Give a default namespace if one is not provided. See
+    # https://github.com/fedora-infra/fmn/issues/208
+    if '/' not in package:
+        package = 'rpms/' + package
+
+    url = '{0}/0/{1}'.format(base, package)
+    log.info("Querying Pagure at %s for packager information", url)
+    try:
+        response = requests.get(url, timeout=25)
+    except requests.exceptions.Timeout as e:
+        log.warn('URL %s timed out %r', url, e)
+        return set()
+
+    if response.status_code != 200:
+        log.warn('URL %s returned code %s', response.url, response.status_code)
+        return set()
+
+    data = response.json()
+
+    packagers = set(sum(data['access_users'].values(), []))
+    groups = set(sum(data['access_groups'].values(), []))
+
+    if groups:
+        fas = get_fas(config)
+    for group in groups:
+        packagers.update(get_user_of_group(config, fas, group))
+
+    return packagers
+
+
 def _get_pkgdb2_packagers_for(config, package):
+    """ Get the packagers (users) associated with a given package in pkgdb.
+
+    Args:
+        config (dict): The application configuration.
+        package (str): The package name.
+    Returns:
+        set:  A `set` of packager usernames.
+    """
     log.debug("Requesting pkgdb2 packagers of package %r" % package)
 
-    default = 'https://admin.fedoraproject.org/pkgdb/api'
-    base = config.get('fmn.rules.utils.pkgdb_url', default)
+    base = config.get('fmn.rules.utils.pkgdb_url',
+                      'https://admin.fedoraproject.org/pkgdb/api')
     url = '{0}/package/{1}'.format(base, package)
-    log.info("hitting url: %r" % url)
-    req = requests.get(url)
+    log.info("Querying PkgDB at %s for packager information", url)
+    try:
+        req = requests.get(url, timeout=15)
+    except requests.exceptions.Timeout as e:
+        log.warn('URL %s timed out %r', url, e)
+        return set()
 
     if not req.status_code == 200:
         log.debug('URL %s returned code %s', req.url, req.status_code)
@@ -142,7 +249,7 @@ def get_packages_of_user(config, username, flags):
 
     for owner in owners:
         key = cache_key_generator(get_packages_of_user, owner)
-        creator = lambda: _get_pkgdb2_packages_for(config, owner, flags)
+        creator = lambda: _get_packages_for(config, owner, flags)
         subset = _cache.get_or_create(key, creator)
         for namespace in subset:
             packages[namespace].update(subset[namespace])
@@ -162,6 +269,27 @@ def invalidate_cache_for(config, fn, arg):
     return _cache.delete(key)
 
 
+def _get_packages_for(config, username, flags):
+    """ Get the packages with which a user is associated.
+
+    The list is gathered from either pkgdb2 (old) or pagure (new) depending on
+    the configuration value of ``fmn.rules.utils.use_pagure_for_ownership``.
+
+    Args:
+        config (dict): The application configuration.
+        username (str): The FAS username to fetch the packages for.
+        flags (list): The type of relationship the user should have to the
+            package (e.g. "watch", "point of contact", or "co-maintained").
+    Returns:
+        dict:  A `dict` mapping namespaces to sets of package names.
+    """
+
+    if config['fmn.rules.utils.use_pagure_for_ownership']:
+        return _get_pagure_packages_for(config, username, flags)
+    else:
+        return _get_pkgdb2_packages_for(config, username, flags)
+
+
 def _get_pkgdb2_packages_for(config, username, flags):
     """
     Get the packages a user is associated with from pkgdb2.
@@ -172,16 +300,23 @@ def _get_pkgdb2_packages_for(config, username, flags):
         flags (list): The type of relationship the user should have to the
             package (e.g. "watch", "point of contact", etc.). See the pkgdb2
             API for details.
+    Returns:
+        dict:  A `dict` mapping namespaces to sets of package names.
     """
     log.debug("Requesting pkgdb2 packages for user %r" % username)
     start = time.time()
 
-    default = 'https://admin.fedoraproject.org/pkgdb/api'
-    base = config.get('fmn.rules.utils.pkgdb_url', default)
+    base = config.get('fmn.rules.utils.pkgdb_url',
+                      'https://admin.fedoraproject.org/pkgdb/api')
 
     url = '{0}/packager/package/{1}'.format(base, username)
-    log.info("hitting url: %r" % url)
-    req = requests.get(url)
+    log.info("Querying pkgdb at %s for packager information", url)
+
+    try:
+        req = requests.get(url, timeout=15)
+    except requests.exceptions.Timeout as e:
+        log.warn('URL %s timed out %r', url, e)
+        return set()
 
     if not req.status_code == 200:
         log.debug('URL %s returned code %s', req.url, req.status_code)
@@ -195,6 +330,55 @@ def _get_pkgdb2_packages_for(config, username, flags):
     for package in packages_of_interest:
         packages[package.get('namespace', 'rpms')].add(package['name'])
     log.debug("done talking with pkgdb2 for now.  %0.2fs", time.time() - start)
+    return dict(packages)
+
+
+def _get_pagure_packages_for(config, username, flags):
+    """
+    Get the packages a user is associated with from pagure.
+
+    Args:
+        config (dict): The application configuration.
+        username (str): The FAS username to fetch the packages for.
+        flags (list): The type of relationship the user should have to the
+            package (e.g. "watch", "point of contact", etc.).
+
+    Returns:
+        dict:  A dictionary mapping namespaces to sets of package names.
+
+    Raises:
+        ValueError: If invalid flags are provided, or no flags are provided.
+    """
+    log.debug("Requesting pagure packages for user %r" % username)
+
+    # In the future we want to also support the 'watch' state.
+    # See https://github.com/fedora-infra/fmn/issues/209
+    # which depends on https://pagure.io/pagure/issue/2421
+    valid_flags = ['point of contact', 'co-maintained']
+
+    bogus = set(flags) - set(valid_flags)
+    if bogus:
+        raise ValueError(
+            "{flags} are not valid owner flags for {user}.".format(flags=bogus, user=username))
+    if len(flags) == 0:
+        raise ValueError("No valid owner flags by which to query.")
+
+    base = config.get('fmn.rules.utils.pagure_api_url',
+                      'https://src.fedoraproject.org/pagure/api')
+    url = base + '/0/projects'
+
+    packages = defaultdict(set)
+    for flag in flags:
+        if flag == 'point of contact':
+            params = dict(owner=username, short=True)
+        else:  # 'co-maintained'
+            params = dict(username=username, short=True)
+
+        pages = _paginate_pagure_data(url, params)
+        for page in pages:
+            for repo in page['projects']:
+                packages[repo['namespace']].add(repo['name'])
+
     return dict(packages)
 
 

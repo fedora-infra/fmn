@@ -1,0 +1,401 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.2]
+    method: GET
+    uri: https://admin.fedoraproject.org/pkgdb/api/package/ejabberd
+  response:
+    body: {string: !!python/unicode "{\n  \"output\": \"ok\",\n  \"packages\": [\n\
+        \    {\n      \"acls\": [\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"peter\",\n          \"status\": \"Approved\"\n\
+        \        },\n        {\n          \"acl\": \"watchbugzilla\",\n          \"\
+        fas_name\": \"peter\",\n          \"status\": \"Approved\"\n        },\n \
+        \       {\n          \"acl\": \"commit\",\n          \"fas_name\": \"peter\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"approveacls\",\n          \"fas_name\": \"peter\",\n          \"\
+        status\": \"Approved\"\n        },\n        {\n          \"acl\": \"watchbugzilla\"\
+        ,\n          \"fas_name\": \"silfreed\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"silfreed\",\n          \"status\": \"Obsolete\"\n        },\n\
+        \        {\n          \"acl\": \"approveacls\",\n          \"fas_name\": \"\
+        silfreed\",\n          \"status\": \"Obsolete\"\n        },\n        {\n \
+        \         \"acl\": \"commit\",\n          \"fas_name\": \"rbarlow\",\n   \
+        \       \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\"\
+        : \"commit\",\n          \"fas_name\": \"silfreed\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"watchbugzilla\"\
+        ,\n          \"fas_name\": \"jkaluza\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"jkaluza\",\n          \"status\": \"Obsolete\"\n        },\n\
+        \        {\n          \"acl\": \"approveacls\",\n          \"fas_name\": \"\
+        jkaluza\",\n          \"status\": \"Obsolete\"\n        },\n        {\n  \
+        \        \"acl\": \"commit\",\n          \"fas_name\": \"martinlanghoff\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"watchcommits\",\n          \"fas_name\": \"martinlanghoff\",\n  \
+        \        \"status\": \"Approved\"\n        },\n        {\n          \"acl\"\
+        : \"watchbugzilla\",\n          \"fas_name\": \"martinlanghoff\",\n      \
+        \    \"status\": \"Approved\"\n        },\n        {\n          \"acl\": \"\
+        watchbugzilla\",\n          \"fas_name\": \"erlang-sig\",\n          \"status\"\
+        : \"Approved\"\n        },\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"erlang-sig\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"approveacls\",\n          \"\
+        fas_name\": \"fale\",\n          \"status\": \"Approved\"\n        },\n  \
+        \      {\n          \"acl\": \"watchcommits\",\n          \"fas_name\": \"\
+        jcline\",\n          \"status\": \"Approved\"\n        },\n        {\n   \
+        \       \"acl\": \"watchbugzilla\",\n          \"fas_name\": \"jcline\",\n\
+        \          \"status\": \"Approved\"\n        },\n        {\n          \"acl\"\
+        : \"commit\",\n          \"fas_name\": \"jcline\",\n          \"status\":\
+        \ \"Approved\"\n        },\n        {\n          \"acl\": \"approveacls\"\
+        ,\n          \"fas_name\": \"jcline\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"approveacls\",\n          \"\
+        fas_name\": \"bowlofeggs\",\n          \"status\": \"Approved\"\n        },\n\
+        \        {\n          \"acl\": \"commit\",\n          \"fas_name\": \"bowlofeggs\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"watchbugzilla\",\n          \"fas_name\": \"bowlofeggs\",\n     \
+        \     \"status\": \"Approved\"\n        },\n        {\n          \"acl\":\
+        \ \"watchcommits\",\n          \"fas_name\": \"bowlofeggs\",\n          \"\
+        status\": \"Approved\"\n        },\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"rbarlow\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"watchbugzilla\",\n         \
+        \ \"fas_name\": \"rbarlow\",\n          \"status\": \"Obsolete\"\n       \
+        \ },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\": \"\
+        group::provenpackager\",\n          \"status\": \"Approved\"\n        }\n\
+        \      ],\n      \"collection\": {\n        \"allow_retire\": true,\n    \
+        \    \"branchname\": \"master\",\n        \"date_created\": \"2014-05-14 12:36:15\"\
+        ,\n        \"date_updated\": \"2017-02-28 20:24:14\",\n        \"dist_tag\"\
+        : \".fc27\",\n        \"koji_name\": \"rawhide\",\n        \"name\": \"Fedora\"\
+        ,\n        \"status\": \"Under Development\",\n        \"version\": \"devel\"\
+        \n      },\n      \"critpath\": false,\n      \"package\": {\n        \"acls\"\
+        : [],\n        \"creation_date\": 1400070978.0,\n        \"description\":\
+        \ \"ejabberd is a Free and Open Source distributed fault-tolerant\\nJabber/XMPP\
+        \ server. It is mostly written in Erlang, and runs on many\\nplatforms (tested\
+        \ on Linux, FreeBSD, NetBSD, Solaris, Mac OS X and\\nWindows NT/2000/XP).\"\
+        ,\n        \"koschei_monitor\": true,\n        \"monitor\": true,\n      \
+        \  \"name\": \"ejabberd\",\n        \"namespace\": \"rpms\",\n        \"review_url\"\
+        : null,\n        \"status\": \"Approved\",\n        \"summary\": \"A distributed,\
+        \ fault-tolerant Jabber/XMPP server\",\n        \"upstream_url\": \"http://www.ejabberd.im/\"\
+        \n      },\n      \"point_of_contact\": \"peter\",\n      \"status\": \"Approved\"\
+        ,\n      \"status_change\": 1400071215.0\n    },\n    {\n      \"acls\": [\n\
+        \        {\n          \"acl\": \"approveacls\",\n          \"fas_name\": \"\
+        silfreed\",\n          \"status\": \"Obsolete\"\n        },\n        {\n \
+        \         \"acl\": \"watchcommits\",\n          \"fas_name\": \"silfreed\"\
+        ,\n          \"status\": \"Obsolete\"\n        },\n        {\n          \"\
+        acl\": \"watchbugzilla\",\n          \"fas_name\": \"silfreed\",\n       \
+        \   \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\": \"\
+        commit\",\n          \"fas_name\": \"silfreed\",\n          \"status\": \"\
+        Obsolete\"\n        },\n        {\n          \"acl\": \"commit\",\n      \
+        \    \"fas_name\": \"mmahut\",\n          \"status\": \"Obsolete\"\n     \
+        \   },\n        {\n          \"acl\": \"watchcommits\",\n          \"fas_name\"\
+        : \"jkaluza\",\n          \"status\": \"Obsolete\"\n        },\n        {\n\
+        \          \"acl\": \"watchbugzilla\",\n          \"fas_name\": \"jkaluza\"\
+        ,\n          \"status\": \"Obsolete\"\n        },\n        {\n          \"\
+        acl\": \"approveacls\",\n          \"fas_name\": \"jkaluza\",\n          \"\
+        status\": \"Obsolete\"\n        },\n        {\n          \"acl\": \"approveacls\"\
+        ,\n          \"fas_name\": \"mmahut\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"mmahut\",\n          \"status\": \"Obsolete\"\n        },\n\
+        \        {\n          \"acl\": \"watchbugzilla\",\n          \"fas_name\"\
+        : \"mmahut\",\n          \"status\": \"Obsolete\"\n        },\n        {\n\
+        \          \"acl\": \"watchbugzilla\",\n          \"fas_name\": \"martinlanghoff\"\
+        ,\n          \"status\": \"Obsolete\"\n        },\n        {\n          \"\
+        acl\": \"watchcommits\",\n          \"fas_name\": \"martinlanghoff\",\n  \
+        \        \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\"\
+        : \"commit\",\n          \"fas_name\": \"martinlanghoff\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"watchbugzilla\"\
+        ,\n          \"fas_name\": \"erlang-sig\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"erlang-sig\",\n          \"status\": \"Obsolete\"\n        },\n\
+        \        {\n          \"acl\": \"watchcommits\",\n          \"fas_name\":\
+        \ \"rbarlow\",\n          \"status\": \"Obsolete\"\n        },\n        {\n\
+        \          \"acl\": \"watchbugzilla\",\n          \"fas_name\": \"rbarlow\"\
+        ,\n          \"status\": \"Obsolete\"\n        },\n        {\n          \"\
+        acl\": \"commit\",\n          \"fas_name\": \"group::provenpackager\",\n \
+        \         \"status\": \"Approved\"\n        }\n      ],\n      \"collection\"\
+        : {\n        \"allow_retire\": true,\n        \"branchname\": \"el6\",\n \
+        \       \"date_created\": \"2014-05-14 12:36:15\",\n        \"date_updated\"\
+        : \"2015-12-08 15:17:58\",\n        \"dist_tag\": \".el6\",\n        \"koji_name\"\
+        : \"dist-6E-epel\",\n        \"name\": \"Fedora EPEL\",\n        \"status\"\
+        : \"Active\",\n        \"version\": \"6\"\n      },\n      \"critpath\": false,\n\
+        \      \"package\": {\n        \"acls\": [],\n        \"creation_date\": 1400070978.0,\n\
+        \        \"description\": \"ejabberd is a Free and Open Source distributed\
+        \ fault-tolerant\\nJabber/XMPP server. It is mostly written in Erlang, and\
+        \ runs on many\\nplatforms (tested on Linux, FreeBSD, NetBSD, Solaris, Mac\
+        \ OS X and\\nWindows NT/2000/XP).\",\n        \"koschei_monitor\": true,\n\
+        \        \"monitor\": true,\n        \"name\": \"ejabberd\",\n        \"namespace\"\
+        : \"rpms\",\n        \"review_url\": null,\n        \"status\": \"Approved\"\
+        ,\n        \"summary\": \"A distributed, fault-tolerant Jabber/XMPP server\"\
+        ,\n        \"upstream_url\": \"http://www.ejabberd.im/\"\n      },\n     \
+        \ \"point_of_contact\": \"orphan\",\n      \"status\": \"Retired\",\n    \
+        \  \"status_change\": 1418836492.0\n    },\n    {\n      \"acls\": [\n   \
+        \     {\n          \"acl\": \"commit\",\n          \"fas_name\": \"xavierb\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"commit\",\n          \"fas_name\": \"peter\",\n          \"status\"\
+        : \"Approved\"\n        },\n        {\n          \"acl\": \"watchbugzilla\"\
+        ,\n          \"fas_name\": \"peter\",\n          \"status\": \"Approved\"\n\
+        \        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"peter\",\n          \"status\": \"Approved\"\n        },\n \
+        \       {\n          \"acl\": \"approveacls\",\n          \"fas_name\": \"\
+        peter\",\n          \"status\": \"Approved\"\n        },\n        {\n    \
+        \      \"acl\": \"watchcommits\",\n          \"fas_name\": \"jcline\",\n \
+        \         \"status\": \"Approved\"\n        },\n        {\n          \"acl\"\
+        : \"watchbugzilla\",\n          \"fas_name\": \"jcline\",\n          \"status\"\
+        : \"Approved\"\n        },\n        {\n          \"acl\": \"commit\",\n  \
+        \        \"fas_name\": \"jcline\",\n          \"status\": \"Approved\"\n \
+        \       },\n        {\n          \"acl\": \"approveacls\",\n          \"fas_name\"\
+        : \"fale\",\n          \"status\": \"Approved\"\n        },\n        {\n \
+        \         \"acl\": \"approveacls\",\n          \"fas_name\": \"jcline\",\n\
+        \          \"status\": \"Approved\"\n        },\n        {\n          \"acl\"\
+        : \"commit\",\n          \"fas_name\": \"rbarlow\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"approveacls\"\
+        ,\n          \"fas_name\": \"bowlofeggs\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"bowlofeggs\",\n          \"status\": \"Approved\"\n        },\n      \
+        \  {\n          \"acl\": \"watchbugzilla\",\n          \"fas_name\": \"bowlofeggs\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"watchcommits\",\n          \"fas_name\": \"bowlofeggs\",\n      \
+        \    \"status\": \"Approved\"\n        },\n        {\n          \"acl\": \"\
+        watchcommits\",\n          \"fas_name\": \"rbarlow\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"watchbugzilla\"\
+        ,\n          \"fas_name\": \"rbarlow\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"group::provenpackager\",\n          \"status\": \"Approved\"\n       \
+        \ }\n      ],\n      \"collection\": {\n        \"allow_retire\": true,\n\
+        \        \"branchname\": \"epel7\",\n        \"date_created\": \"2014-05-14\
+        \ 12:36:15\",\n        \"date_updated\": \"2015-12-08 15:16:41\",\n      \
+        \  \"dist_tag\": \".el7\",\n        \"koji_name\": \"epel7\",\n        \"\
+        name\": \"Fedora EPEL\",\n        \"status\": \"Active\",\n        \"version\"\
+        : \"7\"\n      },\n      \"critpath\": false,\n      \"package\": {\n    \
+        \    \"acls\": [],\n        \"creation_date\": 1400070978.0,\n        \"description\"\
+        : \"ejabberd is a Free and Open Source distributed fault-tolerant\\nJabber/XMPP\
+        \ server. It is mostly written in Erlang, and runs on many\\nplatforms (tested\
+        \ on Linux, FreeBSD, NetBSD, Solaris, Mac OS X and\\nWindows NT/2000/XP).\"\
+        ,\n        \"koschei_monitor\": true,\n        \"monitor\": true,\n      \
+        \  \"name\": \"ejabberd\",\n        \"namespace\": \"rpms\",\n        \"review_url\"\
+        : null,\n        \"status\": \"Approved\",\n        \"summary\": \"A distributed,\
+        \ fault-tolerant Jabber/XMPP server\",\n        \"upstream_url\": \"http://www.ejabberd.im/\"\
+        \n      },\n      \"point_of_contact\": \"peter\",\n      \"status\": \"Approved\"\
+        ,\n      \"status_change\": 1450448824.0\n    },\n    {\n      \"acls\": [\n\
+        \        {\n          \"acl\": \"commit\",\n          \"fas_name\": \"rbarlow\"\
+        ,\n          \"status\": \"Obsolete\"\n        },\n        {\n          \"\
+        acl\": \"watchcommits\",\n          \"fas_name\": \"peter\",\n          \"\
+        status\": \"Approved\"\n        },\n        {\n          \"acl\": \"watchbugzilla\"\
+        ,\n          \"fas_name\": \"peter\",\n          \"status\": \"Approved\"\n\
+        \        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"peter\",\n          \"status\": \"Approved\"\n        },\n        {\n\
+        \          \"acl\": \"approveacls\",\n          \"fas_name\": \"peter\",\n\
+        \          \"status\": \"Approved\"\n        },\n        {\n          \"acl\"\
+        : \"watchbugzilla\",\n          \"fas_name\": \"silfreed\",\n          \"\
+        status\": \"Obsolete\"\n        },\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"silfreed\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"approveacls\",\n          \"\
+        fas_name\": \"silfreed\",\n          \"status\": \"Obsolete\"\n        },\n\
+        \        {\n          \"acl\": \"commit\",\n          \"fas_name\": \"silfreed\"\
+        ,\n          \"status\": \"Obsolete\"\n        },\n        {\n          \"\
+        acl\": \"watchbugzilla\",\n          \"fas_name\": \"jkaluza\",\n        \
+        \  \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\": \"\
+        watchcommits\",\n          \"fas_name\": \"jkaluza\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"approveacls\"\
+        ,\n          \"fas_name\": \"jkaluza\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"martinlanghoff\",\n          \"status\": \"Approved\"\n        },\n  \
+        \      {\n          \"acl\": \"watchcommits\",\n          \"fas_name\": \"\
+        martinlanghoff\",\n          \"status\": \"Approved\"\n        },\n      \
+        \  {\n          \"acl\": \"watchbugzilla\",\n          \"fas_name\": \"martinlanghoff\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"watchbugzilla\",\n          \"fas_name\": \"erlang-sig\",\n     \
+        \     \"status\": \"Approved\"\n        },\n        {\n          \"acl\":\
+        \ \"watchcommits\",\n          \"fas_name\": \"erlang-sig\",\n          \"\
+        status\": \"Approved\"\n        },\n        {\n          \"acl\": \"approveacls\"\
+        ,\n          \"fas_name\": \"fale\",\n          \"status\": \"Approved\"\n\
+        \        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"jcline\",\n          \"status\": \"Approved\"\n        },\n\
+        \        {\n          \"acl\": \"watchbugzilla\",\n          \"fas_name\"\
+        : \"jcline\",\n          \"status\": \"Approved\"\n        },\n        {\n\
+        \          \"acl\": \"commit\",\n          \"fas_name\": \"jcline\",\n   \
+        \       \"status\": \"Approved\"\n        },\n        {\n          \"acl\"\
+        : \"approveacls\",\n          \"fas_name\": \"jcline\",\n          \"status\"\
+        : \"Approved\"\n        },\n        {\n          \"acl\": \"approveacls\"\
+        ,\n          \"fas_name\": \"bowlofeggs\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"bowlofeggs\",\n          \"status\": \"Approved\"\n        },\n      \
+        \  {\n          \"acl\": \"watchbugzilla\",\n          \"fas_name\": \"bowlofeggs\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"watchcommits\",\n          \"fas_name\": \"bowlofeggs\",\n      \
+        \    \"status\": \"Approved\"\n        },\n        {\n          \"acl\": \"\
+        watchcommits\",\n          \"fas_name\": \"rbarlow\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"watchbugzilla\"\
+        ,\n          \"fas_name\": \"rbarlow\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"group::provenpackager\",\n          \"status\": \"Approved\"\n       \
+        \ }\n      ],\n      \"collection\": {\n        \"allow_retire\": false,\n\
+        \        \"branchname\": \"f24\",\n        \"date_created\": \"2016-02-23\
+        \ 22:57:55\",\n        \"date_updated\": \"2016-06-21 13:54:27\",\n      \
+        \  \"dist_tag\": \".fc24\",\n        \"koji_name\": \"f24\",\n        \"name\"\
+        : \"Fedora\",\n        \"status\": \"Active\",\n        \"version\": \"24\"\
+        \n      },\n      \"critpath\": false,\n      \"package\": {\n        \"acls\"\
+        : [],\n        \"creation_date\": 1400070978.0,\n        \"description\":\
+        \ \"ejabberd is a Free and Open Source distributed fault-tolerant\\nJabber/XMPP\
+        \ server. It is mostly written in Erlang, and runs on many\\nplatforms (tested\
+        \ on Linux, FreeBSD, NetBSD, Solaris, Mac OS X and\\nWindows NT/2000/XP).\"\
+        ,\n        \"koschei_monitor\": true,\n        \"monitor\": true,\n      \
+        \  \"name\": \"ejabberd\",\n        \"namespace\": \"rpms\",\n        \"review_url\"\
+        : null,\n        \"status\": \"Approved\",\n        \"summary\": \"A distributed,\
+        \ fault-tolerant Jabber/XMPP server\",\n        \"upstream_url\": \"http://www.ejabberd.im/\"\
+        \n      },\n      \"point_of_contact\": \"peter\",\n      \"status\": \"Approved\"\
+        ,\n      \"status_change\": 1456273575.0\n    },\n    {\n      \"acls\": [\n\
+        \        {\n          \"acl\": \"approveacls\",\n          \"fas_name\": \"\
+        bowlofeggs\",\n          \"status\": \"Approved\"\n        },\n        {\n\
+        \          \"acl\": \"commit\",\n          \"fas_name\": \"bowlofeggs\",\n\
+        \          \"status\": \"Approved\"\n        },\n        {\n          \"acl\"\
+        : \"watchbugzilla\",\n          \"fas_name\": \"bowlofeggs\",\n          \"\
+        status\": \"Approved\"\n        },\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"bowlofeggs\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"watchbugzilla\",\n         \
+        \ \"fas_name\": \"erlang-sig\",\n          \"status\": \"Approved\"\n    \
+        \    },\n        {\n          \"acl\": \"watchcommits\",\n          \"fas_name\"\
+        : \"erlang-sig\",\n          \"status\": \"Approved\"\n        },\n      \
+        \  {\n          \"acl\": \"approveacls\",\n          \"fas_name\": \"fale\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"approveacls\",\n          \"fas_name\": \"jcline\",\n          \"\
+        status\": \"Approved\"\n        },\n        {\n          \"acl\": \"commit\"\
+        ,\n          \"fas_name\": \"jcline\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"watchbugzilla\",\n         \
+        \ \"fas_name\": \"jcline\",\n          \"status\": \"Approved\"\n        },\n\
+        \        {\n          \"acl\": \"watchcommits\",\n          \"fas_name\":\
+        \ \"jcline\",\n          \"status\": \"Approved\"\n        },\n        {\n\
+        \          \"acl\": \"approveacls\",\n          \"fas_name\": \"jkaluza\"\
+        ,\n          \"status\": \"Obsolete\"\n        },\n        {\n          \"\
+        acl\": \"watchbugzilla\",\n          \"fas_name\": \"jkaluza\",\n        \
+        \  \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\": \"\
+        watchcommits\",\n          \"fas_name\": \"jkaluza\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"commit\",\n  \
+        \        \"fas_name\": \"martinlanghoff\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"watchbugzilla\",\n         \
+        \ \"fas_name\": \"martinlanghoff\",\n          \"status\": \"Approved\"\n\
+        \        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"martinlanghoff\",\n          \"status\": \"Approved\"\n    \
+        \    },\n        {\n          \"acl\": \"approveacls\",\n          \"fas_name\"\
+        : \"peter\",\n          \"status\": \"Approved\"\n        },\n        {\n\
+        \          \"acl\": \"commit\",\n          \"fas_name\": \"peter\",\n    \
+        \      \"status\": \"Approved\"\n        },\n        {\n          \"acl\"\
+        : \"watchbugzilla\",\n          \"fas_name\": \"peter\",\n          \"status\"\
+        : \"Approved\"\n        },\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"peter\",\n          \"status\": \"Approved\"\n\
+        \        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"rbarlow\",\n          \"status\": \"Obsolete\"\n        },\n        {\n\
+        \          \"acl\": \"watchbugzilla\",\n          \"fas_name\": \"rbarlow\"\
+        ,\n          \"status\": \"Obsolete\"\n        },\n        {\n          \"\
+        acl\": \"watchcommits\",\n          \"fas_name\": \"rbarlow\",\n         \
+        \ \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\": \"approveacls\"\
+        ,\n          \"fas_name\": \"silfreed\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"silfreed\",\n          \"status\": \"Obsolete\"\n        },\n        {\n\
+        \          \"acl\": \"watchbugzilla\",\n          \"fas_name\": \"silfreed\"\
+        ,\n          \"status\": \"Obsolete\"\n        },\n        {\n          \"\
+        acl\": \"watchcommits\",\n          \"fas_name\": \"silfreed\",\n        \
+        \  \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\": \"\
+        commit\",\n          \"fas_name\": \"group::provenpackager\",\n          \"\
+        status\": \"Approved\"\n        }\n      ],\n      \"collection\": {\n   \
+        \     \"allow_retire\": false,\n        \"branchname\": \"f25\",\n       \
+        \ \"date_created\": \"2016-07-26 13:50:32\",\n        \"date_updated\": \"\
+        2016-11-22 14:31:43\",\n        \"dist_tag\": \".fc25\",\n        \"koji_name\"\
+        : \"f25\",\n        \"name\": \"Fedora\",\n        \"status\": \"Active\"\
+        ,\n        \"version\": \"25\"\n      },\n      \"critpath\": false,\n   \
+        \   \"package\": {\n        \"acls\": [],\n        \"creation_date\": 1400070978.0,\n\
+        \        \"description\": \"ejabberd is a Free and Open Source distributed\
+        \ fault-tolerant\\nJabber/XMPP server. It is mostly written in Erlang, and\
+        \ runs on many\\nplatforms (tested on Linux, FreeBSD, NetBSD, Solaris, Mac\
+        \ OS X and\\nWindows NT/2000/XP).\",\n        \"koschei_monitor\": true,\n\
+        \        \"monitor\": true,\n        \"name\": \"ejabberd\",\n        \"namespace\"\
+        : \"rpms\",\n        \"review_url\": null,\n        \"status\": \"Approved\"\
+        ,\n        \"summary\": \"A distributed, fault-tolerant Jabber/XMPP server\"\
+        ,\n        \"upstream_url\": \"http://www.ejabberd.im/\"\n      },\n     \
+        \ \"point_of_contact\": \"peter\",\n      \"status\": \"Approved\",\n    \
+        \  \"status_change\": 1400071215.0\n    },\n    {\n      \"acls\": [\n   \
+        \     {\n          \"acl\": \"approveacls\",\n          \"fas_name\": \"bowlofeggs\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"commit\",\n          \"fas_name\": \"bowlofeggs\",\n          \"\
+        status\": \"Approved\"\n        },\n        {\n          \"acl\": \"watchbugzilla\"\
+        ,\n          \"fas_name\": \"bowlofeggs\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"watchcommits\",\n          \"\
+        fas_name\": \"bowlofeggs\",\n          \"status\": \"Approved\"\n        },\n\
+        \        {\n          \"acl\": \"watchbugzilla\",\n          \"fas_name\"\
+        : \"erlang-sig\",\n          \"status\": \"Approved\"\n        },\n      \
+        \  {\n          \"acl\": \"watchcommits\",\n          \"fas_name\": \"erlang-sig\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"approveacls\",\n          \"fas_name\": \"fale\",\n          \"status\"\
+        : \"Approved\"\n        },\n        {\n          \"acl\": \"approveacls\"\
+        ,\n          \"fas_name\": \"jcline\",\n          \"status\": \"Approved\"\
+        \n        },\n        {\n          \"acl\": \"commit\",\n          \"fas_name\"\
+        : \"jcline\",\n          \"status\": \"Approved\"\n        },\n        {\n\
+        \          \"acl\": \"watchbugzilla\",\n          \"fas_name\": \"jcline\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"watchcommits\",\n          \"fas_name\": \"jcline\",\n          \"\
+        status\": \"Approved\"\n        },\n        {\n          \"acl\": \"approveacls\"\
+        ,\n          \"fas_name\": \"jkaluza\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"watchbugzilla\",\n         \
+        \ \"fas_name\": \"jkaluza\",\n          \"status\": \"Obsolete\"\n       \
+        \ },\n        {\n          \"acl\": \"watchcommits\",\n          \"fas_name\"\
+        : \"jkaluza\",\n          \"status\": \"Obsolete\"\n        },\n        {\n\
+        \          \"acl\": \"commit\",\n          \"fas_name\": \"martinlanghoff\"\
+        ,\n          \"status\": \"Approved\"\n        },\n        {\n          \"\
+        acl\": \"watchbugzilla\",\n          \"fas_name\": \"martinlanghoff\",\n \
+        \         \"status\": \"Approved\"\n        },\n        {\n          \"acl\"\
+        : \"watchcommits\",\n          \"fas_name\": \"martinlanghoff\",\n       \
+        \   \"status\": \"Approved\"\n        },\n        {\n          \"acl\": \"\
+        approveacls\",\n          \"fas_name\": \"peter\",\n          \"status\":\
+        \ \"Approved\"\n        },\n        {\n          \"acl\": \"commit\",\n  \
+        \        \"fas_name\": \"peter\",\n          \"status\": \"Approved\"\n  \
+        \      },\n        {\n          \"acl\": \"watchbugzilla\",\n          \"\
+        fas_name\": \"peter\",\n          \"status\": \"Approved\"\n        },\n \
+        \       {\n          \"acl\": \"watchcommits\",\n          \"fas_name\": \"\
+        peter\",\n          \"status\": \"Approved\"\n        },\n        {\n    \
+        \      \"acl\": \"commit\",\n          \"fas_name\": \"rbarlow\",\n      \
+        \    \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\": \"\
+        watchbugzilla\",\n          \"fas_name\": \"rbarlow\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"watchcommits\"\
+        ,\n          \"fas_name\": \"rbarlow\",\n          \"status\": \"Obsolete\"\
+        \n        },\n        {\n          \"acl\": \"approveacls\",\n          \"\
+        fas_name\": \"silfreed\",\n          \"status\": \"Obsolete\"\n        },\n\
+        \        {\n          \"acl\": \"commit\",\n          \"fas_name\": \"silfreed\"\
+        ,\n          \"status\": \"Obsolete\"\n        },\n        {\n          \"\
+        acl\": \"watchbugzilla\",\n          \"fas_name\": \"silfreed\",\n       \
+        \   \"status\": \"Obsolete\"\n        },\n        {\n          \"acl\": \"\
+        watchcommits\",\n          \"fas_name\": \"silfreed\",\n          \"status\"\
+        : \"Obsolete\"\n        },\n        {\n          \"acl\": \"commit\",\n  \
+        \        \"fas_name\": \"group::provenpackager\",\n          \"status\": \"\
+        Approved\"\n        }\n      ],\n      \"collection\": {\n        \"allow_retire\"\
+        : false,\n        \"branchname\": \"f26\",\n        \"date_created\": \"2017-02-28\
+        \ 20:24:57\",\n        \"date_updated\": \"2017-07-11 14:04:59\",\n      \
+        \  \"dist_tag\": \".fc26\",\n        \"koji_name\": \"f26\",\n        \"name\"\
+        : \"Fedora\",\n        \"status\": \"Active\",\n        \"version\": \"26\"\
+        \n      },\n      \"critpath\": false,\n      \"package\": {\n        \"acls\"\
+        : [],\n        \"creation_date\": 1400070978.0,\n        \"description\":\
+        \ \"ejabberd is a Free and Open Source distributed fault-tolerant\\nJabber/XMPP\
+        \ server. It is mostly written in Erlang, and runs on many\\nplatforms (tested\
+        \ on Linux, FreeBSD, NetBSD, Solaris, Mac OS X and\\nWindows NT/2000/XP).\"\
+        ,\n        \"koschei_monitor\": true,\n        \"monitor\": true,\n      \
+        \  \"name\": \"ejabberd\",\n        \"namespace\": \"rpms\",\n        \"review_url\"\
+        : null,\n        \"status\": \"Approved\",\n        \"summary\": \"A distributed,\
+        \ fault-tolerant Jabber/XMPP server\",\n        \"upstream_url\": \"http://www.ejabberd.im/\"\
+        \n      },\n      \"point_of_contact\": \"peter\",\n      \"status\": \"Approved\"\
+        ,\n      \"status_change\": 1400071215.0\n    }\n  ]\n}"}
+    headers:
+      accept-ranges: [bytes]
+      age: ['0']
+      appserver: [proxy06.fedoraproject.org]
+      apptime: [D=2441273]
+      connection: [Keep-Alive]
+      content-length: ['24794']
+      content-type: [application/json]
+      date: ['Mon, 31 Jul 2017 14:33:09 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.4.6 (Red Hat Enterprise Linux) mod_wsgi/3.4 Python/2.7.5]
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+      via: [1.1 varnish-v4]
+      x-varnish: ['82566231']
+    status: {code: 200, message: OK}
+version: 1
