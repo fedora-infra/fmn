@@ -19,8 +19,8 @@ python-openid
 python-openid-cla
 python-openid-teams
 redis
-urllib3>=1.21.1,<1.22
-requests>=2.18.1
+urllib3
+requests
 six
 SQLAlchemy>=0.8
 twisted
