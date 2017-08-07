@@ -5,6 +5,9 @@ hostname = socket.gethostname().split('.')[0]
 config = {
     # Consumer stuff
     "fmn.consumer.enabled": True,
+    # The topics to subscribe to as a consumer, defaults to everything. Must be a list
+    # of bytestrings.
+    "fmn.topics": [b'*'],
     "fmn.sqlalchemy.uri": "sqlite:////var/tmp/fmn-dev-db.sqlite",
     "fmn.autocreate": True,  # Should new packagers auto-get accounts?
     "fmn.junk_suffixes": [
