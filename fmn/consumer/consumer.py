@@ -100,12 +100,13 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         config_key (str): The key to set to ``True`` in the fedmsg config to
             enable this consumer. The key is ``fmn.consumer.enabled``.
     """
-    topic = '*'
     config_key = 'fmn.consumer.enabled'
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, hub, *args, **kwargs):
+        self.topic = hub.config.get('fmn.topics', b'*')
+
         log.debug("FMNConsumer initializing")
-        super(FMNConsumer, self).__init__(*args, **kwargs)
+        super(FMNConsumer, self).__init__(hub, *args, **kwargs)
 
         self.uri = self.hub.config.get('fmn.sqlalchemy.uri', None)
         self.autocreate = self.hub.config.get('fmn.autocreate', False)
