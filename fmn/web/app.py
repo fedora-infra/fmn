@@ -602,9 +602,9 @@ def example_messages(openid, context, filter_id, page, endtime):
     # Mock out a fake 'cached preferences' object like we have in the consumer,
     # but really it just consists of the one preferences and its *one* filter
     # for which we're trying to find example messages.
-    preferences = [pref.__json__()]
-    preferences[0]['detail_values'] = ['mock']
-    preferences[0]['filters'] = [filter.__json__(reify=True)]
+    preferences = {'nobody_mock': pref.__json__()}
+    preferences['nobody_mock']['detail_values'] = ['mock']
+    preferences['nobody_mock']['filters'] = [filter.__json__(reify=True)]
 
     results = []
     for message in messages:
