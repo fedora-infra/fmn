@@ -2,6 +2,54 @@
 Changelog
 =========
 
+1.4.0
+=====
+
+
+Features
+--------
+
+* The bootstrap CSS theme is now configurable using the 'fmn.web.theme_css_url'
+  configuration key (`#202 <https://github.com/fedora-infra/fmn/pull/202>`_).
+
+* FMN can now be configured to query Pagure rather than PkgDB
+  using the "fmn.rules.utils.pagure_api_url" and "fmn.rules.utils.use_pagure_for_ownership"
+  configuration flags (`#206 <https://github.com/fedora-infra/fmn/pull/206>`_).
+
+* FMN can now be configured to subscribe to certain topics rather than everything
+  using the 'fmn.topics' configuration field
+  (`#218 <https://github.com/fedora-infra/fmn/pull/218>`_).
+
+* Initial rules for CI-related messages have been added
+  (`#221 <https://github.com/fedora-infra/fmn/pull/221>`_).
+
+
+Bugfixes
+--------
+
+* Fix the CSRF errors for libravatar.org
+  (`#214 <https://github.com/fedora-infra/fmn/pull/214>`_).
+
+* Fix an issue where example messages were never shown for new filters
+  (`#220 <https://github.com/fedora-infra/fmn/pull/220>`_).
+
+
+Development Improvements
+------------------------
+
+* The Vagrant environment now includes datanommer
+  (`#211 <https://github.com/fedora-infra/fmn/pull/211>`_).
+
+
+Many thanks to the following contributors for their work on this release:
+
+* Ralph Bean
+* Pierre-Yves Chibon
+* Jeremy Cline
+* Francois Marier
+* Matt Prahl
+
+
 1.3.1
 =====
 
