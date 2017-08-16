@@ -203,7 +203,7 @@ def ci_image_test_complete(config, message):
 
 # More interesting rules
 
-@hint(topics=[_('ci.pipeline.image.test.smoke.complete')])
+@hint(topics=[_('ci.pipeline.image.test.smoke.complete')], invertible=False)
 def ci_test_passed(config, message):
     """ Any of the tests run passed the CI pipeline
 
@@ -223,7 +223,7 @@ def ci_test_passed(config, message):
     return message.get('msg', {}).get('status', '').lower() == 'success'
 
 
-@hint(topics=[_('ci.pipeline.image.test.smoke.complete')])
+@hint(topics=[_('ci.pipeline.image.test.smoke.complete')], invertible=False)
 def ci_step_complete(config, message):
     """ Any steps of the CI pipeline completed successfully
 
