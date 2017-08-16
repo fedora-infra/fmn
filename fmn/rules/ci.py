@@ -220,7 +220,7 @@ def ci_test_passed(config, message):
             ):
         return False
 
-    return message['msg'].get('status', '').lower() == 'success'
+    return message.get('msg', {}).get('status', '').lower() == 'success'
 
 
 @hint(topics=[_('ci.pipeline.image.test.smoke.complete')])
@@ -232,4 +232,4 @@ def ci_step_complete(config, message):
     <https://fedoraproject.org/wiki/FedoraAtomicCI/pipeline>`_ completed.
     """
     return message['topic'].split(',')[3] == 'ci' \
-        and message['msg'].get('status', '').lower() == 'success'
+        and message.get('msg', {}).get('status', '').lower() == 'success'
