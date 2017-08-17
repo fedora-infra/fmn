@@ -46,6 +46,7 @@ from fmn.rules.autocloud import *
 from fmn.rules.bodhi import *
 from fmn.rules.bugzilla import *
 from fmn.rules.buildsys import *
+from fmn.rules.ci import *
 from fmn.rules.compose import *
 from fmn.rules.coprs import *
 from fmn.rules.faf import *

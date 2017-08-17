@@ -141,7 +141,7 @@ def ci_package_test_complete(config, message):
         'ci.pipeline.package.test.functional.complete')
 
 
-@hint(topics=[_('ci.pipeline.compose.test.integration.queued')])
+@hint(topics=[_('ci.pipeline.compose.test.integration.queued')], invertible=False)
 def ci_compose_test_queued(config, message):
     """ Integration tests queued for a compose
 
@@ -153,7 +153,7 @@ def ci_compose_test_queued(config, message):
         'ci.pipeline.package.test.functional.queued')
 
 
-@hint(topics=[_('ci.pipeline.compose.test.integration.running')])
+@hint(topics=[_('ci.pipeline.compose.test.integration.running')], invertible=False)
 def ci_compose_test_running(config, message):
     """ Integration tests are running for a compose
 
@@ -165,7 +165,7 @@ def ci_compose_test_running(config, message):
         'ci.pipeline.package.test.functional.running')
 
 
-@hint(topics=[_('ci.pipeline.compose.test.integration.complete')])
+@hint(topics=[_('ci.pipeline.compose.test.integration.complete')], invertible=False)
 def ci_compose_test_complete(config, message):
     """ Integration tests completed for a compose
 
@@ -203,7 +203,7 @@ def ci_image_test_complete(config, message):
 
 # More interesting rules
 
-@hint(topics=[_('ci.pipeline.image.test.smoke.complete')])
+@hint(topics=[_('ci.pipeline.image.test.smoke.complete')], invertible=False)
 def ci_test_passed(config, message):
     """ Any of the tests run passed the CI pipeline
 
@@ -220,10 +220,10 @@ def ci_test_passed(config, message):
             ):
         return False
 
-    return message['msg'].get('status', '').lower() == 'success'
+    return message.get('msg', {}).get('status', '').lower() == 'success'
 
 
-@hint(topics=[_('ci.pipeline.image.test.smoke.complete')])
+@hint(topics=[_('ci.pipeline.image.test.smoke.complete')], invertible=False)
 def ci_step_complete(config, message):
     """ Any steps of the CI pipeline completed successfully
 
@@ -231,5 +231,5 @@ def ci_step_complete(config, message):
     the `CI pipeline
     <https://fedoraproject.org/wiki/FedoraAtomicCI/pipeline>`_ completed.
     """
-    return message['topic'].split(',')[3] == 'ci' \
-        and message['msg'].get('status', '').lower() == 'success'
+    return message['topic'].split('.')[3] == 'ci' \
+        and message.get('msg', {}).get('status', '').lower() == 'success'
