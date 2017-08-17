@@ -2,7 +2,7 @@ from fmn.lib.hinting import hint, prefixed as _
 
 # Basic building steps
 
-@hint(categories=['ci'], invertible=False)
+@hint(categories=['ci'])
 def ci_catchall(config, message):
     """ All CI events
 
@@ -14,7 +14,7 @@ def ci_catchall(config, message):
     return message['topic'].split('.')[3] == 'ci'
 
 
-@hint(topics=[_('ci.pipeline.package.ignore')], invertible=False)
+@hint(topics=[_('ci.pipeline.package.ignore')])
 def ci_package_ignore(config, message):
     """ Package ignored by CI
 
@@ -25,7 +25,7 @@ def ci_package_ignore(config, message):
     return message['topic'].endswith('ci.pipeline.package.ignore')
 
 
-@hint(topics=[_('ci.pipeline.package.queued')], invertible=False)
+@hint(topics=[_('ci.pipeline.package.queued')])
 def ci_package_queued(config, message):
     """ Package queued in CI
 
@@ -36,7 +36,7 @@ def ci_package_queued(config, message):
     return message['topic'].endswith('ci.pipeline.package.queued')
 
 
-@hint(topics=[_('ci.pipeline.package.running')], invertible=False)
+@hint(topics=[_('ci.pipeline.package.running')])
 def ci_package_running(config, message):
     """ Package building in CI
 
@@ -47,7 +47,7 @@ def ci_package_running(config, message):
     return message['topic'].endswith('ci.pipeline.package.running')
 
 
-@hint(topics=[_('ci.pipeline.package.complete')], invertible=False)
+@hint(topics=[_('ci.pipeline.package.complete')])
 def ci_package_complete(config, message):
     """ Package built by CI
 
@@ -58,7 +58,7 @@ def ci_package_complete(config, message):
     return message['topic'].endswith('ci.pipeline.package.complete')
 
 
-@hint(topics=[_('ci.pipeline.compose.running')], invertible=False)
+@hint(topics=[_('ci.pipeline.compose.running')])
 def ci_compose_running(config, message):
     """ A compose is being built by CI
 
@@ -69,7 +69,7 @@ def ci_compose_running(config, message):
     return message['topic'].endswith('ci.pipeline.compose.running')
 
 
-@hint(topics=[_('ci.pipeline.compose.complete')], invertible=False)
+@hint(topics=[_('ci.pipeline.compose.complete')])
 def ci_compose_complete(config, message):
     """ A compose was done by CI
 
@@ -80,7 +80,7 @@ def ci_compose_complete(config, message):
     return message['topic'].endswith('ci.pipeline.compose.complete')
 
 
-@hint(topics=[_('ci.pipeline.image.running')], invertible=False)
+@hint(topics=[_('ci.pipeline.image.running')])
 def ci_image_running(config, message):
     """ An image is being built by CI
 
@@ -91,7 +91,7 @@ def ci_image_running(config, message):
     return message['topic'].endswith('ci.pipeline.image.running')
 
 
-@hint(topics=[_('ci.pipeline.image.complete')], invertible=False)
+@hint(topics=[_('ci.pipeline.image.complete')])
 def ci_image_complete(config, message):
     """ An image was built by CI
 
@@ -105,7 +105,7 @@ def ci_image_complete(config, message):
 # Tests steps
 
 
-@hint(topics=[_('ci.pipeline.package.test.functional.queued')], invertible=False)
+@hint(topics=[_('ci.pipeline.package.test.functional.queued')])
 def ci_package_test_queued(config, message):
     """ Functional tests queued for a package
 
@@ -117,7 +117,7 @@ def ci_package_test_queued(config, message):
         'ci.pipeline.package.test.functional.queued')
 
 
-@hint(topics=[_('ci.pipeline.package.test.functional.running')], invertible=False)
+@hint(topics=[_('ci.pipeline.package.test.functional.running')])
 def ci_package_test_running(config, message):
     """ Functional tests are running for a package
 
@@ -129,7 +129,7 @@ def ci_package_test_running(config, message):
         'ci.pipeline.package.test.functional.running')
 
 
-@hint(topics=[_('ci.pipeline.package.test.functional.complete')], invertible=False)
+@hint(topics=[_('ci.pipeline.package.test.functional.complete')])
 def ci_package_test_complete(config, message):
     """ Functional tests completed for a package
 
@@ -177,7 +177,7 @@ def ci_compose_test_complete(config, message):
         'ci.pipeline.package.test.functional.complete')
 
 
-@hint(topics=[_('ci.pipeline.image.test.smoke.running')], invertible=False)
+@hint(topics=[_('ci.pipeline.image.test.smoke.running')])
 def ci_image_test_running(config, message):
     """ Smoke tests are running for an image
 
@@ -189,7 +189,7 @@ def ci_image_test_running(config, message):
         'ci.pipeline.image.test.smoke.running')
 
 
-@hint(topics=[_('ci.pipeline.image.test.smoke.complete')], invertible=False)
+@hint(topics=[_('ci.pipeline.image.test.smoke.complete')])
 def ci_image_test_complete(config, message):
     """ Smoke tests are running for an image
 
