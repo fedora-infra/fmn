@@ -231,5 +231,5 @@ def ci_step_complete(config, message):
     the `CI pipeline
     <https://fedoraproject.org/wiki/FedoraAtomicCI/pipeline>`_ completed.
     """
-    return message['topic'].split(',')[3] == 'ci' \
+    return message['topic'].split('.')[3] == 'ci' \
         and message.get('msg', {}).get('status', '').lower() == 'success'
