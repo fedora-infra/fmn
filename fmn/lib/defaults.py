@@ -38,6 +38,9 @@ exclusion_packages = [
 
     # Ignore mdapi repo changes (really spammy for the koji rawhide repo!)
     'mdapi_repo_update',
+
+    # Ignore CI messages about a step that succeeded
+    'ci_step_complete',
 ]
 
 exclusion_username = [
