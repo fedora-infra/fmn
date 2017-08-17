@@ -2,6 +2,19 @@
 Changelog
 =========
 
+1.4.1
+=====
+
+Bug fixes
+---------
+
+* Ensure the new CI rules appear in the filter list (`#224
+  <https://github.com/fedora-infra/fmn/pull/224>`_).
+
+* Migrate the default user filters to ignore successful CI steps
+  (`#225 <https://github.com/fedora-infra/fmn/pull/225>`_)
+
+
 1.4.0
 =====
 
