@@ -60,8 +60,10 @@ config = {
 
     # IRC
     "fmn.irc.network": "irc.freenode.net",
+    "fmn.irc.port": 6697,
     "fmn.irc.nickname": "fmn-devbot",
-    "fmn.irc.port": 6667,
+    "fmn.irc.nickserv_pass": None,
+    "fmn.irc.use_ssl": True,
     "fmn.irc.timeout": 120,
 
     # GCM - Android notifs

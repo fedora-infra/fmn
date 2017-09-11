@@ -5,6 +5,7 @@ import fedmsg.meta
 import arrow
 import time
 
+from twisted.internet import ssl
 import twisted.internet.protocol
 import twisted.words.protocols.irc
 
@@ -13,7 +14,7 @@ from bleach import clean
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
-log = logging.getLogger("fedmsg")
+log = logging.getLogger(__name__)
 
 
 CONFIRMATION_TEMPLATE = """
@@ -125,6 +126,8 @@ class IRCBackend(BaseBackend):
         super(IRCBackend, self).__init__(*args, **kwargs)
         self.network = self.config['fmn.irc.network']
         self.nickname = self.config['fmn.irc.nickname']
+        self.nickserv_pass = self.config.get('fmn.irc.nickserv_pass')
+        self.use_ssl = self.config.get('fmn.irc.use_ssl', False)
         self.port = int(self.config['fmn.irc.port'])
         self.timeout = int(self.config['fmn.irc.timeout'])
 
@@ -149,12 +152,23 @@ class IRCBackend(BaseBackend):
             'filters': self.subcmd_filters,
         }
 
-        reactor.connectTCP(
-            self.network,
-            self.port,
-            factory,
-            timeout=self.timeout,
-        )
+        if self.use_ssl:
+            log.info('Connecting to IRC server %s:%s with TLS', self.network, self.port)
+            reactor.connectSSL(
+                self.network,
+                self.port,
+                factory,
+                ssl.ClientContextFactory(),
+                timeout=self.timeout,
+            )
+        else:
+            log.info('Connecting to IRC server %s:%s', self.network, self.port)
+            reactor.connectTCP(
+                self.network,
+                self.port,
+                factory,
+                timeout=self.timeout,
+            )
 
     def get_preference(self, session, detail_value):
         return self.preference_for(session, detail_value)
@@ -461,6 +475,10 @@ class IRCBackendProtocol(twisted.words.protocols.irc.IRCClient):
         self.log.info("Signed on as %r." % self.nickname)
         # Attach ourselves back on the consumer to be used.
         self.factory.parent.add_client(self)
+        if self.factory.parent.nickname and self.factory.parent.nickserv_pass:
+            self.log.info('Identifying with NickServ as %s', self.nickname)
+            self.msg('NickServ', 'IDENTIFY {nick} {password}'.format(
+                nick=self.factory.parent.nickname, password=self.factory.parent.nickserv_pass))
 
     def privmsg(self, user, channel, msg):
         """ Called when a user privmsgs me. """
