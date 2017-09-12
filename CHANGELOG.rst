@@ -2,6 +2,19 @@
 Changelog
 =========
 
+1.5.0
+=====
+
+Features
+--------
+
+* The IRC client can now connect via TLS and authenticate with NickServ
+  (`#228 <https://github.com/fedora-infra/fmn/pull/228>`_).
+
+* Handle generic exceptions in backends by requeuing the message
+  (`#229 <https://github.com/fedora-infra/fmn/pull/229>`_).
+
+
 1.4.1
 =====
 
