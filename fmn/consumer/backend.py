@@ -230,6 +230,12 @@ def read(queue_object):
         except smtplib.SMTPSenderRefused:
             yield ch.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
             return
+        except Exception:
+            log.exception('Unexpected exception in a backend')
+            yield ch.basic_publish(exchange='', routing_key='backends', body=body,
+                                   properties=pika.BasicProperties(delivery_mode=2))
+            yield ch.basic_ack(delivery_tag=method.delivery_tag)
+            return
 
     session.commit()
 
