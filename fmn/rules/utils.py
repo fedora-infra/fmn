@@ -364,7 +364,7 @@ def _get_pagure_packages_for(config, username, flags):
         raise ValueError("No valid owner flags by which to query.")
 
     base = config.get('fmn.rules.utils.pagure_api_url',
-                      'https://src.fedoraproject.org/pagure/api')
+                      'https://src.fedoraproject.org/api')
     url = base + '/0/projects'
 
     packages = defaultdict(set)
