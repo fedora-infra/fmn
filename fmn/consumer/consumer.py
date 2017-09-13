@@ -14,27 +14,26 @@ queries to `FAS`_, `pkgdb`_, or the database.
 
 import datetime
 import logging
-import time
 import uuid
 
+from kombu import Connection, Exchange
+from kombu.pools import connections
 import fedmsg.consumers
-import pika
+import kombu
 
 import fmn.lib
 import fmn.rules.utils
+from fmn import config
 from fmn.consumer.util import (
     new_packager,
     new_badges_user,
     get_fas_email,
 )
+from fmn.tasks import find_recipients
 
 
 log = logging.getLogger("fmn")
-
-OPTS = pika.ConnectionParameters(
-    heartbeat_interval=0,
-    retry_delay=2,
-)
+_log = logging.getLogger(__name__)
 
 
 def notify_prefs_change(openid):
@@ -61,32 +60,22 @@ def notify_prefs_change(openid):
             }
         }
     """
-    import json
-    connection = pika.BlockingConnection(OPTS)
-    msg_id = '%s-%s' % (datetime.datetime.utcnow().year, uuid.uuid4())
-    queue = 'refresh'
-    chan = connection.channel()
-    chan.exchange_declare(exchange=queue, type='fanout')
-    chan.basic_publish(
-        exchange=queue,
-        routing_key='',
-        body=json.dumps({
+    broker_url = config.app_conf['celery']['broker']
+    with connections[Connection(broker_url)].acquire(block=True) as conn:
+        producer = conn.Producer()
+        refresh_message = {
             'topic': 'consumer.fmn.prefs.update',
             'body': {
                 'topic': 'consumer.fmn.prefs.update',
-                "msg_id": msg_id,
+                "msg_id": '%s-%s' % (datetime.datetime.utcnow().year, uuid.uuid4()),
                 'msg': {
                     "openid": openid,
                 },
 
             },
-        }),
-        properties=pika.BasicProperties(
-            delivery_mode=2
-        )
-    )
-    chan.close()
-    connection.close()
+        }
+        exchange = Exchange('refresh', type='fanout', delivery_mode='persistent', durable=True)
+        producer.publish(refresh_message, exchange=exchange, routing_key='', declare=[exchange])
 
 
 class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
@@ -105,7 +94,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
     def __init__(self, hub, *args, **kwargs):
         self.topic = hub.config.get('fmn.topics', b'*')
 
-        log.debug("FMNConsumer initializing")
+        _log.info("FMNConsumer initializing")
         super(FMNConsumer, self).__init__(hub, *args, **kwargs)
 
         self.uri = self.hub.config.get('fmn.sqlalchemy.uri', None)
@@ -117,13 +106,13 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         if not self.uri:
             raise ValueError('fmn.sqlalchemy.uri must be present')
 
-        log.debug("Loading rules from fmn.rules")
+        _log.info("Loading rules from fmn.rules")
         self.valid_paths = fmn.lib.load_rules(root="fmn.rules")
 
         session = self.make_session()
         session.close()
 
-        log.debug("FMNConsumer initialized")
+        _log.info("FMNConsumer initialized")
 
     def make_session(self):
         """
@@ -173,8 +162,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
             log.debug('Dropping COPR %r by %r' % (topic, msg['msg']['owner']))
             return
 
-        start = time.time()
-        log.debug("FMNConsumer received %s %s", msg['msg_id'], msg['topic'])
+        _log.info("FMNConsumer received %s %s", msg['msg_id'], msg['topic'])
 
         # First, do some cache management.  This can be confusing because there
         # are two different caches, with two different mechanisms, storing two
@@ -240,28 +228,13 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 fmn.rules.utils.invalidate_cache_for(
                     self.hub.config, target, username)
 
-        # With cache management done, we can move on to the real work.
-        # Compute, based on our in-memory cache of preferences, who we think
-        # should receive this message.
-
-        import json
-        connection = pika.BlockingConnection(OPTS)
-        channel = connection.channel()
-        channel.exchange_declare(exchange='workers')
-        channel.queue_declare('workers', durable=True)
-        channel.basic_publish(
-            exchange='',
-            routing_key='workers',
-            body=json.dumps(raw_msg),
-            properties=pika.BasicProperties(
-                delivery_mode=2
-            )
-        )
-        channel.close()
-        connection.close()
-
-        log.debug("Done.  %0.2fs %s %s",
-                  time.time() - start, msg['msg_id'], msg['topic'])
+        # Finding recipients is computationally quite expensive so it's handled
+        # by Celery worker processes. The results are then dropped into an AMQP
+        # queue and processed by the backends.
+        try:
+            find_recipients.apply_async((raw_msg,))
+        except kombu.exceptions.OperationalError:
+            _log.exception('Dispatching task to find recipients failed')
 
     def stop(self):
         """
