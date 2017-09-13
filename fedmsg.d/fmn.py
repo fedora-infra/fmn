@@ -88,6 +88,13 @@ config = {
     "fmn.rejection_url": "http://localhost:5000/confirm/reject/{secret}",
     "fmn.support_email": "notifications@fedoraproject.org",
 
+    'celery': {
+        'broker': 'amqp://',
+        'include': ['fmn.tasks'],
+        'accept_content': ['json'],
+        'task_serializer': 'json',
+    },
+
     # Generic stuff
     "endpoints": {
         "fmn.%s" % hostname: [
