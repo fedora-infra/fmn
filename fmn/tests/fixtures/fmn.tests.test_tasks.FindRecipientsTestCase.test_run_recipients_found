@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: !!python/unicode '_csrf_token=5d8862b4c4ddca7dbc4bd2feaa2e1aab8d93b777&password=dummypassword&login=Login&username=jcline&user_name=jcline'
+    body: !!python/unicode '_csrf_token=30c0d3a8d2c5695ebf7fbd86b1be4ef14200de73&login=Login&username=jcline&password=dummypassword&user_name=jcline'
     headers:
       Accept: [application/json]
       Accept-Encoding: ['gzip, deflate']
@@ -11,283 +11,277 @@ interactions:
     method: POST
     uri: https://admin.fedoraproject.org/accounts/json/person_by_username
   response:
-    body: {string: !!python/unicode '{"person": {"ssh_key": null,
-        "group_roles": {"sysadmin-noc": {"internal_comments":
-        null, "role_status": "approved", "creation": "2017-01-31 19:24:44.245558+00:00",
-        "person_id": 177467, "approval": "2017-01-31 19:24:50.037802+00:00", "role_type":
-        "user", "group_id": 102095, "sponsor_id": 100037}, "packager": {"internal_comments":
-        null, "role_status": "approved", "creation": "2015-12-16 21:08:51.010705+00:00",
-        "person_id": 177467, "approval": "2015-12-16 21:08:38.274721+00:00", "role_type":
-        "user", "group_id": 100300, "sponsor_id": 163943}, "cla_fpca": {"internal_comments":
-        null, "role_status": "approved", "creation": "2015-11-26 21:10:13.026358+00:00",
-        "person_id": 177467, "approval": "2015-11-26 21:10:11.435763+00:00", "role_type":
-        "user", "group_id": 155928, "sponsor_id": 177467}, "sysadmin-datanommer":
-        {"internal_comments": null, "role_status": "approved", "creation": "2017-04-10
-        17:59:37.974567+00:00", "person_id": 177467, "approval": "2017-04-10 17:59:45.409993+00:00",
-        "role_type": "user", "group_id": 170638, "sponsor_id": 100037}, "sysadmin-web":
-        {"internal_comments": null, "role_status": "approved", "creation": "2016-11-30
-        17:04:17.597821+00:00", "person_id": 177467, "approval": "2016-11-30 17:04:22.839590+00:00",
-        "role_type": "user", "group_id": 100323, "sponsor_id": 100037}, "fedorabugs":
-        {"internal_comments": null, "role_status": "approved", "creation": "2015-12-16
-        21:08:57.056184+00:00", "person_id": 177467, "approval": "2015-12-16 21:08:38.297847+00:00",
-        "role_type": "user", "group_id": 100148, "sponsor_id": 163943}, "sysadmin-bodhi":
-        {"internal_comments": null, "role_status": "approved", "creation": "2017-08-14
-        18:15:26.144050+00:00", "person_id": 177467, "approval": "2017-08-14 18:15:38.523020+00:00",
-        "role_type": "user", "group_id": 211670, "sponsor_id": 200224}, "infra-sig":
-        {"internal_comments": null, "role_status": "approved", "creation": "2017-06-27
-        13:15:48.778979+00:00", "person_id": 177467, "approval": "2017-06-27 13:15:53.327166+00:00",
-        "role_type": "user", "group_id": 177770, "sponsor_id": 100037}, "erlang":
-        {"internal_comments": null, "role_status": "approved", "creation": "2016-06-09
-        15:27:52.447525+00:00", "person_id": 177467, "approval": "2016-06-09 15:28:00.911591+00:00",
-        "role_type": "administrator", "group_id": 202561, "sponsor_id": 200224}, "gitanitya":
-        {"internal_comments": null, "role_status": "approved", "creation": "2016-11-30
-        13:58:53.224460+00:00", "person_id": 177467, "approval": "2016-11-30 13:58:59.321975+00:00",
-        "role_type": "sponsor", "group_id": 178758, "sponsor_id": 101433}, "cla_done":
-        {"internal_comments": null, "role_status": "approved", "creation": "2015-11-26
-        21:10:13.026358+00:00", "person_id": 177467, "approval": "2015-11-26 21:10:11.458182+00:00",
-        "role_type": "user", "group_id": 100002, "sponsor_id": 177467}, "sysadmin":
-        {"internal_comments": null, "role_status": "approved", "creation": "2016-11-30
-        17:03:49.673541+00:00", "person_id": 177467, "approval": "2016-11-30 17:03:57.038845+00:00",
-        "role_type": "user", "group_id": 100332, "sponsor_id": 100037}}, "longitude":
-        -78.640180099999995, "telephone": "980-636-3640", "human_name": "Jeremy Cline",
-        "privacy": false, "status_change": "2014-06-23 21:03:45.099063+00:00", "timezone":
-        "US/Eastern", "password": "dummypassword",
-        "approved_memberships": [{"group_type": "shell", "user_can_remove": true,
-        "url": null, "prerequisite_id": 100332, "apply_rules": "", "display_name":
-        "Bodhi sysadmin group", "owner_id": 200224, "creation": "2016-09-06 19:45:26.365497+00:00",
-        "name": "sysadmin-bodhi", "irc_network": null, "joinmsg": "", "mailing_list":
-        null, "needs_sponsor": true, "id": 211670, "mailing_list_url": null, "invite_only":
-        true, "irc_channel": null}, {"group_type": "pkgdb", "user_can_remove": true,
-        "url": "", "prerequisite_id": 100300, "apply_rules": "", "display_name": "Fedora
-        Infrastructure maintainer group", "owner_id": 101433, "creation": "2014-07-17
-        16:13:59.305740+00:00", "name": "infra-sig", "irc_network": "", "joinmsg":
-        "", "mailing_list": "infra-sig@lists.fedoraproject.org", "needs_sponsor":
-        true, "id": 177770, "mailing_list_url": "", "invite_only": false, "irc_channel":
-        ""}, {"group_type": "shell", "user_can_remove": true, "url": null, "prerequisite_id":
-        100002, "apply_rules": "Must have a good reason to be working on the data*
-        applications.", "display_name": "sysadmin-datanommer", "owner_id": 112617,
-        "creation": "2013-06-17 12:19:13.579223+00:00", "name": "sysadmin-datanommer",
-        "irc_network": null, "joinmsg": "Welcome to the sysadmin-datanommer group.  This
-        should get you access to the datagrepper0* and busgateway0* machines.", "mailing_list":
-        null, "needs_sponsor": true, "id": 170638, "mailing_list_url": null, "invite_only":
-        false, "irc_channel": null}, {"group_type": "shell", "user_can_remove": true,
-        "url": "https://fedoraproject.org/wiki/Infrastructure", "prerequisite_id":
-        100332, "apply_rules": "", "display_name": "Fedora NOC Sysadmin Group", "owner_id":
-        100344, "creation": "2008-03-12 02:01:01.066973+00:00", "name": "sysadmin-noc",
-        "irc_network": "irc.freenode.net", "joinmsg": "", "mailing_list": "fedora-infrastructure-list@redhat.com",
-        "needs_sponsor": true, "id": 102095, "mailing_list_url": "https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list",
-        "invite_only": true, "irc_channel": "fedora-admin"}, {"group_type": "shell",
-        "user_can_remove": true, "url": "https://fedoraproject.org/wiki/Infrastructure",
-        "prerequisite_id": 100332, "apply_rules": "", "display_name": "Fedora Web
-        Sysadmin Group", "owner_id": 100344, "creation": "2008-03-12 02:01:01.157196+00:00",
-        "name": "sysadmin-web", "irc_network": "irc.freenode.net", "joinmsg": "",
-        "mailing_list": "fedora-infrastructure-list@redhat.com", "needs_sponsor":
-        true, "id": 100323, "mailing_list_url": "https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list",
-        "invite_only": true, "irc_channel": "fedora-admin"}, {"group_type": "tracking",
-        "user_can_remove": true, "url": "https://fedoraproject.org/wiki/Infrastructure",
-        "prerequisite_id": 100002, "apply_rules": "This group is for users who are
-        interested in working on Fedora''s servers.  If you are serious about joining
-        you need to send an email to the list letting everyone know you''re ready
-        and get involved.\r\n\r\nIF YOU APPLY FOR THIS GROUP AND HAVEN''T CONTACTED
-        THE LIST OR FOUND A SPONSOR YOU WILL BE IGNORED.  This isn''t a warning, just
-        a heads up on how things work.\r\n\r\nhttp://fedoraproject.org/wiki/Infrastructure/GettingStarted",
-        "display_name": "Fedora Sysadmin Group", "owner_id": 100037, "creation": "2008-03-12
-        02:01:00.842991+00:00", "name": "sysadmin", "irc_network": "irc.freenode.net",
-        "joinmsg": "", "mailing_list": "infrastructure@lists.fedoraproject.org", "needs_sponsor":
-        false, "id": 100332, "mailing_list_url": "https://lists.fedoraproject.org/mailman/listinfo/infrastructure",
-        "invite_only": true, "irc_channel": "fedora-admin"}, {"group_type": "git",
-        "user_can_remove": true, "url": null, "prerequisite_id": 100002, "apply_rules":
-        "", "display_name": "gitanitya", "owner_id": 101433, "creation": "2014-09-29
-        14:41:15.209757+00:00", "name": "gitanitya", "irc_network": null, "joinmsg":
-        "", "mailing_list": null, "needs_sponsor": true, "id": 178758, "mailing_list_url":
-        null, "invite_only": false, "irc_channel": null}, {"group_type": "tracking",
-        "user_can_remove": true, "url": null, "prerequisite_id": 100002, "apply_rules":
-        "", "display_name": "erlang", "owner_id": 200224, "creation": "2016-06-08
-        22:06:52.478574+00:00", "name": "erlang", "irc_network": null, "joinmsg":
-        "", "mailing_list": null, "needs_sponsor": true, "id": 202561, "mailing_list_url":
-        null, "invite_only": true, "irc_channel": null}, {"group_type": "tracking",
-        "user_can_remove": true, "url": "https://bugzilla.redhat.com", "prerequisite_id":
-        null, "apply_rules": "Membership of fedorabugs is not usually granted directly,
-        but automatically given to members of several other groups, including qa and
-        packagers-group: basically, you get membership of fedorabugs if you''re becoming
-        a member of a team where it makes sense for you to get editbugs privileges
-        on Bugzilla. Please don''t apply to this group directly unless you have a
-        special reason to do so.", "display_name": "Group for granting Bugzilla editing
-        privileges", "owner_id": 100001, "creation": "2008-03-12 01:58:48.763123+00:00",
-        "name": "fedorabugs", "irc_network": "irc.freenode.net", "joinmsg": "Hi there!
-        Membership is usually not granted to the fedorabugs group directly - instead,
-        members of several other groups are automatically added to the fedorabugs
-        group, as all members of those groups should have Bugzilla editbugs rights.
-        Maybe you wanted to apply to the QA team? If so, see https://fedoraproject.org/wiki/QA/Join
-        !", "mailing_list": "test@lists.fedoraproject.org", "needs_sponsor": false,
-        "id": 100148, "mailing_list_url": "https://lists.fedoraproject.org/pipermail/test/",
-        "invite_only": true, "irc_channel": "fedora-qa"}, {"group_type": "cvs", "user_can_remove":
-        true, "url": "https://fedoraproject.org/wiki/PackageMaintainers", "prerequisite_id":
-        100002, "apply_rules": "Please do not apply to this group.  Your sponsor will
-        add you after you''ve completed http://fedoraproject.org/wiki/Join_the_package_collection_maintainers.",
-        "display_name": "Fedora Packager GIT Commit Group", "owner_id": 100001, "creation":
-        "2008-03-12 02:00:58.145046+00:00", "name": "packager", "irc_network": "irc.freenode.net",
-        "joinmsg": "Welcome to the Fedora packager group. Please continue the process
-        from: https://fedoraproject.org/wiki/PackageMaintainers/Join#Add_Package_to_Source_Code_Management_.28SCM.29_system_and_Set_Owner",
-        "mailing_list": "devel@lists.fedoraproject.org", "needs_sponsor": true, "id":
-        100300, "mailing_list_url": "https://lists.fedoraproject.org/mailman/listinfo/devel",
-        "invite_only": true, "irc_channel": "#fedora-devel"}, {"group_type": "cla",
-        "user_can_remove": true, "url": "", "prerequisite_id": null, "apply_rules":
-        "", "display_name": "Signed CLA Group", "owner_id": 100001, "creation": "2008-03-12
-        01:58:48.745240+00:00", "name": "cla_done", "irc_network": "", "joinmsg":
-        "", "mailing_list": "", "needs_sponsor": false, "id": 100002, "mailing_list_url":
-        "", "invite_only": true, "irc_channel": ""}, {"group_type": "cla", "user_can_remove":
-        true, "url": "http://fedoraproject.org/wiki/Legal:Fedora_Project_Contributor_Agreement",
-        "prerequisite_id": null, "apply_rules": null, "display_name": "Signers of
-        the Fedora Project Contributor Agreement", "owner_id": 100001, "creation":
-        "2011-05-02 21:40:20.420874+00:00", "name": "cla_fpca", "irc_network": null,
-        "joinmsg": "", "mailing_list": null, "needs_sponsor": false, "id": 155928,
-        "mailing_list_url": null, "invite_only": true, "irc_channel": null}], "country_code":
-        "US", "latitude": 35.775469899999997, "unapproved_memberships": [], "affiliation":
-        null, "status": "active", "roles": [{"internal_comments": null, "role_status":
-        "approved", "creation": "2017-08-14 18:15:26.144050+00:00", "person_id": 177467,
-        "approval": "2017-08-14 18:15:38.523020+00:00", "role_type": "user", "group_id":
-        211670, "sponsor_id": 200224}, {"internal_comments": null, "role_status":
-        "approved", "creation": "2017-06-27 13:15:48.778979+00:00", "person_id": 177467,
-        "approval": "2017-06-27 13:15:53.327166+00:00", "role_type": "user", "group_id":
-        177770, "sponsor_id": 100037}, {"internal_comments": null, "role_status":
-        "approved", "creation": "2017-04-10 17:59:37.974567+00:00", "person_id": 177467,
-        "approval": "2017-04-10 17:59:45.409993+00:00", "role_type": "user", "group_id":
-        170638, "sponsor_id": 100037}, {"internal_comments": null, "role_status":
-        "approved", "creation": "2017-01-31 19:24:44.245558+00:00", "person_id": 177467,
-        "approval": "2017-01-31 19:24:50.037802+00:00", "role_type": "user", "group_id":
-        102095, "sponsor_id": 100037}, {"internal_comments": null, "role_status":
-        "approved", "creation": "2016-11-30 17:04:17.597821+00:00", "person_id": 177467,
-        "approval": "2016-11-30 17:04:22.839590+00:00", "role_type": "user", "group_id":
-        100323, "sponsor_id": 100037}, {"internal_comments": null, "role_status":
-        "approved", "creation": "2016-11-30 17:03:49.673541+00:00", "person_id": 177467,
-        "approval": "2016-11-30 17:03:57.038845+00:00", "role_type": "user", "group_id":
-        100332, "sponsor_id": 100037}, {"internal_comments": null, "role_status":
-        "approved", "creation": "2016-11-30 13:58:53.224460+00:00", "person_id": 177467,
-        "approval": "2016-11-30 13:58:59.321975+00:00", "role_type": "sponsor", "group_id":
-        178758, "sponsor_id": 101433}, {"internal_comments": null, "role_status":
-        "approved", "creation": "2016-06-09 15:27:52.447525+00:00", "person_id": 177467,
-        "approval": "2016-06-09 15:28:00.911591+00:00", "role_type": "administrator",
-        "group_id": 202561, "sponsor_id": 200224}, {"internal_comments": null, "role_status":
-        "approved", "creation": "2015-12-16 21:08:57.056184+00:00", "person_id": 177467,
-        "approval": "2015-12-16 21:08:38.297847+00:00", "role_type": "user", "group_id":
-        100148, "sponsor_id": 163943}, {"internal_comments": null, "role_status":
-        "approved", "creation": "2015-12-16 21:08:51.010705+00:00", "person_id": 177467,
-        "approval": "2015-12-16 21:08:38.274721+00:00", "role_type": "user", "group_id":
-        100300, "sponsor_id": 163943}, {"internal_comments": null, "role_status":
-        "approved", "creation": "2015-11-26 21:10:13.026358+00:00", "person_id": 177467,
-        "approval": "2015-11-26 21:10:11.458182+00:00", "role_type": "user", "group_id":
-        100002, "sponsor_id": 177467}, {"internal_comments": null, "role_status":
-        "approved", "creation": "2015-11-26 21:10:13.026358+00:00", "person_id": 177467,
-        "approval": "2015-11-26 21:10:11.435763+00:00", "role_type": "user", "group_id":
-        155928, "sponsor_id": 177467}], "old_password": "dummypassword",
-        "username": "jcline", "internal_comments": null, "unverified_email": "", "passwordtoken":
-        null, "ipa_sync_status": null, "emailtoken": null, "security_question": "What
-        is the secret stored with this account?", "memberships": [{"group_type": "shell",
-        "user_can_remove": true, "url": null, "prerequisite_id": 100332, "apply_rules":
-        "", "display_name": "Bodhi sysadmin group", "owner_id": 200224, "creation":
-        "2016-09-06 19:45:26.365497+00:00", "name": "sysadmin-bodhi", "irc_network":
-        null, "joinmsg": "", "mailing_list": null, "needs_sponsor": true, "id": 211670,
-        "mailing_list_url": null, "invite_only": true, "irc_channel": null}, {"group_type":
-        "pkgdb", "user_can_remove": true, "url": "", "prerequisite_id": 100300, "apply_rules":
-        "", "display_name": "Fedora Infrastructure maintainer group", "owner_id":
-        101433, "creation": "2014-07-17 16:13:59.305740+00:00", "name": "infra-sig",
-        "irc_network": "", "joinmsg": "", "mailing_list": "infra-sig@lists.fedoraproject.org",
-        "needs_sponsor": true, "id": 177770, "mailing_list_url": "", "invite_only":
-        false, "irc_channel": ""}, {"group_type": "shell", "user_can_remove": true,
-        "url": null, "prerequisite_id": 100002, "apply_rules": "Must have a good reason
-        to be working on the data* applications.", "display_name": "sysadmin-datanommer",
-        "owner_id": 112617, "creation": "2013-06-17 12:19:13.579223+00:00", "name":
-        "sysadmin-datanommer", "irc_network": null, "joinmsg": "Welcome to the sysadmin-datanommer
+    body: {string: !!python/unicode '{"success": true, "person": {"password": "dummypassword",
+        "emailtoken": null, "approved_memberships": [{"user_can_remove": true, "mailing_list":
+        null, "display_name": "Bodhi sysadmin group", "name": "sysadmin-bodhi", "irc_network":
+        null, "mailing_list_url": null, "prerequisite_id": 100332, "apply_rules":
+        "", "joinmsg": "", "group_type": "shell", "irc_channel": null, "creation":
+        "2016-09-06 19:45:26.365497+00:00", "invite_only": true, "id": 211670, "owner_id":
+        200224, "url": null, "needs_sponsor": true}, {"user_can_remove": true, "mailing_list":
+        "infra-sig@lists.fedoraproject.org", "display_name": "Fedora Infrastructure
+        maintainer group", "name": "infra-sig", "irc_network": "", "mailing_list_url":
+        "", "prerequisite_id": 100300, "apply_rules": "", "joinmsg": "", "group_type":
+        "pkgdb", "irc_channel": "", "creation": "2014-07-17 16:13:59.305740+00:00",
+        "invite_only": false, "id": 177770, "owner_id": 101433, "url": "", "needs_sponsor":
+        true}, {"user_can_remove": true, "mailing_list": null, "display_name": "sysadmin-datanommer",
+        "name": "sysadmin-datanommer", "irc_network": null, "mailing_list_url": null,
+        "prerequisite_id": 100002, "apply_rules": "Must have a good reason to be working
+        on the data* applications.", "joinmsg": "Welcome to the sysadmin-datanommer
         group.  This should get you access to the datagrepper0* and busgateway0* machines.",
-        "mailing_list": null, "needs_sponsor": true, "id": 170638, "mailing_list_url":
-        null, "invite_only": false, "irc_channel": null}, {"group_type": "shell",
-        "user_can_remove": true, "url": "https://fedoraproject.org/wiki/Infrastructure",
-        "prerequisite_id": 100332, "apply_rules": "", "display_name": "Fedora NOC
-        Sysadmin Group", "owner_id": 100344, "creation": "2008-03-12 02:01:01.066973+00:00",
-        "name": "sysadmin-noc", "irc_network": "irc.freenode.net", "joinmsg": "",
-        "mailing_list": "fedora-infrastructure-list@redhat.com", "needs_sponsor":
-        true, "id": 102095, "mailing_list_url": "https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list",
-        "invite_only": true, "irc_channel": "fedora-admin"}, {"group_type": "shell",
-        "user_can_remove": true, "url": "https://fedoraproject.org/wiki/Infrastructure",
-        "prerequisite_id": 100332, "apply_rules": "", "display_name": "Fedora Web
-        Sysadmin Group", "owner_id": 100344, "creation": "2008-03-12 02:01:01.157196+00:00",
-        "name": "sysadmin-web", "irc_network": "irc.freenode.net", "joinmsg": "",
-        "mailing_list": "fedora-infrastructure-list@redhat.com", "needs_sponsor":
-        true, "id": 100323, "mailing_list_url": "https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list",
-        "invite_only": true, "irc_channel": "fedora-admin"}, {"group_type": "tracking",
-        "user_can_remove": true, "url": "https://fedoraproject.org/wiki/Infrastructure",
+        "group_type": "shell", "irc_channel": null, "creation": "2013-06-17 12:19:13.579223+00:00",
+        "invite_only": false, "id": 170638, "owner_id": 112617, "url": null, "needs_sponsor":
+        true}, {"user_can_remove": true, "mailing_list": "fedora-infrastructure-list@redhat.com",
+        "display_name": "Fedora NOC Sysadmin Group", "name": "sysadmin-noc", "irc_network":
+        "irc.freenode.net", "mailing_list_url": "https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list",
+        "prerequisite_id": 100332, "apply_rules": "", "joinmsg": "", "group_type":
+        "shell", "irc_channel": "fedora-admin", "creation": "2008-03-12 02:01:01.066973+00:00",
+        "invite_only": true, "id": 102095, "owner_id": 100344, "url": "https://fedoraproject.org/wiki/Infrastructure",
+        "needs_sponsor": true}, {"user_can_remove": true, "mailing_list": "fedora-infrastructure-list@redhat.com",
+        "display_name": "Fedora Web Sysadmin Group", "name": "sysadmin-web", "irc_network":
+        "irc.freenode.net", "mailing_list_url": "https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list",
+        "prerequisite_id": 100332, "apply_rules": "", "joinmsg": "", "group_type":
+        "shell", "irc_channel": "fedora-admin", "creation": "2008-03-12 02:01:01.157196+00:00",
+        "invite_only": true, "id": 100323, "owner_id": 100344, "url": "https://fedoraproject.org/wiki/Infrastructure",
+        "needs_sponsor": true}, {"user_can_remove": true, "mailing_list": "infrastructure@lists.fedoraproject.org",
+        "display_name": "Fedora Sysadmin Group", "name": "sysadmin", "irc_network":
+        "irc.freenode.net", "mailing_list_url": "https://lists.fedoraproject.org/mailman/listinfo/infrastructure",
         "prerequisite_id": 100002, "apply_rules": "This group is for users who are
         interested in working on Fedora''s servers.  If you are serious about joining
         you need to send an email to the list letting everyone know you''re ready
         and get involved.\r\n\r\nIF YOU APPLY FOR THIS GROUP AND HAVEN''T CONTACTED
         THE LIST OR FOUND A SPONSOR YOU WILL BE IGNORED.  This isn''t a warning, just
         a heads up on how things work.\r\n\r\nhttp://fedoraproject.org/wiki/Infrastructure/GettingStarted",
-        "display_name": "Fedora Sysadmin Group", "owner_id": 100037, "creation": "2008-03-12
-        02:01:00.842991+00:00", "name": "sysadmin", "irc_network": "irc.freenode.net",
-        "joinmsg": "", "mailing_list": "infrastructure@lists.fedoraproject.org", "needs_sponsor":
-        false, "id": 100332, "mailing_list_url": "https://lists.fedoraproject.org/mailman/listinfo/infrastructure",
-        "invite_only": true, "irc_channel": "fedora-admin"}, {"group_type": "git",
-        "user_can_remove": true, "url": null, "prerequisite_id": 100002, "apply_rules":
-        "", "display_name": "gitanitya", "owner_id": 101433, "creation": "2014-09-29
-        14:41:15.209757+00:00", "name": "gitanitya", "irc_network": null, "joinmsg":
-        "", "mailing_list": null, "needs_sponsor": true, "id": 178758, "mailing_list_url":
-        null, "invite_only": false, "irc_channel": null}, {"group_type": "tracking",
-        "user_can_remove": true, "url": null, "prerequisite_id": 100002, "apply_rules":
-        "", "display_name": "erlang", "owner_id": 200224, "creation": "2016-06-08
-        22:06:52.478574+00:00", "name": "erlang", "irc_network": null, "joinmsg":
-        "", "mailing_list": null, "needs_sponsor": true, "id": 202561, "mailing_list_url":
-        null, "invite_only": true, "irc_channel": null}, {"group_type": "tracking",
-        "user_can_remove": true, "url": "https://bugzilla.redhat.com", "prerequisite_id":
+        "joinmsg": "", "group_type": "tracking", "irc_channel": "fedora-admin", "creation":
+        "2008-03-12 02:01:00.842991+00:00", "invite_only": true, "id": 100332, "owner_id":
+        100037, "url": "https://fedoraproject.org/wiki/Infrastructure", "needs_sponsor":
+        false}, {"user_can_remove": true, "mailing_list": null, "display_name": "gitanitya",
+        "name": "gitanitya", "irc_network": null, "mailing_list_url": null, "prerequisite_id":
+        100002, "apply_rules": "", "joinmsg": "", "group_type": "git", "irc_channel":
+        null, "creation": "2014-09-29 14:41:15.209757+00:00", "invite_only": false,
+        "id": 178758, "owner_id": 101433, "url": null, "needs_sponsor": true}, {"user_can_remove":
+        true, "mailing_list": null, "display_name": "erlang", "name": "erlang", "irc_network":
+        null, "mailing_list_url": null, "prerequisite_id": 100002, "apply_rules":
+        "", "joinmsg": "", "group_type": "tracking", "irc_channel": null, "creation":
+        "2016-06-08 22:06:52.478574+00:00", "invite_only": true, "id": 202561, "owner_id":
+        200224, "url": null, "needs_sponsor": true}, {"user_can_remove": true, "mailing_list":
+        "test@lists.fedoraproject.org", "display_name": "Group for granting Bugzilla
+        editing privileges", "name": "fedorabugs", "irc_network": "irc.freenode.net",
+        "mailing_list_url": "https://lists.fedoraproject.org/pipermail/test/", "prerequisite_id":
         null, "apply_rules": "Membership of fedorabugs is not usually granted directly,
         but automatically given to members of several other groups, including qa and
         packagers-group: basically, you get membership of fedorabugs if you''re becoming
         a member of a team where it makes sense for you to get editbugs privileges
         on Bugzilla. Please don''t apply to this group directly unless you have a
-        special reason to do so.", "display_name": "Group for granting Bugzilla editing
-        privileges", "owner_id": 100001, "creation": "2008-03-12 01:58:48.763123+00:00",
-        "name": "fedorabugs", "irc_network": "irc.freenode.net", "joinmsg": "Hi there!
-        Membership is usually not granted to the fedorabugs group directly - instead,
-        members of several other groups are automatically added to the fedorabugs
-        group, as all members of those groups should have Bugzilla editbugs rights.
-        Maybe you wanted to apply to the QA team? If so, see https://fedoraproject.org/wiki/QA/Join
-        !", "mailing_list": "test@lists.fedoraproject.org", "needs_sponsor": false,
-        "id": 100148, "mailing_list_url": "https://lists.fedoraproject.org/pipermail/test/",
-        "invite_only": true, "irc_channel": "fedora-qa"}, {"group_type": "cvs", "user_can_remove":
-        true, "url": "https://fedoraproject.org/wiki/PackageMaintainers", "prerequisite_id":
-        100002, "apply_rules": "Please do not apply to this group.  Your sponsor will
-        add you after you''ve completed http://fedoraproject.org/wiki/Join_the_package_collection_maintainers.",
-        "display_name": "Fedora Packager GIT Commit Group", "owner_id": 100001, "creation":
-        "2008-03-12 02:00:58.145046+00:00", "name": "packager", "irc_network": "irc.freenode.net",
+        special reason to do so.", "joinmsg": "Hi there! Membership is usually not
+        granted to the fedorabugs group directly - instead, members of several other
+        groups are automatically added to the fedorabugs group, as all members of
+        those groups should have Bugzilla editbugs rights. Maybe you wanted to apply
+        to the QA team? If so, see https://fedoraproject.org/wiki/QA/Join !", "group_type":
+        "tracking", "irc_channel": "fedora-qa", "creation": "2008-03-12 01:58:48.763123+00:00",
+        "invite_only": true, "id": 100148, "owner_id": 100001, "url": "https://bugzilla.redhat.com",
+        "needs_sponsor": false}, {"user_can_remove": true, "mailing_list": "devel@lists.fedoraproject.org",
+        "display_name": "Fedora Packager GIT Commit Group", "name": "packager", "irc_network":
+        "irc.freenode.net", "mailing_list_url": "https://lists.fedoraproject.org/mailman/listinfo/devel",
+        "prerequisite_id": 100002, "apply_rules": "Please do not apply to this group.  Your
+        sponsor will add you after you''ve completed http://fedoraproject.org/wiki/Join_the_package_collection_maintainers.",
         "joinmsg": "Welcome to the Fedora packager group. Please continue the process
         from: https://fedoraproject.org/wiki/PackageMaintainers/Join#Add_Package_to_Source_Code_Management_.28SCM.29_system_and_Set_Owner",
-        "mailing_list": "devel@lists.fedoraproject.org", "needs_sponsor": true, "id":
-        100300, "mailing_list_url": "https://lists.fedoraproject.org/mailman/listinfo/devel",
-        "invite_only": true, "irc_channel": "#fedora-devel"}, {"group_type": "cla",
-        "user_can_remove": true, "url": "", "prerequisite_id": null, "apply_rules":
-        "", "display_name": "Signed CLA Group", "owner_id": 100001, "creation": "2008-03-12
-        01:58:48.745240+00:00", "name": "cla_done", "irc_network": "", "joinmsg":
-        "", "mailing_list": "", "needs_sponsor": false, "id": 100002, "mailing_list_url":
-        "", "invite_only": true, "irc_channel": ""}, {"group_type": "cla", "user_can_remove":
-        true, "url": "http://fedoraproject.org/wiki/Legal:Fedora_Project_Contributor_Agreement",
-        "prerequisite_id": null, "apply_rules": null, "display_name": "Signers of
-        the Fedora Project Contributor Agreement", "owner_id": 100001, "creation":
-        "2011-05-02 21:40:20.420874+00:00", "name": "cla_fpca", "irc_network": null,
-        "joinmsg": "", "mailing_list": null, "needs_sponsor": false, "id": 155928,
-        "mailing_list_url": null, "invite_only": true, "irc_channel": null}], "alias_enabled":
-        null, "ircnick": "jcline", "id": 177467, "email": "jeremy@jcline.org", "facsimile":
-        null, "locale": "en", "security_answer": null, "gpg_keyid": "AF3C99C7B1BF22C0FD415D2BC6C89D21F194C642",
-        "password_changed": "1970-01-01 00:00:01+00:00", "creation": "2014-06-23
-        21:03:45.099063+00:00", "postal_address": "", "certificate_serial": 1, "last_seen":
-        "2017-09-15 18:27:43.845674+00:00", "comments": null}, "tg_flash": null, "success":
-        true}'}
+        "group_type": "cvs", "irc_channel": "#fedora-devel", "creation": "2008-03-12
+        02:00:58.145046+00:00", "invite_only": true, "id": 100300, "owner_id": 100001,
+        "url": "https://fedoraproject.org/wiki/PackageMaintainers", "needs_sponsor":
+        true}, {"user_can_remove": true, "mailing_list": "", "display_name": "Signed
+        CLA Group", "name": "cla_done", "irc_network": "", "mailing_list_url": "",
+        "prerequisite_id": null, "apply_rules": "", "joinmsg": "", "group_type": "cla",
+        "irc_channel": "", "creation": "2008-03-12 01:58:48.745240+00:00", "invite_only":
+        true, "id": 100002, "owner_id": 100001, "url": "", "needs_sponsor": false},
+        {"user_can_remove": true, "mailing_list": null, "display_name": "Signers of
+        the Fedora Project Contributor Agreement", "name": "cla_fpca", "irc_network":
+        null, "mailing_list_url": null, "prerequisite_id": null, "apply_rules": null,
+        "joinmsg": "", "group_type": "cla", "irc_channel": null, "creation": "2011-05-02
+        21:40:20.420874+00:00", "invite_only": true, "id": 155928, "owner_id": 100001,
+        "url": "http://fedoraproject.org/wiki/Legal:Fedora_Project_Contributor_Agreement",
+        "needs_sponsor": false}], "locale": "en", "alias_enabled": null, "id": 177467,
+        "status_change": "2014-06-23 21:03:45.099063+00:00", "ircnick": "jcline",
+        "latitude": 35.775469899999997, "affiliation": null, "privacy": false, "ssh_key": null,
+        "country_code": "US", "facsimile": null, "security_question":
+        "What is the secret stored with this account?", "certificate_serial": 1, "creation":
+        "2014-06-23 21:03:45.099063+00:00", "unapproved_memberships": [], "longitude":
+        -78.640180099999995, "old_password": "dummypassword",
+        "username": "jcline", "comments": null, "ipa_sync_status": null, "email":
+        "jeremy@jcline.org", "unverified_email": "", "telephone": "980-636-3640",
+        "group_roles": {"gitanitya": {"role_type": "sponsor", "person_id": 177467,
+        "approval": "2016-11-30 13:58:59.321975+00:00", "group_id": 178758, "creation":
+        "2016-11-30 13:58:53.224460+00:00", "sponsor_id": 101433, "internal_comments":
+        null, "role_status": "approved"}, "sysadmin-noc": {"role_type": "user", "person_id":
+        177467, "approval": "2017-01-31 19:24:50.037802+00:00", "group_id": 102095,
+        "creation": "2017-01-31 19:24:44.245558+00:00", "sponsor_id": 100037, "internal_comments":
+        null, "role_status": "approved"}, "sysadmin": {"role_type": "user", "person_id":
+        177467, "approval": "2016-11-30 17:03:57.038845+00:00", "group_id": 100332,
+        "creation": "2016-11-30 17:03:49.673541+00:00", "sponsor_id": 100037, "internal_comments":
+        null, "role_status": "approved"}, "infra-sig": {"role_type": "user", "person_id":
+        177467, "approval": "2017-06-27 13:15:53.327166+00:00", "group_id": 177770,
+        "creation": "2017-06-27 13:15:48.778979+00:00", "sponsor_id": 100037, "internal_comments":
+        null, "role_status": "approved"}, "cla_fpca": {"role_type": "user", "person_id":
+        177467, "approval": "2015-11-26 21:10:11.435763+00:00", "group_id": 155928,
+        "creation": "2015-11-26 21:10:13.026358+00:00", "sponsor_id": 177467, "internal_comments":
+        null, "role_status": "approved"}, "cla_done": {"role_type": "user", "person_id":
+        177467, "approval": "2015-11-26 21:10:11.458182+00:00", "group_id": 100002,
+        "creation": "2015-11-26 21:10:13.026358+00:00", "sponsor_id": 177467, "internal_comments":
+        null, "role_status": "approved"}, "sysadmin-datanommer": {"role_type": "user",
+        "person_id": 177467, "approval": "2017-04-10 17:59:45.409993+00:00", "group_id":
+        170638, "creation": "2017-04-10 17:59:37.974567+00:00", "sponsor_id": 100037,
+        "internal_comments": null, "role_status": "approved"}, "erlang": {"role_type":
+        "administrator", "person_id": 177467, "approval": "2016-06-09 15:28:00.911591+00:00",
+        "group_id": 202561, "creation": "2016-06-09 15:27:52.447525+00:00", "sponsor_id":
+        200224, "internal_comments": null, "role_status": "approved"}, "packager":
+        {"role_type": "user", "person_id": 177467, "approval": "2015-12-16 21:08:38.274721+00:00",
+        "group_id": 100300, "creation": "2015-12-16 21:08:51.010705+00:00", "sponsor_id":
+        163943, "internal_comments": null, "role_status": "approved"}, "sysadmin-bodhi":
+        {"role_type": "user", "person_id": 177467, "approval": "2017-08-14 18:15:38.523020+00:00",
+        "group_id": 211670, "creation": "2017-08-14 18:15:26.144050+00:00", "sponsor_id":
+        200224, "internal_comments": null, "role_status": "approved"}, "fedorabugs":
+        {"role_type": "user", "person_id": 177467, "approval": "2015-12-16 21:08:38.297847+00:00",
+        "group_id": 100148, "creation": "2015-12-16 21:08:57.056184+00:00", "sponsor_id":
+        163943, "internal_comments": null, "role_status": "approved"}, "sysadmin-web":
+        {"role_type": "user", "person_id": 177467, "approval": "2016-11-30 17:04:22.839590+00:00",
+        "group_id": 100323, "creation": "2016-11-30 17:04:17.597821+00:00", "sponsor_id":
+        100037, "internal_comments": null, "role_status": "approved"}}, "internal_comments":
+        null, "status": "active", "passwordtoken": null, "security_answer": null,
+        "gpg_keyid": "AF3C99C7B1BF22C0FD415D2BC6C89D21F194C642", "roles": [{"role_type":
+        "user", "person_id": 177467, "approval": "2017-08-14 18:15:38.523020+00:00",
+        "group_id": 211670, "creation": "2017-08-14 18:15:26.144050+00:00", "sponsor_id":
+        200224, "internal_comments": null, "role_status": "approved"}, {"role_type":
+        "user", "person_id": 177467, "approval": "2017-06-27 13:15:53.327166+00:00",
+        "group_id": 177770, "creation": "2017-06-27 13:15:48.778979+00:00", "sponsor_id":
+        100037, "internal_comments": null, "role_status": "approved"}, {"role_type":
+        "user", "person_id": 177467, "approval": "2017-04-10 17:59:45.409993+00:00",
+        "group_id": 170638, "creation": "2017-04-10 17:59:37.974567+00:00", "sponsor_id":
+        100037, "internal_comments": null, "role_status": "approved"}, {"role_type":
+        "user", "person_id": 177467, "approval": "2017-01-31 19:24:50.037802+00:00",
+        "group_id": 102095, "creation": "2017-01-31 19:24:44.245558+00:00", "sponsor_id":
+        100037, "internal_comments": null, "role_status": "approved"}, {"role_type":
+        "user", "person_id": 177467, "approval": "2016-11-30 17:04:22.839590+00:00",
+        "group_id": 100323, "creation": "2016-11-30 17:04:17.597821+00:00", "sponsor_id":
+        100037, "internal_comments": null, "role_status": "approved"}, {"role_type":
+        "user", "person_id": 177467, "approval": "2016-11-30 17:03:57.038845+00:00",
+        "group_id": 100332, "creation": "2016-11-30 17:03:49.673541+00:00", "sponsor_id":
+        100037, "internal_comments": null, "role_status": "approved"}, {"role_type":
+        "sponsor", "person_id": 177467, "approval": "2016-11-30 13:58:59.321975+00:00",
+        "group_id": 178758, "creation": "2016-11-30 13:58:53.224460+00:00", "sponsor_id":
+        101433, "internal_comments": null, "role_status": "approved"}, {"role_type":
+        "administrator", "person_id": 177467, "approval": "2016-06-09 15:28:00.911591+00:00",
+        "group_id": 202561, "creation": "2016-06-09 15:27:52.447525+00:00", "sponsor_id":
+        200224, "internal_comments": null, "role_status": "approved"}, {"role_type":
+        "user", "person_id": 177467, "approval": "2015-12-16 21:08:38.297847+00:00",
+        "group_id": 100148, "creation": "2015-12-16 21:08:57.056184+00:00", "sponsor_id":
+        163943, "internal_comments": null, "role_status": "approved"}, {"role_type":
+        "user", "person_id": 177467, "approval": "2015-12-16 21:08:38.274721+00:00",
+        "group_id": 100300, "creation": "2015-12-16 21:08:51.010705+00:00", "sponsor_id":
+        163943, "internal_comments": null, "role_status": "approved"}, {"role_type":
+        "user", "person_id": 177467, "approval": "2015-11-26 21:10:11.458182+00:00",
+        "group_id": 100002, "creation": "2015-11-26 21:10:13.026358+00:00", "sponsor_id":
+        177467, "internal_comments": null, "role_status": "approved"}, {"role_type":
+        "user", "person_id": 177467, "approval": "2015-11-26 21:10:11.435763+00:00",
+        "group_id": 155928, "creation": "2015-11-26 21:10:13.026358+00:00", "sponsor_id":
+        177467, "internal_comments": null, "role_status": "approved"}], "memberships":
+        [{"user_can_remove": true, "mailing_list": null, "display_name": "Bodhi sysadmin
+        group", "name": "sysadmin-bodhi", "irc_network": null, "mailing_list_url":
+        null, "prerequisite_id": 100332, "apply_rules": "", "joinmsg": "", "group_type":
+        "shell", "irc_channel": null, "creation": "2016-09-06 19:45:26.365497+00:00",
+        "invite_only": true, "id": 211670, "owner_id": 200224, "url": null, "needs_sponsor":
+        true}, {"user_can_remove": true, "mailing_list": "infra-sig@lists.fedoraproject.org",
+        "display_name": "Fedora Infrastructure maintainer group", "name": "infra-sig",
+        "irc_network": "", "mailing_list_url": "", "prerequisite_id": 100300, "apply_rules":
+        "", "joinmsg": "", "group_type": "pkgdb", "irc_channel": "", "creation": "2014-07-17
+        16:13:59.305740+00:00", "invite_only": false, "id": 177770, "owner_id": 101433,
+        "url": "", "needs_sponsor": true}, {"user_can_remove": true, "mailing_list":
+        null, "display_name": "sysadmin-datanommer", "name": "sysadmin-datanommer",
+        "irc_network": null, "mailing_list_url": null, "prerequisite_id": 100002,
+        "apply_rules": "Must have a good reason to be working on the data* applications.",
+        "joinmsg": "Welcome to the sysadmin-datanommer group.  This should get you
+        access to the datagrepper0* and busgateway0* machines.", "group_type": "shell",
+        "irc_channel": null, "creation": "2013-06-17 12:19:13.579223+00:00", "invite_only":
+        false, "id": 170638, "owner_id": 112617, "url": null, "needs_sponsor": true},
+        {"user_can_remove": true, "mailing_list": "fedora-infrastructure-list@redhat.com",
+        "display_name": "Fedora NOC Sysadmin Group", "name": "sysadmin-noc", "irc_network":
+        "irc.freenode.net", "mailing_list_url": "https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list",
+        "prerequisite_id": 100332, "apply_rules": "", "joinmsg": "", "group_type":
+        "shell", "irc_channel": "fedora-admin", "creation": "2008-03-12 02:01:01.066973+00:00",
+        "invite_only": true, "id": 102095, "owner_id": 100344, "url": "https://fedoraproject.org/wiki/Infrastructure",
+        "needs_sponsor": true}, {"user_can_remove": true, "mailing_list": "fedora-infrastructure-list@redhat.com",
+        "display_name": "Fedora Web Sysadmin Group", "name": "sysadmin-web", "irc_network":
+        "irc.freenode.net", "mailing_list_url": "https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list",
+        "prerequisite_id": 100332, "apply_rules": "", "joinmsg": "", "group_type":
+        "shell", "irc_channel": "fedora-admin", "creation": "2008-03-12 02:01:01.157196+00:00",
+        "invite_only": true, "id": 100323, "owner_id": 100344, "url": "https://fedoraproject.org/wiki/Infrastructure",
+        "needs_sponsor": true}, {"user_can_remove": true, "mailing_list": "infrastructure@lists.fedoraproject.org",
+        "display_name": "Fedora Sysadmin Group", "name": "sysadmin", "irc_network":
+        "irc.freenode.net", "mailing_list_url": "https://lists.fedoraproject.org/mailman/listinfo/infrastructure",
+        "prerequisite_id": 100002, "apply_rules": "This group is for users who are
+        interested in working on Fedora''s servers.  If you are serious about joining
+        you need to send an email to the list letting everyone know you''re ready
+        and get involved.\r\n\r\nIF YOU APPLY FOR THIS GROUP AND HAVEN''T CONTACTED
+        THE LIST OR FOUND A SPONSOR YOU WILL BE IGNORED.  This isn''t a warning, just
+        a heads up on how things work.\r\n\r\nhttp://fedoraproject.org/wiki/Infrastructure/GettingStarted",
+        "joinmsg": "", "group_type": "tracking", "irc_channel": "fedora-admin", "creation":
+        "2008-03-12 02:01:00.842991+00:00", "invite_only": true, "id": 100332, "owner_id":
+        100037, "url": "https://fedoraproject.org/wiki/Infrastructure", "needs_sponsor":
+        false}, {"user_can_remove": true, "mailing_list": null, "display_name": "gitanitya",
+        "name": "gitanitya", "irc_network": null, "mailing_list_url": null, "prerequisite_id":
+        100002, "apply_rules": "", "joinmsg": "", "group_type": "git", "irc_channel":
+        null, "creation": "2014-09-29 14:41:15.209757+00:00", "invite_only": false,
+        "id": 178758, "owner_id": 101433, "url": null, "needs_sponsor": true}, {"user_can_remove":
+        true, "mailing_list": null, "display_name": "erlang", "name": "erlang", "irc_network":
+        null, "mailing_list_url": null, "prerequisite_id": 100002, "apply_rules":
+        "", "joinmsg": "", "group_type": "tracking", "irc_channel": null, "creation":
+        "2016-06-08 22:06:52.478574+00:00", "invite_only": true, "id": 202561, "owner_id":
+        200224, "url": null, "needs_sponsor": true}, {"user_can_remove": true, "mailing_list":
+        "test@lists.fedoraproject.org", "display_name": "Group for granting Bugzilla
+        editing privileges", "name": "fedorabugs", "irc_network": "irc.freenode.net",
+        "mailing_list_url": "https://lists.fedoraproject.org/pipermail/test/", "prerequisite_id":
+        null, "apply_rules": "Membership of fedorabugs is not usually granted directly,
+        but automatically given to members of several other groups, including qa and
+        packagers-group: basically, you get membership of fedorabugs if you''re becoming
+        a member of a team where it makes sense for you to get editbugs privileges
+        on Bugzilla. Please don''t apply to this group directly unless you have a
+        special reason to do so.", "joinmsg": "Hi there! Membership is usually not
+        granted to the fedorabugs group directly - instead, members of several other
+        groups are automatically added to the fedorabugs group, as all members of
+        those groups should have Bugzilla editbugs rights. Maybe you wanted to apply
+        to the QA team? If so, see https://fedoraproject.org/wiki/QA/Join !", "group_type":
+        "tracking", "irc_channel": "fedora-qa", "creation": "2008-03-12 01:58:48.763123+00:00",
+        "invite_only": true, "id": 100148, "owner_id": 100001, "url": "https://bugzilla.redhat.com",
+        "needs_sponsor": false}, {"user_can_remove": true, "mailing_list": "devel@lists.fedoraproject.org",
+        "display_name": "Fedora Packager GIT Commit Group", "name": "packager", "irc_network":
+        "irc.freenode.net", "mailing_list_url": "https://lists.fedoraproject.org/mailman/listinfo/devel",
+        "prerequisite_id": 100002, "apply_rules": "Please do not apply to this group.  Your
+        sponsor will add you after you''ve completed http://fedoraproject.org/wiki/Join_the_package_collection_maintainers.",
+        "joinmsg": "Welcome to the Fedora packager group. Please continue the process
+        from: https://fedoraproject.org/wiki/PackageMaintainers/Join#Add_Package_to_Source_Code_Management_.28SCM.29_system_and_Set_Owner",
+        "group_type": "cvs", "irc_channel": "#fedora-devel", "creation": "2008-03-12
+        02:00:58.145046+00:00", "invite_only": true, "id": 100300, "owner_id": 100001,
+        "url": "https://fedoraproject.org/wiki/PackageMaintainers", "needs_sponsor":
+        true}, {"user_can_remove": true, "mailing_list": "", "display_name": "Signed
+        CLA Group", "name": "cla_done", "irc_network": "", "mailing_list_url": "",
+        "prerequisite_id": null, "apply_rules": "", "joinmsg": "", "group_type": "cla",
+        "irc_channel": "", "creation": "2008-03-12 01:58:48.745240+00:00", "invite_only":
+        true, "id": 100002, "owner_id": 100001, "url": "", "needs_sponsor": false},
+        {"user_can_remove": true, "mailing_list": null, "display_name": "Signers of
+        the Fedora Project Contributor Agreement", "name": "cla_fpca", "irc_network":
+        null, "mailing_list_url": null, "prerequisite_id": null, "apply_rules": null,
+        "joinmsg": "", "group_type": "cla", "irc_channel": null, "creation": "2011-05-02
+        21:40:20.420874+00:00", "invite_only": true, "id": 155928, "owner_id": 100001,
+        "url": "http://fedoraproject.org/wiki/Legal:Fedora_Project_Contributor_Agreement",
+        "needs_sponsor": false}], "human_name": "Jeremy Cline", "last_seen": "2017-09-15
+        18:23:48.293348+00:00", "timezone": "US/Eastern", "password_changed": "1970-01-01
+        00:00:01+00:00", "postal_address": ""}, "tg_flash": null}'}
     headers:
-      appserver: [proxy10.phx2.fedoraproject.org]
-      apptime: [D=327968]
+      appserver: [proxy06.fedoraproject.org]
+      apptime: [D=410265]
       connection: [Keep-Alive]
       content-length: ['22784']
       content-type: [application/json]
-      date: ['Fri, 15 Sep 2017 18:27:43 GMT']
+      date: ['Fri, 15 Sep 2017 18:23:48 GMT']
       keep-alive: ['timeout=15, max=500']
       server: [Apache/2.2.15 (Red Hat)]
       strict-transport-security: [max-age=15768000; includeSubDomains; preload]
@@ -833,17 +827,17 @@ interactions:
     headers:
       accept-ranges: [bytes]
       age: ['0']
-      appserver: [proxy09.fedoraproject.org]
-      apptime: [D=428802]
+      appserver: [proxy01.phx2.fedoraproject.org]
+      apptime: [D=325858]
       connection: [Keep-Alive]
       content-length: ['37524']
       content-type: [application/json]
-      date: ['Fri, 15 Sep 2017 18:27:45 GMT']
+      date: ['Fri, 15 Sep 2017 18:23:49 GMT']
       keep-alive: ['timeout=15, max=500']
       server: [Apache/2.4.6 (Red Hat Enterprise Linux) mod_wsgi/3.4 Python/2.7.5]
       strict-transport-security: [max-age=15768000; includeSubDomains; preload]
       via: [1.1 varnish-v4]
-      x-varnish: ['13700446']
+      x-varnish: ['11733981']
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -2432,16 +2426,16 @@ interactions:
     headers:
       accept-ranges: [bytes]
       age: ['0']
-      appserver: [proxy12.fedoraproject.org]
-      apptime: [D=1085643]
+      appserver: [proxy06.fedoraproject.org]
+      apptime: [D=1416799]
       connection: [Keep-Alive]
       content-length: ['112508']
       content-type: [application/json]
-      date: ['Fri, 15 Sep 2017 18:27:46 GMT']
+      date: ['Fri, 15 Sep 2017 18:23:50 GMT']
       keep-alive: ['timeout=15, max=500']
       server: [Apache/2.4.6 (Red Hat Enterprise Linux) mod_wsgi/3.4 Python/2.7.5]
       strict-transport-security: [max-age=15768000; includeSubDomains; preload]
       via: [1.1 varnish-v4]
-      x-varnish: ['10044822']
+      x-varnish: ['10035940']
     status: {code: 200, message: OK}
 version: 1

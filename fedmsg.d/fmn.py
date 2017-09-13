@@ -93,6 +93,7 @@ config = {
         'include': ['fmn.tasks'],
         'accept_content': ['json'],
         'task_serializer': 'json',
+        'task_default_queue': 'workers',
     },
 
     # Generic stuff
