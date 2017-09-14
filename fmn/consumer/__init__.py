@@ -18,6 +18,7 @@ The FMN consumer package contains all the service that process the incoming
    from the ``backend`` queue and dispatches them. It defines a backend interface
    and new backends can be added to allow for new message mediums.
 """
+from .. import fmn_fasshim  # noqa
 from .consumer import FMNConsumer  # noqa
 from .producer import ConfirmationProducer  # noqa
 from .producer import DigestProducer  # noqa
