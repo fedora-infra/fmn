@@ -99,7 +99,7 @@
     - "fmn-backend.service"
     - "fmn-digests.service"
     - "fmn-sse.service"
-    - "fmn-worker.service"
+    - "fmn-celery-worker.service"
     - "fmn-web.service"
 
 - name: Reload the systemd daemon
