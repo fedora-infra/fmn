@@ -28,6 +28,9 @@ Here are some tips:
 * By default, only the SSE backend is enabled. To enable other backends,
   turn them on in ~/.fedmsg/fmn.py
 
+* Run the Celery Flower monitoring service with ``systemctl --user start flower``
+  and then navigate to http://localhost:5555/ for a task dashboard.
+
 Once you run `fstart` you can navigate to http://localhost:5000/
 in your browser to view the FMN web interface.
 
