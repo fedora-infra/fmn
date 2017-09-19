@@ -12,70 +12,24 @@ queries to `FAS`_, `pkgdb`_, or the database.
 .. _pkgdb: https://admin.fedoraproject.org/pkgdb/
 """
 
-import datetime
 import logging
-import uuid
 
-from kombu import Connection, Exchange
-from kombu.pools import connections
 import fedmsg.consumers
 import kombu
 
 import fmn.lib
 import fmn.rules.utils
-from fmn import config
+from fmn.celery import RELOAD_CACHE_EXCHANGE_NAME
 from fmn.consumer.util import (
     new_packager,
     new_badges_user,
     get_fas_email,
 )
-from fmn.tasks import find_recipients
+from fmn.tasks import find_recipients, REFRESH_CACHE_TOPIC
 
 
 log = logging.getLogger("fmn")
 _log = logging.getLogger(__name__)
-
-
-def notify_prefs_change(openid):
-    """
-    Publish a message to a fanout exchange notifying consumers about preference
-    updates.
-
-    Consumers can use these messages to refresh the process-local caches on a
-    user-by-user basis. To recieve these messages, just bind the RabbitMQ
-    queue you're using to the ``refresh`` fanout exchange.
-
-    Messages are JSON-serialized and UTF-8 encoded.
-
-    Example::
-
-        {
-            "topic": "consumer.fmn.prefs.update",
-            "body": {
-                "topic": "consumer.fmn.prefs.update",
-                "msg_id": "<year>-<random-uuid>",
-                "msg": {
-                    "openid": "<user's openid who updated their preferences>"
-                }
-            }
-        }
-    """
-    broker_url = config.app_conf['celery']['broker']
-    with connections[Connection(broker_url)].acquire(block=True) as conn:
-        producer = conn.Producer()
-        refresh_message = {
-            'topic': 'consumer.fmn.prefs.update',
-            'body': {
-                'topic': 'consumer.fmn.prefs.update',
-                "msg_id": '%s-%s' % (datetime.datetime.utcnow().year, uuid.uuid4()),
-                'msg': {
-                    "openid": openid,
-                },
-
-            },
-        }
-        exchange = Exchange('refresh', type='fanout', delivery_mode='persistent', durable=True)
-        producer.publish(refresh_message, exchange=exchange, routing_key='', declare=[exchange])
 
 
 class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
@@ -175,7 +129,11 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
 
         if '.fmn.' in topic:
             openid = msg['msg']['openid']
-            notify_prefs_change(openid)
+            _log.info('Broadcasting message to Celery workers to update cache for %s', openid)
+            find_recipients.apply_async(
+                ({'topic': 'fmn.internal.refresh_cache', 'body': openid},),
+                exchange=RELOAD_CACHE_EXCHANGE_NAME,
+            )
 
         # If a user has tweaked something in the pkgdb2 db, then invalidate our
         # dogpile cache.. but only the parts that have something to do with any
@@ -212,7 +170,11 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 )
                 session.add(user)
                 session.commit()
-                notify_prefs_change(openid)
+                _log.info('Broadcasting message to Celery workers to update cache for %s', openid)
+                find_recipients.apply_async(
+                    ({'topic': REFRESH_CACHE_TOPIC, 'body': openid},),
+                    exchange=RELOAD_CACHE_EXCHANGE_NAME,
+                )
 
         # Do the same dogpile.cache invalidation trick that we did above, but
         # here do it for fas group membership changes.  (This is important

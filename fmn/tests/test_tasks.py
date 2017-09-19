@@ -52,10 +52,8 @@ class FindRecipientsTestCase(Base):
         """Assert messages with .fmn. in the topic cause preferences to be refreshed."""
         find_recipients = tasks._FindRecipients()
         message = {
-            'topic': 'com.example.fmn.message',
-            'body': {
-                'msg': {'openid': 'jcline.id.fedoraproject.org'}
-            }
+            'topic': 'fmn.internal.refresh_cache',
+            'body': 'jcline.id.fedoraproject.org',
         }
 
         find_recipients.run(message)
@@ -63,7 +61,7 @@ class FindRecipientsTestCase(Base):
             'jcline.id.fedoraproject.org', find_recipients.user_preferences)
 
     @mock.patch('fmn.tasks.connections')
-    def test_run_no_recipients(self, mock_connections):
+    def test_run_no_recipients(self, mock_conns):
         """Assert messages without any recipients results in no messages to the backend."""
         find_recipients = tasks._FindRecipients()
         user = models.User(
@@ -78,7 +76,9 @@ class FindRecipientsTestCase(Base):
         }
 
         find_recipients.run(message)
-        self.assertEqual(0, mock_connections.__getitem__.call_count)
+
+        conn = mock_conns.__getitem__.return_value.acquire.return_value.__enter__.return_value
+        self.assertEqual(0, conn.Producer.return_value.publish.call_count)
 
     @mock.patch('fmn.rules.utils._cache', new_callable=cache.make_region)
     @mock.patch('fmn.tasks.connections')

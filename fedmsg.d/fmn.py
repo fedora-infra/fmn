@@ -93,7 +93,12 @@ config = {
         'include': ['fmn.tasks'],
         'accept_content': ['json'],
         'task_serializer': 'json',
-        'task_default_queue': 'workers',
+        'task_routes': {
+            'fmn.tasks.find_recipients': {
+                'queue': 'fmn.tasks.unprocessed_messages',
+                'routing_key': 'fmn.tasks.unprocessed_messages',
+            },
+        }
     },
 
     # Generic stuff

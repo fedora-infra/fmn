@@ -45,6 +45,9 @@ __all__ = ['find_recipients']
 _log = get_task_logger(__name__)
 
 
+REFRESH_CACHE_TOPIC = 'fmn.internal.refresh_cache'
+
+
 # Monkey patch fedmsg_meta modules
 fasshim.nick2fas = fmn_fasshim.nick2fas
 fasshim.email2fas = fmn_fasshim.email2fas
@@ -138,11 +141,13 @@ class _FindRecipients(task.Task):
             message (dict): A fedmsg to find recipients for.
         """
         _log.debug('Determining recipients for message "%r"', message)
-
         topic, message_body = message['topic'], message['body']
-        if '.fmn.' in topic:
-            openid = message_body['msg']['openid']
-            fmn_lib.update_preferences(openid, self.user_preferences)
+
+        # We send a fake message with this topic as a broadcast to all workers in order for them
+        # to refresh their caches, so if this message is a cache refresh notification stop early.
+        if topic == REFRESH_CACHE_TOPIC:
+            _log.info('Refreshing the user preferences for %s', message_body)
+            fmn_lib.update_preferences(message_body, self.user_preferences)
             return
 
         results = fmn_lib.recipients(
