@@ -1,11 +1,306 @@
 interactions:
 - request:
+    body: !!python/unicode '_csrf_token=5d8862b4c4ddca7dbc4bd2feaa2e1aab8d93b777&password=dummypassword&login=Login&username=besser82&user_name=jcline'
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['169']
+      Content-Type: [application/x-www-form-urlencoded]
+      User-agent: [Fedora Account System Client/0.9.0]
+    method: POST
+    uri: https://admin.fedoraproject.org/accounts/json/person_by_username
+  response:
+    body: {string: "{\"tg_flash\": null, \"success\": true, \"person\": {\"username\"\
+        : \"besser82\", \"certificate_serial\": 1, \"password\": \"*\", \"comments\"\
+        : \"\", \"status\": \"active\", \"facsimile\": null, \"password_changed\"\
+        : null, \"emailtoken\": null, \"unapproved_memberships\": [], \"creation\"\
+        : \"2012-05-31 06:55:16.201184+00:00\", \"id\": 163460, \"old_password\":\
+        \ null, \"ipa_sync_status\": null, \"alias_enabled\": null, \"gpg_keyid\"\
+        : \"7594C21D\", \"roles\": [{\"creation\": \"2017-07-05 19:02:33.116754+00:00\"\
+        , \"sponsor_id\": 100037, \"approval\": \"2017-07-05 19:02:33.234618+00:00\"\
+        , \"internal_comments\": null, \"person_id\": 163460, \"role_status\": \"\
+        approved\", \"role_type\": \"administrator\", \"group_id\": 217185}, {\"creation\"\
+        : \"2015-07-28 17:29:32.098405+00:00\", \"sponsor_id\": 100548, \"approval\"\
+        : \"2015-07-28 17:40:04.102253+00:00\", \"internal_comments\": null, \"person_id\"\
+        : 163460, \"role_status\": \"approved\", \"role_type\": \"user\", \"group_id\"\
+        : 130287}, {\"creation\": \"2012-05-31 06:58:35.188697+00:00\", \"sponsor_id\"\
+        : 163460, \"approval\": \"2012-05-31 06:58:35.268556+00:00\", \"internal_comments\"\
+        : null, \"person_id\": 163460, \"role_status\": \"approved\", \"role_type\"\
+        : \"user\", \"group_id\": 155928}, {\"creation\": \"2012-05-31 06:58:35.188697+00:00\"\
+        , \"sponsor_id\": 163460, \"approval\": \"2012-05-31 06:58:35.282860+00:00\"\
+        , \"internal_comments\": null, \"person_id\": 163460, \"role_status\": \"\
+        approved\", \"role_type\": \"user\", \"group_id\": 100002}, {\"creation\"\
+        : \"2012-06-17 17:10:26.122883+00:00\", \"sponsor_id\": 100158, \"approval\"\
+        : \"2012-06-17 17:10:35.369948+00:00\", \"internal_comments\": null, \"person_id\"\
+        : 163460, \"role_status\": \"approved\", \"role_type\": \"sponsor\", \"group_id\"\
+        : 100148}, {\"creation\": \"2013-05-15 17:47:34.153816+00:00\", \"sponsor_id\"\
+        : 100044, \"approval\": \"2013-05-15 17:47:50.705579+00:00\", \"internal_comments\"\
+        : null, \"person_id\": 163460, \"role_status\": \"approved\", \"role_type\"\
+        : \"sponsor\", \"group_id\": 100300}, {\"creation\": \"2013-06-25 15:32:19.538029+00:00\"\
+        , \"sponsor_id\": 100045, \"approval\": \"2013-06-25 15:32:25.178634+00:00\"\
+        , \"internal_comments\": null, \"person_id\": 163460, \"role_status\": \"\
+        approved\", \"role_type\": \"user\", \"group_id\": 107427}, {\"creation\"\
+        : \"2013-09-30 22:47:57.998672+00:00\", \"sponsor_id\": 100037, \"approval\"\
+        : \"2013-09-30 22:47:58.107978+00:00\", \"internal_comments\": null, \"person_id\"\
+        : 163460, \"role_status\": \"approved\", \"role_type\": \"administrator\"\
+        , \"group_id\": 172910}, {\"creation\": \"2013-09-16 17:50:09.522356+00:00\"\
+        , \"sponsor_id\": 123736, \"approval\": \"2013-12-16 20:50:58.389570+00:00\"\
+        , \"internal_comments\": null, \"person_id\": 163460, \"role_status\": \"\
+        approved\", \"role_type\": \"user\", \"group_id\": 146764}, {\"creation\"\
+        : \"2013-09-15 14:54:05.222816+00:00\", \"sponsor_id\": 100697, \"approval\"\
+        : \"2013-09-16 15:34:59.111178+00:00\", \"internal_comments\": null, \"person_id\"\
+        : 163460, \"role_status\": \"approved\", \"role_type\": \"user\", \"group_id\"\
+        : 100366}], \"group_roles\": {\"alt-gtk-de-sig\": {\"creation\": \"2017-07-05\
+        \ 19:02:33.116754+00:00\", \"sponsor_id\": 100037, \"approval\": \"2017-07-05\
+        \ 19:02:33.234618+00:00\", \"internal_comments\": null, \"person_id\": 163460,\
+        \ \"role_status\": \"approved\", \"role_type\": \"administrator\", \"group_id\"\
+        : 217185}, \"designteam\": {\"creation\": \"2015-07-28 17:29:32.098405+00:00\"\
+        , \"sponsor_id\": 100548, \"approval\": \"2015-07-28 17:40:04.102253+00:00\"\
+        , \"internal_comments\": null, \"person_id\": 163460, \"role_status\": \"\
+        approved\", \"role_type\": \"user\", \"group_id\": 130287}, \"packager\":\
+        \ {\"creation\": \"2013-05-15 17:47:34.153816+00:00\", \"sponsor_id\": 100044,\
+        \ \"approval\": \"2013-05-15 17:47:50.705579+00:00\", \"internal_comments\"\
+        : null, \"person_id\": 163460, \"role_status\": \"approved\", \"role_type\"\
+        : \"sponsor\", \"group_id\": 100300}, \"provenpackager\": {\"creation\": \"\
+        2013-06-25 15:32:19.538029+00:00\", \"sponsor_id\": 100045, \"approval\":\
+        \ \"2013-06-25 15:32:25.178634+00:00\", \"internal_comments\": null, \"person_id\"\
+        : 163460, \"role_status\": \"approved\", \"role_type\": \"user\", \"group_id\"\
+        : 107427}, \"ambassadors\": {\"creation\": \"2013-09-15 14:54:05.222816+00:00\"\
+        , \"sponsor_id\": 100697, \"approval\": \"2013-09-16 15:34:59.111178+00:00\"\
+        , \"internal_comments\": null, \"person_id\": 163460, \"role_status\": \"\
+        approved\", \"role_type\": \"user\", \"group_id\": 100366}, \"cla_fpca\":\
+        \ {\"creation\": \"2012-05-31 06:58:35.188697+00:00\", \"sponsor_id\": 163460,\
+        \ \"approval\": \"2012-05-31 06:58:35.268556+00:00\", \"internal_comments\"\
+        : null, \"person_id\": 163460, \"role_status\": \"approved\", \"role_type\"\
+        : \"user\", \"group_id\": 155928}, \"cla_done\": {\"creation\": \"2012-05-31\
+        \ 06:58:35.188697+00:00\", \"sponsor_id\": 163460, \"approval\": \"2012-05-31\
+        \ 06:58:35.282860+00:00\", \"internal_comments\": null, \"person_id\": 163460,\
+        \ \"role_status\": \"approved\", \"role_type\": \"user\", \"group_id\": 100002},\
+        \ \"shogun-ca\": {\"creation\": \"2013-09-30 22:47:57.998672+00:00\", \"sponsor_id\"\
+        : 100037, \"approval\": \"2013-09-30 22:47:58.107978+00:00\", \"internal_comments\"\
+        : null, \"person_id\": 163460, \"role_status\": \"approved\", \"role_type\"\
+        : \"administrator\", \"group_id\": 172910}, \"fedorabugs\": {\"creation\"\
+        : \"2012-06-17 17:10:26.122883+00:00\", \"sponsor_id\": 100158, \"approval\"\
+        : \"2012-06-17 17:10:35.369948+00:00\", \"internal_comments\": null, \"person_id\"\
+        : 163460, \"role_status\": \"approved\", \"role_type\": \"sponsor\", \"group_id\"\
+        : 100148}, \"proventesters\": {\"creation\": \"2013-09-16 17:50:09.522356+00:00\"\
+        , \"sponsor_id\": 123736, \"approval\": \"2013-12-16 20:50:58.389570+00:00\"\
+        , \"internal_comments\": null, \"person_id\": 163460, \"role_status\": \"\
+        approved\", \"role_type\": \"user\", \"group_id\": 146764}}, \"ssh_key\":\
+        \ null, \"last_seen\": \"2017-09-15 10:19:24.734851+00:00\", \"internal_comments\"\
+        : null, \"longitude\": 9.9849800000000002, \"affiliation\": null, \"memberships\"\
+        : [{\"id\": 217185, \"user_can_remove\": true, \"owner_id\": 163460, \"joinmsg\"\
+        : \"\", \"name\": \"alt-gtk-de-sig\", \"url\": \"\", \"needs_sponsor\": true,\
+        \ \"irc_network\": \"\", \"mailing_list_url\": \"https://lists.fedoraproject.org/admin/lists/alt-gtk-de-sig.lists.fedoraproject.org/\"\
+        , \"prerequisite_id\": 100300, \"irc_channel\": \"\", \"display_name\": \"\
+        Alternative GTK desktop environments\", \"mailing_list\": \"alt-gtk-de-sig@lists.fedoraproject.org\"\
+        , \"creation\": \"2017-07-05 19:02:33.116754+00:00\", \"apply_rules\": \"\"\
+        , \"invite_only\": true, \"group_type\": \"pkgdb\"}, {\"id\": 130287, \"user_can_remove\"\
+        : true, \"owner_id\": 100548, \"joinmsg\": \"Welcome to the Fedora Design\
+        \ Team!\", \"name\": \"designteam\", \"url\": \"http://fedoraproject.org/wiki/Design\"\
+        , \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"mailing_list_url\"\
+        : \"\", \"prerequisite_id\": null, \"irc_channel\": \"#fedora-design\", \"\
+        display_name\": \"Fedora Design Team\", \"mailing_list\": \"\", \"creation\"\
+        : \"2009-05-15 14:31:28.043039+00:00\", \"apply_rules\": \"This group is invite-only.\
+        \ Please read this document for instructions on how to join the Fedora Design\
+        \ Team:\\r\\n\\r\\nhttp://fedoraproject.org/wiki/Join_the_Design_Team\", \"\
+        invite_only\": true, \"group_type\": \"git\"}, {\"id\": 155928, \"user_can_remove\"\
+        : true, \"owner_id\": 100001, \"joinmsg\": \"\", \"name\": \"cla_fpca\", \"\
+        url\": \"http://fedoraproject.org/wiki/Legal:Fedora_Project_Contributor_Agreement\"\
+        , \"needs_sponsor\": false, \"irc_network\": null, \"mailing_list_url\": null,\
+        \ \"prerequisite_id\": null, \"irc_channel\": null, \"display_name\": \"Signers\
+        \ of the Fedora Project Contributor Agreement\", \"mailing_list\": null, \"\
+        creation\": \"2011-05-02 21:40:20.420874+00:00\", \"apply_rules\": null, \"\
+        invite_only\": true, \"group_type\": \"cla\"}, {\"id\": 100002, \"user_can_remove\"\
+        : true, \"owner_id\": 100001, \"joinmsg\": \"\", \"name\": \"cla_done\", \"\
+        url\": \"\", \"needs_sponsor\": false, \"irc_network\": \"\", \"mailing_list_url\"\
+        : \"\", \"prerequisite_id\": null, \"irc_channel\": \"\", \"display_name\"\
+        : \"Signed CLA Group\", \"mailing_list\": \"\", \"creation\": \"2008-03-12\
+        \ 01:58:48.745240+00:00\", \"apply_rules\": \"\", \"invite_only\": true, \"\
+        group_type\": \"cla\"}, {\"id\": 100148, \"user_can_remove\": true, \"owner_id\"\
+        : 100001, \"joinmsg\": \"Hi there! Membership is usually not granted to the\
+        \ fedorabugs group directly - instead, members of several other groups are\
+        \ automatically added to the fedorabugs group, as all members of those groups\
+        \ should have Bugzilla editbugs rights. Maybe you wanted to apply to the QA\
+        \ team? If so, see https://fedoraproject.org/wiki/QA/Join !\", \"name\": \"\
+        fedorabugs\", \"url\": \"https://bugzilla.redhat.com\", \"needs_sponsor\"\
+        : false, \"irc_network\": \"irc.freenode.net\", \"mailing_list_url\": \"https://lists.fedoraproject.org/pipermail/test/\"\
+        , \"prerequisite_id\": null, \"irc_channel\": \"fedora-qa\", \"display_name\"\
+        : \"Group for granting Bugzilla editing privileges\", \"mailing_list\": \"\
+        test@lists.fedoraproject.org\", \"creation\": \"2008-03-12 01:58:48.763123+00:00\"\
+        , \"apply_rules\": \"Membership of fedorabugs is not usually granted directly,\
+        \ but automatically given to members of several other groups, including qa\
+        \ and packagers-group: basically, you get membership of fedorabugs if you're\
+        \ becoming a member of a team where it makes sense for you to get editbugs\
+        \ privileges on Bugzilla. Please don't apply to this group directly unless\
+        \ you have a special reason to do so.\", \"invite_only\": true, \"group_type\"\
+        : \"tracking\"}, {\"id\": 100300, \"user_can_remove\": true, \"owner_id\"\
+        : 100001, \"joinmsg\": \"Welcome to the Fedora packager group. Please continue\
+        \ the process from: https://fedoraproject.org/wiki/PackageMaintainers/Join#Add_Package_to_Source_Code_Management_.28SCM.29_system_and_Set_Owner\"\
+        , \"name\": \"packager\", \"url\": \"https://fedoraproject.org/wiki/PackageMaintainers\"\
+        , \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"mailing_list_url\"\
+        : \"https://lists.fedoraproject.org/mailman/listinfo/devel\", \"prerequisite_id\"\
+        : 100002, \"irc_channel\": \"#fedora-devel\", \"display_name\": \"Fedora Packager\
+        \ GIT Commit Group\", \"mailing_list\": \"devel@lists.fedoraproject.org\"\
+        , \"creation\": \"2008-03-12 02:00:58.145046+00:00\", \"apply_rules\": \"\
+        Please do not apply to this group.  Your sponsor will add you after you've\
+        \ completed http://fedoraproject.org/wiki/Join_the_package_collection_maintainers.\"\
+        , \"invite_only\": true, \"group_type\": \"cvs\"}, {\"id\": 107427, \"user_can_remove\"\
+        : true, \"owner_id\": 100001, \"joinmsg\": \"Please use your new privileges\
+        \ wisely.\", \"name\": \"provenpackager\", \"url\": \"\", \"needs_sponsor\"\
+        : true, \"irc_network\": \"\", \"mailing_list_url\": \"\", \"prerequisite_id\"\
+        : 100300, \"irc_channel\": \"\", \"display_name\": \"Advanced Fedora Packager\
+        \ Group\", \"mailing_list\": \"\", \"creation\": \"2008-06-05 18:27:47.534915+00:00\"\
+        , \"apply_rules\": \"Instead of applying for this group, please consider opening\
+        \ a ticket at https://fedorahosted.org/fesco and stating what you plan to\
+        \ do with the group membership.\\r\\n\\r\\nThis makes it easier for the sponsors\
+        \ to decide. The process for gaining access to this group is located at https://fedoraproject.org/wiki/Provenpackager_policy\"\
+        , \"invite_only\": true, \"group_type\": \"cvs\"}, {\"id\": 172910, \"user_can_remove\"\
+        : true, \"owner_id\": 163460, \"joinmsg\": \"\", \"name\": \"shogun-ca\",\
+        \ \"url\": \"\", \"needs_sponsor\": true, \"irc_network\": \"\", \"mailing_list_url\"\
+        : \"\", \"prerequisite_id\": 100002, \"irc_channel\": \"\", \"display_name\"\
+        : \"SHOGUN-iPython-Group\", \"mailing_list\": \"\", \"creation\": \"2013-09-30\
+        \ 22:47:57.998672+00:00\", \"apply_rules\": \"\", \"invite_only\": true, \"\
+        group_type\": \"tracking\"}, {\"id\": 146764, \"user_can_remove\": true, \"\
+        owner_id\": 110673, \"joinmsg\": \"The proventesters group is currently inactive.\
+        \ Please do not apply to it. Thanks!\", \"name\": \"proventesters\", \"url\"\
+        : \"\", \"needs_sponsor\": true, \"irc_network\": \"\", \"mailing_list_url\"\
+        : \"\", \"prerequisite_id\": 100002, \"irc_channel\": \"\", \"display_name\"\
+        : \"Proven Testers (INACTIVE, please do not apply)\", \"mailing_list\": \"\
+        \", \"creation\": \"2010-04-23 21:03:49.267535+00:00\", \"apply_rules\": \"\
+        The proventesters group is currently inactive. Please do not apply to it.\
+        \ Thanks!\", \"invite_only\": true, \"group_type\": \"tracking\"}, {\"id\"\
+        : 100366, \"user_can_remove\": true, \"owner_id\": 151651, \"joinmsg\": \"\
+        In order to maintain a high level of quality in our Ambassadors, we ask you\
+        \ to follow our membership process: \\r\\n\\r\\nThe next step in the process\
+        \ is to pick a mentor.\\r\\n\\r\\nhttps://fedoraproject.org/wiki/Ambassadors_Join_choose_a_mentor\"\
+        , \"name\": \"ambassadors\", \"url\": \"https://fedoraproject.org/wiki/Ambassadors\"\
+        , \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"mailing_list_url\"\
+        : \"https://admin.fedoraproject.org/mailman/listinfo/ambassadors\", \"prerequisite_id\"\
+        : 100002, \"irc_channel\": \"fedora-ambassadors\", \"display_name\": \"Fedora\
+        \ Ambassador Project\", \"mailing_list\": \"ambassadors@lists.fedoraproject.org.\
+        \ \", \"creation\": \"2008-03-12 02:00:57.771641+00:00\", \"apply_rules\"\
+        : \"Please follow https://fedoraproject.org/wiki/Ambassadors_Join_start\"\
+        , \"invite_only\": true, \"group_type\": \"tracking\"}], \"postal_address\"\
+        : null, \"passwordtoken\": null, \"security_answer\": null, \"status_change\"\
+        : \"2014-03-12 14:57:25.498081+00:00\", \"timezone\": \"Europe/Berlin\", \"\
+        approved_memberships\": [{\"id\": 217185, \"user_can_remove\": true, \"owner_id\"\
+        : 163460, \"joinmsg\": \"\", \"name\": \"alt-gtk-de-sig\", \"url\": \"\",\
+        \ \"needs_sponsor\": true, \"irc_network\": \"\", \"mailing_list_url\": \"\
+        https://lists.fedoraproject.org/admin/lists/alt-gtk-de-sig.lists.fedoraproject.org/\"\
+        , \"prerequisite_id\": 100300, \"irc_channel\": \"\", \"display_name\": \"\
+        Alternative GTK desktop environments\", \"mailing_list\": \"alt-gtk-de-sig@lists.fedoraproject.org\"\
+        , \"creation\": \"2017-07-05 19:02:33.116754+00:00\", \"apply_rules\": \"\"\
+        , \"invite_only\": true, \"group_type\": \"pkgdb\"}, {\"id\": 130287, \"user_can_remove\"\
+        : true, \"owner_id\": 100548, \"joinmsg\": \"Welcome to the Fedora Design\
+        \ Team!\", \"name\": \"designteam\", \"url\": \"http://fedoraproject.org/wiki/Design\"\
+        , \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"mailing_list_url\"\
+        : \"\", \"prerequisite_id\": null, \"irc_channel\": \"#fedora-design\", \"\
+        display_name\": \"Fedora Design Team\", \"mailing_list\": \"\", \"creation\"\
+        : \"2009-05-15 14:31:28.043039+00:00\", \"apply_rules\": \"This group is invite-only.\
+        \ Please read this document for instructions on how to join the Fedora Design\
+        \ Team:\\r\\n\\r\\nhttp://fedoraproject.org/wiki/Join_the_Design_Team\", \"\
+        invite_only\": true, \"group_type\": \"git\"}, {\"id\": 155928, \"user_can_remove\"\
+        : true, \"owner_id\": 100001, \"joinmsg\": \"\", \"name\": \"cla_fpca\", \"\
+        url\": \"http://fedoraproject.org/wiki/Legal:Fedora_Project_Contributor_Agreement\"\
+        , \"needs_sponsor\": false, \"irc_network\": null, \"mailing_list_url\": null,\
+        \ \"prerequisite_id\": null, \"irc_channel\": null, \"display_name\": \"Signers\
+        \ of the Fedora Project Contributor Agreement\", \"mailing_list\": null, \"\
+        creation\": \"2011-05-02 21:40:20.420874+00:00\", \"apply_rules\": null, \"\
+        invite_only\": true, \"group_type\": \"cla\"}, {\"id\": 100002, \"user_can_remove\"\
+        : true, \"owner_id\": 100001, \"joinmsg\": \"\", \"name\": \"cla_done\", \"\
+        url\": \"\", \"needs_sponsor\": false, \"irc_network\": \"\", \"mailing_list_url\"\
+        : \"\", \"prerequisite_id\": null, \"irc_channel\": \"\", \"display_name\"\
+        : \"Signed CLA Group\", \"mailing_list\": \"\", \"creation\": \"2008-03-12\
+        \ 01:58:48.745240+00:00\", \"apply_rules\": \"\", \"invite_only\": true, \"\
+        group_type\": \"cla\"}, {\"id\": 100148, \"user_can_remove\": true, \"owner_id\"\
+        : 100001, \"joinmsg\": \"Hi there! Membership is usually not granted to the\
+        \ fedorabugs group directly - instead, members of several other groups are\
+        \ automatically added to the fedorabugs group, as all members of those groups\
+        \ should have Bugzilla editbugs rights. Maybe you wanted to apply to the QA\
+        \ team? If so, see https://fedoraproject.org/wiki/QA/Join !\", \"name\": \"\
+        fedorabugs\", \"url\": \"https://bugzilla.redhat.com\", \"needs_sponsor\"\
+        : false, \"irc_network\": \"irc.freenode.net\", \"mailing_list_url\": \"https://lists.fedoraproject.org/pipermail/test/\"\
+        , \"prerequisite_id\": null, \"irc_channel\": \"fedora-qa\", \"display_name\"\
+        : \"Group for granting Bugzilla editing privileges\", \"mailing_list\": \"\
+        test@lists.fedoraproject.org\", \"creation\": \"2008-03-12 01:58:48.763123+00:00\"\
+        , \"apply_rules\": \"Membership of fedorabugs is not usually granted directly,\
+        \ but automatically given to members of several other groups, including qa\
+        \ and packagers-group: basically, you get membership of fedorabugs if you're\
+        \ becoming a member of a team where it makes sense for you to get editbugs\
+        \ privileges on Bugzilla. Please don't apply to this group directly unless\
+        \ you have a special reason to do so.\", \"invite_only\": true, \"group_type\"\
+        : \"tracking\"}, {\"id\": 100300, \"user_can_remove\": true, \"owner_id\"\
+        : 100001, \"joinmsg\": \"Welcome to the Fedora packager group. Please continue\
+        \ the process from: https://fedoraproject.org/wiki/PackageMaintainers/Join#Add_Package_to_Source_Code_Management_.28SCM.29_system_and_Set_Owner\"\
+        , \"name\": \"packager\", \"url\": \"https://fedoraproject.org/wiki/PackageMaintainers\"\
+        , \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"mailing_list_url\"\
+        : \"https://lists.fedoraproject.org/mailman/listinfo/devel\", \"prerequisite_id\"\
+        : 100002, \"irc_channel\": \"#fedora-devel\", \"display_name\": \"Fedora Packager\
+        \ GIT Commit Group\", \"mailing_list\": \"devel@lists.fedoraproject.org\"\
+        , \"creation\": \"2008-03-12 02:00:58.145046+00:00\", \"apply_rules\": \"\
+        Please do not apply to this group.  Your sponsor will add you after you've\
+        \ completed http://fedoraproject.org/wiki/Join_the_package_collection_maintainers.\"\
+        , \"invite_only\": true, \"group_type\": \"cvs\"}, {\"id\": 107427, \"user_can_remove\"\
+        : true, \"owner_id\": 100001, \"joinmsg\": \"Please use your new privileges\
+        \ wisely.\", \"name\": \"provenpackager\", \"url\": \"\", \"needs_sponsor\"\
+        : true, \"irc_network\": \"\", \"mailing_list_url\": \"\", \"prerequisite_id\"\
+        : 100300, \"irc_channel\": \"\", \"display_name\": \"Advanced Fedora Packager\
+        \ Group\", \"mailing_list\": \"\", \"creation\": \"2008-06-05 18:27:47.534915+00:00\"\
+        , \"apply_rules\": \"Instead of applying for this group, please consider opening\
+        \ a ticket at https://fedorahosted.org/fesco and stating what you plan to\
+        \ do with the group membership.\\r\\n\\r\\nThis makes it easier for the sponsors\
+        \ to decide. The process for gaining access to this group is located at https://fedoraproject.org/wiki/Provenpackager_policy\"\
+        , \"invite_only\": true, \"group_type\": \"cvs\"}, {\"id\": 172910, \"user_can_remove\"\
+        : true, \"owner_id\": 163460, \"joinmsg\": \"\", \"name\": \"shogun-ca\",\
+        \ \"url\": \"\", \"needs_sponsor\": true, \"irc_network\": \"\", \"mailing_list_url\"\
+        : \"\", \"prerequisite_id\": 100002, \"irc_channel\": \"\", \"display_name\"\
+        : \"SHOGUN-iPython-Group\", \"mailing_list\": \"\", \"creation\": \"2013-09-30\
+        \ 22:47:57.998672+00:00\", \"apply_rules\": \"\", \"invite_only\": true, \"\
+        group_type\": \"tracking\"}, {\"id\": 146764, \"user_can_remove\": true, \"\
+        owner_id\": 110673, \"joinmsg\": \"The proventesters group is currently inactive.\
+        \ Please do not apply to it. Thanks!\", \"name\": \"proventesters\", \"url\"\
+        : \"\", \"needs_sponsor\": true, \"irc_network\": \"\", \"mailing_list_url\"\
+        : \"\", \"prerequisite_id\": 100002, \"irc_channel\": \"\", \"display_name\"\
+        : \"Proven Testers (INACTIVE, please do not apply)\", \"mailing_list\": \"\
+        \", \"creation\": \"2010-04-23 21:03:49.267535+00:00\", \"apply_rules\": \"\
+        The proventesters group is currently inactive. Please do not apply to it.\
+        \ Thanks!\", \"invite_only\": true, \"group_type\": \"tracking\"}, {\"id\"\
+        : 100366, \"user_can_remove\": true, \"owner_id\": 151651, \"joinmsg\": \"\
+        In order to maintain a high level of quality in our Ambassadors, we ask you\
+        \ to follow our membership process: \\r\\n\\r\\nThe next step in the process\
+        \ is to pick a mentor.\\r\\n\\r\\nhttps://fedoraproject.org/wiki/Ambassadors_Join_choose_a_mentor\"\
+        , \"name\": \"ambassadors\", \"url\": \"https://fedoraproject.org/wiki/Ambassadors\"\
+        , \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"mailing_list_url\"\
+        : \"https://admin.fedoraproject.org/mailman/listinfo/ambassadors\", \"prerequisite_id\"\
+        : 100002, \"irc_channel\": \"fedora-ambassadors\", \"display_name\": \"Fedora\
+        \ Ambassador Project\", \"mailing_list\": \"ambassadors@lists.fedoraproject.org.\
+        \ \", \"creation\": \"2008-03-12 02:00:57.771641+00:00\", \"apply_rules\"\
+        : \"Please follow https://fedoraproject.org/wiki/Ambassadors_Join_start\"\
+        , \"invite_only\": true, \"group_type\": \"tracking\"}], \"privacy\": false,\
+        \ \"latitude\": 52.123159999999999, \"security_question\": null, \"email\"\
+        : \"fedora@besser82.io\", \"country_code\": \"DE\", \"locale\": \"de\", \"\
+        human_name\": \"Bj\xF6rn Esser\", \"ircnick\": \"besser82@irc.freenode.net\"\
+        , \"telephone\": null, \"unverified_email\": null}}"}
+    headers:
+      appserver: [proxy06.fedoraproject.org]
+      apptime: [D=376313]
+      connection: [Keep-Alive]
+      content-length: ['19695']
+      content-type: [application/json]
+      date: ['Fri, 15 Sep 2017 18:27:35 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.2.15 (Red Hat)]
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+    status: {code: 200, message: OK}
+- request:
     body: null
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.12.5]
+      User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://admin.fedoraproject.org/pkgdb/api/packager/package/besser82
   response:
@@ -25,29 +320,79 @@ interactions:
         : \"SuperLU\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
         \      \"status\": \"Approved\",\n      \"summary\": \"Subroutines to solve\
         \ sparse linear systems\",\n      \"upstream_url\": \"http://crd-legacy.lbl.gov/~xiaoye/SuperLU/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1424204993.0,\n\
+        \      \"description\": \"This is a different, Qt5-compatible approach of\
+        \ the existing appmenu-qt\\n(https://launchpad.net/appmenu-qt).\\n\\nappmenu-qt5\
+        \ is a Qt5 QPA theme plugin that adds support for application\\nmenus to Qt5\
+        \ applications.  This only works for Qt5 versions >= 5.2\\ncurrently.  To\
+        \ enable the support, set QT_QPA_PLATFORMTHEME=appmenu-qt5\\nin your environment\
+        \ or install the appmenu-qt5-profile.d package to\\nenable system-wide, see\
+        \ README.fedora *BEFORE* for further information.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"appmenu-qt5\",\n    \
+        \  \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1185002\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Support for global\
+        \ DBus-exported application menu in Qt5\",\n      \"upstream_url\": \"https://launchpad.net/appmenu-qt5\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1484059095.0,\n\
+        \      \"description\": \"\\nArc is a flat theme with transparent elements\
+        \ for GTK 3, GTK 2 and\\nGnome-Shell which supports GTK 3 and GTK 2 based\
+        \ desktop environments\\nlike Gnome, Cinnamon, Budgie, Pantheon, XFCE, Mate,\
+        \ etc.\",\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n  \
+        \    \"name\": \"arc-theme\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1411438\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Flat theme with transparent elements\",\n      \"\
+        upstream_url\": \"https://github.com/horst3180/arc-theme\"\n    },\n    {\n\
+        \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        : \"ARPACK is a collection of Fortran 77 subroutines designed to solve large\\\
+        nscale eigenvalue problems.\\n\\nThe package is designed to compute a few\
+        \ eigenvalues and corresponding\\neigenvectors of a general n by n matrix\
+        \ A. It is most appropriate for\\nlarge sparse or structured matrices A where\
+        \ structured means that a\\nmatrix-vector product w <- Av requires order n\
+        \ rather than the usual\\norder n**2 floating point operations. This software\
+        \ is based upon an\\nalgorithmic variant of the Arnoldi process called the\
+        \ Implicitly\\nRestarted Arnoldi Method (IRAM).\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": \"nobuild\",\n      \"name\": \"arpack\",\n  \
+        \    \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Fortran 77 subroutines for solving large\
+        \ scale eigenvalue problems\",\n      \"upstream_url\": \"https://github.com/opencollab/arpack-ng\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1483655017.0,\n\
+        \      \"description\": \"Bluetooth configuration tool depending on gnome-bluetooth.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"blueberry\",\n      \"namespace\": \"rpms\",\n      \"review_url\": \"\
+        https://bugzilla.redhat.com/1409404\",\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"Bluetooth configuration tool\",\n      \"upstream_url\"\
+        : \"https://github.com/linuxmint/blueberry\"\n    },\n    {\n      \"acls\"\
+        : [],\n      \"creation_date\": 1487684706.0,\n      \"description\": \"This\
+        \ was a GSoC'10 project to implement a new command line tools for\\nbluez\
+        \ (Bluetooth stack for Linux).  It is currently an active open\\nsource project.\\\
+        n\\nThe project is implemented in C and uses the D-Bus interface of bluez.\\\
+        n\\nThe project is still a work in progress, and not all APIs from Bluez\\\
+        nhave been implemented as a part of bluez-tools.  The APIs which have\\nbeen\
+        \ implemented in bluez-tools are adapter, agent, device, network\\nand obex.\
+        \  Other APIs, such as interfaces for medical devices,\\npedometers and other\
+        \ specific APIs have not been ported to bluez-tools.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"bluez-tools\",\n    \
+        \  \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1424772\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"A set of tools to\
+        \ manage Bluetooth devices for Linux\",\n      \"upstream_url\": \"https://github.com/khvzak/bluez-tools\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"ARPACK is a collection of Fortran 77 subroutines\
-        \ designed to solve large\\nscale eigenvalue problems.\\n\\nThe package is\
-        \ designed to compute a few eigenvalues and corresponding\\neigenvectors of\
-        \ a general n by n matrix A. It is most appropriate for\\nlarge sparse or\
-        \ structured matrices A where structured means that a\\nmatrix-vector product\
-        \ w <- Av requires order n rather than the usual\\norder n**2 floating point\
-        \ operations. This software is based upon an\\nalgorithmic variant of the\
-        \ Arnoldi process called the Implicitly\\nRestarted Arnoldi Method (IRAM).\"\
-        ,\n      \"koschei_monitor\": true,\n      \"monitor\": \"nobuild\",\n   \
-        \   \"name\": \"arpack\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Fortran 77\
-        \ subroutines for solving large scale eigenvalue problems\",\n      \"upstream_url\"\
-        : \"https://github.com/opencollab/arpack-ng\"\n    },\n    {\n      \"acls\"\
-        : [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"Cinnamon\
-        \ is a Linux desktop which provides advanced\\ninnovative features and a traditional\
-        \ user experience.\\n\\nThe desktop layout is similar to Gnome 2.\\nThe underlying\
-        \ technology is forked from Gnome Shell.\\nThe emphasis is put on making users\
-        \ feel at home and providing\\nthem with an easy to use and comfortable desktop\
-        \ experience.\",\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n\
-        \      \"name\": \"cinnamon\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Window management\
-        \ and application launching for GNOME\",\n      \"upstream_url\": \"http://cinnamon.linuxmint.com\"\
+        \      \"description\": \"Cinnamon is a Linux desktop which provides advanced\\\
+        ninnovative features and a traditional user experience.\\n\\nThe desktop layout\
+        \ is similar to Gnome 2.\\nThe underlying technology is forked from Gnome\
+        \ Shell.\\nThe emphasis is put on making users feel at home and providing\\\
+        nthem with an easy to use and comfortable desktop experience.\",\n      \"\
+        koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\": \"cinnamon\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Window management and application launching\
+        \ for GNOME\",\n      \"upstream_url\": \"https://github.com/linuxmint/\"\n\
+        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1476187308.0,\n\
+        \      \"description\": \"This applet integrates the Ubuntu Application Menu\
+        \ (Global Menu)\\nsupport into the Cinnamon Desktop.  It uses the same idea\
+        \ as the\\nGnome Shell extension made by rgcjonas.\\n\\nThis is a third-party\
+        \ applet, not official.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
+        : true,\n      \"name\": \"cinnamon-applet-globalappmenu\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1382810\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Ubuntu AppMenu support\
+        \ for Cinnamon Desktop\",\n      \"upstream_url\": \"https://github.com/lestcape/Global-AppMenu\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"This package contains configuration utilities for\
         \ the Cinnamon desktop, which\\nallow to configure accessibility options,\
@@ -57,16 +402,16 @@ interactions:
         \      \"name\": \"cinnamon-control-center\",\n      \"namespace\": \"rpms\"\
         ,\n      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"\
         summary\": \"Utilities to configure the Cinnamon desktop\",\n      \"upstream_url\"\
-        : \"http://cinnamon.linuxmint.com\"\n    },\n    {\n      \"acls\": [],\n\
-        \      \"creation_date\": 1400070978.0,\n      \"description\": \"The cinnamon-desktop\
-        \ package contains an internal library\\n(libcinnamondesktop) used to implement\
-        \ some portions of the CINNAMON\\ndesktop, and also some data files and other\
-        \ shared components of the\\nCINNAMON user environment.\",\n      \"koschei_monitor\"\
-        : false,\n      \"monitor\": false,\n      \"name\": \"cinnamon-desktop\"\
-        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"Shared code among cinnamon-session,\
-        \ nemo, etc\",\n      \"upstream_url\": \"http://cinnamon.linuxmint.com\"\n\
-        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        : \"https://github.com/linuxmint/cinnamon-control-center\"\n    },\n    {\n\
+        \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        : \"The cinnamon-desktop package contains an internal library\\n(libcinnamon-desktop)\
+        \ used to implement some portions of the CINNAMON\\ndesktop, and also some\
+        \ data files and other shared components of the\\nCINNAMON user environment.\"\
+        ,\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"\
+        name\": \"cinnamon-desktop\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Shared code\
+        \ among cinnamon-session, nemo, etc\",\n      \"upstream_url\": \"https://github.com/linuxmint/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"cinnamon-menus is an implementation of the draft\
         \ \\\"Desktop\\nMenu Specification\\\" from freedesktop.org. This package\\\
         nalso contains the Cinnamon menu layout configuration files,\\n.directory\
@@ -81,57 +426,70 @@ interactions:
         \    \"monitor\": false,\n      \"name\": \"cinnamon-screensaver\",\n    \
         \  \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"Cinnamon Screensaver\",\n      \"upstream_url\"\
-        : \"http://cinnamon.linuxmint.com\"\n    },\n    {\n      \"acls\": [],\n\
+        : \"https://github.com/linuxmint/\"\n    },\n    {\n      \"acls\": [],\n\
         \      \"creation_date\": 1400070978.0,\n      \"description\": \"Cinnamon-session\
         \ manages a Cinnamon desktop or GDM login session. It starts up\\nthe other\
         \ core components and handles logout and saving the session.\",\n      \"\
         koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\": \"cinnamon-session\"\
         ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"Cinnamon session manager\",\n      \"\
-        upstream_url\": \"http://cinnamon.linuxmint.com\"\n    },\n    {\n      \"\
-        acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
-        : \"A daemon to share settings from CINNAMON to other applications. It also\\\
-        nhandles global keybindings, and many of desktop-wide settings.\",\n     \
-        \ \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\":\
-        \ \"cinnamon-settings-daemon\",\n      \"namespace\": \"rpms\",\n      \"\
-        review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\": \"\
-        The daemon sharing settings from CINNAMON to GTK+/KDE applications\",\n  \
-        \    \"upstream_url\": \"http://cinnamon.linuxmint.com\"\n    },\n    {\n\
-        \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
-        : \"Translations for Cinnamon, Nemo and Mintlocale\",\n      \"koschei_monitor\"\
-        : false,\n      \"monitor\": false,\n      \"name\": \"cinnamon-translations\"\
-        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"Translations for Cinnamon and Nemo\"\
-        ,\n      \"upstream_url\": \"http://cinnamon.linuxmint.com\"\n    },\n   \
-        \ {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"\
+        upstream_url\": \"https://github.com/linuxmint/cinnamon-session\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"A daemon to share settings from CINNAMON to other applications.\
+        \ It also\\nhandles global keybindings, and many of desktop-wide settings.\"\
+        ,\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"\
+        name\": \"cinnamon-settings-daemon\",\n      \"namespace\": \"rpms\",\n  \
+        \    \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
+        : \"The daemon sharing settings from CINNAMON to GTK+/KDE applications\",\n\
+        \      \"upstream_url\": \"https://github.com/linuxmint/\"\n    },\n    {\n\
+        \      \"acls\": [],\n      \"creation_date\": 1483971831.0,\n      \"description\"\
+        : \"Collection of the best themes available for Cinnamon.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"cinnamon-themes\",\n\
+        \      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1411151\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Collection of the\
+        \ best themes available for Cinnamon\",\n      \"upstream_url\": \"http://cinnamon.linuxmint.com\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"Translations for Cinnamon, Nemo and Mintlocale.\"\
+        ,\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"\
+        name\": \"cinnamon-translations\",\n      \"namespace\": \"rpms\",\n     \
+        \ \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
+        : \"Translations for Cinnamon and Nemo\",\n      \"upstream_url\": \"https://github.com/linuxmint/cinnamon-translations\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"CMake is used to control the software compilation\
+        \ process using simple\\nplatform and compiler independent configuration files.\
+        \ CMake generates\\nnative makefiles and workspaces that can be used in the\
+        \ compiler\\nenvironment of your choice. CMake is quite sophisticated: it\
+        \ is possible\\nto support complex environments requiring system configuration,\
+        \ preprocessor\\ngeneration, code generation, and template instantiation.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"cmake\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
+        \      \"status\": \"Approved\",\n      \"summary\": \"Cross-platform make\
+        \ system\",\n      \"upstream_url\": \"http://www.cmake.org\"\n    },\n  \
+        \  {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"\
         description\": \"CMake is used to control the software compilation process\
         \ using simple\\nplatform and compiler independent configuration files. CMake\
         \ generates\\nnative makefiles and workspaces that can be used in the compiler\\\
         nenvironment of your choice. CMake is quite sophisticated: it is possible\\\
         nto support complex environments requiring system configuration, preprocessor\\\
-        ngeneration, code generation, and template instantiation.\",\n      \"koschei_monitor\"\
-        : true,\n      \"monitor\": true,\n      \"name\": \"cmake\",\n      \"namespace\"\
-        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
-        \      \"summary\": \"Cross-platform make system\",\n      \"upstream_url\"\
-        : \"http://www.cmake.org\"\n    },\n    {\n      \"acls\": [],\n      \"creation_date\"\
-        : 1400070978.0,\n      \"description\": \"CMake is used to control the software\
-        \ compilation process using simple\\nplatform and compiler independent configuration\
-        \ files. CMake generates\\nnative makefiles and workspaces that can be used\
-        \ in the compiler\\nenvironment of your choice. CMake is quite sophisticated:\
-        \ it is possible\\nto support complex environments requiring system configuration,\
-        \ preprocessor\\ngeneration, code generation, and template instantiation.\\\
-        n\\nThis package is for compatibility purposes only, and links to cmake as\\\
-        ndistributed by EL-6.\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
-        : false,\n      \"name\": \"cmake28\",\n      \"namespace\": \"rpms\",\n \
-        \     \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
-        : \"Cross-platform make system\",\n      \"upstream_url\": \"http://www.cmake.org\"\
+        ngeneration, code generation, and template instantiation.\\n\\nThis package\
+        \ is for compatibility purposes only, and links to cmake as\\ndistributed\
+        \ by EL-6.\",\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n\
+        \      \"name\": \"cmake28\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Cross-platform\
+        \ make system\",\n      \"upstream_url\": \"http://www.cmake.org\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"D-Bus python bindings for use with python programs.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"dbus-python\",\n      \"namespace\": \"rpms\",\n      \"review_url\":\
+        \ null,\n      \"status\": \"Approved\",\n      \"summary\": \"D-Bus Python\
+        \ Bindings\",\n      \"upstream_url\": \"http://www.freedesktop.org/wiki/Software/DBusBindings/\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1413547076.0,\n\
         \      \"description\": \"Dbus daemon for performing package actions with\
         \ the dnf package manager\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
         : true,\n      \"name\": \"dnfdaemon\",\n      \"namespace\": \"rpms\",\n\
         \      \"review_url\": \"https://bugzilla.redhat.com/1149390\",\n      \"\
         status\": \"Approved\",\n      \"summary\": \"DBus daemon for dnf package\
-        \ actions\",\n      \"upstream_url\": \"https://github.com/timlau/dnf-daemon\"\
+        \ actions\",\n      \"upstream_url\": \"https://github.com/manatools/dnfdaemon\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"FDUPES is a program for identifying duplicate files\
         \ residing within specified\\ndirectories.\",\n      \"koschei_monitor\":\
@@ -180,8 +538,18 @@ interactions:
         : \"icecast\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
         \      \"status\": \"Approved\",\n      \"summary\": \"ShoutCast compatible\
         \ streaming media server\",\n      \"upstream_url\": \"http://www.icecast.org/\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"jsoncpp is an implementation of a JSON (http://json.org)\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1499339084.0,\n\
+        \      \"description\": \"JSON-C implements a reference counting object model\
+        \ that allows you\\nto easily construct JSON objects in C, output them as\
+        \ JSON formatted\\nstrings and parse JSON formatted strings back into the\
+        \ C representation\\nof JSON objects.  It aims to conform to RFC 7159.\",\n\
+        \      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"json-c12\",\n      \"namespace\": \"rpms\",\n      \"review_url\": \"\
+        https://bugzilla.redhat.com/1467132\",\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"JSON implementation in C (0.12 compatibility package)\"\
+        ,\n      \"upstream_url\": \"https://github.com/json-c/json-c\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"jsoncpp is an implementation of a JSON (http://json.org)\
         \ reader and writer in\\nC++. JSON (JavaScript Object Notation) is a lightweight\
         \ data-interchange format.\\nIt is easy for humans to read and write. It is\
         \ easy for machines to parse and\\ngenerate.\",\n      \"koschei_monitor\"\
@@ -205,62 +573,119 @@ interactions:
         name\": \"libsvm\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
         : null,\n      \"status\": \"Approved\",\n      \"summary\": \"A Library for\
         \ Support Vector Machines\",\n      \"upstream_url\": \"http://www.csie.ntu.edu.tw/~cjlin/libsvm/\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"OpenCL ICD Bindings.\",\n      \"koschei_monitor\"\
-        : true,\n      \"monitor\": true,\n      \"name\": \"ocl-icd\",\n      \"\
-        namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\": \"\
-        Approved\",\n      \"summary\": \"OpenCL ICD Bindings\",\n      \"upstream_url\"\
-        : \"https://forge.imag.fr/projects/ocl-icd/\"\n    },\n    {\n      \"acls\"\
-        : [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"This\
-        \ package provides some directories required by packages which use OpenCL.\"\
-        ,\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"\
-        name\": \"opencl-filesystem\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"OpenCL filesystem\
-        \ layout\",\n      \"upstream_url\": \"http://www.khronos.org/registry/cl/\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"pngquant converts 24/32-bit RGBA PNG images to 8-bit\
-        \ palette with alpha channel\\npreserved.  Such images are compatible with\
-        \ all modern web browsers and a\\ncompatibility setting is available to help\
-        \ transparency degrade well in\\nInternet Explorer 6.  Quantized files are\
-        \ often 40-70 percent smaller than\\ntheir 24/32-bit version. pngquant uses\
-        \ the median cut algorithm.\",\n      \"koschei_monitor\": false,\n      \"\
-        monitor\": true,\n      \"name\": \"pngquant\",\n      \"namespace\": \"rpms\"\
-        ,\n      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"\
-        summary\": \"PNG quantization tool for reducing image file size\",\n     \
-        \ \"upstream_url\": \"http://pngquant.org\"\n    },\n    {\n      \"acls\"\
-        : [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"Pocl's\
-        \ goal is to become an efficient open source (MIT-licensed) implementation\\\
-        nof the OpenCL 1.2 (and soon OpenCL 2.0) standard.\\n\\nIn addition to producing\
-        \ an easily portable open-source OpenCL implementation,\\nanother major goal\
-        \ of this project is improving performance portability of\\nOpenCL programs\
-        \ with compiler optimizations, reducing the need for\\ntarget-dependent manual\
-        \ optimizations.\\n\\nAt the core of pocl is the kernel compiler that consists\
-        \ of a set of LLVM\\npasses used to statically transform kernels into work-group\
-        \ functions with\\nmultiple work-items, even in the presence of work-group\
-        \ barriers. These\\nfunctions are suitable for parallelization in multiple\
-        \ ways (SIMD, VLIW,\\nsuperscalar,...).\",\n      \"koschei_monitor\": true,\n\
-        \      \"monitor\": true,\n      \"name\": \"pocl\",\n      \"namespace\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1492464429.0,\n\
+        \      \"description\": \"libzypp is a library for package management built\
+        \ on top of the\\nlibsolv library. It is the foundation for the Zypper package\
+        \ manager.\",\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n\
+        \      \"name\": \"libzypp\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1427182\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"A package management library\",\n      \"upstream_url\"\
+        : \"https://en.opensuse.org/Portal:Libzypp\"\n    },\n    {\n      \"acls\"\
+        : [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"Lightdm\
+        \ is a display manager that:\\n* Is cross-desktop - supports different desktops\\\
+        n* Supports different display technologies\\n* Is lightweight - low memory\
+        \ usage and fast performance\",\n      \"koschei_monitor\": true,\n      \"\
+        monitor\": \"nobuild\",\n      \"name\": \"lightdm\",\n      \"namespace\"\
         : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
-        \      \"summary\": \"Portable Computing Language - an OpenCL implementation\"\
-        ,\n      \"upstream_url\": \"http://pocl.sourceforge.net\"\n    },\n    {\n\
+        \      \"summary\": \"A cross-desktop Display Manager\",\n      \"upstream_url\"\
+        : \"https://launchpad.net/lightdm/1.22\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1400070978.0,\n      \"description\": \"A LightDM\
+        \ greeter that uses the GTK3 toolkit.\",\n      \"koschei_monitor\": false,\n\
+        \      \"monitor\": true,\n      \"name\": \"lightdm-gtk\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"LightDM GTK Greeter\",\n      \"upstream_url\": \"https://launchpad.net/lightdm-gtk-greeter\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1436358044.0,\n\
+        \      \"description\": \"Just a small dialog to make it easier for users\
+        \ to modify the settings\\nof lightdm-gtk-greeter.\",\n      \"koschei_monitor\"\
+        : false,\n      \"monitor\": \"nobuild\",\n      \"name\": \"lightdm-gtk-greeter-settings\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1239235\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Settings editor for\
+        \ LightDM GTK+ Greeter\",\n      \"upstream_url\": \"https://launchpad.net/lightdm-gtk-greeter-settings\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1491584925.0,\n\
+        \      \"description\": \"This tool currently lets users configure slick-greeter.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"lightdm-settings\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1440240\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Configuration tool for the LightDM display manager\"\
+        ,\n      \"upstream_url\": \"https://github.com/linuxmint/lightdm-settings\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1483971411.0,\n\
+        \      \"description\": \"Icon theme for Linux Mint.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"mint-x-icons\",\n   \
+        \   \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1411152\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Icon theme for Linux\
+        \ Mint\",\n      \"upstream_url\": \"http://linuxmint.com\"\n    },\n    {\n\
+        \      \"acls\": [],\n      \"creation_date\": 1483971339.0,\n      \"description\"\
+        : \"The Mint-Y icon theme.\",\n      \"koschei_monitor\": true,\n      \"\
+        monitor\": true,\n      \"name\": \"mint-y-icons\",\n      \"namespace\":\
+        \ \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1411153\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"The Mint-Y icon theme\"\
+        ,\n      \"upstream_url\": \"http://linuxmint.com\"\n    },\n    {\n     \
+        \ \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        : \"OpenCL ICD Bindings.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
+        : true,\n      \"name\": \"ocl-icd\",\n      \"namespace\": \"rpms\",\n  \
+        \    \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
+        : \"OpenCL ICD Bindings\",\n      \"upstream_url\": \"https://forge.imag.fr/projects/ocl-icd/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"This package provides some directories required\
+        \ by packages which use OpenCL.\",\n      \"koschei_monitor\": false,\n  \
+        \    \"monitor\": false,\n      \"name\": \"opencl-filesystem\",\n      \"\
+        namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\": \"\
+        Approved\",\n      \"summary\": \"OpenCL filesystem layout\",\n      \"upstream_url\"\
+        : \"http://www.khronos.org/registry/cl/\"\n    },\n    {\n      \"acls\":\
+        \ [],\n      \"creation_date\": 1494704257.0,\n      \"description\": \"Pix\
+        \ is an image browser, viewer, organizer and editor.\\nIt features some advanced\
+        \ tools, too:\\n\\n   * Import images from a digital camera.\\n   * Slide\
+        \ Shows.\\n   * Set an image as Desktop background.\\n   * Create index image.\\\
+        n   * Rename images in series.\\n   * Convert image format.\\n   * Change\
+        \ images date and time.\\n   * JPEG lossless transformations.\\n   * Find\
+        \ duplicated images.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
+        : true,\n      \"name\": \"pix\",\n      \"namespace\": \"rpms\",\n      \"\
+        review_url\": \"https://bugzilla.redhat.com/1450482\",\n      \"status\":\
+        \ \"Approved\",\n      \"summary\": \"Image management application\",\n  \
+        \    \"upstream_url\": \"https://github.com/linuxmint/pix\"\n    },\n    {\n\
         \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
-        : \"The Atomic Simulation Environment (ASE) is the common part of the simulation\\\
-        ntools developed at CAMd. ASE provides Python modules for manipulating atoms,\\\
-        nanalyzing simulations, visualization etc.\",\n      \"koschei_monitor\":\
-        \ false,\n      \"monitor\": true,\n      \"name\": \"python-ase\",\n    \
-        \  \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"Atomic Simulation Environment\",\n \
-        \     \"upstream_url\": \"https://wiki.fysik.dtu.dk/ase/\"\n    },\n    {\n\
-        \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
-        : \"Behavior-driven development (or BDD) is an agile software development\\\
-        ntechnique that encourages collaboration between developers, QA and non-\\\
-        ntechnical or business participants in a software project.\\n\\nbehave uses\
-        \ tests written in a natural language style, backed up\\nby Python code.\"\
-        ,\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"\
-        name\": \"python-behave\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Tools for the\
-        \ behavior-driven development, Python style\",\n      \"upstream_url\": \"\
-        http://pypi.python.org/pypi/behave\"\n    },\n    {\n      \"acls\": [],\n\
+        : \"pngquant converts 24/32-bit RGBA PNG images to 8-bit palette with alpha\
+        \ channel\\npreserved.  Such images are compatible with all modern web browsers\
+        \ and a\\ncompatibility setting is available to help transparency degrade\
+        \ well in\\nInternet Explorer 6.  Quantized files are often 40-70 percent\
+        \ smaller than\\ntheir 24/32-bit version. pngquant uses the median cut algorithm.\"\
+        ,\n      \"koschei_monitor\": false,\n      \"monitor\": true,\n      \"name\"\
+        : \"pngquant\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
+        \      \"status\": \"Approved\",\n      \"summary\": \"PNG quantization tool\
+        \ for reducing image file size\",\n      \"upstream_url\": \"http://pngquant.org\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"Pocl's goal is to become an efficient open source\
+        \ (MIT-licensed) implementation\\nof the OpenCL 1.2 (and soon OpenCL 2.0)\
+        \ standard.\\n\\nIn addition to producing an easily portable open-source OpenCL\
+        \ implementation,\\nanother major goal of this project is improving performance\
+        \ portability of\\nOpenCL programs with compiler optimizations, reducing the\
+        \ need for\\ntarget-dependent manual optimizations.\\n\\nAt the core of pocl\
+        \ is the kernel compiler that consists of a set of LLVM\\npasses used to statically\
+        \ transform kernels into work-group functions with\\nmultiple work-items,\
+        \ even in the presence of work-group barriers. These\\nfunctions are suitable\
+        \ for parallelization in multiple ways (SIMD, VLIW,\\nsuperscalar,...).\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"pocl\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
+        \      \"status\": \"Approved\",\n      \"summary\": \"Portable Computing\
+        \ Language - an OpenCL implementation\",\n      \"upstream_url\": \"http://pocl.sourceforge.net\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"The Atomic Simulation Environment (ASE) is the common\
+        \ part of the simulation\\ntools developed at CAMd. ASE provides Python modules\
+        \ for manipulating atoms,\\nanalyzing simulations, visualization etc.\",\n\
+        \      \"koschei_monitor\": false,\n      \"monitor\": true,\n      \"name\"\
+        : \"python-ase\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
+        \      \"status\": \"Approved\",\n      \"summary\": \"Atomic Simulation Environment\"\
+        ,\n      \"upstream_url\": \"https://wiki.fysik.dtu.dk/ase/\"\n    },\n  \
+        \  {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"\
+        description\": \"Behavior-driven development (or BDD) is an agile software\
+        \ development\\ntechnique that encourages collaboration between developers,\
+        \ QA and non-\\ntechnical or business participants in a software project.\\\
+        n\\nbehave uses tests written in a natural language style, backed up\\nby\
+        \ Python code.\",\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n\
+        \      \"name\": \"python-behave\",\n      \"namespace\": \"rpms\",\n    \
+        \  \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
+        : \"Tools for the behavior-driven development, Python style\",\n      \"upstream_url\"\
+        : \"http://pypi.python.org/pypi/behave\"\n    },\n    {\n      \"acls\": [],\n\
         \      \"creation_date\": 1421329015.0,\n      \"description\": \"Django-Angular\
         \ is a collection of utilities, which aim to ease the\\nintegration of Django\
         \ with AngularJS by providing reusable components.\",\n      \"koschei_monitor\"\
@@ -298,6 +723,12 @@ interactions:
         : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1268380\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"A sphinx theme that\
         \ integrates the Bootstrap framework\",\n      \"upstream_url\": \"http://ryan-roemer.github.com/sphinx-bootstrap-theme\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1494010326.0,\n\
+        \      \"description\": \"Python bindings for xapps.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"python-xapp\",\n    \
+        \  \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1448559\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Python bindings for\
+        \ xapps\",\n      \"upstream_url\": \"https://github.com/linuxmint/python-xapp\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1401710054.0,\n\
         \      \"description\": \"Ratools is a fast, dynamic, multi-threading framework\
         \ for creating, modifying\\nand sending IPv6 Router Advertisements (RA).\"\
@@ -330,14 +761,21 @@ interactions:
         \      \"name\": \"siege\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
         : null,\n      \"status\": \"Approved\",\n      \"summary\": \"A HTTP regression\
         \ testing and benchmarking utility\",\n      \"upstream_url\": \"http://www.joedog.org/JoeDog/Siege\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1411251082.0,\n\
-        \      \"description\": \"Command line interface for testing internet bandwidth\
-        \ using speedtest.net\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
-        : false,\n      \"name\": \"speedtest-cli\",\n      \"namespace\": \"rpms\"\
-        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1119369\",\n      \"\
-        status\": \"Approved\",\n      \"summary\": \"Command line interface for testing\
-        \ internet bandwidth\",\n      \"upstream_url\": \"https://github.com/sivel/speedtest-cli\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1491574241.0,\n\
+        \      \"description\": \"A cross-distro LightDM greeter based on unity-greeter.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"slick-greeter\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1440138\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"A slick-looking LightDM greeter\",\n      \"upstream_url\"\
+        : \"https://github.com/linuxmint/slick-greeter\"\n    },\n    {\n      \"\
+        acls\": [],\n      \"creation_date\": 1411251082.0,\n      \"description\"\
+        : \"Command line interface for testing internet bandwidth using speedtest.net\"\
+        ,\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"\
+        name\": \"speedtest-cli\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1119369\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Command line interface for testing internet bandwidth\"\
+        ,\n      \"upstream_url\": \"https://github.com/sivel/speedtest-cli\"\n  \
+        \  },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"Simplified Wrapper and Interface Generator (SWIG)\
         \ is a software\\ndevelopment tool for connecting C, C++ and Objective C programs\
         \ with a\\nvariety of high-level programming languages.  SWIG is primarily\
@@ -349,17 +787,84 @@ interactions:
         \      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
         : \"Connects C/C++/Objective C to some high-level programming languages\"\
         ,\n      \"upstream_url\": \"http://swig.sourceforge.net/\"\n    },\n    {\n\
-        \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
-        : \"Wine as a compatibility layer for UNIX to run Windows applications. This\\\
-        npackage includes a program loader, which allows unmodified Windows\\n3.x/9x/NT\
-        \ binaries to run on x86 and x86_64 Unixes. Wine can use native system\\n.dll\
-        \ files if they are available.\\n\\nIn Fedora wine is a meta-package which\
-        \ will install everything needed for wine\\nto work smoothly. Smaller setups\
-        \ can be achieved by installing some of the\\nwine-* sub packages.\",\n  \
-        \    \"koschei_monitor\": false,\n      \"monitor\": \"nobuild\",\n      \"\
-        name\": \"wine\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
-        \      \"status\": \"Approved\",\n      \"summary\": \"A compatibility layer\
-        \ for windows applications\",\n      \"upstream_url\": \"http://www.winehq.org/\"\
+        \      \"acls\": [],\n      \"creation_date\": 1476187100.0,\n      \"description\"\
+        : \"GTK+ module for exporting old-style menus as GMenuModels.\\nMany applications\
+        \ implement menus as GtkMenuShells and GtkMenuItems\\nand aren't looking to\
+        \ migrate to the newer GMenuModel API.\\nThis GTK+ module watches for these\
+        \ types of menus and exports the\\nappropriate GMenuModel implementation.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"unity-gtk-module\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1382813\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"GTK+ module for exporting old-style menus as GMenuModels\"\
+        ,\n      \"upstream_url\": \"https://launchpad.net/unity-gtk-module\"\n  \
+        \  },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"Wine as a compatibility layer for UNIX to run Windows\
+        \ applications. This\\npackage includes a program loader, which allows unmodified\
+        \ Windows\\n3.x/9x/NT binaries to run on x86 and x86_64 Unixes. Wine can use\
+        \ native system\\n.dll files if they are available.\\n\\nIn Fedora wine is\
+        \ a meta-package which will install everything needed for wine\\nto work smoothly.\
+        \ Smaller setups can be achieved by installing some of the\\nwine-* sub packages.\"\
+        ,\n      \"koschei_monitor\": false,\n      \"monitor\": \"nobuild\",\n  \
+        \    \"name\": \"wine\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"A compatibility\
+        \ layer for windows applications\",\n      \"upstream_url\": \"http://www.winehq.org/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1487684865.0,\n\
+        \      \"description\": \"Xed is a small, but powerful text editor.  It has\
+        \ most standard text\\neditor functions and fully supports international text\
+        \ in Unicode.\\nAdvanced features include syntax highlighting and automatic\
+        \ indentation\\nof source code, printing and editing of multiple documents\
+        \ in one window.\\n\\nXed is extensible through a plugin system, which currently\
+        \ includes\\nsupport for spell checking, comparing files, viewing CVS ChangeLogs,\
+        \ and\\nadjusting indentation levels.\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": true,\n      \"name\": \"xed\",\n      \"namespace\":\
+        \ \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1424798\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"X-Apps [Text] Editor\
+        \ (Cross-DE, backward-compatible, GTK3, traditional UI)\",\n      \"upstream_url\"\
+        : \"https://github.com/linuxmint/xed\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1494246957.0,\n      \"description\": \"Xplayer\
+        \ is a generic media player.\",\n      \"koschei_monitor\": true,\n      \"\
+        monitor\": true,\n      \"name\": \"xplayer\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1424871\",\n      \"\
+        status\": \"Approved\",\n      \"summary\": \"A generic Media Player\",\n\
+        \      \"upstream_url\": \"https://github.com/linuxmint/xplayer\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1487716215.0,\n    \
+        \  \"description\": \"Xplayer-pl-parser is a simple GObject-based library\
+        \ to\\nparse a host of play-list formats, as well as save those.\",\n    \
+        \  \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\": \"\
+        xplayer-plparser\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1424851\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Xplayer play-list parser\",\n      \"upstream_url\"\
+        : \"https://github.com/linuxmint/xplayer-plparser\"\n    },\n    {\n     \
+        \ \"acls\": [],\n      \"creation_date\": 1494247235.0,\n      \"description\"\
+        : \"X-Apps Document Reader is a document viewer capable of displaying\\nmultiple\
+        \ and singlepage document formats like PDF and PostScript.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"xreader\",\n      \"\
+        namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1424832\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Simple document viewer\"\
+        ,\n      \"upstream_url\": \"https://github.com/linuxmint/xreader\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1487684911.0,\n    \
+        \  \"description\": \"Xviewer is a simple graphics viewer for the Cinnamon\
+        \ desktop and others\\nwhich uses the gdk-pixbuf library. It can deal with\
+        \ large images, and zoom\\nand scroll with constant memory usage. Its goals\
+        \ are simplicity and standards\\ncompliance.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"xviewer\",\n      \"\
+        namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1424825\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Fast and functional\
+        \ graphics viewer\",\n      \"upstream_url\": \"https://github.com/linuxmint/xviewer\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1494246909.0,\n\
+        \      \"description\": \"This package contains plugins for additional features\
+        \ in xviewer.\",\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n\
+        \      \"name\": \"xviewer-plugins\",\n      \"namespace\": \"rpms\",\n  \
+        \    \"review_url\": \"https://bugzilla.redhat.com/1424826\",\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"A collection of plugins for xviewer\"\
+        ,\n      \"upstream_url\": \"https://github.com/linuxmint/xviewer-plugins\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1492464727.0,\n\
+        \      \"description\": \"Zypper is a command line package manager tool using\
+        \ libzypp,\\nwhich can be used to manage software for RPM based systems.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"zypper\",\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1427185\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Command line package\
+        \ manager using libzypp\",\n      \"upstream_url\": \"http://en.opensuse.org/Portal:Zypper\"\
         \n    }\n  ],\n  \"output\": \"ok\",\n  \"point of contact\": [\n    {\n \
         \     \"acls\": [],\n      \"creation_date\": 1417698223.0,\n      \"description\"\
         : \"A cli version of the game 2048 for your Linux terminal.\",\n      \"koschei_monitor\"\
@@ -409,78 +914,38 @@ interactions:
         : \"SuperLU\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
         \      \"status\": \"Approved\",\n      \"summary\": \"Subroutines to solve\
         \ sparse linear systems\",\n      \"upstream_url\": \"http://crd-legacy.lbl.gov/~xiaoye/SuperLU/\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1424204993.0,\n\
-        \      \"description\": \"This is a different, Qt5-compatible approach of\
-        \ the existing appmenu-qt\\n(https://launchpad.net/appmenu-qt).\\n\\nappmenu-qt5\
-        \ is a Qt5 QPA theme plugin that adds support for application\\nmenus to Qt5\
-        \ applications.  This only works for Qt5 versions >= 5.2\\ncurrently.  To\
-        \ enable the support, set QT_QPA_PLATFORMTHEME=appmenu-qt5\\nin your environment\
-        \ or install the appmenu-qt5-profile.d package to\\nenable system-wide, see\
-        \ README.fedora *BEFORE* for further information.\",\n      \"koschei_monitor\"\
-        : true,\n      \"monitor\": true,\n      \"name\": \"appmenu-qt5\",\n    \
-        \  \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1185002\"\
-        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Support for global\
-        \ DBus-exported application menu in Qt5\",\n      \"upstream_url\": \"https://launchpad.net/appmenu-qt5\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1484059095.0,\n\
-        \      \"description\": \"\\nArc is a flat theme with transparent elements\
-        \ for GTK 3, GTK 2 and\\nGnome-Shell which supports GTK 3 and GTK 2 based\
-        \ desktop environments\\nlike Gnome, Cinnamon, Budgie, Pantheon, XFCE, Mate,\
-        \ etc.\",\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n  \
-        \    \"name\": \"arc-theme\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : \"https://bugzilla.redhat.com/1411438\",\n      \"status\": \"Approved\"\
-        ,\n      \"summary\": \"Flat theme with transparent elements\",\n      \"\
-        upstream_url\": \"https://github.com/horst3180/arc-theme\"\n    },\n    {\n\
-        \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
-        : \"ARPREC is a software package for performing arbitrary precision\\narithmetic.\
-        \  It consists of a revision and extension of Bailey's\\nearlier MPFUN package,\
-        \ enhanced with special IEEE numerical\\ntechniques.  Features include:\\\
-        n\\n  * Written in C++ for broad portability and fast execution.\\n\\n  *\
-        \ Includes C++ and Fortran 90/95 interfaces based on custom data-types\\n\
-        \    and operator/function overloading, which permit the library to be\\n\
-        \    used with only minor modifications for many conventional C++ and\\n \
-        \   Fortran-90 programs.\\n\\n  * Includes all of the usual arithmetic operations,\
-        \ as well as many\\n    transcendental functions, including cos, sin, tan,\
-        \ arccos, arcsin,\\n    arctan, exp, log, log10, erf, gamma and Bessel functions.\\\
-        n\\n  * Supports three arbitrary precision data-types: mp_real, mp_int\\n\
-        \    and mp_complex.\\n\\n  * Supports many mixed-mode operations between\
-        \ arbitrary precision\\n    variables or constants and conventional variables\
-        \ or constants.\\n\\n  * Includes special library routines, incorporating\
-        \ advanced\\n    algorithms for extra-high precision (above 1000 digits) computation.\\\
-        n\\n  * Includes a number of sample application programs, including programs\\\
-        n    for quadrature (numerical definite integrals), PLSQ (integer relation\\\
-        n    finding) and polynomial root finding.\\n\\n  * Includes the \\\"Experimental\
-        \ Mathematician's Toolkit\\\".  This is a\\n    self-contained interactive\
-        \ program that performs many operations\\n    typical of modern experimental\
-        \ mathematics, including arithmetic\\n    expressions, common transcendental\
-        \ functions, infinite series\\n    evaluation, definite integrals, polynomial\
-        \ roots, user-defined\\n    functions, all evaluated to a user-defined level\
-        \ of numeric\\n    precision, up to 1000 decimal digits.\",\n      \"koschei_monitor\"\
-        : false,\n      \"monitor\": true,\n      \"name\": \"arprec\",\n      \"\
-        namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\": \"\
-        Approved\",\n      \"summary\": \"Software package for performing arbitrary\
-        \ precision arithmetic\",\n      \"upstream_url\": \"http://crd.lbl.gov/~dhbailey/mpdist\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1483655017.0,\n\
-        \      \"description\": \"Bluetooth configuration tool depending on gnome-bluetooth.\"\
-        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
-        : \"blueberry\",\n      \"namespace\": \"rpms\",\n      \"review_url\": \"\
-        https://bugzilla.redhat.com/1409404\",\n      \"status\": \"Approved\",\n\
-        \      \"summary\": \"Bluetooth configuration tool\",\n      \"upstream_url\"\
-        : \"https://github.com/linuxmint/blueberry\"\n    },\n    {\n      \"acls\"\
-        : [],\n      \"creation_date\": 1487684706.0,\n      \"description\": \"This\
-        \ was a GSoC'10 project to implement a new command line tools for\\nbluez\
-        \ (Bluetooth stack for Linux).  It is currently an active open\\nsource project.\\\
-        n\\nThe project is implemented in C and uses the D-Bus interface of bluez.\\\
-        n\\nThe project is still a work in progress, and not all APIs from Bluez\\\
-        nhave been implemented as a part of bluez-tools.  The APIs which have\\nbeen\
-        \ implemented in bluez-tools are adapter, agent, device, network\\nand obex.\
-        \  Other APIs, such as interfaces for medical devices,\\npedometers and other\
-        \ specific APIs have not been ported to bluez-tools.\",\n      \"koschei_monitor\"\
-        : true,\n      \"monitor\": true,\n      \"name\": \"bluez-tools\",\n    \
-        \  \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1424772\"\
-        ,\n      \"status\": \"Approved\",\n      \"summary\": \"A set of tools to\
-        \ manage Bluetooth devices for Linux\",\n      \"upstream_url\": \"https://github.com/khvzak/bluez-tools\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"The BuildBot is a system to automate the compile/test\
+        \      \"description\": \"ARPREC is a software package for performing arbitrary\
+        \ precision\\narithmetic.  It consists of a revision and extension of Bailey's\\\
+        nearlier MPFUN package, enhanced with special IEEE numerical\\ntechniques.\
+        \  Features include:\\n\\n  * Written in C++ for broad portability and fast\
+        \ execution.\\n\\n  * Includes C++ and Fortran 90/95 interfaces based on custom\
+        \ data-types\\n    and operator/function overloading, which permit the library\
+        \ to be\\n    used with only minor modifications for many conventional C++\
+        \ and\\n    Fortran-90 programs.\\n\\n  * Includes all of the usual arithmetic\
+        \ operations, as well as many\\n    transcendental functions, including cos,\
+        \ sin, tan, arccos, arcsin,\\n    arctan, exp, log, log10, erf, gamma and\
+        \ Bessel functions.\\n\\n  * Supports three arbitrary precision data-types:\
+        \ mp_real, mp_int\\n    and mp_complex.\\n\\n  * Supports many mixed-mode\
+        \ operations between arbitrary precision\\n    variables or constants and\
+        \ conventional variables or constants.\\n\\n  * Includes special library routines,\
+        \ incorporating advanced\\n    algorithms for extra-high precision (above\
+        \ 1000 digits) computation.\\n\\n  * Includes a number of sample application\
+        \ programs, including programs\\n    for quadrature (numerical definite integrals),\
+        \ PLSQ (integer relation\\n    finding) and polynomial root finding.\\n\\\
+        n  * Includes the \\\"Experimental Mathematician's Toolkit\\\".  This is a\\\
+        n    self-contained interactive program that performs many operations\\n \
+        \   typical of modern experimental mathematics, including arithmetic\\n  \
+        \  expressions, common transcendental functions, infinite series\\n    evaluation,\
+        \ definite integrals, polynomial roots, user-defined\\n    functions, all\
+        \ evaluated to a user-defined level of numeric\\n    precision, up to 1000\
+        \ decimal digits.\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
+        : true,\n      \"name\": \"arprec\",\n      \"namespace\": \"rpms\",\n   \
+        \   \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
+        : \"Software package for performing arbitrary precision arithmetic\",\n  \
+        \    \"upstream_url\": \"http://crd.lbl.gov/~dhbailey/mpdist\"\n    },\n \
+        \   {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n     \
+        \ \"description\": \"The BuildBot is a system to automate the compile/test\
         \ cycle required by\\nmost software projects to validate code changes. By\
         \ automatically\\nrebuilding and testing the tree each time something has\
         \ changed, build\\nproblems are pinpointed quickly, before other developers\
@@ -503,54 +968,27 @@ interactions:
         namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\": \"\
         Approved\",\n      \"summary\": \"Tool to check system for binary-hardening\"\
         ,\n      \"upstream_url\": \"http://www.trapkit.de/tools/checksec.html\"\n\
-        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1476187308.0,\n\
-        \      \"description\": \"This applet integrates the Ubuntu Application Menu\
-        \ (Global Menu)\\nsupport into the Cinnamon Desktop.  It uses the same idea\
-        \ as the\\nGnome Shell extension made by rgcjonas.\\n\\nThis is a third-party\
-        \ applet, not official.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
-        : true,\n      \"name\": \"cinnamon-applet-globalappmenu\",\n      \"namespace\"\
-        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1382810\"\
-        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Ubuntu AppMenu support\
-        \ for Cinnamon Desktop\",\n      \"upstream_url\": \"https://github.com/lestcape/Global-AppMenu\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1483971831.0,\n\
-        \      \"description\": \"Collection of the best themes available for Cinnamon.\"\
-        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
-        : \"cinnamon-themes\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : \"https://bugzilla.redhat.com/1411151\",\n      \"status\": \"Approved\"\
-        ,\n      \"summary\": \"Collection of the best themes available for Cinnamon\"\
-        ,\n      \"upstream_url\": \"http://cinnamon.linuxmint.com\"\n    },\n   \
-        \ {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"\
-        description\": \"CMake is used to control the software compilation process\
-        \ using simple\\nplatform and compiler independent configuration files. CMake\
-        \ generates\\nnative makefiles and workspaces that can be used in the compiler\\\
-        nenvironment of your choice. CMake is quite sophisticated: it is possible\\\
-        nto support complex environments requiring system configuration, preprocessor\\\
-        ngeneration, code generation, and template instantiation.\\n\\nThis package\
-        \ is for compatibility purposes only, and links to cmake as\\ndistributed\
-        \ by EL-6.\",\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n\
-        \      \"name\": \"cmake28\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Cross-platform\
-        \ make system\",\n      \"upstream_url\": \"http://www.cmake.org\"\n    },\n\
-        \    {\n      \"acls\": [],\n      \"creation_date\": 1457453001.0,\n    \
-        \  \"description\": \"CMake is used to control the software compilation process\
-        \ using simple\\nplatform and compiler independent configuration files. CMake\
-        \ generates\\nnative makefiles and workspaces that can be used in the compiler\\\
-        nenvironment of your choice. CMake is quite sophisticated: it is possible\\\
-        nto support complex environments requiring system configuration, preprocessor\\\
-        ngeneration, code generation, and template instantiation.\",\n      \"koschei_monitor\"\
-        : false,\n      \"monitor\": \"None\",\n      \"name\": \"cmake3\",\n    \
-        \  \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1315193\"\
-        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Cross-platform make\
-        \ system\",\n      \"upstream_url\": \"http://www.cmake.org\"\n    },\n  \
-        \  {\n      \"acls\": [],\n      \"creation_date\": 1486064435.0,\n      \"\
-        description\": \"dnfdragora is a DNF frontend, based on rpmdragora from Mageia\\\
-        n(originally rpmdrake) Perl code.\\n\\ndnfdragora is written in Python 3 and\
-        \ uses libYui, the widget\\nabstraction library written by SUSE, so that it\
-        \ can be run\\nusing Qt 5, GTK+ 3, or ncurses interfaces.\",\n      \"koschei_monitor\"\
-        : true,\n      \"monitor\": true,\n      \"name\": \"dnfdragora\",\n     \
-        \ \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1418788\"\
-        ,\n      \"status\": \"Approved\",\n      \"summary\": \"DNF package-manager\
-        \ based on libYui abstraction\",\n      \"upstream_url\": \"https://github.com/manatools/dnfdragora\"\
+        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1457453001.0,\n\
+        \      \"description\": \"CMake is used to control the software compilation\
+        \ process using simple\\nplatform and compiler independent configuration files.\
+        \ CMake generates\\nnative makefiles and workspaces that can be used in the\
+        \ compiler\\nenvironment of your choice. CMake is quite sophisticated: it\
+        \ is possible\\nto support complex environments requiring system configuration,\
+        \ preprocessor\\ngeneration, code generation, and template instantiation.\"\
+        ,\n      \"koschei_monitor\": false,\n      \"monitor\": \"None\",\n     \
+        \ \"name\": \"cmake3\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1315193\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Cross-platform make system\",\n      \"upstream_url\"\
+        : \"http://www.cmake.org\"\n    },\n    {\n      \"acls\": [],\n      \"creation_date\"\
+        : 1486064435.0,\n      \"description\": \"dnfdragora is a DNF frontend, based\
+        \ on rpmdragora from Mageia\\n(originally rpmdrake) Perl code.\\n\\ndnfdragora\
+        \ is written in Python 3 and uses libYui, the widget\\nabstraction library\
+        \ written by SUSE, so that it can be run\\nusing Qt 5, GTK+ 3, or ncurses\
+        \ interfaces.\",\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n\
+        \      \"name\": \"dnfdragora\",\n      \"namespace\": \"rpms\",\n      \"\
+        review_url\": \"https://bugzilla.redhat.com/1418788\",\n      \"status\":\
+        \ \"Approved\",\n      \"summary\": \"DNF package-manager based on libYui\
+        \ abstraction\",\n      \"upstream_url\": \"https://github.com/manatools/dnfdragora\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1427748861.0,\n\
         \      \"description\": \"\\nRyan, a bartender from a dystopian future can't\
         \ sleep peacefully\\nfor months.  His nights are sequences of nightmares and\
@@ -673,11 +1111,21 @@ interactions:
         \ compiled ELF file\\nwas built using hardening flags.\\n\\nIt checks, using\
         \ readelf, for these hardening characteristics:\\n\\n  * Position Independent\
         \ Executable\\n  * Stack protected\\n  * Fortify source functions\\n  * Read-only\
-        \ relocations\\n  * Immediate binding\",\n      \"koschei_monitor\": false,\n\
+        \ relocations\\n  * Immediate binding\",\n      \"koschei_monitor\": true,\n\
         \      \"monitor\": true,\n      \"name\": \"hardening-check\",\n      \"\
         namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\": \"\
         Approved\",\n      \"summary\": \"Tool to check ELF for being built hardened\"\
         ,\n      \"upstream_url\": \"http://packages.debian.org/source/sid/hardening-wrapper\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1497618497.0,\n\
+        \      \"description\": \"hardening-check is a tool to check whether an already\
+        \ compiled ELF file\\nwas built using hardening flags.\\n\\nIt checks, using\
+        \ readelf, for these hardening characteristics:\\n\\n  * Position Independent\
+        \ Executable\\n  * Stack protected\\n  * Fortify source functions\\n  * Read-only\
+        \ relocations\\n  * Immediate binding\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": true,\n      \"name\": \"hardening-wrapper\",\n      \"\
+        namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1444428\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Tool to check ELF\
+        \ for being built hardened\",\n      \"upstream_url\": \"http://packages.debian.org/hardening-wrapper\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"Icecast is a streaming media server which currently\
         \ supports\\nOgg Vorbis and MP3 audio streams.  It can be used to create an\\\
@@ -690,32 +1138,33 @@ interactions:
         \ streaming media server\",\n      \"upstream_url\": \"http://www.icecast.org/\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"JSON-C implements a reference counting object model\
-        \ that allows you to easily\\nconstruct JSON objects in C, output them as\
-        \ JSON formatted strings and parse\\nJSON formatted strings back into the\
-        \ C representation of JSON objects.\",\n      \"koschei_monitor\": false,\n\
-        \      \"monitor\": true,\n      \"name\": \"json-c\",\n      \"namespace\"\
-        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
-        \      \"summary\": \"A JSON implementation in C\",\n      \"upstream_url\"\
-        : \"https://github.com/json-c/json-c/wiki\"\n    },\n    {\n      \"acls\"\
-        : [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"jsoncpp\
-        \ is an implementation of a JSON (http://json.org) reader and writer in\\\
-        nC++. JSON (JavaScript Object Notation) is a lightweight data-interchange\
-        \ format.\\nIt is easy for humans to read and write. It is easy for machines\
-        \ to parse and\\ngenerate.\",\n      \"koschei_monitor\": true,\n      \"\
-        monitor\": \"nobuild\",\n      \"name\": \"jsoncpp\",\n      \"namespace\"\
-        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
-        \      \"summary\": \"JSON library implemented in C++\",\n      \"upstream_url\"\
-        : \"https://github.com/open-source-parsers/jsoncpp\"\n    },\n    {\n    \
-        \  \"acls\": [],\n      \"creation_date\": 1457377727.0,\n      \"description\"\
-        : \"Libarchive is a programming library that can create and read several different\\\
-        nstreaming archive formats, including most popular tar variants, several cpio\\\
-        nformats, and both BSD and GNU ar variants. It can also write shar archives\
-        \ and\\nread ISO9660 CDROM images and ZIP archives.\",\n      \"koschei_monitor\"\
-        : false,\n      \"monitor\": true,\n      \"name\": \"libarchive3\",\n   \
-        \   \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1315307\"\
-        ,\n      \"status\": \"Approved\",\n      \"summary\": \"A library for handling\
-        \ streaming archive formats\",\n      \"upstream_url\": \"http://www.libarchive.org/\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \ that allows you\\nto easily construct JSON objects in C, output them as\
+        \ JSON formatted\\nstrings and parse JSON formatted strings back into the\
+        \ C representation\\nof JSON objects.  It aims to conform to RFC 7159.\",\n\
+        \      \"koschei_monitor\": false,\n      \"monitor\": true,\n      \"name\"\
+        : \"json-c\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
+        \      \"status\": \"Approved\",\n      \"summary\": \"JSON implementation\
+        \ in C\",\n      \"upstream_url\": \"https://github.com/json-c/json-c\"\n\
+        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"jsoncpp is an implementation of a JSON (http://json.org)\
+        \ reader and writer in\\nC++. JSON (JavaScript Object Notation) is a lightweight\
+        \ data-interchange format.\\nIt is easy for humans to read and write. It is\
+        \ easy for machines to parse and\\ngenerate.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": \"nobuild\",\n      \"name\": \"jsoncpp\",\n \
+        \     \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"JSON library implemented in C++\",\n\
+        \      \"upstream_url\": \"https://github.com/open-source-parsers/jsoncpp\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1457377727.0,\n\
+        \      \"description\": \"Libarchive is a programming library that can create\
+        \ and read several different\\nstreaming archive formats, including most popular\
+        \ tar variants, several cpio\\nformats, and both BSD and GNU ar variants.\
+        \ It can also write shar archives and\\nread ISO9660 CDROM images and ZIP\
+        \ archives.\",\n      \"koschei_monitor\": false,\n      \"monitor\": true,\n\
+        \      \"name\": \"libarchive3\",\n      \"namespace\": \"rpms\",\n      \"\
+        review_url\": \"https://bugzilla.redhat.com/1315307\",\n      \"status\":\
+        \ \"Approved\",\n      \"summary\": \"A library for handling streaming archive\
+        \ formats\",\n      \"upstream_url\": \"http://www.libarchive.org/\"\n   \
+        \ },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"The Berkeley Database (Berkeley DB) is a programmatic\
         \ toolkit that\\nprovides embedded database support for both traditional and\\\
         nclient/server applications. The Berkeley DB includes B+tree, Extended\\nLinear\
@@ -828,29 +1277,17 @@ interactions:
         ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"Maven Mojo to generate code for Mahout\
         \ Collections\",\n      \"upstream_url\": \"http://mahout.apache.org/\"\n\
-        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1483971411.0,\n\
-        \      \"description\": \"Icon theme for Linux Mint.\",\n      \"koschei_monitor\"\
-        : true,\n      \"monitor\": true,\n      \"name\": \"mint-x-icons\",\n   \
-        \   \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1411152\"\
-        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Icon theme for Linux\
-        \ Mint\",\n      \"upstream_url\": \"http://linuxmint.com\"\n    },\n    {\n\
-        \      \"acls\": [],\n      \"creation_date\": 1483971339.0,\n      \"description\"\
-        : \"The Mint-Y icon theme.\",\n      \"koschei_monitor\": true,\n      \"\
-        monitor\": true,\n      \"name\": \"mint-y-icons\",\n      \"namespace\":\
-        \ \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1411153\"\
-        ,\n      \"status\": \"Approved\",\n      \"summary\": \"The Mint-Y icon theme\"\
-        ,\n      \"upstream_url\": \"http://linuxmint.com\"\n    },\n    {\n     \
-        \ \"acls\": [],\n      \"creation_date\": 1405361161.0,\n      \"description\"\
-        : \"This package contains the\\nSELinux-policy-module for pipelight.\",\n\
-        \      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\"\
-        : \"pipelight-selinux\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : \"https://bugzilla.redhat.com/1119288\",\n      \"status\": \"Approved\"\
-        ,\n      \"summary\": \"SELinux-policy-module for pipelight\",\n      \"upstream_url\"\
-        : \"https://github.com/besser82/pipelight-selinux\"\n    },\n    {\n     \
-        \ \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
-        : \"Premake is a build configuration tool that can generate project files\
-        \ for:\\n - GNU make\\n - Code::Blocks\\n - CodeLite\\n - MonoDevelop\\n -\
-        \ SharpDevelop\\n - Apple XCode\\n - Microsoft Visual Studio\",\n      \"\
+        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1405361161.0,\n\
+        \      \"description\": \"This package contains the\\nSELinux-policy-module\
+        \ for pipelight.\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
+        : false,\n      \"name\": \"pipelight-selinux\",\n      \"namespace\": \"\
+        rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1119288\",\n\
+        \      \"status\": \"Approved\",\n      \"summary\": \"SELinux-policy-module\
+        \ for pipelight\",\n      \"upstream_url\": \"https://github.com/besser82/pipelight-selinux\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"Premake is a build configuration tool that can generate\
+        \ project files for:\\n - GNU make\\n - Code::Blocks\\n - CodeLite\\n - MonoDevelop\\\
+        n - SharpDevelop\\n - Apple XCode\\n - Microsoft Visual Studio\",\n      \"\
         koschei_monitor\": false,\n      \"monitor\": true,\n      \"name\": \"premake\"\
         ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"Cross-platform build configuration tool\"\
@@ -897,11 +1334,11 @@ interactions:
         Approved\",\n      \"summary\": \"Collection of fast NumPy array functions\
         \ written in Cython\",\n      \"upstream_url\": \"http://berkeleyanalytics.com/bottleneck\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"Building a command-line interface?  Found yourself\
-        \ uttering \\u201cargh!\\u201d while\\nstruggling with the API of argparse?\
-        \  Don\\u2019t want to lose its power but don\\u2019t\\nneed the complexity?\\\
-        n\\npython-argh provides a wrapper for argparse.  Argparse is a very\\npowerful\
-        \ tool;  python-argh just makes it easy to use.\",\n      \"koschei_monitor\"\
+        \      \"description\": \"\\nBuilding a command-line interface?  Found yourself\
+        \ uttering \\u201cargh!\\u201d\\nwhile struggling with the API of argparse?\
+        \  Don\\u2019t want to lose its\\npower but don\\u2019t need the complexity?\\\
+        n\\npython-argh provides a wrapper for argparse.  Argparse is a very powerful\\\
+        ntool;  python-argh just makes it easy to use.\",\n      \"koschei_monitor\"\
         : true,\n      \"monitor\": true,\n      \"name\": \"python-argh\",\n    \
         \  \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"Unobtrusive argparse wrapper with natural\
@@ -927,13 +1364,23 @@ interactions:
         : \"https://bugzilla.redhat.com/1387836\",\n      \"status\": \"Approved\"\
         ,\n      \"summary\": \"Interpret strings as packed binary data\",\n     \
         \ \"upstream_url\": \"https://pypi.python.org/pypi/bitstruct\"\n    },\n \
-        \   {\n      \"acls\": [],\n      \"creation_date\": 1477334158.0,\n     \
-        \ \"description\": \"USB programmer for devices based on the Joyetech Evic\
-        \ VTC Mini.\",\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n\
-        \      \"name\": \"python-evic\",\n      \"namespace\": \"rpms\",\n      \"\
-        review_url\": \"https://bugzilla.redhat.com/1387834\",\n      \"status\":\
-        \ \"Approved\",\n      \"summary\": \"USB programmer for devices based on\
-        \ the Joyetech Evic VTC Mini\",\n      \"upstream_url\": \"https://github.com/Ban3/python-evic\"\
+        \   {\n      \"acls\": [],\n      \"creation_date\": 1492779269.0,\n     \
+        \ \"description\": \"\\nbz2file is a Python library for reading and writing\\\
+        nbzip2-compressed files.\\n\\nIt contains a drop-in replacement for the file\
+        \ interface in the\\nstandard library\\u2019s bz2 module, including features\
+        \ from the latest\\ndevelopment version of CPython that are not available\
+        \ in older releases.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
+        : true,\n      \"name\": \"python-bz2file\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1442743\",\n      \"\
+        status\": \"Approved\",\n      \"summary\": \"Read and write bzip2-compressed\
+        \ files\",\n      \"upstream_url\": \"https://pypi.python.org/pypi/bz2file\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1477334158.0,\n\
+        \      \"description\": \"USB programmer for devices based on the Joyetech\
+        \ Evic VTC Mini.\",\n      \"koschei_monitor\": true,\n      \"monitor\":\
+        \ true,\n      \"name\": \"python-evic\",\n      \"namespace\": \"rpms\",\n\
+        \      \"review_url\": \"https://bugzilla.redhat.com/1387834\",\n      \"\
+        status\": \"Approved\",\n      \"summary\": \"USB programmer for devices based\
+        \ on the Joyetech Evic VTC Mini\",\n      \"upstream_url\": \"https://github.com/Ban3/python-evic\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"\\nGensim is a Python library for topic modelling,\
         \ document indexing\\nand similarity retrieval with large corpora.  Target\
@@ -976,29 +1423,36 @@ interactions:
         : \"python-ngram\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
         : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Set-based subclass\
         \ providing fuzzy search based on N-grams\",\n      \"upstream_url\": \"https://github.com/gpoulter/python-ngram\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"python-pathtools is a Python API library for common\
-        \ path\\nand pattern functionality.\",\n      \"koschei_monitor\": false,\n\
-        \      \"monitor\": false,\n      \"name\": \"python-pathtools\",\n      \"\
-        namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\": \"\
-        Approved\",\n      \"summary\": \"Pattern matching and various utilities for\
-        \ file systems paths\",\n      \"upstream_url\": \"https://github.com/gorakhargosh/pathtools\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1475011230.0,\n\
-        \      \"description\": \"\\nThe psycogreen package enables psycopg2 to work\
-        \ with co-routine libraries,\\nusing asynchronous calls internally but offering\
-        \ a blocking interface so\\nthat regular code can run unmodified.  Psycopg\
-        \ offers co-routines support\\nsince release 2.2.  Because the main module\
-        \ is a C extension it cannot be\\nmonkey-patched to become co-routine-friendly.\
-        \  Instead it exposes a hook\\nthat co-routine libraries can use to install\
-        \ a function integrating with\\ntheir event scheduler.  Psycopg will call\
-        \ the function whenever it\\nexecutes a libpq call that may block.  Psycogreen\
-        \ is a collection of \\u201cwait\\ncallbacks\\u201d useful to integrate Psycopg\
-        \ with different co-routine libraries.\",\n      \"koschei_monitor\": true,\n\
-        \      \"monitor\": true,\n      \"name\": \"python-psycogreen\",\n      \"\
-        namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1379421\"\
-        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Psycopg2 integration\
-        \ with co-routine libraries\",\n      \"upstream_url\": \"https://pypi.python.org/pypi/psycogreen\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1490794685.0,\n\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1493296377.0,\n\
+        \      \"description\": \"A plugin that changes nose to behave better.\",\n\
+        \      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"python-nose_fixes\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1445822\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Plugin to make nose behave better\",\n      \"upstream_url\"\
+        : \"https://pypi.python.org/pypi/nose_fixes\"\n    },\n    {\n      \"acls\"\
+        : [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"python-pathtools\
+        \ is a Python API library for common path\\nand pattern functionality.\",\n\
+        \      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\"\
+        : \"python-pathtools\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Pattern matching\
+        \ and various utilities for file systems paths\",\n      \"upstream_url\"\
+        : \"https://github.com/gorakhargosh/pathtools\"\n    },\n    {\n      \"acls\"\
+        : [],\n      \"creation_date\": 1475011230.0,\n      \"description\": \"\\\
+        nThe psycogreen package enables psycopg2 to work with co-routine libraries,\\\
+        nusing asynchronous calls internally but offering a blocking interface so\\\
+        nthat regular code can run unmodified.  Psycopg offers co-routines support\\\
+        nsince release 2.2.  Because the main module is a C extension it cannot be\\\
+        nmonkey-patched to become co-routine-friendly.  Instead it exposes a hook\\\
+        nthat co-routine libraries can use to install a function integrating with\\\
+        ntheir event scheduler.  Psycopg will call the function whenever it\\nexecutes\
+        \ a libpq call that may block.  Psycogreen is a collection of \\u201cwait\\\
+        ncallbacks\\u201d useful to integrate Psycopg with different co-routine libraries.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"python-psycogreen\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1379421\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Psycopg2 integration with co-routine libraries\",\n\
+        \      \"upstream_url\": \"https://pypi.python.org/pypi/psycogreen\"\n   \
+        \ },\n    {\n      \"acls\": [],\n      \"creation_date\": 1490794685.0,\n\
         \      \"description\": \"This library allows you to create a system tray\
         \ icon.\",\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n \
         \     \"name\": \"python-pystray\",\n      \"namespace\": \"rpms\",\n    \
@@ -1031,32 +1485,46 @@ interactions:
         ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"Sphinx extension cheeseshop\",\n   \
         \   \"upstream_url\": \"https://pypi.python.org/pypi/sphinxcontrib-cheeseshop\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"This package provides numeric types of twice the\
-        \ precision of IEEE\\ndouble (106 mantissa bits, or approximately 32 decimal\
-        \ digits) and\\nfour times the precision of IEEE double (212 mantissa bits,\
-        \ or\\napproximately 64 decimal digits).  Due to features such as operator\\\
-        nand function overloading, these facilities can be utilized\\nwith only minor\
-        \ modifications to conventional C++ and Fortran-90\\nprograms.\\n\\nIn addition\
-        \ to the basic arithmetic operations (add, subtract,\\nmultiply, divide, square\
-        \ root), common transcendental functions such\\nas the exponential, logarithm,\
-        \ trigonometric and hyperbolic functions\\nare also included.\",\n      \"\
-        koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\": \"qd\"\
-        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"Double-Double and Quad-Double Arithmetic\"\
-        ,\n      \"upstream_url\": \"http://crd.lbl.gov/~dhbailey/mpdist/\"\n    },\n\
-        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
-        \  \"description\": \"These scripts allow one to manage a series of patches\
-        \ by keeping track of the\\nchanges each patch makes. Patches can be applied,\
-        \ un-applied, refreshed, etc.\\n\\nThe scripts are heavily based on Andrew\
-        \ Morton's patch scripts found at\\nhttp://www.zip.com.au/~akpm/linux/patches/\"\
-        ,\n      \"koschei_monitor\": false,\n      \"monitor\": true,\n      \"name\"\
-        : \"quilt\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
-        \      \"status\": \"Approved\",\n      \"summary\": \"Scripts for working\
-        \ with series of patches\",\n      \"upstream_url\": \"http://savannah.nongnu.org/projects/quilt\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1407355660.0,\n\
-        \      \"description\": \"\\nRapidJSON is a fast JSON parser and generator\
-        \ for C++.  It was\\ninspired by RapidXml.\\n\\n  RapidJSON is small but complete.\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1493296614.0,\n\
+        \      \"description\": \"\\nTestFixtures is a collection of helpers and mock\
+        \ objects that are\\nuseful when writing unit tests or doc tests.\\n\\nIf\
+        \ you\\u2019re wondering why \\u201cyet another mock object library\\u201d,\
+        \ testing\\nis often described as an art form and as such some styles of library\\\
+        nwill suit some people while others will suit other styles.  This\\nlibrary\
+        \ contains common test fixtures the author found himself\\nrepeating from\
+        \ package to package and so decided to extract them\\ninto their own library\
+        \ and give them some tests of their own!\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": true,\n      \"name\": \"python-testfixtures\",\n    \
+        \  \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1445824\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Collection of helpers\
+        \ and mock objects for unit tests and doc tests\",\n      \"upstream_url\"\
+        : \"https://pypi.python.org/pypi/testfixtures\"\n    },\n    {\n      \"acls\"\
+        : [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"This\
+        \ package provides numeric types of twice the precision of IEEE\\ndouble (106\
+        \ mantissa bits, or approximately 32 decimal digits) and\\nfour times the\
+        \ precision of IEEE double (212 mantissa bits, or\\napproximately 64 decimal\
+        \ digits).  Due to features such as operator\\nand function overloading, these\
+        \ facilities can be utilized\\nwith only minor modifications to conventional\
+        \ C++ and Fortran-90\\nprograms.\\n\\nIn addition to the basic arithmetic\
+        \ operations (add, subtract,\\nmultiply, divide, square root), common transcendental\
+        \ functions such\\nas the exponential, logarithm, trigonometric and hyperbolic\
+        \ functions\\nare also included.\",\n      \"koschei_monitor\": false,\n \
+        \     \"monitor\": false,\n      \"name\": \"qd\",\n      \"namespace\": \"\
+        rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n  \
+        \    \"summary\": \"Double-Double and Quad-Double Arithmetic\",\n      \"\
+        upstream_url\": \"http://crd.lbl.gov/~dhbailey/mpdist/\"\n    },\n    {\n\
+        \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        : \"These scripts allow one to manage a series of patches by keeping track\
+        \ of the\\nchanges each patch makes. Patches can be applied, un-applied, refreshed,\
+        \ etc.\\n\\nThe scripts are heavily based on Andrew Morton's patch scripts\
+        \ found at\\nhttp://www.zip.com.au/~akpm/linux/patches/\",\n      \"koschei_monitor\"\
+        : false,\n      \"monitor\": true,\n      \"name\": \"quilt\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"Scripts for working with series of patches\",\n    \
+        \  \"upstream_url\": \"http://savannah.nongnu.org/projects/quilt\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1407355660.0,\n    \
+        \  \"description\": \"\\nRapidJSON is a fast JSON parser and generator for\
+        \ C++.  It was\\ninspired by RapidXml.\\n\\n  RapidJSON is small but complete.\
         \  It supports both SAX and DOM style\\n  API. The SAX parser is only a half\
         \ thousand lines of code.\\n\\n  RapidJSON is fast.  Its performance can be\
         \ comparable to strlen().\\n  It also optionally supports SSE2/SSE4.1 for\
@@ -1208,50 +1676,42 @@ interactions:
         \ Shogun's development activity can be found on ohloh.\",\n      \"koschei_monitor\"\
         : true,\n      \"monitor\": true,\n      \"name\": \"shogun\",\n      \"namespace\"\
         : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
-        \      \"summary\": \"Large Scale Machine Learning Toolbox\",\n      \"upstream_url\"\
-        : \"http://shogun-toolbox.org\"\n    },\n    {\n      \"acls\": [],\n    \
-        \  \"creation_date\": 1400070978.0,\n      \"description\": \"This package\
-        \ contains data-files needed for running the test-suite\\nand examples of\
-        \ the SHOGUN machine learning toolbox.\",\n      \"koschei_monitor\": false,\n\
-        \      \"monitor\": false,\n      \"name\": \"shogun-data\",\n      \"namespace\"\
-        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
-        \      \"summary\": \"Data-files for the SHOGUN machine learning toolbox\"\
+        \      \"summary\": \"Unified and efficient Machine Learning since 1999\"\
         ,\n      \"upstream_url\": \"http://shogun-toolbox.org\"\n    },\n    {\n\
-        \      \"acls\": [],\n      \"creation_date\": 1405021344.0,\n      \"description\"\
-        : \"SoundKonverter is a front-end to various audio converters.\\n\\nThe key\
-        \ features are:\\n  * Audio conversion\\n  * Replay Gain calculation\\n  *\
-        \ CD ripping\",\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n\
-        \      \"name\": \"soundkonverter\",\n      \"namespace\": \"rpms\",\n   \
-        \   \"review_url\": \"https://bugzilla.redhat.com/1114547\",\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"Audio file converter, CD ripper and\
-        \ Replay Gain tool\",\n      \"upstream_url\": \"http://kde-apps.org/content/show.php?content=29024\"\
+        \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        : \"This package contains data-files needed for running the test-suite\\nand\
+        \ examples of the SHOGUN machine learning toolbox.\",\n      \"koschei_monitor\"\
+        : false,\n      \"monitor\": false,\n      \"name\": \"shogun-data\",\n  \
+        \    \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Data-files for the SHOGUN machine learning\
+        \ toolbox\",\n      \"upstream_url\": \"http://shogun-toolbox.org\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1405021344.0,\n    \
+        \  \"description\": \"SoundKonverter is a front-end to various audio converters.\\\
+        n\\nThe key features are:\\n  * Audio conversion\\n  * Replay Gain calculation\\\
+        n  * CD ripping\",\n      \"koschei_monitor\": false,\n      \"monitor\":\
+        \ false,\n      \"name\": \"soundkonverter\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1114547\",\n      \"\
+        status\": \"Approved\",\n      \"summary\": \"Audio file converter, CD ripper\
+        \ and Replay Gain tool\",\n      \"upstream_url\": \"http://kde-apps.org/content/show.php?content=29024\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"The Google SparseHash project contains several C++\
-        \ template hash-map\\nimplementations with different performance characteristics,\
-        \ including\\nan implementation that optimizes for space and one that optimizes\
-        \ for\\nspeed.\",\n      \"koschei_monitor\": false,\n      \"monitor\": true,\n\
-        \      \"name\": \"sparsehash\",\n      \"namespace\": \"rpms\",\n      \"\
-        review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\": \"\
-        Extremely memory-efficient C++ hash_map implementation\",\n      \"upstream_url\"\
-        : \"http://code.google.com/p/sparsehash\"\n    },\n    {\n      \"acls\":\
-        \ [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"This\
-        \ script tries to export ssh public keys to a specified site. It will\\nwalk\
-        \ you through generating key pairs if it doesn't find any to export.\\nIt\
-        \ handles all the fiddly details like making sure local and remote\\npermissions\
-        \ are correct, and tells you what it's doing if it has to change\\nanything.\"\
-        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
-        : \"ssh-installkeys\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"A tool for\
-        \ installing ssh keys on remote sites\",\n      \"upstream_url\": \"http://www.catb.org/~esr/ssh-installkeys/\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"This script tries to export ssh public keys to a\
+        \ specified site. It will\\nwalk you through generating key pairs if it doesn't\
+        \ find any to export.\\nIt handles all the fiddly details like making sure\
+        \ local and remote\\npermissions are correct, and tells you what it's doing\
+        \ if it has to change\\nanything.\",\n      \"koschei_monitor\": true,\n \
+        \     \"monitor\": true,\n      \"name\": \"ssh-installkeys\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"A tool for installing ssh keys on remote sites\",\n\
+        \      \"upstream_url\": \"http://www.catb.org/~esr/ssh-installkeys/\"\n \
+        \   },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"\\nStichwort is a simple tool for C++ keyword arguments.\
         \  The library\\nprovides rather clean and simple API for creating keywords\
         \ and handling\\nthem as function parameters.\",\n      \"koschei_monitor\"\
-        : false,\n      \"monitor\": false,\n      \"name\": \"stichwort\",\n    \
-        \  \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"Simple library for named parameters\
-        \ in C++\",\n      \"upstream_url\": \"https://github.com/lisitsyn/stichwort\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        : true,\n      \"monitor\": true,\n      \"name\": \"stichwort\",\n      \"\
+        namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\": \"\
+        Approved\",\n      \"summary\": \"Simple library for named parameters in C++\"\
+        ,\n      \"upstream_url\": \"https://github.com/lisitsyn/stichwort\"\n   \
+        \ },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"Tapkee is a C++ template library for dimensionality\
         \ reduction with\\nsome bias on spectral methods.  The Tapkee origins from\
         \ the code\\ndeveloped during GSoC 2011 as the part of the Shogun machine\
@@ -1272,89 +1732,58 @@ interactions:
         \ scaling and landmark Multidimensional scaling\\n    (MDS/lMDS)\\n  * Stochastic\
         \ Proximity Embedding (SPE)\\n  * PCA and randomized PCA\\n  * Kernel PCA\
         \ (kPCA)\\n  * Random projection\\n  * Factor analysis\\n  * t-SNE\\n  * Barnes-Hut-SNE\"\
-        ,\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"\
-        name\": \"tapkee\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"C++ template\
-        \ library for efficient dimension reduction\",\n      \"upstream_url\": \"\
-        http://tapkee.lisitsyn.me/\"\n    },\n    {\n      \"acls\": [],\n      \"\
-        creation_date\": 1400070978.0,\n      \"description\": \"TextCat is an implementation\
-        \ of the text categorization algorithm\\npresented in Cavnar, W. B. and J.\
-        \ M. Trenkle, \\\"N-Gram-Based Text\\nCategorization\\\".  TextCat uses this\
-        \ the technique to implement a\\nwritten language identification.  At the\
-        \ moment, it knows about 69\\nnatural languages (counting Esperanto as a natural\
-        \ language).\",\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n\
-        \      \"name\": \"textcat\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Written language\
-        \ identification\",\n      \"upstream_url\": \"http://www.let.rug.nl/~vannoord/TextCat/\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1482877532.0,\n\
-        \      \"description\": \"\\nLightweight, portable and easy to integrate C\
-        \ directory\\tand file reader.\\nTinyDir wraps dirent for POSIX and FindFirstFile\
-        \ for Windows.\",\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n\
-        \      \"name\": \"tinydir\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : \"https://bugzilla.redhat.com/1408852\",\n      \"status\": \"Approved\"\
-        ,\n      \"summary\": \"Portable and easy to integrate C directory and file\
-        \ reader\",\n      \"upstream_url\": \"https://github.com/cxong/tinydir\"\n\
-        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1476187100.0,\n\
-        \      \"description\": \"GTK+ module for exporting old-style menus as GMenuModels.\\\
-        nMany applications implement menus as GtkMenuShells and GtkMenuItems\\nand\
-        \ aren't looking to migrate to the newer GMenuModel API.\\nThis GTK+ module\
-        \ watches for these types of menus and exports the\\nappropriate GMenuModel\
-        \ implementation.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
-        : true,\n      \"name\": \"unity-gtk-module\",\n      \"namespace\": \"rpms\"\
-        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1382813\",\n      \"\
-        status\": \"Approved\",\n      \"summary\": \"GTK+ module for exporting old-style\
-        \ menus as GMenuModels\",\n      \"upstream_url\": \"https://launchpad.net/unity-gtk-module\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"tapkee\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
+        \      \"status\": \"Approved\",\n      \"summary\": \"C++ template library\
+        \ for efficient dimension reduction\",\n      \"upstream_url\": \"http://tapkee.lisitsyn.me/\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"\\nAny C structure can be stored in a hash table\
-        \ using uthash.  Just\\nadd a UT_hash_handle to the structure and choose one\
-        \ or more fields\\nin your structure to act as the key.  Then use these macros\
-        \ to store,\\nretrieve or delete items from the hash table.\",\n      \"koschei_monitor\"\
-        : true,\n      \"monitor\": true,\n      \"name\": \"uthash\",\n      \"namespace\"\
-        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
-        \      \"summary\": \"A hash table for C structures\",\n      \"upstream_url\"\
-        : \"http://troydhanson.github.io/uthash\"\n    },\n    {\n      \"acls\":\
-        \ [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"WordNet\
-        \ is a large lexical database of English, developed under the direction\\\
-        nof George A. Miller. Nouns, verbs, adjectives and adverbs are grouped into\
-        \ sets\\nof cognitive synonyms (synsets), each expressing a distinct concept.\
-        \ Synsets\\nare interlinked by means of conceptual-semantic and lexical relations.\
-        \ The\\nresulting network of meaningfully related words and concepts can be\
-        \ navigated\\nwith the browser. WordNet is also freely and publicly available\
-        \ for download.\\nWordNet's structure makes it a useful tool for computational\
-        \ linguistics and\\nnatural language processing.\",\n      \"koschei_monitor\"\
-        : false,\n      \"monitor\": true,\n      \"name\": \"wordnet\",\n      \"\
-        namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\": \"\
-        Approved\",\n      \"summary\": \"A lexical database for the English language\"\
-        ,\n      \"upstream_url\": \"http://wordnet.princeton.edu/\"\n    },\n   \
-        \ {\n      \"acls\": [],\n      \"creation_date\": 1487684865.0,\n      \"\
-        description\": \"Xed is a small, but powerful text editor.  It has most standard\
-        \ text\\neditor functions and fully supports international text in Unicode.\\\
-        nAdvanced features include syntax highlighting and automatic indentation\\\
-        nof source code, printing and editing of multiple documents in one window.\\\
-        n\\nXed is extensible through a plugin system, which currently includes\\\
-        nsupport for spell checking, comparing files, viewing CVS ChangeLogs, and\\\
-        nadjusting indentation levels.\",\n      \"koschei_monitor\": true,\n    \
-        \  \"monitor\": true,\n      \"name\": \"xed\",\n      \"namespace\": \"rpms\"\
-        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1424798\",\n      \"\
-        status\": \"Approved\",\n      \"summary\": \"X-Apps [Text] Editor (Cross-DE,\
-        \ backward-compatible, GTK3, traditional UI)\",\n      \"upstream_url\": \"\
-        https://github.com/linuxmint/xed\"\n    },\n    {\n      \"acls\": [],\n \
-        \     \"creation_date\": 1487716215.0,\n      \"description\": \"Xplayer-pl-parser\
-        \ is a simple GObject-based library to\\nparse a host of play-list formats,\
-        \ as well as save those.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
-        : true,\n      \"name\": \"xplayer-plparser\",\n      \"namespace\": \"rpms\"\
-        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1424851\",\n      \"\
-        status\": \"Approved\",\n      \"summary\": \"Xplayer play-list parser\",\n\
-        \      \"upstream_url\": \"https://github.com/linuxmint/xplayer-plparser\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1487684911.0,\n\
-        \      \"description\": \"Xviewer is a simple graphics viewer for the Cinnamon\
-        \ desktop and others\\nwhich uses the gdk-pixbuf library. It can deal with\
-        \ large images, and zoom\\nand scroll with constant memory usage. Its goals\
-        \ are simplicity and standards\\ncompliance.\",\n      \"koschei_monitor\"\
-        : true,\n      \"monitor\": true,\n      \"name\": \"xviewer\",\n      \"\
-        namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1424825\"\
-        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Fast and functional\
-        \ graphics viewer\",\n      \"upstream_url\": \"https://github.com/linuxmint/xviewer\"\
+        \      \"description\": \"TextCat is an implementation of the text categorization\
+        \ algorithm\\npresented in Cavnar, W. B. and J. M. Trenkle, \\\"N-Gram-Based\
+        \ Text\\nCategorization\\\".  TextCat uses this the technique to implement\
+        \ a\\nwritten language identification.  At the moment, it knows about 69\\\
+        nnatural languages (counting Esperanto as a natural language).\",\n      \"\
+        koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\": \"textcat\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Written language identification\",\n\
+        \      \"upstream_url\": \"http://www.let.rug.nl/~vannoord/TextCat/\"\n  \
+        \  },\n    {\n      \"acls\": [],\n      \"creation_date\": 1491913266.0,\n\
+        \      \"description\": \"thermald monitors and controls platform temperature.\\\
+        n\\nThermal issues are important to handle proactively to reduce performance\\\
+        nimpact.  thermald uses the existing Linux kernel infrastructure and can\\\
+        nbe easily enhanced.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
+        : true,\n      \"name\": \"thermald\",\n      \"namespace\": \"rpms\",\n \
+        \     \"review_url\": \"https://bugzilla.redhat.com/1440406\",\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Thermal Management daemon\",\n     \
+        \ \"upstream_url\": \"https://github.com/01org/thermal_daemon\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1482877532.0,\n    \
+        \  \"description\": \"\\nLightweight, portable and easy to integrate C directory\\\
+        tand file reader.\\nTinyDir wraps dirent for POSIX and FindFirstFile for Windows.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"tinydir\",\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1408852\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Portable and easy\
+        \ to integrate C directory and file reader\",\n      \"upstream_url\": \"\
+        https://github.com/cxong/tinydir\"\n    },\n    {\n      \"acls\": [],\n \
+        \     \"creation_date\": 1400070978.0,\n      \"description\": \"\\nAny C\
+        \ structure can be stored in a hash table using uthash.  Just\\nadd a UT_hash_handle\
+        \ to the structure and choose one or more fields\\nin your structure to act\
+        \ as the key.  Then use these macros to store,\\nretrieve or delete items\
+        \ from the hash table.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
+        : true,\n      \"name\": \"uthash\",\n      \"namespace\": \"rpms\",\n   \
+        \   \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
+        : \"A hash table for C structures\",\n      \"upstream_url\": \"http://troydhanson.github.io/uthash\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"WordNet is a large lexical database of English,\
+        \ developed under the direction\\nof George A. Miller. Nouns, verbs, adjectives\
+        \ and adverbs are grouped into sets\\nof cognitive synonyms (synsets), each\
+        \ expressing a distinct concept. Synsets\\nare interlinked by means of conceptual-semantic\
+        \ and lexical relations. The\\nresulting network of meaningfully related words\
+        \ and concepts can be navigated\\nwith the browser. WordNet is also freely\
+        \ and publicly available for download.\\nWordNet's structure makes it a useful\
+        \ tool for computational linguistics and\\nnatural language processing.\"\
+        ,\n      \"koschei_monitor\": false,\n      \"monitor\": true,\n      \"name\"\
+        : \"wordnet\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
+        \      \"status\": \"Approved\",\n      \"summary\": \"A lexical database\
+        \ for the English language\",\n      \"upstream_url\": \"http://wordnet.princeton.edu/\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1431104614.0,\n\
         \      \"description\": \"Common scripts and templates for developing\\nand\
         \ building YaST2 modules and components.\",\n      \"koschei_monitor\": false,\n\
@@ -1393,10 +1822,10 @@ interactions:
         \ information,\\nincluding that provided by platform-specific extensions,\
         \ and not to\\ncrash on platform-unsupported properties (e.g. 1.2 properties\
         \ on 1.1\\nplatforms).\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
-        : false,\n      \"name\": \"clinfo\",\n      \"namespace\": \"rpms\",\n  \
-        \    \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
-        : \"Enumerate OpenCL platforms and devices\",\n      \"upstream_url\": \"\
-        https://github.com/Oblomov/clinfo\"\n    },\n    {\n      \"acls\": [],\n\
+        : \"nobuild\",\n      \"name\": \"clinfo\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"\
+        summary\": \"Enumerate OpenCL platforms and devices\",\n      \"upstream_url\"\
+        : \"https://github.com/Oblomov/clinfo\"\n    },\n    {\n      \"acls\": [],\n\
         \      \"creation_date\": 1400070978.0,\n      \"description\": \"Gocl is\
         \ a GLib/GObject based library that aims at simplifying the\\nuse of OpenCL\
         \ in GNOME software. It is intended to be a lightweight\\nwrapper that adapts\
@@ -1442,18 +1871,364 @@ interactions:
     headers:
       accept-ranges: [bytes]
       age: ['0']
-      appserver: [proxy14.fedoraproject.org]
-      apptime: [D=992847]
+      appserver: [proxy04.fedoraproject.org]
+      apptime: [D=2625154]
       connection: [Keep-Alive]
-      content-length: ['102398']
+      content-length: ['111794']
       content-type: [application/json]
-      date: ['Wed, 29 Mar 2017 20:21:18 GMT']
+      date: ['Fri, 15 Sep 2017 18:27:36 GMT']
       keep-alive: ['timeout=15, max=500']
       server: [Apache/2.4.6 (Red Hat Enterprise Linux) mod_wsgi/3.4 Python/2.7.5]
-      set-cookie: ['pkgdb=eyJfcGVybWFuZW50Ijp0cnVlfQ.C72ovg.z9xucNAb-AmAfX6J1CtdHryCBxw;
-          Expires=Wed, 29-Mar-2017 21:21:18 GMT; Secure; HttpOnly; Path=/pkgdb/']
       strict-transport-security: [max-age=15768000; includeSubDomains; preload]
       via: [1.1 varnish-v4]
-      x-varnish: ['7643800']
+      x-varnish: ['11444437']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://admin.fedoraproject.org/pkgdb/api/packager/package/group::alt-gtk-de-sig
+  response:
+    body: {string: !!python/unicode "{\n  \"co-maintained\": [],\n  \"output\": \"\
+        ok\",\n  \"point of contact\": [\n    {\n      \"acls\": [],\n      \"creation_date\"\
+        : 1424204993.0,\n      \"description\": \"This is a different, Qt5-compatible\
+        \ approach of the existing appmenu-qt\\n(https://launchpad.net/appmenu-qt).\\\
+        n\\nappmenu-qt5 is a Qt5 QPA theme plugin that adds support for application\\\
+        nmenus to Qt5 applications.  This only works for Qt5 versions >= 5.2\\ncurrently.\
+        \  To enable the support, set QT_QPA_PLATFORMTHEME=appmenu-qt5\\nin your environment\
+        \ or install the appmenu-qt5-profile.d package to\\nenable system-wide, see\
+        \ README.fedora *BEFORE* for further information.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"appmenu-qt5\",\n    \
+        \  \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1185002\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Support for global\
+        \ DBus-exported application menu in Qt5\",\n      \"upstream_url\": \"https://launchpad.net/appmenu-qt5\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1484059095.0,\n\
+        \      \"description\": \"\\nArc is a flat theme with transparent elements\
+        \ for GTK 3, GTK 2 and\\nGnome-Shell which supports GTK 3 and GTK 2 based\
+        \ desktop environments\\nlike Gnome, Cinnamon, Budgie, Pantheon, XFCE, Mate,\
+        \ etc.\",\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n  \
+        \    \"name\": \"arc-theme\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1411438\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Flat theme with transparent elements\",\n      \"\
+        upstream_url\": \"https://github.com/horst3180/arc-theme\"\n    },\n    {\n\
+        \      \"acls\": [],\n      \"creation_date\": 1483655017.0,\n      \"description\"\
+        : \"Bluetooth configuration tool depending on gnome-bluetooth.\",\n      \"\
+        koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\": \"blueberry\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1409404\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Bluetooth configuration\
+        \ tool\",\n      \"upstream_url\": \"https://github.com/linuxmint/blueberry\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1487684706.0,\n\
+        \      \"description\": \"This was a GSoC'10 project to implement a new command\
+        \ line tools for\\nbluez (Bluetooth stack for Linux).  It is currently an\
+        \ active open\\nsource project.\\n\\nThe project is implemented in C and uses\
+        \ the D-Bus interface of bluez.\\n\\nThe project is still a work in progress,\
+        \ and not all APIs from Bluez\\nhave been implemented as a part of bluez-tools.\
+        \  The APIs which have\\nbeen implemented in bluez-tools are adapter, agent,\
+        \ device, network\\nand obex.  Other APIs, such as interfaces for medical\
+        \ devices,\\npedometers and other specific APIs have not been ported to bluez-tools.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"bluez-tools\",\n      \"namespace\": \"rpms\",\n      \"review_url\":\
+        \ \"https://bugzilla.redhat.com/1424772\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"A set of tools to manage Bluetooth devices for Linux\"\
+        ,\n      \"upstream_url\": \"https://github.com/khvzak/bluez-tools\"\n   \
+        \ },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"Cinnamon is a Linux desktop which provides advanced\\\
+        ninnovative features and a traditional user experience.\\n\\nThe desktop layout\
+        \ is similar to Gnome 2.\\nThe underlying technology is forked from Gnome\
+        \ Shell.\\nThe emphasis is put on making users feel at home and providing\\\
+        nthem with an easy to use and comfortable desktop experience.\",\n      \"\
+        koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\": \"cinnamon\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Window management and application launching\
+        \ for GNOME\",\n      \"upstream_url\": \"https://github.com/linuxmint/\"\n\
+        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1476187308.0,\n\
+        \      \"description\": \"This applet integrates the Ubuntu Application Menu\
+        \ (Global Menu)\\nsupport into the Cinnamon Desktop.  It uses the same idea\
+        \ as the\\nGnome Shell extension made by rgcjonas.\\n\\nThis is a third-party\
+        \ applet, not official.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
+        : true,\n      \"name\": \"cinnamon-applet-globalappmenu\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1382810\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Ubuntu AppMenu support\
+        \ for Cinnamon Desktop\",\n      \"upstream_url\": \"https://github.com/lestcape/Global-AppMenu\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"This package contains configuration utilities for\
+        \ the Cinnamon desktop, which\\nallow to configure accessibility options,\
+        \ desktop fonts, keyboard and mouse\\nproperties, sound setup, desktop theme\
+        \ and background, user interface\\nproperties, screen resolution, and other\
+        \ settings.\",\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n\
+        \      \"name\": \"cinnamon-control-center\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"\
+        summary\": \"Utilities to configure the Cinnamon desktop\",\n      \"upstream_url\"\
+        : \"https://github.com/linuxmint/cinnamon-control-center\"\n    },\n    {\n\
+        \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        : \"The cinnamon-desktop package contains an internal library\\n(libcinnamon-desktop)\
+        \ used to implement some portions of the CINNAMON\\ndesktop, and also some\
+        \ data files and other shared components of the\\nCINNAMON user environment.\"\
+        ,\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"\
+        name\": \"cinnamon-desktop\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Shared code\
+        \ among cinnamon-session, nemo, etc\",\n      \"upstream_url\": \"https://github.com/linuxmint/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"cinnamon-menus is an implementation of the draft\
+        \ \\\"Desktop\\nMenu Specification\\\" from freedesktop.org. This package\\\
+        nalso contains the Cinnamon menu layout configuration files,\\n.directory\
+        \ files and assorted menu related utility programs,\\nPython bindings, and\
+        \ a simple menu editor.\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
+        : false,\n      \"name\": \"cinnamon-menus\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"\
+        summary\": \"A menu system for the Cinnamon project\",\n      \"upstream_url\"\
+        : \"http://cinnamon.linuxmint.com\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1400070978.0,\n      \"description\": \"cinnamon-screensaver\
+        \ is a screen saver and locker.\",\n      \"koschei_monitor\": false,\n  \
+        \    \"monitor\": false,\n      \"name\": \"cinnamon-screensaver\",\n    \
+        \  \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Cinnamon Screensaver\",\n      \"upstream_url\"\
+        : \"https://github.com/linuxmint/\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1400070978.0,\n      \"description\": \"Cinnamon-session\
+        \ manages a Cinnamon desktop or GDM login session. It starts up\\nthe other\
+        \ core components and handles logout and saving the session.\",\n      \"\
+        koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\": \"cinnamon-session\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Cinnamon session manager\",\n      \"\
+        upstream_url\": \"https://github.com/linuxmint/cinnamon-session\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"A daemon to share settings from CINNAMON to other applications.\
+        \ It also\\nhandles global keybindings, and many of desktop-wide settings.\"\
+        ,\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"\
+        name\": \"cinnamon-settings-daemon\",\n      \"namespace\": \"rpms\",\n  \
+        \    \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
+        : \"The daemon sharing settings from CINNAMON to GTK+/KDE applications\",\n\
+        \      \"upstream_url\": \"https://github.com/linuxmint/\"\n    },\n    {\n\
+        \      \"acls\": [],\n      \"creation_date\": 1483971831.0,\n      \"description\"\
+        : \"Collection of the best themes available for Cinnamon.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"cinnamon-themes\",\n\
+        \      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1411151\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Collection of the\
+        \ best themes available for Cinnamon\",\n      \"upstream_url\": \"http://cinnamon.linuxmint.com\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"Translations for Cinnamon, Nemo and Mintlocale.\"\
+        ,\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"\
+        name\": \"cinnamon-translations\",\n      \"namespace\": \"rpms\",\n     \
+        \ \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
+        : \"Translations for Cinnamon and Nemo\",\n      \"upstream_url\": \"https://github.com/linuxmint/cinnamon-translations\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"Cjs allows using Cinnamon libraries from Javascript.\
+        \ It's based on the\\nSpidermonkey Javascript engine from Mozilla and the\
+        \ GObject introspection\\nframework.\",\n      \"koschei_monitor\": false,\n\
+        \      \"monitor\": true,\n      \"name\": \"cjs\",\n      \"namespace\":\
+        \ \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"Javascript Bindings for Cinnamon\",\n      \"upstream_url\"\
+        : \"https://github.com/linuxmint/cjs\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1400070978.0,\n      \"description\": \"D-Bus python\
+        \ bindings for use with python programs.\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": true,\n      \"name\": \"dbus-python\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"D-Bus Python Bindings\",\n      \"upstream_url\": \"\
+        http://www.freedesktop.org/wiki/Software/DBusBindings/\"\n    },\n    {\n\
+        \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        : \"Lightdm is a display manager that:\\n* Is cross-desktop - supports different\
+        \ desktops\\n* Supports different display technologies\\n* Is lightweight\
+        \ - low memory usage and fast performance\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": \"nobuild\",\n      \"name\": \"lightdm\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"A cross-desktop Display Manager\",\n      \"upstream_url\"\
+        : \"https://launchpad.net/lightdm/1.22\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1400070978.0,\n      \"description\": \"A LightDM\
+        \ greeter that uses the GTK3 toolkit.\",\n      \"koschei_monitor\": false,\n\
+        \      \"monitor\": true,\n      \"name\": \"lightdm-gtk\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"LightDM GTK Greeter\",\n      \"upstream_url\": \"https://launchpad.net/lightdm-gtk-greeter\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1436358044.0,\n\
+        \      \"description\": \"Just a small dialog to make it easier for users\
+        \ to modify the settings\\nof lightdm-gtk-greeter.\",\n      \"koschei_monitor\"\
+        : false,\n      \"monitor\": \"nobuild\",\n      \"name\": \"lightdm-gtk-greeter-settings\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1239235\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Settings editor for\
+        \ LightDM GTK+ Greeter\",\n      \"upstream_url\": \"https://launchpad.net/lightdm-gtk-greeter-settings\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1491584925.0,\n\
+        \      \"description\": \"This tool currently lets users configure slick-greeter.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"lightdm-settings\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1440240\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Configuration tool for the LightDM display manager\"\
+        ,\n      \"upstream_url\": \"https://github.com/linuxmint/lightdm-settings\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1483971411.0,\n\
+        \      \"description\": \"Icon theme for Linux Mint.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"mint-x-icons\",\n   \
+        \   \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1411152\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Icon theme for Linux\
+        \ Mint\",\n      \"upstream_url\": \"http://linuxmint.com\"\n    },\n    {\n\
+        \      \"acls\": [],\n      \"creation_date\": 1483971339.0,\n      \"description\"\
+        : \"The Mint-Y icon theme.\",\n      \"koschei_monitor\": true,\n      \"\
+        monitor\": true,\n      \"name\": \"mint-y-icons\",\n      \"namespace\":\
+        \ \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1411153\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"The Mint-Y icon theme\"\
+        ,\n      \"upstream_url\": \"http://linuxmint.com\"\n    },\n    {\n     \
+        \ \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        : \"Language selection tool for Cinnamon.\",\n      \"koschei_monitor\": false,\n\
+        \      \"monitor\": false,\n      \"name\": \"mintlocale\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"Language selection tool\",\n      \"upstream_url\":\
+        \ \"https://github.com/linuxmint/mintlocale\"\n    },\n    {\n      \"acls\"\
+        : [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"Muffin\
+        \ is a window and compositing manager that displays and manages\\nyour desktop\
+        \ via OpenGL. Muffin combines a sophisticated display engine\\nusing the Clutter\
+        \ toolkit with solid window-management logic inherited\\nfrom the Metacity\
+        \ window manager.\\n\\nMuffin is very extensible via plugins, which\\nare\
+        \ used both to add fancy visual effects and to rework the window\\nmanagement\
+        \ behaviors to meet the needs of the environment.\",\n      \"koschei_monitor\"\
+        : false,\n      \"monitor\": false,\n      \"name\": \"muffin\",\n      \"\
+        namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\": \"\
+        Approved\",\n      \"summary\": \"Window and compositing manager based on\
+        \ Clutter\",\n      \"upstream_url\": \"https://github.com/linuxmint/\"\n\
+        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"Nemo is the file manager and graphical shell for\
+        \ the Cinnamon desktop\\nthat makes it easy to manage your files and the rest\
+        \ of your system.\\nIt allows to browse directories on local and remote filesystems,\
+        \ preview\\nfiles and launch applications associated with them.\\nIt is also\
+        \ responsible for handling the icons on the Cinnamon desktop.\",\n      \"\
+        koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\": \"nemo\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"File manager for Cinnamon\",\n     \
+        \ \"upstream_url\": \"https://github.com/linuxmint/\"\n    },\n    {\n   \
+        \   \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        : \"Extensions for Nemo\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
+        : false,\n      \"name\": \"nemo-extensions\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"\
+        summary\": \"Extensions for Nemo\",\n      \"upstream_url\": \"https://github.com/linuxmint/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1494704257.0,\n\
+        \      \"description\": \"Pix is an image browser, viewer, organizer and editor.\\\
+        nIt features some advanced tools, too:\\n\\n   * Import images from a digital\
+        \ camera.\\n   * Slide Shows.\\n   * Set an image as Desktop background.\\\
+        n   * Create index image.\\n   * Rename images in series.\\n   * Convert image\
+        \ format.\\n   * Change images date and time.\\n   * JPEG lossless transformations.\\\
+        n   * Find duplicated images.\",\n      \"koschei_monitor\": true,\n     \
+        \ \"monitor\": true,\n      \"name\": \"pix\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1450482\",\n      \"\
+        status\": \"Approved\",\n      \"summary\": \"Image management application\"\
+        ,\n      \"upstream_url\": \"https://github.com/linuxmint/pix\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"polkit-gnome provides an authentication agent for PolicyKit\\\
+        nthat matches the look and feel of the GNOME desktop.\",\n      \"koschei_monitor\"\
+        : false,\n      \"monitor\": false,\n      \"name\": \"polkit-gnome\",\n \
+        \     \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"PolicyKit integration for the GNOME\
+        \ desktop\",\n      \"upstream_url\": \"http://www.freedesktop.org/wiki/Software/PolicyKit\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"PyGTK is an extension module for Python that gives\
+        \ you access to the GTK+\\nwidget set.  Just about anything you can write\
+        \ in C with GTK+ you can write\\nin Python with PyGTK (within reason), but\
+        \ with all the benefits of using a\\nhigh-level scripting language.\",\n \
+        \     \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\"\
+        : \"pygtk2\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
+        \      \"status\": \"Approved\",\n      \"summary\": \"Python bindings for\
+        \ GTK+\",\n      \"upstream_url\": \"http://www.pygtk.org/\"\n    },\n   \
+        \ {\n      \"acls\": [],\n      \"creation_date\": 1494010326.0,\n      \"\
+        description\": \"Python bindings for xapps.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"python-xapp\",\n    \
+        \  \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1448559\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Python bindings for\
+        \ xapps\",\n      \"upstream_url\": \"https://github.com/linuxmint/python-xapp\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1491574241.0,\n\
+        \      \"description\": \"A cross-distro LightDM greeter based on unity-greeter.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"slick-greeter\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1440138\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"A slick-looking LightDM greeter\",\n      \"upstream_url\"\
+        : \"https://github.com/linuxmint/slick-greeter\"\n    },\n    {\n      \"\
+        acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        : \"tint2 is a simple panel/taskbar made for modern X window managers. It\
+        \ was\\nspecifically made for Openbox3 but should also work with other window\
+        \ managers\\n(GNOME, KDE, etc...). It's based on ttm code http://code.google.com/p/ttm/.\"\
+        ,\n      \"koschei_monitor\": false,\n      \"monitor\": true,\n      \"name\"\
+        : \"tint2\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
+        \      \"status\": \"Approved\",\n      \"summary\": \"A lightweight X11 desktop\
+        \ panel and task manager\",\n      \"upstream_url\": \"https://github.com/o9000/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1476187100.0,\n\
+        \      \"description\": \"GTK+ module for exporting old-style menus as GMenuModels.\\\
+        nMany applications implement menus as GtkMenuShells and GtkMenuItems\\nand\
+        \ aren't looking to migrate to the newer GMenuModel API.\\nThis GTK+ module\
+        \ watches for these types of menus and exports the\\nappropriate GMenuModel\
+        \ implementation.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
+        : true,\n      \"name\": \"unity-gtk-module\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1382813\",\n      \"\
+        status\": \"Approved\",\n      \"summary\": \"GTK+ module for exporting old-style\
+        \ menus as GMenuModels\",\n      \"upstream_url\": \"https://launchpad.net/unity-gtk-module\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1476278703.0,\n\
+        \      \"description\": \"This package includes files that are shared between\
+        \ several XApp\\napps (i18n files and configuration schemas).\",\n      \"\
+        koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\": \"xapps\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1382908\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Common files for\
+        \ XApp desktop apps\",\n      \"upstream_url\": \"https://github.com/linuxmint\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1487684865.0,\n\
+        \      \"description\": \"Xed is a small, but powerful text editor.  It has\
+        \ most standard text\\neditor functions and fully supports international text\
+        \ in Unicode.\\nAdvanced features include syntax highlighting and automatic\
+        \ indentation\\nof source code, printing and editing of multiple documents\
+        \ in one window.\\n\\nXed is extensible through a plugin system, which currently\
+        \ includes\\nsupport for spell checking, comparing files, viewing CVS ChangeLogs,\
+        \ and\\nadjusting indentation levels.\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": true,\n      \"name\": \"xed\",\n      \"namespace\":\
+        \ \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1424798\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"X-Apps [Text] Editor\
+        \ (Cross-DE, backward-compatible, GTK3, traditional UI)\",\n      \"upstream_url\"\
+        : \"https://github.com/linuxmint/xed\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1494246957.0,\n      \"description\": \"Xplayer\
+        \ is a generic media player.\",\n      \"koschei_monitor\": true,\n      \"\
+        monitor\": true,\n      \"name\": \"xplayer\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1424871\",\n      \"\
+        status\": \"Approved\",\n      \"summary\": \"A generic Media Player\",\n\
+        \      \"upstream_url\": \"https://github.com/linuxmint/xplayer\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1487716215.0,\n    \
+        \  \"description\": \"Xplayer-pl-parser is a simple GObject-based library\
+        \ to\\nparse a host of play-list formats, as well as save those.\",\n    \
+        \  \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\": \"\
+        xplayer-plparser\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1424851\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Xplayer play-list parser\",\n      \"upstream_url\"\
+        : \"https://github.com/linuxmint/xplayer-plparser\"\n    },\n    {\n     \
+        \ \"acls\": [],\n      \"creation_date\": 1494247235.0,\n      \"description\"\
+        : \"X-Apps Document Reader is a document viewer capable of displaying\\nmultiple\
+        \ and singlepage document formats like PDF and PostScript.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"xreader\",\n      \"\
+        namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1424832\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Simple document viewer\"\
+        ,\n      \"upstream_url\": \"https://github.com/linuxmint/xreader\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1487684911.0,\n    \
+        \  \"description\": \"Xviewer is a simple graphics viewer for the Cinnamon\
+        \ desktop and others\\nwhich uses the gdk-pixbuf library. It can deal with\
+        \ large images, and zoom\\nand scroll with constant memory usage. Its goals\
+        \ are simplicity and standards\\ncompliance.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"xviewer\",\n      \"\
+        namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1424825\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Fast and functional\
+        \ graphics viewer\",\n      \"upstream_url\": \"https://github.com/linuxmint/xviewer\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1494246909.0,\n\
+        \      \"description\": \"This package contains plugins for additional features\
+        \ in xviewer.\",\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n\
+        \      \"name\": \"xviewer-plugins\",\n      \"namespace\": \"rpms\",\n  \
+        \    \"review_url\": \"https://bugzilla.redhat.com/1424826\",\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"A collection of plugins for xviewer\"\
+        ,\n      \"upstream_url\": \"https://github.com/linuxmint/xviewer-plugins\"\
+        \n    }\n  ],\n  \"watch\": []\n}"}
+    headers:
+      accept-ranges: [bytes]
+      age: ['0']
+      appserver: [proxy14.fedoraproject.org]
+      apptime: [D=453836]
+      connection: [Keep-Alive]
+      content-length: ['22901']
+      content-type: [application/json]
+      date: ['Fri, 15 Sep 2017 18:27:40 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.4.6 (Red Hat Enterprise Linux) mod_wsgi/3.4 Python/2.7.5]
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+      via: [1.1 varnish-v4]
+      x-varnish: ['13484932']
     status: {code: 200, message: OK}
 version: 1

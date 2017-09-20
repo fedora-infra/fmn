@@ -1,11 +1,186 @@
 interactions:
 - request:
+    body: !!python/unicode '_csrf_token=5d8862b4c4ddca7dbc4bd2feaa2e1aab8d93b777&password=dummypassword&login=Login&username=remi&user_name=jcline'
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['165']
+      Content-Type: [application/x-www-form-urlencoded]
+      User-agent: [Fedora Account System Client/0.9.0]
+    method: POST
+    uri: https://admin.fedoraproject.org/accounts/json/person_by_username
+  response:
+    body: {string: !!python/unicode '{"success": true, "tg_flash": null, "person":
+        {"email": "fedora@famillecollet.com", "approved_memberships": [{"id": 101441,
+        "apply_rules": "", "prerequisite_id": null, "name": "cla_fedora", "display_name":
+        "Fedora CLA Group", "needs_sponsor": false, "mailing_list": "", "creation":
+        "2008-03-12 02:00:57.941258+00:00", "url": "", "mailing_list_url": "", "joinmsg":
+        "", "irc_channel": "", "irc_network": "", "invite_only": true, "group_type":
+        "cla", "owner_id": 100001, "user_can_remove": true}, {"id": 100002, "apply_rules":
+        "", "prerequisite_id": null, "name": "cla_done", "display_name": "Signed CLA
+        Group", "needs_sponsor": false, "mailing_list": "", "creation": "2008-03-12
+        01:58:48.745240+00:00", "url": "", "mailing_list_url": "", "joinmsg": "",
+        "irc_channel": "", "irc_network": "", "invite_only": true, "group_type": "cla",
+        "owner_id": 100001, "user_can_remove": true}, {"id": 100148, "apply_rules":
+        "Membership of fedorabugs is not usually granted directly, but automatically
+        given to members of several other groups, including qa and packagers-group:
+        basically, you get membership of fedorabugs if you''re becoming a member of
+        a team where it makes sense for you to get editbugs privileges on Bugzilla.
+        Please don''t apply to this group directly unless you have a special reason
+        to do so.", "prerequisite_id": null, "name": "fedorabugs", "display_name":
+        "Group for granting Bugzilla editing privileges", "needs_sponsor": false,
+        "mailing_list": "test@lists.fedoraproject.org", "creation": "2008-03-12 01:58:48.763123+00:00",
+        "url": "https://bugzilla.redhat.com", "mailing_list_url": "https://lists.fedoraproject.org/pipermail/test/",
+        "joinmsg": "Hi there! Membership is usually not granted to the fedorabugs
+        group directly - instead, members of several other groups are automatically
+        added to the fedorabugs group, as all members of those groups should have
+        Bugzilla editbugs rights. Maybe you wanted to apply to the QA team? If so,
+        see https://fedoraproject.org/wiki/QA/Join !", "irc_channel": "fedora-qa",
+        "irc_network": "irc.freenode.net", "invite_only": true, "group_type": "tracking",
+        "owner_id": 100001, "user_can_remove": true}, {"id": 100300, "apply_rules":
+        "Please do not apply to this group.  Your sponsor will add you after you''ve
+        completed http://fedoraproject.org/wiki/Join_the_package_collection_maintainers.",
+        "prerequisite_id": 100002, "name": "packager", "display_name": "Fedora Packager
+        GIT Commit Group", "needs_sponsor": true, "mailing_list": "devel@lists.fedoraproject.org",
+        "creation": "2008-03-12 02:00:58.145046+00:00", "url": "https://fedoraproject.org/wiki/PackageMaintainers",
+        "mailing_list_url": "https://lists.fedoraproject.org/mailman/listinfo/devel",
+        "joinmsg": "Welcome to the Fedora packager group. Please continue the process
+        from: https://fedoraproject.org/wiki/PackageMaintainers/Join#Add_Package_to_Source_Code_Management_.28SCM.29_system_and_Set_Owner",
+        "irc_channel": "#fedora-devel", "irc_network": "irc.freenode.net", "invite_only":
+        true, "group_type": "cvs", "owner_id": 100001, "user_can_remove": true}, {"id":
+        107427, "apply_rules": "Instead of applying for this group, please consider
+        opening a ticket at https://fedorahosted.org/fesco and stating what you plan
+        to do with the group membership.\r\n\r\nThis makes it easier for the sponsors
+        to decide. The process for gaining access to this group is located at https://fedoraproject.org/wiki/Provenpackager_policy",
+        "prerequisite_id": 100300, "name": "provenpackager", "display_name": "Advanced
+        Fedora Packager Group", "needs_sponsor": true, "mailing_list": "", "creation":
+        "2008-06-05 18:27:47.534915+00:00", "url": "", "mailing_list_url": "", "joinmsg":
+        "Please use your new privileges wisely.", "irc_channel": "", "irc_network":
+        "", "invite_only": true, "group_type": "cvs", "owner_id": 100001, "user_can_remove":
+        true}, {"id": 155928, "apply_rules": null, "prerequisite_id": null, "name":
+        "cla_fpca", "display_name": "Signers of the Fedora Project Contributor Agreement",
+        "needs_sponsor": false, "mailing_list": null, "creation": "2011-05-02 21:40:20.420874+00:00",
+        "url": "http://fedoraproject.org/wiki/Legal:Fedora_Project_Contributor_Agreement",
+        "mailing_list_url": null, "joinmsg": "", "irc_channel": null, "irc_network":
+        null, "invite_only": true, "group_type": "cla", "owner_id": 100001, "user_can_remove":
+        true}], "status": "active", "comments": "The only one who like PHP :)", "postal_address":
+        null, "password_changed": null, "password": "*", "status_change": "2009-06-20
+        21:22:20.310542+00:00", "memberships": [{"id": 101441, "apply_rules": "",
+        "prerequisite_id": null, "name": "cla_fedora", "display_name": "Fedora CLA
+        Group", "needs_sponsor": false, "mailing_list": "", "creation": "2008-03-12
+        02:00:57.941258+00:00", "url": "", "mailing_list_url": "", "joinmsg": "",
+        "irc_channel": "", "irc_network": "", "invite_only": true, "group_type": "cla",
+        "owner_id": 100001, "user_can_remove": true}, {"id": 100002, "apply_rules":
+        "", "prerequisite_id": null, "name": "cla_done", "display_name": "Signed CLA
+        Group", "needs_sponsor": false, "mailing_list": "", "creation": "2008-03-12
+        01:58:48.745240+00:00", "url": "", "mailing_list_url": "", "joinmsg": "",
+        "irc_channel": "", "irc_network": "", "invite_only": true, "group_type": "cla",
+        "owner_id": 100001, "user_can_remove": true}, {"id": 100148, "apply_rules":
+        "Membership of fedorabugs is not usually granted directly, but automatically
+        given to members of several other groups, including qa and packagers-group:
+        basically, you get membership of fedorabugs if you''re becoming a member of
+        a team where it makes sense for you to get editbugs privileges on Bugzilla.
+        Please don''t apply to this group directly unless you have a special reason
+        to do so.", "prerequisite_id": null, "name": "fedorabugs", "display_name":
+        "Group for granting Bugzilla editing privileges", "needs_sponsor": false,
+        "mailing_list": "test@lists.fedoraproject.org", "creation": "2008-03-12 01:58:48.763123+00:00",
+        "url": "https://bugzilla.redhat.com", "mailing_list_url": "https://lists.fedoraproject.org/pipermail/test/",
+        "joinmsg": "Hi there! Membership is usually not granted to the fedorabugs
+        group directly - instead, members of several other groups are automatically
+        added to the fedorabugs group, as all members of those groups should have
+        Bugzilla editbugs rights. Maybe you wanted to apply to the QA team? If so,
+        see https://fedoraproject.org/wiki/QA/Join !", "irc_channel": "fedora-qa",
+        "irc_network": "irc.freenode.net", "invite_only": true, "group_type": "tracking",
+        "owner_id": 100001, "user_can_remove": true}, {"id": 100300, "apply_rules":
+        "Please do not apply to this group.  Your sponsor will add you after you''ve
+        completed http://fedoraproject.org/wiki/Join_the_package_collection_maintainers.",
+        "prerequisite_id": 100002, "name": "packager", "display_name": "Fedora Packager
+        GIT Commit Group", "needs_sponsor": true, "mailing_list": "devel@lists.fedoraproject.org",
+        "creation": "2008-03-12 02:00:58.145046+00:00", "url": "https://fedoraproject.org/wiki/PackageMaintainers",
+        "mailing_list_url": "https://lists.fedoraproject.org/mailman/listinfo/devel",
+        "joinmsg": "Welcome to the Fedora packager group. Please continue the process
+        from: https://fedoraproject.org/wiki/PackageMaintainers/Join#Add_Package_to_Source_Code_Management_.28SCM.29_system_and_Set_Owner",
+        "irc_channel": "#fedora-devel", "irc_network": "irc.freenode.net", "invite_only":
+        true, "group_type": "cvs", "owner_id": 100001, "user_can_remove": true}, {"id":
+        107427, "apply_rules": "Instead of applying for this group, please consider
+        opening a ticket at https://fedorahosted.org/fesco and stating what you plan
+        to do with the group membership.\r\n\r\nThis makes it easier for the sponsors
+        to decide. The process for gaining access to this group is located at https://fedoraproject.org/wiki/Provenpackager_policy",
+        "prerequisite_id": 100300, "name": "provenpackager", "display_name": "Advanced
+        Fedora Packager Group", "needs_sponsor": true, "mailing_list": "", "creation":
+        "2008-06-05 18:27:47.534915+00:00", "url": "", "mailing_list_url": "", "joinmsg":
+        "Please use your new privileges wisely.", "irc_channel": "", "irc_network":
+        "", "invite_only": true, "group_type": "cvs", "owner_id": 100001, "user_can_remove":
+        true}, {"id": 155928, "apply_rules": null, "prerequisite_id": null, "name":
+        "cla_fpca", "display_name": "Signers of the Fedora Project Contributor Agreement",
+        "needs_sponsor": false, "mailing_list": null, "creation": "2011-05-02 21:40:20.420874+00:00",
+        "url": "http://fedoraproject.org/wiki/Legal:Fedora_Project_Contributor_Agreement",
+        "mailing_list_url": null, "joinmsg": "", "irc_channel": null, "irc_network":
+        null, "invite_only": true, "group_type": "cla", "owner_id": 100001, "user_can_remove":
+        true}], "telephone": null, "security_question": null, "ipa_sync_status": null,
+        "certificate_serial": 4, "security_answer": null, "emailtoken": null, "passwordtoken":
+        null, "unapproved_memberships": [], "roles": [{"role_type": "user", "creation":
+        "2008-03-12 02:02:36.998695+00:00", "sponsor_id": null, "approval": null,
+        "role_status": "approved", "person_id": 100666, "internal_comments": null,
+        "group_id": 101441}, {"role_type": "user", "creation": "2008-03-12 02:02:36.859013+00:00",
+        "sponsor_id": null, "approval": "2008-03-12 02:02:36.859013+00:00", "role_status":
+        "approved", "person_id": 100666, "internal_comments": null, "group_id": 100002},
+        {"role_type": "user", "creation": "2008-03-12 02:02:36.919512+00:00", "sponsor_id":
+        null, "approval": "2006-09-06 13:17:19.858456+00:00", "role_status": "approved",
+        "person_id": 100666, "internal_comments": null, "group_id": 100148}, {"role_type":
+        "sponsor", "creation": "2008-03-12 02:02:36.956175+00:00", "sponsor_id": 100007,
+        "approval": "2006-05-25 12:14:46.801543+00:00", "role_status": "approved",
+        "person_id": 100666, "internal_comments": null, "group_id": 100300}, {"role_type":
+        "user", "creation": "2009-03-10 04:55:14.766506+00:00", "sponsor_id": null,
+        "approval": "2009-03-10 04:55:14.766506+00:00", "role_status": "approved",
+        "person_id": 100666, "internal_comments": null, "group_id": 107427}, {"role_type":
+        "user", "creation": "2011-05-26 12:21:15.789550+00:00", "sponsor_id": 100666,
+        "approval": "2011-05-26 12:21:14.798284+00:00", "role_status": "approved",
+        "person_id": 100666, "internal_comments": null, "group_id": 155928}], "alias_enabled":
+        null, "group_roles": {"packager": {"role_type": "sponsor", "creation": "2008-03-12
+        02:02:36.956175+00:00", "sponsor_id": 100007, "approval": "2006-05-25 12:14:46.801543+00:00",
+        "role_status": "approved", "person_id": 100666, "internal_comments": null,
+        "group_id": 100300}, "provenpackager": {"role_type": "user", "creation": "2009-03-10
+        04:55:14.766506+00:00", "sponsor_id": null, "approval": "2009-03-10 04:55:14.766506+00:00",
+        "role_status": "approved", "person_id": 100666, "internal_comments": null,
+        "group_id": 107427}, "cla_fpca": {"role_type": "user", "creation": "2011-05-26
+        12:21:15.789550+00:00", "sponsor_id": 100666, "approval": "2011-05-26 12:21:14.798284+00:00",
+        "role_status": "approved", "person_id": 100666, "internal_comments": null,
+        "group_id": 155928}, "fedorabugs": {"role_type": "user", "creation": "2008-03-12
+        02:02:36.919512+00:00", "sponsor_id": null, "approval": "2006-09-06 13:17:19.858456+00:00",
+        "role_status": "approved", "person_id": 100666, "internal_comments": null,
+        "group_id": 100148}, "cla_fedora": {"role_type": "user", "creation": "2008-03-12
+        02:02:36.998695+00:00", "sponsor_id": null, "approval": null, "role_status":
+        "approved", "person_id": 100666, "internal_comments": null, "group_id": 101441},
+        "cla_done": {"role_type": "user", "creation": "2008-03-12 02:02:36.859013+00:00",
+        "sponsor_id": null, "approval": "2008-03-12 02:02:36.859013+00:00", "role_status":
+        "approved", "person_id": 100666, "internal_comments": null, "group_id": 100002}},
+        "longitude": 4.0440569000000002, "latitude": 49.2465057, "affiliation": null,
+        "old_password": null, "human_name": "Remi Collet", "last_seen": "2017-09-13
+        15:01:17.743059+00:00", "timezone": "Europe/Paris", "internal_comments": null,
+        "ssh_key": null, "unverified_email": null, "ircnick": "RemiFedora", "id":
+        100666, "creation": "2006-05-24 01:44:14.114900+00:00", "facsimile": null,
+        "country_code": "FR", "privacy": false, "locale": "fr", "gpg_keyid": "5A0E
+        6F54 D94D 5732 69EE  E3FF 614A 6905 29F1 6A18", "username": "remi"}}'}
+    headers:
+      appserver: [proxy06.fedoraproject.org]
+      apptime: [D=472367]
+      connection: [Keep-Alive]
+      content-length: ['12355']
+      content-type: [application/json]
+      date: ['Fri, 15 Sep 2017 18:27:21 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.2.15 (Red Hat)]
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+    status: {code: 200, message: OK}
+- request:
     body: null
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.12.5]
+      User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://admin.fedoraproject.org/pkgdb/api/packager/package/remi
   response:
@@ -272,24 +447,18 @@ interactions:
         summary\": \"Create RPM spec files from PEAR modules\",\n      \"upstream_url\"\
         : \"http://pear.php.net/package/PEAR_Command_Packaging\"\n    },\n    {\n\
         \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
-        : \"APC is a free, open, and robust framework for caching and optimizing PHP\\\
-        nintermediate code.\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
-        : false,\n      \"name\": \"php-pecl-apc\",\n      \"namespace\": \"rpms\"\
+        : \"PECL cairo is the official Cairo Graphics Library binding. It provides\
+        \ an\\nobject oriented and procedural interface for the cairo library. Support\
+        \ is\\ncurrently provided for 1.4 to 1.8 versions of the library\\n(1.10 is\
+        \ partially supported).\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
+        : false,\n      \"name\": \"php-pecl-cairo\",\n      \"namespace\": \"rpms\"\
         ,\n      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"\
-        summary\": \"APC caches and optimizes PHP intermediate code\",\n      \"upstream_url\"\
-        : \"http://pecl.php.net/package/APC\"\n    },\n    {\n      \"acls\": [],\n\
-        \      \"creation_date\": 1400070978.0,\n      \"description\": \"PECL cairo\
-        \ is the official Cairo Graphics Library binding. It provides an\\nobject\
-        \ oriented and procedural interface for the cairo library. Support is\\ncurrently\
-        \ provided for 1.4 to 1.8 versions of the library\\n(1.10 is partially supported).\"\
-        ,\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"\
-        name\": \"php-pecl-cairo\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"PECL package\
-        \ for drawing using cairo via PHP scripts\",\n      \"upstream_url\": \"http://www.cairographics.org/cairo-php/\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"This extension uses libgearman library to provide\
-        \ API for\\ncommunicating with gearmand, and writing clients and workers\\\
-        n\\nDocumentation: http://php.net/gearman\",\n      \"koschei_monitor\": false,\n\
+        summary\": \"PECL package for drawing using cairo via PHP scripts\",\n   \
+        \   \"upstream_url\": \"http://www.cairographics.org/cairo-php/\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"This extension uses libgearman library to provide API\
+        \ for\\ncommunicating with gearmand, and writing clients and workers\\n\\\
+        nDocumentation: http://php.net/gearman\",\n      \"koschei_monitor\": false,\n\
         \      \"monitor\": false,\n      \"name\": \"php-pecl-gearman\",\n      \"\
         namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\": \"\
         Approved\",\n      \"summary\": \"PHP wrapper to libgearman\",\n      \"upstream_url\"\
@@ -309,8 +478,9 @@ interactions:
         : \"Approved\",\n      \"summary\": \"PECL extension for Sphinx SQL full-text\
         \ search engine\",\n      \"upstream_url\": \"http://pecl.php.net/package/sphinx\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"Bindings to the functions of libssh2 which implements\
-        \ the SSH2 protocol.\\nlibssh2 is available from http://www.sourceforge.net/projects/libssh2\"\
+        \      \"description\": \"Bindings to the libssh2 library which provide access\
+        \ to resources\\n(shell, remote exec, tunneling, file transfer) on a remote\
+        \ machine using\\na secure cryptographic transport.\\n\\nDocumentation: http://php.net/ssh2\"\
         ,\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"\
         name\": \"php-pecl-ssh2\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
         : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Bindings for\
@@ -397,21 +567,22 @@ interactions:
         \ \"Approved\",\n      \"summary\": \"Symfony Security Component - ACL (Access\
         \ Control List)\",\n      \"upstream_url\": \"https://github.com/symfony/security-acl\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1490726864.0,\n\
-        \      \"description\": \"Symfony PHP framework (version 3).\",\n      \"\
-        koschei_monitor\": true,\n      \"monitor\": \"nobuild\",\n      \"name\"\
-        : \"php-symfony3\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : \"https://bugzilla.redhat.com/1431298\",\n      \"status\": \"Approved\"\
-        ,\n      \"summary\": \"Symfony PHP framework (version 3)\",\n      \"upstream_url\"\
-        : \"http://symfony.com\"\n    },\n    {\n      \"acls\": [],\n      \"creation_date\"\
-        : 1409054578.0,\n      \"description\": \"The flexible, fast, and secure template\
-        \ engine for PHP.\\n\\n* Fast: Twig compiles templates down to plain optimized\
-        \ PHP code. The\\n  overhead compared to regular PHP code was reduced to the\
-        \ very minimum.\\n\\n* Secure: Twig has a sandbox mode to evaluate untrusted\
-        \ template code. This\\n  allows Twig to be used as a template language for\
-        \ applications where users\\n  may modify the template design.\\n\\n* Flexible:\
-        \ Twig is powered by a flexible lexer and parser. This allows the\\n  developer\
-        \ to define its own custom tags and filters, and create its own\\n  DSL.\\\
-        n\\nAutoloader: /usr/share/php/Twig/autoload.php\",\n      \"koschei_monitor\"\
+        \      \"description\": \"Symfony PHP framework (version 3).\\n\\nNOTE: Does\
+        \ not require PHPUnit bridge.\",\n      \"koschei_monitor\": true,\n     \
+        \ \"monitor\": \"nobuild\",\n      \"name\": \"php-symfony3\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1431298\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Symfony PHP framework\
+        \ (version 3)\",\n      \"upstream_url\": \"http://symfony.com\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1409054578.0,\n    \
+        \  \"description\": \"The flexible, fast, and secure template engine for PHP.\\\
+        n\\n* Fast: Twig compiles templates down to plain optimized PHP code. The\\\
+        n  overhead compared to regular PHP code was reduced to the very minimum.\\\
+        n\\n* Secure: Twig has a sandbox mode to evaluate untrusted template code.\
+        \ This\\n  allows Twig to be used as a template language for applications\
+        \ where users\\n  may modify the template design.\\n\\n* Flexible: Twig is\
+        \ powered by a flexible lexer and parser. This allows the\\n  developer to\
+        \ define its own custom tags and filters, and create its own\\n  DSL.\\n\\\
+        nAutoloader: /usr/share/php/Twig/autoload.php\",\n      \"koschei_monitor\"\
         : true,\n      \"monitor\": \"nobuild\",\n      \"name\": \"php-twig\",\n\
         \      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1118528\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"The flexible, fast,\
@@ -439,39 +610,32 @@ interactions:
         \      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
         : \"Handle the administration of MySQL over the World Wide Web\",\n      \"\
         upstream_url\": \"https://www.phpmyadmin.net/\"\n    },\n    {\n      \"acls\"\
-        : [],\n      \"creation_date\": 1411069262.0,\n      \"description\": \"phpMyAdmin\
-        \ is a tool written in PHP intended to handle the administration of\\nMySQL\
-        \ over the World Wide Web. Most frequently used operations are supported\\\
-        nby the user interface (managing databases, tables, fields, relations, indexes,\\\
-        nusers, permissions), while you still have the ability to directly execute\
-        \ any\\nSQL statement.\\n\\nFeatures include an intuitive web interface, support\
-        \ for most MySQL features\\n(browse and drop databases, tables, views, fields\
-        \ and indexes, create, copy,\\ndrop, rename and alter databases, tables, fields\
-        \ and indexes, maintenance\\nserver, databases and tables, with proposals\
-        \ on server configuration, execute,\\nedit and bookmark any SQL-statement,\
-        \ even batch-queries, manage MySQL users\\nand privileges, manage stored procedures\
-        \ and triggers), import data from CSV\\nand SQL, export data to various formats:\
-        \ CSV, SQL, XML, PDF, OpenDocument Text\\nand Spreadsheet, Word, Excel, LATEX\
-        \ and others, administering multiple servers,\\ncreating PDF graphics of your\
-        \ database layout, creating complex queries using\\nQuery-by-example (QBE),\
-        \ searching globally in a database or a subset of it,\\ntransforming stored\
-        \ data into any format using a set of predefined functions,\\nlike displaying\
-        \ BLOB-data as image or download-link and much more...\",\n      \"koschei_monitor\"\
-        : false,\n      \"monitor\": false,\n      \"name\": \"phpMyAdmin4\",\n  \
-        \    \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1121355\"\
-        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Handle the administration\
-        \ of MySQL over the World Wide Web\",\n      \"upstream_url\": \"https://www.phpmyadmin.net/\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"The uw-imap package provides UW server daemons for\
-        \ both the IMAP (Internet\\nMessage Access Protocol) and POP (Post Office\
-        \ Protocol) mail access\\nprotocols.  The POP protocol uses a \\\"post office\\\
-        \" machine to collect\\nmail for users and allows users to download their\
-        \ mail to their local\\nmachine for reading. The IMAP protocol allows a user\
-        \ to read mail on a\\nremote machine without downloading it to their local\
-        \ machine.\",\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n\
-        \      \"name\": \"uw-imap\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"UW Server daemons\
-        \ for IMAP and POP network mail protocols\",\n      \"upstream_url\": \"http://www.washington.edu/imap/\"\
+        : [],\n      \"creation_date\": 1491916941.0,\n      \"description\": \"Redis\
+        \ available as docker container, is an advanced key-value store. It is often\
+        \ referred to as a data structure server since keys can contain strings, hashes,\
+        \ lists, sets and sorted sets. You can run atomic operations on these types,\
+        \ like appending to a string; incrementing the value in a hash; pushing to\
+        \ a list; computing set intersection, union and difference; or getting the\
+        \ member with highest ranking in a sorted set. In order to achieve its outstanding\
+        \ performance, Redis works with an in-memory dataset. Depending on your use\
+        \ case, you can persist it either by dumping the dataset to disk every once\
+        \ in a while, or by appending each command to a log.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"redis\",\n      \"namespace\"\
+        : \"container\",\n      \"review_url\": \"https://bugzilla.redhat.com/1431528\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Redis in-memory data\
+        \ structure store, used as database, cache and message broker\",\n      \"\
+        upstream_url\": \"https://redis.io/\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1400070978.0,\n      \"description\": \"The uw-imap\
+        \ package provides UW server daemons for both the IMAP (Internet\\nMessage\
+        \ Access Protocol) and POP (Post Office Protocol) mail access\\nprotocols.\
+        \  The POP protocol uses a \\\"post office\\\" machine to collect\\nmail for\
+        \ users and allows users to download their mail to their local\\nmachine for\
+        \ reading. The IMAP protocol allows a user to read mail on a\\nremote machine\
+        \ without downloading it to their local machine.\",\n      \"koschei_monitor\"\
+        : false,\n      \"monitor\": false,\n      \"name\": \"uw-imap\",\n      \"\
+        namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\": \"\
+        Approved\",\n      \"summary\": \"UW Server daemons for IMAP and POP network\
+        \ mail protocols\",\n      \"upstream_url\": \"http://www.washington.edu/imap/\"\
         \n    }\n  ],\n  \"output\": \"ok\",\n  \"point of contact\": [\n    {\n \
         \     \"acls\": [],\n      \"creation_date\": 1460670291.0,\n      \"description\"\
         : \"Smart and Readable Documentation for your PHP project.\",\n      \"koschei_monitor\"\
@@ -721,12 +885,22 @@ interactions:
         \      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1352468\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"Powerful, flexible\
         \ web routing for PSR-7 requests\",\n      \"upstream_url\": \"https://github.com/auraphp/Aura.Router\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"PHP_CompatInfo will parse a file/folder/array to\
-        \ find out the minimum\\nversion and extensions required for it to run. CLI\
-        \ version has many reports\\n(extension, interface, class, function, constant)\
-        \ to display and ability to\\nshow content of dictionary references.\\n\\\
-        nDocumentation: http://php5.laurent-laville.org/compatinfo/manual/current/en/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1499080992.0,\n\
+        \      \"description\": \"BaconQrCode is a port of QR code portion of the\
+        \ ZXing library.\\nIt currently only features the encoder part, but could\
+        \ later\\nreceive the decoder part as well.\\n\\nAs the Reed Solomon codec\
+        \ implementation of the ZXing library\\nperforms quite slow in PHP, it was\
+        \ exchanged with the implementation\\nby Phil Karn.\\n\\nAutoloader: /usr/share/php/BaconQrCode/autoload.php\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
+        : \"php-bacon-qr-code\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1465313\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"QR code generator for PHP\",\n      \"upstream_url\"\
+        : \"https://github.com/Bacon/BaconQrCode\"\n    },\n    {\n      \"acls\"\
+        : [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"PHP_CompatInfo\
+        \ will parse a file/folder/array to find out the minimum\\nversion and extensions\
+        \ required for it to run. CLI version has many reports\\n(extension, interface,\
+        \ class, function, constant) to display and ability to\\nshow content of dictionary\
+        \ references.\\n\\nDocumentation: http://php5.laurent-laville.org/compatinfo/manual/current/en/\"\
         ,\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
         : \"php-bartlett-PHP-CompatInfo\",\n      \"namespace\": \"rpms\",\n     \
         \ \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
@@ -852,9 +1026,17 @@ interactions:
         ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"XML transition from PHP4 domxml to PHP5\
         \ dom module\",\n      \"upstream_url\": \"http://alexandre.alapetite.fr/doc-alex/domxml-php4-php5/\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"The Graph component enables you to create line,\
-        \ pie and bar charts.\\nThe output driver mechanism allows you to create different\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1499080665.0,\n\
+        \      \"description\": \"This library based on QRcode Perl CGI & PHP scripts\
+        \ by Y. Swetake\\nhelps you generate images containing a QR code.\\n\\nAutoloader:\
+        \ /usr/share/php/Endroid/QrCode/autoload.php\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": false,\n      \"name\": \"php-endroid-qrcode\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1465443\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Endroid QR Code\"\
+        ,\n      \"upstream_url\": \"https://github.com/endroid/QrCode\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"The Graph component enables you to create line, pie\
+        \ and bar charts.\\nThe output driver mechanism allows you to create different\
         \ image types\\nfrom each chart, and the available renderers make the chart\
         \ output\\ncustomizable from simple two-dimensional charts to beautiful\\\
         nthree-dimensional data projections.\",\n      \"koschei_monitor\": false,\n\
@@ -896,38 +1078,47 @@ interactions:
         name\": \"php-getid3\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
         : null,\n      \"status\": \"Approved\",\n      \"summary\": \"The PHP media\
         \ file parser\",\n      \"upstream_url\": \"http://www.getid3.org/\"\n   \
-        \ },\n    {\n      \"acls\": [],\n      \"creation_date\": 1446684827.0,\n\
-        \      \"description\": \"Hamcrest is a matching library originally written\
-        \ for Java,\\nbut subsequently ported to many other languages.\\n\\nphp-hamcrest\
-        \ is the official PHP port of Hamcrest and essentially follows\\na literal\
-        \ translation of the original Java API for Hamcrest,\\nwith a few Exceptions,\
-        \ mostly down to PHP language barriers.\\n\\nTo use this library, you just\
-        \ have to add, in your project:\\n  require_once '/usr/share/php/Hamcrest/autoload.php';\"\
+        \ },\n    {\n      \"acls\": [],\n      \"creation_date\": 1493590839.0,\n\
+        \      \"description\": \"reCAPTCHA PHP client library.\\n\\nreCAPTCHA is\
+        \ a free CAPTCHA service that protect websites from spam and abuse.\\nThis\
+        \ is Google authored code that provides plugins for third-party integration\\\
+        nwith reCAPTCHA.\\n\\nAutoloader: /usr/share/php/ReCaptcha/autoload.php\"\
         ,\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
-        : \"php-hamcrest\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : \"https://bugzilla.redhat.com/1271954\",\n      \"status\": \"Approved\"\
-        ,\n      \"summary\": \"PHP port of Hamcrest Matchers\",\n      \"upstream_url\"\
-        : \"https://github.com/hamcrest/hamcrest-php\"\n    },\n    {\n      \"acls\"\
-        : [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"An\
-        \ interface to deal with reminders, alarms and notifications through a\\nstandardized\
-        \ API. The following notification methods are currently\\navailable: standard\
-        \ Horde notifications, pop-ups, emails.\",\n      \"koschei_monitor\": true,\n\
-        \      \"monitor\": false,\n      \"name\": \"php-horde-Horde-Alarm\",\n \
-        \     \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"Horde Alarm Libraries\",\n      \"upstream_url\"\
-        : \"http://pear.horde.org\"\n    },\n    {\n      \"acls\": [],\n      \"\
-        creation_date\": 1400070978.0,\n      \"description\": \"Classes for parsing\
-        \ command line arguments with various actions, providing\\nhelp, grouping\
-        \ options, and more.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
-        : false,\n      \"name\": \"php-horde-Horde-Argv\",\n      \"namespace\":\
-        \ \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
-        \      \"summary\": \"Horde command-line argument parsing package\",\n   \
-        \   \"upstream_url\": \"http://pear.horde.org\"\n    },\n    {\n      \"acls\"\
-        : [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"The\
-        \ Horde_Auth package provides a common interface into the various\\nbackends\
-        \ for the Horde authentication system.\",\n      \"koschei_monitor\": true,\n\
-        \      \"monitor\": false,\n      \"name\": \"php-horde-Horde-Auth\",\n  \
-        \    \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"php-google-recaptcha\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1415394\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"reCAPTCHA PHP client library\",\n      \"upstream_url\"\
+        : \"https://github.com/google/recaptcha\"\n    },\n    {\n      \"acls\":\
+        \ [],\n      \"creation_date\": 1446684827.0,\n      \"description\": \"Hamcrest\
+        \ is a matching library originally written for Java,\\nbut subsequently ported\
+        \ to many other languages.\\n\\nphp-hamcrest is the official PHP port of Hamcrest\
+        \ and essentially follows\\na literal translation of the original Java API\
+        \ for Hamcrest,\\nwith a few Exceptions, mostly down to PHP language barriers.\\\
+        n\\nTo use this library, you just have to add, in your project:\\n  require_once\
+        \ '/usr/share/php/Hamcrest/autoload.php';\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": false,\n      \"name\": \"php-hamcrest\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1271954\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"PHP port of Hamcrest\
+        \ Matchers\",\n      \"upstream_url\": \"https://github.com/hamcrest/hamcrest-php\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"An interface to deal with reminders, alarms and\
+        \ notifications through a\\nstandardized API. The following notification methods\
+        \ are currently\\navailable: standard Horde notifications, pop-ups, emails.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
+        : \"php-horde-Horde-Alarm\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Horde Alarm\
+        \ Libraries\",\n      \"upstream_url\": \"http://pear.horde.org\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"Classes for parsing command line arguments with various\
+        \ actions, providing\\nhelp, grouping options, and more.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": false,\n      \"name\": \"php-horde-Horde-Argv\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Horde command-line argument parsing\
+        \ package\",\n      \"upstream_url\": \"http://pear.horde.org\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"The Horde_Auth package provides a common interface into\
+        \ the various\\nbackends for the Horde authentication system.\",\n      \"\
+        koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\": \"php-horde-Horde-Auth\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"Horde Authentication API\",\n      \"\
         upstream_url\": \"http://pear.horde.org\"\n    },\n    {\n      \"acls\":\
         \ [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"Autoload\
@@ -1934,8 +2125,15 @@ interactions:
         ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1239222\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"Create deep copies\
         \ (clones) of your objects\",\n      \"upstream_url\": \"https://github.com/myclabs/DeepCopy\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1456152185.0,\n\
-        \      \"description\": \"Nette Framework is a popular tool for PHP web development\\\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1499080879.0,\n\
+        \      \"description\": \"PHP Enum implementation inspired from SplEnum.\\\
+        n\\nAutoloader: /usr/share/php/MyCLabs/Enum/autoload.php\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": false,\n      \"name\": \"php-myclabs-php-enum\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1465291\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"PHP Enum implementation\"\
+        ,\n      \"upstream_url\": \"https://github.com/myclabs/php-enum\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1456152185.0,\n    \
+        \  \"description\": \"Nette Framework is a popular tool for PHP web development\\\
         nIt is designed to be as usable and as friendly as possible.\\nIt focuses\
         \ on security and performance and is definitely one\\nof the safest PHP frameworks.\\\
         n\\nNette Framework speaks your language and helps you to easily build better\
@@ -2885,41 +3083,31 @@ interactions:
         : \"Approved\",\n      \"summary\": \"Find out version and extensions required\
         \ for a piece of code to run\",\n      \"upstream_url\": \"http://pear.php.net/package/PHP_CompatInfo\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"PHPUnit is a family of PEAR packages that supports\
-        \ the development of\\nobject-oriented PHP applications using the concepts\
-        \ and methods of Agile\\nSoftware Development, Extreme Programming, Test-Driven\
-        \ Development and\\nDesign-by-Contract Development by providing an elegant\
-        \ and robust framework\\nfor the creation, execution and analysis of Unit\
-        \ Tests.\",\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n\
-        \      \"name\": \"php-pear-PHPUnit\",\n      \"namespace\": \"rpms\",\n \
-        \     \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
-        : \"Regression testing framework for unit tests\",\n      \"upstream_url\"\
-        : \"http://www.phpunit.de\"\n    },\n    {\n      \"acls\": [],\n      \"\
-        creation_date\": 1400070978.0,\n      \"description\": \"It takes an array\
-        \ of data as input and pages it according to various\\nparameters. It also\
-        \ builds links within a specified range, and allows\\ncomplete customization\
-        \ of the output (it even works with front controllers\\nand mod_rewrite).\
-        \ Two operating modes available: \\\"Jumping\\\" and \\\"Sliding\\\"\\nwindow\
-        \ style.\",\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n\
-        \      \"name\": \"php-pear-Pager\",\n      \"namespace\": \"rpms\",\n   \
-        \   \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
-        : \"Data paging class\",\n      \"upstream_url\": \"http://pear.php.net/package/Pager\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"Payment_Process is a gateway-independent framework\
-        \ for processing credit\\ncards, e-checks and eventually other forms of payments\
-        \ as well.\",\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n\
-        \      \"name\": \"php-pear-Payment-Process\",\n      \"namespace\": \"rpms\"\
+        \      \"description\": \"It takes an array of data as input and pages it\
+        \ according to various\\nparameters. It also builds links within a specified\
+        \ range, and allows\\ncomplete customization of the output (it even works\
+        \ with front controllers\\nand mod_rewrite). Two operating modes available:\
+        \ \\\"Jumping\\\" and \\\"Sliding\\\"\\nwindow style.\",\n      \"koschei_monitor\"\
+        : false,\n      \"monitor\": false,\n      \"name\": \"php-pear-Pager\",\n\
+        \      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Data paging class\",\n      \"upstream_url\"\
+        : \"http://pear.php.net/package/Pager\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1400070978.0,\n      \"description\": \"Payment_Process\
+        \ is a gateway-independent framework for processing credit\\ncards, e-checks\
+        \ and eventually other forms of payments as well.\",\n      \"koschei_monitor\"\
+        : false,\n      \"monitor\": false,\n      \"name\": \"php-pear-Payment-Process\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Unified payment processor\",\n     \
+        \ \"upstream_url\": \"http://pear.php.net/package/Payment_Process\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"Implementation of Simple Object Access Protocol (SOAP)\
+        \ protocol and services.\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
+        : false,\n      \"name\": \"php-pear-SOAP\",\n      \"namespace\": \"rpms\"\
         ,\n      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"\
-        summary\": \"Unified payment processor\",\n      \"upstream_url\": \"http://pear.php.net/package/Payment_Process\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"Implementation of Simple Object Access Protocol\
-        \ (SOAP) protocol and services.\",\n      \"koschei_monitor\": false,\n  \
-        \    \"monitor\": false,\n      \"name\": \"php-pear-SOAP\",\n      \"namespace\"\
-        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
-        \      \"summary\": \"Simple Object Access Protocol (SOAP) Client/Server for\
-        \ PHP\",\n      \"upstream_url\": \"http://pear.php.net/package/SOAP\"\n \
-        \   },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"An interface for communicating with Twitter's public\
+        summary\": \"Simple Object Access Protocol (SOAP) Client/Server for PHP\"\
+        ,\n      \"upstream_url\": \"http://pear.php.net/package/SOAP\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"An interface for communicating with Twitter's public\
         \ API.\\nSend status updates, fetch information, add friends, etc.\",\n  \
         \    \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\"\
         : \"php-pear-Services-Twitter\",\n      \"namespace\": \"rpms\",\n      \"\
@@ -3115,22 +3303,11 @@ interactions:
         summary\": \"Swiss-army knife for reading and writing XML files\",\n     \
         \ \"upstream_url\": \"http://pear.php.net/package/XML_Serializer\"\n    },\n\
         \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
-        \  \"description\": \"XML_Util is a utility class that helps you working with\
-        \ (and especially\\ncreating) XML documents.\\n\\nAll methods of XML_Util\
-        \ can be called statically, that means you do not have\\nto instantiate an\
-        \ XML_Util object to use the provided methods.\\n\\nThe funcionality of XML_Util\
-        \ ranges from validating an XML tag name (as there\\nare strict rules for\
-        \ tag and attribute names) to the creation of namespaced\\nXML tags.\",\n\
-        \      \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\"\
-        : \"php-pear-XML-Util\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"XML utility\
-        \ class\",\n      \"upstream_url\": \"http://pear.php.net/package/XML_Util\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"You can use Console_Color::convert to transform\
-        \ colorcodes like %r into\\nANSI control codes.\\n  <?php\\n  include \\\"\
-        Console/Color2.php\\\";\\n  $console = new Console_Color2();\\n  print $console->convert(\\\
-        \"%rHello World!%n\\\");\\n  ?>\\nwould print \\\"Hello World\\\" in red,\
-        \ for example.\",\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n\
+        \  \"description\": \"You can use Console_Color::convert to transform colorcodes\
+        \ like %r into\\nANSI control codes.\\n  <?php\\n  include \\\"Console/Color2.php\\\
+        \";\\n  $console = new Console_Color2();\\n  print $console->convert(\\\"\
+        %rHello World!%n\\\");\\n  ?>\\nwould print \\\"Hello World\\\" in red, for\
+        \ example.\",\n      \"koschei_monitor\": false,\n      \"monitor\": false,\n\
         \      \"name\": \"php-pear-console-color2\",\n      \"namespace\": \"rpms\"\
         ,\n      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"\
         summary\": \"Easily use ANSI console colors in your application\",\n     \
@@ -3185,37 +3362,26 @@ interactions:
         \ BBCode markup into XHTML, LaTeX or plain text\",\n      \"upstream_url\"\
         : \"http://pear.php.net/package/Text_Wiki\"\n    },\n    {\n      \"acls\"\
         : [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"This\
-        \ extension allows the retrieval of file type information for the vast\\nmajority\
-        \ of files.  This information may include such information as dimensions\\\
-        nor compression quality of images, duration of sound files, etc...\\n\\nAdditionally,\
-        \ it can also be used to retrieve the MIME type for a particular\\nfile, and\
-        \ for text files, the proper language encoding.\",\n      \"koschei_monitor\"\
-        : false,\n      \"monitor\": false,\n      \"name\": \"php-pecl-Fileinfo\"\
-        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"Fileinfo is a PHP extension that wraps\
-        \ the libmagic library\",\n      \"upstream_url\": \"http://pecl.php.net/package/Fileinfo\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"This extension can communicate with any AMQP spec\
-        \ 0-9-1 compatible server,\\nsuch as RabbitMQ, OpenAMQP and Qpid, giving you\
-        \ the ability to create and\\ndelete exchanges and queues, as well as publish\
-        \ to any exchange and consume\\nfrom any queue.\",\n      \"koschei_monitor\"\
-        : true,\n      \"monitor\": false,\n      \"name\": \"php-pecl-amqp\",\n \
-        \     \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"Communicate with any AMQP compliant\
-        \ server\",\n      \"upstream_url\": \"http://pecl.php.net/package/amqp\"\n\
-        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"APCu is userland caching: APC stripped of opcode\
-        \ caching.\\n\\nAPCu only supports userland caching of variables.\\n\\nThe\
-        \ php-pecl-apcu-bc package provides a drop\\nin replacement for APC.\",\n\
-        \      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
-        : \"php-pecl-apcu\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"APC User Cache\"\
-        ,\n      \"upstream_url\": \"http://pecl.php.net/package/APCu\"\n    },\n\
-        \    {\n      \"acls\": [],\n      \"creation_date\": 1467262393.0,\n    \
-        \  \"description\": \"This module provides a backwards compatible API for\
-        \ APC.\",\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n \
-        \     \"name\": \"php-pecl-apcu-bc\",\n      \"namespace\": \"rpms\",\n  \
-        \    \"review_url\": \"https://bugzilla.redhat.com/1350148\",\n      \"status\"\
+        \ extension can communicate with any AMQP spec 0-9-1 compatible server,\\\
+        nsuch as RabbitMQ, OpenAMQP and Qpid, giving you the ability to create and\\\
+        ndelete exchanges and queues, as well as publish to any exchange and consume\\\
+        nfrom any queue.\",\n      \"koschei_monitor\": true,\n      \"monitor\":\
+        \ false,\n      \"name\": \"php-pecl-amqp\",\n      \"namespace\": \"rpms\"\
+        ,\n      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"\
+        summary\": \"Communicate with any AMQP compliant server\",\n      \"upstream_url\"\
+        : \"http://pecl.php.net/package/amqp\"\n    },\n    {\n      \"acls\": [],\n\
+        \      \"creation_date\": 1400070978.0,\n      \"description\": \"APCu is\
+        \ userland caching: APC stripped of opcode caching.\\n\\nAPCu only supports\
+        \ userland caching of variables.\\n\\nThe php-pecl-apcu-bc package provides\
+        \ a drop\\nin replacement for APC.\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": false,\n      \"name\": \"php-pecl-apcu\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"APC User Cache\",\n      \"upstream_url\": \"http://pecl.php.net/package/APCu\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1467262393.0,\n\
+        \      \"description\": \"This module provides a backwards compatible API\
+        \ for APC.\",\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n\
+        \      \"name\": \"php-pecl-apcu-bc\",\n      \"namespace\": \"rpms\",\n \
+        \     \"review_url\": \"https://bugzilla.redhat.com/1350148\",\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"APCu Backwards Compatibility Module\"\
         ,\n      \"upstream_url\": \"http://pecl.php.net/package/APCu\"\n    },\n\
         \    {\n      \"acls\": [],\n      \"creation_date\": 1430063733.0,\n    \
@@ -3634,6 +3800,21 @@ interactions:
         : \"php-pecl-zip\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
         : null,\n      \"status\": \"Approved\",\n      \"summary\": \"A ZIP archive\
         \ management extension\",\n      \"upstream_url\": \"http://pecl.php.net/package/zip\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1493591059.0,\n\
+        \      \"description\": \"Component for reading phar.io manifest information\
+        \ from a PHP Archive (PHAR).\\n\\nAutoloader: /usr/share/php/PharIo/Manifest/autoload.php\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
+        : \"php-phar-io-manifest\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1440006\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Component for reading phar.io manifest information\"\
+        ,\n      \"upstream_url\": \"https://github.com/phar-io/manifest\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1492009175.0,\n    \
+        \  \"description\": \"Library for handling version information and constraints.\\\
+        n\\nAutoloader: /usr/share/php/PharIo/Version/autoload.php\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": false,\n      \"name\": \"php-phar-io-version\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1440005\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Library for handling\
+        \ version information and constraints\",\n      \"upstream_url\": \"https://github.com/phar-io/version\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1462553758.0,\n\
         \      \"description\": \"Using this library it is possible to statically\
         \ reflect one or more files\\nand create an object graph representing your\
@@ -3702,7 +3883,16 @@ interactions:
         review_url\": \"https://bugzilla.redhat.com/1415389\",\n      \"status\":\
         \ \"Approved\",\n      \"summary\": \"ESRI ShapeFile library for PHP\",\n\
         \      \"upstream_url\": \"https://github.com/phpmyadmin/shapefile\"\n   \
-        \ },\n    {\n      \"acls\": [],\n      \"creation_date\": 1421414345.0,\n\
+        \ },\n    {\n      \"acls\": [],\n      \"creation_date\": 1493590896.0,\n\
+        \      \"description\": \"A validating SQL lexer and parser with a focus on\
+        \ MySQL dialect.\\n\\nThis library was originally developed for phpMyAdmin\
+        \ during\\nthe Google Summer of Code 2015.\\n\\nAutoloader: /usr/share/php/PhpMyAdmin/SqlParser/autoload.php\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
+        : \"php-phpmyadmin-sql-parser\",\n      \"namespace\": \"rpms\",\n      \"\
+        review_url\": \"https://bugzilla.redhat.com/1415686\",\n      \"status\":\
+        \ \"Approved\",\n      \"summary\": \"A validating SQL lexer and parser with\
+        \ a focus on MySQL dialect\",\n      \"upstream_url\": \"https://github.com/phpmyadmin/sql-parser\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1421414345.0,\n\
         \      \"description\": \"Pure-PHP ASN1 parser.\",\n      \"koschei_monitor\"\
         : true,\n      \"monitor\": false,\n      \"name\": \"php-phpseclib-file-asn1\"\
         ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1182446\"\
@@ -3854,6 +4044,13 @@ interactions:
         : \"php-phpunit-comparator\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
         : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Compare PHP\
         \ values for equality\",\n      \"upstream_url\": \"https://github.com/sebastianbergmann/comparator\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1493591017.0,\n\
+        \      \"description\": \"PHPUnit extension for database interaction testing.\\\
+        n\\nAutoloader: /usr/share/php/PHPUnit6/DbUnit/autoload.php\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": false,\n      \"name\": \"php-phpunit-dbunit3\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1420382\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"PHPUnit extension\
+        \ for database interaction testing\",\n      \"upstream_url\": \"https://github.com/sebastianbergmann/dbunit\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"Diff implementation.\",\n      \"koschei_monitor\"\
         : true,\n      \"monitor\": false,\n      \"name\": \"php-phpunit-diff\",\n\
@@ -4018,6 +4215,22 @@ interactions:
         ,\n      \"review_url\": \"https://bugzilla.redhat.com/1307216\",\n      \"\
         status\": \"Approved\",\n      \"summary\": \"Looks up which function or method\
         \ a line of code belongs to\",\n      \"upstream_url\": \"https://github.com/sebastianbergmann/code-unit-reverse-lookup\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1492083685.0,\n\
+        \      \"description\": \"This component provides the functionality to compare\
+        \ PHP values for equality.\\n\\nAutoloader: /usr/share/php/SebastianBergmann/Comparator2/autoload.php\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
+        : \"php-sebastian-comparator2\",\n      \"namespace\": \"rpms\",\n      \"\
+        review_url\": \"https://bugzilla.redhat.com/1428913\",\n      \"status\":\
+        \ \"Approved\",\n      \"summary\": \"Compare PHP values for equality\",\n\
+        \      \"upstream_url\": \"https://github.com/sebastianbergmann/comparator\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1493641357.0,\n\
+        \      \"description\": \"This component provides functionality that helps\
+        \ writing PHP code that\\nhas runtime-specific (PHP / HHVM) execution paths.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
+        : \"php-sebastian-environment3\",\n      \"namespace\": \"rpms\",\n      \"\
+        review_url\": \"https://bugzilla.redhat.com/1444648\",\n      \"status\":\
+        \ \"Approved\",\n      \"summary\": \"Handle HHVM/PHP environments\",\n  \
+        \    \"upstream_url\": \"https://github.com/sebastianbergmann/environment\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1488893865.0,\n\
         \      \"description\": \"Provides the functionality to export PHP variables\
         \ for visualization.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
@@ -4032,6 +4245,13 @@ interactions:
         ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1170948\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"Snapshotting of global\
         \ state\",\n      \"upstream_url\": \"https://github.com/sebastianbergmann/global-state\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1493590992.0,\n\
+        \      \"description\": \"Snapshotting of global state,\\nfactored out of\
+        \ PHPUnit into a stand-alone component.\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": false,\n      \"name\": \"php-sebastian-global-state2\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1446473\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Snapshotting of global\
+        \ state\",\n      \"upstream_url\": \"https://github.com/sebastianbergmann/global-state\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1460552761.0,\n\
         \      \"description\": \"Traverses array structures and object graphs to\
         \ enumerate all\\nreferenced objects.\\n\\nAutoloader: /usr/share/php/SebastianBergmann/ObjectEnumerator/autoload.php\"\
@@ -4040,6 +4260,14 @@ interactions:
         \     \"review_url\": \"https://bugzilla.redhat.com/1320532\",\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"Traverses array and object to enumerate\
         \ all referenced objects\",\n      \"upstream_url\": \"https://github.com/sebastianbergmann/object-enumerator\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1491481476.0,\n\
+        \      \"description\": \"Traverses array structures and object graphs to\
+        \ enumerate all\\nreferenced objects.\\n\\nAutoloader: /usr/share/php/SebastianBergmann/ObjectEnumerator3/autoload.php\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
+        : \"php-sebastian-object-enumerator3\",\n      \"namespace\": \"rpms\",\n\
+        \      \"review_url\": \"https://bugzilla.redhat.com/1428914\",\n      \"\
+        status\": \"Approved\",\n      \"summary\": \"Traverses array and object to\
+        \ enumerate all referenced objects\",\n      \"upstream_url\": \"https://github.com/sebastianbergmann/object-enumerator\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1490195290.0,\n\
         \      \"description\": \"Allows reflection of object attributes, including\
         \ inherited\\nand non-public ones.\",\n      \"koschei_monitor\": true,\n\
@@ -4215,7 +4443,15 @@ interactions:
         ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"An Extension to PHP standard DOM\",\n\
         \      \"upstream_url\": \"https://github.com/theseer/fDOMDocument\"\n   \
-        \ },\n    {\n      \"acls\": [],\n      \"creation_date\": 1448810915.0,\n\
+        \ },\n    {\n      \"acls\": [],\n      \"creation_date\": 1493590757.0,\n\
+        \      \"description\": \"A small library for converting tokenized PHP source\
+        \ code into XML\\nand potentially other formats.\\n\\nAutoloader: /usr/share/php/TheSeer/Tokenizer/autoload.php\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
+        : \"php-theseer-tokenizer\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1444522\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Library for converting tokenized PHP source code into\
+        \ XML\",\n      \"upstream_url\": \"https://github.com/theseer/tokenizer\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1448810915.0,\n\
         \      \"description\": \"Tracy library is a useful PHP everyday programmer's\
         \ helper. It helps you to:\\n\\n- quickly detect and correct errors\\n- log\
         \ errors\\n- dump variables\\n- measure the time\\n\\nTo use this library,\
@@ -4257,12 +4493,13 @@ interactions:
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1442858457.0,\n\
         \      \"description\": \"A validating SQL lexer and parser with a focus on\
         \ MySQL dialect.\\n\\nThis library was originally developed for phpMyAdmin\
-        \ during\\nthe Google Summer of Code 2015.\\n\\nAutoloader: /usr/share/php/SqlParser/autoload.php\"\
+        \ during\\nthe Google Summer of Code 2015.\\n\\nTo use this library, you just\
+        \ have to add, in your project:\\n  require_once '/usr/share/php/SqlParser/autoload.php';\"\
         ,\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
         : \"php-udan11-sql-parser\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
         : \"https://bugzilla.redhat.com/1262807\",\n      \"status\": \"Approved\"\
         ,\n      \"summary\": \"A validating SQL lexer and parser with a focus on\
-        \ MySQL dialect\",\n      \"upstream_url\": \"https://github.com/phpmyadmin/sql-parser\"\
+        \ MySQL dialect\",\n      \"upstream_url\": \"https://github.com/udan11/sql-parser\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"XCache is a fast, stable  PHP opcode and data cacher\
         \ that has been tested\\nand is now running on production servers under high\
@@ -4342,8 +4579,8 @@ interactions:
         : \"php-zendframework-zend-code\",\n      \"namespace\": \"rpms\",\n     \
         \ \"review_url\": \"https://bugzilla.redhat.com/show_bug.cgi?id=1266336\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"Zend Framework Code\
-        \ component\",\n      \"upstream_url\": \"https://framework.zend.com/\"\n\
-        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443662954.0,\n\
+        \ component\",\n      \"upstream_url\": \"https://zendframework.github.io/zend-code/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443662954.0,\n\
         \      \"description\": \"Zend\\\\Config is designed to simplify access to\
         \ configuration data within\\napplications. It provides a nested object property-based\
         \ user interface\\nfor accessing this configuration data within application\
@@ -4376,8 +4613,8 @@ interactions:
         : \"php-zendframework-zend-crypt\",\n      \"namespace\": \"rpms\",\n    \
         \  \"review_url\": \"https://bugzilla.redhat.com/show_bug.cgi?id=1266336\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"Zend Framework Crypt\
-        \ component\",\n      \"upstream_url\": \"https://framework.zend.com/\"\n\
-        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663034.0,\n\
+        \ component\",\n      \"upstream_url\": \"https://zendframework.github.io/zend-crypt/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663034.0,\n\
         \      \"description\": \"Zend\\\\Db is a component that abstract the access\
         \ to a Database using an object\\noriented API to build the queries. Zend\\\
         \\Db consumes different storage adapters\\nto access different database vendors\
@@ -4442,7 +4679,7 @@ interactions:
         : \"php-zendframework-zend-eventmanager\",\n      \"namespace\": \"rpms\"\
         ,\n      \"review_url\": \"https://bugzilla.redhat.com/show_bug.cgi?id=1266336\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"Trigger and listen\
-        \ to events within a PHP application\",\n      \"upstream_url\": \"https://framework.zend.com/\"\
+        \ to events within a PHP application\",\n      \"upstream_url\": \"https://zendframework.github.io/zend-eventmanager/\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1468942678.0,\n\
         \      \"description\": \"zend-expressive builds on zend-stratigility to provide\
         \ a minimalist PSR-7\\nmiddleware framework for PHP, with the following features:\\\
@@ -4547,8 +4784,8 @@ interactions:
         : true,\n      \"monitor\": false,\n      \"name\": \"php-zendframework-zend-feed\"\
         ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/show_bug.cgi?id=1266336\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"Zend Framework Feed\
-        \ component\",\n      \"upstream_url\": \"https://framework.zend.com/\"\n\
-        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663080.0,\n\
+        \ component\",\n      \"upstream_url\": \"https://zendframework.github.io/zend-feed/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663080.0,\n\
         \      \"description\": \"Zend\\\\File is a component used to manage file\
         \ transfer and class autoloading.\\n\\nDocumentation: https://zendframework.github.io/zend-file/\"\
         ,\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
@@ -4595,21 +4832,22 @@ interactions:
         : \"php-zendframework-zend-hydrator\",\n      \"namespace\": \"rpms\",\n \
         \     \"review_url\": \"https://bugzilla.redhat.com/1302552\",\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"Zend Framework Hydrator component\"\
-        ,\n      \"upstream_url\": \"https://framework.zend.com/\"\n    },\n    {\n\
-        \      \"acls\": [],\n      \"creation_date\": 1443663107.0,\n      \"description\"\
-        : \"Zend\\\\I18n comes with a complete translation suite which supports all\
-        \ major\\nformats and includes popular features like plural translations and\
-        \ text\\ndomains. The Translator component is mostly dependency free, except\
-        \ for\\nthe fallback to a default locale, where it relies on the Intl PHP\
-        \ extension.\\n\\nThe translator itself is initialized without any parameters,\
-        \ as any\\nconfiguration to it is optional. A translator without any translations\\\
-        nwill actually do nothing but just return the given message IDs.\",\n    \
-        \  \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\":\
-        \ \"php-zendframework-zend-i18n\",\n      \"namespace\": \"rpms\",\n     \
+        ,\n      \"upstream_url\": \"https://zendframework.github.io/zend-hydrator/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663107.0,\n\
+        \      \"description\": \"Zend\\\\I18n comes with a complete translation suite\
+        \ which supports all major\\nformats and includes popular features like plural\
+        \ translations and text\\ndomains. The Translator component is mostly dependency\
+        \ free, except for\\nthe fallback to a default locale, where it relies on\
+        \ the Intl PHP extension.\\n\\nThe translator itself is initialized without\
+        \ any parameters, as any\\nconfiguration to it is optional. A translator without\
+        \ any translations\\nwill actually do nothing but just return the given message\
+        \ IDs.\\n\\nDocumentation: https://zendframework.github.io/zend-i18n/\",\n\
+        \      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
+        : \"php-zendframework-zend-i18n\",\n      \"namespace\": \"rpms\",\n     \
         \ \"review_url\": \"https://bugzilla.redhat.com/show_bug.cgi?id=1266336\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"Zend Framework I18n\
-        \ component\",\n      \"upstream_url\": \"http://framework.zend.com/\"\n \
-        \   },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663114.0,\n\
+        \ component\",\n      \"upstream_url\": \"https://zendframework.github.io/zend-i18n/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663114.0,\n\
         \      \"description\": \"This \\\"component\\\" provides translation resources,\
         \ specifically\\nfor zendframework/zend-validate and zendframework/zend-captcha,\\\
         nfor use with zendframework/zend-i18n's Translator subcomponent.\",\n    \
@@ -4626,8 +4864,8 @@ interactions:
         : true,\n      \"monitor\": false,\n      \"name\": \"php-zendframework-zend-inputfilter\"\
         ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/show_bug.cgi?id=1266336\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"Zend Framework InputFilter\
-        \ component\",\n      \"upstream_url\": \"https://framework.zend.com/\"\n\
-        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663127.0,\n\
+        \ component\",\n      \"upstream_url\": \"https://zendframework.github.io/zend-inputfilter/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663127.0,\n\
         \      \"description\": \"Zend\\\\Json provides convenience methods for serializing\
         \ native PHP to JSON\\nand decoding JSON to native PHP.\\n\\nDocumentation:\
         \ https://zendframework.github.io/zend-json/\",\n      \"koschei_monitor\"\
@@ -4670,14 +4908,14 @@ interactions:
         : \"php-zendframework-zend-log\",\n      \"namespace\": \"rpms\",\n      \"\
         review_url\": \"https://bugzilla.redhat.com/show_bug.cgi?id=1266336\",\n \
         \     \"status\": \"Approved\",\n      \"summary\": \"Zend Framework Log component\"\
-        ,\n      \"upstream_url\": \"https://framework.zend.com/\"\n    },\n    {\n\
-        \      \"acls\": [],\n      \"creation_date\": 1443663153.0,\n      \"description\"\
-        : \"Zend\\\\Mail provides generalized functionality to compose and send both\
-        \ text\\nand MIME-compliant multipart email messages. Mail can be sent with\
-        \ Zend\\\\Mail\\nvia the Mail\\\\Transport\\\\Sendmail, Mail\\\\Transport\\\
-        \\Smtp or the\\nMail\\\\Transport\\\\File transport. Of course, you can also\
-        \ implement your own\\ntransport by implementing the Mail\\\\Transport\\\\\
-        TransportInterface.\\n\\nDocumentation: https://zendframework.github.io/zend-mail/\"\
+        ,\n      \"upstream_url\": \"https://zendframework.github.io/zend-log/\"\n\
+        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663153.0,\n\
+        \      \"description\": \"Zend\\\\Mail provides generalized functionality\
+        \ to compose and send both text\\nand MIME-compliant multipart email messages.\
+        \ Mail can be sent with Zend\\\\Mail\\nvia the Mail\\\\Transport\\\\Sendmail,\
+        \ Mail\\\\Transport\\\\Smtp or the\\nMail\\\\Transport\\\\File transport.\
+        \ Of course, you can also implement your own\\ntransport by implementing the\
+        \ Mail\\\\Transport\\\\TransportInterface.\\n\\nDocumentation: https://zendframework.github.io/zend-mail/\"\
         ,\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
         : \"php-zendframework-zend-mail\",\n      \"namespace\": \"rpms\",\n     \
         \ \"review_url\": \"https://bugzilla.redhat.com/show_bug.cgi?id=1266336\"\
@@ -4843,8 +5081,8 @@ interactions:
         : \"php-zendframework-zend-navigation\",\n      \"namespace\": \"rpms\",\n\
         \      \"review_url\": \"https://bugzilla.redhat.com/show_bug.cgi?id=1266336\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"Zend Framework Navigation\
-        \ component\",\n      \"upstream_url\": \"http://framework.zend.com/\"\n \
-        \   },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663199.0,\n\
+        \ component\",\n      \"upstream_url\": \"https://zendframework.github.io/zend-navigation/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663199.0,\n\
         \      \"description\": \"Zend\\\\Paginator is a flexible component for paginating\\\
         ncollections of data and presenting that data to users.\",\n      \"koschei_monitor\"\
         : true,\n      \"monitor\": false,\n      \"name\": \"php-zendframework-zend-paginator\"\
@@ -4940,8 +5178,8 @@ interactions:
         : \"php-zendframework-zend-session\",\n      \"namespace\": \"rpms\",\n  \
         \    \"review_url\": \"https://bugzilla.redhat.com/show_bug.cgi?id=1266336\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"Zend Framework Session\
-        \ component\",\n      \"upstream_url\": \"https://framework.zend.com/\"\n\
-        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663266.0,\n\
+        \ component\",\n      \"upstream_url\": \"https://zendframework.github.io/zend-session/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663266.0,\n\
         \      \"description\": \"Zend\\\\Soap is a component to manage the SOAP protocol\
         \ in order\\nto design client or server PHP application.\",\n      \"koschei_monitor\"\
         : true,\n      \"monitor\": false,\n      \"name\": \"php-zendframework-zend-soap\"\
@@ -4990,8 +5228,8 @@ interactions:
         : \"php-zendframework-zend-test\",\n      \"namespace\": \"rpms\",\n     \
         \ \"review_url\": \"https://bugzilla.redhat.com/show_bug.cgi?id=1266336\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"Zend Framework Test\
-        \ component\",\n      \"upstream_url\": \"https://framework.zend.com/\"\n\
-        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663289.0,\n\
+        \ component\",\n      \"upstream_url\": \"https://zendframework.github.io/zend-test/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1443663289.0,\n\
         \      \"description\": \"Zend\\\\Text is a component to work on text strings.\\\
         nIt contains the subcomponents:\\n\\n* Zend\\\\Text\\\\Figlet that enables\
         \ developers to create a so called FIGlet text.\\n  A FIGlet text is a string,\
@@ -5136,48 +5374,55 @@ interactions:
         : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
         \      \"summary\": \"Simple RSS Library in PHP\",\n      \"upstream_url\"\
         : \"http://simplepie.org/\"\n    },\n    {\n      \"acls\": [],\n      \"\
-        creation_date\": 1489409124.0,\n      \"description\": \"PHPUnit is a programmer-oriented\
-        \ testing framework for PHP.\\nIt is an instance of the xUnit architecture\
-        \ for unit testing frameworks.\",\n      \"koschei_monitor\": true,\n    \
-        \  \"monitor\": false,\n      \"name\": \"phpunit6\",\n      \"namespace\"\
-        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1420381\"\
-        ,\n      \"status\": \"Approved\",\n      \"summary\": \"The PHP Unit Testing\
-        \ framework\",\n      \"upstream_url\": \"https://github.com/sebastianbergmann/phpunit\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"QElectroTech is a Qt application to design electric\
-        \ diagrams. It uses XML\\nfiles for elements and diagrams, and includes both\
-        \ a diagram editor and an\\nelement editor.\",\n      \"koschei_monitor\"\
-        : false,\n      \"monitor\": false,\n      \"name\": \"qelectrotech\",\n \
-        \     \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"An electric diagrams editor\",\n   \
-        \   \"upstream_url\": \"http://qelectrotech.org/\"\n    },\n    {\n      \"\
+        creation_date\": 1492780355.0,\n      \"description\": \"phpcov is a command-line\
+        \ frontend for the PHP_CodeCoverage library.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": false,\n      \"name\": \"phpcov\",\n      \"\
+        namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1420384\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"CLI frontend for\
+        \ PHP_CodeCoverage\",\n      \"upstream_url\": \"https://github.com/sebastianbergmann/phpcov\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1489409124.0,\n\
+        \      \"description\": \"PHPUnit is a programmer-oriented testing framework\
+        \ for PHP.\\nIt is an instance of the xUnit architecture for unit testing\
+        \ frameworks.\",\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n\
+        \      \"name\": \"phpunit6\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1420381\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"The PHP Unit Testing framework\",\n      \"upstream_url\"\
+        : \"https://github.com/sebastianbergmann/phpunit\"\n    },\n    {\n      \"\
         acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
-        : \"RoundCube Webmail is a browser-based multilingual IMAP client\\nwith an\
-        \ application-like user interface. It provides full\\nfunctionality you expect\
-        \ from an e-mail client, including MIME\\nsupport, address book, folder manipulation,\
-        \ message searching\\nand spell checking. RoundCube Webmail is written in\
-        \ PHP and\\nrequires a database: MySQL, PostgreSQL and SQLite are known to\\\
-        nwork. The user interface is fully skinnable using XHTML and\\nCSS 2.\",\n\
-        \      \"koschei_monitor\": false,\n      \"monitor\": true,\n      \"name\"\
-        : \"roundcubemail\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Round Cube\
-        \ Webmail is a browser-based multilingual IMAP client\",\n      \"upstream_url\"\
-        : \"http://www.roundcube.net\"\n    },\n    {\n      \"acls\": [],\n     \
-        \ \"creation_date\": 1400070978.0,\n      \"description\": \"ssdeep is a program\
-        \ for computing context triggered piecewise hashes (CTPH).\\nAlso called fuzzy\
-        \ hashes, CTPH can match inputs that have homologies.\\nSuch inputs have sequences\
-        \ of identical bytes in the same order, although bytes\\nin between these\
-        \ sequences may be different in both content and length.\",\n      \"koschei_monitor\"\
-        : false,\n      \"monitor\": false,\n      \"name\": \"ssdeep\",\n      \"\
-        namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\": \"\
-        Approved\",\n      \"summary\": \"Compute context triggered piecewise hashes\"\
-        ,\n      \"upstream_url\": \"http://ssdeep.sourceforge.net/\"\n    },\n  \
-        \  {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"\
-        description\": \"Wordpress is an online publishing / weblog package that makes\
-        \ it very easy,\\nalmost trivial, to get information out to people on the\
-        \ web.\\n\\nImportant information in /usr/share/doc/wordpress/README.fedora\"\
-        ,\n      \"koschei_monitor\": false,\n      \"monitor\": true,\n      \"name\"\
-        : \"wordpress\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
+        : \"QElectroTech is a Qt application to design electric diagrams. It uses\
+        \ XML\\nfiles for elements and diagrams, and includes both a diagram editor\
+        \ and an\\nelement editor.\",\n      \"koschei_monitor\": false,\n      \"\
+        monitor\": false,\n      \"name\": \"qelectrotech\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"An electric diagrams editor\",\n      \"upstream_url\"\
+        : \"http://qelectrotech.org/\"\n    },\n    {\n      \"acls\": [],\n     \
+        \ \"creation_date\": 1400070978.0,\n      \"description\": \"RoundCube Webmail\
+        \ is a browser-based multilingual IMAP client\\nwith an application-like user\
+        \ interface. It provides full\\nfunctionality you expect from an e-mail client,\
+        \ including MIME\\nsupport, address book, folder manipulation, message searching\\\
+        nand spell checking. RoundCube Webmail is written in PHP and\\nrequires a\
+        \ database: MySQL, PostgreSQL and SQLite are known to\\nwork. The user interface\
+        \ is fully skinnable using XHTML and\\nCSS 2.\",\n      \"koschei_monitor\"\
+        : false,\n      \"monitor\": true,\n      \"name\": \"roundcubemail\",\n \
+        \     \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Round Cube Webmail is a browser-based\
+        \ multilingual IMAP client\",\n      \"upstream_url\": \"http://www.roundcube.net\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"ssdeep is a program for computing context triggered\
+        \ piecewise hashes (CTPH).\\nAlso called fuzzy hashes, CTPH can match inputs\
+        \ that have homologies.\\nSuch inputs have sequences of identical bytes in\
+        \ the same order, although bytes\\nin between these sequences may be different\
+        \ in both content and length.\",\n      \"koschei_monitor\": false,\n    \
+        \  \"monitor\": false,\n      \"name\": \"ssdeep\",\n      \"namespace\":\
+        \ \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"Compute context triggered piecewise hashes\",\n    \
+        \  \"upstream_url\": \"http://ssdeep.sourceforge.net/\"\n    },\n    {\n \
+        \     \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        : \"Wordpress is an online publishing / weblog package that makes it very\
+        \ easy,\\nalmost trivial, to get information out to people on the web.\\n\\\
+        nImportant information in /usr/share/doc/wordpress/README.fedora\",\n    \
+        \  \"koschei_monitor\": false,\n      \"monitor\": true,\n      \"name\":\
+        \ \"wordpress\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
         \      \"status\": \"Approved\",\n      \"summary\": \"Blog tool and publishing\
         \ platform\",\n      \"upstream_url\": \"http://www.wordpress.org\"\n    },\n\
         \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
@@ -5239,18 +5484,16 @@ interactions:
     headers:
       accept-ranges: [bytes]
       age: ['0']
-      appserver: [proxy10.phx2.fedoraproject.org]
-      apptime: [D=3245340]
+      appserver: [proxy03.fedoraproject.org]
+      apptime: [D=3934334]
       connection: [Keep-Alive]
-      content-length: ['374708']
+      content-length: ['380010']
       content-type: [application/json]
-      date: ['Wed, 29 Mar 2017 20:40:01 GMT']
+      date: ['Fri, 15 Sep 2017 18:27:23 GMT']
       keep-alive: ['timeout=15, max=500']
       server: [Apache/2.4.6 (Red Hat Enterprise Linux) mod_wsgi/3.4 Python/2.7.5]
-      set-cookie: ['pkgdb=eyJfcGVybWFuZW50Ijp0cnVlfQ.C72tJA.eWDYdehFal8EhbKepznguXIQ0U0;
-          Expires=Wed, 29-Mar-2017 21:40:04 GMT; Secure; HttpOnly; Path=/pkgdb/']
       strict-transport-security: [max-age=15768000; includeSubDomains; preload]
       via: [1.1 varnish-v4]
-      x-varnish: ['6737093']
+      x-varnish: ['3935112']
     status: {code: 200, message: OK}
 version: 1

@@ -21,6 +21,7 @@ config = {
 
     # Some configuration for the rule processors
     "fmn.rules.utils.use_pkgdb2": False,
+    "fmn.rules.utils.use_pagure_for_ownership": True,
     "fmn.rules.utils.pkgdb2_api_url": "http://209.132.184.188/api/",
     "fmn.rules.cache": {
         'backend': 'dogpile.cache.redis',
@@ -75,6 +76,13 @@ config = {
     "fmn.acceptance_url": "http://localhost:5000/confirm/accept/{secret}",
     "fmn.rejection_url": "http://localhost:5000/confirm/reject/{secret}",
     "fmn.support_email": "notifications@fedoraproject.org",
+
+    'celery': {
+        'broker': 'amqp://',
+        'include': ['fmn.tasks'],
+        'accept_content': ['json'],
+        'task_serializer': 'json',
+    },
 
     # Generic stuff
     "endpoints": {

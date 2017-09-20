@@ -22,11 +22,11 @@ import fedmsg
 import fedmsg.meta
 import fedmsg_meta_fedora_infrastructure
 
+from fmn import fmn_fasshim
 import fmn.lib
 import fmn.rules.utils
 import fmn.consumer.backends as fmn_backends
 import fmn.consumer.producer as fmn_producers
-import fmn.consumer.fmn_fasshim
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -38,20 +38,20 @@ fedmsg.meta.make_processors(**CONFIG)
 DB_URI = CONFIG.get('fmn.sqlalchemy.uri', None)
 session = fmn.lib.models.init(DB_URI)
 
-fmn.consumer.fmn_fasshim.make_fas_cache(**CONFIG)
+fmn_fasshim.make_fas_cache(**CONFIG)
 # Monkey patch fedmsg_meta modules
-fasshim.nick2fas = fmn.consumer.fmn_fasshim.nick2fas
-fasshim.email2fas = fmn.consumer.fmn_fasshim.email2fas
+fasshim.nick2fas = fmn_fasshim.nick2fas
+fasshim.email2fas = fmn_fasshim.email2fas
 fedmsg_meta_fedora_infrastructure.supybot.nick2fas = \
-    fmn.consumer.fmn_fasshim.nick2fas
+    fmn_fasshim.nick2fas
 fedmsg_meta_fedora_infrastructure.anitya.email2fas = \
-    fmn.consumer.fmn_fasshim.email2fas
+    fmn_fasshim.email2fas
 fedmsg_meta_fedora_infrastructure.bz.email2fas = \
-    fmn.consumer.fmn_fasshim.email2fas
+    fmn_fasshim.email2fas
 fedmsg_meta_fedora_infrastructure.mailman3.email2fas = \
-    fmn.consumer.fmn_fasshim.email2fas
+    fmn_fasshim.email2fas
 fedmsg_meta_fedora_infrastructure.pagure.email2fas = \
-    fmn.consumer.fmn_fasshim.email2fas
+    fmn_fasshim.email2fas
 
 CNT = 0
 

@@ -22,11 +22,16 @@ from __future__ import unicode_literals
 import unittest
 
 from fedmsg.meta import make_processors
+from fedora.client.fas2 import AccountSystem
+import mock
 
 from fmn.rules import generic
 from fmn.tests import Base
 
 
+@mock.patch('fmn.rules.utils._FAS', new=AccountSystem(
+    'https://admin.fedoraproject.org/accounts/', username='jcline', password='dummypassword',
+    cache_session=False, insecure=False))
 class UserPackageFilterTests(Base):
 
     def setUp(self):

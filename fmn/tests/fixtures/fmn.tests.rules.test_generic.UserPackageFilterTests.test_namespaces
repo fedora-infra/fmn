@@ -1,31 +1,941 @@
 interactions:
 - request:
+    body: !!python/unicode 'username=ralph&user_name=jcline&login=Login&password=dummypassword&_csrf_token=5d8862b4c4ddca7dbc4bd2feaa2e1aab8d93b777'
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['166']
+      Content-Type: [application/x-www-form-urlencoded]
+      User-agent: [Fedora Account System Client/0.9.0]
+    method: POST
+    uri: https://admin.fedoraproject.org/accounts/json/person_by_username
+  response:
+    body: {string: "{\"success\": true, \"person\": {\"password_changed\": null, \"\
+        email\": \"rbean@redhat.com\", \"latitude\": null, \"country_code\": \"US\"\
+        , \"emailtoken\": null, \"alias_enabled\": null, \"comments\": \"Testing.\
+        \  Testing.\", \"security_question\": null, \"certificate_serial\": 1, \"\
+        ircnick\": \"threebean\", \"affiliation\": null, \"approved_memberships\"\
+        : [{\"creation\": \"2008-03-12 02:01:00.347424+00:00\", \"apply_rules\": \"\
+        \", \"mailing_list_url\": \"rel-eng@fedoraproject.org\", \"display_name\"\
+        : \"Fedora Release Engineering Group\", \"owner_id\": 100103, \"group_type\"\
+        : \"tracking\", \"joinmsg\": \"\", \"irc_channel\": \"fedora-devel\", \"user_can_remove\"\
+        : true, \"name\": \"releng-team\", \"mailing_list\": \"\", \"url\": \"https://fedoraproject.org/wiki/ReleaseEngineering\"\
+        , \"invite_only\": true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\"\
+        , \"prerequisite_id\": null, \"id\": 101737}, {\"creation\": \"2017-02-16\
+        \ 15:11:56.116566+00:00\", \"apply_rules\": \"Must be added by sysadmin-main.\"\
+        , \"mailing_list_url\": null, \"display_name\": \"MBS Admins\", \"owner_id\"\
+        : 112617, \"group_type\": \"shell\", \"joinmsg\": \"Welcome to the MBS sysadmin\
+        \ group.\", \"irc_channel\": null, \"user_can_remove\": true, \"name\": \"\
+        sysadmin-mbs\", \"mailing_list\": null, \"url\": null, \"invite_only\": true,\
+        \ \"needs_sponsor\": true, \"irc_network\": null, \"prerequisite_id\": 100332,\
+        \ \"id\": 214837}, {\"creation\": \"2016-09-23 18:48:20.373600+00:00\", \"\
+        apply_rules\": \"Ask in #fedora-modularity.\", \"mailing_list_url\": null,\
+        \ \"display_name\": \"Factory 2.0 Devs\", \"owner_id\": 112617, \"group_type\"\
+        : \"shell\", \"joinmsg\": \"Those working on factory 2 (to upload sprint demo\
+        \ videos to fedorapeople.org)\", \"irc_channel\": null, \"user_can_remove\"\
+        : true, \"name\": \"factory2\", \"mailing_list\": null, \"url\": null, \"\
+        invite_only\": false, \"needs_sponsor\": true, \"irc_network\": null, \"prerequisite_id\"\
+        : 100002, \"id\": 212015}, {\"creation\": \"2016-07-20 15:07:36.780647+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": null, \"display_name\": \"\
+        Pungi Development\", \"owner_id\": 112617, \"group_type\": \"shell\", \"joinmsg\"\
+        : \"\", \"irc_channel\": null, \"user_can_remove\": true, \"name\": \"pungi-devel\"\
+        , \"mailing_list\": null, \"url\": null, \"invite_only\": true, \"needs_sponsor\"\
+        : true, \"irc_network\": null, \"prerequisite_id\": 100002, \"id\": 210475},\
+        \ {\"creation\": \"2016-04-13 15:06:43.445094+00:00\", \"apply_rules\": \"\
+        \", \"mailing_list_url\": null, \"display_name\": \"Modularity Working Group\"\
+        , \"owner_id\": 112617, \"group_type\": \"tracking\", \"joinmsg\": \"Welcome\
+        \ to the Modularity Working Group  https://fedoraproject.org/wiki/Modularity_Working_Group\"\
+        , \"irc_channel\": null, \"user_can_remove\": true, \"name\": \"modularity-wg\"\
+        , \"mailing_list\": null, \"url\": null, \"invite_only\": false, \"needs_sponsor\"\
+        : true, \"irc_network\": null, \"prerequisite_id\": 100002, \"id\": 189842},\
+        \ {\"creation\": \"2013-03-14 18:14:47.757011+00:00\", \"apply_rules\": \"\
+        \", \"mailing_list_url\": null, \"display_name\": \"sysadmin-calendar\", \"\
+        owner_id\": 101433, \"group_type\": \"shell\", \"joinmsg\": \"\", \"irc_channel\"\
+        : null, \"user_can_remove\": true, \"name\": \"sysadmin-calendar\", \"mailing_list\"\
+        : null, \"url\": null, \"invite_only\": true, \"needs_sponsor\": true, \"\
+        irc_network\": null, \"prerequisite_id\": 100002, \"id\": 168942}, {\"creation\"\
+        : \"2015-10-21 19:21:58.897547+00:00\", \"apply_rules\": \"Be sure you have\
+        \ created a FAS account, filled out the fields, and uploaded keys. Once your\
+        \ FAS account is complete, send an email to  commops@lists.fedoraproject.org\
+        \ to introduce yourself. Include your IRC nick, what time-zone you are in\
+        \ (e.g. UTC-5), and what CommOps areas you are interested in. Happy Hacking!\
+        \ :) https://fedoraproject.org/wiki/CommOps/Join\", \"mailing_list_url\":\
+        \ \"https://lists.fedoraproject.org/admin/lists/commops.lists.fedoraproject.org/\"\
+        , \"display_name\": \"Community + Operations = CommOps\", \"owner_id\": 176980,\
+        \ \"group_type\": \"tracking\", \"joinmsg\": \"Welcome to CommOps! Please\
+        \ join #fedora-commops on Freenode.\", \"irc_channel\": \"#fedora-commops\"\
+        , \"user_can_remove\": true, \"name\": \"commops\", \"mailing_list\": \"commops@lists.fedoraproject.org\"\
+        , \"url\": \"https://fedoraproject.org/wiki/CommOps\", \"invite_only\": false,\
+        \ \"needs_sponsor\": true, \"irc_network\": \"Freenode\", \"prerequisite_id\"\
+        : 100002, \"id\": 184912}, {\"creation\": \"2010-03-05 04:16:41.404145+00:00\"\
+        , \"apply_rules\": \"To obtain membership in this group, which grants commit\
+        \ access to the fedora-web git repo, email gitfedora-web-sponsors@fedoraproject.org\"\
+        , \"mailing_list_url\": \"\", \"display_name\": \"Fedora Websites Team GIT\
+        \ Commit Group\", \"owner_id\": 151651, \"group_type\": \"git\", \"joinmsg\"\
+        : \"\", \"irc_channel\": \"\", \"user_can_remove\": true, \"name\": \"gitfedora-web\"\
+        , \"mailing_list\": \"\", \"url\": \"\", \"invite_only\": true, \"needs_sponsor\"\
+        : true, \"irc_network\": \"\", \"prerequisite_id\": 100075, \"id\": 144959},\
+        \ {\"creation\": \"2008-03-12 02:01:01.226874+00:00\", \"apply_rules\": \"\
+        If you want to join this group, please email websites@lists.fedoraproject.org\"\
+        , \"mailing_list_url\": \"http://lists.fedoraproject.org/mailman/listinfo/websites\"\
+        , \"display_name\": \"Fedora Websites Team\", \"owner_id\": 151651, \"group_type\"\
+        : \"tracking\", \"joinmsg\": \"Welcome to the Fedora Websites team!\\r\\n\\\
+        r\\nhttp://fedoraproject.org/wiki/Websites\", \"irc_channel\": \"fedora-websites\"\
+        , \"user_can_remove\": true, \"name\": \"web\", \"mailing_list\": \"websites@lists.fedoraproject.org\"\
+        , \"url\": \"http://fedoraproject.org/wiki/Websites\", \"invite_only\": true,\
+        \ \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"prerequisite_id\"\
+        : 100002, \"id\": 100075}, {\"creation\": \"2008-03-12 01:58:48.757146+00:00\"\
+        , \"apply_rules\": \"This group is a for invite only group.  It is for admins\
+        \ of the account system.  Because of the sensitive nature of this group we\
+        \ do not allow many users in.  Do NOT apply for this group.\", \"mailing_list_url\"\
+        : \"https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\",\
+        \ \"display_name\": \"Account System Admins (invite only)\", \"owner_id\"\
+        : 100001, \"group_type\": \"tracking\", \"joinmsg\": \"\", \"irc_channel\"\
+        : \"fedora-admin\", \"user_can_remove\": true, \"name\": \"accounts\", \"\
+        mailing_list\": \"fedora-infrastructure-list@redhat.com\", \"url\": \"https://fedoraproject.org/wiki/Infrastructure\"\
+        , \"invite_only\": true, \"needs_sponsor\": false, \"irc_network\": \"irc.freenode.net\"\
+        , \"prerequisite_id\": null, \"id\": 100006}, {\"creation\": \"2015-05-10\
+        \ 01:13:35.981282+00:00\", \"apply_rules\": \"\", \"mailing_list_url\": null,\
+        \ \"display_name\": \"Fedora m\xF8te Sysadmin Group\", \"owner_id\": 175037,\
+        \ \"group_type\": \"shell\", \"joinmsg\": \"Thanks for applying to the m\xF8\
+        te sysadmin group!\", \"irc_channel\": null, \"user_can_remove\": true, \"\
+        name\": \"sysadmin-mote\", \"mailing_list\": null, \"url\": null, \"invite_only\"\
+        : false, \"needs_sponsor\": true, \"irc_network\": null, \"prerequisite_id\"\
+        : 100332, \"id\": 182141}, {\"creation\": \"2008-03-12 02:00:59.007589+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"\", \"display_name\": \"\
+        Fedora Community Git Commit Group\", \"owner_id\": 100196, \"group_type\"\
+        : \"git\", \"joinmsg\": \"\", \"irc_channel\": \"\", \"user_can_remove\":\
+        \ true, \"name\": \"gitfedoracommunity\", \"mailing_list\": \"\", \"url\"\
+        : \"https://fedorahosted.org/fedoracommunity\", \"invite_only\": false, \"\
+        needs_sponsor\": true, \"irc_network\": \"\", \"prerequisite_id\": 100002,\
+        \ \"id\": 102780}, {\"creation\": \"2008-03-12 02:00:57.883941+00:00\", \"\
+        apply_rules\": \"This group is for people who need to commit to the python-fedora\
+        \ module.  Please talk to toshio@fedoraproject.org (or abadger1999 in #fedora-admin\
+        \ on irc.freenode.net) before joining.\\r\\n\\r\\nIf you're looking for a\
+        \ place to meet other python programmers, check out the python special interest\
+        \ group instead:\\r\\n\\r\\nhttp://fedoraproject.org/wiki/SIGs/Python\", \"\
+        mailing_list_url\": \"https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\"\
+        , \"display_name\": \"BZR Python-Fedora Package\", \"owner_id\": 100068, \"\
+        group_type\": \"bzr\", \"joinmsg\": \"This group is for people who need to\
+        \ commit to the python-fedora module on fedorahosted.org.  The python-fedora\
+        \ module allows applications to talk to Fedora Infrastructure Web Services\
+        \ and provides some useful functions for writing other Services.  if your\
+        \ interested in this, please get in touch with toshio@fedoraproject.org (also\
+        \ abadger1999 in #fedora-admin on irc.freenode.net) to talk about what tasks\
+        \ you can perform.\", \"irc_channel\": \"fedora-admin\", \"user_can_remove\"\
+        : true, \"name\": \"bzrpython-fedora\", \"mailing_list\": \"fedora-infrastructure-list@redhat.com\"\
+        , \"url\": \"https://fedorahosted.org/python-fedora\", \"invite_only\": false,\
+        \ \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"prerequisite_id\"\
+        : null, \"id\": 102317}, {\"creation\": \"2008-03-12 02:00:59.687639+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"https://fedorahosted.org/mailman/listinfo/bodhi\"\
+        , \"display_name\": \"Bodhi Git Commit Group\", \"owner_id\": 100176, \"group_type\"\
+        : \"git\", \"joinmsg\": \"\", \"irc_channel\": \"#fedora-devel\", \"user_can_remove\"\
+        : true, \"name\": \"gitbodhi\", \"mailing_list\": \"bodhi@lists.fedorahosted.org\"\
+        , \"url\": \"https://fedorahosted.org/bodhi/\", \"invite_only\": false, \"\
+        needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"prerequisite_id\"\
+        : null, \"id\": 101170}, {\"creation\": \"2008-03-12 02:00:57.941258+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"\", \"display_name\": \"\
+        Fedora CLA Group\", \"owner_id\": 100001, \"group_type\": \"cla\", \"joinmsg\"\
+        : \"\", \"irc_channel\": \"\", \"user_can_remove\": true, \"name\": \"cla_fedora\"\
+        , \"mailing_list\": \"\", \"url\": \"\", \"invite_only\": true, \"needs_sponsor\"\
+        : false, \"irc_network\": \"\", \"prerequisite_id\": null, \"id\": 101441},\
+        \ {\"creation\": \"2008-03-12 01:58:48.763123+00:00\", \"apply_rules\": \"\
+        Membership of fedorabugs is not usually granted directly, but automatically\
+        \ given to members of several other groups, including qa and packagers-group:\
+        \ basically, you get membership of fedorabugs if you're becoming a member\
+        \ of a team where it makes sense for you to get editbugs privileges on Bugzilla.\
+        \ Please don't apply to this group directly unless you have a special reason\
+        \ to do so.\", \"mailing_list_url\": \"https://lists.fedoraproject.org/pipermail/test/\"\
+        , \"display_name\": \"Group for granting Bugzilla editing privileges\", \"\
+        owner_id\": 100001, \"group_type\": \"tracking\", \"joinmsg\": \"Hi there!\
+        \ Membership is usually not granted to the fedorabugs group directly - instead,\
+        \ members of several other groups are automatically added to the fedorabugs\
+        \ group, as all members of those groups should have Bugzilla editbugs rights.\
+        \ Maybe you wanted to apply to the QA team? If so, see https://fedoraproject.org/wiki/QA/Join\
+        \ !\", \"irc_channel\": \"fedora-qa\", \"user_can_remove\": true, \"name\"\
+        : \"fedorabugs\", \"mailing_list\": \"test@lists.fedoraproject.org\", \"url\"\
+        : \"https://bugzilla.redhat.com\", \"invite_only\": true, \"needs_sponsor\"\
+        : false, \"irc_network\": \"irc.freenode.net\", \"prerequisite_id\": null,\
+        \ \"id\": 100148}, {\"creation\": \"2008-03-12 02:01:01.007644+00:00\", \"\
+        apply_rules\": \"\", \"mailing_list_url\": \"https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\"\
+        , \"display_name\": \"Fedora Tools Sysadmin Group\", \"owner_id\": 100344,\
+        \ \"group_type\": \"shell\", \"joinmsg\": \"\", \"irc_channel\": \"fedora-admin\"\
+        , \"user_can_remove\": true, \"name\": \"sysadmin-tools\", \"mailing_list\"\
+        : \"fedora-infrastructure-list@redhat.com\", \"url\": \"https://fedoraproject.org/wiki/Infrastructure\"\
+        , \"invite_only\": true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\"\
+        , \"prerequisite_id\": 100332, \"id\": 102902}, {\"creation\": \"2011-05-02\
+        \ 21:40:20.420874+00:00\", \"apply_rules\": null, \"mailing_list_url\": null,\
+        \ \"display_name\": \"Signers of the Fedora Project Contributor Agreement\"\
+        , \"owner_id\": 100001, \"group_type\": \"cla\", \"joinmsg\": \"\", \"irc_channel\"\
+        : null, \"user_can_remove\": true, \"name\": \"cla_fpca\", \"mailing_list\"\
+        : null, \"url\": \"http://fedoraproject.org/wiki/Legal:Fedora_Project_Contributor_Agreement\"\
+        , \"invite_only\": true, \"needs_sponsor\": false, \"irc_network\": null,\
+        \ \"prerequisite_id\": null, \"id\": 155928}, {\"creation\": \"2008-03-12\
+        \ 01:58:48.745240+00:00\", \"apply_rules\": \"\", \"mailing_list_url\": \"\
+        \", \"display_name\": \"Signed CLA Group\", \"owner_id\": 100001, \"group_type\"\
+        : \"cla\", \"joinmsg\": \"\", \"irc_channel\": \"\", \"user_can_remove\":\
+        \ true, \"name\": \"cla_done\", \"mailing_list\": \"\", \"url\": \"\", \"\
+        invite_only\": true, \"needs_sponsor\": false, \"irc_network\": \"\", \"prerequisite_id\"\
+        : null, \"id\": 100002}, {\"creation\": \"2008-11-12 22:58:09.244122+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": null, \"display_name\": \"\
+        Moksha GIT Commit Group\", \"owner_id\": 100176, \"group_type\": \"git\",\
+        \ \"joinmsg\": \"\", \"irc_channel\": null, \"user_can_remove\": true, \"\
+        name\": \"gitmoksha\", \"mailing_list\": null, \"url\": null, \"invite_only\"\
+        : false, \"needs_sponsor\": true, \"irc_network\": null, \"prerequisite_id\"\
+        : null, \"id\": 118562}, {\"creation\": \"2008-03-19 13:34:51.657788+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\"\
+        , \"display_name\": \"FAS Git Commit Group\", \"owner_id\": 101538, \"group_type\"\
+        : \"git\", \"joinmsg\": \"Welcome to the FAS git repo access group\", \"irc_channel\"\
+        : \"fedora-admin\", \"user_can_remove\": true, \"name\": \"gitfas\", \"mailing_list\"\
+        : \"fedora-infrastructure-list@redhat.com\", \"url\": \"https://fedorahosted.org/fas/\"\
+        , \"invite_only\": true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\"\
+        , \"prerequisite_id\": null, \"id\": 103375}, {\"creation\": \"2008-03-12\
+        \ 02:00:57.861657+00:00\", \"apply_rules\": \"Please contact Toshio Kuratomi\
+        \ before applying to this group.  You can contact him via email to toshio@fedoraproject.org\
+        \ or IRC: abadger1999 in #fedora-admin on irc.freenode.net\", \"mailing_list_url\"\
+        : \"\", \"display_name\": \"Packagedb BZR Commit Group\", \"owner_id\": 100068,\
+        \ \"group_type\": \"bzr\", \"joinmsg\": \"\", \"irc_channel\": \"\", \"user_can_remove\"\
+        : true, \"name\": \"bzrpackagedb\", \"mailing_list\": \"\", \"url\": \"https://fedorahosted.org/packagedb/\"\
+        , \"invite_only\": true, \"needs_sponsor\": true, \"irc_network\": \"\", \"\
+        prerequisite_id\": null, \"id\": 102119}, {\"creation\": \"2012-05-21 21:29:45.189131+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"\", \"display_name\": \"\
+        Fedora Hosted Automation\", \"owner_id\": 139137, \"group_type\": \"git\"\
+        , \"joinmsg\": \"\", \"irc_channel\": \"\", \"user_can_remove\": true, \"\
+        name\": \"gitfedorahosted\", \"mailing_list\": \"\", \"url\": \"\", \"invite_only\"\
+        : true, \"needs_sponsor\": true, \"irc_network\": \"\", \"prerequisite_id\"\
+        : 100002, \"id\": 163239}, {\"creation\": \"2008-03-12 02:01:01.157196+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\"\
+        , \"display_name\": \"Fedora Web Sysadmin Group\", \"owner_id\": 100344, \"\
+        group_type\": \"shell\", \"joinmsg\": \"\", \"irc_channel\": \"fedora-admin\"\
+        , \"user_can_remove\": true, \"name\": \"sysadmin-web\", \"mailing_list\"\
+        : \"fedora-infrastructure-list@redhat.com\", \"url\": \"https://fedoraproject.org/wiki/Infrastructure\"\
+        , \"invite_only\": true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\"\
+        , \"prerequisite_id\": 100332, \"id\": 100323}, {\"creation\": \"2008-03-12\
+        \ 02:01:00.917628+00:00\", \"apply_rules\": \"\", \"mailing_list_url\": \"\
+        https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\", \"display_name\"\
+        : \"Fedora CVS Sysadmin Group\", \"owner_id\": 100103, \"group_type\": \"\
+        shell\", \"joinmsg\": \"\", \"irc_channel\": \"fedora-admin\", \"user_can_remove\"\
+        : true, \"name\": \"sysadmin-cvs\", \"mailing_list\": \"fedora-infrastructure-list@redhat.com\"\
+        , \"url\": \"https://fedoraproject.org/wiki/Infrastructure\", \"invite_only\"\
+        : true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"\
+        prerequisite_id\": 100332, \"id\": 101291}, {\"creation\": \"2008-03-12 02:01:01.066973+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\"\
+        , \"display_name\": \"Fedora NOC Sysadmin Group\", \"owner_id\": 100344, \"\
+        group_type\": \"shell\", \"joinmsg\": \"\", \"irc_channel\": \"fedora-admin\"\
+        , \"user_can_remove\": true, \"name\": \"sysadmin-noc\", \"mailing_list\"\
+        : \"fedora-infrastructure-list@redhat.com\", \"url\": \"https://fedoraproject.org/wiki/Infrastructure\"\
+        , \"invite_only\": true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\"\
+        , \"prerequisite_id\": 100332, \"id\": 102095}, {\"creation\": \"2012-12-10\
+        \ 16:45:25.317169+00:00\", \"apply_rules\": \"\", \"mailing_list_url\": \"\
+        \", \"display_name\": \"Git FUSS\", \"owner_id\": 162614, \"group_type\":\
+        \ \"git\", \"joinmsg\": \"\", \"irc_channel\": \"\", \"user_can_remove\":\
+        \ true, \"name\": \"gitfuss\", \"mailing_list\": \"\", \"url\": \"\", \"invite_only\"\
+        : false, \"needs_sponsor\": true, \"irc_network\": \"\", \"prerequisite_id\"\
+        : 100002, \"id\": 167120}, {\"creation\": \"2011-02-09 16:34:52.397614+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"\", \"display_name\": \"\
+        Fedora Infrastructure Apprentice\", \"owner_id\": 100037, \"group_type\":\
+        \ \"shell\", \"joinmsg\": \"please join #fedora-admin and ask for assistance\
+        \ getting started\", \"irc_channel\": \"\", \"user_can_remove\": true, \"\
+        name\": \"fi-apprentice\", \"mailing_list\": \"\", \"url\": \"\", \"invite_only\"\
+        : true, \"needs_sponsor\": true, \"irc_network\": \"\", \"prerequisite_id\"\
+        : 100002, \"id\": 154363}, {\"creation\": \"2008-03-12 02:00:58.145046+00:00\"\
+        , \"apply_rules\": \"Please do not apply to this group.  Your sponsor will\
+        \ add you after you've completed http://fedoraproject.org/wiki/Join_the_package_collection_maintainers.\"\
+        , \"mailing_list_url\": \"https://lists.fedoraproject.org/mailman/listinfo/devel\"\
+        , \"display_name\": \"Fedora Packager GIT Commit Group\", \"owner_id\": 100001,\
+        \ \"group_type\": \"cvs\", \"joinmsg\": \"Welcome to the Fedora packager group.\
+        \ Please continue the process from: https://fedoraproject.org/wiki/PackageMaintainers/Join#Add_Package_to_Source_Code_Management_.28SCM.29_system_and_Set_Owner\"\
+        , \"irc_channel\": \"#fedora-devel\", \"user_can_remove\": true, \"name\"\
+        : \"packager\", \"mailing_list\": \"devel@lists.fedoraproject.org\", \"url\"\
+        : \"https://fedoraproject.org/wiki/PackageMaintainers\", \"invite_only\":\
+        \ true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"\
+        prerequisite_id\": 100002, \"id\": 100300}, {\"creation\": \"2012-11-16 17:24:03.690086+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": null, \"display_name\": \"\
+        Fedmsg Announce\", \"owner_id\": 112617, \"group_type\": \"tracking\", \"\
+        joinmsg\": \"\", \"irc_channel\": null, \"user_can_remove\": true, \"name\"\
+        : \"fedmsg-announce\", \"mailing_list\": null, \"url\": null, \"invite_only\"\
+        : false, \"needs_sponsor\": true, \"irc_network\": null, \"prerequisite_id\"\
+        : 100002, \"id\": 166683}, {\"creation\": \"2008-12-09 04:50:34.438586+00:00\"\
+        , \"apply_rules\": \"Send patches!\", \"mailing_list_url\": \"\", \"display_name\"\
+        : \"Offtrac git commit group\", \"owner_id\": 100351, \"group_type\": \"git\"\
+        , \"joinmsg\": \"\", \"irc_channel\": \"\", \"user_can_remove\": true, \"\
+        name\": \"gitofftrac\", \"mailing_list\": \"\", \"url\": \"\", \"invite_only\"\
+        : false, \"needs_sponsor\": true, \"irc_network\": \"\", \"prerequisite_id\"\
+        : 100002, \"id\": 120715}, {\"creation\": \"2008-03-12 02:01:01.047397+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\"\
+        , \"display_name\": \"Fedora Main Sysadmin Group\", \"owner_id\": 100037,\
+        \ \"group_type\": \"shell\", \"joinmsg\": \"\", \"irc_channel\": \"fedora-admin\"\
+        , \"user_can_remove\": true, \"name\": \"sysadmin-main\", \"mailing_list\"\
+        : \"fedora-infrastructure-list@redhat.com\", \"url\": \"https://fedoraproject.org/wiki/Infrastructure\"\
+        , \"invite_only\": true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\"\
+        , \"prerequisite_id\": 100332, \"id\": 100322}, {\"creation\": \"2011-07-01\
+        \ 19:35:32.009123+00:00\", \"apply_rules\": \"\", \"mailing_list_url\": null,\
+        \ \"display_name\": \"FI sysadmin logs\", \"owner_id\": 100059, \"group_type\"\
+        : \"tracking\", \"joinmsg\": \"hope you like email!\", \"irc_channel\": null,\
+        \ \"user_can_remove\": true, \"name\": \"sysadmin-logs\", \"mailing_list\"\
+        : null, \"url\": null, \"invite_only\": false, \"needs_sponsor\": true, \"\
+        irc_network\": null, \"prerequisite_id\": 100332, \"id\": 157080}, {\"creation\"\
+        : \"2013-08-12 20:28:12.978767+00:00\", \"apply_rules\": \"\", \"mailing_list_url\"\
+        : null, \"display_name\": \"Access to the Fedora Badges git repository\",\
+        \ \"owner_id\": 112617, \"group_type\": \"git\", \"joinmsg\": \"Welcome to\
+        \ the Badges git repo.\", \"irc_channel\": null, \"user_can_remove\": true,\
+        \ \"name\": \"gitbadges\", \"mailing_list\": null, \"url\": null, \"invite_only\"\
+        : false, \"needs_sponsor\": true, \"irc_network\": null, \"prerequisite_id\"\
+        : 100002, \"id\": 171760}, {\"creation\": \"2008-03-12 02:01:00.842991+00:00\"\
+        , \"apply_rules\": \"This group is for users who are interested in working\
+        \ on Fedora's servers.  If you are serious about joining you need to send\
+        \ an email to the list letting everyone know you're ready and get involved.\\\
+        r\\n\\r\\nIF YOU APPLY FOR THIS GROUP AND HAVEN'T CONTACTED THE LIST OR FOUND\
+        \ A SPONSOR YOU WILL BE IGNORED.  This isn't a warning, just a heads up on\
+        \ how things work.\\r\\n\\r\\nhttp://fedoraproject.org/wiki/Infrastructure/GettingStarted\"\
+        , \"mailing_list_url\": \"https://lists.fedoraproject.org/mailman/listinfo/infrastructure\"\
+        , \"display_name\": \"Fedora Sysadmin Group\", \"owner_id\": 100037, \"group_type\"\
+        : \"tracking\", \"joinmsg\": \"\", \"irc_channel\": \"fedora-admin\", \"user_can_remove\"\
+        : true, \"name\": \"sysadmin\", \"mailing_list\": \"infrastructure@lists.fedoraproject.org\"\
+        , \"url\": \"https://fedoraproject.org/wiki/Infrastructure\", \"invite_only\"\
+        : true, \"needs_sponsor\": false, \"irc_network\": \"irc.freenode.net\", \"\
+        prerequisite_id\": 100002, \"id\": 100332}, {\"creation\": \"2008-06-26 22:14:49.097030+00:00\"\
+        , \"apply_rules\": null, \"mailing_list_url\": \"\", \"display_name\": \"\
+        Fedora Supybot Plugins\", \"owner_id\": 100344, \"group_type\": \"git\", \"\
+        joinmsg\": \"\", \"irc_channel\": \"#fedora-admin\", \"user_can_remove\":\
+        \ true, \"name\": \"gitsupybot-fedora\", \"mailing_list\": \"\", \"url\":\
+        \ \"\", \"invite_only\": false, \"needs_sponsor\": true, \"irc_network\":\
+        \ \"Freenode\", \"prerequisite_id\": 100002, \"id\": 109043}, {\"creation\"\
+        : \"2010-05-11 23:55:35.127476+00:00\", \"apply_rules\": \"Please contact\
+        \ Toshio Kuratomi before applying to this group. You can contact him via email\
+        \ to toshio@fedoraproject.org or IRC: abadger1999 in #fedora-admin on irc.freenode.net\
+        \ \", \"mailing_list_url\": \"\", \"display_name\": \"bzrkitchen\", \"owner_id\"\
+        : 100068, \"group_type\": \"bzr\", \"joinmsg\": \"This group is no longer\
+        \ useful.  kitchen is now managed on github: https://github.com/fedora-infra/kitchen/\"\
+        , \"irc_channel\": \"\", \"user_can_remove\": true, \"name\": \"bzrkitchen\"\
+        , \"mailing_list\": \"\", \"url\": \"\", \"invite_only\": false, \"needs_sponsor\"\
+        : true, \"irc_network\": \"\", \"prerequisite_id\": null, \"id\": 147531}],\
+        \ \"old_password\": null, \"group_roles\": {\"gitfedoracommunity\": {\"creation\"\
+        : \"2012-01-26 23:49:44.618946+00:00\", \"role_status\": \"approved\", \"\
+        person_id\": 112617, \"group_id\": 102780, \"role_type\": \"administrator\"\
+        , \"approval\": \"2012-01-26 23:55:54.574667+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 100196}, \"sysadmin-mote\": {\"creation\": \"2015-06-12\
+        \ 15:05:54.342236+00:00\", \"role_status\": \"approved\", \"person_id\": 112617,\
+        \ \"group_id\": 182141, \"role_type\": \"sponsor\", \"approval\": \"2015-06-12\
+        \ 15:05:59.954217+00:00\", \"internal_comments\": null, \"sponsor_id\": 175037},\
+        \ \"sysadmin-main\": {\"creation\": \"2013-01-25 05:09:00.549117+00:00\",\
+        \ \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 100322,\
+        \ \"role_type\": \"user\", \"approval\": \"2013-01-25 05:09:08.084855+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 100037}, \"fi-apprentice\"\
+        : {\"creation\": \"2013-02-07 17:49:31.430837+00:00\", \"role_status\": \"\
+        approved\", \"person_id\": 112617, \"group_id\": 154363, \"role_type\": \"\
+        sponsor\", \"approval\": \"2013-02-07 17:49:37.640675+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 100037}, \"gitfuss\": {\"creation\": \"2012-12-10\
+        \ 18:13:45.336466+00:00\", \"role_status\": \"approved\", \"person_id\": 112617,\
+        \ \"group_id\": 167120, \"role_type\": \"user\", \"approval\": \"2012-12-10\
+        \ 19:30:10.746450+00:00\", \"internal_comments\": null, \"sponsor_id\": 162614},\
+        \ \"modularity-wg\": {\"creation\": \"2016-04-13 15:06:43.445094+00:00\",\
+        \ \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 189842,\
+        \ \"role_type\": \"administrator\", \"approval\": \"2016-04-13 15:06:43.544686+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 112617}, \"packager\": {\"\
+        creation\": \"2012-02-03 21:49:07.118415+00:00\", \"role_status\": \"approved\"\
+        , \"person_id\": 112617, \"group_id\": 100300, \"role_type\": \"sponsor\"\
+        , \"approval\": \"2012-02-03 21:49:16.950570+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 100068}, \"gitfedora-web\": {\"creation\": \"2015-09-15\
+        \ 20:21:00.877603+00:00\", \"role_status\": \"approved\", \"person_id\": 112617,\
+        \ \"group_id\": 144959, \"role_type\": \"user\", \"approval\": \"2015-09-15\
+        \ 20:21:00.965285+00:00\", \"internal_comments\": null, \"sponsor_id\": 151651},\
+        \ \"gitbodhi\": {\"creation\": \"2012-01-28 19:49:32.976928+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 101170, \"role_type\"\
+        : \"user\", \"approval\": \"2012-01-28 19:49:37.330651+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 100176}, \"sysadmin-web\": {\"creation\": \"2012-05-22\
+        \ 18:02:57.166095+00:00\", \"role_status\": \"approved\", \"person_id\": 112617,\
+        \ \"group_id\": 100323, \"role_type\": \"user\", \"approval\": \"2012-05-22\
+        \ 18:03:02.037044+00:00\", \"internal_comments\": null, \"sponsor_id\": 100176},\
+        \ \"sysadmin\": {\"creation\": \"2012-02-22 23:28:51.518861+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 100332, \"role_type\"\
+        : \"sponsor\", \"approval\": \"2012-02-22 23:28:59.513475+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 101458}, \"sysadmin-tools\": {\"creation\": \"2012-02-22\
+        \ 23:29:24.025195+00:00\", \"role_status\": \"approved\", \"person_id\": 112617,\
+        \ \"group_id\": 102902, \"role_type\": \"user\", \"approval\": \"2012-02-22\
+        \ 23:29:28.593868+00:00\", \"internal_comments\": null, \"sponsor_id\": 101458},\
+        \ \"commops\": {\"creation\": \"2015-10-21 19:22:31.228309+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 184912, \"role_type\"\
+        : \"administrator\", \"approval\": \"2015-10-21 19:22:38.133593+00:00\", \"\
+        internal_comments\": null, \"sponsor_id\": 115885}, \"bzrkitchen\": {\"creation\"\
+        : \"2014-12-02 14:44:23.679072+00:00\", \"role_status\": \"approved\", \"\
+        person_id\": 112617, \"group_id\": 147531, \"role_type\": \"administrator\"\
+        , \"approval\": \"2014-12-02 15:53:26.118445+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 100068}, \"pungi-devel\": {\"creation\": \"2016-07-20\
+        \ 15:07:36.780647+00:00\", \"role_status\": \"approved\", \"person_id\": 112617,\
+        \ \"group_id\": 210475, \"role_type\": \"administrator\", \"approval\": \"\
+        2016-07-20 15:07:36.923313+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 162614}, \"bzrpython-fedora\": {\"creation\": \"2012-02-13 17:26:07.973627+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 102317,\
+        \ \"role_type\": \"user\", \"approval\": \"2012-02-13 17:26:12.658831+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 100068}, \"gitfas\": {\"creation\"\
+        : \"2012-04-02 19:26:53.150720+00:00\", \"role_status\": \"approved\", \"\
+        person_id\": 112617, \"group_id\": 103375, \"role_type\": \"user\", \"approval\"\
+        : \"2012-04-02 19:26:59.139095+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 100068}, \"accounts\": {\"creation\": \"2015-06-24 14:54:04.143607+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 100006,\
+        \ \"role_type\": \"user\", \"approval\": \"2015-06-24 14:54:12.492600+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 162614}, \"releng-team\": {\"\
+        creation\": \"2017-08-02 19:03:37.231678+00:00\", \"role_status\": \"approved\"\
+        , \"person_id\": 112617, \"group_id\": 101737, \"role_type\": \"user\", \"\
+        approval\": \"2017-08-02 19:03:46.593800+00:00\", \"internal_comments\": null,\
+        \ \"sponsor_id\": 100103}, \"sysadmin-mbs\": {\"creation\": \"2017-02-16 15:11:56.116566+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 214837,\
+        \ \"role_type\": \"administrator\", \"approval\": \"2017-02-16 15:11:56.206401+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 112617}, \"web\": {\"creation\"\
+        : \"2015-09-15 20:20:23.801708+00:00\", \"role_status\": \"approved\", \"\
+        person_id\": 112617, \"group_id\": 100075, \"role_type\": \"user\", \"approval\"\
+        : \"2015-09-15 20:20:31.488972+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 151651}, \"gitbadges\": {\"creation\": \"2013-08-12 20:28:12.978767+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 171760,\
+        \ \"role_type\": \"administrator\", \"approval\": \"2013-08-12 20:28:13.979368+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 112617}, \"fedorabugs\": {\"\
+        creation\": \"2012-02-03 21:49:16.896734+00:00\", \"role_status\": \"approved\"\
+        , \"person_id\": 112617, \"group_id\": 100148, \"role_type\": \"user\", \"\
+        approval\": \"2012-02-03 21:49:16.962645+00:00\", \"internal_comments\": null,\
+        \ \"sponsor_id\": 100068}, \"sysadmin-calendar\": {\"creation\": \"2016-03-06\
+        \ 03:28:10.032391+00:00\", \"role_status\": \"approved\", \"person_id\": 112617,\
+        \ \"group_id\": 168942, \"role_type\": \"user\", \"approval\": \"2016-03-06\
+        \ 03:28:15.053897+00:00\", \"internal_comments\": null, \"sponsor_id\": 112617},\
+        \ \"cla_done\": {\"creation\": \"2011-12-22 05:12:34.733714+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 100002, \"role_type\"\
+        : \"user\", \"approval\": \"2011-12-22 05:12:34.820426+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 112617}, \"gitofftrac\": {\"creation\": \"2012-11-27\
+        \ 01:41:41.995254+00:00\", \"role_status\": \"approved\", \"person_id\": 112617,\
+        \ \"group_id\": 120715, \"role_type\": \"administrator\", \"approval\": \"\
+        2012-11-27 03:30:49.848477+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 100351}, \"sysadmin-logs\": {\"creation\": \"2013-06-12 14:58:53.490540+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 157080,\
+        \ \"role_type\": \"user\", \"approval\": \"2013-06-12 15:00:53.336729+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 100037}, \"gitmoksha\": {\"\
+        creation\": \"2010-07-13 15:28:37.857882+00:00\", \"role_status\": \"approved\"\
+        , \"person_id\": 112617, \"group_id\": 118562, \"role_type\": \"user\", \"\
+        approval\": \"2010-07-13 15:28:41.052444+00:00\", \"internal_comments\": null,\
+        \ \"sponsor_id\": 100176}, \"gitfedorahosted\": {\"creation\": \"2012-05-21\
+        \ 22:21:28.657834+00:00\", \"role_status\": \"approved\", \"person_id\": 112617,\
+        \ \"group_id\": 163239, \"role_type\": \"user\", \"approval\": \"2012-05-21\
+        \ 22:21:33.350082+00:00\", \"internal_comments\": null, \"sponsor_id\": 139137},\
+        \ \"bzrpackagedb\": {\"creation\": \"2012-04-24 01:24:10.900201+00:00\", \"\
+        role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 102119,\
+        \ \"role_type\": \"user\", \"approval\": \"2012-04-24 01:24:21.615720+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 100068}, \"cla_fedora\": {\"\
+        creation\": \"2008-08-14 19:14:17.974674+00:00\", \"role_status\": \"approved\"\
+        , \"person_id\": 112617, \"group_id\": 101441, \"role_type\": \"user\", \"\
+        approval\": \"2008-08-14 19:14:18.190622+00:00\", \"internal_comments\": null,\
+        \ \"sponsor_id\": 112617}, \"sysadmin-noc\": {\"creation\": \"2012-07-09 19:07:28.170494+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 102095,\
+        \ \"role_type\": \"user\", \"approval\": \"2012-07-09 19:07:39.794246+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 101458}, \"gitsupybot-fedora\"\
+        : {\"creation\": \"2014-11-10 16:04:39.418044+00:00\", \"role_status\": \"\
+        approved\", \"person_id\": 112617, \"group_id\": 109043, \"role_type\": \"\
+        administrator\", \"approval\": \"2014-12-12 01:56:21.760693+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 103066}, \"cla_fpca\": {\"creation\": \"2011-12-22\
+        \ 05:12:34.733714+00:00\", \"role_status\": \"approved\", \"person_id\": 112617,\
+        \ \"group_id\": 155928, \"role_type\": \"user\", \"approval\": \"2011-12-22\
+        \ 05:12:34.807737+00:00\", \"internal_comments\": null, \"sponsor_id\": 112617},\
+        \ \"sysadmin-cvs\": {\"creation\": \"2012-07-04 21:13:57.125304+00:00\", \"\
+        role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 101291,\
+        \ \"role_type\": \"user\", \"approval\": \"2012-07-04 21:14:01.755180+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 100068}, \"factory2\": {\"\
+        creation\": \"2016-09-23 18:48:20.373600+00:00\", \"role_status\": \"approved\"\
+        , \"person_id\": 112617, \"group_id\": 212015, \"role_type\": \"administrator\"\
+        , \"approval\": \"2016-09-23 18:48:20.470975+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 112617}, \"fedmsg-announce\": {\"creation\": \"2012-11-16\
+        \ 17:24:03.690086+00:00\", \"role_status\": \"approved\", \"person_id\": 112617,\
+        \ \"group_id\": 166683, \"role_type\": \"administrator\", \"approval\": \"\
+        2012-11-16 17:24:03.770793+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 112617}}, \"telephone\": null, \"timezone\": \"US/Eastern\", \"facsimile\"\
+        : null, \"status_change\": \"2011-12-22 05:11:51.151959+00:00\", \"longitude\"\
+        : null, \"creation\": \"2008-08-14 18:54:57.294232+00:00\", \"unverified_email\"\
+        : null, \"password\": \"*\", \"postal_address\": null, \"memberships\": [{\"\
+        creation\": \"2008-03-12 02:01:00.347424+00:00\", \"apply_rules\": \"\", \"\
+        mailing_list_url\": \"rel-eng@fedoraproject.org\", \"display_name\": \"Fedora\
+        \ Release Engineering Group\", \"owner_id\": 100103, \"group_type\": \"tracking\"\
+        , \"joinmsg\": \"\", \"irc_channel\": \"fedora-devel\", \"user_can_remove\"\
+        : true, \"name\": \"releng-team\", \"mailing_list\": \"\", \"url\": \"https://fedoraproject.org/wiki/ReleaseEngineering\"\
+        , \"invite_only\": true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\"\
+        , \"prerequisite_id\": null, \"id\": 101737}, {\"creation\": \"2017-02-16\
+        \ 15:11:56.116566+00:00\", \"apply_rules\": \"Must be added by sysadmin-main.\"\
+        , \"mailing_list_url\": null, \"display_name\": \"MBS Admins\", \"owner_id\"\
+        : 112617, \"group_type\": \"shell\", \"joinmsg\": \"Welcome to the MBS sysadmin\
+        \ group.\", \"irc_channel\": null, \"user_can_remove\": true, \"name\": \"\
+        sysadmin-mbs\", \"mailing_list\": null, \"url\": null, \"invite_only\": true,\
+        \ \"needs_sponsor\": true, \"irc_network\": null, \"prerequisite_id\": 100332,\
+        \ \"id\": 214837}, {\"creation\": \"2016-09-23 18:48:20.373600+00:00\", \"\
+        apply_rules\": \"Ask in #fedora-modularity.\", \"mailing_list_url\": null,\
+        \ \"display_name\": \"Factory 2.0 Devs\", \"owner_id\": 112617, \"group_type\"\
+        : \"shell\", \"joinmsg\": \"Those working on factory 2 (to upload sprint demo\
+        \ videos to fedorapeople.org)\", \"irc_channel\": null, \"user_can_remove\"\
+        : true, \"name\": \"factory2\", \"mailing_list\": null, \"url\": null, \"\
+        invite_only\": false, \"needs_sponsor\": true, \"irc_network\": null, \"prerequisite_id\"\
+        : 100002, \"id\": 212015}, {\"creation\": \"2016-07-20 15:07:36.780647+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": null, \"display_name\": \"\
+        Pungi Development\", \"owner_id\": 112617, \"group_type\": \"shell\", \"joinmsg\"\
+        : \"\", \"irc_channel\": null, \"user_can_remove\": true, \"name\": \"pungi-devel\"\
+        , \"mailing_list\": null, \"url\": null, \"invite_only\": true, \"needs_sponsor\"\
+        : true, \"irc_network\": null, \"prerequisite_id\": 100002, \"id\": 210475},\
+        \ {\"creation\": \"2016-04-13 15:06:43.445094+00:00\", \"apply_rules\": \"\
+        \", \"mailing_list_url\": null, \"display_name\": \"Modularity Working Group\"\
+        , \"owner_id\": 112617, \"group_type\": \"tracking\", \"joinmsg\": \"Welcome\
+        \ to the Modularity Working Group  https://fedoraproject.org/wiki/Modularity_Working_Group\"\
+        , \"irc_channel\": null, \"user_can_remove\": true, \"name\": \"modularity-wg\"\
+        , \"mailing_list\": null, \"url\": null, \"invite_only\": false, \"needs_sponsor\"\
+        : true, \"irc_network\": null, \"prerequisite_id\": 100002, \"id\": 189842},\
+        \ {\"creation\": \"2013-03-14 18:14:47.757011+00:00\", \"apply_rules\": \"\
+        \", \"mailing_list_url\": null, \"display_name\": \"sysadmin-calendar\", \"\
+        owner_id\": 101433, \"group_type\": \"shell\", \"joinmsg\": \"\", \"irc_channel\"\
+        : null, \"user_can_remove\": true, \"name\": \"sysadmin-calendar\", \"mailing_list\"\
+        : null, \"url\": null, \"invite_only\": true, \"needs_sponsor\": true, \"\
+        irc_network\": null, \"prerequisite_id\": 100002, \"id\": 168942}, {\"creation\"\
+        : \"2015-10-21 19:21:58.897547+00:00\", \"apply_rules\": \"Be sure you have\
+        \ created a FAS account, filled out the fields, and uploaded keys. Once your\
+        \ FAS account is complete, send an email to  commops@lists.fedoraproject.org\
+        \ to introduce yourself. Include your IRC nick, what time-zone you are in\
+        \ (e.g. UTC-5), and what CommOps areas you are interested in. Happy Hacking!\
+        \ :) https://fedoraproject.org/wiki/CommOps/Join\", \"mailing_list_url\":\
+        \ \"https://lists.fedoraproject.org/admin/lists/commops.lists.fedoraproject.org/\"\
+        , \"display_name\": \"Community + Operations = CommOps\", \"owner_id\": 176980,\
+        \ \"group_type\": \"tracking\", \"joinmsg\": \"Welcome to CommOps! Please\
+        \ join #fedora-commops on Freenode.\", \"irc_channel\": \"#fedora-commops\"\
+        , \"user_can_remove\": true, \"name\": \"commops\", \"mailing_list\": \"commops@lists.fedoraproject.org\"\
+        , \"url\": \"https://fedoraproject.org/wiki/CommOps\", \"invite_only\": false,\
+        \ \"needs_sponsor\": true, \"irc_network\": \"Freenode\", \"prerequisite_id\"\
+        : 100002, \"id\": 184912}, {\"creation\": \"2010-03-05 04:16:41.404145+00:00\"\
+        , \"apply_rules\": \"To obtain membership in this group, which grants commit\
+        \ access to the fedora-web git repo, email gitfedora-web-sponsors@fedoraproject.org\"\
+        , \"mailing_list_url\": \"\", \"display_name\": \"Fedora Websites Team GIT\
+        \ Commit Group\", \"owner_id\": 151651, \"group_type\": \"git\", \"joinmsg\"\
+        : \"\", \"irc_channel\": \"\", \"user_can_remove\": true, \"name\": \"gitfedora-web\"\
+        , \"mailing_list\": \"\", \"url\": \"\", \"invite_only\": true, \"needs_sponsor\"\
+        : true, \"irc_network\": \"\", \"prerequisite_id\": 100075, \"id\": 144959},\
+        \ {\"creation\": \"2008-03-12 02:01:01.226874+00:00\", \"apply_rules\": \"\
+        If you want to join this group, please email websites@lists.fedoraproject.org\"\
+        , \"mailing_list_url\": \"http://lists.fedoraproject.org/mailman/listinfo/websites\"\
+        , \"display_name\": \"Fedora Websites Team\", \"owner_id\": 151651, \"group_type\"\
+        : \"tracking\", \"joinmsg\": \"Welcome to the Fedora Websites team!\\r\\n\\\
+        r\\nhttp://fedoraproject.org/wiki/Websites\", \"irc_channel\": \"fedora-websites\"\
+        , \"user_can_remove\": true, \"name\": \"web\", \"mailing_list\": \"websites@lists.fedoraproject.org\"\
+        , \"url\": \"http://fedoraproject.org/wiki/Websites\", \"invite_only\": true,\
+        \ \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"prerequisite_id\"\
+        : 100002, \"id\": 100075}, {\"creation\": \"2008-03-12 01:58:48.757146+00:00\"\
+        , \"apply_rules\": \"This group is a for invite only group.  It is for admins\
+        \ of the account system.  Because of the sensitive nature of this group we\
+        \ do not allow many users in.  Do NOT apply for this group.\", \"mailing_list_url\"\
+        : \"https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\",\
+        \ \"display_name\": \"Account System Admins (invite only)\", \"owner_id\"\
+        : 100001, \"group_type\": \"tracking\", \"joinmsg\": \"\", \"irc_channel\"\
+        : \"fedora-admin\", \"user_can_remove\": true, \"name\": \"accounts\", \"\
+        mailing_list\": \"fedora-infrastructure-list@redhat.com\", \"url\": \"https://fedoraproject.org/wiki/Infrastructure\"\
+        , \"invite_only\": true, \"needs_sponsor\": false, \"irc_network\": \"irc.freenode.net\"\
+        , \"prerequisite_id\": null, \"id\": 100006}, {\"creation\": \"2015-05-10\
+        \ 01:13:35.981282+00:00\", \"apply_rules\": \"\", \"mailing_list_url\": null,\
+        \ \"display_name\": \"Fedora m\xF8te Sysadmin Group\", \"owner_id\": 175037,\
+        \ \"group_type\": \"shell\", \"joinmsg\": \"Thanks for applying to the m\xF8\
+        te sysadmin group!\", \"irc_channel\": null, \"user_can_remove\": true, \"\
+        name\": \"sysadmin-mote\", \"mailing_list\": null, \"url\": null, \"invite_only\"\
+        : false, \"needs_sponsor\": true, \"irc_network\": null, \"prerequisite_id\"\
+        : 100332, \"id\": 182141}, {\"creation\": \"2008-03-12 02:00:59.007589+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"\", \"display_name\": \"\
+        Fedora Community Git Commit Group\", \"owner_id\": 100196, \"group_type\"\
+        : \"git\", \"joinmsg\": \"\", \"irc_channel\": \"\", \"user_can_remove\":\
+        \ true, \"name\": \"gitfedoracommunity\", \"mailing_list\": \"\", \"url\"\
+        : \"https://fedorahosted.org/fedoracommunity\", \"invite_only\": false, \"\
+        needs_sponsor\": true, \"irc_network\": \"\", \"prerequisite_id\": 100002,\
+        \ \"id\": 102780}, {\"creation\": \"2008-03-12 02:00:57.883941+00:00\", \"\
+        apply_rules\": \"This group is for people who need to commit to the python-fedora\
+        \ module.  Please talk to toshio@fedoraproject.org (or abadger1999 in #fedora-admin\
+        \ on irc.freenode.net) before joining.\\r\\n\\r\\nIf you're looking for a\
+        \ place to meet other python programmers, check out the python special interest\
+        \ group instead:\\r\\n\\r\\nhttp://fedoraproject.org/wiki/SIGs/Python\", \"\
+        mailing_list_url\": \"https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\"\
+        , \"display_name\": \"BZR Python-Fedora Package\", \"owner_id\": 100068, \"\
+        group_type\": \"bzr\", \"joinmsg\": \"This group is for people who need to\
+        \ commit to the python-fedora module on fedorahosted.org.  The python-fedora\
+        \ module allows applications to talk to Fedora Infrastructure Web Services\
+        \ and provides some useful functions for writing other Services.  if your\
+        \ interested in this, please get in touch with toshio@fedoraproject.org (also\
+        \ abadger1999 in #fedora-admin on irc.freenode.net) to talk about what tasks\
+        \ you can perform.\", \"irc_channel\": \"fedora-admin\", \"user_can_remove\"\
+        : true, \"name\": \"bzrpython-fedora\", \"mailing_list\": \"fedora-infrastructure-list@redhat.com\"\
+        , \"url\": \"https://fedorahosted.org/python-fedora\", \"invite_only\": false,\
+        \ \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"prerequisite_id\"\
+        : null, \"id\": 102317}, {\"creation\": \"2008-03-12 02:00:59.687639+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"https://fedorahosted.org/mailman/listinfo/bodhi\"\
+        , \"display_name\": \"Bodhi Git Commit Group\", \"owner_id\": 100176, \"group_type\"\
+        : \"git\", \"joinmsg\": \"\", \"irc_channel\": \"#fedora-devel\", \"user_can_remove\"\
+        : true, \"name\": \"gitbodhi\", \"mailing_list\": \"bodhi@lists.fedorahosted.org\"\
+        , \"url\": \"https://fedorahosted.org/bodhi/\", \"invite_only\": false, \"\
+        needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"prerequisite_id\"\
+        : null, \"id\": 101170}, {\"creation\": \"2008-03-12 02:00:57.941258+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"\", \"display_name\": \"\
+        Fedora CLA Group\", \"owner_id\": 100001, \"group_type\": \"cla\", \"joinmsg\"\
+        : \"\", \"irc_channel\": \"\", \"user_can_remove\": true, \"name\": \"cla_fedora\"\
+        , \"mailing_list\": \"\", \"url\": \"\", \"invite_only\": true, \"needs_sponsor\"\
+        : false, \"irc_network\": \"\", \"prerequisite_id\": null, \"id\": 101441},\
+        \ {\"creation\": \"2008-03-12 01:58:48.763123+00:00\", \"apply_rules\": \"\
+        Membership of fedorabugs is not usually granted directly, but automatically\
+        \ given to members of several other groups, including qa and packagers-group:\
+        \ basically, you get membership of fedorabugs if you're becoming a member\
+        \ of a team where it makes sense for you to get editbugs privileges on Bugzilla.\
+        \ Please don't apply to this group directly unless you have a special reason\
+        \ to do so.\", \"mailing_list_url\": \"https://lists.fedoraproject.org/pipermail/test/\"\
+        , \"display_name\": \"Group for granting Bugzilla editing privileges\", \"\
+        owner_id\": 100001, \"group_type\": \"tracking\", \"joinmsg\": \"Hi there!\
+        \ Membership is usually not granted to the fedorabugs group directly - instead,\
+        \ members of several other groups are automatically added to the fedorabugs\
+        \ group, as all members of those groups should have Bugzilla editbugs rights.\
+        \ Maybe you wanted to apply to the QA team? If so, see https://fedoraproject.org/wiki/QA/Join\
+        \ !\", \"irc_channel\": \"fedora-qa\", \"user_can_remove\": true, \"name\"\
+        : \"fedorabugs\", \"mailing_list\": \"test@lists.fedoraproject.org\", \"url\"\
+        : \"https://bugzilla.redhat.com\", \"invite_only\": true, \"needs_sponsor\"\
+        : false, \"irc_network\": \"irc.freenode.net\", \"prerequisite_id\": null,\
+        \ \"id\": 100148}, {\"creation\": \"2008-03-12 02:01:01.007644+00:00\", \"\
+        apply_rules\": \"\", \"mailing_list_url\": \"https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\"\
+        , \"display_name\": \"Fedora Tools Sysadmin Group\", \"owner_id\": 100344,\
+        \ \"group_type\": \"shell\", \"joinmsg\": \"\", \"irc_channel\": \"fedora-admin\"\
+        , \"user_can_remove\": true, \"name\": \"sysadmin-tools\", \"mailing_list\"\
+        : \"fedora-infrastructure-list@redhat.com\", \"url\": \"https://fedoraproject.org/wiki/Infrastructure\"\
+        , \"invite_only\": true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\"\
+        , \"prerequisite_id\": 100332, \"id\": 102902}, {\"creation\": \"2011-05-02\
+        \ 21:40:20.420874+00:00\", \"apply_rules\": null, \"mailing_list_url\": null,\
+        \ \"display_name\": \"Signers of the Fedora Project Contributor Agreement\"\
+        , \"owner_id\": 100001, \"group_type\": \"cla\", \"joinmsg\": \"\", \"irc_channel\"\
+        : null, \"user_can_remove\": true, \"name\": \"cla_fpca\", \"mailing_list\"\
+        : null, \"url\": \"http://fedoraproject.org/wiki/Legal:Fedora_Project_Contributor_Agreement\"\
+        , \"invite_only\": true, \"needs_sponsor\": false, \"irc_network\": null,\
+        \ \"prerequisite_id\": null, \"id\": 155928}, {\"creation\": \"2008-03-12\
+        \ 01:58:48.745240+00:00\", \"apply_rules\": \"\", \"mailing_list_url\": \"\
+        \", \"display_name\": \"Signed CLA Group\", \"owner_id\": 100001, \"group_type\"\
+        : \"cla\", \"joinmsg\": \"\", \"irc_channel\": \"\", \"user_can_remove\":\
+        \ true, \"name\": \"cla_done\", \"mailing_list\": \"\", \"url\": \"\", \"\
+        invite_only\": true, \"needs_sponsor\": false, \"irc_network\": \"\", \"prerequisite_id\"\
+        : null, \"id\": 100002}, {\"creation\": \"2008-11-12 22:58:09.244122+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": null, \"display_name\": \"\
+        Moksha GIT Commit Group\", \"owner_id\": 100176, \"group_type\": \"git\",\
+        \ \"joinmsg\": \"\", \"irc_channel\": null, \"user_can_remove\": true, \"\
+        name\": \"gitmoksha\", \"mailing_list\": null, \"url\": null, \"invite_only\"\
+        : false, \"needs_sponsor\": true, \"irc_network\": null, \"prerequisite_id\"\
+        : null, \"id\": 118562}, {\"creation\": \"2008-03-19 13:34:51.657788+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\"\
+        , \"display_name\": \"FAS Git Commit Group\", \"owner_id\": 101538, \"group_type\"\
+        : \"git\", \"joinmsg\": \"Welcome to the FAS git repo access group\", \"irc_channel\"\
+        : \"fedora-admin\", \"user_can_remove\": true, \"name\": \"gitfas\", \"mailing_list\"\
+        : \"fedora-infrastructure-list@redhat.com\", \"url\": \"https://fedorahosted.org/fas/\"\
+        , \"invite_only\": true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\"\
+        , \"prerequisite_id\": null, \"id\": 103375}, {\"creation\": \"2008-03-12\
+        \ 02:00:57.861657+00:00\", \"apply_rules\": \"Please contact Toshio Kuratomi\
+        \ before applying to this group.  You can contact him via email to toshio@fedoraproject.org\
+        \ or IRC: abadger1999 in #fedora-admin on irc.freenode.net\", \"mailing_list_url\"\
+        : \"\", \"display_name\": \"Packagedb BZR Commit Group\", \"owner_id\": 100068,\
+        \ \"group_type\": \"bzr\", \"joinmsg\": \"\", \"irc_channel\": \"\", \"user_can_remove\"\
+        : true, \"name\": \"bzrpackagedb\", \"mailing_list\": \"\", \"url\": \"https://fedorahosted.org/packagedb/\"\
+        , \"invite_only\": true, \"needs_sponsor\": true, \"irc_network\": \"\", \"\
+        prerequisite_id\": null, \"id\": 102119}, {\"creation\": \"2012-05-21 21:29:45.189131+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"\", \"display_name\": \"\
+        Fedora Hosted Automation\", \"owner_id\": 139137, \"group_type\": \"git\"\
+        , \"joinmsg\": \"\", \"irc_channel\": \"\", \"user_can_remove\": true, \"\
+        name\": \"gitfedorahosted\", \"mailing_list\": \"\", \"url\": \"\", \"invite_only\"\
+        : true, \"needs_sponsor\": true, \"irc_network\": \"\", \"prerequisite_id\"\
+        : 100002, \"id\": 163239}, {\"creation\": \"2008-03-12 02:01:01.157196+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\"\
+        , \"display_name\": \"Fedora Web Sysadmin Group\", \"owner_id\": 100344, \"\
+        group_type\": \"shell\", \"joinmsg\": \"\", \"irc_channel\": \"fedora-admin\"\
+        , \"user_can_remove\": true, \"name\": \"sysadmin-web\", \"mailing_list\"\
+        : \"fedora-infrastructure-list@redhat.com\", \"url\": \"https://fedoraproject.org/wiki/Infrastructure\"\
+        , \"invite_only\": true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\"\
+        , \"prerequisite_id\": 100332, \"id\": 100323}, {\"creation\": \"2008-03-12\
+        \ 02:01:00.917628+00:00\", \"apply_rules\": \"\", \"mailing_list_url\": \"\
+        https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\", \"display_name\"\
+        : \"Fedora CVS Sysadmin Group\", \"owner_id\": 100103, \"group_type\": \"\
+        shell\", \"joinmsg\": \"\", \"irc_channel\": \"fedora-admin\", \"user_can_remove\"\
+        : true, \"name\": \"sysadmin-cvs\", \"mailing_list\": \"fedora-infrastructure-list@redhat.com\"\
+        , \"url\": \"https://fedoraproject.org/wiki/Infrastructure\", \"invite_only\"\
+        : true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"\
+        prerequisite_id\": 100332, \"id\": 101291}, {\"creation\": \"2008-03-12 02:01:01.066973+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\"\
+        , \"display_name\": \"Fedora NOC Sysadmin Group\", \"owner_id\": 100344, \"\
+        group_type\": \"shell\", \"joinmsg\": \"\", \"irc_channel\": \"fedora-admin\"\
+        , \"user_can_remove\": true, \"name\": \"sysadmin-noc\", \"mailing_list\"\
+        : \"fedora-infrastructure-list@redhat.com\", \"url\": \"https://fedoraproject.org/wiki/Infrastructure\"\
+        , \"invite_only\": true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\"\
+        , \"prerequisite_id\": 100332, \"id\": 102095}, {\"creation\": \"2012-12-10\
+        \ 16:45:25.317169+00:00\", \"apply_rules\": \"\", \"mailing_list_url\": \"\
+        \", \"display_name\": \"Git FUSS\", \"owner_id\": 162614, \"group_type\":\
+        \ \"git\", \"joinmsg\": \"\", \"irc_channel\": \"\", \"user_can_remove\":\
+        \ true, \"name\": \"gitfuss\", \"mailing_list\": \"\", \"url\": \"\", \"invite_only\"\
+        : false, \"needs_sponsor\": true, \"irc_network\": \"\", \"prerequisite_id\"\
+        : 100002, \"id\": 167120}, {\"creation\": \"2011-02-09 16:34:52.397614+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"\", \"display_name\": \"\
+        Fedora Infrastructure Apprentice\", \"owner_id\": 100037, \"group_type\":\
+        \ \"shell\", \"joinmsg\": \"please join #fedora-admin and ask for assistance\
+        \ getting started\", \"irc_channel\": \"\", \"user_can_remove\": true, \"\
+        name\": \"fi-apprentice\", \"mailing_list\": \"\", \"url\": \"\", \"invite_only\"\
+        : true, \"needs_sponsor\": true, \"irc_network\": \"\", \"prerequisite_id\"\
+        : 100002, \"id\": 154363}, {\"creation\": \"2008-03-12 02:00:58.145046+00:00\"\
+        , \"apply_rules\": \"Please do not apply to this group.  Your sponsor will\
+        \ add you after you've completed http://fedoraproject.org/wiki/Join_the_package_collection_maintainers.\"\
+        , \"mailing_list_url\": \"https://lists.fedoraproject.org/mailman/listinfo/devel\"\
+        , \"display_name\": \"Fedora Packager GIT Commit Group\", \"owner_id\": 100001,\
+        \ \"group_type\": \"cvs\", \"joinmsg\": \"Welcome to the Fedora packager group.\
+        \ Please continue the process from: https://fedoraproject.org/wiki/PackageMaintainers/Join#Add_Package_to_Source_Code_Management_.28SCM.29_system_and_Set_Owner\"\
+        , \"irc_channel\": \"#fedora-devel\", \"user_can_remove\": true, \"name\"\
+        : \"packager\", \"mailing_list\": \"devel@lists.fedoraproject.org\", \"url\"\
+        : \"https://fedoraproject.org/wiki/PackageMaintainers\", \"invite_only\":\
+        \ true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\", \"\
+        prerequisite_id\": 100002, \"id\": 100300}, {\"creation\": \"2012-11-16 17:24:03.690086+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": null, \"display_name\": \"\
+        Fedmsg Announce\", \"owner_id\": 112617, \"group_type\": \"tracking\", \"\
+        joinmsg\": \"\", \"irc_channel\": null, \"user_can_remove\": true, \"name\"\
+        : \"fedmsg-announce\", \"mailing_list\": null, \"url\": null, \"invite_only\"\
+        : false, \"needs_sponsor\": true, \"irc_network\": null, \"prerequisite_id\"\
+        : 100002, \"id\": 166683}, {\"creation\": \"2008-12-09 04:50:34.438586+00:00\"\
+        , \"apply_rules\": \"Send patches!\", \"mailing_list_url\": \"\", \"display_name\"\
+        : \"Offtrac git commit group\", \"owner_id\": 100351, \"group_type\": \"git\"\
+        , \"joinmsg\": \"\", \"irc_channel\": \"\", \"user_can_remove\": true, \"\
+        name\": \"gitofftrac\", \"mailing_list\": \"\", \"url\": \"\", \"invite_only\"\
+        : false, \"needs_sponsor\": true, \"irc_network\": \"\", \"prerequisite_id\"\
+        : 100002, \"id\": 120715}, {\"creation\": \"2008-03-12 02:01:01.047397+00:00\"\
+        , \"apply_rules\": \"\", \"mailing_list_url\": \"https://www.redhat.com/mailman/listinfo/fedora-infrastructure-list\"\
+        , \"display_name\": \"Fedora Main Sysadmin Group\", \"owner_id\": 100037,\
+        \ \"group_type\": \"shell\", \"joinmsg\": \"\", \"irc_channel\": \"fedora-admin\"\
+        , \"user_can_remove\": true, \"name\": \"sysadmin-main\", \"mailing_list\"\
+        : \"fedora-infrastructure-list@redhat.com\", \"url\": \"https://fedoraproject.org/wiki/Infrastructure\"\
+        , \"invite_only\": true, \"needs_sponsor\": true, \"irc_network\": \"irc.freenode.net\"\
+        , \"prerequisite_id\": 100332, \"id\": 100322}, {\"creation\": \"2011-07-01\
+        \ 19:35:32.009123+00:00\", \"apply_rules\": \"\", \"mailing_list_url\": null,\
+        \ \"display_name\": \"FI sysadmin logs\", \"owner_id\": 100059, \"group_type\"\
+        : \"tracking\", \"joinmsg\": \"hope you like email!\", \"irc_channel\": null,\
+        \ \"user_can_remove\": true, \"name\": \"sysadmin-logs\", \"mailing_list\"\
+        : null, \"url\": null, \"invite_only\": false, \"needs_sponsor\": true, \"\
+        irc_network\": null, \"prerequisite_id\": 100332, \"id\": 157080}, {\"creation\"\
+        : \"2013-08-12 20:28:12.978767+00:00\", \"apply_rules\": \"\", \"mailing_list_url\"\
+        : null, \"display_name\": \"Access to the Fedora Badges git repository\",\
+        \ \"owner_id\": 112617, \"group_type\": \"git\", \"joinmsg\": \"Welcome to\
+        \ the Badges git repo.\", \"irc_channel\": null, \"user_can_remove\": true,\
+        \ \"name\": \"gitbadges\", \"mailing_list\": null, \"url\": null, \"invite_only\"\
+        : false, \"needs_sponsor\": true, \"irc_network\": null, \"prerequisite_id\"\
+        : 100002, \"id\": 171760}, {\"creation\": \"2008-03-12 02:01:00.842991+00:00\"\
+        , \"apply_rules\": \"This group is for users who are interested in working\
+        \ on Fedora's servers.  If you are serious about joining you need to send\
+        \ an email to the list letting everyone know you're ready and get involved.\\\
+        r\\n\\r\\nIF YOU APPLY FOR THIS GROUP AND HAVEN'T CONTACTED THE LIST OR FOUND\
+        \ A SPONSOR YOU WILL BE IGNORED.  This isn't a warning, just a heads up on\
+        \ how things work.\\r\\n\\r\\nhttp://fedoraproject.org/wiki/Infrastructure/GettingStarted\"\
+        , \"mailing_list_url\": \"https://lists.fedoraproject.org/mailman/listinfo/infrastructure\"\
+        , \"display_name\": \"Fedora Sysadmin Group\", \"owner_id\": 100037, \"group_type\"\
+        : \"tracking\", \"joinmsg\": \"\", \"irc_channel\": \"fedora-admin\", \"user_can_remove\"\
+        : true, \"name\": \"sysadmin\", \"mailing_list\": \"infrastructure@lists.fedoraproject.org\"\
+        , \"url\": \"https://fedoraproject.org/wiki/Infrastructure\", \"invite_only\"\
+        : true, \"needs_sponsor\": false, \"irc_network\": \"irc.freenode.net\", \"\
+        prerequisite_id\": 100002, \"id\": 100332}, {\"creation\": \"2008-06-26 22:14:49.097030+00:00\"\
+        , \"apply_rules\": null, \"mailing_list_url\": \"\", \"display_name\": \"\
+        Fedora Supybot Plugins\", \"owner_id\": 100344, \"group_type\": \"git\", \"\
+        joinmsg\": \"\", \"irc_channel\": \"#fedora-admin\", \"user_can_remove\":\
+        \ true, \"name\": \"gitsupybot-fedora\", \"mailing_list\": \"\", \"url\":\
+        \ \"\", \"invite_only\": false, \"needs_sponsor\": true, \"irc_network\":\
+        \ \"Freenode\", \"prerequisite_id\": 100002, \"id\": 109043}, {\"creation\"\
+        : \"2010-05-11 23:55:35.127476+00:00\", \"apply_rules\": \"Please contact\
+        \ Toshio Kuratomi before applying to this group. You can contact him via email\
+        \ to toshio@fedoraproject.org or IRC: abadger1999 in #fedora-admin on irc.freenode.net\
+        \ \", \"mailing_list_url\": \"\", \"display_name\": \"bzrkitchen\", \"owner_id\"\
+        : 100068, \"group_type\": \"bzr\", \"joinmsg\": \"This group is no longer\
+        \ useful.  kitchen is now managed on github: https://github.com/fedora-infra/kitchen/\"\
+        , \"irc_channel\": \"\", \"user_can_remove\": true, \"name\": \"bzrkitchen\"\
+        , \"mailing_list\": \"\", \"url\": \"\", \"invite_only\": false, \"needs_sponsor\"\
+        : true, \"irc_network\": \"\", \"prerequisite_id\": null, \"id\": 147531}],\
+        \ \"roles\": [{\"creation\": \"2017-08-02 19:03:37.231678+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 101737, \"role_type\"\
+        : \"user\", \"approval\": \"2017-08-02 19:03:46.593800+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 100103}, {\"creation\": \"2017-02-16 15:11:56.116566+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 214837,\
+        \ \"role_type\": \"administrator\", \"approval\": \"2017-02-16 15:11:56.206401+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 112617}, {\"creation\": \"\
+        2016-09-23 18:48:20.373600+00:00\", \"role_status\": \"approved\", \"person_id\"\
+        : 112617, \"group_id\": 212015, \"role_type\": \"administrator\", \"approval\"\
+        : \"2016-09-23 18:48:20.470975+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 112617}, {\"creation\": \"2016-07-20 15:07:36.780647+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 210475, \"role_type\"\
+        : \"administrator\", \"approval\": \"2016-07-20 15:07:36.923313+00:00\", \"\
+        internal_comments\": null, \"sponsor_id\": 162614}, {\"creation\": \"2016-04-13\
+        \ 15:06:43.445094+00:00\", \"role_status\": \"approved\", \"person_id\": 112617,\
+        \ \"group_id\": 189842, \"role_type\": \"administrator\", \"approval\": \"\
+        2016-04-13 15:06:43.544686+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 112617}, {\"creation\": \"2016-03-06 03:28:10.032391+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 168942, \"role_type\"\
+        : \"user\", \"approval\": \"2016-03-06 03:28:15.053897+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 112617}, {\"creation\": \"2015-10-21 19:22:31.228309+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 184912,\
+        \ \"role_type\": \"administrator\", \"approval\": \"2015-10-21 19:22:38.133593+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 115885}, {\"creation\": \"\
+        2015-09-15 20:21:00.877603+00:00\", \"role_status\": \"approved\", \"person_id\"\
+        : 112617, \"group_id\": 144959, \"role_type\": \"user\", \"approval\": \"\
+        2015-09-15 20:21:00.965285+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 151651}, {\"creation\": \"2015-09-15 20:20:23.801708+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 100075, \"role_type\"\
+        : \"user\", \"approval\": \"2015-09-15 20:20:31.488972+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 151651}, {\"creation\": \"2015-06-24 14:54:04.143607+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 100006,\
+        \ \"role_type\": \"user\", \"approval\": \"2015-06-24 14:54:12.492600+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 162614}, {\"creation\": \"\
+        2015-06-12 15:05:54.342236+00:00\", \"role_status\": \"approved\", \"person_id\"\
+        : 112617, \"group_id\": 182141, \"role_type\": \"sponsor\", \"approval\":\
+        \ \"2015-06-12 15:05:59.954217+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 175037}, {\"creation\": \"2012-01-26 23:49:44.618946+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 102780, \"role_type\"\
+        : \"administrator\", \"approval\": \"2012-01-26 23:55:54.574667+00:00\", \"\
+        internal_comments\": null, \"sponsor_id\": 100196}, {\"creation\": \"2012-02-13\
+        \ 17:26:07.973627+00:00\", \"role_status\": \"approved\", \"person_id\": 112617,\
+        \ \"group_id\": 102317, \"role_type\": \"user\", \"approval\": \"2012-02-13\
+        \ 17:26:12.658831+00:00\", \"internal_comments\": null, \"sponsor_id\": 100068},\
+        \ {\"creation\": \"2012-01-28 19:49:32.976928+00:00\", \"role_status\": \"\
+        approved\", \"person_id\": 112617, \"group_id\": 101170, \"role_type\": \"\
+        user\", \"approval\": \"2012-01-28 19:49:37.330651+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 100176}, {\"creation\": \"2008-08-14 19:14:17.974674+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 101441,\
+        \ \"role_type\": \"user\", \"approval\": \"2008-08-14 19:14:18.190622+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 112617}, {\"creation\": \"\
+        2012-02-03 21:49:16.896734+00:00\", \"role_status\": \"approved\", \"person_id\"\
+        : 112617, \"group_id\": 100148, \"role_type\": \"user\", \"approval\": \"\
+        2012-02-03 21:49:16.962645+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 100068}, {\"creation\": \"2012-02-22 23:29:24.025195+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 102902, \"role_type\"\
+        : \"user\", \"approval\": \"2012-02-22 23:29:28.593868+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 101458}, {\"creation\": \"2011-12-22 05:12:34.733714+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 155928,\
+        \ \"role_type\": \"user\", \"approval\": \"2011-12-22 05:12:34.807737+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 112617}, {\"creation\": \"\
+        2011-12-22 05:12:34.733714+00:00\", \"role_status\": \"approved\", \"person_id\"\
+        : 112617, \"group_id\": 100002, \"role_type\": \"user\", \"approval\": \"\
+        2011-12-22 05:12:34.820426+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 112617}, {\"creation\": \"2010-07-13 15:28:37.857882+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 118562, \"role_type\"\
+        : \"user\", \"approval\": \"2010-07-13 15:28:41.052444+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 100176}, {\"creation\": \"2012-04-02 19:26:53.150720+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 103375,\
+        \ \"role_type\": \"user\", \"approval\": \"2012-04-02 19:26:59.139095+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 100068}, {\"creation\": \"\
+        2012-04-24 01:24:10.900201+00:00\", \"role_status\": \"approved\", \"person_id\"\
+        : 112617, \"group_id\": 102119, \"role_type\": \"user\", \"approval\": \"\
+        2012-04-24 01:24:21.615720+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 100068}, {\"creation\": \"2012-05-21 22:21:28.657834+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 163239, \"role_type\"\
+        : \"user\", \"approval\": \"2012-05-21 22:21:33.350082+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 139137}, {\"creation\": \"2012-05-22 18:02:57.166095+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 100323,\
+        \ \"role_type\": \"user\", \"approval\": \"2012-05-22 18:03:02.037044+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 100176}, {\"creation\": \"\
+        2012-07-04 21:13:57.125304+00:00\", \"role_status\": \"approved\", \"person_id\"\
+        : 112617, \"group_id\": 101291, \"role_type\": \"user\", \"approval\": \"\
+        2012-07-04 21:14:01.755180+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 100068}, {\"creation\": \"2012-07-09 19:07:28.170494+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 102095, \"role_type\"\
+        : \"user\", \"approval\": \"2012-07-09 19:07:39.794246+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 101458}, {\"creation\": \"2012-12-10 18:13:45.336466+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 167120,\
+        \ \"role_type\": \"user\", \"approval\": \"2012-12-10 19:30:10.746450+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 162614}, {\"creation\": \"\
+        2013-02-07 17:49:31.430837+00:00\", \"role_status\": \"approved\", \"person_id\"\
+        : 112617, \"group_id\": 154363, \"role_type\": \"sponsor\", \"approval\":\
+        \ \"2013-02-07 17:49:37.640675+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 100037}, {\"creation\": \"2012-02-03 21:49:07.118415+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 100300, \"role_type\"\
+        : \"sponsor\", \"approval\": \"2012-02-03 21:49:16.950570+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 100068}, {\"creation\": \"2012-11-16 17:24:03.690086+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 166683,\
+        \ \"role_type\": \"administrator\", \"approval\": \"2012-11-16 17:24:03.770793+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 112617}, {\"creation\": \"\
+        2012-11-27 01:41:41.995254+00:00\", \"role_status\": \"approved\", \"person_id\"\
+        : 112617, \"group_id\": 120715, \"role_type\": \"administrator\", \"approval\"\
+        : \"2012-11-27 03:30:49.848477+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 100351}, {\"creation\": \"2013-01-25 05:09:00.549117+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 100322, \"role_type\"\
+        : \"user\", \"approval\": \"2013-01-25 05:09:08.084855+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 100037}, {\"creation\": \"2013-06-12 14:58:53.490540+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 157080,\
+        \ \"role_type\": \"user\", \"approval\": \"2013-06-12 15:00:53.336729+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 100037}, {\"creation\": \"\
+        2013-08-12 20:28:12.978767+00:00\", \"role_status\": \"approved\", \"person_id\"\
+        : 112617, \"group_id\": 171760, \"role_type\": \"administrator\", \"approval\"\
+        : \"2013-08-12 20:28:13.979368+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 112617}, {\"creation\": \"2012-02-22 23:28:51.518861+00:00\", \"role_status\"\
+        : \"approved\", \"person_id\": 112617, \"group_id\": 100332, \"role_type\"\
+        : \"sponsor\", \"approval\": \"2012-02-22 23:28:59.513475+00:00\", \"internal_comments\"\
+        : null, \"sponsor_id\": 101458}, {\"creation\": \"2014-11-10 16:04:39.418044+00:00\"\
+        , \"role_status\": \"approved\", \"person_id\": 112617, \"group_id\": 109043,\
+        \ \"role_type\": \"administrator\", \"approval\": \"2014-12-12 01:56:21.760693+00:00\"\
+        , \"internal_comments\": null, \"sponsor_id\": 103066}, {\"creation\": \"\
+        2014-12-02 14:44:23.679072+00:00\", \"role_status\": \"approved\", \"person_id\"\
+        : 112617, \"group_id\": 147531, \"role_type\": \"administrator\", \"approval\"\
+        : \"2014-12-02 15:53:26.118445+00:00\", \"internal_comments\": null, \"sponsor_id\"\
+        : 100068}], \"passwordtoken\": null, \"ssh_key\": null, \"gpg_keyid\": \"\
+        8D98 78C9 425D 288C 3218 580B 6E66 D2FD B023 97FD\", \"id\": 112617, \"unapproved_memberships\"\
+        : [], \"privacy\": false, \"locale\": \"en\", \"human_name\": \"Ralph Bean\"\
+        , \"ipa_sync_status\": null, \"username\": \"ralph\", \"last_seen\": \"2017-09-15\
+        \ 16:52:37.535455+00:00\", \"status\": \"active\", \"internal_comments\":\
+        \ null, \"security_answer\": null}, \"tg_flash\": null}"}
+    headers:
+      appserver: [proxy09.fedoraproject.org]
+      apptime: [D=325775]
+      connection: [Keep-Alive]
+      content-length: ['62330']
+      content-type: [application/json]
+      date: ['Fri, 15 Sep 2017 18:29:55 GMT']
+      keep-alive: ['timeout=15, max=500']
+      server: [Apache/2.2.15 (Red Hat)]
+      strict-transport-security: [max-age=15768000; includeSubDomains; preload]
+    status: {code: 200, message: OK}
+- request:
     body: null
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.12.5]
+      User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://admin.fedoraproject.org/pkgdb/api/packager/package/ralph
   response:
     body: {string: !!python/unicode "{\n  \"co-maintained\": [\n    {\n      \"acls\"\
-        : [],\n      \"creation_date\": 1490708185.0,\n      \"description\": \"A\
-        \ client/server for the Network Time Protocol, this program keeps your computer's\
-        \ clock accurate. It was specially designed to support systems with intermittent\
-        \ internet connections, but it also works well in permanently connected environments.\
-        \ It can use also hardware reference clocks, system real-time clock or manual\
-        \ input as time references.\",\n      \"koschei_monitor\": true,\n      \"\
-        monitor\": false,\n      \"name\": \"chronyd\",\n      \"namespace\": \"modules\"\
-        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1419506\",\n      \"\
-        status\": \"Approved\",\n      \"summary\": \"An NTP client/server\",\n  \
-        \    \"upstream_url\": \"\"\n    },\n    {\n      \"acls\": [],\n      \"\
-        creation_date\": 1489496670.0,\n      \"description\": \"The container-runtime\
-        \ module.\",\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n\
-        \      \"name\": \"container-runtime\",\n      \"namespace\": \"modules\"\
-        ,\n      \"review_url\": \"https://bugzilla.redhat.com/1419506\",\n      \"\
-        status\": \"Approved\",\n      \"summary\": \"The container-runtime module\"\
-        ,\n      \"upstream_url\": \"https://github.com/container-images/container-runtime\"\
+        : [],\n      \"creation_date\": 1491843167.0,\n      \"description\": \"BIND\
+        \ (Berkeley Internet Name Domain) is an implementation of the DNS (Domain\
+        \ Name System) protocols. BIND includes a DNS server (named), which resolves\
+        \ host names to IP addresses; a resolver library (routines for applications\
+        \ to use when interfacing with DNS); and tools for verifying that the DNS\
+        \ server is operating properly.\",\n      \"koschei_monitor\": true,\n   \
+        \   \"monitor\": false,\n      \"name\": \"bind\",\n      \"namespace\": \"\
+        modules\",\n      \"review_url\": \"https://bugzilla.redhat.com/1419506\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"The Berkeley Internet\
+        \ Name Domain (BIND) DNS (Domain Name System) server\",\n      \"upstream_url\"\
+        : \"\"\n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1490708185.0,\n\
+        \      \"description\": \"A client/server for the Network Time Protocol, this\
+        \ program keeps your computer's clock accurate. It was specially designed\
+        \ to support systems with intermittent internet connections, but it also works\
+        \ well in permanently connected environments. It can use also hardware reference\
+        \ clocks, system real-time clock or manual input as time references.\",\n\
+        \      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
+        : \"chronyd\",\n      \"namespace\": \"modules\",\n      \"review_url\": \"\
+        https://bugzilla.redhat.com/1419506\",\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"An NTP client/server\",\n      \"upstream_url\": \"\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1491525603.0,\n\
+        \      \"description\": \"Common build requirements which are required by\
+        \ many packages.\",\n      \"koschei_monitor\": true,\n      \"monitor\":\
+        \ true,\n      \"name\": \"common-build-dependencies\",\n      \"namespace\"\
+        : \"modules\",\n      \"review_url\": \"https://bugzilla.redhat.com/1419506\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Common build requirements\
+        \ which are required by many packages.\",\n      \"upstream_url\": \"\"\n\
+        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1491525678.0,\n\
+        \      \"description\": \"Common build requirements which are required by\
+        \ many packages.\",\n      \"koschei_monitor\": true,\n      \"monitor\":\
+        \ true,\n      \"name\": \"common-build-dependencies-bootstrap\",\n      \"\
+        namespace\": \"modules\",\n      \"review_url\": \"https://bugzilla.redhat.com/1419506\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Common build requirements\
+        \ which are required by many packages.\",\n      \"upstream_url\": \"\"\n\
+        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1489496670.0,\n\
+        \      \"description\": \"The container-runtime module.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": false,\n      \"name\": \"container-runtime\"\
+        ,\n      \"namespace\": \"modules\",\n      \"review_url\": \"https://bugzilla.redhat.com/1419506\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"The container-runtime\
+        \ module\",\n      \"upstream_url\": \"https://github.com/container-images/container-runtime\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"A webapp to retrieve historical information about\
         \ messages on the fedmsg\\nbus.  It is a JSON api for the datanommer message\
@@ -88,6 +998,12 @@ interactions:
         : \"fedmsg\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
         \      \"status\": \"Approved\",\n      \"summary\": \"Tools for Fedora Infrastructure\
         \ real-time messaging\",\n      \"upstream_url\": \"http://github.com/fedora-infra/fedmsg\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1499739600.0,\n\
+        \      \"description\": \"CLI for Fedora package request\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": \"nobuild\",\n      \"name\": \"fedrepo-req\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1469331\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"CLI for Fedora package\
+        \ repo requests\",\n      \"upstream_url\": \"https://pagure.io/fedrepo_req\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"The GeoLite databases are free IP geolocation databases.\\\
         n\\nThe GeoLite databases are distributed under the Creative Commons\\nAttribution-ShareAlike\
@@ -190,26 +1106,33 @@ interactions:
         \ \"namespace\": \"modules\",\n      \"review_url\": \"https://bugzilla.redhat.com/1419506\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"High Performance,\
         \ Distributed Memory Object Cache\",\n      \"upstream_url\": \"\"\n    },\n\
-        \    {\n      \"acls\": [],\n      \"creation_date\": 1479303094.0,\n    \
-        \  \"description\": \"A python library for manipulation of the proposed module\
-        \ metadata format.\",\n      \"koschei_monitor\": true,\n      \"monitor\"\
-        : true,\n      \"name\": \"modulemd\",\n      \"namespace\": \"rpms\",\n \
-        \     \"review_url\": \"https://bugzilla.redhat.com/1376035\",\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"Module metadata manipulation library\"\
-        ,\n      \"upstream_url\": \"https://pagure.io/modulemd\"\n    },\n    {\n\
-        \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
-        : \"Moksha is a platform for creating real-time collaborative web applications.\
-        \  It\\nprovides a set of Python and JavaScript API's that make it simple\
-        \ to create\\nrich applications that can acquire, manipulate, and visualize\
-        \ data from\\nexternal services. It is a unified framework build using the\
-        \ best available\\nopen source technologies such as TurboGears2, jQuery, AMQP,\
-        \ and Orbited.\",\n      \"koschei_monitor\": false,\n      \"monitor\": true,\n\
-        \      \"name\": \"moksha\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"A platform\
-        \ for creating real-time web applications\",\n      \"upstream_url\": \"https://fedorahosted.org/moksha\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1490713285.0,\n\
-        \      \"description\": \"Mongo (from \\\"humongous\\\") is a high-performance,\
-        \ open source, schema-free document-oriented database.\",\n      \"koschei_monitor\"\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1491843531.0,\n    \
+        \  \"description\": \"Base runtime will only be shipping with microdnf, we\
+        \ need the rest of the feature set\",\n      \"koschei_monitor\": true,\n\
+        \      \"monitor\": false,\n      \"name\": \"microdnf\",\n      \"namespace\"\
+        : \"modules\",\n      \"review_url\": \"https://bugzilla.redhat.com/1419506\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"DNF Full Version\"\
+        ,\n      \"upstream_url\": \"\"\n    },\n    {\n      \"acls\": [],\n    \
+        \  \"creation_date\": 1479303094.0,\n      \"description\": \"A python library\
+        \ for manipulation of the proposed module metadata format.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"modulemd\",\n      \"\
+        namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1376035\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Module metadata manipulation\
+        \ library\",\n      \"upstream_url\": \"https://pagure.io/modulemd\"\n   \
+        \ },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"Moksha is a platform for creating real-time collaborative\
+        \ web applications.  It\\nprovides a set of Python and JavaScript API's that\
+        \ make it simple to create\\nrich applications that can acquire, manipulate,\
+        \ and visualize data from\\nexternal services. It is a unified framework build\
+        \ using the best available\\nopen source technologies such as TurboGears2,\
+        \ jQuery, AMQP, and Orbited.\",\n      \"koschei_monitor\": false,\n     \
+        \ \"monitor\": true,\n      \"name\": \"moksha\",\n      \"namespace\": \"\
+        rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n  \
+        \    \"summary\": \"A platform for creating real-time web applications\",\n\
+        \      \"upstream_url\": \"https://fedorahosted.org/moksha\"\n    },\n   \
+        \ {\n      \"acls\": [],\n      \"creation_date\": 1490713285.0,\n      \"\
+        description\": \"Mongo (from \\\"humongous\\\") is a high-performance, open\
+        \ source, schema-free document-oriented database.\",\n      \"koschei_monitor\"\
         : true,\n      \"monitor\": false,\n      \"name\": \"mongodb\",\n      \"\
         namespace\": \"modules\",\n      \"review_url\": \"https://bugzilla.redhat.com/1419506\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"High-performance,\
@@ -361,19 +1284,6 @@ interactions:
         : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1275057\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"Parse AppStream files\
         \ when you don't have libappstream-glib\",\n      \"upstream_url\": \"http://pypi.python.org/pypi/python-appstream\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"\\nThe argparse module is an optparse-inspired command\
-        \ line parser that\\nimproves on optparse by:\\n * handling both optional\
-        \ and positional arguments\\n * supporting parsers that dispatch to sub-parsers\\\
-        n * producing more informative usage messages\\n * supporting actions that\
-        \ consume any number of command-line args\\n * allowing types and actions\
-        \ to be specified with simple callables\\n    instead of hacking class attributes\
-        \ like STORE_ACTIONS or CHECK_METHODS\\n\\nas well as including a number of\
-        \ other more minor improvements on the\\noptparse API.\",\n      \"koschei_monitor\"\
-        : false,\n      \"monitor\": false,\n      \"name\": \"python-argparse\",\n\
-        \      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"Optparse inspired command line parser\
-        \ for Python\",\n      \"upstream_url\": \"http://code.google.com/p/argparse/\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"Arrow is a Python library that offers a sensible,\
         \ human-friendly approach to\\ncreating, manipulating, formatting and converting\
@@ -590,7 +1500,7 @@ interactions:
         : false,\n      \"monitor\": true,\n      \"name\": \"python-dogpile-cache\"\
         ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"A caching front-end based on the Dogpile\
-        \ lock\",\n      \"upstream_url\": \"http://pypi.python.org/pypi/dogpile.cache\"\
+        \ lock\",\n      \"upstream_url\": \"https://pypi.io/project/dogpile.cache\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"A \\\"dogpile\\\" lock, one which allows a single\
         \ thread to generate an expensive\\nresource while other threads use the \\\
@@ -765,13 +1675,20 @@ interactions:
         rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n  \
         \    \"summary\": \"HTTP request/response parser for Python\",\n      \"upstream_url\"\
         : \"https://github.com/benoitc/http-parser/\"\n    },\n    {\n      \"acls\"\
-        : [],\n      \"creation_date\": 1424771494.0,\n      \"description\": \"A\
-        \ Python implementation of JSON Web Token draft 01. This library provides\
-        \ a\\nmeans of representing signed content using JSON data structures, including\\\
-        nclaims to be transferred between two parties encoded as digitally signed\
-        \ and\\nencrypted JSON objects.\",\n      \"koschei_monitor\": false,\n  \
-        \    \"monitor\": true,\n      \"name\": \"python-jwt\",\n      \"namespace\"\
-        : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1194028\"\
+        : [],\n      \"creation_date\": 1400070978.0,\n      \"description\": \"This\
+        \ module allows python objects to be serialized to JSON in a similar fashion\\\
+        nto the pickle module.\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
+        : false,\n      \"name\": \"python-jsonpickle\",\n      \"namespace\": \"\
+        rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n  \
+        \    \"summary\": \"A module that allows any object to be serialized into\
+        \ JSON\",\n      \"upstream_url\": \"https://pypi.io/project/jsonpickle/\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1424771494.0,\n\
+        \      \"description\": \"A Python implementation of JSON Web Token draft\
+        \ 01. This library provides a\\nmeans of representing signed content using\
+        \ JSON data structures, including\\nclaims to be transferred between two parties\
+        \ encoded as digitally signed and\\nencrypted JSON objects.\",\n      \"koschei_monitor\"\
+        : false,\n      \"monitor\": true,\n      \"name\": \"python-jwt\",\n    \
+        \  \"namespace\": \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1194028\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"JSON Web Token implementation\
         \ in Python\",\n      \"upstream_url\": \"http://pypi.python.org/pypi/pyjwt\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
@@ -834,9 +1751,9 @@ interactions:
         : false,\n      \"monitor\": true,\n      \"name\": \"python-moksha-common\"\
         ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"Common components for Moksha\",\n  \
-        \    \"upstream_url\": \"http://pypi.python.org/pypi/moksha.common\"\n   \
-        \ },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"Hub components for Moksha.\",\n      \"koschei_monitor\"\
+        \    \"upstream_url\": \"https://pypi.io/project/moksha.common\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"Hub components for Moksha.\",\n      \"koschei_monitor\"\
         : false,\n      \"monitor\": true,\n      \"name\": \"python-moksha-hub\"\
         ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"Hub components for Moksha\",\n     \
@@ -957,8 +1874,8 @@ interactions:
         : \"python-pyramid\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
         : null,\n      \"status\": \"Approved\",\n      \"summary\": \"The Pyramid\
         \ web application framework, a Pylons project\",\n      \"upstream_url\":\
-        \ \"http://pylonsproject.com\"\n    },\n    {\n      \"acls\": [],\n     \
-        \ \"creation_date\": 1429027525.0,\n      \"description\": \"pyramid_fas_openid\
+        \ \"https://trypyramid.com/\"\n    },\n    {\n      \"acls\": [],\n      \"\
+        creation_date\": 1429027525.0,\n      \"description\": \"pyramid_fas_openid\
         \ provides a view for the Pyramid framework that acts as\\nan OpenID consumer\
         \ for the Fedora Account System.\",\n      \"koschei_monitor\": false,\n \
         \     \"monitor\": true,\n      \"name\": \"python-pyramid-fas-openid\",\n\
@@ -977,8 +1894,8 @@ interactions:
         \ to join the\\nactive transaction as provided by the transaction\\nhttp://pypi.python.org/pypi/transaction\\\
         n\\nSee http://docs.pylonsproject.org/projects/pyramid_tm/dev/\\nor docs/index.rst\
         \ in this distribution for detailed documentation.\",\n      \"koschei_monitor\"\
-        : true,\n      \"monitor\": false,\n      \"name\": \"python-pyramid-tm\"\
-        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : true,\n      \"monitor\": true,\n      \"name\": \"python-pyramid-tm\",\n\
+        \      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
         : \"Approved\",\n      \"summary\": \"A package which allows Pyramid requests\
         \ to join the active transaction\",\n      \"upstream_url\": \"http://pypi.python.org/pypi/pyramid_tm\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
@@ -1079,34 +1996,35 @@ interactions:
         : \"Approved\",\n      \"summary\": \"A simple, lightweight OAuth2 client\"\
         ,\n      \"upstream_url\": \"http://pypi.python.org/pypi/sanction\"\n    },\n\
         \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
-        \  \"description\": \"A Python module to simplify calling shell commands.\\\
-        nAlso known as PBS, or Python Bash Scripting.\",\n      \"koschei_monitor\"\
-        : false,\n      \"monitor\": false,\n      \"name\": \"python-sh\",\n    \
-        \  \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"Python module to simplify calling shell\
-        \ commands\",\n      \"upstream_url\": \"https://github.com/amoffat/sh/\"\n\
+        \  \"description\": \"sh is a full-fledged subprocess replacement for Python\
+        \ that allows you to call\\nany program as if it were a function.  sh is not\
+        \ a collection of system\\ncommands implemented in Python.\",\n      \"koschei_monitor\"\
+        : false,\n      \"monitor\": true,\n      \"name\": \"python-sh\",\n     \
+        \ \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Python subprocess replacement\",\n \
+        \     \"upstream_url\": \"https://github.com/amoffat/sh\"\n    },\n    {\n\
+        \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        : \"Ripped from FormEncode and strainer just to support Pythons 2 and 3.\\\
+        nIntended for use in your webapp test suites.\\n\\nExample usage::\\n\\n \
+        \   >>> from sieve.operators import eq_xml, in_xml\\n    >>> a = \\\"<foo><bar>Value</bar></foo>\\\
+        \"\\n    >>> b = \\\"\\\"\\\"\\n    ... <foo>\\n    ...     <bar>\\n    ...\
+        \         Value\\n    ...     </bar>\\n    ... </foo>\\n    ... \\\"\\\"\\\
+        \"\\n    >>> eq_xml(a, b)\\n    True\\n    >>> c = \\\"<html><body><foo><bar>Value</bar></foo></body></html\\\
+        \"\\n    >>> in_xml(a, c)  # 'needle' in a 'haystack'\\n    True\",\n    \
+        \  \"koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\"\
+        : \"python-sieve\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"XML Comparison\
+        \ Utils\",\n      \"upstream_url\": \"http://pypi.python.org/pypi/sieve\"\n\
         \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"Ripped from FormEncode and strainer just to support\
-        \ Pythons 2 and 3.\\nIntended for use in your webapp test suites.\\n\\nExample\
-        \ usage::\\n\\n    >>> from sieve.operators import eq_xml, in_xml\\n    >>>\
-        \ a = \\\"<foo><bar>Value</bar></foo>\\\"\\n    >>> b = \\\"\\\"\\\"\\n  \
-        \  ... <foo>\\n    ...     <bar>\\n    ...         Value\\n    ...     </bar>\\\
-        n    ... </foo>\\n    ... \\\"\\\"\\\"\\n    >>> eq_xml(a, b)\\n    True\\\
-        n    >>> c = \\\"<html><body><foo><bar>Value</bar></foo></body></html\\\"\\\
-        n    >>> in_xml(a, c)  # 'needle' in a 'haystack'\\n    True\",\n      \"\
-        koschei_monitor\": false,\n      \"monitor\": false,\n      \"name\": \"python-sieve\"\
-        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"XML Comparison Utils\",\n      \"upstream_url\"\
-        : \"http://pypi.python.org/pypi/sieve\"\n    },\n    {\n      \"acls\": [],\n\
-        \      \"creation_date\": 1400070978.0,\n      \"description\": \"The module\
-        \ simplemediawiki is an extremely low-level wrapper to the MediaWiki\\nAPI.\
-        \ It automatically handles cookies and g zip compression so that you can\\\
-        nmake basic calls to the API in the easiest way possible. It also provides\
-        \ a\\nfew functions to make day-to-day API access easier.\",\n      \"koschei_monitor\"\
-        : false,\n      \"monitor\": false,\n      \"name\": \"python-simplemediawiki\"\
-        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
-        : \"Approved\",\n      \"summary\": \"Extremely low-level wrapper to the MediaWiki\
-        \ API\",\n      \"upstream_url\": \"https://github.com/ianweller/python-simplemediawiki\"\
+        \      \"description\": \"The module simplemediawiki is an extremely low-level\
+        \ wrapper to the MediaWiki\\nAPI. It automatically handles cookies and g zip\
+        \ compression so that you can\\nmake basic calls to the API in the easiest\
+        \ way possible. It also provides a\\nfew functions to make day-to-day API\
+        \ access easier.\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
+        : false,\n      \"name\": \"python-simplemediawiki\",\n      \"namespace\"\
+        : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"Extremely low-level wrapper to the MediaWiki API\",\n\
+        \      \"upstream_url\": \"https://github.com/ianweller/python-simplemediawiki\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"Socket pool is a simple socket pool that supports\
         \ multiple factories and\\nbackends. It can easily be used by gevent, eventlet\
@@ -1170,6 +2088,18 @@ interactions:
         : \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
         \      \"summary\": \"Format agnostic tabular data library (XLS, JSON, YAML,\
         \ CSV)\",\n      \"upstream_url\": \"http://github.com/kennethreitz/tablib\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1448810459.0,\n\
+        \      \"description\": \"The main use cases of the library are:\\n\\n* printing\
+        \ small tables without hassle: just one function call, formatting is\\n  guided\
+        \ by the data itself\\n* authoring tabular data for lightweight plain-text\
+        \ markup: multiple output\\n  formats suitable for further editing or transformation\\\
+        n* readable presentation of mixed textual and numeric data: smart column\\\
+        n  alignment, configurable number formatting, alignment by a decimal point\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"python-tabulate\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1284790\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Pretty-print tabular data in Python, a library and\
+        \ a command-line utility\",\n      \"upstream_url\": \"https://pypi.python.org/pypi/tabulate\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"A module & command-line tool for extracting Python\
         \ tracebacks from text.\\n\\n    $ tbgrep file1 file2 file3\\n    $ tail -f\
@@ -1452,14 +2382,35 @@ interactions:
         : \"python-zope-testing\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
         : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Zope Testing\
         \ Framework\",\n      \"upstream_url\": \"https://pypi.io/project/zope.testing\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"Python 3 bindings for the cairo library.\",\n  \
-        \    \"koschei_monitor\": false,\n      \"monitor\": true,\n      \"name\"\
-        : \"python3-cairo\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
-        : null,\n      \"status\": \"Approved\",\n      \"summary\": \"Python 3 bindings\
-        \ for the cairo library\",\n      \"upstream_url\": \"http://cairographics.org/pycairo\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
-        \      \"description\": \"This Python 3 module provides a DNS API for looking\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1491844139.0,\n\
+        \      \"description\": \"Python is an interpreted, interactive, object-oriented\
+        \ programming language often compared to Tcl, Perl, Scheme or Java. Python\
+        \ includes modules, classes, exceptions, very high level dynamic data types\
+        \ and dynamic typing. Python supports interfaces to many system calls and\
+        \ libraries, as well as to various windowing systems (X11, Motif, Tk, Mac\
+        \ and MFC).\",\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n\
+        \      \"name\": \"python2\",\n      \"namespace\": \"modules\",\n      \"\
+        review_url\": \"https://bugzilla.redhat.com/1419506\",\n      \"status\":\
+        \ \"Approved\",\n      \"summary\": \"An interpreted, interactive, object-oriented\
+        \ programming language\",\n      \"upstream_url\": \"\"\n    },\n    {\n \
+        \     \"acls\": [],\n      \"creation_date\": 1491844116.0,\n      \"description\"\
+        : \"Python 3 is a new version of the language that is incompatible with the\
+        \ 2.x line of releases. The language is mostly the same, but many details,\
+        \ especially how built-in objects like dictionaries and strings work, have\
+        \ changed considerably, and a lot of deprecated features have finally been\
+        \ removed.\",\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n\
+        \      \"name\": \"python3\",\n      \"namespace\": \"modules\",\n      \"\
+        review_url\": \"https://bugzilla.redhat.com/1419506\",\n      \"status\":\
+        \ \"Approved\",\n      \"summary\": \"Version 3 of the Python programming\
+        \ language aka Python 3000\",\n      \"upstream_url\": \"\"\n    },\n    {\n\
+        \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        : \"Python 3 bindings for the cairo library.\",\n      \"koschei_monitor\"\
+        : false,\n      \"monitor\": true,\n      \"name\": \"python3-cairo\",\n \
+        \     \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"Python 3 bindings for the cairo library\"\
+        ,\n      \"upstream_url\": \"http://cairographics.org/pycairo\"\n    },\n\
+        \    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n    \
+        \  \"description\": \"This Python 3 module provides a DNS API for looking\
         \ up DNS entries from\\nwithin Python 3 modules and applications. This module\
         \ is a simple,\\nlightweight implementation.\",\n      \"koschei_monitor\"\
         : false,\n      \"monitor\": false,\n      \"name\": \"python3-py3dns\",\n\
@@ -1475,7 +2426,18 @@ interactions:
         \      \"name\": \"python3-zope-fixers\",\n      \"namespace\": \"rpms\",\n\
         \      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
         : \"2to3 fixers for Zope\",\n      \"upstream_url\": \"http://svn.zope.org/zope.fixers/\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1490709111.0,\n\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1491843488.0,\n\
+        \      \"description\": \"Rsyslog is an enhanced, multi-threaded syslog daemon.\
+        \ It supports MySQL, syslog/TCP, RFC 3195, permitted sender lists, filtering\
+        \ on any message part, and fine grain output format control. It is compatible\
+        \ with stock sysklogd and can be used as a drop-in replacement. Rsyslog is\
+        \ simple to set up, with advanced features suitable for enterprise-class,\
+        \ encryption-protected syslog relay chains.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": false,\n      \"name\": \"rsyslog\",\n      \"\
+        namespace\": \"modules\",\n      \"review_url\": \"https://bugzilla.redhat.com/1419506\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Enhanced system logging\
+        \ and kernel message trapping daemon\",\n      \"upstream_url\": \"\"\n  \
+        \  },\n    {\n      \"acls\": [],\n      \"creation_date\": 1490709111.0,\n\
         \      \"description\": \"Ruby is the interpreted scripting language for quick\
         \ and easy object-oriented programming.  It has many features to process text\
         \ files and to do system management tasks (as in Perl).  It is simple, straight-forward,\
@@ -1615,8 +2577,8 @@ interactions:
         : true,\n      \"name\": \"bugwarrior\",\n      \"namespace\": \"rpms\",\n\
         \      \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
         : \"Sync github, bitbucket, and trac issues with taskwarrior\",\n      \"\
-        upstream_url\": \"http://pypi.python.org/pypi/bugwarrior\"\n    },\n    {\n\
-        \      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
+        upstream_url\": \"https://pypi.io/project/bugwarrior\"\n    },\n    {\n  \
+        \    \"acls\": [],\n      \"creation_date\": 1400070978.0,\n      \"description\"\
         : \"The merge of convenience and cool!\\n\\nHovercraft is a tool to make impress.js\
         \ presentations from\\nreStructuredText.\\n\\n- Write your presentations in\
         \ a text markup language. No slow, limiting\\n  GUI, no annoying HTML!\\n-\
@@ -1686,17 +2648,39 @@ interactions:
         review_url\": \"https://bugzilla.redhat.com/1379830\",\n      \"status\":\
         \ \"Approved\",\n      \"summary\": \"Update the product definition center\
         \ in response to fedmsg\",\n      \"upstream_url\": \"https://pypi.io/project/pdc-updater\"\
-        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1489440737.0,\n\
-        \      \"description\": \"A module for proftpd.\",\n      \"koschei_monitor\"\
-        : true,\n      \"monitor\": false,\n      \"name\": \"proftpd\",\n      \"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1493384558.0,\n\
+        \      \"description\": \"This module is an extremely light-weight, high-performance\
+        \ Moose\\r\\nreplacement. It also avoids depending on any XS modules to allow\
+        \ simple\\r\\ndeployments. The name Moo is based on the idea that it provides\
+        \ almost -but\\r\\nnot quite- two thirds of Moose.\",\n      \"koschei_monitor\"\
+        : true,\n      \"monitor\": false,\n      \"name\": \"perl-Moo\",\n      \"\
         namespace\": \"modules\",\n      \"review_url\": \"https://bugzilla.redhat.com/1419506\"\
-        ,\n      \"status\": \"Approved\",\n      \"summary\": \"A module for proftpd\"\
-        ,\n      \"upstream_url\": \"\"\n    },\n    {\n      \"acls\": [],\n    \
-        \  \"creation_date\": 1400070978.0,\n      \"description\": \"Python bindings\
-        \ for the cairo library.\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
-        : true,\n      \"name\": \"pycairo\",\n      \"namespace\": \"rpms\",\n  \
-        \    \"review_url\": null,\n      \"status\": \"Approved\",\n      \"summary\"\
-        : \"Python bindings for the cairo library\",\n      \"upstream_url\": \"http://cairographics.org/pycairo\"\
+        ,\n      \"status\": \"Approved\",\n      \"summary\": \"Minimalist Object\
+        \ Orientation (with Moose compatibility)\",\n      \"upstream_url\": \"\"\n\
+        \    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1490897021.0,\n\
+        \      \"description\": \"Perl is a high-level programming language with roots\
+        \ in C, sed, awk and shell scripting. Perl is good at handling processes and\
+        \ files, and is especially good at handling text. Perl's hallmarks are practicality\
+        \ and efficiency. While it is used to do a lot of different things, Perl's\
+        \ most common applications are system administration utilities and web programming.\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": false,\n      \"name\"\
+        : \"perl-bootstrap\",\n      \"namespace\": \"modules\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1419506\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Practical Extraction and Report Language\",\n    \
+        \  \"upstream_url\": \"\"\n    },\n    {\n      \"acls\": [],\n      \"creation_date\"\
+        : 1400070978.0,\n      \"description\": \"Python bindings for the cairo library.\"\
+        ,\n      \"koschei_monitor\": false,\n      \"monitor\": true,\n      \"name\"\
+        : \"pycairo\",\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n\
+        \      \"status\": \"Approved\",\n      \"summary\": \"Python bindings for\
+        \ the cairo library\",\n      \"upstream_url\": \"http://cairographics.org/pycairo\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"This package contains the Python bindings for the\
+        \ GeoIP API, allowing IP to\\nlocation lookups to country, city and organization\
+        \ level within Python code.\",\n      \"koschei_monitor\": false,\n      \"\
+        monitor\": true,\n      \"name\": \"python-GeoIP\",\n      \"namespace\":\
+        \ \"rpms\",\n      \"review_url\": null,\n      \"status\": \"Approved\",\n\
+        \      \"summary\": \"Python bindings for the GeoIP geographical lookup libraries\"\
+        ,\n      \"upstream_url\": \"http://www.maxmind.com/download/geoip/api/python/\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"ZConfig is a configuration library intended for\
         \ general use. It supports\\na hierarchical schema-driven configuration model\
@@ -1759,8 +2743,8 @@ interactions:
         : \"python-detox\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
         : \"https://bugzilla.redhat.com/1318328\",\n      \"status\": \"Approved\"\
         ,\n      \"summary\": \"Distributing activities of the tox tool\",\n     \
-        \ \"upstream_url\": \"http://pypi.python.org/pypi/detox\"\n    },\n    {\n\
-        \      \"acls\": [],\n      \"creation_date\": 1488823158.0,\n      \"description\"\
+        \ \"upstream_url\": \"https://pypi.io/project/detox\"\n    },\n    {\n   \
+        \   \"acls\": [],\n      \"creation_date\": 1488823158.0,\n      \"description\"\
         : \"django-cors-headers is a Django application for handling the server headers\\\
         nrequired for Cross-Origin Resource Sharing (CORS).\",\n      \"koschei_monitor\"\
         : true,\n      \"monitor\": true,\n      \"name\": \"python-django-cors-headers\"\
@@ -1819,6 +2803,13 @@ interactions:
         : \"python-jira\",\n      \"namespace\": \"rpms\",\n      \"review_url\":\
         \ null,\n      \"status\": \"Approved\",\n      \"summary\": \"A library to\
         \ ease use of the JIRA 5 REST APIs\",\n      \"upstream_url\": \"https://pypi.io/project/jira\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
+        \      \"description\": \"This module allows python objects to be serialized\
+        \ to JSON in a similar fashion\\nto the pickle module.\",\n      \"koschei_monitor\"\
+        : false,\n      \"monitor\": false,\n      \"name\": \"python-jsonpickle\"\
+        ,\n      \"namespace\": \"rpms\",\n      \"review_url\": null,\n      \"status\"\
+        : \"Approved\",\n      \"summary\": \"A module that allows any object to be\
+        \ serialized into JSON\",\n      \"upstream_url\": \"https://pypi.io/project/jsonpickle/\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"kitchen includes functions to make gettext easier\
         \ to use, handling unicode\\ntext easier (conversion with bytes, outputting\
@@ -1956,6 +2947,18 @@ interactions:
         : \"rpms\",\n      \"review_url\": \"https://bugzilla.redhat.com/1334894\"\
         ,\n      \"status\": \"Approved\",\n      \"summary\": \"Sync pagure and github\
         \ issues to jira, via fedmsg\",\n      \"upstream_url\": \"https://pypi.io/pypi/sync2jira\"\
+        \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1448810459.0,\n\
+        \      \"description\": \"The main use cases of the library are:\\n\\n* printing\
+        \ small tables without hassle: just one function call, formatting is\\n  guided\
+        \ by the data itself\\n* authoring tabular data for lightweight plain-text\
+        \ markup: multiple output\\n  formats suitable for further editing or transformation\\\
+        n* readable presentation of mixed textual and numeric data: smart column\\\
+        n  alignment, configurable number formatting, alignment by a decimal point\"\
+        ,\n      \"koschei_monitor\": true,\n      \"monitor\": true,\n      \"name\"\
+        : \"python-tabulate\",\n      \"namespace\": \"rpms\",\n      \"review_url\"\
+        : \"https://bugzilla.redhat.com/1284790\",\n      \"status\": \"Approved\"\
+        ,\n      \"summary\": \"Pretty-print tabular data in Python, a library and\
+        \ a command-line utility\",\n      \"upstream_url\": \"https://pypi.python.org/pypi/tabulate\"\
         \n    },\n    {\n      \"acls\": [],\n      \"creation_date\": 1400070978.0,\n\
         \      \"description\": \"This is a python API for the `taskwarrior <http://taskwarrior.org>`_\\\
         ncommand line tool.\",\n      \"koschei_monitor\": false,\n      \"monitor\"\
@@ -2376,18 +3379,16 @@ interactions:
     headers:
       accept-ranges: [bytes]
       age: ['0']
-      appserver: [proxy01.phx2.fedoraproject.org]
-      apptime: [D=1526953]
+      appserver: [proxy12.fedoraproject.org]
+      apptime: [D=2060587]
       connection: [Keep-Alive]
-      content-length: ['168868']
+      content-length: ['177139']
       content-type: [application/json]
-      date: ['Wed, 29 Mar 2017 20:40:06 GMT']
+      date: ['Fri, 15 Sep 2017 18:29:57 GMT']
       keep-alive: ['timeout=15, max=500']
       server: [Apache/2.4.6 (Red Hat Enterprise Linux) mod_wsgi/3.4 Python/2.7.5]
-      set-cookie: ['pkgdb=eyJfcGVybWFuZW50Ijp0cnVlfQ.C72tJw.x-8BVLnRM-B8s9MpAyocKgQH-aI;
-          Expires=Wed, 29-Mar-2017 21:40:07 GMT; Secure; HttpOnly; Path=/pkgdb/']
       strict-transport-security: [max-age=15768000; includeSubDomains; preload]
       via: [1.1 varnish-v4]
-      x-varnish: ['12951523']
+      x-varnish: ['10444795']
     status: {code: 200, message: OK}
 version: 1

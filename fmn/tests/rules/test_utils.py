@@ -21,6 +21,7 @@ from __future__ import unicode_literals
 
 import unittest
 
+from fedora.client.fas2 import AccountSystem
 from requests.exceptions import ConnectTimeout, ReadTimeout
 from dogpile import cache
 import mock
@@ -147,6 +148,9 @@ class GetPkgdb2PackagesForTests(Base):
         self.assertEqual(set(), packages)
 
 
+@mock.patch('fmn.rules.utils._FAS', new=AccountSystem(
+    'https://admin.fedoraproject.org/accounts/', username='jcline', password='dummypassword',
+    cache_session=False, insecure=False))
 class GetPkgdb2PackagersForTests(Base):
 
     def setUp(self):

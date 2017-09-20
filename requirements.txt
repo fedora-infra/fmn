@@ -2,6 +2,7 @@ arrow
 beautifulsoup4
 bleach
 bunch
+celery
 datanommer.models
 docutils
 dogpile.cache
