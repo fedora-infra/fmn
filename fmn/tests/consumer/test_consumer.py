@@ -19,16 +19,16 @@
 """Tests for the :mod:`fmn.consumer.consumer` module"""
 from __future__ import absolute_import
 
-import unittest
-
 import mock
 
 from fmn.consumer import consumer
+from fmn.tests import Base
 
 
-class FMNConsumerTests(unittest.TestCase):
+class FMNConsumerTests(Base):
 
     def setUp(self):
+        super(FMNConsumerTests, self).setUp()
         self.config = {
             'fmn.consumer.enabled': True,
             'validate_signatures': False,
@@ -50,3 +50,52 @@ class FMNConsumerTests(unittest.TestCase):
 
         self.assertEqual([b'my.custom.topic'], fmn_consumer.topic)
         self.hub.subscribe.assert_called_once_with(b'my.custom.topic', fmn_consumer._consume_json)
+
+    @mock.patch('fmn.consumer.consumer.find_recipients')
+    def test_refresh_cache_fmn_message(self, mock_find_recipients):
+        """Assert messages with an '.fmn.' topic result in a message to workers."""
+        fmn_consumer = consumer.FMNConsumer(self.hub)
+        fmn_consumer.autocreate = False
+        message = {
+            'topic': 'com.example.fmn.topic',
+            'body': {
+                'msg_id': '12',
+                'msg': {'openid': 'jcline.id.fedoraproject.org'},
+                'topic': 'com.example.topic',
+            }
+        }
+        fmn_consumer.work(self.sess, message)
+
+        self.assertEqual(
+            mock_find_recipients.apply_async.call_args_list[0][0][0],
+            ({'topic': 'fmn.internal.refresh_cache', 'body': 'jcline.id.fedoraproject.org'},),
+        )
+        self.assertEqual(
+            mock_find_recipients.apply_async.call_args_list[0][1],
+            dict(exchange='fmn.tasks.reload_cache'),
+        )
+
+    @mock.patch('fmn.consumer.consumer.new_packager', mock.Mock(return_value='jcline'))
+    @mock.patch('fmn.consumer.consumer.get_fas_email', mock.Mock(return_value='jcline'))
+    @mock.patch('fmn.consumer.consumer.find_recipients')
+    def test_refresh_cache_auto_create(self, mock_find_recipients):
+        """Assert messages with an '.fmn.' topic result in a message to workers."""
+        fmn_consumer = consumer.FMNConsumer(self.hub)
+        fmn_consumer.autocreate = True
+        message = {
+            'topic': 'com.example.topic',
+            'body': {
+                'msg_id': '12',
+                'topic': 'com.example.topic',
+            }
+        }
+        fmn_consumer.work(self.sess, message)
+
+        self.assertEqual(
+            mock_find_recipients.apply_async.call_args_list[0][0][0],
+            ({'topic': 'fmn.internal.refresh_cache', 'body': 'jcline.id.fedoraproject.org'},),
+        )
+        self.assertEqual(
+            mock_find_recipients.apply_async.call_args_list[0][1],
+            dict(exchange='fmn.tasks.reload_cache'),
+        )

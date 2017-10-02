@@ -20,10 +20,18 @@
 from __future__ import absolute_import
 
 from celery import Celery
+from kombu.common import Broadcast, Queue
 
 from . import config
 
 
+RELOAD_CACHE_EXCHANGE_NAME = 'fmn.tasks.reload_cache'
+
+
 #: The celery application object
 app = Celery('FMN')
+app.conf.task_queues = (
+    Broadcast(RELOAD_CACHE_EXCHANGE_NAME),
+    Queue('fmn.tasks.unprocessed_messages'),
+)
 app.conf.update(**config.app_conf['celery'])
