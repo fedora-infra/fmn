@@ -25,6 +25,8 @@ This module contains the `Celery tasks`_ used by FMN.
 
 from __future__ import absolute_import
 
+import datetime
+
 from celery.utils.log import get_task_logger
 from fedmsg_meta_fedora_infrastructure import fasshim
 from kombu import Connection, Queue
@@ -34,9 +36,9 @@ import fedmsg
 import fedmsg.meta
 import fedmsg_meta_fedora_infrastructure
 
-from . import config, lib as fmn_lib
-from .celery import app
+from . import config, lib as fmn_lib, formatters
 from . import fmn_fasshim
+from .celery import app
 
 
 __all__ = ['find_recipients']
@@ -152,18 +154,172 @@ class _FindRecipients(task.Task):
 
         results = fmn_lib.recipients(
              self.user_preferences, message_body, self.valid_paths, self.config)
-        _log.info('Found %s recipients for message %s', sum(map(len, results.values())), topic)
+        _log.info('Found %s recipients for message %s', sum(map(len, results.values())),
+                  message_body.get('msg_id', topic))
 
+        self._queue_for_delivery(results, message)
+
+    def _queue_for_delivery(self, results, message):
+        """
+        Queue a processed message for delivery to its recipients.
+
+        The message is either delivered to the default AMQP exchange with the 'backends'
+        routing key or placed in the database if the user has enabled batch delivery. If
+        it is placed in the database, the :func:`batch_messages` task will handle its
+        delivery.
+
+        Message format::
+            {
+              "context": "email",
+              "recipient": dict,
+              "fedmsg": dict,
+              "formatted_message": <formatted_message>
+            }
+
+        Args:
+            results (dict): A dictionary where the keys are context names and the values are
+                a list of recipients for that context. A recipient entry in the list is a
+                dictionary. See :func:`fmn.lib.recipients` for the dictionary format.
+            message (dict): The raw fedmsg to humanize and deliver to the given recipients.
+        """
+        session = fmn_lib.models.Session()
         broker_url = config.app_conf['celery']['broker']
+
         with connections[Connection(broker_url)].acquire(block=True, timeout=60) as conn:
             producer = conn.Producer()
             for context, recipients in results.items():
-                _log.info('Publishing recipients list for the %s backend', context)
-                producer.publish(
-                    {'context': context, 'recipients': recipients, 'raw_msg': message},
-                    routing_key='backends',
-                    declare=[Queue('backends', durable=True)],
-                )
+                _log.info('Dispatching messages for %d recipients for the %s backend',
+                          len(recipients), context)
+                for recipient in recipients:
+                    user = recipient['user']
+                    preference = self.user_preferences['{}_{}'.format(user, context)]
+
+                    if ('filter_oneshot' in recipient and recipient['filter_oneshot']):
+                        _log.info('Marking one-time filter as fired')
+                        idx = recipient['filter_id']
+                        fltr = fmn_lib.models.Filter.query.get(idx)
+                        fltr.fired(session)
+
+                    if preference.get('batch_delta') or preference.get('batch_count'):
+                        _log.info('User "%s" has batch delivery set; placing message in database',
+                                  user)
+                        fmn_lib.models.QueuedMessage.enqueue(session, user, context, message)
+                        continue
+
+                    formatted_message = message
+                    try:
+                        if context == 'email':
+                            formatted_message = formatters.email(message['body'], recipient)
+                        elif context == 'irc':
+                            formatted_message = formatters.irc(message['body'], recipient)
+                        elif context == 'sse':
+                            formatted_message = formatters.sse(message['body'], recipient)
+                    except Exception:
+                        _log.exception('An unexpected exception occurred formatting the message '
+                                       'for delivery: falling back to sending the raw fedmsg')
+
+                    _log.info('Queuing message for delivery to %s on the %s backend', user, context)
+                    backend_message = {
+                        "context": context,
+                        "recipient": recipient,
+                        "fedmsg": message,
+                        "formatted_message": formatted_message,
+                    }
+                    producer.publish(backend_message, routing_key='backends',
+                                     declare=[Queue('backends', durable=True)])
+                    session.commit()
+
+
+@app.task(name='fmn.tasks.batch_messages', ignore_results=True)
+def batch_messages():
+    """
+    A task that collects all messages ready for batch delivery and queues them.
+
+    Messages for users of the batch feature are placed in the database by the
+    :func:`find_recipients` task. Those messages are then picked up by this task,
+    turned into a summary using the :mod:`fmn.formatters` module, and placed in
+    the delivery service's AMQP queue.
+
+    This is intended to be run as a periodic task using Celery's beat service.
+    """
+    session = fmn_lib.models.Session()
+    broker_url = config.app_conf['celery']['broker']
+    with connections[Connection(broker_url)].acquire(block=True, timeout=60) as conn:
+        producer = conn.Producer()
+        for pref in fmn_lib.models.Preference.list_batching(session):
+            if not _batch_ready(pref):
+                continue
+
+            queued_messages = fmn_lib.models.QueuedMessage.list_for(
+                session, pref.user, pref.context)
+            _log.info('Batching %d queued messages for %s', len(queued_messages), pref.user.openid)
+
+            messages = [m.message for m in queued_messages]
+            recipients = [
+                {
+                    pref.context.detail_name: value.value,
+                    'user': pref.user.openid,
+                    'markup_messages': pref.markup_messages,
+                    'triggered_by_links': pref.triggered_by_links,
+                    'shorten_links': pref.shorten_links,
+                }
+                for value in pref.detail_values
+            ]
+            for recipient in recipients:
+                try:
+                    if pref.context.name == 'email':
+                        formatted_message = formatters.email_batch(messages, recipient)
+                    elif pref.context.name == 'irc':
+                        formatted_message = formatters.irc_batch(messages, recipient)
+                except Exception:
+                    _log.exception('An unexpected exception occurred formatting the message '
+                                   'for delivery: falling back to sending the raw fedmsg')
+                    formatted_message = messages
+
+                backend_message = {
+                    "context": pref.context.name,
+                    "recipient": recipient,
+                    "fedmsg": messages,
+                    "formatted_message": formatted_message,
+                }
+                producer.publish(backend_message, routing_key='backends',
+                                 declare=[Queue('backends', durable=True)])
+
+            for message in queued_messages:
+                message.dequeue(session)
+            session.commit()
+
+
+def _batch_ready(preference):
+    """
+    Determine if a message batch is ready for a user.
+
+    Args:
+        preference (fmn_lib.models.Preference): The user preference entry which
+            contains the user's batch preferences.
+    Returns:
+        bool: True if there's a batch ready.
+    """
+    session = fmn_lib.models.Session()
+    count = fmn_lib.models.QueuedMessage.count_for(session, preference.user, preference.context)
+    if not count:
+        return False
+
+    # Batch based on count
+    if preference.batch_count is not None and preference.batch_count <= count:
+        _log.info("Sending digest for %r per msg count", preference.user.openid)
+        return True
+
+    # Batch based on time
+    earliest = fmn_lib.models.QueuedMessage.earliest_for(
+        session, preference.user, preference.context)
+    now = datetime.datetime.utcnow()
+    delta = datetime.timedelta.total_seconds(now - earliest.created_on)
+    if preference.batch_delta is not None and preference.batch_delta <= delta:
+        _log.info("Sending digest for %r per time delta", preference.user.openid)
+        return True
+
+    return False
 
 
 #: A Celery task that accepts a message as input and determines the recipients.

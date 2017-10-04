@@ -21,7 +21,7 @@ from __future__ import absolute_import
 
 import mock
 
-from fmn.consumer import consumer
+from fmn import consumer
 from fmn.tests import Base
 
 
@@ -51,7 +51,7 @@ class FMNConsumerTests(Base):
         self.assertEqual([b'my.custom.topic'], fmn_consumer.topic)
         self.hub.subscribe.assert_called_once_with(b'my.custom.topic', fmn_consumer._consume_json)
 
-    @mock.patch('fmn.consumer.consumer.find_recipients')
+    @mock.patch('fmn.consumer.find_recipients')
     def test_refresh_cache_fmn_message(self, mock_find_recipients):
         """Assert messages with an '.fmn.' topic result in a message to workers."""
         fmn_consumer = consumer.FMNConsumer(self.hub)
@@ -75,9 +75,9 @@ class FMNConsumerTests(Base):
             dict(exchange='fmn.tasks.reload_cache'),
         )
 
-    @mock.patch('fmn.consumer.consumer.new_packager', mock.Mock(return_value='jcline'))
-    @mock.patch('fmn.consumer.consumer.get_fas_email', mock.Mock(return_value='jcline'))
-    @mock.patch('fmn.consumer.consumer.find_recipients')
+    @mock.patch('fmn.consumer.new_packager', mock.Mock(return_value='jcline'))
+    @mock.patch('fmn.consumer.get_fas_email', mock.Mock(return_value='jcline'))
+    @mock.patch('fmn.consumer.find_recipients')
     def test_refresh_cache_auto_create(self, mock_find_recipients):
         """Assert messages with an '.fmn.' topic result in a message to workers."""
         fmn_consumer = consumer.FMNConsumer(self.hub)

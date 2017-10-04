@@ -33,6 +33,7 @@ class Base(unittest.TestCase):
 
         self.config = {
             'fmn.backends': ['irc', 'email', 'android'],
+            'topic_prefix_re': '',
         }
         self.valid_paths = fmn.lib.load_rules(
             root='fmn.tests.example_rules')

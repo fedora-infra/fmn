@@ -8,3 +8,5 @@ vcrpy
 # Docs requirements
 sphinx
 sqlalchemy_schemadisplay
+# Nice to have
+flower

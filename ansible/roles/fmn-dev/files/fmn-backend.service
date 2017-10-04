@@ -1,11 +1,12 @@
 [Unit]
-Description=FMN.consumer backend
+Description=FMN Delivery Service #%i
 After=network.target
-Documentation=https://github.com/fedora-infra/fmn.consumer/
+Documentation=https://github.com/fedora-infra/fmn/
 
 [Service]
-ExecStart=/home/vagrant/.virtualenvs/fmn/bin/python %h/devel/fmn/consumer/backend.py
+ExecStart=/home/vagrant/.virtualenvs/fmn/bin/twistd -n -l - -y %h/devel/usr/share/fmn/delivery_service.tac
 Type=simple
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target

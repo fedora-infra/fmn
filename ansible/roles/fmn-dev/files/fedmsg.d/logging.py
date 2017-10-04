@@ -13,21 +13,25 @@ config = dict(
             console={
                 "class": "logging.StreamHandler",
                 "formatter": "bare",
-                "level": "DEBUG",
                 "stream": "ext://sys.stdout",
             }
         ),
         loggers=dict(
             fedmsg={
-                "level": "DEBUG",
+                "level": "INFO",
                 "propagate": False,
                 "handlers": ["console"],
             },
             moksha={
-                "level": "DEBUG",
+                "level": "INFO",
                 "propagate": False,
                 "handlers": ["console"],
             },
         ),
+        root={
+            "level": "INFO",
+            "propagate": False,
+            "handlers": ["console"],
+        },
     ),
 )

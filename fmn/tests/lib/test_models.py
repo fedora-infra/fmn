@@ -166,9 +166,18 @@ class TestPreferences(fmn.tests.Base):
         self.sess.commit()
 
     def test_list_batching(self):
+        """Assert preferences with batching on are returned when listing batching."""
+        self.pref1.enabled = True
+        self.sess.commit()
+
         batching = fmn.lib.models.Preference.list_batching(self.sess)
-        self.assertEqual(len(batching), 2)
-        self.assertEqual(set([self.pref1, self.pref4]), set(batching))
+        self.assertEqual(len(batching), 1)
+        self.assertEqual(self.pref1, batching[0])
+
+    def test_list_batching_disabled(self):
+        """Assert disabled preferences aren't returned when listing batching."""
+        batching = fmn.lib.models.Preference.list_batching(self.sess)
+        self.assertEqual(len(batching), 0)
 
 
 class TestQueuedMessages(fmn.tests.Base):
