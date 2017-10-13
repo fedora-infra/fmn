@@ -322,5 +322,16 @@ def _batch_ready(preference):
     return False
 
 
+@app.task(name='fmn.tasks.heat_fas_cache', ignore_results=True)
+def heat_fas_cache():  # pragma: no cover
+    """
+    Fetch all users from FAS and populate the local Redis cache.
+
+    This is helpful to do once on startup since we'll need everyone's email or
+    IRC nickname eventually.
+    """
+    fmn_fasshim.make_fas_cache(**config.app_conf)
+
+
 #: A Celery task that accepts a message as input and determines the recipients.
 find_recipients = app.tasks[_FindRecipients.name]

@@ -25,7 +25,7 @@ from .util import (
     new_badges_user,
     get_fas_email,
 )
-from fmn.tasks import find_recipients, REFRESH_CACHE_TOPIC
+from fmn.tasks import find_recipients, REFRESH_CACHE_TOPIC, heat_fas_cache
 
 
 log = logging.getLogger("fmn")
@@ -59,6 +59,8 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
 
         if not self.uri:
             raise ValueError('fmn.sqlalchemy.uri must be present')
+
+        heat_fas_cache.apply_async()
 
         _log.info("Loading rules from fmn.rules")
         self.valid_paths = fmn.lib.load_rules(root="fmn.rules")

@@ -91,6 +91,10 @@ config = {
                 'queue': 'fmn.tasks.unprocessed_messages',
                 'routing_key': 'fmn.tasks.unprocessed_messages',
             },
+            'fmn.tasks.heat_fas_cache': {
+                'queue': 'fmn.tasks.unprocessed_messages',
+                'routing_key': 'fmn.tasks.unprocessed_messages',
+            },
         },
         'beat_schedule': {
             'process-digests': {
