@@ -125,20 +125,22 @@ def load_preferences(openid=None, cull_disabled=False, cull_backends=None):
             method. The keys are in the format ``<openid>_<context_name>``.
     """
     cull_backends = cull_backends or []
+    backends = [b for b in CONFIG['fmn.backends'] if b not in cull_backends]
 
+    preference_q = Preference.query.filter(Preference.context_name.in_(backends))
+    if cull_disabled:
+        preference_q = preference_q.filter(Preference.enabled.is_(True))
     if openid:
         log.info('Loading the latest preferences for %s', openid)
-        preferences = Preference.query.filter(Preference.openid == openid).all()
+        preference_q = preference_q.filter(Preference.openid == openid)
     else:
         log.info('Loading the latest preferences for all users')
-        preferences = Preference.query.all()
 
+    preferences = preference_q.all()
     prefs = {}
     for p in preferences:
-        if p.context.name in CONFIG['fmn.backends'] and p.context.name not in cull_backends\
-                and (not cull_disabled or p.enabled):
-            key = '{openid}_{context}'.format(openid=p.openid, context=p.context_name)
-            prefs[key] = p.__json__(reify=True)
+        key = '{openid}_{context}'.format(openid=p.openid, context=p.context_name)
+        prefs[key] = p.__json__(reify=True)
 
     return prefs
 
@@ -154,6 +156,12 @@ def update_preferences(openid, existing_preferences):
             :func:`load_preferences`.
     """
     user_prefs = load_preferences(openid=openid, cull_disabled=True)
+    for backend in CONFIG['fmn.backends']:
+        # Clean out the old settings in case a backend was disabled.
+        try:
+            del existing_preferences['{}_{}'.format(openid, backend)]
+        except KeyError:
+            pass
     for key, value in user_prefs.items():
         existing_preferences[key] = value
     return existing_preferences

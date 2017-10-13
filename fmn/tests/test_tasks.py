@@ -18,6 +18,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 """Tests for the :mod:`fmn.tasks` module."""
 
+import datetime
+
 from dogpile import cache
 from kombu import Queue
 import mock
@@ -80,10 +82,12 @@ class FindRecipientsTestCase(Base):
         conn = mock_conns.__getitem__.return_value.acquire.return_value.__enter__.return_value
         self.assertEqual(0, conn.Producer.return_value.publish.call_count)
 
+    @mock.patch('fmn.tasks.formatters.sse')
     @mock.patch('fmn.rules.utils._cache', new_callable=cache.make_region)
     @mock.patch('fmn.tasks.connections')
-    def test_run_recipients_found(self, mock_conns, mock_rules_cache):
+    def test_run_recipients_found(self, mock_conns, mock_rules_cache, mock_fmt_sse):
         """Assert messages are sent to the backend when recipients are found."""
+        mock_fmt_sse.return_value = 'Such pretty, very message'
         find_recipients = tasks._FindRecipients()
 
         mock_rules_cache.configure(backend='dogpile.cache.memory')
@@ -135,7 +139,7 @@ class FindRecipientsTestCase(Base):
 
         expected_published_message = {
             'context': u'sse',
-            'recipients': [{
+            'recipient': {
                 'triggered_by_links': True,
                 'markup_messages': False,
                 'user': u'jcline.id.fedoraproject.org',
@@ -145,8 +149,9 @@ class FindRecipientsTestCase(Base):
                 'filter_id': 2,
                 'shorten_links': False,
                 'verbose': True
-            }],
-            'raw_msg': message,
+            },
+            'fedmsg': message,
+            'formatted_message': 'Such pretty, very message'
         }
 
         find_recipients.run(message)
@@ -156,3 +161,63 @@ class FindRecipientsTestCase(Base):
             routing_key='backends',
             declare=[Queue('backends', durable=True)],
         )
+
+
+class BatchReadyTests(Base):
+    """Tests for the :func:`fmn.tasks._batch_ready` function."""
+
+    def setUp(self):
+        super(BatchReadyTests, self).setUp()
+        # Set up a user with preferences to match the message
+        self.user = models.User(
+            openid='jcline.id.fedoraproject.org', openid_url='http://jcline.id.fedoraproject.org')
+        self.sess.add(self.user)
+        self.context = models.Context(
+            name='sse', description='description', detail_name='SSE', icon='wat')
+        self.sess.add(self.context)
+        self.sess.commit()
+        fmn_lib.defaults.create_defaults_for(self.sess, self.user, detail_values={'sse': 'jcline'})
+        self.sess.commit()
+        self.preference = models.Preference.query.filter_by(
+            context_name='sse', openid='jcline.id.fedoraproject.org').first()
+        self.preference.enabled = True
+        self.sess.add(self.preference)
+        self.sess.commit()
+
+    def test_no_messages(self):
+        """Assert when there aren't any messages, there's not a batch ready for a user."""
+        self.assertFalse(tasks._batch_ready(self.preference))
+
+    def test_by_count(self):
+        """Assert when at least as many messages queued as the batch count, a batch is ready."""
+        self.preference.batch_count = 1
+        message = models.QueuedMessage(user=self.user, context=self.context)
+        message.message = {}
+        self.sess.add(message)
+        self.sess.commit()
+
+        self.assertTrue(tasks._batch_ready(self.preference))
+
+    def test_by_time(self):
+        """
+        Assert that when the earliest message was delivered "batch_delta" seconds ago, a
+        batch is ready.
+        """
+        self.preference.batch_delta = 60 * 60
+        message = models.QueuedMessage(
+            user=self.user, context=self.context, created_on=datetime.datetime(2010, 1, 1))
+        message.message = {}
+        self.sess.add(message)
+        self.sess.commit()
+
+        self.assertTrue(tasks._batch_ready(self.preference))
+
+    def test_not_ready(self):
+        """Assert when there are messages, but the count and time aren't met, there's no batch."""
+        self.preference.batch_delta = 60 * 60
+        message = models.QueuedMessage(user=self.user, context=self.context)
+        message.message = {}
+        self.sess.add(message)
+        self.sess.commit()
+
+        self.assertFalse(tasks._batch_ready(self.preference))

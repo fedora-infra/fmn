@@ -1,0 +1,14 @@
+[Unit]
+Description=Celery worker to find FMN message recipients
+After=network.target
+Documentation=https://github.com/fedora-infra/fmn/
+
+[Service]
+Type=simple
+ExecStart=/home/vagrant/.virtualenvs/fmn/bin/celery beat -A fmn -l info
+
+[Install]
+WantedBy=multi-user.target
+
+[Install]
+WantedBy=multi-user.target

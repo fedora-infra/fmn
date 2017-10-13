@@ -14,22 +14,3 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-"""The Celery application."""
-from __future__ import absolute_import
-
-from celery import Celery
-from kombu.common import Broadcast, Queue
-
-from . import config
-
-
-RELOAD_CACHE_EXCHANGE_NAME = 'fmn.tasks.reload_cache'
-
-
-#: The celery application object
-app = Celery('FMN')
-app.conf.task_queues = (
-    Broadcast(RELOAD_CACHE_EXCHANGE_NAME),
-    Queue('fmn.tasks.unprocessed_messages'),
-)
-app.conf.update(**config.app_conf['celery'])

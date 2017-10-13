@@ -1,18 +1,30 @@
-import fmn.lib.models
-from fmn.consumer.backends.base import BaseBackend, shorten
-import fedmsg.meta
+# This file is part of the FMN project.
+# Copyright (C) 2017 Red Hat, Inc.
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+import logging
 
-import arrow
-import time
-
-from twisted.internet import ssl
+from bleach import clean
+from twisted.internet import ssl, reactor
 import twisted.internet.protocol
 import twisted.words.protocols.irc
 
-from twisted.internet import reactor
-from bleach import clean
+from fmn.exceptions import FmnError
+from .base import BaseBackend
+import fmn.lib.models
 
-import logging
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
@@ -45,78 +57,6 @@ rule_template = """
  - {rule_title}
    {rule_doc}
 """
-
-mirc_colors = {
-    "white": 0,
-    "black": 1,
-    "blue": 2,
-    "green": 3,
-    "red": 4,
-    "brown": 5,
-    "purple": 6,
-    "orange": 7,
-    "yellow": 8,
-    "light green": 9,
-    "teal": 10,
-    "light cyan": 11,
-    "light blue": 12,
-    "pink": 13,
-    "grey": 14,
-    "light grey": 15,
-}
-
-
-def _format_message(msg, recipient, config):
-    # Here we have to distinguish between two different kinds of messages that
-    # might arrive: the `raw` message from fedmsg itself and the product of a
-    # call to `fedmsg.meta.conglomerate(..)`
-    if 'subtitle' not in msg:
-        # This handles normal, 'raw' messages which get passed through msg2*.
-        title = fedmsg.meta.msg2title(msg, **config)
-        subtitle = fedmsg.meta.msg2subtitle(msg, **config)
-        link = fedmsg.meta.msg2link(msg, **config)
-        # Only prefix with topic if we're "marking up" messages.
-        if recipient['markup_messages']:
-            template = u"{title} -- {subtitle} {delta}{link}{flt}"
-        else:
-            template = u"{subtitle} {delta}{link}{flt}"
-    else:
-        # This handles messages that have already been 'conglomerated'.
-        title = u""
-        subtitle = msg['subtitle']
-        link = msg['link']
-        template = u"{subtitle} {delta}{link}{flt}"
-
-    if recipient['shorten_links']:
-        link = shorten(link)
-
-    # Tack a human-readable delta on the end so users know that fmn is
-    # backlogged (if it is).
-    delta = ''
-    if time.time() - msg['timestamp'] > 10:
-        delta = arrow.get(msg['timestamp']).humanize() + ' '
-
-    flt = ''
-    if recipient['triggered_by_links'] and 'filter_id' in recipient:
-        flt_template = "{base_url}{user}/irc/{filter_id}"
-        flt_link = flt_template.format(
-            base_url=config['fmn.base_url'], **recipient)
-        if recipient['shorten_links']:
-            flt_link = shorten(flt_link)
-        flt = "    ( triggered by %s )" % flt_link
-
-    if recipient['markup_messages']:
-        def markup(s, color):
-            return "\x03%i%s\x03" % (mirc_colors[color], s)
-
-        color_lookup = config.get('irc_color_lookup', {})
-        title_color = color_lookup.get(title.split('.')[0], "light grey")
-        title = markup(title, title_color)
-        if link:
-            link = markup(link, "teal")
-
-    return template.format(title=title, subtitle=subtitle, delta=delta,
-                           link=link, flt=flt)
 
 
 class IRCBackend(BaseBackend):
@@ -189,7 +129,7 @@ class IRCBackend(BaseBackend):
             client.msg(nick.encode('utf-8'), line.encode('utf-8'))
 
     def cmd_start(self, nick, message):
-        self.log.info("CMD start: %r sent us %r" % (nick, message))
+        log.info("CMD start: %r sent us %r" % (nick, message))
         sess = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
         if self.disabled_for(sess, nick):
             self.enable(sess, nick)
@@ -200,7 +140,7 @@ class IRCBackend(BaseBackend):
         sess.close()
 
     def cmd_stop(self, nick, message):
-        self.log.info("CMD stop:  %r sent us %r" % (nick, message))
+        log.info("CMD stop:  %r sent us %r" % (nick, message))
         sess = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
 
         if self.disabled_for(sess, nick):
@@ -212,7 +152,7 @@ class IRCBackend(BaseBackend):
         sess.close()
 
     def cmd_list(self, nick, message):
-        self.log.info("CMD list:  %r sent us %r" % (nick, message))
+        log.info("CMD list:  %r sent us %r" % (nick, message))
         if message.strip() == 'list':
             self.commands['default'](nick, message)
         else:
@@ -223,7 +163,7 @@ class IRCBackend(BaseBackend):
             )(nick, message)
 
     def subcmd_categories(self, nick, message):
-        self.log.info("CMD list categories:  %r sent us %r" % (nick, message))
+        log.info("CMD list categories:  %r sent us %r" % (nick, message))
 
         valid_paths = fmn.lib.load_rules(root="fmn.rules")
         subcmd_string = message.split(None, 2)[-1].lower()
@@ -247,7 +187,7 @@ class IRCBackend(BaseBackend):
             self.commands['default'](nick, message)
 
     def subcmd_rules(self, nick, message):
-        self.log.info("CMD list rules:  %r sent us %r" % (nick, message))
+        log.info("CMD list rules:  %r sent us %r" % (nick, message))
 
         valid_paths = fmn.lib.load_rules(root="fmn.rules")
         subcmd_string = message.split(None, 2)[-1].lower()
@@ -273,7 +213,7 @@ class IRCBackend(BaseBackend):
             self.send(nick, "Not a valid category.")
 
     def subcmd_filters(self, nick, message):
-        self.log.info("CMD list filters:  %r sent us %r" % (nick, message))
+        log.info("CMD list filters:  %r sent us %r" % (nick, message))
 
         valid_paths = fmn.lib.load_rules(root="fmn.rules")
         sess = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
@@ -338,7 +278,7 @@ class IRCBackend(BaseBackend):
         sess.close()
 
     def cmd_help(self, nick, message):
-        self.log.info("CMD help:  %r sent us %r" % (nick, message))
+        log.info("CMD help:  %r sent us %r" % (nick, message))
 
         lines = self.config.get('fmn.irc_help_template', HELP_TEMPLATE).format(
             support_email=self.config['fmn.support_email'],
@@ -354,61 +294,57 @@ class IRCBackend(BaseBackend):
         if message.startswith('***'):
             return
 
-        self.log.info("CMD unk:   %r sent us %r" % (nick, message))
+        log.info("CMD unk:   %r sent us %r" % (nick, message))
         self.send(nick, "say 'help' for help or 'stop' to stop messages")
 
-    def handle(self, session, recipient, msg, streamline=False):
-        user = recipient['user']
+    def deliver(self, formatted_message, recipient, raw_fedmsg):
+        """
+        Deliver a message to the recipient.
+
+        .. warning::
+            Although the original fedmsg is provided, be very careful when making
+            use of it. The format will change from message to message, and schema
+            changes are common.
+
+        Args:
+            formatted_message (str): The formatted message that is ready for delivery
+                to the user. It has been formatted according to the user's preferences.
+            recipient (dict): The recipient of the message.
+            raw_fedmsg (dict): The original fedmsg that was used to produce the formatted
+                message.
+        """
+        session = fmn.lib.models.Session()
 
         if not self.clients:
             # This is usually the case if we are suffering a netsplit.
-            self.log.warning("IRCBackend has no clients to work with; enqueue")
-            fmn.lib.models.QueuedMessage.enqueue(
-                session, user, 'irc', msg)
-            return
+            # Raising an exception will cause the message to be requeued and
+            # tried again later.
+            raise FmnError("IRCBackend has no clients to work with.")
 
-        self.log.debug("Notifying via irc %r" % recipient)
+        log.debug("Notifying via irc %r" % recipient)
 
         if 'irc nick' not in recipient:
-            self.log.warning("No irc nick found.  Bailing.")
+            log.warning("No irc nick found.  Bailing.")
             return
-
-        # Handle any backlog that may have accumulated while we were suffering
-        # a netsplit.
-        preference_obj = fmn.lib.models.Preference.load(session, user, 'irc')
-        if not streamline:
-            fmn.consumer.producer.DigestProducer.manage_batch(
-                session, self, preference_obj)
-
-        # With all of that out of the way, now we can actually send them the
-        # message that triggered all this.
-        message = _format_message(msg, recipient, self.config)
 
         nickname = recipient['irc nick']
 
         if self.disabled_for(session, detail_value=nickname):
-            self.log.debug("Messages stopped for %r, not sending." % nickname)
+            log.debug("Messages stopped for %r, not sending." % nickname)
             return
 
         for client in self.clients:
             getattr(client, recipient.get('method', 'msg'))(
                 nickname.encode('utf-8'),
-                message.encode('utf-8'),
+                formatted_message.encode('utf-8'),
             )
-
-    def handle_batch(self, session, recipient, messages):
-        # Squash some messages into one conglomerate message
-        # https://github.com/fedora-infra/datagrepper/issues/132
-        messages = fedmsg.meta.conglomerate(messages, **self.config)
-        for message in messages:
-            self.handle(session, recipient, message, streamline=True)
 
     def handle_confirmation(self, session, confirmation):
         if not self.clients:
-            self.log.warning("IRCBackend has no clients to work with.")
+            log.warning("IRCBackend has no clients to work with.")
             return
 
-        self.log.debug("Handling confirmation via irc %r" % confirmation)
+        log.debug("Handling confirmation via irc %r" % confirmation)
 
         query = "ACC %s" % confirmation.detail_value
         for client in self.clients:
@@ -416,7 +352,7 @@ class IRCBackend(BaseBackend):
 
     def handle_confirmation_valid_nick(self, session, nick):
         if not self.clients:
-            self.log.warning("IRCBackend has no clients to work with.")
+            log.warning("IRCBackend has no clients to work with.")
             return
 
         confirmations = fmn.lib.models.Confirmation.by_detail(
@@ -472,11 +408,11 @@ class IRCBackendProtocol(twisted.words.protocols.irc.IRCClient):
         return self.factory.parent.commands
 
     def signedOn(self):
-        self.log.info("Signed on as %r." % self.nickname)
+        log.info("Signed on as %r." % self.nickname)
         # Attach ourselves back on the consumer to be used.
         self.factory.parent.add_client(self)
         if self.factory.parent.nickname and self.factory.parent.nickserv_pass:
-            self.log.info('Identifying with NickServ as %s', self.nickname)
+            log.info('Identifying with NickServ as %s', self.nickname)
             self.msg('NickServ', 'IDENTIFY {nick} {password}'.format(
                 nick=self.factory.parent.nickname, password=self.factory.parent.nickserv_pass))
 

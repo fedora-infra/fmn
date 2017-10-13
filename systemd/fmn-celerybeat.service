@@ -1,12 +1,14 @@
 [Unit]
-Description=FMN Delivery Service #%i
+Description=Celery worker to find FMN message recipients
 After=network.target
 Documentation=https://github.com/fedora-infra/fmn/
 
 [Service]
-ExecStart=/usr/bin/twistd -n -l - -y /usr/lib/share/fmn/delivery_service.tac
 Type=simple
-Restart=on-failure
+ExecStart=/usr/bin/celery beat -A fmn
+
+[Install]
+WantedBy=multi-user.target
 
 [Install]
 WantedBy=multi-user.target

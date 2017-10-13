@@ -20,7 +20,7 @@ import kombu
 import fmn.lib
 import fmn.rules.utils
 from fmn.celery import RELOAD_CACHE_EXCHANGE_NAME
-from fmn.consumer.util import (
+from .util import (
     new_packager,
     new_badges_user,
     get_fas_email,

@@ -587,11 +587,20 @@ class Preference(BASE):
 
     @classmethod
     def list_batching(cls, session):
+        """
+        Get a list of all enabled preferences with batching enabled.
+
+        Args:
+            session (sqlalchemy.orm.session.Session): The database session to use when querying.
+
+        Returns:
+            list: A list of all enabled preferences with batching on.
+        """
         return session.query(cls)\
             .filter(sa.or_(
                 cls.batch_delta != None,
                 cls.batch_count != None,
-            )).all()
+            )).filter_by(enabled=True).all()
 
     def set_batch_values(self, session, delta, count):
         self.batch_delta = delta

@@ -97,9 +97,9 @@
   with_items:
     - "fedmsg-hub.service"
     - "fmn-backend.service"
-    - "fmn-digests.service"
     - "fmn-sse.service"
     - "fmn-worker@.service"
+    - "fmn-celerybeat.service"
     - "flower.service"
     - "fmn-web.service"
 
