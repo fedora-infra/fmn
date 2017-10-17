@@ -34,11 +34,10 @@ import logging
 from kombu import Connection, Queue
 from kombu.mixins import ConsumerMixin
 from twisted.application import service
-from twisted.internet import threads, reactor, task, defer
+from twisted.internet import threads, reactor, defer
 import six
 
 from fmn import config
-from fmn.lib import models
 from .backends import sse, irc, debug, mail
 
 _log = logging.getLogger(__name__)
@@ -172,9 +171,8 @@ class DeliveryService(service.Service):
                 raise ValueError("%r in fmn.backends (%r) is invalid" % (
                     key, config.app_conf['fmn.backends']))
 
+        _log.info('Running the FMN delivery service with the %r backends', self.backends.keys())
         reactor.callInThread(self.consumer.run)
-        self.confirmation_loop = task.LoopingCall(self.handle_confirmations)
-        self.confirmation_loop.start(config.app_conf.get('fmn.confirmation_frequency', 10))
 
     @defer.inlineCallbacks
     def handle_message(self, message):
@@ -219,24 +217,6 @@ class DeliveryService(service.Service):
                            'deliver a notification to recipient "%r"', context, recipient)
             raise
 
-    def handle_confirmations(self):
-        """
-        Process pending confirmations of delivery details and reap expired confirmations.
-
-        .. note::
-            This uses blocking APIs inside the reactor and should be refactored.
-        """
-        try:
-            session = models.Session()
-            pending = models.Confirmation.query.filter_by(status='pending').all()
-            for confirmation in pending:
-                backend = self.backends[confirmation.context.name]
-                backend.handle_confirmation(session, confirmation)
-            models.Confirmation.delete_expired(session)
-        except Exception:
-            _log.exception('Unexpected exception while trying to handle a confirmation')
-
     def stopService(self):
         """Implementation of the Service API, called when the service is shutting down."""
         self.consumer.stop()
-        self.confirmation_loop.stop()

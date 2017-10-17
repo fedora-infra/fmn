@@ -95,12 +95,20 @@ config = {
                 'queue': 'fmn.tasks.unprocessed_messages',
                 'routing_key': 'fmn.tasks.unprocessed_messages',
             },
+            'fmn.tasks.confirmations': {
+                'queue': 'fmn.tasks.unprocessed_messages',
+                'routing_key': 'fmn.tasks.unprocessed_messages',
+            },
         },
         'beat_schedule': {
             'process-digests': {
                 'task': 'fmn.tasks.batch_messages',
                 'schedule': 60.0,
-            }
+            },
+            'process-confirmations': {
+                'task': 'fmn.tasks.confirmations',
+                'schedule': 15.0,
+            },
         },
     },
 

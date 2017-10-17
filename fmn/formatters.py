@@ -42,6 +42,28 @@ from . import config
 
 _log = logging.getLogger(__name__)
 
+
+EMAIL_CONFIRMATION_TEMPLATE = u"""
+{username} has requested that notifications be sent to this email address
+* To accept, visit this address:
+  {acceptance_url}
+* Or, to reject you can visit this address:
+  {rejection_url}
+Alternatively, you can ignore this.  This is an automated message, please
+email {support_email} if you have any concerns/issues/abuse.
+"""
+
+IRC_CONFIRMATION_TEMPLATE = u"""
+{username} has requested that notifications be sent to this nick
+* To accept, visit this address:
+  {acceptance_url}
+* Or, to reject you can visit this address:
+  {rejection_url}
+Alternatively, you can ignore this.  This is an automated message, please
+email {support_email} if you have any concerns/issues/abuse.
+I am run by Fedora Infrastructure.  Type 'help' for more information.
+"""
+
 MIRC_COLORS = {
     "white": 0,
     "black": 1,
@@ -157,6 +179,31 @@ def irc_batch(messages, recipient):
         return irc(messages[0], recipient)
     else:
         return fedmsg.meta.conglomerate(messages, **config.app_conf)
+
+
+def irc_confirmation(confirmation):
+    """
+    Create a confirmation irc message to send to new users with a confirmation link.
+
+    Args:
+        confirmation (models.Confirmation): The confirmation database entry.
+
+    Returns:
+        str: The irc message to send.
+    """
+    acceptance_url = config.app_conf['fmn.acceptance_url'].format(
+        secret=confirmation.secret)
+    rejection_url = config.app_conf['fmn.rejection_url'].format(
+        secret=confirmation.secret)
+    template = config.app_conf.get('fmn.irc_confirmation_template',
+                                   IRC_CONFIRMATION_TEMPLATE)
+    message = template.format(
+        acceptance_url=acceptance_url,
+        rejection_url=rejection_url,
+        support_email=config.app_conf['fmn.support_email'],
+        username=confirmation.openid,
+    ).strip()
+    return message
 
 
 def sse(msg, recipient):
@@ -309,14 +356,9 @@ def email(message, recipient):
     usernames = fedmsg.meta.msg2usernames(message, **config.app_conf)
     packages = fedmsg.meta.msg2packages(message, **config.app_conf)
 
-    email_message = email_module.Message.Message()
+    email_message = _base_email()
     email_message.add_header('To', to_bytes(recipient['email address']))
     email_message.add_header('From', to_bytes(from_address))
-    # Although this is a non-standard header and RFC 2076 discourages it, some
-    # old clients don't honour RFC 3834 and will auto-respond unless this is set.
-    email_message.add_header('Precendence', 'Bulk')
-    # Mark this mail as auto-generated so auto-responders don't respond; see RFC 3834
-    email_message.add_header('Auto-Submitted', 'auto-generated')
 
     # Assemble a menagerie of possibly useful headers
     for topic in topics or []:
@@ -434,3 +476,50 @@ def email_batch(messages, recipient):
 
     email_message.set_payload(to_bytes(content), 'utf-8')
     return email_message.as_string()
+
+
+def email_confirmation(confirmation):
+    """
+    Create a confirmation email to new user emails with a confirmation link.
+
+    Args:
+        confirmation (models.Confirmation): The confirmation database entry.
+
+    Returns:
+        str: The email to send as a string.
+    """
+    email_message = _base_email()
+    email_message.add_header('To', confirmation.detail_value)
+    email_message.add_header('From', config.app_conf['fmn.email.from_address'])
+    email_message.add_header('Subject', u'Confirm notification email')
+    acceptance_url = config.app_conf['fmn.acceptance_url'].format(
+        secret=confirmation.secret)
+    rejection_url = config.app_conf['fmn.rejection_url'].format(
+        secret=confirmation.secret)
+    template = config.app_conf.get('fmn.mail_confirmation_template',
+                                   EMAIL_CONFIRMATION_TEMPLATE)
+    content = template.format(
+        acceptance_url=acceptance_url,
+        rejection_url=rejection_url,
+        support_email=config.app_conf['fmn.support_email'],
+        username=confirmation.openid,
+    ).strip()
+    email_message.set_payload(content)
+    return email_message.as_string()
+
+
+def _base_email():
+    """
+    Create an email Message with some basic headers to mark the email as auto-generated.
+
+    Returns:
+        email.Message.Message: The email message object with the 'Precedence' and 'Auto-Submitted'
+            headers set.
+    """
+    email_message = email_module.Message.Message()
+    # Although this is a non-standard header and RFC 2076 discourages it, some
+    # old clients don't honour RFC 3834 and will auto-respond unless this is set.
+    email_message.add_header('Precedence', 'Bulk')
+    # Mark this mail as auto-generated so auto-responders don't respond; see RFC 3834
+    email_message.add_header('Auto-Submitted', 'auto-generated')
+    return email_message

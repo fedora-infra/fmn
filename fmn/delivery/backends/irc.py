@@ -21,6 +21,7 @@ from twisted.internet import ssl, reactor
 import twisted.internet.protocol
 import twisted.words.protocols.irc
 
+from fmn import formatters
 from fmn.exceptions import FmnError
 from .base import BaseBackend
 import fmn.lib.models
@@ -28,17 +29,6 @@ import fmn.lib.models
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
-
-CONFIRMATION_TEMPLATE = """
-{username} has requested that notifications be sent to this nick
-* To accept, visit this address:
-  {acceptance_url}
-* Or, to reject you can visit this address:
-  {rejection_url}
-Alternatively, you can ignore this.  This is an automated message, please
-email {support_email} if you have any concerns/issues/abuse.
-I am run by Fedora Infrastructure.  Type 'help' for more information.
-"""
 
 HELP_TEMPLATE = """
 I am a notifications bot run by Fedora Infrastructure.  My commands are:
@@ -313,6 +303,10 @@ class IRCBackend(BaseBackend):
             raw_fedmsg (dict): The original fedmsg that was used to produce the formatted
                 message.
         """
+        if recipient.get('confirmation'):
+            self._handle_confirmation(recipient['irc nick'])
+            return
+
         session = fmn.lib.models.Session()
 
         if not self.clients:
@@ -339,14 +333,19 @@ class IRCBackend(BaseBackend):
                 formatted_message.encode('utf-8'),
             )
 
-    def handle_confirmation(self, session, confirmation):
+    def _handle_confirmation(self, nick):
+        """
+        Dispatch a message to nickserv to make sure the account is registered.
+
+        The "noticed" callback on the client will handle the response.
+        """
         if not self.clients:
             log.warning("IRCBackend has no clients to work with.")
             return
 
-        log.debug("Handling confirmation via irc %r" % confirmation)
+        log.debug("Handling confirmation via irc for %r" % nick)
 
-        query = "ACC %s" % confirmation.detail_value
+        query = "ACC %s" % nick
         for client in self.clients:
             client.msg((u'NickServ').encode('utf-8'), query.encode('utf-8'))
 
@@ -359,21 +358,7 @@ class IRCBackend(BaseBackend):
             session, context="irc", value=nick)
 
         for confirmation in confirmations:
-            confirmation.set_status(session, 'valid')
-            acceptance_url = self.config['fmn.acceptance_url'].format(
-                secret=confirmation.secret)
-            rejection_url = self.config['fmn.rejection_url'].format(
-                secret=confirmation.secret)
-
-            template = self.config.get('fmn.irc_confirmation_template',
-                                       CONFIRMATION_TEMPLATE)
-            lines = template.format(
-                acceptance_url=acceptance_url,
-                rejection_url=rejection_url,
-                support_email=self.config['fmn.support_email'],
-                username=confirmation.openid,
-            ).strip().split('\n')
-
+            lines = formatters.irc_confirmation(confirmation).split('\n')
             for line in lines:
                 for client in self.clients:
                     client.msg(nick.encode('utf-8'), line.encode('utf-8'))

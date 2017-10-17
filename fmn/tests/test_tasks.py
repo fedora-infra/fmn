@@ -221,3 +221,114 @@ class BatchReadyTests(Base):
         self.sess.commit()
 
         self.assertFalse(tasks._batch_ready(self.preference))
+
+
+@mock.patch('fmn.tasks.connections')
+class ConfirmationsTests(Base):
+    """Tests for the :func:`fmn.tasks.confirmations` function."""
+
+    def test_email_pending(self, mock_conns):
+        """Assert the expected message is dispatched for pending email confirmation."""
+        user = models.User(
+            openid='jcline.id.fedoraproject.org', openid_url='http://jcline.id.fedoraproject.org')
+        context = models.Context(
+            name='email', description='description', detail_name='email', icon='wat')
+        confirmation = models.Confirmation(
+            secret='a'*32, detail_value='jeremy@jcline.org', user=user, context=context)
+        self.sess.add(confirmation)
+        self.sess.commit()
+        expected_email = """Precedence: Bulk
+Auto-Submitted: auto-generated
+To: jeremy@jcline.org
+From: notifications@fedoraproject.org
+Subject: Confirm notification email
+
+jcline.id.fedoraproject.org has requested that notifications be sent to this email address
+* To accept, visit this address:
+  http://localhost:5000/confirm/accept/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+* Or, to reject you can visit this address:
+  http://localhost:5000/confirm/reject/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Alternatively, you can ignore this.  This is an automated message, please
+email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
+        expected_message = {
+            'context': 'email',
+            'recipient': {
+                'email': 'jeremy@jcline.org',
+                'user': 'jcline.id.fedoraproject.org',
+                'triggered_by_links': False,
+                'confirmation': True,
+            },
+            'fedmsg': {},
+            'formatted_message': expected_email,
+        }
+
+        tasks.confirmations()
+
+        conn = mock_conns.__getitem__.return_value.acquire.return_value.__enter__.return_value
+        self.assertEqual(
+            expected_message, conn.Producer.return_value.publish.call_args_list[0][0][0])
+
+    def test_irc_pending(self, mock_conns):
+        """Assert the expected message is dispatched for pending irc nick confirmation."""
+        user = models.User(
+            openid='jcline.id.fedoraproject.org', openid_url='http://jcline.id.fedoraproject.org')
+        context = models.Context(
+            name='irc', description='description', detail_name='irc nick', icon='wat')
+        confirmation = models.Confirmation(
+            secret='a'*32, detail_value='jcline', user=user, context=context)
+        self.sess.add(confirmation)
+        self.sess.commit()
+        expected_message = {
+            'context': 'irc',
+            'recipient': {
+                'irc nick': 'jcline',
+                'user': 'jcline.id.fedoraproject.org',
+                'triggered_by_links': False,
+                'confirmation': True,
+            },
+            'fedmsg': {},
+            'formatted_message': u'',  # right now the backend still formats the message
+        }
+
+        tasks.confirmations()
+
+        conn = mock_conns.__getitem__.return_value.acquire.return_value.__enter__.return_value
+        self.assertEqual(
+            expected_message, conn.Producer.return_value.publish.call_args_list[0][0][0])
+
+    def test_expired_reaped(self, mock_conns):
+        """Assert confirmations that have expired are deleted and not sent."""
+        user = models.User(
+            openid='jcline.id.fedoraproject.org', openid_url='http://jcline.id.fedoraproject.org')
+        context = models.Context(
+            name='irc', description='description', detail_name='irc nick', icon='wat')
+        created = datetime.datetime.utcnow() - datetime.timedelta(days=2)
+        confirmation = models.Confirmation(
+            created_on=created, secret='a'*32, detail_value='jcline', user=user, context=context)
+        self.sess.add(confirmation)
+        self.sess.commit()
+
+        tasks.confirmations()
+
+        conn = mock_conns.__getitem__.return_value.acquire.return_value.__enter__.return_value
+        self.assertEqual(0, conn.Producer.return_value.publish.call_count)
+
+    def test_handled_valid(self, mock_conns):
+        """
+        Assert confirmation is placed in the 'valid' state until a backend marks it
+        otherwise.
+        """
+        user = models.User(
+            openid='jcline.id.fedoraproject.org', openid_url='http://jcline.id.fedoraproject.org')
+        context = models.Context(
+            name='irc', description='description', detail_name='irc nick', icon='wat')
+        confirmation = models.Confirmation(
+            secret='a'*32, detail_value='jcline', user=user, context=context)
+        self.sess.add(confirmation)
+        self.sess.commit()
+
+        tasks.confirmations()
+
+        confirmation = models.Confirmation.query.all()
+        self.assertEqual(1, len(confirmation))
+        self.assertEqual('valid', confirmation[0].status)

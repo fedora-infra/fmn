@@ -24,7 +24,6 @@ from kombu import Queue, Consumer
 from mock import Mock, patch
 
 from fmn.delivery import service
-from fmn.lib import models
 from fmn.tests import Base
 
 
@@ -91,10 +90,9 @@ class ConsumerTests(unittest.TestCase):
 class DeliveryServiceTests(Base):
     """Tests for the :class:`fmn.delivery.service.DeliveryService` class."""
 
-    @patch('fmn.delivery.service.task')
     @patch('fmn.delivery.service.reactor')
-    def test_start_service(self, mock_reactor, mock_task):
-        """Assert startService creates a looping call for confirmations and starts the consumer."""
+    def test_start_service(self, mock_reactor):
+        """Assert startService starts the consumer."""
         test_config = {
             'fmn.backends.debug': True,
         }
@@ -104,27 +102,9 @@ class DeliveryServiceTests(Base):
             delivery_service.startService()
 
         mock_reactor.callInThread.assert_called_with(delivery_service.consumer.run)
-        mock_task.LoopingCall.assert_called_with(delivery_service.handle_confirmations)
-        delivery_service.confirmation_loop.start.assert_called_with(10)
 
-    @patch('fmn.delivery.service.task')
     @patch('fmn.delivery.service.reactor')
-    def test_confirmation_frequency(self, mock_reactor, mock_task):
-        """Assert the confirmation loop frequency is configurable."""
-        test_config = {
-            'fmn.backends.debug': True,
-            'fmn.confirmation_frequency': 15,
-        }
-        delivery_service = service.DeliveryService()
-
-        with patch.dict(service.config.app_conf, test_config):
-            delivery_service.startService()
-
-        delivery_service.confirmation_loop.start.assert_called_with(15)
-
-    @patch('fmn.delivery.service.task')
-    @patch('fmn.delivery.service.reactor')
-    def test_prune_backends(self, mock_reactor, mock_task):
+    def test_prune_backends(self, mock_reactor):
         """Assert backends are pruned to match the configured backends."""
         test_config = {
             'fmn.backends.debug': True,
@@ -139,9 +119,8 @@ class DeliveryServiceTests(Base):
         self.assertEqual(1, len(delivery_service.backends))
         self.assertTrue('sse' in delivery_service.backends)
 
-    @patch('fmn.delivery.service.task')
     @patch('fmn.delivery.service.reactor')
-    def test_invalid_backends(self, mock_reactor, mock_task):
+    def test_invalid_backends(self, mock_reactor):
         """Assert an invalid backend in the configuration raises a ValueError."""
         test_config = {
             'fmn.backends.debug': True,
@@ -163,7 +142,6 @@ class DeliveryServiceTests(Base):
         mock_log.exception.assert_called_with('Received a malformed message, "%r", from the'
                                               ' backend queue, dropping message!', None)
 
-    @patch('fmn.delivery.service.task', Mock())
     @patch('fmn.delivery.service.reactor', Mock())
     @patch('fmn.delivery.service._log')
     def test_handle_message_missing_backend(self, mock_log):
@@ -190,7 +168,6 @@ class DeliveryServiceTests(Base):
             'Delivery request to the "%s" backend failed because there is no '
             'backend loaded with that name', 'carrier bird')
 
-    @patch('fmn.delivery.service.task', Mock())
     @patch('fmn.delivery.service.reactor', Mock())
     @patch('fmn.delivery.service._log')
     def test_handle_message(self, mock_log):
@@ -204,7 +181,6 @@ class DeliveryServiceTests(Base):
         }
         test_config = {
             'fmn.backends.debug': True,
-            'fmn.confirmation_frequency': 15,
             'fmn.backends': ['sse'],
         }
         delivery_service = service.DeliveryService()
@@ -238,12 +214,10 @@ class DeliveryServiceTests(Base):
             'deliver a notification to recipient "%r"', 'sse', {})
 
     @patch('fmn.delivery.service.reactor', Mock())
-    @patch('fmn.delivery.service.task', Mock())
     def test_stop_service(self):
-        """Assert stopService forwards to the looping confirmation call and the consumer."""
+        """Assert stopService forwards to the consumer."""
         test_config = {
             'fmn.backends.debug': True,
-            'fmn.confirmation_frequency': 15,
             'fmn.backends': ['sse'],
         }
         delivery_service = service.DeliveryService()
@@ -254,41 +228,3 @@ class DeliveryServiceTests(Base):
         delivery_service.stopService()
 
         self.assertTrue(delivery_service.consumer.should_stop)
-        delivery_service.confirmation_loop.stop.assert_called_with()
-
-    def test_handle_confirmations(self):
-        """Assert confirmations are handled with the backend"""
-        user = models.User(
-            openid='jcline.id.fedoraproject.org', openid_url='http://jcline.id.fedoraproject.org')
-        context = models.Context(
-            name='sse', description='description', detail_name='SSE', icon='wat')
-        confirmation = models.Confirmation(detail_value='eh', user=user, context=context)
-        self.sess.add(confirmation)
-        self.sess.commit()
-        delivery_service = service.DeliveryService()
-        mock_backend = Mock()
-        delivery_service.backends = {'sse': mock_backend}
-
-        delivery_service.handle_confirmations()
-
-        mock_backend.handle_confirmation.assert_called_once_with(models.Session(), confirmation)
-
-    @patch('fmn.delivery.service._log')
-    def test_handle_confirmation_failed(self, mock_log):
-        """Assert exceptions are reported, but aren't raised."""
-        user = models.User(
-            openid='jcline.id.fedoraproject.org', openid_url='http://jcline.id.fedoraproject.org')
-        context = models.Context(
-            name='sse', description='description', detail_name='SSE', icon='wat')
-        confirmation = models.Confirmation(detail_value='eh', user=user, context=context)
-        self.sess.add(confirmation)
-        self.sess.commit()
-        delivery_service = service.DeliveryService()
-        mock_backend = Mock()
-        mock_backend.handle_confirmation.side_effect = Exception
-        delivery_service.backends = {'sse': mock_backend}
-
-        delivery_service.handle_confirmations()
-
-        mock_log.exception.assert_called_with(
-            'Unexpected exception while trying to handle a confirmation')

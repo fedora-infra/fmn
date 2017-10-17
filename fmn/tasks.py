@@ -38,6 +38,7 @@ import fedmsg_meta_fedora_infrastructure
 
 from . import config, lib as fmn_lib, formatters
 from . import fmn_fasshim
+from .lib import models
 from .celery import app
 
 
@@ -182,7 +183,7 @@ class _FindRecipients(task.Task):
                 dictionary. See :func:`fmn.lib.recipients` for the dictionary format.
             message (dict): The raw fedmsg to humanize and deliver to the given recipients.
         """
-        session = fmn_lib.models.Session()
+        session = models.Session()
         broker_url = config.app_conf['celery']['broker']
 
         with connections[Connection(broker_url)].acquire(block=True, timeout=60) as conn:
@@ -197,13 +198,13 @@ class _FindRecipients(task.Task):
                     if ('filter_oneshot' in recipient and recipient['filter_oneshot']):
                         _log.info('Marking one-time filter as fired')
                         idx = recipient['filter_id']
-                        fltr = fmn_lib.models.Filter.query.get(idx)
+                        fltr = models.Filter.query.get(idx)
                         fltr.fired(session)
 
                     if preference.get('batch_delta') or preference.get('batch_count'):
                         _log.info('User "%s" has batch delivery set; placing message in database',
                                   user)
-                        fmn_lib.models.QueuedMessage.enqueue(session, user, context, message)
+                        models.QueuedMessage.enqueue(session, user, context, message)
                         continue
 
                     formatted_message = message
@@ -242,15 +243,15 @@ def batch_messages():
 
     This is intended to be run as a periodic task using Celery's beat service.
     """
-    session = fmn_lib.models.Session()
+    session = models.Session()
     broker_url = config.app_conf['celery']['broker']
     with connections[Connection(broker_url)].acquire(block=True, timeout=60) as conn:
         producer = conn.Producer()
-        for pref in fmn_lib.models.Preference.list_batching(session):
+        for pref in models.Preference.list_batching(session):
             if not _batch_ready(pref):
                 continue
 
-            queued_messages = fmn_lib.models.QueuedMessage.list_for(
+            queued_messages = models.QueuedMessage.list_for(
                 session, pref.user, pref.context)
             _log.info('Batching %d queued messages for %s', len(queued_messages), pref.user.openid)
 
@@ -295,13 +296,13 @@ def _batch_ready(preference):
     Determine if a message batch is ready for a user.
 
     Args:
-        preference (fmn_lib.models.Preference): The user preference entry which
+        preference (models.Preference): The user preference entry which
             contains the user's batch preferences.
     Returns:
         bool: True if there's a batch ready.
     """
-    session = fmn_lib.models.Session()
-    count = fmn_lib.models.QueuedMessage.count_for(session, preference.user, preference.context)
+    session = models.Session()
+    count = models.QueuedMessage.count_for(session, preference.user, preference.context)
     if not count:
         return False
 
@@ -311,7 +312,7 @@ def _batch_ready(preference):
         return True
 
     # Batch based on time
-    earliest = fmn_lib.models.QueuedMessage.earliest_for(
+    earliest = models.QueuedMessage.earliest_for(
         session, preference.user, preference.context)
     now = datetime.datetime.utcnow()
     delta = datetime.timedelta.total_seconds(now - earliest.created_on)
@@ -331,6 +332,47 @@ def heat_fas_cache():  # pragma: no cover
     IRC nickname eventually.
     """
     fmn_fasshim.make_fas_cache(**config.app_conf)
+
+
+@app.task(name='fmn.tasks.confirmations', ignore_results=True)
+def confirmations():
+    """
+    Load all pending confirmations, create formatted messages, and dispatch them to the
+    delivery service.
+
+    This is intended to be dispatched regularly via celery beat.
+    """
+    session = models.Session()
+    models.Confirmation.delete_expired(session)
+    pending = models.Confirmation.query.filter_by(status='pending').all()
+    broker_url = config.app_conf['celery']['broker']
+    with connections[Connection(broker_url)].acquire(block=True, timeout=60) as conn:
+        producer = conn.Producer()
+        for confirmation in pending:
+            message = None
+            if confirmation.context.name == 'email':
+                message = formatters.email_confirmation(confirmation)
+            else:
+                # The way the irc backend is currently written, it has to format the
+                # confirmation itself. For now, just send an empty message, but in the
+                # future it may be worth refactoring the irc backend to let us format here.
+                message = ''
+            recipient = {
+                confirmation.context.detail_name: confirmation.detail_value,
+                'user': confirmation.user.openid,
+                'triggered_by_links': False,
+                'confirmation': True,
+            }
+            backend_message = {
+                "context": confirmation.context.name,
+                "recipient": recipient,
+                "fedmsg": {},
+                "formatted_message": message,
+            }
+            _log.info('Dispatching confirmation message for %r', confirmation)
+            confirmation.set_status(session, 'valid')
+            producer.publish(backend_message, routing_key='backends',
+                             declare=[Queue('backends', durable=True)])
 
 
 #: A Celery task that accepts a message as input and determines the recipients.

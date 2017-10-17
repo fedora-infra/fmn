@@ -18,7 +18,6 @@ from .base import BaseBackend
 
 from kitchen.text.converters import to_bytes
 
-import email
 import logging
 
 from twisted.internet import defer
@@ -28,17 +27,6 @@ from fmn.lib import models
 from fmn.util import get_fas_email
 
 _log = logging.getLogger(__name__)
-
-
-CONFIRMATION_TEMPLATE = u"""
-{username} has requested that notifications be sent to this email address
-* To accept, visit this address:
-  {acceptance_url}
-* Or, to reject you can visit this address:
-  {rejection_url}
-Alternatively, you can ignore this.  This is an automated message, please
-email {support_email} if you have any concerns/issues/abuse.
-"""
 
 reason = u"""
 You received this message due to your preference settings at
@@ -85,48 +73,6 @@ class EmailBackend(BaseBackend):
         except smtp.SMTPBadRcpt as e:
             _log.info('Failed to email %s: %s', recipient['email address'], str(e))
             self.handle_bad_email_address(recipient)
-
-    def handle_confirmation(self, session, confirmation):
-        """
-        Send a confirmation email to new user emails with a confirmation link.
-
-        Args:
-            session (sqlalchemy.orm.session.Session): The session to use.
-            confirmation (models.Confirmation): The confirmation database entry.
-        """
-        confirmation.set_status(session, 'valid')
-        acceptance_url = self.config['fmn.acceptance_url'].format(
-            secret=confirmation.secret)
-        rejection_url = self.config['fmn.rejection_url'].format(
-            secret=confirmation.secret)
-
-        template = self.config.get('fmn.mail_confirmation_template',
-                                   CONFIRMATION_TEMPLATE)
-        content = template.format(
-            acceptance_url=acceptance_url,
-            rejection_url=rejection_url,
-            support_email=self.config['fmn.support_email'],
-            username=confirmation.openid,
-        ).strip()
-        subject = u'Confirm notification email'
-
-        recipient = {
-            'user': confirmation.user.openid,
-            'email address': confirmation.detail_value,
-            'triggered_by_links': False,
-        }
-        email_message = email.Message.Message()
-        email_message.add_header('To', recipient['email address'])
-        email_message.add_header('From', self.from_address)
-        # Although this is a non-standard header and RFC 2076 discourages it, some
-        # old clients don't honour RFC 3834 and will auto-respond unless this is set.
-        email_message.add_header('Precendence', 'Bulk')
-        # Mark this mail as auto-generated so auto-responders don't respond; see RFC 3834
-        email_message.add_header('Auto-Submitted', 'auto-generated')
-        email_message.add_header('Subject', subject)
-        email_message.set_payload(content)
-
-        self.deliver(email_message.as_string(), recipient, {})
 
     def handle_bad_email_address(self, recipient):
         """ Handle a bad email address.
