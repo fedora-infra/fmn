@@ -36,6 +36,7 @@ class FMNConsumerTests(Base):
         }
         self.hub = mock.Mock(config=self.config)
 
+    @mock.patch('fmn.consumer.heat_fas_cache', mock.Mock())
     def test_default_topic(self):
         """Assert the default topic for the FMN consumer is everything."""
         fmn_consumer = consumer.FMNConsumer(self.hub)
@@ -43,6 +44,7 @@ class FMNConsumerTests(Base):
         self.assertEqual(b'*', fmn_consumer.topic)
         self.hub.subscribe.assert_called_once_with(b'*', fmn_consumer._consume_json)
 
+    @mock.patch('fmn.consumer.heat_fas_cache', mock.Mock())
     def test_custom_topics(self):
         """Assert the default topic for the FMN consumer is everything."""
         self.config['fmn.topics'] = [b'my.custom.topic']
@@ -51,6 +53,14 @@ class FMNConsumerTests(Base):
         self.assertEqual([b'my.custom.topic'], fmn_consumer.topic)
         self.hub.subscribe.assert_called_once_with(b'my.custom.topic', fmn_consumer._consume_json)
 
+    @mock.patch('fmn.consumer.heat_fas_cache')
+    def test_heat_cache(self, mock_heat):
+        """Assert a task is dispatched to heat the cache on startup."""
+        consumer.FMNConsumer(self.hub)
+
+        mock_heat.apply_async.assert_called_once_with()
+
+    @mock.patch('fmn.consumer.heat_fas_cache', mock.Mock())
     @mock.patch('fmn.consumer.find_recipients')
     def test_refresh_cache_fmn_message(self, mock_find_recipients):
         """Assert messages with an '.fmn.' topic result in a message to workers."""
@@ -75,6 +85,7 @@ class FMNConsumerTests(Base):
             dict(exchange='fmn.tasks.reload_cache'),
         )
 
+    @mock.patch('fmn.consumer.heat_fas_cache', mock.Mock())
     @mock.patch('fmn.consumer.new_packager', mock.Mock(return_value='jcline'))
     @mock.patch('fmn.consumer.get_fas_email', mock.Mock(return_value='jcline'))
     @mock.patch('fmn.consumer.find_recipients')
