@@ -33,6 +33,7 @@
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
 ]
 
@@ -341,3 +342,8 @@ texinfo_documents = [
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #
 # texinfo_no_detailmenu = False
+
+intersphinx_mapping = {
+        'python': ('https://docs.python.org/3', None),
+        'fedmsg': ('https://fedmsg.readthedocs.io/en/stable/', None),
+}
