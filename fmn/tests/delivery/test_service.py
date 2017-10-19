@@ -75,20 +75,17 @@ class ConsumerTests(unittest.TestCase):
             service.reactor, mock_delivery.handle_message, {'hello': 'world'})
         message.ack.assert_called_once_with()
 
-    @patch('fmn.delivery.service.connections')
     @patch('fmn.delivery.service.threads.blockingCallFromThread')
-    def test_on_message_failed_delivery(self, mock_blocking_call, mock_conns):
+    def test_on_message_failed_delivery(self, mock_blocking_call):
         """Assert general exceptions in the delivery service re-queue the message."""
         mock_blocking_call.side_effect = Exception
         message = Mock()
         consumer = service.Consumer(Mock(), 'backends')
-        conn = mock_conns.__getitem__.return_value.acquire.return_value.__enter__.return_value
 
         consumer.on_message({'hello': 'world'}, message)
 
-        conn.Producer.return_value.publish.assert_called_with(
-            {'hello': 'world'}, routing_key='backends')
-        message.ack.assert_called_once_with()
+        self.assertEqual(1, message.requeue.call_count)
+        self.assertEqual(0, message.ack.call_count)
 
 
 class DeliveryServiceTests(Base):

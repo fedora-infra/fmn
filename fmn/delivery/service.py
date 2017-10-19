@@ -33,7 +33,6 @@ import logging
 
 from kombu import Connection, Queue
 from kombu.mixins import ConsumerMixin
-from kombu.pools import connections
 from twisted.application import service
 from twisted.internet import threads, reactor, task, defer
 import six
@@ -128,16 +127,12 @@ class Consumer(ConsumerMixin):
         """
         try:
             threads.blockingCallFromThread(reactor, self.delivery_service.handle_message, body)
-        except Exception as e:
-            # Something is wrong with the delivery backend - publish the message so it's at the
-            # back of the queue and carry on. In the future it'd be good to handle recoverable
-            # vs non-recoverable errors differently.
-            _log.error('Message delivery failed: %r', e)
-            with connections[Connection(self.broker_url)].acquire(block=True, timeout=60) as conn:
-                producer = conn.Producer()
-                producer.publish(body, routing_key='backends')
-        finally:
             message.ack()
+        except Exception as e:
+            # Something unexpected is wrong with the delivery backend - requeue the message
+            # so we try again later.
+            _log.error('Message delivery failed: %r', e)
+            message.requeue()
 
 
 class DeliveryService(service.Service):
