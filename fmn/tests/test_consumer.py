@@ -41,14 +41,15 @@ class FMNConsumerTests(Base):
         """Assert the default topic for the FMN consumer is everything."""
         fmn_consumer = consumer.FMNConsumer(self.hub)
 
-        self.assertEqual(b'*', fmn_consumer.topic)
+        self.assertEqual(['*'], fmn_consumer.topic)
         self.hub.subscribe.assert_called_once_with(b'*', fmn_consumer._consume_json)
 
     @mock.patch('fmn.consumer.heat_fas_cache', mock.Mock())
     def test_custom_topics(self):
         """Assert the default topic for the FMN consumer is everything."""
         self.config['fmn.topics'] = [b'my.custom.topic']
-        fmn_consumer = consumer.FMNConsumer(self.hub)
+        with mock.patch.dict(consumer.config.app_conf, self.config):
+            fmn_consumer = consumer.FMNConsumer(self.hub)
 
         self.assertEqual([b'my.custom.topic'], fmn_consumer.topic)
         self.hub.subscribe.assert_called_once_with(b'my.custom.topic', fmn_consumer._consume_json)

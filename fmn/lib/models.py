@@ -43,14 +43,14 @@ import fedmsg
 import fedmsg.utils
 
 import fmn.lib.defaults
+from fmn import config
 
-_config = fedmsg.config.load_config()
 
 #: The SQLAlchemy database engine, initialized with the URL in the fedmsg config key
 #: ``fmn.sqlalchemy.uri`` and ``fmn.sqlalchemy.debug`` (bool). If the debug setting is
 #: true, SQLAlchemy will log all the raw SQL statements it generates.
 engine = create_engine(
-    _config.get('fmn.sqlalchemy.uri'), echo=_config.get('fmn.sqlalchemy.debug', False))
+    config.app_conf['fmn.sqlalchemy.uri'], echo=config.app_conf['fmn.sqlalchemy.debug'])
 
 #: An SQLAlchemy scoped session. This session can be optionally called to return
 #: the thread-local session or used directly (in which case it creates or uses the

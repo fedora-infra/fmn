@@ -28,7 +28,7 @@ from fmn.lib import load_preferences, models, recipients as get_recipients
 from fmn.tests import Base as BaseTestCase
 
 
-@mock.patch('fmn.lib.CONFIG', {'fmn.backends': ['post', 'pidgeon']})
+@mock.patch('fmn.lib.fmn_config.app_conf', {'fmn.backends': ['post', 'pidgeon']})
 class LoadPreferenceTests(BaseTestCase):
 
     def setUp(self):

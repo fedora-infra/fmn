@@ -9,7 +9,6 @@ from pkg_resources import get_distribution
 import arrow
 import docutils
 import docutils.examples
-import fedmsg.config
 import fedmsg.meta
 import jinja2
 import libravatar
@@ -18,6 +17,7 @@ import markupsafe
 import flask
 from flask.ext.openid import OpenID
 
+from fmn import config
 import fmn.lib
 import fmn.lib.hinting
 import fmn.lib.models
@@ -47,12 +47,9 @@ app.jinja_env.tests['equalto'] = lambda x, y: x == y
 # Also, allow 'continue' and 'break' statements in jinja loops
 app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 
-fedmsg_config = fedmsg.config.load_config()
-db_url = fedmsg_config.get('fmn.sqlalchemy.uri')
-if not db_url:
-    raise ValueError("fmn.sqlalchemy.uri must be present")
+db_url = config.app_conf['fmn.sqlalchemy.uri']
 
-fedmsg.meta.make_processors(**fedmsg_config)
+fedmsg.meta.make_processors(**config.app_conf)
 
 # Long, long ago
 # http://threebean.org/blog/datanommer-and-fedmsg-activity/
@@ -81,7 +78,7 @@ SESSION = fmn.lib.models.init(db_url, debug=False, create=False)
 
 # Initialize a datanommer session.
 try:
-    datanommer.models.init(fedmsg_config['datanommer.sqlalchemy.url'])
+    datanommer.models.init(config.app_conf['datanommer.sqlalchemy.url'])
 except Exception as e:
     log.warning("Could not initialize datanommer db connection:")
     log.exception(e)
@@ -101,7 +98,7 @@ def extract_openid_identifier(openid_url):
 
 @app.before_request
 def check_auth():
-    flask.g.fedmsg_config = fedmsg_config
+    flask.g.fedmsg_config = config.app_conf
     flask.g.auth = Bunch(
         logged_in=False,
         method=None,
@@ -157,7 +154,7 @@ def login_required(function):
         if not flask.g.auth.logged_in:
             flask.flash('Login required', 'errors')
             return flask.redirect(flask.url_for(
-                fedmsg_config.get('fmn.web.default_login', 'login'),
+                config.app_conf['fmn.web.default_login'],
                 next=flask.request.url))
 
         # Ensure that the logged in user exists before we proceed.
@@ -229,8 +226,10 @@ def inject_variable():
 
     fmn_version = get_distribution('fmn').version
 
-    default = flask.url_for('static', filename='bootstrap/css/bootstrap.css')
-    theme_css_url = fedmsg_config.get('fmn.web.theme_css_url', default)
+    if config.app_conf['fmn.web.theme_css_url'] is not None:
+        theme_css_url = config.app_conf['fmn.web.theme_css_url']
+    else:
+        theme_css_url = flask.url_for('static', filename='bootstrap/css/bootstrap.css')
 
     return dict(
         openid=openid,
@@ -307,7 +306,7 @@ def link_fedora_mobile(openid, api_key, registration_id):
         SESSION, openid=openid, context=ctx)
 
     try:
-        fmn.lib.validate_detail_value(ctx, registration_id, fedmsg_config)
+        fmn.lib.validate_detail_value(ctx, registration_id, config.app_conf)
     except Exception as e:
         raise APIError(403, dict(reason=str(e)))
 
@@ -458,7 +457,7 @@ def context(openid, context):
     # add sse url to the context to display to the user
     if str(pref.context_name) == 'sse':
         # set default value value
-        sse_url = fedmsg_config.get('fmn.sse.url', 'http://localhost:8080/')
+        sse_url = config.app_conf['fmn.sse.url']
         # TODO: update below once fedora groups get their own fedmsg config
         sse_route = sse_url + ('user/' if sse_url.endswith("/") else '/user/')
         sse_route += openid.split(".", 1)[0]
@@ -481,7 +480,7 @@ def _get_context(openid, context, authz=True):
     if not context:
         flask.abort(404)
 
-    if context.name not in fedmsg_config['fmn.backends']:
+    if context.name not in config.app_conf['fmn.backends']:
         # TODO - is there a better status code for this?  More like
         # "temporariliy unavailable" or "under construction"
         flask.abort(404)
@@ -558,7 +557,7 @@ def example_messages(openid, context, filter_id, page, endtime):
     filter = pref.get_filter(SESSION, filter_id)
 
     hinting = fmn.lib.hinting.gather_hinting(
-        fedmsg_config, filter.rules, valid_paths)
+        config.app_conf, filter.rules, valid_paths)
 
     # Now, connect to datanommer and get the latest bazillion messages
     # (adjusting by any hinting the rules we're evalulating might provide).
@@ -592,10 +591,10 @@ def example_messages(openid, context, filter_id, page, endtime):
     def _make_result(msg, d):
         """ Little utility used inside the loop below """
         return {
-            'icon': fedmsg.meta.msg2icon(d, **fedmsg_config),
-            'icon2': fedmsg.meta.msg2secondary_icon(d, **fedmsg_config),
-            'subtitle': fedmsg.meta.msg2subtitle(d, **fedmsg_config),
-            'link': fedmsg.meta.msg2link(d, **fedmsg_config),
+            'icon': fedmsg.meta.msg2icon(d, **config.app_conf),
+            'icon2': fedmsg.meta.msg2secondary_icon(d, **config.app_conf),
+            'subtitle': fedmsg.meta.msg2subtitle(d, **config.app_conf),
+            'link': fedmsg.meta.msg2link(d, **config.app_conf),
             'time': arrow.get(msg.timestamp).humanize(),
         }
 
@@ -610,7 +609,7 @@ def example_messages(openid, context, filter_id, page, endtime):
     for message in messages:
         original = message.__json__()
         recips = fmn.lib.recipients(
-            preferences, message.__json__(), valid_paths, fedmsg_config)
+            preferences, message.__json__(), valid_paths, config.app_conf)
         if recips:
             results.append(_make_result(message, original))
 
@@ -901,7 +900,7 @@ def handle_details():
     if detail_value:
         # Do some validation on the specifics of the value before we commit.
         try:
-            fmn.lib.validate_detail_value(ctx, detail_value, fedmsg_config)
+            fmn.lib.validate_detail_value(ctx, detail_value, config.app_conf)
         except Exception as e:
             raise APIError(403, dict(reason=str(e)))
 
@@ -1149,7 +1148,7 @@ for key in htmldocs:
 
 
 def load_docs(request):
-    URL = fedmsg_config.get('fmn.base_url', request.url_root)
+    URL = config.app_conf['fmn.base_url']
     docs = htmldocs[request.endpoint]
     docs = jinja2.Template(docs).render(URL=URL)
     return markupsafe.Markup(docs)
