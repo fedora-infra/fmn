@@ -40,6 +40,7 @@ from . import config, lib as fmn_lib, formatters
 from . import fmn_fasshim
 from .lib import models
 from .celery import app
+from .constants import BACKEND_QUEUE_PREFIX
 
 
 __all__ = ['find_recipients']
@@ -225,8 +226,9 @@ class _FindRecipients(task.Task):
                         "fedmsg": message,
                         "formatted_message": formatted_message,
                     }
-                    producer.publish(backend_message, routing_key='backends',
-                                     declare=[Queue('backends', durable=True)])
+                    routing_key = BACKEND_QUEUE_PREFIX + context
+                    producer.publish(backend_message, routing_key=routing_key,
+                                     declare=[Queue(routing_key, durable=True)])
                     session.commit()
 
 
@@ -282,8 +284,9 @@ def batch_messages():
                     "fedmsg": messages,
                     "formatted_message": formatted_message,
                 }
-                producer.publish(backend_message, routing_key='backends',
-                                 declare=[Queue('backends', durable=True)])
+                routing_key = BACKEND_QUEUE_PREFIX + pref.context.name
+                producer.publish(backend_message, routing_key=routing_key,
+                                 declare=[Queue(routing_key, durable=True)])
 
             for message in queued_messages:
                 message.dequeue(session)
@@ -370,8 +373,9 @@ def confirmations():
             }
             _log.info('Dispatching confirmation message for %r', confirmation)
             confirmation.set_status(session, 'valid')
-            producer.publish(backend_message, routing_key='backends',
-                             declare=[Queue('backends', durable=True)])
+            routing_key = BACKEND_QUEUE_PREFIX + confirmation.context.name
+            producer.publish(backend_message, routing_key=routing_key,
+                             declare=[Queue(routing_key, durable=True)])
 
 
 #: A Celery task that accepts a message as input and determines the recipients.
