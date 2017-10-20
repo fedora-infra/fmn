@@ -58,13 +58,6 @@ class BaseBackend(object):
         """
         pass
 
-    @abc.abstractmethod
-    def handle_confirmation(self, session, confirmation):
-        """
-        Handle a confirmation message.
-        """
-        pass
-
     # Some helper methods for our child classes.
     def context_object(self, session):
         return fmn.lib.models.Context.get(self.__context_name__)

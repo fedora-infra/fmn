@@ -26,6 +26,7 @@ import requests
 
 from . import Base
 from fmn import formatters
+from fmn.lib import models
 
 
 class ShortenTests(Base):
@@ -106,6 +107,29 @@ class IrcTests(Base):
             "shorten_links": False,
             "verbose": True,
         }
+
+    def test_confirmation(self):
+        """Assert the IRC confirmation message is formatted as expected."""
+        confirmation = models.Confirmation(
+            secret='a'*32,
+            detail_value='jeremy@jcline.org',
+            openid='jcline.id.fedoraproject.org',
+            context_name='email',
+        )
+        expected = u"""
+jcline.id.fedoraproject.org has requested that notifications be sent to this nick
+* To accept, visit this address:
+  http://localhost:5000/confirm/accept/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+* Or, to reject you can visit this address:
+  http://localhost:5000/confirm/reject/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Alternatively, you can ignore this.  This is an automated message, please
+email notifications@fedoraproject.org if you have any concerns/issues/abuse.
+I am run by Fedora Infrastructure.  Type 'help' for more information.
+"""
+
+        message = formatters.irc_confirmation(confirmation)
+
+        self.assertEqual(expected.strip(), message)
 
     @mock.patch('fmn.formatters.arrow.get')
     def test_format_unmarked(self, mock_arrow):
@@ -231,13 +255,46 @@ class SseTests(Base):
 
 class EmailTests(Base):
 
+    def test_base_email(self):
+        """Assert the basic email has the auto-generation headers."""
+        message = formatters._base_email()
+
+        self.assertEqual(message['Auto-Submitted'], 'auto-generated')
+        self.assertEqual(message['Precedence'], 'Bulk')
+
+    def test_confirmation(self):
+        """Assert a :class:`models.Confirmation` is formatted to an email."""
+        confirmation = models.Confirmation(
+            secret='a'*32,
+            detail_value='jeremy@jcline.org',
+            openid='jcline.id.fedoraproject.org',
+            context_name='email',
+        )
+        expected = """Precedence: Bulk
+Auto-Submitted: auto-generated
+To: jeremy@jcline.org
+From: notifications@fedoraproject.org
+Subject: Confirm notification email
+
+jcline.id.fedoraproject.org has requested that notifications be sent to this email address
+* To accept, visit this address:
+  http://localhost:5000/confirm/accept/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+* Or, to reject you can visit this address:
+  http://localhost:5000/confirm/reject/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Alternatively, you can ignore this.  This is an automated message, please
+email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
+
+        message = formatters.email_confirmation(confirmation)
+
+        self.assertEqual(expected, message)
+
     def test_email(self):
         """Assert a well-formed email is returned from a basic message."""
         expected = (
+            "Precedence: Bulk\n"
+            "Auto-Submitted: auto-generated\n"
             "To: jeremy@jcline.org\n"
             "From: notifications@fedoraproject.org\n"
-            "Precendence: Bulk\n"
-            "Auto-Submitted: auto-generated\n"
             "X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n"
             "X-Fedmsg-Category: fmn\n"
             "X-Fedmsg-Username: jcline\n"

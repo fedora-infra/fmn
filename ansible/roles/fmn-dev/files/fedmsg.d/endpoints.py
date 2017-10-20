@@ -31,6 +31,11 @@ config = dict(
             "tcp://hub.fedoraproject.org:9940",
             #"tcp://stg.fedoraproject.org:9940",
         ],
+        'fmn.fmn-dev': [
+            'tcp://*:3333',
+            'tcp://*:3334',
+            'tcp://*:3335',
+        ]
 
         # For other, more 'normal' services, fedmsg will try to guess the
         # name of it's calling module to determine which endpoint definition
