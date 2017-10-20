@@ -21,7 +21,6 @@ env:
   matrix:
     - TOXENV=lint
     - TOXENV=py27
-    - TOXENV=el7
 matrix:
   include:
     - python: "3.4"
