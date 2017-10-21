@@ -2,6 +2,18 @@
 Changelog
 =========
 
+2.0.0
+=====
+
+Features
+--------
+
+* The FMN workers and backend is now implemented using Celery
+  (`#231 <https://github.com/fedora-infra/fmn/pull/231>`_,
+  `#232 <https://github.com/fedora-infra/fmn/pull/232>`_,
+  `#234 <https://github.com/fedora-infra/fmn/pull/234>`_)
+
+
 1.5.0
 =====
 
