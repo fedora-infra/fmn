@@ -2,8 +2,8 @@
 Configuration
 =============
 
-FMN's configuration is part of `fedmsg's configuration`_. A ``fmn.py`` configuration
-file is helpful to keep FMN's settings separated from the normal fedmsg configuration.
+.. automodule:: fmn.config
+    :members:
 
 
 The Database
@@ -54,5 +54,4 @@ service.
 .. _Celery: http://docs.celeryproject.org/en/latest/
 .. _Celery beat: http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html
 .. _Celery workers: http://docs.celeryproject.org/en/latest/userguide/workers.html
-.. _fedmsg's configuration: https://fedmsg.readthedocs.io/en/stable/configuration/
 .. _fedmsg consumer: https://fedmsg.readthedocs.io/en/stable/subscribing/

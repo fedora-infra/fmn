@@ -24,16 +24,16 @@ import json
 import logging
 import re
 
-import fedmsg
 import six
 from pika import ConnectionParameters, exceptions as pika_exceptions
 from pika.adapters import twisted_connection
 from twisted.internet import reactor, defer, protocol, error
 from twisted.web import server, resource
 
+from fmn import config
+
 
 _log = logging.getLogger(__name__)
-app_config = fedmsg.config.load_config()
 
 
 # Create a few namedtuples to make the various tuples used throughout
@@ -59,18 +59,18 @@ class SSEServer(resource.Resource):
 
     def __init__(self, *args, **kwargs):
         resource.Resource.__init__(self, *args, **kwargs)
-        self.expire_ms = int(app_config.get('fmn.sse.pika.msg_expiration', 3600000))
-        self.amqp_host = app_config.get('fmn.sse.pika.host', 'localhost')
-        self.amqp_port = int(app_config.get('fmn.sse.pika.port', 5672))
+        self.expire_ms = config.app_conf['fmn.sse.pika.msg_expiration']
+        self.amqp_host = config.app_conf['fmn.sse.pika.host']
+        self.amqp_port = config.app_conf['fmn.sse.pika.port']
         self.amqp_parameters = ConnectionParameters(self.amqp_host, self.amqp_port)
 
-        whitelist = app_config.get('fmn.sse.webserver.queue_whitelist')
+        whitelist = config.app_conf['fmn.sse.webserver.queue_whitelist']
         self.whitelist = re.compile(whitelist) if whitelist else None
-        blacklist = app_config.get('fmn.sse.webserver.queue_blacklist')
+        blacklist = config.app_conf['fmn.sse.webserver.queue_blacklist']
         self.blacklist = re.compile(blacklist) if blacklist else None
 
-        self.allow_origin = app_config.get('fmn.sse.webserver.allow_origin', '*')
-        self.prefetch_count = app_config.get('fmn.sse.pika.prefetch_count',  5)
+        self.allow_origin = config.app_conf['fmn.sse.webserver.allow_origin']
+        self.prefetch_count = config.app_conf['fmn.sse.pika.prefetch_count']
         self.connection = None
         self.channel = None
 
@@ -323,6 +323,6 @@ class JsonForbidden(JsonErrorPage):
 if __name__ == "__main__":
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
     site = server.Site(SSEServer())
-    port = int(app_config.get('fmn.sse.webserver.tcp_port', 8080))
+    port = config.app_conf['fmn.sse.webserver.tcp_port']
     reactor.listenTCP(port, site)
     reactor.run()

@@ -77,8 +77,7 @@ class _FindRecipients(task.Task):
         This is run once per process, not per task.
         """
         _log.info('Initializing the "%s" task', self.name)
-        self.config = fedmsg.config.load_config()
-        fedmsg.meta.make_processors(**self.config)
+        fedmsg.meta.make_processors(**config.app_conf)
         self._valid_paths = None
         self._user_preferences = None
         _log.info('Initialization complete for the "%s" task', self.name)
@@ -154,7 +153,7 @@ class _FindRecipients(task.Task):
             return
 
         results = fmn_lib.recipients(
-             self.user_preferences, message_body, self.valid_paths, self.config)
+             self.user_preferences, message_body, self.valid_paths, config.app_conf)
         _log.info('Found %s recipients for message %s', sum(map(len, results.values())),
                   message_body.get('msg_id', topic))
 

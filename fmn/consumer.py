@@ -19,6 +19,7 @@ import kombu
 
 import fmn.lib
 import fmn.rules.utils
+from fmn import config
 from fmn.celery import RELOAD_CACHE_EXCHANGE_NAME
 from .util import (
     new_packager,
@@ -46,19 +47,15 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
     config_key = 'fmn.consumer.enabled'
 
     def __init__(self, hub, *args, **kwargs):
-        self.topic = hub.config.get('fmn.topics', b'*')
+        self.topic = config.app_conf['fmn.topics']
 
         _log.info("FMNConsumer initializing")
         super(FMNConsumer, self).__init__(hub, *args, **kwargs)
 
-        self.uri = self.hub.config.get('fmn.sqlalchemy.uri', None)
-        self.autocreate = self.hub.config.get('fmn.autocreate', False)
-        self.junk_suffixes = self.hub.config.get('fmn.junk_suffixes', [])
-        self.ignored_copr_owners = self.hub.config.get('ignored_copr_owners',
-                                                       [])
-
-        if not self.uri:
-            raise ValueError('fmn.sqlalchemy.uri must be present')
+        self.uri = config.app_conf['fmn.sqlalchemy.uri']
+        self.autocreate = config.app_conf['fmn.autocreate']
+        self.junk_suffixes = config.app_conf['fmn.junk_suffixes']
+        self.ignored_copr_owners = config.app_conf['ignored_copr_owners']
 
         heat_fas_cache.apply_async()
 
@@ -143,12 +140,12 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         # 'username' here could be an actual username, or a group name like
         # 'group::infra-sig'.
         if '.pkgdb.' in topic:
-            usernames = fedmsg.meta.msg2usernames(msg, **self.hub.config)
+            usernames = fedmsg.meta.msg2usernames(msg, **config.app_conf)
             for username in usernames:
                 log.info("Invalidating pkgdb2 dogpile cache for %r" % username)
                 target = fmn.rules.utils.get_packages_of_user
                 fmn.rules.utils.invalidate_cache_for(
-                    self.hub.config, target, username)
+                    config.app_conf, target, username)
 
         # Create a local account with all the default rules if a user is
         # identified by one of our 'selectors'.  Here we can add all kinds of
@@ -165,7 +162,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 log.info("Autocreating account for %r" % username)
                 openid = '%s.id.fedoraproject.org' % username
                 openid_url = 'https://%s.id.fedoraproject.org' % username
-                email = get_fas_email(self.hub.config, username)
+                email = get_fas_email(config.app_conf, username)
                 user = fmn.lib.models.User.get_or_create(
                     session, openid=openid, openid_url=openid_url,
                     create_defaults=True, detail_values=dict(email=email),
@@ -185,12 +182,11 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         # group changes we need to sync fas relationships to catch up and route
         # messages to the new group members).
         if '.fas.group.' in topic:
-            usernames = fedmsg.meta.msg2usernames(msg, **self.hub.config)
+            usernames = fedmsg.meta.msg2usernames(msg, **config.app_conf)
             for username in usernames:
                 log.info("Invalidating fas cache for %r" % username)
                 target = fmn.rules.utils.get_groups_of_user
-                fmn.rules.utils.invalidate_cache_for(
-                    self.hub.config, target, username)
+                fmn.rules.utils.invalidate_cache_for(config.app_conf, target, username)
 
         # Finding recipients is computationally quite expensive so it's handled
         # by Celery worker processes. The results are then dropped into an AMQP

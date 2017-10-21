@@ -13,11 +13,11 @@ except ImportError:
     from fmn.dogpile_backports import kwarg_function_key_generator
 import bs4
 import docutils.examples
-import fedmsg
 import markupsafe
 import six
 
 from fmn.lib.models import Preference
+from fmn import config as fmn_config
 import fmn.lib.hinting
 
 try:
@@ -29,9 +29,6 @@ log = logging.getLogger(__name__)
 
 irc_regex = r'[a-zA-Z_\-\[\]\\^{}|`][a-zA-Z0-9_\-\[\]\\^{}|`]*'
 gcm_regex = r'^[\w-]+$'
-
-
-CONFIG = fedmsg.config.load_config()
 
 
 def recipients(preferences, message, valid_paths, config):
@@ -125,7 +122,7 @@ def load_preferences(openid=None, cull_disabled=False, cull_backends=None):
             method. The keys are in the format ``<openid>_<context_name>``.
     """
     cull_backends = cull_backends or []
-    backends = [b for b in CONFIG['fmn.backends'] if b not in cull_backends]
+    backends = [b for b in fmn_config.app_conf['fmn.backends'] if b not in cull_backends]
 
     preference_q = Preference.query.filter(Preference.context_name.in_(backends))
     if cull_disabled:
@@ -156,7 +153,7 @@ def update_preferences(openid, existing_preferences):
             :func:`load_preferences`.
     """
     user_prefs = load_preferences(openid=openid, cull_disabled=True)
-    for backend in CONFIG['fmn.backends']:
+    for backend in fmn_config.app_conf['fmn.backends']:
         # Clean out the old settings in case a backend was disabled.
         try:
             del existing_preferences['{}_{}'.format(openid, backend)]

@@ -10,17 +10,18 @@ import fedora.client
 import fedora.client.fas2
 from dogpile.cache import make_region
 
-CONFIG = fedmsg.config.load_config()
-fedmsg.meta.make_processors(**CONFIG)
+from fmn import config
+
+fedmsg.meta.make_processors(**config.app_conf)
 
 _cache = make_region(
     key_mangler=lambda key: "fmn.consumer:dogpile:" + key
-).configure(**CONFIG['fmn.rules.cache'].copy())
+).configure(**config.app_conf['fmn.rules.cache'].copy())
 
 log = logging.getLogger("moksha.hub")
 
 default_url = 'https://admin.fedoraproject.org/accounts/'
-creds = CONFIG['fas_credentials']
+creds = config.app_conf['fas_credentials']
 
 fasclient = fedora.client.fas2.AccountSystem(
     base_url=creds.get('base_url', default_url),
