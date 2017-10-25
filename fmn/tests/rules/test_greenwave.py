@@ -90,21 +90,19 @@ GREENWAVE_MSG = {
 class TestGreenwaveDecisionUpdate(Base):
     '''Test greenwave_decision_update()'''
 
-    def setUp(self):
-        super(TestGreenwaveDecisionUpdate, self).setUp()
-        self.msg = copy.deepcopy(GREENWAVE_MSG)
-
     def test_topic_match(self):
         '''Correct topic must match'''
         self.assertTrue(greenwave.greenwave_decision_update(
-            self.config, self.msg))
+            self.config, GREENWAVE_MSG))
 
     def test_topic_no_match(self):
         '''Different topic must not match'''
-        self.msg['topic'] = "org.fedoraproject.prod.some.other.service"
+        msg = copy.deepcopy(GREENWAVE_MSG)
+        msg['topic'] = "org.fedoraproject.prod.some.other.service"
         self.assertFalse(greenwave.greenwave_decision_update(
-            self.config, self.msg))
+            self.config, msg))
 
-        self.msg['topic'] = "org.fedoraproject.prod.fakegreenwave.decision.update"
+        msg = copy.deepcopy(GREENWAVE_MSG)
+        msg['topic'] = "org.fedoraproject.prod.fakegreenwave.decision.update"
         self.assertFalse(greenwave.greenwave_decision_update(
-            self.config, self.msg))
+            self.config, msg))
