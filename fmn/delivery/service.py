@@ -38,6 +38,7 @@ from twisted.internet import threads, reactor, defer
 import six
 
 from fmn import config
+from fmn.constants import BACKEND_QUEUE_PREFIX
 from .backends import sse, irc, debug, mail
 
 _log = logging.getLogger(__name__)
@@ -146,8 +147,6 @@ class DeliveryService(service.Service):
 
     def startService(self):
         """Implementation of the Service API, called when the service is being started."""
-        self.consumer = Consumer(self, 'backends')
-
         if config.app_conf.get('fmn.backends.debug', False):
             _log.info('"fmn.backends.debug" is True, using the DebugBackend')
             self.backends = {
@@ -172,6 +171,8 @@ class DeliveryService(service.Service):
                     key, config.app_conf['fmn.backends']))
 
         _log.info('Running the FMN delivery service with the %r backends', self.backends.keys())
+        queues = [BACKEND_QUEUE_PREFIX + b for b in self.backends.keys()]
+        self.consumer = Consumer(self, queues)
         reactor.callInThread(self.consumer.run)
 
     @defer.inlineCallbacks

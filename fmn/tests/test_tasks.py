@@ -24,7 +24,7 @@ from dogpile import cache
 from kombu import Queue
 import mock
 
-from fmn import tasks, lib as fmn_lib
+from fmn import tasks, lib as fmn_lib, constants
 from fmn.lib import models
 from fmn.tests import Base
 
@@ -158,8 +158,8 @@ class FindRecipientsTestCase(Base):
         conn = mock_conns.__getitem__.return_value.acquire.return_value.__enter__.return_value
         conn.Producer.return_value.publish.assert_called_with(
             expected_published_message,
-            routing_key='backends',
-            declare=[Queue('backends', durable=True)],
+            routing_key=constants.BACKEND_QUEUE_PREFIX + 'sse',
+            declare=[Queue(constants.BACKEND_QUEUE_PREFIX + 'sse', durable=True)],
         )
 
 
