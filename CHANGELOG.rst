@@ -5,13 +5,31 @@ Changelog
 2.0.0
 =====
 
+Backwards-incompatible Changes
+------------------------------
+
+The default queue names for FMN have changed. Messages that need to be processed
+for recipients are placed in the ``fmn.tasks.unprocessed_messages`` queue and
+messages ready for delivery are in the ``fmn.backends.<backend_name>`` queues.
+
+
 Features
 --------
 
 * The FMN workers and backend is now implemented using Celery
   (`#231 <https://github.com/fedora-infra/fmn/pull/231>`_,
   `#232 <https://github.com/fedora-infra/fmn/pull/232>`_,
-  `#234 <https://github.com/fedora-infra/fmn/pull/234>`_)
+  `#234 <https://github.com/fedora-infra/fmn/pull/234>`_,
+  `#235 <https://github.com/fedora-infra/fmn/pull/235>`_,
+  `#237 <https://github.com/fedora-infra/fmn/pull/237>`_,
+  `#238 <https://github.com/fedora-infra/fmn/pull/238>`_,
+  `#241 <https://github.com/fedora-infra/fmn/pull/241>`_,)
+
+* Rules for Greenwave
+  (`#244 <https://github.com/fedora-infra/fmn/pull/244>`_)
+
+* Configuration defaults are now provided
+  (`#239 <https://github.com/fedora-infra/fmn/pull/239>`_)
 
 
 1.5.0
