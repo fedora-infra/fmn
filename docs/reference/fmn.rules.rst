@@ -188,6 +188,13 @@ GitHub Rules
     :undoc-members:
     :show-inheritance:
 
+Greenwave Rules
+---------------
+
+.. automodule:: fmn.rules.greenwave
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 The New Hotness Rules
 ---------------------
