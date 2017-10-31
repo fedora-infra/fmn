@@ -354,9 +354,13 @@ class GetPagurePackagesForTests(Base):
         packages = utils._get_packages_for(self.config, 'jcline', ['point of contact'])
         self.assertEqual(self.expected_point_of_contact, packages)
 
+    def test_watch(self):
+        """Assert "watch" returns an empty set until it's implemented."""
+        self.assertEqual({}, utils._get_packages_for(self.config, 'jcline', ['watch']))
+
     def test_all(self):
         packages = utils._get_packages_for(
-            self.config, 'jcline', ['point of contact', 'co-maintained'])
+            self.config, 'jcline', ['point of contact', 'co-maintained', 'watch'])
         self.assertEqual(self.expected_all, packages)
 
 
