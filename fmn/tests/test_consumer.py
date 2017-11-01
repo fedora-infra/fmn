@@ -21,7 +21,7 @@ from __future__ import absolute_import
 
 import mock
 
-from fmn import consumer
+from fmn import consumer, config
 from fmn.tests import Base
 
 
@@ -29,11 +29,10 @@ class FMNConsumerTests(Base):
 
     def setUp(self):
         super(FMNConsumerTests, self).setUp()
-        self.config = {
-            'fmn.consumer.enabled': True,
-            'validate_signatures': False,
-            'fmn.sqlalchemy.uri': 'sqlite://',
-        }
+        self.config = config._FmnConfig()
+        self.config['fmn.sqlalchemy.uri'] = 'sqlite://'
+        self.config['fmn.consumer.enabled'] = True
+        self.config['validate_signatures'] = False
         self.hub = mock.Mock(config=self.config)
 
     @mock.patch('fmn.consumer.heat_fas_cache', mock.Mock())
@@ -83,7 +82,8 @@ class FMNConsumerTests(Base):
         )
         self.assertEqual(
             mock_find_recipients.apply_async.call_args_list[0][1],
-            dict(exchange='fmn.tasks.reload_cache'),
+            dict(exchange='fmn.tasks.reload_cache',
+                 routing_key=self.config['celery']['task_default_queue']),
         )
 
     @mock.patch('fmn.consumer.heat_fas_cache', mock.Mock())
