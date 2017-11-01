@@ -82,6 +82,7 @@ class FindRecipientsTestCase(Base):
         conn = mock_conns.__getitem__.return_value.acquire.return_value.__enter__.return_value
         self.assertEqual(0, conn.Producer.return_value.publish.call_count)
 
+    @mock.patch.dict('fmn.tasks.config.app_conf', {'fmn.backends': ['sse']})
     @mock.patch('fmn.tasks.formatters.sse')
     @mock.patch('fmn.rules.utils._cache', new_callable=cache.make_region)
     @mock.patch('fmn.tasks.connections')
