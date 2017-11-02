@@ -4,7 +4,7 @@ After=network.target
 Documentation=https://github.com/fedora-infra/fmn/
 
 [Service]
-ExecStart=/usr/bin/twistd -n -l - -y /usr/lib/share/fmn/delivery_service.tac
+ExecStart=/usr/bin/twistd -n -l - -y /usr/share/fmn/delivery_service.tac
 Type=simple
 Restart=on-failure
 
