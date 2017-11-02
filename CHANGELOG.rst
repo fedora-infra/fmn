@@ -2,6 +2,24 @@
 Changelog
 =========
 
+v2.0.1
+======
+
+Bug fixes
+---------
+
+* Fix a caching issue where disabling delivery methods wouldn't be picked up
+  by all worker processes (`#251 <https://github.com/fedora-infra/fmn/issues/251>`_).
+
+* Fix the path in the distributed systemd unit file for the delivery service:
+  it is now /usr/share/fmn/ rather than /usr/lib/share/
+  (`#246 <https://github.com/fedora-infra/fmn/pull/246>`_).
+
+* Fix a bug in the package ownership queries that caused all rules querying for
+  package watchers to be ignored
+  (`#248 <https://github.com/fedora-infra/fmn/pull/248>`_).
+
+
 2.0.0
 =====
 
