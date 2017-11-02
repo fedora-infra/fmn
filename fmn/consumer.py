@@ -132,6 +132,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
             find_recipients.apply_async(
                 ({'topic': 'fmn.internal.refresh_cache', 'body': openid},),
                 exchange=RELOAD_CACHE_EXCHANGE_NAME,
+                routing_key=config.app_conf['celery']['task_default_queue'],
             )
 
         # If a user has tweaked something in the pkgdb2 db, then invalidate our
