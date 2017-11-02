@@ -351,10 +351,7 @@ def _get_pagure_packages_for(config, username, flags):
     """
     log.debug("Requesting pagure packages for user %r" % username)
 
-    # In the future we want to also support the 'watch' state.
-    # See https://github.com/fedora-infra/fmn/issues/209
-    # which depends on https://pagure.io/pagure/issue/2421
-    valid_flags = ['point of contact', 'co-maintained']
+    valid_flags = ['point of contact', 'co-maintained', 'watch']
 
     bogus = set(flags) - set(valid_flags)
     if bogus:
@@ -371,8 +368,14 @@ def _get_pagure_packages_for(config, username, flags):
     for flag in flags:
         if flag == 'point of contact':
             params = dict(owner=username, short=True)
-        else:  # 'co-maintained'
+        elif flag == 'co-maintained':
             params = dict(username=username, short=True)
+        else:  # watch
+            # In the future we want to also support the 'watch' state.
+            # See https://github.com/fedora-infra/fmn/issues/209
+            # which depends on https://pagure.io/pagure/issue/2421
+            log.debug('"watch" flag is currently unsupported, skipping')
+            continue
 
         pages = _paginate_pagure_data(url, params)
         for page in pages:
