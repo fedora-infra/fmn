@@ -79,6 +79,11 @@ class _FindRecipients(task.Task):
         """
         _log.info('Initializing the "%s" task', self.name)
         fedmsg.meta.make_processors(**config.app_conf)
+        try:
+            fedmsg.init()
+        except ValueError:
+            # Inexplicably, fedmsg raises a ValueError if it knows you already initialized it.
+            pass
         self._valid_paths = None
         self._user_preferences = None
         _log.info('Initialization complete for the "%s" task', self.name)
@@ -194,6 +199,13 @@ class _FindRecipients(task.Task):
                 for recipient in recipients:
                     user = recipient['user']
                     preference = self.user_preferences['{}_{}'.format(user, context)]
+
+                    # Announce the notification for consumers like Hubs
+                    fedmsg.publish(
+                        topic='notification.{user}.{context}'.format(user=user, context=context),
+                        modname='fmn',
+                        msg=message,
+                    )
 
                     if ('filter_oneshot' in recipient and recipient['filter_oneshot']):
                         _log.info('Marking one-time filter as fired')
