@@ -11,12 +11,13 @@ try:
     from dogpile.cache.util import kwarg_function_key_generator
 except ImportError:
     from fmn.dogpile_backports import kwarg_function_key_generator
+from sqlalchemy.orm import subqueryload
 import bs4
 import docutils.examples
 import markupsafe
 import six
 
-from fmn.lib.models import Preference
+from fmn.lib.models import Preference, Filter, _cached_load_class
 from fmn import config as fmn_config
 import fmn.lib.hinting
 
@@ -44,26 +45,26 @@ def recipients(preferences, message, valid_paths, config):
     notified = set()
 
     for preference in preferences.values():
-        user = preference['user']
-        context = preference['context']
-        if (user['openid'], context['name']) in notified:
+        if (preference.user.openid, preference.context.name) in notified:
             continue
 
-        for filter in preference['filters']:
+        for filter in preference.filters:
+            if not filter.active:
+                continue
             if matches(filter, message, valid_paths, rule_cache, config):
-                for detail_value in preference['detail_values']:
-                    results[context['name']].append({
-                        'user': user['openid'],
-                        context['detail_name']: detail_value,
-                        'filter_name': filter['name'],
-                        'filter_id': filter['id'],
-                        'filter_oneshot': filter['oneshot'],
-                        'markup_messages': preference['markup_messages'],
-                        'triggered_by_links': preference['triggered_by_links'],
-                        'shorten_links': preference['shorten_links'],
-                        'verbose': preference['verbose'],
+                for detail_value in preference.detail_values:
+                    results[preference.context.name].append({
+                        'user': preference.user.openid,
+                        preference.context.detail_name: detail_value.value,
+                        'filter_name': filter.name,
+                        'filter_id': filter.id,
+                        'filter_oneshot': filter.oneshot,
+                        'markup_messages': preference.markup_messages,
+                        'triggered_by_links': preference.triggered_by_links,
+                        'shorten_links': preference.shorten_links,
+                        'verbose': preference.verbose,
                     })
-                notified.add((user['openid'], context['name']))
+                notified.add((preference.user.openid, preference.context.name))
                 break
 
     return results
@@ -72,21 +73,23 @@ def recipients(preferences, message, valid_paths, config):
 def matches(filter, message, valid_paths, rule_cache, config):
     """ Returns True if the given filter matches the given message. """
 
-    if not filter['rules']:
+    if not filter.rules:
         return False
 
-    for rule in filter['rules']:
-        fn = rule['fn']
-        negated = rule['negated']
-        arguments = rule['arguments']
-        rule_cache_key = rule['cache_key']
+    log.debug('Processing %r rules on the %r filter for %r on the %r context',
+              len(filter.rules), filter.name, filter.preference.openid,
+              filter.preference.context_name)
+    for rule in filter.rules:
+        log.debug('Determining if %r is a match', rule)
+        fn = _cached_load_class(str(rule.code_path))
+        rule_cache_key = rule.cache_key
 
         try:
             if rule_cache_key not in rule_cache:
-                value = fn(config, message, **arguments)
-                if negated:
+                value = fn(config, message, **rule.arguments)
+                if rule.negated:
                     value = not value
-                rule_cache[rule_cache_key] =  value
+                rule_cache[rule_cache_key] = value
 
             if not rule_cache[rule_cache_key]:
                 return False
@@ -96,6 +99,7 @@ def matches(filter, message, valid_paths, rule_cache, config):
             return False
 
     # Then all rules matched on this filter..
+    log.debug('Rule %r was a match!', rule)
     return True
 
 
@@ -124,6 +128,8 @@ def load_preferences(openid=None, cull_disabled=False, cull_backends=None):
     cull_backends = cull_backends or []
     backends = [b for b in fmn_config.app_conf['fmn.backends'] if b not in cull_backends]
 
+    preference_q = Preference.query.options(
+        subqueryload(Preference.filters).subqueryload(Filter.rules))
     preference_q = Preference.query.filter(Preference.context_name.in_(backends))
     if cull_disabled:
         preference_q = preference_q.filter(Preference.enabled.is_(True))
@@ -137,8 +143,9 @@ def load_preferences(openid=None, cull_disabled=False, cull_backends=None):
     prefs = {}
     for p in preferences:
         key = '{openid}_{context}'.format(openid=p.openid, context=p.context_name)
-        prefs[key] = p.__json__(reify=True)
+        prefs[key] = p
 
+    log.info('Successfully loaded %r preferences', len(prefs))
     return prefs
 
 

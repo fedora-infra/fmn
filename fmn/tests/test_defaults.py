@@ -26,14 +26,14 @@ class TestDefaults(fmn.tests.Base):
         self.create_data()
         preferences = fmn.lib.load_preferences()
         pref = preferences['ralph.id.fedoraproject.org_email']
-        self.assertEqual(pref['user']['openid'], 'ralph.id.fedoraproject.org')
-        self.assertEqual(pref['detail_values'], ['shmalf@fedoraproject.org'])
-        self.assertEqual(pref['enabled'], True)
+        self.assertEqual(pref.user.openid, 'ralph.id.fedoraproject.org')
+        self.assertEqual([v.value for v in pref.detail_values], ['shmalf@fedoraproject.org'])
+        self.assertEqual(pref.enabled, True)
 
     def test_defaults_without_detail_value(self):
         self.create_data()
         preferences = fmn.lib.load_preferences()
         pref = preferences['toshio.id.fedoraproject.org_email']
-        self.assertEqual(pref['user']['openid'], 'toshio.id.fedoraproject.org')
-        self.assertEqual(pref['detail_values'], [])
-        self.assertEqual(pref['enabled'], False)
+        self.assertEqual(pref.user.openid, 'toshio.id.fedoraproject.org')
+        self.assertEqual(pref.detail_values, [])
+        self.assertEqual(pref.enabled, False)
