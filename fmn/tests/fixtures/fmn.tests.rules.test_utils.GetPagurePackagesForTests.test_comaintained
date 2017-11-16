@@ -7,15 +7,15 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.2]
     method: GET
-    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?short=True&page=1&username=jcline
+    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?short=True&page=1&username=jcline&per_page=100
   response:
     body: {string: !!python/unicode "{\n  \"args\": {\n    \"fork\": null,\n    \"\
         namespace\": null,\n    \"owner\": null,\n    \"page\": 1,\n    \"pattern\"\
         : null,\n    \"per_page\": 20,\n    \"short\": true,\n    \"tags\": [],\n\
         \    \"username\": \"jcline\"\n  },\n  \"pagination\": {\n    \"first\": \"\
-        https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=20&short=True&page=1\"\
-        ,\n    \"last\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=20&short=True&page=3\"\
-        ,\n    \"next\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=20&short=True&page=2\"\
+        https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=100&short=True&page=1\"\
+        ,\n    \"last\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=100&short=True&page=3\"\
+        ,\n    \"next\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=100&short=True&page=2\"\
         ,\n    \"page\": 1,\n    \"pages\": 3,\n    \"per_page\": 20,\n    \"prev\"\
         : null\n  },\n  \"projects\": [\n    {\n      \"description\": \"The bodhi\
         \ rpms\",\n      \"fullname\": \"rpms/bodhi\",\n      \"name\": \"bodhi\"\
@@ -88,17 +88,17 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.2]
     method: GET
-    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=20&short=True&page=2
+    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=100&short=True&page=2
   response:
     body: {string: !!python/unicode "{\n  \"args\": {\n    \"fork\": null,\n    \"\
         namespace\": null,\n    \"owner\": null,\n    \"page\": 2,\n    \"pattern\"\
         : null,\n    \"per_page\": 20,\n    \"short\": true,\n    \"tags\": [],\n\
         \    \"username\": \"jcline\"\n  },\n  \"pagination\": {\n    \"first\": \"\
-        https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=20&short=True&page=1\"\
-        ,\n    \"last\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=20&short=True&page=3\"\
-        ,\n    \"next\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=20&short=True&page=3\"\
+        https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=100&short=True&page=1\"\
+        ,\n    \"last\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=100&short=True&page=3\"\
+        ,\n    \"next\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=100&short=True&page=3\"\
         ,\n    \"page\": 2,\n    \"pages\": 3,\n    \"per_page\": 20,\n    \"prev\"\
-        : \"https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=20&short=True&page=1\"\
+        : \"https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=100&short=True&page=1\"\
         \n  },\n  \"projects\": [\n    {\n      \"description\": \"The erlang-p1_tls\
         \ rpms\",\n      \"fullname\": \"rpms/erlang-p1_tls\",\n      \"name\": \"\
         erlang-p1_tls\",\n      \"namespace\": \"rpms\"\n    },\n    {\n      \"description\"\
@@ -170,16 +170,16 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.2]
     method: GET
-    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=20&short=True&page=3
+    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=100&short=True&page=3
   response:
     body: {string: !!python/unicode "{\n  \"args\": {\n    \"fork\": null,\n    \"\
         namespace\": null,\n    \"owner\": null,\n    \"page\": 3,\n    \"pattern\"\
         : null,\n    \"per_page\": 20,\n    \"short\": true,\n    \"tags\": [],\n\
         \    \"username\": \"jcline\"\n  },\n  \"pagination\": {\n    \"first\": \"\
-        https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=20&short=True&page=1\"\
-        ,\n    \"last\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=20&short=True&page=3\"\
+        https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=100&short=True&page=1\"\
+        ,\n    \"last\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=100&short=True&page=3\"\
         ,\n    \"next\": null,\n    \"page\": 3,\n    \"pages\": 3,\n    \"per_page\"\
-        : 20,\n    \"prev\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=20&short=True&page=2\"\
+        : 20,\n    \"prev\": \"https://src.stg.fedoraproject.org/pagure/api/0/projects?username=jcline&per_page=100&short=True&page=2\"\
         \n  },\n  \"projects\": [\n    {\n      \"description\": \"The python-pkginfo\
         \ rpms\",\n      \"fullname\": \"rpms/python-pkginfo\",\n      \"name\": \"\
         python-pkginfo\",\n      \"namespace\": \"rpms\"\n    },\n    {\n      \"\
