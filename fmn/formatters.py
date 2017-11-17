@@ -31,7 +31,6 @@ import datetime
 import time
 import email as email_module
 
-from kitchen.text.converters import to_bytes, to_unicode
 import arrow
 import requests
 import six
@@ -345,51 +344,64 @@ def email(message, recipient):
     Returns:
         str: The email as a unicode string.
     """
-    from_address = config.app_conf['fmn.email.from_address']
-    topics = [message['topic']]
-    categories = [topics[0].split('.')[3]]
-    content = fedmsg.meta.msg2long_form(message, **config.app_conf) or u''
-    link = fedmsg.meta.msg2link(message, **config.app_conf) or u''
-    if link:
-        content += "\n\t" + link
-    subject = fedmsg.meta.msg2subtitle(message, **config.app_conf) or u''
-    usernames = fedmsg.meta.msg2usernames(message, **config.app_conf)
-    packages = fedmsg.meta.msg2packages(message, **config.app_conf)
-
     email_message = _base_email()
-    email_message.add_header('To', to_bytes(recipient['email address']))
-    email_message.add_header('From', to_bytes(from_address))
+    email_message.add_header('To', recipient['email address'].encode('utf-8'))
+    email_message.add_header('From', config.app_conf['fmn.email.from_address'].encode('utf-8'))
+    try:
+        email_message.add_header('X-Fedmsg-Topic', message['topic'].encode('utf-8'))
+        email_message.add_header(
+            'X-Fedmsg-Category', message['topic'].split('.')[3].encode('utf-8'))
+    except Exception:
+        _log.exception('Unable to parse message topic and category for %r', message)
 
-    # Assemble a menagerie of possibly useful headers
-    for topic in topics or []:
-        email_message.add_header('X-Fedmsg-Topic', to_bytes(topic))
-    for category in categories or []:
-        email_message.add_header('X-Fedmsg-Category', to_bytes(category))
-    for username in usernames or []:
-        email_message.add_header('X-Fedmsg-Username', to_bytes(username))
-    for package in packages or []:
-        email_message.add_header('X-Fedmsg-Package', to_bytes(package))
-
+    try:
+        subject = fedmsg.meta.msg2subtitle(message, **config.app_conf) or u'fedmsg notification'
+    except Exception:
+        _log.exception('fedmsg.meta.msg2subtitle failed to handle %r', message)
+        subject = u'fedmsg notification'
     subject_prefix = config.app_conf.get('fmn.email.subject_prefix', '')
     if subject_prefix:
-        subject = '{0} {1}'.format(
+        subject = u'{0} {1}'.format(
             subject_prefix.strip(), subject.strip())
+    email_message.add_header('Subject', subject.encode('utf-8'))
 
-    email_message.add_header('Subject', to_bytes(subject))
+    try:
+        usernames = fedmsg.meta.msg2usernames(message, **config.app_conf) or []
+        for username in usernames:
+            email_message.add_header('X-Fedmsg-Username', username.encode('utf-8'))
+    except Exception:
+        _log.exception('fedmsg.meta.msg2usernames failed to handle %r', message)
+
+    try:
+        packages = fedmsg.meta.msg2packages(message, **config.app_conf) or []
+        for package in packages:
+            email_message.add_header('X-Fedmsg-Package', package.encode('utf-8'))
+    except Exception:
+        _log.exception('fedmsg.meta.msg2packages failed to handle %r', message)
+
+    try:
+        content = fedmsg.meta.msg2long_form(message, **config.app_conf) or u''
+    except Exception:
+        _log.exception('fedmsg.meta.msg2long_form failed to handle %r', message)
+        content = json.dumps(message, sort_keys=True, indent=4)
+
+    try:
+        link = fedmsg.meta.msg2link(message, **config.app_conf)
+        if link:
+            content += "\n\t" + link
+    except Exception:
+        _log.exception('fedmsg.meta.msg2link failed to handle %r', message)
 
     # Since we do simple text email, adding the footer to the content
     # before setting the payload.
-    footer = to_unicode(config.app_conf.get('fmn.email.footer', ''))
-
-    triggered_by = recipient['triggered_by_links']
-    if 'filter_id' in recipient and 'user' in recipient and triggered_by:
+    footer = config.app_conf.get('fmn.email.footer', u'')
+    if 'filter_id' in recipient and 'user' in recipient and recipient['triggered_by_links']:
         base_url = config.app_conf['fmn.base_url']
         footer = (u'You received this message due to your preference settings at \n{base_url}'
                   u'{user}/email/{filter_id}').format(base_url=base_url, **recipient) + footer
     if footer:
         content += u'\n\n--\n{0}'.format(footer.strip())
-
-    email_message.set_payload(to_bytes(content), 'utf-8')
+    email_message.set_payload(content.encode('utf-8'), 'utf-8')
 
     # Explicitly declare encoding, but remove the transfer encoding
     # https://github.com/fedora-infra/fmn/issues/94
@@ -403,78 +415,76 @@ def email_batch(messages, recipient):
     if len(messages) == 1:
         return email(messages[0], recipient)
 
-    def _format_line(msg):
-        timestamp = datetime.datetime.fromtimestamp(msg['timestamp'])
-        link = fedmsg.meta.msg2link(msg, **config.app_conf) or u''
-        payload = fedmsg.meta.msg2subtitle(msg, **config.app_conf) or u''
+    email_message = _base_email()
+    email_message.add_header('To', recipient['email address'].encode('utf-8'))
+    email_message.add_header('From', config.app_conf['fmn.email.from_address'].encode('utf-8'))
+    email_message.add_header(
+        'Subject', u'Fedora Notifications Digest ({n} updates)'.format(n=len(messages)))
+    try:
+        topics = set([message['topic'] for message in messages])
+        categories = set([topic.split('.')[3] for topic in topics])
+        for topic in topics:
+            email_message.add_header('X-Fedmsg-Topic', topic.encode('utf-8'))
+        for cat in categories:
+            email_message.add_header('X-Fedmsg-Category', cat.encode('utf-8'))
+    except Exception:
+        _log.exception('Unable to parse message topic and category for %r', messages)
+
+    for msg in messages:
+        try:
+            for username in fedmsg.meta.msg2usernames(msg, **config.app_conf) or []:
+                email_message.add_header('X-Fedmsg-Username', username.encode('utf-8'))
+        except Exception:
+            _log.exception('fedmsg.meta.msg2usernames failed to handle %r', msg)
+        try:
+            for package in fedmsg.meta.msg2packages(msg, **config.app_conf) or []:
+                email_message.add_header('X-Fedmsg-Package', package.encode('utf-8'))
+        except Exception:
+            _log.exception('fedmsg.meta.msg2packages failed to handle %r', msg)
+
+    content = u'Digest Summary:\n'
+    message_template = u'{number}.\t{summary} ({ts})\n\t- {link}\n{details}{separator}'
+    separator = u'\n\n' + '-' * 79 + '\n\n'
+    for message_number, message in enumerate(messages, start=1):
+        try:
+            summary = fedmsg.meta.msg2subtitle(message, **config.app_conf) or u''
+        except Exception:
+            _log.exception('fedmsg.meta.msg2subtitle failed to handle %r', message)
+            summary = u'Unparsable message subtitle'
 
         if recipient.get('verbose', True):
-            longform = fedmsg.meta.msg2long_form(msg, **config.app_conf) or u''
-            if longform:
-                payload += "\n" + longform
+            try:
+                longform = fedmsg.meta.msg2long_form(message, **config.app_conf) or u''
+            except Exception:
+                _log.exception('fedmsg.meta.msg2long_form failed to handle %r', message)
+                longform = u'Unparsable message details'
+        else:
+            longform = u''
 
-        return timestamp.strftime("%c") + ", " + payload + "\n\t" + link
+        try:
+            link = fedmsg.meta.msg2link(message, **config.app_conf) or u''
+        except Exception:
+            _log.exception('fedmsg.meta.msg2link failed to handle %r', message)
+            link = u'No link could be found in the message'
 
-    from_address = config.app_conf['fmn.email.from_address']
-    topics = set([message['topic'] for message in messages])
-    categories = set([topic.split('.')[3] for topic in topics])
-
-    def squash(items):
-        return reduce(set.union, items, set())
-    usernames = squash([
-        fedmsg.meta.msg2usernames(msg, **config.app_conf)
-        for msg in messages])
-    packages = squash([
-        fedmsg.meta.msg2packages(msg, **config.app_conf)
-        for msg in messages])
-    subject = u'Fedora Notifications Digest ({n} updates)'.format(n=len(messages))
-    summary = u"Digest summary:\n"
-    i = 0
-    for msg in messages:
-        i = i + 1
-        line = fedmsg.meta.msg2subtitle(msg, **config.app_conf) or u''
-        summary += '%d.\t%s\n' % (i, line)
-
-    separator = "\n\n" + "-"*79 + "\n\n"
-    if recipient.get('verbose', True):
-        content = summary + separator
-    else:
-        content = u''
-    content += separator.join([_format_line(message) for message in messages])
-
-    email_message = email_module.Message.Message()
-    email_message.add_header('To', recipient['email address'])
-    email_message.add_header('From', from_address)
-    email_message.add_header('Subject', to_bytes(subject))
-    # Although this is a non-standard header and RFC 2076 discourages it, some
-    # old clients don't honour RFC 3834 and will auto-respond unless this is set.
-    email_message.add_header('Precendence', 'Bulk')
-    # Mark this mail as auto-generated so auto-responders don't respond; see RFC 3834
-    email_message.add_header('Auto-Submitted', 'auto-generated')
-
-    # Assemble a menagerie of possibly useful headers
-    for topic in topics or []:
-        email_message.add_header('X-Fedmsg-Topic', to_bytes(topic))
-    for category in categories or []:
-        email_message.add_header('X-Fedmsg-Category', to_bytes(category))
-    for username in usernames or []:
-        email_message.add_header('X-Fedmsg-Username', to_bytes(username))
-    for package in packages or []:
-        email_message.add_header('X-Fedmsg-Package', to_bytes(package))
+        timestamp = datetime.datetime.fromtimestamp(message['timestamp'])
+        content += message_template.format(
+            number=message_number, summary=summary, ts=timestamp.strftime('%c'),
+            link=link, details=longform, separator=separator)
 
     if len(content) > 20000000:
         # This email is enormous, too large to be sent.
-        content = ('This message digest was too large to be sent!\n'
-                   'The following messages were batched:\n\n')
+        content = (u'This message digest was too large to be sent!\n'
+                   u'The following messages were batched:\n\n')
         for msg in messages:
             content += msg['msg_id'] + '\n'
 
         if len(content) > 20000000:
             # Even the briefest summary is too big
-            content = ('The message digest was so large, not even a summary could be sent.\n'
-                       'Consider adjusting your FMN settings.\n')
+            content = (u'The message digest was so large, not even a summary could be sent.\n'
+                       u'Consider adjusting your FMN settings.\n')
 
-    email_message.set_payload(to_bytes(content), 'utf-8')
+    email_message.set_payload(content.encode('utf-8'), 'utf-8')
     return email_message.as_string()
 
 

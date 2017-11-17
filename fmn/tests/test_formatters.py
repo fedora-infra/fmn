@@ -255,6 +255,31 @@ class SseTests(Base):
 
 class EmailTests(Base):
 
+    def setUp(self):
+        super(EmailTests, self).setUp()
+        self.message = {
+            "msg": {
+                "changed": "rules",
+                "context": "email",
+                "openid": "jcline.id.fedoraproject.org"
+            },
+            "msg_id": "2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b",
+            "timestamp": 1507310730,
+            "topic": "org.fedoraproject.dev.fmn.filter.update",
+            "username": "vagrant"
+        }
+        self.recipient = {
+            "email address": "jeremy@jcline.org",
+            "filter_id": 11,
+            "filter_name": "test",
+            "filter_oneshot": False,
+            "markup_messages": False,
+            "shorten_links": False,
+            "triggered_by_links": False,
+            "user": "jcline.id.fedoraproject.org",
+            "verbose": True,
+        }
+
     def test_base_email(self):
         """Assert the basic email has the auto-generation headers."""
         message = formatters._base_email()
@@ -291,32 +316,254 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
     def test_email(self):
         """Assert a well-formed email is returned from a basic message."""
         expected = (
-            "Precedence: Bulk\n"
-            "Auto-Submitted: auto-generated\n"
-            "To: jeremy@jcline.org\n"
-            "From: notifications@fedoraproject.org\n"
-            "X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n"
-            "X-Fedmsg-Category: fmn\n"
-            "X-Fedmsg-Username: jcline\n"
-            "Subject: jcline updated the rules on a fmn email filter\n"
-            "MIME-Version: 1.0\n"
-            "Content-Type: text/plain; charset=\"utf-8\"\n"
-            "Content-Transfer-Encoding: base64\n\n"
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'To: jeremy@jcline.org\n'
+            'From: notifications@fedoraproject.org\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'Subject: jcline updated the rules on a fmn email filter\n'
+            'X-Fedmsg-Username: jcline\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
             "amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9h\n"
             "cHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n"
         )
-        message = {
-            "msg": {
-                "changed": "rules",
-                "context": "email",
-                "openid": "jcline.id.fedoraproject.org"
+
+        actual = formatters.email(self.message, self.recipient)
+        self.assertEqual(expected, actual)
+
+    @mock.patch.dict('fmn.formatters.config.app_conf', {'fmn.email.subject_prefix': 'PREFIX: '})
+    def test_subject_prefix(self):
+        """Assert the subject prefix is added if configured."""
+        expected = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'To: jeremy@jcline.org\n'
+            'From: notifications@fedoraproject.org\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'Subject: PREFIX: jcline updated the rules on a fmn email filter\n'
+            'X-Fedmsg-Username: jcline\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            "amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9h\n"
+            "cHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n"
+        )
+
+        actual = formatters.email(self.message, self.recipient)
+        self.assertEqual(expected, actual)
+
+    def test_unparsable_category(self):
+        """Assert failing to parse the topic works and just leaves those headers off."""
+        expected = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'To: jeremy@jcline.org\n'
+            'From: notifications@fedoraproject.org\n'
+            'X-Fedmsg-Topic: so.short\n'
+            'Subject: fedmsg notification\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+        )
+        self.message['topic'] = 'so.short'
+
+        actual = formatters.email(self.message, self.recipient)
+        self.assertEqual(expected, actual)
+
+    @mock.patch('fmn.formatters.fedmsg.meta.msg2subtitle', mock.Mock(side_effect=Exception))
+    def test_no_subtitle(self):
+        """Assert an exception in msg2subtitle results in "fedmsg notification" as the subject."""
+        expected = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'To: jeremy@jcline.org\n'
+            'From: notifications@fedoraproject.org\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'Subject: fedmsg notification\n'
+            'X-Fedmsg-Username: jcline\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            "amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9h\n"
+            "cHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n"
+        )
+
+        actual = formatters.email(self.message, self.recipient)
+        self.assertEqual(expected, actual)
+
+    @mock.patch('fmn.formatters.fedmsg.meta.msg2usernames', mock.Mock(side_effect=Exception))
+    def test_unparsable_usernames(self):
+        """Assert unparsable usernames just exclude that header."""
+        expected = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'To: jeremy@jcline.org\n'
+            'From: notifications@fedoraproject.org\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'Subject: jcline updated the rules on a fmn email filter\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            "amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9h\n"
+            "cHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n"
+        )
+
+        actual = formatters.email(self.message, self.recipient)
+        self.assertEqual(expected, actual)
+
+    @mock.patch('fmn.formatters.fedmsg.meta.msg2packages', mock.Mock(return_value=['pkg']))
+    def test_packages(self):
+        """Assert package headers are added."""
+        expected = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'To: jeremy@jcline.org\n'
+            'From: notifications@fedoraproject.org\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'Subject: jcline updated the rules on a fmn email filter\n'
+            'X-Fedmsg-Username: jcline\n'
+            'X-Fedmsg-Package: pkg\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            "amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9h\n"
+            "cHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n"
+        )
+
+        actual = formatters.email(self.message, self.recipient)
+        self.assertEqual(expected, actual)
+
+    @mock.patch('fmn.formatters.fedmsg.meta.msg2packages', mock.Mock(side_effect=Exception))
+    def test_unparsable_packages(self):
+        """Assert unparsable usernames just exclude that header."""
+        expected = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'To: jeremy@jcline.org\n'
+            'From: notifications@fedoraproject.org\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'Subject: jcline updated the rules on a fmn email filter\n'
+            'X-Fedmsg-Username: jcline\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            "amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9h\n"
+            "cHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n"
+        )
+
+        actual = formatters.email(self.message, self.recipient)
+        self.assertEqual(expected, actual)
+
+    @mock.patch('fmn.formatters.fedmsg.meta.msg2long_form', mock.Mock(side_effect=Exception))
+    def test_unparsable_body(self):
+        """Assert the message JSON is sent of the long form fails."""
+        expected = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'To: jeremy@jcline.org\n'
+            'From: notifications@fedoraproject.org\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'Subject: jcline updated the rules on a fmn email filter\n'
+            'X-Fedmsg-Username: jcline\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            'ewogICAgIm1zZyI6IHsKICAgICAgICAiY2hhbmdlZCI6ICJydWxlcyIsIAogICAgICAgICJjb250\n'
+            'ZXh0IjogImVtYWlsIiwgCiAgICAgICAgIm9wZW5pZCI6ICJqY2xpbmUuaWQuZmVkb3JhcHJvamVj\n'
+            'dC5vcmciCiAgICB9LCAKICAgICJtc2dfaWQiOiAiMjAxNy02YWE3MWQ1Yi1mYmU0LTQ5ZTctYWZk\n'
+            'ZC1hZmNmMGQyMjgwMmIiLCAKICAgICJ0aW1lc3RhbXAiOiAxNTA3MzEwNzMwLCAKICAgICJ0b3Bp\n'
+            'YyI6ICJvcmcuZmVkb3JhcHJvamVjdC5kZXYuZm1uLmZpbHRlci51cGRhdGUiLCAKICAgICJ1c2Vy\n'
+            'bmFtZSI6ICJ2YWdyYW50Igp9CglodHRwczovL2FwcHMuZmVkb3JhcHJvamVjdC5vcmcvbm90aWZp\n'
+            'Y2F0aW9ucy8=\n'
+        )
+
+        actual = formatters.email(self.message, self.recipient)
+        self.assertEqual(expected, actual)
+
+    @mock.patch('fmn.formatters.fedmsg.meta.msg2link', mock.Mock(side_effect=Exception))
+    def test_unparsable_link(self):
+        """Assert no link is included if none can be derived."""
+        expected = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'To: jeremy@jcline.org\n'
+            'From: notifications@fedoraproject.org\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'Subject: jcline updated the rules on a fmn email filter\n'
+            'X-Fedmsg-Username: jcline\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            'amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcg==\n'
+        )
+
+        actual = formatters.email(self.message, self.recipient)
+        self.assertEqual(expected, actual)
+
+    def test_footer(self):
+        """Assert no link is included if none can be derived."""
+        expected = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'To: jeremy@jcline.org\n'
+            'From: notifications@fedoraproject.org\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'Subject: jcline updated the rules on a fmn email filter\n'
+            'X-Fedmsg-Username: jcline\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            'amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9h\n'
+            'cHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMvCgotLQpZb3UgcmVjZWl2ZWQgdGhp\n'
+            'cyBtZXNzYWdlIGR1ZSB0byB5b3VyIHByZWZlcmVuY2Ugc2V0dGluZ3MgYXQgCmh0dHA6Ly9sb2Nh\n'
+            'bGhvc3Q6NTAwMC9qY2xpbmUuaWQuZmVkb3JhcHJvamVjdC5vcmcvZW1haWwvMTE=\n'
+        )
+        self.recipient['triggered_by_links'] = True
+
+        actual = formatters.email(self.message, self.recipient)
+        self.assertEqual(expected, actual)
+
+
+class EmailBatchTests(Base):
+
+    def setUp(self):
+        super(EmailBatchTests, self).setUp()
+        self.messages = [
+            {
+                "msg": {
+                    "changed": "rules",
+                    "context": "email",
+                    "openid": "jcline.id.fedoraproject.org"
+                },
+                "msg_id": "2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b",
+                "timestamp": 1507310730,
+                "topic": "org.fedoraproject.dev.fmn.filter.update",
+                "username": "vagrant",
             },
-            "msg_id": "2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b",
-            "timestamp": 1507310730,
-            "topic": "org.fedoraproject.dev.fmn.filter.update",
-            "username": "vagrant"
-        }
-        recipient = {
+            {
+                "msg": {
+                    "changed": "rules",
+                    "context": "email",
+                    "openid": "bowlofeggs.id.fedoraproject.org"
+                },
+                "msg_id": "2017-6aa71d5b-aaaa-bbbb-cccc-afcf0d22802z",
+                "timestamp": 1507310730,
+                "topic": "org.fedoraproject.dev.fmn.filter.update",
+                "username": "vagrant",
+            },
+        ]
+        self.recipient = {
             "email address": "jeremy@jcline.org",
             "filter_id": 11,
             "filter_name": "test",
@@ -328,5 +575,39 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
             "verbose": True,
         }
 
-        actual = formatters.email(message, recipient)
+    def test_single_message(self):
+        """Assert if the batch is of length one, it's the same as a plain email."""
+        self.assertEqual(
+            formatters.email(self.messages[0], self.recipient),
+            formatters.email_batch([self.messages[0]], self.recipient),
+        )
+
+    def test_basic_batch(self):
+        """Assert a well-formed email is returned from a basic message."""
+        expected = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'To: jeremy@jcline.org\n'
+            'From: notifications@fedoraproject.org\n'
+            'Subject: Fedora Notifications Digest (2 updates)\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Username: jcline\n'
+            'X-Fedmsg-Username: bowlofeggs\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            'RGlnZXN0IFN1bW1hcnk6CjEuCWpjbGluZSB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFp\n'
+            'bCBmaWx0ZXIgKEZyaSBPY3QgIDYgMTc6MjU6MzAgMjAxNykKCS0gaHR0cHM6Ly9hcHBzLmZlZG9y\n'
+            'YXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMvCmpjbGluZSB1cGRhdGVkIHRoZSBydWxlcyBvbiBh\n'
+            'IGZtbiBlbWFpbCBmaWx0ZXIKCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t\n'
+            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCjIuCWJvd2xvZmVnZ3Mg\n'
+            'dXBkYXRlZCB0aGUgcnVsZXMgb24gYSBmbW4gZW1haWwgZmlsdGVyIChGcmkgT2N0ICA2IDE3OjI1\n'
+            'OjMwIDIwMTcpCgktIGh0dHBzOi8vYXBwcy5mZWRvcmFwcm9qZWN0Lm9yZy9ub3RpZmljYXRpb25z\n'
+            'Lwpib3dsb2ZlZ2dzIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoKLS0t\n'
+            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t\n'
+            'LS0tLS0tLS0tLS0tLS0tLS0tLQoK\n'
+        )
+
+        actual = formatters.email_batch(self.messages, self.recipient)
         self.assertEqual(expected, actual)

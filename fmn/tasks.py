@@ -36,7 +36,7 @@ import fedmsg
 import fedmsg.meta
 import fedmsg_meta_fedora_infrastructure
 
-from . import config, lib as fmn_lib, formatters
+from . import config, lib as fmn_lib, formatters, exceptions
 from . import fmn_fasshim
 from .lib import models
 from .celery import app
@@ -207,17 +207,27 @@ class _FindRecipients(task.Task):
                         models.QueuedMessage.enqueue(session, user, context, message)
                         continue
 
-                    formatted_message = message
-                    try:
-                        if context == 'email':
-                            formatted_message = formatters.email(message['body'], recipient)
-                        elif context == 'irc':
+                    formatted_message = None
+                    if context == 'email':
+                        formatted_message = formatters.email(message['body'], recipient)
+                    elif context == 'irc':
+                        try:
                             formatted_message = formatters.irc(message['body'], recipient)
-                        elif context == 'sse':
+                        except Exception:
+                            _log.exception('An exception occurred formatting the message '
+                                           'for delivery: falling back to sending the raw fedmsg')
+                            formatted_message = message
+                    elif context == 'sse':
+                        try:
                             formatted_message = formatters.sse(message['body'], recipient)
-                    except Exception:
-                        _log.exception('An unexpected exception occurred formatting the message '
-                                       'for delivery: falling back to sending the raw fedmsg')
+                        except Exception:
+                            _log.exception('An exception occurred formatting the message '
+                                           'for delivery: falling back to sending the raw fedmsg')
+                            formatted_message = message
+
+                    if formatted_message is None:
+                        raise exceptions.FmnError(
+                            'The message was not formatted in any way, aborting!')
 
                     _log.info('Queuing message for delivery to %s on the %s backend', user, context)
                     backend_message = {
@@ -268,15 +278,20 @@ def batch_messages():
                 for value in pref.detail_values
             ]
             for recipient in recipients:
-                try:
-                    if pref.context.name == 'email':
-                        formatted_message = formatters.email_batch(messages, recipient)
-                    elif pref.context.name == 'irc':
-                        formatted_message = formatters.irc_batch(messages, recipient)
-                except Exception:
-                    _log.exception('An unexpected exception occurred formatting the message '
-                                   'for delivery: falling back to sending the raw fedmsg')
-                    formatted_message = messages
+                if pref.context.name == 'email':
+                    formatted_message = formatters.email_batch(
+                        [m['body'] for m in messages], recipient)
+                elif pref.context.name == 'irc':
+                    try:
+                        formatted_message = formatters.irc_batch(
+                            [m['body'] for m in messages], recipient)
+                    except Exception:
+                        _log.exception('An exception occurred formatting the message '
+                                       'for delivery: falling back to sending the raw fedmsg')
+                        formatted_message = messages
+                if formatted_message is None:
+                    raise exceptions.FmnError(
+                        'The message was not formatted in any way, aborting!')
 
                 backend_message = {
                     "context": pref.context.name,
