@@ -5,7 +5,7 @@ Documentation=https://github.com/fedora-infra/fmn/
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/celery worker --pool=solo -E -A fmn -l info -n fmn-worker%i@%H
+ExecStart=/usr/bin/celery worker --pool=prefork --concurrency=1 -E -A fmn -l info -n fmn-worker%i@%H
 
 [Install]
 WantedBy=multi-user.target
