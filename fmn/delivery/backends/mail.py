@@ -66,7 +66,7 @@ class EmailBackend(BaseBackend):
                 self.host,
                 to_bytes(self.from_address),
                 [to_bytes(recipient['email address'])],
-                formatted_message,
+                formatted_message.encode('utf-8'),
                 port=self.port,
             )
             _log.info('Email successfully delivered to %s', recipient['email address'])
