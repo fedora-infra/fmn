@@ -192,6 +192,7 @@ class DeliveryService(service.Service):
         try:
             context = message['context']
             recipient = message['recipient']
+            # This could be a dict, or a list if it's a batch message
             fedmsg = message['fedmsg']
             formatted_message = message['formatted_message']
         except Exception:
@@ -208,15 +209,19 @@ class DeliveryService(service.Service):
 
         try:
             yield backend.deliver(formatted_message, recipient, fedmsg)
-            _log.info('Successfully delivered message %s to %s via %s',
-                      fedmsg.get('body', {}).get('msg_id', 'UNKNOWN_ID'),
-                      recipient.get('user', 'UNKOWN_USER'), context)
         except Exception:
             # Logging from outside the twisted thread won't provide the full traceback, so catch
             # it here, log it for the traceback, and raise it again.
             _log.exception('The "%s" backend raised an unexpected exception while trying to '
                            'deliver a notification to recipient "%r"', context, recipient)
             raise
+        if isinstance(fedmsg, dict):
+            _log.info('Successfully delivered message %s to %s via %s',
+                      fedmsg.get('body', {}).get('msg_id', 'UNKNOWN_ID'),
+                      recipient.get('user', 'UNKOWN_USER'), context)
+        else:
+            _log.info('Successfully delivered a batch of %r messages to %r via %r',
+                      len(fedmsg), recipient.get('user', 'UNKOWN_USER'), context)
 
     def stopService(self):
         """Implementation of the Service API, called when the service is shutting down."""

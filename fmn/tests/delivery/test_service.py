@@ -228,3 +228,26 @@ class DeliveryServiceTests(Base):
         delivery_service.stopService()
 
         self.assertTrue(delivery_service.consumer.should_stop)
+
+    @patch('fmn.delivery.service._log')
+    def test_handle_batch(self, mock_log):
+        delivery_service = service.DeliveryService()
+        message = {
+            'context': 'sse',
+            'recipient': {},
+            'fedmsg': [{'msg_id': 1}, {'msg_id': 2}],
+            'formatted_message': ''
+        }
+        test_config = {
+            'fmn.backends.debug': True,
+            'fmn.backends': ['sse'],
+        }
+        delivery_service = service.DeliveryService()
+        with patch.dict(service.config.app_conf, test_config):
+            delivery_service.startService()
+
+        delivery_service.handle_message(message)
+
+        mock_log.info.assert_called_with(
+            'Successfully delivered a batch of %r messages to %r via %r',
+            2, 'UNKOWN_USER', 'sse')
