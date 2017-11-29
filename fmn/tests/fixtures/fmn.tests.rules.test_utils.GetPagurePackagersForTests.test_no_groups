@@ -7,7 +7,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.2]
     method: GET
-    uri: https://src.stg.fedoraproject.org/pagure/api/0/rpms/ejabberd
+    uri: https://src.stg.fedoraproject.org/pagure/api/0/rpms/ejabberd?fork=False
   response:
     body: {string: !!python/unicode "{\n  \"access_groups\": {\n    \"admin\": [],\n\
         \    \"commit\": [],\n    \"ticket\": []\n  },\n  \"access_users\": {\n  \

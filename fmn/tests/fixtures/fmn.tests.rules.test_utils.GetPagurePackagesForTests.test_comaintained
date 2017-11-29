@@ -7,7 +7,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.2]
     method: GET
-    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?short=True&page=1&username=jcline&per_page=100
+    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?fork=False&short=True&page=1&username=jcline&per_page=100
   response:
     body: {string: !!python/unicode "{\n  \"args\": {\n    \"fork\": null,\n    \"\
         namespace\": null,\n    \"owner\": null,\n    \"page\": 1,\n    \"pattern\"\

@@ -7,7 +7,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.2]
     method: GET
-    uri: https://src.stg.fedoraproject.org/pagure/api/0/notanamespace/orapackage
+    uri: https://src.stg.fedoraproject.org/pagure/api/0/notanamespace/orapackage?fork=False
   response:
     body: {string: !!python/unicode "{\n  \"error\": \"Project not found\",\n  \"\
         error_code\": \"ENOPROJECT\"\n}"}

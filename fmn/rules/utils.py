@@ -161,7 +161,7 @@ def _get_pagure_packagers_for(config, package):
     url = '{0}/0/{1}'.format(base, package)
     log.info("Querying Pagure at %s for packager information", url)
     try:
-        response = requests_session.get(url, timeout=25)
+        response = requests_session.get(url, params={'fork': False}, timeout=25)
     except requests.exceptions.Timeout as e:
         log.warn('URL %s timed out %r', url, e)
         return set()
@@ -371,10 +371,11 @@ def _get_pagure_packages_for(config, username, flags):
 
     packages = defaultdict(set)
     for flag in flags:
+        params = {'short': True, 'fork': False, 'per_page': 100}
         if flag == 'point of contact':
-            params = dict(owner=username, short=True, per_page=100)
+            params['owner'] = username
         elif flag == 'co-maintained':
-            params = dict(username=username, short=True, per_page=100)
+            params['username'] = username
         else:  # watch
             # In the future we want to also support the 'watch' state.
             # See https://github.com/fedora-infra/fmn/issues/209
