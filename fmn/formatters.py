@@ -103,45 +103,44 @@ def shorten(link):
         return link
 
 
-def irc(msg, recipient):
+def irc(message, recipient):
     """
     Format a fedmsg for delivery via IRC.
 
     Args:
-        msg (dict): The fedmsg's message body.
+        message (dict): The fedmsg's message body.
         recipient (dict): The recipient's formatting preferences.
 
     Returns:
         str: A human-readable message suitable for delivery to the user.
     """
-    # Here we have to distinguish between two different kinds of messages that
-    # might arrive: the `raw` message from fedmsg itself and the product of a
-    # call to `fedmsg.meta.conglomerate(..)`
-    if 'subtitle' not in msg:
-        # This handles normal, 'raw' messages which get passed through msg2*.
-        title = fedmsg.meta.msg2title(msg, **config.app_conf)
-        subtitle = fedmsg.meta.msg2subtitle(msg, **config.app_conf)
-        link = fedmsg.meta.msg2link(msg, **config.app_conf)
-        # Only prefix with topic if we're "marking up" messages.
-        if recipient['markup_messages']:
-            template = u"{title} -- {subtitle} {delta}{link}{flt}"
-        else:
-            template = u"{subtitle} {delta}{link}{flt}"
+    if recipient['markup_messages']:
+        template = u"{title} -- {subtitle} {delta} {link} {flt}"
     else:
-        # This handles messages that have already been 'conglomerated'.
-        title = u""
-        subtitle = msg['subtitle']
-        link = msg['link']
-        template = u"{subtitle} {delta}{link}{flt}"
-
-    if recipient['shorten_links']:
-        link = shorten(link)
+        template = u"{subtitle} {delta} {link} {flt}"
+    title = 'Unknown title'
+    subtitle = 'Unknown subtitle'
+    link = None
+    try:
+        title = fedmsg.meta.msg2title(message, **config.app_conf)
+    except Exception:
+        _log.exception('Unable to produce a message title for %r', message)
+    try:
+        subtitle = fedmsg.meta.msg2subtitle(message, **config.app_conf)
+    except Exception:
+        _log.exception('Unable to produce a message subtitle for %r', message)
+    try:
+        link = fedmsg.meta.msg2link(message, **config.app_conf)
+        if recipient['shorten_links']:
+            link = shorten(link)
+    except Exception:
+        _log.exception('Unable to produce a message link for %r', message)
 
     # Tack a human-readable delta on the end so users know that fmn is
     # backlogged (if it is).
     delta = ''
-    if time.time() - msg['timestamp'] > 10:
-        delta = arrow.get(msg['timestamp']).humanize() + ' '
+    if time.time() - message['timestamp'] > 10:
+        delta = arrow.get(message['timestamp']).humanize()
 
     flt = ''
     if recipient['triggered_by_links'] and 'filter_id' in recipient:
@@ -150,7 +149,7 @@ def irc(msg, recipient):
             base_url=config.app_conf['fmn.base_url'], **recipient)
         if recipient['shorten_links']:
             flt_link = shorten(flt_link)
-        flt = "    ( triggered by %s )" % flt_link
+        flt = "(triggered by %s)" % flt_link
 
     if recipient['markup_messages']:
         def markup(s, color):
@@ -163,7 +162,7 @@ def irc(msg, recipient):
             link = markup(link, "teal")
 
     return template.format(title=title, subtitle=subtitle, delta=delta,
-                           link=link, flt=flt)
+                           link=link, flt=flt).strip()
 
 
 def irc_batch(messages, recipient):
@@ -177,7 +176,50 @@ def irc_batch(messages, recipient):
     if len(messages) == 1:
         return irc(messages[0], recipient)
     else:
-        return fedmsg.meta.conglomerate(messages, **config.app_conf)
+        template = u'{subtitle} {delta} {link} {filter_link}\n'
+        formatted_message = u''
+        try:
+            # This apparently returns a list of dicts with the 'link', 'subtitle',
+            # 'subjective', 'secondary_icon' and any number of other keys from the
+            # individual conglomerator.
+            conglomerated = fedmsg.meta.conglomerate(messages, **config.app_conf)
+            for message in conglomerated:
+                formatted_message += template.format(
+                    subtitle=message['subtitle'], delta=message.get('human_time', ''),
+                    link=message['link'], filter_link=_irc_filter_link(recipient))
+        except Exception:
+            _log.exception('An unexpected error occurred while processing an IRC batch')
+            formatted_message = (
+                u'You received {} notifications in this batch, but there was a problem '
+                u'making them human-readable. This error has been automatically reported. '
+                u'Join #fedora-admin for more information. '
+                u'The message IDs are: \n').format(len(messages))
+            for message in messages:
+                if 'msg_id' in message:
+                    _log.error('%s was among the batch that could not be processed',
+                               message['msg_id'])
+                    formatted_message += u'{}\n'.format(message['msg_id'])
+        return formatted_message
+
+
+def _irc_filter_link(recipient):
+    """
+    Create a link to the recipient's filter that triggered this message.
+
+    Args:
+        recipient: The recipient dictionary.
+    Returns:
+        six.text_type: A (potentially shortened) link to the user's filter or
+            an empty string if the user has turned off the setting to include
+            links to the triggered filter.
+    """
+    if recipient['triggered_by_links'] and 'filter_id' in recipient:
+        link = u'{base_url}{user}/irc/{filter_id}'.format(
+            base_url=config.app_conf['fmn.base_url'], **recipient)
+        if recipient['shorten_links']:
+            link = shorten(link)
+        return link
+    return u''
 
 
 def irc_confirmation(confirmation):
@@ -344,15 +386,7 @@ def email(message, recipient):
     Returns:
         str: The email as a unicode string.
     """
-    email_message = _base_email()
-    email_message.add_header('To', recipient['email address'].encode('utf-8'))
-    email_message.add_header('From', config.app_conf['fmn.email.from_address'].encode('utf-8'))
-    try:
-        email_message.add_header('X-Fedmsg-Topic', message['topic'].encode('utf-8'))
-        email_message.add_header(
-            'X-Fedmsg-Category', message['topic'].split('.')[3].encode('utf-8'))
-    except Exception:
-        _log.exception('Unable to parse message topic and category for %r', message)
+    email_message = _base_email(recipient=recipient, messages=[message])
 
     try:
         subject = fedmsg.meta.msg2subtitle(message, **config.app_conf) or u'fedmsg notification'
@@ -364,20 +398,6 @@ def email(message, recipient):
         subject = u'{0} {1}'.format(
             subject_prefix.strip(), subject.strip())
     email_message.add_header('Subject', subject.encode('utf-8'))
-
-    try:
-        usernames = fedmsg.meta.msg2usernames(message, **config.app_conf) or []
-        for username in usernames:
-            email_message.add_header('X-Fedmsg-Username', username.encode('utf-8'))
-    except Exception:
-        _log.exception('fedmsg.meta.msg2usernames failed to handle %r', message)
-
-    try:
-        packages = fedmsg.meta.msg2packages(message, **config.app_conf) or []
-        for package in packages:
-            email_message.add_header('X-Fedmsg-Package', package.encode('utf-8'))
-    except Exception:
-        _log.exception('fedmsg.meta.msg2packages failed to handle %r', message)
 
     try:
         content = fedmsg.meta.msg2long_form(message, **config.app_conf) or u''
@@ -415,32 +435,9 @@ def email_batch(messages, recipient):
     if len(messages) == 1:
         return email(messages[0], recipient)
 
-    email_message = _base_email()
-    email_message.add_header('To', recipient['email address'].encode('utf-8'))
-    email_message.add_header('From', config.app_conf['fmn.email.from_address'].encode('utf-8'))
+    email_message = _base_email(recipient=recipient, messages=messages)
     email_message.add_header(
         'Subject', u'Fedora Notifications Digest ({n} updates)'.format(n=len(messages)))
-    try:
-        topics = set([message['topic'] for message in messages])
-        categories = set([topic.split('.')[3] for topic in topics])
-        for topic in topics:
-            email_message.add_header('X-Fedmsg-Topic', topic.encode('utf-8'))
-        for cat in categories:
-            email_message.add_header('X-Fedmsg-Category', cat.encode('utf-8'))
-    except Exception:
-        _log.exception('Unable to parse message topic and category for %r', messages)
-
-    for msg in messages:
-        try:
-            for username in fedmsg.meta.msg2usernames(msg, **config.app_conf) or []:
-                email_message.add_header('X-Fedmsg-Username', username.encode('utf-8'))
-        except Exception:
-            _log.exception('fedmsg.meta.msg2usernames failed to handle %r', msg)
-        try:
-            for package in fedmsg.meta.msg2packages(msg, **config.app_conf) or []:
-                email_message.add_header('X-Fedmsg-Package', package.encode('utf-8'))
-        except Exception:
-            _log.exception('fedmsg.meta.msg2packages failed to handle %r', msg)
 
     content = u'Digest Summary:\n'
     message_template = u'{number}.\t{summary} ({ts})\n\t- {link}\n{details}{separator}'
@@ -500,7 +497,6 @@ def email_confirmation(confirmation):
     """
     email_message = _base_email()
     email_message.add_header('To', confirmation.detail_value)
-    email_message.add_header('From', config.app_conf['fmn.email.from_address'])
     email_message.add_header('Subject', u'Confirm notification email')
     acceptance_url = config.app_conf['fmn.acceptance_url'].format(
         secret=confirmation.secret)
@@ -518,7 +514,7 @@ def email_confirmation(confirmation):
     return email_message.as_string()
 
 
-def _base_email():
+def _base_email(recipient=None, messages=None):
     """
     Create an email Message with some basic headers to mark the email as auto-generated.
 
@@ -532,4 +528,32 @@ def _base_email():
     email_message.add_header('Precedence', 'Bulk')
     # Mark this mail as auto-generated so auto-responders don't respond; see RFC 3834
     email_message.add_header('Auto-Submitted', 'auto-generated')
+    email_message.add_header('From', config.app_conf['fmn.email.from_address'].encode('utf-8'))
+
+    if recipient and 'email address' in recipient:
+        email_message.add_header('To', recipient['email address'].encode('utf-8'))
+
+    if messages:
+        try:
+            topics = set([message['topic'] for message in messages])
+            for topic in topics:
+                email_message.add_header('X-Fedmsg-Topic', topic.encode('utf-8'))
+            categories = set([topic.split('.')[3] for topic in topics])
+            for cat in categories:
+                email_message.add_header('X-Fedmsg-Category', cat.encode('utf-8'))
+        except Exception:
+            _log.exception('Unable to parse message topic and category for %r', messages)
+
+        for msg in messages:
+            try:
+                for username in fedmsg.meta.msg2usernames(msg, **config.app_conf) or []:
+                    email_message.add_header('X-Fedmsg-Username', username.encode('utf-8'))
+            except Exception:
+                _log.exception('fedmsg.meta.msg2usernames failed to handle %r', msg)
+            try:
+                for package in fedmsg.meta.msg2packages(msg, **config.app_conf) or []:
+                    email_message.add_header('X-Fedmsg-Package', package.encode('utf-8'))
+            except Exception:
+                _log.exception('fedmsg.meta.msg2packages failed to handle %r', msg)
+
     return email_message

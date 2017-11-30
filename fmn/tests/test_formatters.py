@@ -141,6 +141,49 @@ I am run by Fedora Infrastructure.  Type 'help' for more information.
         formatted_message = formatters.irc(self.message, self.recipient)
         self.assertEqual(expected_message, formatted_message)
 
+    @mock.patch('fmn.formatters.arrow.get')
+    def test_format_marked_up(self, mock_arrow):
+        """Assert pretty colors are added to IRC messages if marked up."""
+        mock_arrow.return_value.humanize.return_value = '2 score and 3 days ago'
+        self.recipient['markup_messages'] = True
+        expected_message = (
+            u"\x038buildsys.task.state.change\x03 -- koschei's scratch build of "
+            u"eclipse-4.5.0-1.fc26.src.rpm for f26 started 2 score and 3 days ago"
+            u" \x0310http://koji.fedoraproject.org/koji/taskinfo?taskID=16289846\x03"
+        )
+
+        formatted_message = formatters.irc(self.message, self.recipient)
+        self.assertEqual(expected_message, formatted_message)
+
+    @mock.patch('fmn.formatters.arrow.get')
+    def test_format_triggered_by(self, mock_arrow):
+        """Assert triggered-by links are added to IRC messages if configured to."""
+        mock_arrow.return_value.humanize.return_value = 'eleventy-one minutes ago'
+        self.recipient['triggered_by_links'] = True
+        expected_message = (
+            u"koschei's scratch build of eclipse-4.5.0-1.fc26.src.rpm for f26 started "
+            u"eleventy-one minutes ago http://koji.fedoraproject.org/koji/taskinfo?taskID=16289846"
+            u" (triggered by http://localhost:5000/jcline.id.fedoraproject.org/irc/7)"
+        )
+
+        formatted_message = formatters.irc(self.message, self.recipient)
+        self.assertEqual(expected_message, formatted_message)
+
+    @mock.patch('fmn.formatters.arrow.get')
+    def test_shorten(self, mock_arrow):
+        """Assert links are shortened."""
+        mock_arrow.return_value.humanize.return_value = 'Schfourteenteen hours ago'
+        self.recipient['shorten_links'] = True
+        self.recipient['triggered_by_links'] = True
+
+        expected_message = (
+            u'koschei\'s scratch build of eclipse-4.5.0-1.fc26.src.rpm for f26 started '
+            u'Schfourteenteen hours ago https://da.gd/TT0da (triggered by https://da.gd/B800F)'
+        )
+
+        formatted_message = formatters.irc(self.message, self.recipient)
+        self.assertEqual(expected_message, formatted_message)
+
 
 class SseTests(Base):
 
@@ -286,6 +329,7 @@ class EmailTests(Base):
 
         self.assertEqual(message['Auto-Submitted'], 'auto-generated')
         self.assertEqual(message['Precedence'], 'Bulk')
+        self.assertEqual(message['From'], 'notifications@fedoraproject.org')
 
     def test_confirmation(self):
         """Assert a :class:`models.Confirmation` is formatted to an email."""
@@ -297,8 +341,8 @@ class EmailTests(Base):
         )
         expected = """Precedence: Bulk
 Auto-Submitted: auto-generated
-To: jeremy@jcline.org
 From: notifications@fedoraproject.org
+To: jeremy@jcline.org
 Subject: Confirm notification email
 
 jcline.id.fedoraproject.org has requested that notifications be sent to this email address
@@ -318,12 +362,12 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
         expected = (
             'Precedence: Bulk\n'
             'Auto-Submitted: auto-generated\n'
-            'To: jeremy@jcline.org\n'
             'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
-            'Subject: jcline updated the rules on a fmn email filter\n'
             'X-Fedmsg-Username: jcline\n'
+            'Subject: jcline updated the rules on a fmn email filter\n'
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
@@ -340,12 +384,12 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
         expected = (
             'Precedence: Bulk\n'
             'Auto-Submitted: auto-generated\n'
-            'To: jeremy@jcline.org\n'
             'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
-            'Subject: PREFIX: jcline updated the rules on a fmn email filter\n'
             'X-Fedmsg-Username: jcline\n'
+            'Subject: PREFIX: jcline updated the rules on a fmn email filter\n'
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
@@ -361,8 +405,8 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
         expected = (
             'Precedence: Bulk\n'
             'Auto-Submitted: auto-generated\n'
-            'To: jeremy@jcline.org\n'
             'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
             'X-Fedmsg-Topic: so.short\n'
             'Subject: fedmsg notification\n'
             'MIME-Version: 1.0\n'
@@ -380,12 +424,12 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
         expected = (
             'Precedence: Bulk\n'
             'Auto-Submitted: auto-generated\n'
-            'To: jeremy@jcline.org\n'
             'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
-            'Subject: fedmsg notification\n'
             'X-Fedmsg-Username: jcline\n'
+            'Subject: fedmsg notification\n'
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
@@ -402,8 +446,8 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
         expected = (
             'Precedence: Bulk\n'
             'Auto-Submitted: auto-generated\n'
-            'To: jeremy@jcline.org\n'
             'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
@@ -423,13 +467,13 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
         expected = (
             'Precedence: Bulk\n'
             'Auto-Submitted: auto-generated\n'
-            'To: jeremy@jcline.org\n'
             'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
-            'Subject: jcline updated the rules on a fmn email filter\n'
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Package: pkg\n'
+            'Subject: jcline updated the rules on a fmn email filter\n'
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
@@ -446,12 +490,12 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
         expected = (
             'Precedence: Bulk\n'
             'Auto-Submitted: auto-generated\n'
-            'To: jeremy@jcline.org\n'
             'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
-            'Subject: jcline updated the rules on a fmn email filter\n'
             'X-Fedmsg-Username: jcline\n'
+            'Subject: jcline updated the rules on a fmn email filter\n'
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
@@ -468,12 +512,12 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
         expected = (
             'Precedence: Bulk\n'
             'Auto-Submitted: auto-generated\n'
-            'To: jeremy@jcline.org\n'
             'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
-            'Subject: jcline updated the rules on a fmn email filter\n'
             'X-Fedmsg-Username: jcline\n'
+            'Subject: jcline updated the rules on a fmn email filter\n'
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
@@ -495,12 +539,12 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
         expected = (
             'Precedence: Bulk\n'
             'Auto-Submitted: auto-generated\n'
-            'To: jeremy@jcline.org\n'
             'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
-            'Subject: jcline updated the rules on a fmn email filter\n'
             'X-Fedmsg-Username: jcline\n'
+            'Subject: jcline updated the rules on a fmn email filter\n'
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
@@ -515,12 +559,12 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
         expected = (
             'Precedence: Bulk\n'
             'Auto-Submitted: auto-generated\n'
-            'To: jeremy@jcline.org\n'
             'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
-            'Subject: jcline updated the rules on a fmn email filter\n'
             'X-Fedmsg-Username: jcline\n'
+            'Subject: jcline updated the rules on a fmn email filter\n'
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
@@ -587,13 +631,13 @@ class EmailBatchTests(Base):
         expected = (
             'Precedence: Bulk\n'
             'Auto-Submitted: auto-generated\n'
-            'To: jeremy@jcline.org\n'
             'From: notifications@fedoraproject.org\n'
-            'Subject: Fedora Notifications Digest (2 updates)\n'
+            'To: jeremy@jcline.org\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Username: bowlofeggs\n'
+            'Subject: Fedora Notifications Digest (2 updates)\n'
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
