@@ -70,9 +70,12 @@ class EmailBackend(BaseBackend):
                 port=self.port,
             )
             _log.info('Email successfully delivered to %s', recipient['email address'])
-        except smtp.SMTPBadRcpt as e:
+        except smtp.SMTPClientError as e:
             _log.info('Failed to email %s: %s', recipient['email address'], str(e))
-            self.handle_bad_email_address(recipient)
+            if e.code == 550:
+                self.handle_bad_email_address(recipient)
+            else:
+                raise
 
     def handle_bad_email_address(self, recipient):
         """ Handle a bad email address.
