@@ -135,15 +135,17 @@ class GetPkgdb2PackagesForTests(Base):
             self.config, 'jcline', ['point of contact', 'watch', 'co-maintained'])
         self.assertEqual(self.expected_all, packages)
 
-    @mock.patch('fmn.rules.utils.requests.get', mock.Mock(side_effect=ConnectTimeout))
-    def test_connect_failure(self):
+    @mock.patch('fmn.rules.utils.requests_session')
+    def test_connect_failure(self, mock_session):
+        mock_session.get.side_effect = ConnectTimeout
         """Assert a bad response results in an empty result."""
         packages = utils._get_packages_for(self.config, 'jcline', ['co-maintained'])
         self.assertEqual(set(), packages)
 
-    @mock.patch('fmn.rules.utils.requests.get', mock.Mock(side_effect=ReadTimeout))
-    def test_read_failure(self):
+    @mock.patch('fmn.rules.utils.requests_session')
+    def test_read_failure(self, mock_session):
         """Assert a bad response results in an empty result."""
+        mock_session.get.side_effect = ReadTimeout
         packages = utils._get_packages_for(self.config, 'jcline', ['co-maintained'])
         self.assertEqual(set(), packages)
 
@@ -206,14 +208,16 @@ class GetPkgdb2PackagersForTests(Base):
         packagers = utils._get_packagers_for(self.config, 'ejabberd')
         self.assertTrue(expected_packagers.issubset(packagers))
 
-    @mock.patch('fmn.rules.utils.requests.get', mock.Mock(side_effect=ReadTimeout))
-    def test_read_timeout(self):
+    @mock.patch('fmn.rules.utils.requests_session')
+    def test_read_timeout(self, mock_session):
+        mock_session.get.side_effect = ReadTimeout
         packagers = utils._get_packagers_for(self.config, 'rpms/ejabberd')
 
         self.assertEqual(set(), packagers)
 
-    @mock.patch('fmn.rules.utils.requests.get', mock.Mock(side_effect=ConnectTimeout))
-    def test_connect_timeout(self):
+    @mock.patch('fmn.rules.utils.requests_session')
+    def test_connect_timeout(self, mock_session):
+        mock_session.get.side_effect = ConnectTimeout
         packagers = utils._get_packagers_for(self.config, 'rpms/ejabberd')
 
         self.assertEqual(set(), packagers)
@@ -323,15 +327,17 @@ class GetPagurePackagesForTests(Base):
             self.config, 'thisisnotausername123', ['co-maintained'])
         self.assertEqual(dict(), packages)
 
-    @mock.patch('fmn.rules.utils.requests.get', mock.Mock(side_effect=ConnectTimeout))
-    def test_connect_failure(self):
+    @mock.patch('fmn.rules.utils.requests_session')
+    def test_connect_failure(self, mock_session):
         """Assert a bad response results in an empty result."""
+        mock_session.get.side_effect = ConnectTimeout
         packages = utils._get_packages_for(self.config, 'jcline', ['co-maintained'])
         self.assertEqual(dict(), packages)
 
-    @mock.patch('fmn.rules.utils.requests.get', mock.Mock(side_effect=ReadTimeout))
-    def test_read_failure(self):
+    @mock.patch('fmn.rules.utils.requests_session')
+    def test_read_failure(self, mock_session):
         """Assert a bad response results in an empty result."""
+        mock_session.get.side_effect = ReadTimeout
         packages = utils._get_packages_for(self.config, 'jcline', ['co-maintained'])
         self.assertEqual(dict(), packages)
 
@@ -415,14 +421,16 @@ class GetPagurePackagersForTests(Base):
 
         self.assertEqual(expected_packagers, packagers)
 
-    @mock.patch('fmn.rules.utils.requests.get', mock.Mock(side_effect=ReadTimeout))
-    def test_read_timeout(self):
+    @mock.patch('fmn.rules.utils.requests_session')
+    def test_read_timeout(self, mock_session):
+        mock_session.get.side_effect = ReadTimeout
         packagers = utils._get_packagers_for(self.config, 'rpms/ejabberd')
 
         self.assertEqual(set(), packagers)
 
-    @mock.patch('fmn.rules.utils.requests.get', mock.Mock(side_effect=ConnectTimeout))
-    def test_connect_timeout(self):
+    @mock.patch('fmn.rules.utils.requests_session')
+    def test_connect_timeout(self, mock_session):
+        mock_session.get.side_effect = ConnectTimeout
         packagers = utils._get_packagers_for(self.config, 'rpms/ejabberd')
 
         self.assertEqual(set(), packagers)

@@ -7,7 +7,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.2]
     method: GET
-    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?short=True&page=1&username=thisisnotausername123
+    uri: https://src.stg.fedoraproject.org/pagure/api/0/projects?short=True&page=1&username=thisisnotausername123&per_page=100
   response:
     body: {string: !!python/unicode "{\n  \"error\": \"No projects found\",\n  \"\
         error_code\": \"ENOPROJECTS\"\n}"}

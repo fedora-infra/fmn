@@ -31,6 +31,8 @@ _FAS = None
 # the fast part at the tightest part of the loop.
 _regex_cache = {}
 
+requests_session = requests.Session()
+
 
 def compile_regex(pattern):
     if not pattern in _regex_cache:
@@ -86,12 +88,15 @@ def _paginate_pagure_data(url, params):
 
     while next_page_url:
         try:
-            response = requests.get(next_page_url, timeout=25)
+            response = requests_session.get(next_page_url, timeout=25)
             if response.status_code == 200:
                 data = response.json()
                 # When we run out of pages, this will be None
                 next_page_url = data['pagination']['next']
                 yield data
+            elif response.status_code == 404:
+                # Pagure apparently returns 404 if the query returns an empty list?
+                next_page_url = None
             else:
                 log.error('Querying Pagure at %s returned code %s',
                           response.url, response.status_code)
@@ -156,7 +161,7 @@ def _get_pagure_packagers_for(config, package):
     url = '{0}/0/{1}'.format(base, package)
     log.info("Querying Pagure at %s for packager information", url)
     try:
-        response = requests.get(url, timeout=25)
+        response = requests_session.get(url, timeout=25)
     except requests.exceptions.Timeout as e:
         log.warn('URL %s timed out %r', url, e)
         return set()
@@ -194,7 +199,7 @@ def _get_pkgdb2_packagers_for(config, package):
     url = '{0}/package/{1}'.format(base, package)
     log.info("Querying PkgDB at %s for packager information", url)
     try:
-        req = requests.get(url, timeout=15)
+        req = requests_session.get(url, timeout=15)
     except requests.exceptions.Timeout as e:
         log.warn('URL %s timed out %r', url, e)
         return set()
@@ -313,7 +318,7 @@ def _get_pkgdb2_packages_for(config, username, flags):
     log.info("Querying pkgdb at %s for packager information", url)
 
     try:
-        req = requests.get(url, timeout=15)
+        req = requests_session.get(url, timeout=15)
     except requests.exceptions.Timeout as e:
         log.warn('URL %s timed out %r', url, e)
         return set()
@@ -367,9 +372,9 @@ def _get_pagure_packages_for(config, username, flags):
     packages = defaultdict(set)
     for flag in flags:
         if flag == 'point of contact':
-            params = dict(owner=username, short=True)
+            params = dict(owner=username, short=True, per_page=100)
         elif flag == 'co-maintained':
-            params = dict(username=username, short=True)
+            params = dict(username=username, short=True, per_page=100)
         else:  # watch
             # In the future we want to also support the 'watch' state.
             # See https://github.com/fedora-infra/fmn/issues/209
