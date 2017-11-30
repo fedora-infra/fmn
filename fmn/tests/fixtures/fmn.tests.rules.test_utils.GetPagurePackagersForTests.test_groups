@@ -7,7 +7,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.2]
     method: GET
-    uri: https://src.stg.fedoraproject.org/pagure/api/0/rpms/python-urllib3
+    uri: https://src.stg.fedoraproject.org/pagure/api/0/rpms/python-urllib3?fork=False
   response:
     body: {string: !!python/unicode "{\n  \"access_groups\": {\n    \"admin\": [],\n\
         \    \"commit\": [\n      \"infra-sig\"\n    ],\n    \"ticket\": []\n  },\n\
