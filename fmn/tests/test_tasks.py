@@ -240,8 +240,8 @@ class ConfirmationsTests(Base):
         self.sess.commit()
         expected_email = """Precedence: Bulk
 Auto-Submitted: auto-generated
-To: jeremy@jcline.org
 From: notifications@fedoraproject.org
+To: jeremy@jcline.org
 Subject: Confirm notification email
 
 jcline.id.fedoraproject.org has requested that notifications be sent to this email address
