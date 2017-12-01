@@ -2,6 +2,34 @@
 Changelog
 =========
 
+v2.0.2
+======
+
+Bug fixes
+---------
+
+* Small performance improvements to the user to package mapping function
+  (`#255 <https://github.com/fedora-infra/fmn/pull/255>`_).
+
+* Change workers to run in pre-fork mode with concurrency 1
+  (`#256 <https://github.com/fedora-infra/fmn/pull/256>`_).
+
+* Handle batch messages in the delivery service without crashing
+  (`#258 <https://github.com/fedora-infra/fmn/pull/258>`_).
+
+* Refactor the message formatting functions so they don't crash on unformattable
+  messages (`#259 <https://github.com/fedora-infra/fmn/pull/259>`_).
+
+* Encode email with UTF-8 before sending
+  (`#260 <https://github.com/fedora-infra/fmn/pull/260>`_).
+
+* Ignore forks when determining what packages a user maintains
+  (`#264 <https://github.com/fedora-infra/fmn/pull/264>`_).
+
+* Disable or fix email addresses that can't be delivered to anymore
+  (`#265 <https://github.com/fedora-infra/fmn/pull/265>`_).
+
+
 v2.0.1
 ======
 
