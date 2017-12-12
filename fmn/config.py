@@ -657,7 +657,12 @@ class _FmnConfig(dict):
                         'level': 'INFO',
                         'propagate': False,
                         'handlers': ['console'],
-                    }
+                    },
+                    'celery': {
+                        'level': 'INFO',
+                        'propagate': False,
+                        'handlers': ['console'],
+                    },
                 },
                 'root': {
                     'level': 'WARNING',
