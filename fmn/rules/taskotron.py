@@ -7,7 +7,6 @@ RELEASE_CRITICAL_TASKS = [
     # taskotron_release_critical_task()
     'dist.abicheck',
     'dist.rpmdeplint',
-    'dist.upgradepath',
 ]
 
 
@@ -142,7 +141,6 @@ def taskotron_release_critical_task(config, message):
 
     * ``dist.abicheck``
     * ``dist.rpmdeplint``
-    * ``dist.upgradepath``
     """
 
     # We only operate on taskotron messages, first off.
