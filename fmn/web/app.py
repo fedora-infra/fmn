@@ -598,18 +598,11 @@ def example_messages(openid, context, filter_id, page, endtime):
             'time': arrow.get(msg.timestamp).humanize(),
         }
 
-    # Mock out a fake 'cached preferences' object like we have in the consumer,
-    # but really it just consists of the one preferences and its *one* filter
-    # for which we're trying to find example messages.
-    preferences = {'nobody_mock': pref.__json__()}
-    preferences['nobody_mock']['detail_values'] = ['mock']
-    preferences['nobody_mock']['filters'] = [filter.__json__(reify=True)]
-
     results = []
     for message in messages:
         original = message.__json__()
         recips = fmn.lib.recipients(
-            preferences, message.__json__(), valid_paths, config.app_conf)
+            {'nobody_mock': pref}, message.__json__(), valid_paths, config.app_conf)
         if recips:
             results.append(_make_result(message, original))
 

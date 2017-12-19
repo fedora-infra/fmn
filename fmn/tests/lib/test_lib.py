@@ -57,7 +57,7 @@ class LoadPreferenceTests(BaseTestCase):
             pref = models.Preference.query.filter(
                 models.Preference.openid == openid,
                 models.Preference.context_name == context).first()
-            self.assertEqual(pref.__json__(reify=True), preferences[key])
+            self.assertEqual(pref, preferences[key])
 
     def test_load_preferences_cull_backends(self):
         """Assert all preferences are loaded, excepting specified backends"""
@@ -70,7 +70,7 @@ class LoadPreferenceTests(BaseTestCase):
             pref = models.Preference.query.filter(
                 models.Preference.openid == openid,
                 models.Preference.context_name == context).first()
-            self.assertEqual(pref.__json__(reify=True), preferences[key])
+            self.assertEqual(pref, preferences[key])
 
     def test_load_preferences_skip_disabled(self):
         """Assert all preferences are loaded, excepting disabled preferences"""
@@ -80,7 +80,7 @@ class LoadPreferenceTests(BaseTestCase):
         pref = models.Preference.query.filter(
             models.Preference.openid == 'jcline',
             models.Preference.context_name == 'pidgeon').first()
-        self.assertEqual(pref.__json__(reify=True), preferences['jcline_pidgeon'])
+        self.assertEqual(pref, preferences['jcline_pidgeon'])
 
 
 class TestRecipients(BaseTestCase):

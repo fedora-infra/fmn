@@ -201,7 +201,7 @@ class _FindRecipients(task.Task):
                         fltr = models.Filter.query.get(idx)
                         fltr.fired(session)
 
-                    if preference.get('batch_delta') or preference.get('batch_count'):
+                    if preference.batch_delta or preference.batch_count:
                         _log.info('User "%s" has batch delivery set; placing message in database',
                                   user)
                         models.QueuedMessage.enqueue(session, user, context, message)
