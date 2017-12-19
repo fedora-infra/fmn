@@ -17,13 +17,30 @@
 """The Celery application."""
 from __future__ import absolute_import
 
+import logging
+import logging.config
+
 from celery import Celery
+from celery.signals import setup_logging
 from kombu.common import Broadcast, Queue
 
 from . import config
 
 
+_log = logging.getLogger(__name__)
+
 RELOAD_CACHE_EXCHANGE_NAME = 'fmn.tasks.reload_cache'
+
+
+@setup_logging.connect
+def configure_logging(**kwargs):
+    """
+    Signal sent by Celery when logging needs to be setup for a worker.
+
+    Arguments are unused.
+    """
+    logging.config.dictConfig(config.app_conf['logging'])
+    _log.info('Logging successfully configured for Celery')
 
 
 #: The celery application object
