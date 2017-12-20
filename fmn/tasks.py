@@ -207,22 +207,7 @@ class _FindRecipients(task.Task):
                         models.QueuedMessage.enqueue(session, user, context, message)
                         continue
 
-                    formatted_message = None
-                    if context == 'email':
-                        formatted_message = formatters.email(message['body'], recipient)
-                    elif context == 'irc':
-                        formatted_message = formatters.irc(message['body'], recipient)
-                    elif context == 'sse':
-                        try:
-                            formatted_message = formatters.sse(message['body'], recipient)
-                        except Exception:
-                            _log.exception('An exception occurred formatting the message '
-                                           'for delivery: falling back to sending the raw fedmsg')
-                            formatted_message = message
-
-                    if formatted_message is None:
-                        raise exceptions.FmnError(
-                            'The message was not formatted in any way, aborting!')
+                    formatted_message = _format(context, message, recipient)
 
                     _log.info('Queuing message for delivery to %s on the %s backend', user, context)
                     backend_message = {
@@ -235,6 +220,49 @@ class _FindRecipients(task.Task):
                     producer.publish(backend_message, routing_key=routing_key,
                                      declare=[Queue(routing_key, durable=True)])
                     session.commit()
+
+
+def _format(context, message, recipient):
+    """
+    Format the message(s) using the context and recipient to determine settings.
+
+    Args:
+        context (str): The name of the context; this is used to determine what formatter
+            function to use.
+        message (dict or list): A fedmsg or list of fedmsgs to format.
+        recipient (dict): A recipient dictionary passed on to the formatter function.
+
+    Raises:
+        FmnError: If the message could not be formatted.
+    """
+    formatted_message = None
+
+    # If it's a dictionary, it's a single message that doesn't need batching
+    if isinstance(message, dict):
+        if context == 'email':
+            formatted_message = formatters.email(message['body'], recipient)
+        elif context == 'irc':
+            formatted_message = formatters.irc(message['body'], recipient)
+        elif context == 'sse':
+            try:
+                formatted_message = formatters.sse(message['body'], recipient)
+            except Exception:
+                _log.exception('An exception occurred formatting the message '
+                               'for delivery: falling back to sending the raw fedmsg')
+                formatted_message = message
+    elif isinstance(message, list):
+        if context == 'email':
+            formatted_message = formatters.email_batch(
+                [m['body'] for m in message], recipient)
+        elif context == 'irc':
+            formatted_message = formatters.irc_batch(
+                [m['body'] for m in message], recipient)
+
+    if formatted_message is None:
+        raise exceptions.FmnError(
+            'The message was not formatted in any way, aborting!')
+
+    return formatted_message
 
 
 @app.task(name='fmn.tasks.batch_messages', ignore_results=True)
@@ -273,17 +301,12 @@ def batch_messages():
                 for value in pref.detail_values
             ]
             for recipient in recipients:
-                formatted_message = None
-                if pref.context.name == 'email':
-                    formatted_message = formatters.email_batch(
-                        [m['body'] for m in messages], recipient)
-                elif pref.context.name == 'irc':
-                    formatted_message = formatters.irc_batch(
-                        [m['body'] for m in messages], recipient)
-                if formatted_message is None:
-                        _log.error('A batch message for %r was not formatted, skipping!',
-                                   recipient)
-                        continue
+                try:
+                    formatted_message = _format(pref.context.name, messages, recipient)
+                except exceptions.FmnError:
+                    _log.error('A batch message for %r was not formatted, skipping!',
+                               recipient)
+                    continue
 
                 backend_message = {
                     "context": pref.context.name,

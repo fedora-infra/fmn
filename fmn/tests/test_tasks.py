@@ -25,6 +25,7 @@ from kombu import Queue
 import mock
 
 from fmn import tasks, lib as fmn_lib, constants
+from fmn.exceptions import FmnError
 from fmn.lib import models
 from fmn.tests import Base
 
@@ -333,3 +334,67 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
         confirmation = models.Confirmation.query.all()
         self.assertEqual(1, len(confirmation))
         self.assertEqual('valid', confirmation[0].status)
+
+
+@mock.patch('fmn.tasks.formatters')
+class FormatTests(Base):
+
+    def setUp(self):
+        super(FormatTests, self).setUp()
+        self.message = {
+            'body': {
+                "msg": {
+                    "changed": "rules",
+                    "context": "email",
+                    "openid": "jcline.id.fedoraproject.org"
+                },
+                "msg_id": "2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b",
+                "timestamp": 1507310730,
+                "topic": "org.fedoraproject.dev.fmn.filter.update",
+                "username": "vagrant",
+            }
+        }
+        self.recipient = {
+            "email address": "jeremy@jcline.org",
+            "filter_id": 11,
+            "filter_name": "test",
+            "filter_oneshot": False,
+            "markup_messages": False,
+            "shorten_links": False,
+            "triggered_by_links": False,
+            "user": "jcline.id.fedoraproject.org",
+            "verbose": True,
+        }
+    def test_failure(self, mock_formatters):
+        """Assert an exception is raised if there's no formatted message."""
+        mock_formatters.email.return_value = None
+        self.assertRaises(FmnError, tasks._format, 'email', self.message, self.recipient)
+
+        mock_formatters.email.assert_called_once_with(self.message['body'], self.recipient)
+
+
+    def test_single_email(self, mock_formatters):
+        """Assert single messages for email context use the correct formatter."""
+        tasks._format('email', self.message, self.recipient)
+
+        mock_formatters.email.assert_called_once_with(self.message['body'], self.recipient)
+
+    def test_multi_email(self, mock_formatters):
+        """Assert multiple messages for email context use the correct formatter."""
+        tasks._format('email', [self.message, self.message], self.recipient)
+
+        mock_formatters.email_batch.assert_called_once_with(
+            [self.message['body'], self.message['body']], self.recipient)
+
+    def test_single_irc(self, mock_formatters):
+        """Assert single messages for irc context use the correct formatter."""
+        tasks._format('irc', self.message, self.recipient)
+
+        mock_formatters.irc.assert_called_once_with(self.message['body'], self.recipient)
+
+    def test_multi_irc(self, mock_formatters):
+        """Assert multiple messages for irc context use the correct formatter."""
+        tasks._format('irc', [self.message, self.message], self.recipient)
+
+        mock_formatters.irc_batch.assert_called_once_with(
+            [self.message['body'], self.message['body']], self.recipient)
