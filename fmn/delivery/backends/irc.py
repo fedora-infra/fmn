@@ -20,6 +20,7 @@ from bleach import clean
 from twisted.internet import ssl, reactor
 import twisted.internet.protocol
 import twisted.words.protocols.irc
+import sqlalchemy
 
 from fmn import formatters
 from fmn.exceptions import FmnError
@@ -120,26 +121,35 @@ class IRCBackend(BaseBackend):
 
     def cmd_start(self, nick, message):
         log.info("CMD start: %r sent us %r" % (nick, message))
-        sess = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
-        if self.disabled_for(sess, nick):
-            self.enable(sess, nick)
-            self.send(nick, "OK")
-        else:
-            self.send(nick, "Messages not currently stopped.  Nothing to do.")
-        sess.commit()
-        sess.close()
+        session = fmn.lib.models.Session()
+        try:
+            if self.disabled_for(session, nick):
+                self.enable(session, nick)
+                self.send(nick, "OK")
+            else:
+                self.send(nick, "Messages not currently stopped.  Nothing to do.")
+            session.commit()
+        except sqlalchemy.exc.SQLAlchemyError:
+            self.send(nick, 'There was a problem contacting the database, please try again later')
+            session.rollback()
+        finally:
+            fmn.lib.models.Session.remove()
 
     def cmd_stop(self, nick, message):
         log.info("CMD stop:  %r sent us %r" % (nick, message))
-        sess = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
 
-        if self.disabled_for(sess, nick):
-            self.send(nick, "Messages already stopped.  Nothing to do.")
-        else:
-            self.disable(sess, nick)
-            self.send(nick, "OK")
-        sess.commit()
-        sess.close()
+        session = fmn.lib.models.Session()
+        try:
+            if self.disabled_for(session, nick):
+                self.send(nick, "Messages already stopped.  Nothing to do.")
+            else:
+                self.disable(session, nick)
+                self.send(nick, "OK")
+        except sqlalchemy.exc.SQLAlchemyError:
+            self.send(nick, 'There was a problem contacting the database, please try again later')
+            session.rollback()
+        finally:
+            fmn.lib.models.Session.remove()
 
     def cmd_list(self, nick, message):
         log.info("CMD list:  %r sent us %r" % (nick, message))
@@ -206,66 +216,71 @@ class IRCBackend(BaseBackend):
         log.info("CMD list filters:  %r sent us %r" % (nick, message))
 
         valid_paths = fmn.lib.load_rules(root="fmn.rules")
-        sess = fmn.lib.models.init(self.config.get('fmn.sqlalchemy.uri'))
-        pref = self.get_preference(sess, nick)
+        sess = fmn.lib.models.Session()
+        try:
+            pref = self.get_preference(sess, nick)
 
-        if pref is None:
-            self.send(nick,
-                      'The nick is not configured with Fedora Notifications')
-            sess.close()
-            return
-
-        subcmd_string = message.split(None, 2)[-1].lower()
-
-        # Returns the list of filters associated with the rule if the sub
-        # command ends with `filters` else it is checked for the validity of
-        # the filter name. If the matching filter is found then the list of
-        # rules for the filter is returned. If the matching filter is not found
-        # then an error message is returned
-        if subcmd_string.strip() == 'filters':
-            filters = pref.filters
-
-            self.send(nick, 'You have {num_filter} filter(s)'.format(
-                num_filter=len(filters)))
-
-            for filtr in filters:
-                self.send(nick, '  - {filtr_name}'.format(
-                    filtr_name=filtr.name)
-                )
-        else:
-            subcmd_string = self.dequote(subcmd_string)
-
-            try:
-                filtr = pref.get_filter_name(sess, subcmd_string)
-            except ValueError:
-                self.send(nick, 'Not a valid filter')
+            if pref is None:
+                self.send(nick,
+                          'The nick is not configured with Fedora Notifications')
                 sess.close()
                 return
 
-            rules = filtr.rules
-            self.send(nick,
-                      '{num_rule} matching rules for this filter'.format(
-                        num_rule=len(rules)))
+            subcmd_string = message.split(None, 2)[-1].lower()
 
-            for rule in rules:
-                rule_title = rule.title(valid_paths)
-                rule_doc = clean(rule.doc(
-                                valid_paths,
-                                no_links=True
-                            ).replace('\n', ' '), strip=True)
-                self.send(nick, rule_template.format(
-                    rule_title=rule_title,
-                    rule_doc=rule_doc
-                ))
+            # Returns the list of filters associated with the rule if the sub
+            # command ends with `filters` else it is checked for the validity of
+            # the filter name. If the matching filter is found then the list of
+            # rules for the filter is returned. If the matching filter is not found
+            # then an error message is returned
+            if subcmd_string.strip() == 'filters':
+                filters = pref.filters
 
-                if rule.arguments:
-                    for key, value in rule.arguments.iteritems():
-                        self.send(nick, '   {key} - {value}'.format(
-                            key=key,
-                            value=value
-                        ))
-                self.send(nick, '-*'*10)
-        sess.close()
+                self.send(nick, 'You have {num_filter} filter(s)'.format(
+                    num_filter=len(filters)))
+
+                for filtr in filters:
+                    self.send(nick, '  - {filtr_name}'.format(
+                        filtr_name=filtr.name)
+                    )
+            else:
+                subcmd_string = self.dequote(subcmd_string)
+
+                try:
+                    filtr = pref.get_filter_name(sess, subcmd_string)
+                except ValueError:
+                    self.send(nick, 'Not a valid filter')
+                    sess.close()
+                    return
+
+                rules = filtr.rules
+                self.send(nick,
+                          '{num_rule} matching rules for this filter'.format(
+                            num_rule=len(rules)))
+
+                for rule in rules:
+                    rule_title = rule.title(valid_paths)
+                    rule_doc = clean(rule.doc(
+                                    valid_paths,
+                                    no_links=True
+                                ).replace('\n', ' '), strip=True)
+                    self.send(nick, rule_template.format(
+                        rule_title=rule_title,
+                        rule_doc=rule_doc
+                    ))
+
+                    if rule.arguments:
+                        for key, value in rule.arguments.iteritems():
+                            self.send(nick, '   {key} - {value}'.format(
+                                key=key,
+                                value=value
+                            ))
+                    self.send(nick, '-*'*10)
+        except sqlalchemy.exc.SQLAlchemyError:
+            self.send(nick, 'Unable to contact database, please try again later')
+            sess.rollback()
+        finally:
+            fmn.lib.models.Session.remove()
 
     def cmd_help(self, nick, message):
         log.info("CMD help:  %r sent us %r" % (nick, message))
@@ -307,8 +322,6 @@ class IRCBackend(BaseBackend):
             self._handle_confirmation(recipient['irc nick'])
             return
 
-        session = fmn.lib.models.Session()
-
         if not self.clients:
             # This is usually the case if we are suffering a netsplit.
             # Raising an exception will cause the message to be requeued and
@@ -323,9 +336,16 @@ class IRCBackend(BaseBackend):
 
         nickname = recipient['irc nick']
 
-        if self.disabled_for(session, detail_value=nickname):
-            log.debug("Messages stopped for %r, not sending." % nickname)
-            return
+        session = fmn.lib.models.Session()
+        try:
+            if self.disabled_for(session, detail_value=nickname):
+                log.debug("Messages stopped for %r, not sending." % nickname)
+                return
+        except sqlalchemy.exc.SQLAlchemyError:
+            log.exception('Unable to determine if delivery is disabled')
+            session.rollback()
+        finally:
+            fmn.lib.models.Session.remove()
 
         for client in self.clients:
             getattr(client, recipient.get('method', 'msg'))(
@@ -354,20 +374,34 @@ class IRCBackend(BaseBackend):
             log.warning("IRCBackend has no clients to work with.")
             return
 
-        confirmations = fmn.lib.models.Confirmation.by_detail(
-            session, context="irc", value=nick)
+        session = fmn.lib.models.Session()
+        try:
+            confirmations = fmn.lib.models.Confirmation.by_detail(
+                session, context="irc", value=nick)
 
-        for confirmation in confirmations:
-            lines = formatters.irc_confirmation(confirmation).split('\n')
-            for line in lines:
-                for client in self.clients:
-                    client.msg(nick.encode('utf-8'), line.encode('utf-8'))
+            for confirmation in confirmations:
+                lines = formatters.irc_confirmation(confirmation).split('\n')
+                for line in lines:
+                    for client in self.clients:
+                        client.msg(nick.encode('utf-8'), line.encode('utf-8'))
+        except sqlalchemy.exc.SQLAlchemyError:
+            session.rollback()
+            raise
+        finally:
+            fmn.lib.models.Session.remove()
 
     def handle_confirmation_invalid_nick(self, session, nick):
-        confirmations = fmn.lib.models.Confirmation.by_detail(
-            session, context="irc", value=nick)
-        for confirmation in confirmations:
-            confirmation.set_status(session, 'invalid')
+        session = fmn.lib.models.Session()
+        try:
+            confirmations = fmn.lib.models.Confirmation.by_detail(
+                session, context="irc", value=nick)
+            for confirmation in confirmations:
+                confirmation.set_status(session, 'invalid')
+        except sqlalchemy.exc.SQLAlchemyError:
+            session.rollback()
+            raise
+        finally:
+            fmn.lib.models.Session.remove()
 
     def cleanup_clients(self, factory):
         self.clients = [c for c in self.clients if c.factory != factory]
