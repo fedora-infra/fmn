@@ -23,6 +23,7 @@ import datetime
 from dogpile import cache
 from kombu import Queue
 import mock
+import sqlalchemy
 
 from fmn import tasks, lib as fmn_lib, constants
 from fmn.exceptions import FmnError
@@ -365,13 +366,13 @@ class FormatTests(Base):
             "user": "jcline.id.fedoraproject.org",
             "verbose": True,
         }
+
     def test_failure(self, mock_formatters):
         """Assert an exception is raised if there's no formatted message."""
         mock_formatters.email.return_value = None
         self.assertRaises(FmnError, tasks._format, 'email', self.message, self.recipient)
 
         mock_formatters.email.assert_called_once_with(self.message['body'], self.recipient)
-
 
     def test_single_email(self, mock_formatters):
         """Assert single messages for email context use the correct formatter."""
@@ -398,3 +399,120 @@ class FormatTests(Base):
 
         mock_formatters.irc_batch.assert_called_once_with(
             [self.message['body'], self.message['body']], self.recipient)
+
+
+class MaybeMarkFilterFiredTests(Base):
+    """Tests for :func:`tasks._maybe_mark_filter_fired`."""
+
+    def test_no_filter_oneshot(self):
+        """Assert if the filter_oneshot key is missing, None is returned."""
+        self.assertTrue(tasks._maybe_mark_filter_fired({}) is None)
+
+    def test_filter_oneshot_false(self):
+        """Assert if the filter_oneshot key is missing, None is returned."""
+        self.assertTrue(tasks._maybe_mark_filter_fired({'filter_oneshot': False}) is None)
+
+    @mock.patch('fmn.tasks._log')
+    def test_invalid_filter_id(self, mock_log):
+        """Assert if the filter_id references an invalid key, nothing bad happens."""
+        recipient = {'filter_oneshot': True, 'filter_id': 8675309}
+
+        self.assertTrue(tasks._maybe_mark_filter_fired(recipient) is None)
+        mock_log.exception.assert_called_once_with(
+            'Unable to mark one-shot filter (id %s) as fired', 8675309)
+
+    def test_valid_oneshot_filter(self):
+        """Assert oneshot filters are properly deactivated."""
+        session = models.Session()
+        filt = models.Filter(active=True, oneshot=True)
+        session.add(filt)
+        session.commit()
+        recipient = {'filter_oneshot': True, 'filter_id': filt.id}
+
+        self.assertTrue(tasks._maybe_mark_filter_fired(recipient) is None)
+        self.assertEqual(1, models.Filter.query.count())
+        self.assertFalse(models.Filter.query.one().active)
+
+
+class BatchTests(Base):
+    """Tests for :func:`tasks._batch`."""
+
+    def setUp(self):
+        super(BatchTests, self).setUp()
+        user = models.User(
+            openid='jcline.id.fedoraproject.org', openid_url='http://jcline.id.fedoraproject.org')
+        self.sess.add(user)
+        context = models.Context(
+            name='sse', description='description', detail_name='SSE', icon='wat')
+        self.sess.add(context)
+        self.sess.commit()
+        fmn_lib.defaults.create_defaults_for(self.sess, user, detail_values={'sse': 'jcline'})
+        self.sess.commit()
+        preference = models.Preference.query.filter_by(
+            context_name='sse', openid='jcline.id.fedoraproject.org').first()
+        preference.enabled = True
+        self.sess.add(preference)
+        self.sess.commit()
+
+        self. message = {
+            "topic": "org.fedoraproject.prod.buildsys.build.state.change",
+            'body': {
+                "username": "apache",
+                "i": 1,
+                "timestamp": 1505399391.0,
+                "msg_id": "2017-7c65d9ff-85c0-42bb-8288-9b6112cb3da2",
+                "topic": "org.fedoraproject.prod.buildsys.build.state.change",
+                "msg": {
+                    "build_id": 970796,
+                    "old": 0,
+                    "name": "fedmsg",
+                    "task_id": 21861152,
+                    "attribute": "state",
+                    "request": [
+                        ("git://pkgs.fedoraproject.org/rpms/fedmsg?#"
+                         "870987e84539239a22170475bbf13ac4d2ef4382"),
+                        "f26-candidate",
+                        {},
+                    ],
+                    "instance": "primary",
+                    "version": "1.0.1",
+                    "owner": "jcline",
+                    "new": 1,
+                    "release": "4.fc26"
+                }
+            }
+        }
+
+        self.recipient = {
+            'triggered_by_links': True,
+            'markup_messages': False,
+            'user': u'jcline.id.fedoraproject.org',
+            'filter_name': u'Events referring to my username',
+            u'SSE': u'jcline',
+            'filter_oneshot': False,
+            'filter_id': 2,
+            'shorten_links': False,
+            'verbose': True
+        }
+
+    def test_no_batch_delta_or_count(self):
+        """Assert False is returned if the message isn't batched."""
+        self.assertFalse(tasks._batch({}, 'sse', self.recipient, self.message))
+
+    def test_batch_count(self):
+        """Assert the batch_count keyword triggers batching."""
+        self.assertTrue(tasks._batch({'batch_count': True}, 'sse', self.recipient, self.message))
+        self.assertEqual(1, models.QueuedMessage.query.count())
+
+    def test_batch_delta(self):
+        """Assert the batch_delta keyword triggers batching."""
+        self.assertTrue(tasks._batch({'batch_delta': True}, 'sse', self.recipient, self.message))
+        self.assertEqual(1, models.QueuedMessage.query.count())
+
+    @mock.patch('fmn.tasks.models.QueuedMessage.enqueue')
+    def test_batch_failure(self, mock_enqueue):
+        """Assert a database failure results in the message not being queued."""
+        mock_enqueue.side_effect = sqlalchemy.exc.SQLAlchemyError('boop')
+
+        self.assertFalse(tasks._batch({'batch_delta': True}, 'sse', self.recipient, self.message))
+        self.assertEqual(0, models.QueuedMessage.query.count())

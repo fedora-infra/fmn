@@ -35,6 +35,7 @@ from celery import task
 import fedmsg
 import fedmsg.meta
 import fedmsg_meta_fedora_infrastructure
+import sqlalchemy
 
 from . import config, lib as fmn_lib, formatters, exceptions
 from . import fmn_fasshim
@@ -183,7 +184,6 @@ class _FindRecipients(task.Task):
                 dictionary. See :func:`fmn.lib.recipients` for the dictionary format.
             message (dict): The raw fedmsg to humanize and deliver to the given recipients.
         """
-        session = models.Session()
         broker_url = config.app_conf['celery']['broker']
 
         with connections[Connection(broker_url)].acquire(block=True, timeout=60) as conn:
@@ -192,19 +192,11 @@ class _FindRecipients(task.Task):
                 _log.info('Dispatching messages for %d recipients for the %s backend',
                           len(recipients), context)
                 for recipient in recipients:
+                    _maybe_mark_filter_fired(recipient)
+
                     user = recipient['user']
                     preference = self.user_preferences['{}_{}'.format(user, context)]
-
-                    if ('filter_oneshot' in recipient and recipient['filter_oneshot']):
-                        _log.info('Marking one-time filter as fired')
-                        idx = recipient['filter_id']
-                        fltr = models.Filter.query.get(idx)
-                        fltr.fired(session)
-
-                    if preference.get('batch_delta') or preference.get('batch_count'):
-                        _log.info('User "%s" has batch delivery set; placing message in database',
-                                  user)
-                        models.QueuedMessage.enqueue(session, user, context, message)
+                    if _batch(preference, context, recipient, message):
                         continue
 
                     formatted_message = _format(context, message, recipient)
@@ -219,7 +211,57 @@ class _FindRecipients(task.Task):
                     routing_key = BACKEND_QUEUE_PREFIX + context
                     producer.publish(backend_message, routing_key=routing_key,
                                      declare=[Queue(routing_key, durable=True)])
-                    session.commit()
+
+
+def _maybe_mark_filter_fired(recipient):
+    """
+    If the filter was a one-shot filter, try to mark it as triggered. If that fails,
+    log the error and continue since there's not much else to be done.
+
+    Args:
+        recipient (dict): The recipient dictionary.
+    """
+
+    if ('filter_oneshot' in recipient and recipient['filter_oneshot']):
+        _log.info('Marking one-time filter as fired')
+        session = models.Session()
+        idx = recipient['filter_id']
+        try:
+            fltr = models.Filter.query.get(idx)
+            fltr.fired(session)
+            session.commit()
+        except (sqlalchemy.exc.SQLAlchemyError, AttributeError):
+            _log.exception('Unable to mark one-shot filter (id %s) as fired', idx)
+            session.rollback()
+        finally:
+            models.Session.remove()
+
+
+def _batch(preference, context, recipient, message):
+    """
+    Batch the message if the user wishes it.
+
+    Args:
+        preference (dict): The user's preferences in dictionary form.
+        context (str): The context to batch it for.
+        recipient (dict): The recipient dictionary.
+        message (dict): The fedmsg to batch.
+    """
+    if preference.get('batch_delta') or preference.get('batch_count'):
+        _log.info('User "%s" has batch delivery set; placing message in database',
+                  recipient['user'])
+        session = models.Session()
+        try:
+            models.QueuedMessage.enqueue(session, recipient['user'], context, message)
+            session.commit()
+            return True
+        except sqlalchemy.exc.SQLAlchemyError:
+            _log.exception('Unable to queue message for batch delivery')
+            session.rollback()
+        finally:
+            models.Session.remove()
+
+    return False
 
 
 def _format(context, message, recipient):
@@ -278,49 +320,56 @@ def batch_messages():
     This is intended to be run as a periodic task using Celery's beat service.
     """
     session = models.Session()
-    broker_url = config.app_conf['celery']['broker']
-    with connections[Connection(broker_url)].acquire(block=True, timeout=60) as conn:
-        producer = conn.Producer()
-        for pref in models.Preference.list_batching(session):
-            if not _batch_ready(pref):
-                continue
-
-            queued_messages = models.QueuedMessage.list_for(
-                session, pref.user, pref.context)
-            _log.info('Batching %d queued messages for %s', len(queued_messages), pref.user.openid)
-
-            messages = [m.message for m in queued_messages]
-            recipients = [
-                {
-                    pref.context.detail_name: value.value,
-                    'user': pref.user.openid,
-                    'markup_messages': pref.markup_messages,
-                    'triggered_by_links': pref.triggered_by_links,
-                    'shorten_links': pref.shorten_links,
-                }
-                for value in pref.detail_values
-            ]
-            for recipient in recipients:
-                try:
-                    formatted_message = _format(pref.context.name, messages, recipient)
-                except exceptions.FmnError:
-                    _log.error('A batch message for %r was not formatted, skipping!',
-                               recipient)
+    try:
+        broker_url = config.app_conf['celery']['broker']
+        with connections[Connection(broker_url)].acquire(block=True, timeout=60) as conn:
+            producer = conn.Producer()
+            for pref in models.Preference.list_batching(session):
+                if not _batch_ready(pref):
                     continue
 
-                backend_message = {
-                    "context": pref.context.name,
-                    "recipient": recipient,
-                    "fedmsg": messages,
-                    "formatted_message": formatted_message,
-                }
-                routing_key = BACKEND_QUEUE_PREFIX + pref.context.name
-                producer.publish(backend_message, routing_key=routing_key,
-                                 declare=[Queue(routing_key, durable=True)])
+                queued_messages = models.QueuedMessage.list_for(
+                    session, pref.user, pref.context)
+                _log.info('Batching %d queued messages for %s',
+                          len(queued_messages), pref.user.openid)
 
-            for message in queued_messages:
-                message.dequeue(session)
-            session.commit()
+                messages = [m.message for m in queued_messages]
+                recipients = [
+                    {
+                        pref.context.detail_name: value.value,
+                        'user': pref.user.openid,
+                        'markup_messages': pref.markup_messages,
+                        'triggered_by_links': pref.triggered_by_links,
+                        'shorten_links': pref.shorten_links,
+                    }
+                    for value in pref.detail_values
+                ]
+                for recipient in recipients:
+                    try:
+                        formatted_message = _format(pref.context.name, messages, recipient)
+                    except exceptions.FmnError:
+                        _log.error('A batch message for %r was not formatted, skipping!',
+                                   recipient)
+                        continue
+
+                    backend_message = {
+                        "context": pref.context.name,
+                        "recipient": recipient,
+                        "fedmsg": messages,
+                        "formatted_message": formatted_message,
+                    }
+                    routing_key = BACKEND_QUEUE_PREFIX + pref.context.name
+                    producer.publish(backend_message, routing_key=routing_key,
+                                     declare=[Queue(routing_key, durable=True)])
+
+                for message in queued_messages:
+                    message.dequeue(session)
+                session.commit()
+    except sqlalchemy.exc.SQLAlchemyError:
+        _log.exception('Failed to dispatch queued messages for delivery')
+        session.rollback()
+    finally:
+        models.Session.remove()
 
 
 def _batch_ready(preference):
@@ -334,23 +383,27 @@ def _batch_ready(preference):
         bool: True if there's a batch ready.
     """
     session = models.Session()
-    count = models.QueuedMessage.count_for(session, preference.user, preference.context)
-    if not count:
-        return False
+    try:
+        count = models.QueuedMessage.count_for(session, preference.user, preference.context)
+        if not count:
+            return False
 
-    # Batch based on count
-    if preference.batch_count is not None and preference.batch_count <= count:
-        _log.info("Sending digest for %r per msg count", preference.user.openid)
-        return True
+        # Batch based on count
+        if preference.batch_count is not None and preference.batch_count <= count:
+            _log.info("Sending digest for %r per msg count", preference.user.openid)
+            return True
 
-    # Batch based on time
-    earliest = models.QueuedMessage.earliest_for(
-        session, preference.user, preference.context)
-    now = datetime.datetime.utcnow()
-    delta = datetime.timedelta.total_seconds(now - earliest.created_on)
-    if preference.batch_delta is not None and preference.batch_delta <= delta:
-        _log.info("Sending digest for %r per time delta", preference.user.openid)
-        return True
+        # Batch based on time
+        earliest = models.QueuedMessage.earliest_for(
+            session, preference.user, preference.context)
+        now = datetime.datetime.utcnow()
+        delta = datetime.timedelta.total_seconds(now - earliest.created_on)
+        if preference.batch_delta is not None and preference.batch_delta <= delta:
+            _log.info("Sending digest for %r per time delta", preference.user.openid)
+            return True
+    except sqlalchemy.exc.SQLAlchemyError:
+        _log.exception('Failed to determine if the batch is ready for %s', preference.user)
+        session.rollback()
 
     return False
 
@@ -375,37 +428,44 @@ def confirmations():
     This is intended to be dispatched regularly via celery beat.
     """
     session = models.Session()
-    models.Confirmation.delete_expired(session)
-    pending = models.Confirmation.query.filter_by(status='pending').all()
-    broker_url = config.app_conf['celery']['broker']
-    with connections[Connection(broker_url)].acquire(block=True, timeout=60) as conn:
-        producer = conn.Producer()
-        for confirmation in pending:
-            message = None
-            if confirmation.context.name == 'email':
-                message = formatters.email_confirmation(confirmation)
-            else:
-                # The way the irc backend is currently written, it has to format the
-                # confirmation itself. For now, just send an empty message, but in the
-                # future it may be worth refactoring the irc backend to let us format here.
-                message = ''
-            recipient = {
-                confirmation.context.detail_name: confirmation.detail_value,
-                'user': confirmation.user.openid,
-                'triggered_by_links': False,
-                'confirmation': True,
-            }
-            backend_message = {
-                "context": confirmation.context.name,
-                "recipient": recipient,
-                "fedmsg": {},
-                "formatted_message": message,
-            }
-            _log.info('Dispatching confirmation message for %r', confirmation)
-            confirmation.set_status(session, 'valid')
-            routing_key = BACKEND_QUEUE_PREFIX + confirmation.context.name
-            producer.publish(backend_message, routing_key=routing_key,
-                             declare=[Queue(routing_key, durable=True)])
+    try:
+        models.Confirmation.delete_expired(session)
+        pending = models.Confirmation.query.filter_by(status='pending').all()
+        broker_url = config.app_conf['celery']['broker']
+        with connections[Connection(broker_url)].acquire(block=True, timeout=60) as conn:
+            producer = conn.Producer()
+            for confirmation in pending:
+                message = None
+                if confirmation.context.name == 'email':
+                    message = formatters.email_confirmation(confirmation)
+                else:
+                    # The way the irc backend is currently written, it has to format the
+                    # confirmation itself. For now, just send an empty message, but in the
+                    # future it may be worth refactoring the irc backend to let us format here.
+                    message = ''
+                recipient = {
+                    confirmation.context.detail_name: confirmation.detail_value,
+                    'user': confirmation.user.openid,
+                    'triggered_by_links': False,
+                    'confirmation': True,
+                }
+                backend_message = {
+                    "context": confirmation.context.name,
+                    "recipient": recipient,
+                    "fedmsg": {},
+                    "formatted_message": message,
+                }
+                _log.info('Dispatching confirmation message for %r', confirmation)
+                confirmation.set_status(session, 'valid')
+                routing_key = BACKEND_QUEUE_PREFIX + confirmation.context.name
+                producer.publish(backend_message, routing_key=routing_key,
+                                 declare=[Queue(routing_key, durable=True)])
+        session.commit()
+    except sqlalchemy.exc.SQLAlchemyError:
+        _log.exception('Unable to handle confirmations')
+        session.rollback()
+    finally:
+        models.Session.remove()
 
 
 #: A Celery task that accepts a message as input and determines the recipients.
