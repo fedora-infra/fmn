@@ -29,6 +29,7 @@ from fmn.lib import models
 from fmn.tests import Base
 
 
+@mock.patch('fmn.tasks.fedmsg.publish', mock.Mock())
 class FindRecipientsTestCase(Base):
 
     def test_valid_paths(self):
@@ -161,6 +162,36 @@ class FindRecipientsTestCase(Base):
             expected_published_message,
             routing_key=constants.BACKEND_QUEUE_PREFIX + 'sse',
             declare=[Queue(constants.BACKEND_QUEUE_PREFIX + 'sse', durable=True)],
+        )
+
+
+@mock.patch.dict('fmn.tasks.config.app_conf', {'fmn.backends': ['sse']})
+class QueueForDeliveryTests(Base):
+
+    def setUp(self):
+        super(QueueForDeliveryTests, self).setUp()
+        mock_conns = mock.patch('fmn.tasks.connections')
+        mock_conns = mock_conns.start()
+        self.addCleanup(mock_conns.stop)
+        self.conn = mock_conns.__getitem__.return_value.acquire.return_value.__enter__.return_value
+        self.producer = self.conn.Producer.return_value
+        self.fedmsg_publish = mock.patch('fmn.tasks.fedmsg.publish')
+        self.fedmsg_publish = self.fedmsg_publish.start()
+        self.addCleanup(self.fedmsg_publish.stop)
+        self.find_recipients = tasks._FindRecipients()
+
+    def test_send_fedmsg(self):
+        """Assert fedmsgs are published for a delivered message."""
+        self.find_recipients._user_preferences = {'jcline_sse': {}}
+        results = {'sse': [{'user': 'jcline'}]}
+        message = {'hello': 'world'}
+
+        self.find_recipients._queue_for_delivery(results, message)
+
+        self.fedmsg_publish.assert_called_once_with(
+            topic='notification.jcline.sse',
+            modname='fmn',
+            msg=message,
         )
 
 

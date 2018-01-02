@@ -104,6 +104,11 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
         """
         topic, msg = raw_msg['topic'], raw_msg['body']
 
+        if 'fmn.notification' in topic:
+            # This is a notification of a notification we've sent. Processing it
+            # would lead to a positive feedback loop.
+            return
+
         for suffix in self.junk_suffixes:
             if topic.endswith(suffix):
                 log.debug("Dropping %r", topic)
