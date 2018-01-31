@@ -96,7 +96,7 @@ def shorten(link):
     if not link:
         return ''
     try:
-        response = requests.get('http://da.gd/s', params=dict(url=link), timeout=30)
+        response = requests.get('https://da.gd/s', params=dict(url=link), timeout=30)
         return response.text.strip()
     except Exception as e:
         _log.warn("Link shortening failed: %r" % e)
