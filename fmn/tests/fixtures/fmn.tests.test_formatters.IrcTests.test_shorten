@@ -7,7 +7,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: http://da.gd/s?url=http%3A%2F%2Fkoji.fedoraproject.org%2Fkoji%2Ftaskinfo%3FtaskID%3D16289846
+    uri: https://da.gd/s?url=http%3A%2F%2Fkoji.fedoraproject.org%2Fkoji%2Ftaskinfo%3FtaskID%3D16289846
   response:
     body: {string: !!python/unicode 'https://da.gd/TT0da
 
@@ -35,7 +35,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: http://da.gd/s?url=http%3A%2F%2Flocalhost%3A5000%2Fjcline.id.fedoraproject.org%2Firc%2F7
+    uri: https://da.gd/s?url=http%3A%2F%2Flocalhost%3A5000%2Fjcline.id.fedoraproject.org%2Firc%2F7
   response:
     body: {string: !!python/unicode 'https://da.gd/B800F
 
