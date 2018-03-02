@@ -438,50 +438,71 @@ def email_batch(messages, recipient):
     email_message = _base_email(recipient=recipient, messages=messages)
     email_message.add_header(
         'Subject', u'Fedora Notifications Digest ({n} updates)'.format(n=len(messages)))
-
-    content = u'Digest Summary:\n'
-    message_template = u'{number}.\t{summary} ({ts})\n\t- {link}\n{details}{separator}'
+    summary_template = u'{number}.\t{short_title}\n'
+    message_template = u'({ts}) {short_title}\n- {link}\n{details}'
     separator = u'\n\n' + '-' * 79 + '\n\n'
-    for message_number, message in enumerate(messages, start=1):
-        try:
-            summary = fedmsg.meta.msg2subtitle(message, **config.app_conf) or u''
-        except Exception:
-            _log.exception('fedmsg.meta.msg2subtitle failed to handle %r', message)
-            summary = u'Unparsable message subtitle'
+    formatted_messages = []
 
-        if recipient.get('verbose', True):
+    if recipient.get('verbose', True):
+        summary = u'Digest Summary:\n'
+        for message_number, message in enumerate(messages, start=1):
+            try:
+                shortform = fedmsg.meta.msg2subtitle(message, **config.app_conf) or u''
+            except Exception:
+                _log.exception('fedmsg.meta.msg2subtitle failed to handle %r', message)
+                shortform = u'Unparsable message subtitle'
+
             try:
                 longform = fedmsg.meta.msg2long_form(message, **config.app_conf) or u''
             except Exception:
                 _log.exception('fedmsg.meta.msg2long_form failed to handle %r', message)
                 longform = u'Unparsable message details'
-        else:
-            longform = u''
 
-        try:
-            link = fedmsg.meta.msg2link(message, **config.app_conf) or u''
-        except Exception:
-            _log.exception('fedmsg.meta.msg2link failed to handle %r', message)
-            link = u'No link could be found in the message'
+            try:
+                link = fedmsg.meta.msg2link(message, **config.app_conf) or u''
+            except Exception:
+                _log.exception('fedmsg.meta.msg2link failed to handle %r', message)
+                link = u'No link could be found in the message'
 
-        timestamp = datetime.datetime.fromtimestamp(message['timestamp'])
-        content += message_template.format(
-            number=message_number, summary=summary, ts=timestamp.strftime('%c'),
-            link=link, details=longform, separator=separator)
+            timestamp = datetime.datetime.fromtimestamp(message['timestamp'])
+            summary += summary_template.format(number=message_number, short_title=shortform)
+            formatted_messages.append(message_template.format(ts=timestamp.strftime('%c'),
+                short_title=shortform, link=link, details=longform))
 
-    if len(content) > 20000000:
+            digest_content = summary + separator + separator.join(full_messages)
+    else:
+        for message_number, message in enumerate(messages, start=1):
+            try:
+                shortform = fedmsg.meta.msg2subtitle(message, **config.app_conf) or u''
+            except Exception:
+                _log.exception('fedmsg.meta.msg2subtitle failed to handle %r', message)
+                shortform = u'Unparsable message subtitle'
+
+            try:
+                link = fedmsg.meta.msg2link(message, **config.app_conf) or u''
+            except Exception:
+                _log.exception('fedmsg.meta.msg2link failed to handle %r', message)
+                link = u'No link could be found in the message'
+
+            timestamp = datetime.datetime.fromtimestamp(message['timestamp'])
+            formatted_messages.append(message_template.format(ts=timestamp.strftime('%c'),
+                short_title=shortform, link=link))
+
+            digest_content = separator.join(formatted_messages)
+
+    if len(digest_content) > 20000000:
         # This email is enormous, too large to be sent.
-        content = (u'This message digest was too large to be sent!\n'
+        digest_content = (u'This message digest was too large to be sent!\n'
                    u'The following messages were batched:\n\n')
         for msg in messages:
-            content += msg['msg_id'] + '\n'
+            digest_content += msg['msg_id'] + '\n'
 
-        if len(content) > 20000000:
+        if len(digest_content) > 20000000:
             # Even the briefest summary is too big
-            content = (u'The message digest was so large, not even a summary could be sent.\n'
+            digest_content = (u'The message digest was so large, not even a summary could be sent.\n'
                        u'Consider adjusting your FMN settings.\n')
 
-    email_message.set_payload(content.encode('utf-8'), 'utf-8')
+    email_message.set_payload(digest_content.encode('utf-8'), 'utf-8')
     return email_message.as_string()
 
 
