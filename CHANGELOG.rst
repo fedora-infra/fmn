@@ -2,6 +2,16 @@
 Changelog
 =========
 
+Master
+======
+
+Bug fixes
+---------
+
+* Restore summary in digest email when reporting verbose messages
+  (`#278 <https://github.com/fedora-infra/fmn/pull/278>`_).
+
+
 v2.0.2
 ======
 

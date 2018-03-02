@@ -617,7 +617,7 @@ class EmailBatchTests(Base):
                 "username": "vagrant",
             },
         ]
-        self.recipient = {
+        self.verbose_recipient = {
             "email address": "jeremy@jcline.org",
             "filter_id": 11,
             "filter_name": "test",
@@ -628,16 +628,27 @@ class EmailBatchTests(Base):
             "user": "jcline.id.fedoraproject.org",
             "verbose": True,
         }
+        self.not_verbose_recipient = {
+            "email address": "jeremy@jcline.org",
+            "filter_id": 11,
+            "filter_name": "test",
+            "filter_oneshot": False,
+            "markup_messages": False,
+            "shorten_links": False,
+            "triggered_by_links": False,
+            "user": "jcline.id.fedoraproject.org",
+            "verbose": False,
+        }
 
     def test_single_message(self):
         """Assert if the batch is of length one, it's the same as a plain email."""
         self.assertEqual(
-            formatters.email(self.messages[0], self.recipient),
-            formatters.email_batch([self.messages[0]], self.recipient),
+            formatters.email(self.messages[0], self.verbose_recipient),
+            formatters.email_batch([self.messages[0]], self.verbose_recipient),
         )
 
-    def test_basic_batch(self):
-        """Assert a well-formed email is returned from a basic message."""
+    def test_basic_batch_verbose(self):
+        """Assert a well-formed verbose email is returned from a basic message."""
         expected = (
             'Precedence: Bulk\n'
             'Auto-Submitted: auto-generated\n'
@@ -653,16 +664,45 @@ class EmailBatchTests(Base):
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
             'RGlnZXN0IFN1bW1hcnk6CjEuCWpjbGluZSB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFp\n'
-            'bCBmaWx0ZXIgKEZyaSBPY3QgIDYgMTc6MjU6MzAgMjAxNykKCS0gaHR0cHM6Ly9hcHBzLmZlZG9y\n'
-            'YXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMvCmpjbGluZSB1cGRhdGVkIHRoZSBydWxlcyBvbiBh\n'
-            'IGZtbiBlbWFpbCBmaWx0ZXIKCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t\n'
-            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCjIuCWJvd2xvZmVnZ3Mg\n'
-            'dXBkYXRlZCB0aGUgcnVsZXMgb24gYSBmbW4gZW1haWwgZmlsdGVyIChGcmkgT2N0ICA2IDE3OjI1\n'
-            'OjMwIDIwMTcpCgktIGh0dHBzOi8vYXBwcy5mZWRvcmFwcm9qZWN0Lm9yZy9ub3RpZmljYXRpb25z\n'
-            'Lwpib3dsb2ZlZ2dzIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoKLS0t\n'
-            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t\n'
-            'LS0tLS0tLS0tLS0tLS0tLS0tLQoK\n'
+            'bCBmaWx0ZXIKMi4JYm93bG9mZWdncyB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFpbCBm\n'
+            'aWx0ZXIKCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t\n'
+            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCihGcmkgT2N0ICA2IDE3OjI1OjMwIDIwMTcp\n'
+            'IGpjbGluZSB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFpbCBmaWx0ZXIKLSBodHRwczov\n'
+            'L2FwcHMuZmVkb3JhcHJvamVjdC5vcmcvbm90aWZpY2F0aW9ucy8KCmpjbGluZSB1cGRhdGVkIHRo\n'
+            'ZSBydWxlcyBvbiBhIGZtbiBlbWFpbCBmaWx0ZXIKCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t\n'
+            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCihG\n'
+            'cmkgT2N0ICA2IDE3OjI1OjMwIDIwMTcpIGJvd2xvZmVnZ3MgdXBkYXRlZCB0aGUgcnVsZXMgb24g\n'
+            'YSBmbW4gZW1haWwgZmlsdGVyCi0gaHR0cHM6Ly9hcHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlm\n'
+            'aWNhdGlvbnMvCgpib3dsb2ZlZ2dzIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZp\n'
+            'bHRlcg==\n'
         )
 
-        actual = formatters.email_batch(self.messages, self.recipient)
+        actual = formatters.email_batch(self.messages, self.verbose_recipient)
+        self.assertEqual(expected, actual)
+
+    def test_basic_batch_not_verbose(self):
+        """Assert a well-formed not verbose email is returned from a basic message."""
+        expected = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Username: jcline\n'
+            'X-Fedmsg-Username: bowlofeggs\n'
+            'X-Fedmsg-Num-Packages: 0\n'
+            'Subject: Fedora Notifications Digest (2 updates)\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            'KEZyaSBPY3QgIDYgMTc6MjU6MzAgMjAxNykgamNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEg\n'
+            'Zm1uIGVtYWlsIGZpbHRlcgotIGh0dHBzOi8vYXBwcy5mZWRvcmFwcm9qZWN0Lm9yZy9ub3RpZmlj\n'
+            'YXRpb25zLwoKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t\n'
+            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQoKKEZyaSBPY3QgIDYgMTc6MjU6MzAgMjAx\n'
+            'NykgYm93bG9mZWdncyB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFpbCBmaWx0ZXIKLSBo\n'
+            'dHRwczovL2FwcHMuZmVkb3JhcHJvamVjdC5vcmcvbm90aWZpY2F0aW9ucy8=\n'
+        )
+
+        actual = formatters.email_batch(self.messages, self.not_verbose_recipient)
         self.assertEqual(expected, actual)
