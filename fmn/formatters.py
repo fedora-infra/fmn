@@ -438,13 +438,13 @@ def email_batch(messages, recipient):
     email_message = _base_email(recipient=recipient, messages=messages)
     email_message.add_header(
         'Subject', u'Fedora Notifications Digest ({n} updates)'.format(n=len(messages)))
-    summary_template = u'{number}.\t{short_title}\n'
-    message_template = u'({ts}) {short_title}\n- {link}\n{details}'
     separator = u'\n\n' + '-' * 79 + '\n\n'
     formatted_messages = []
 
     if recipient.get('verbose', True):
-        summary = u'Digest Summary:\n'
+        summary_template = u'{number}.\t{short_title}'
+        message_template = u'({ts}) {short_title}\n- {link}\n\n{details}'
+        summary = [u'Digest Summary:', ]
         for message_number, message in enumerate(messages, start=1):
             try:
                 shortform = fedmsg.meta.msg2subtitle(message, **config.app_conf) or u''
@@ -465,12 +465,15 @@ def email_batch(messages, recipient):
                 link = u'No link could be found in the message'
 
             timestamp = datetime.datetime.fromtimestamp(message['timestamp'])
-            summary += summary_template.format(number=message_number, short_title=shortform)
-            formatted_messages.append(message_template.format(ts=timestamp.strftime('%c'),
-                short_title=shortform, link=link, details=longform))
+            summary.append(summary_template.format(number=message_number, short_title=shortform))
+            formatted_messages.append(message_template.format(
+                ts=timestamp.strftime('%c'), short_title=shortform,
+                link=link,
+                details=longform))
 
-            digest_content = summary + separator + separator.join(full_messages)
+            digest_content = u'\n'.join(summary) + separator + separator.join(formatted_messages)
     else:
+        message_template = u'({ts}) {short_title}\n- {link}'
         for message_number, message in enumerate(messages, start=1):
             try:
                 shortform = fedmsg.meta.msg2subtitle(message, **config.app_conf) or u''
@@ -485,22 +488,24 @@ def email_batch(messages, recipient):
                 link = u'No link could be found in the message'
 
             timestamp = datetime.datetime.fromtimestamp(message['timestamp'])
-            formatted_messages.append(message_template.format(ts=timestamp.strftime('%c'),
-                short_title=shortform, link=link))
+            formatted_messages.append(message_template.format(
+                ts=timestamp.strftime('%c'), short_title=shortform,
+                link=link))
 
             digest_content = separator.join(formatted_messages)
 
     if len(digest_content) > 20000000:
         # This email is enormous, too large to be sent.
         digest_content = (u'This message digest was too large to be sent!\n'
-                   u'The following messages were batched:\n\n')
+                          u'The following messages were batched:\n\n')
         for msg in messages:
             digest_content += msg['msg_id'] + '\n'
 
         if len(digest_content) > 20000000:
             # Even the briefest summary is too big
-            digest_content = (u'The message digest was so large, not even a summary could be sent.\n'
-                       u'Consider adjusting your FMN settings.\n')
+            digest_content = (u'The message digest was so large, '
+                              u'not even a summary could be sent.\n'
+                              u'Consider adjusting your FMN settings.\n')
 
     email_message.set_payload(digest_content.encode('utf-8'), 'utf-8')
     return email_message.as_string()
