@@ -471,7 +471,7 @@ def email_batch(messages, recipient):
                 link=link,
                 details=longform))
 
-            digest_content = u'\n'.join(summary) + separator + separator.join(formatted_messages)
+        digest_content = u'\n'.join(summary) + separator + separator.join(formatted_messages)
     else:
         message_template = u'({ts}) {short_title}\n- {link}'
         for message_number, message in enumerate(messages, start=1):
@@ -492,7 +492,7 @@ def email_batch(messages, recipient):
                 ts=timestamp.strftime('%c'), short_title=shortform,
                 link=link))
 
-            digest_content = separator.join(formatted_messages)
+        digest_content = separator.join(formatted_messages)
 
     if len(digest_content) > 20000000:
         # This email is enormous, too large to be sent.
