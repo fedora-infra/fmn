@@ -436,6 +436,14 @@ def email_batch(messages, recipient):
         return email(messages[0], recipient)
 
     email_message = _base_email(recipient=recipient, messages=messages)
+
+    if len(messages) >= 1000:
+        email_message.add_header('Subject', u'Fedora Notifications Digest error')
+        digest_error = (u'Too many messages were queued to be sent in this digest ({n})!\n'
+                        u'Consider adjusting your FMN settings.\n'.format(n=len(messages)))
+        email_message.set_payload(digest_error.encode('utf-8'), 'utf-8')
+        return email_message.as_string()
+
     email_message.add_header(
         'Subject', u'Fedora Notifications Digest ({n} updates)'.format(n=len(messages)))
     separator = u'\n\n' + '-' * 79 + '\n\n'
@@ -494,18 +502,12 @@ def email_batch(messages, recipient):
 
         digest_content = separator.join(formatted_messages)
 
-    if len(digest_content) > 20000000:
+    if len(digest_content) >= 500000:
         # This email is enormous, too large to be sent.
         digest_content = (u'This message digest was too large to be sent!\n'
                           u'The following messages were batched:\n\n')
         for msg in messages:
-            digest_content += msg['msg_id'] + '\n'
-
-        if len(digest_content) > 20000000:
-            # Even the briefest summary is too big
-            digest_content = (u'The message digest was so large, '
-                              u'not even a summary could be sent.\n'
-                              u'Consider adjusting your FMN settings.\n')
+            digest_content += msg['msg_id'] + u'\n'
 
     email_message.set_payload(digest_content.encode('utf-8'), 'utf-8')
     return email_message.as_string()

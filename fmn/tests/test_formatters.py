@@ -728,3 +728,52 @@ class EmailBatchTests(Base):
 
         actual = formatters.email_batch(self.messages, self.not_verbose_recipient)
         self.assertEqual(expected, actual)
+
+    def test_too_many_messages(self):
+        """Test batch content when too many messages are queued."""
+        big_batch = self.messages * 500
+        expected = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Username: bowlofeggs\n'
+            'X-Fedmsg-Username: jcline\n'
+            'X-Fedmsg-Num-Packages: 0\n'
+            'Subject: Fedora Notifications Digest error\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            'VG9vIG1hbnkgbWVzc2FnZXMgd2VyZSBxdWV1ZWQgdG8gYmUgc2VudCBpbiB0aGlzIGRpZ2VzdCAo\n'
+            'MTAwMCkhCkNvbnNpZGVyIGFkanVzdGluZyB5b3VyIEZNTiBzZXR0aW5ncy4K\n'
+        )
+
+        actual = formatters.email_batch(big_batch, self.verbose_recipient)
+        self.assertEqual(expected, actual)
+
+    @mock.patch('fmn.formatters.fedmsg.meta.msg2long_form', mock.Mock(return_value=u'a' * 250000))
+    def test_digest_content_too_long(self):
+        """Test batch content when it exceeds 500k characters limit."""
+        expected = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Username: bowlofeggs\n'
+            'X-Fedmsg-Username: jcline\n'
+            'X-Fedmsg-Num-Packages: 0\n'
+            'Subject: Fedora Notifications Digest (2 updates)\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            'VGhpcyBtZXNzYWdlIGRpZ2VzdCB3YXMgdG9vIGxhcmdlIHRvIGJlIHNlbnQhClRoZSBmb2xsb3dp\n'
+            'bmcgbWVzc2FnZXMgd2VyZSBiYXRjaGVkOgoKMjAxNy02YWE3MWQ1Yi1mYmU0LTQ5ZTctYWZkZC1h\n'
+            'ZmNmMGQyMjgwMmIKMjAxNy02YWE3MWQ1Yi1hYWFhLWJiYmItY2NjYy1hZmNmMGQyMjgwMnoK\n'
+        )
+
+        actual = formatters.email_batch(self.messages, self.verbose_recipient)
+        self.assertEqual(expected, actual)
