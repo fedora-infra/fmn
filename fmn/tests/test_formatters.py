@@ -647,6 +647,28 @@ class EmailBatchTests(Base):
             formatters.email_batch([self.messages[0]], self.verbose_recipient),
         )
 
+    def test_unique_username_headers(self):
+        """Test that usernames are added only once for each in headers."""
+        double_messages = self.messages * 2
+        expected_start = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Username: jcline\n'
+            'X-Fedmsg-Username: bowlofeggs\n'
+            'X-Fedmsg-Num-Packages: 0\n'
+            'Subject: Fedora Notifications Digest (4 updates)\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+        )
+
+        actual = formatters.email_batch(double_messages, self.verbose_recipient)
+        self.assertIn(expected_start, actual)
+
     def test_basic_batch_verbose(self):
         """Assert a well-formed verbose email is returned from a basic message."""
         expected = (

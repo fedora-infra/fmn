@@ -570,11 +570,12 @@ def _base_email(recipient=None, messages=None):
         except Exception:
             _log.exception('Unable to parse message topic and category for %r', messages)
 
+        usernames = set()
         packages = set()
         for msg in messages:
             try:
                 for username in fedmsg.meta.msg2usernames(msg, **config.app_conf) or []:
-                    email_message.add_header('X-Fedmsg-Username', username.encode('utf-8'))
+                    usernames.add(username)
             except Exception:
                 _log.exception('fedmsg.meta.msg2usernames failed to handle %r', msg)
             try:
@@ -582,6 +583,9 @@ def _base_email(recipient=None, messages=None):
                     packages.add(package)
             except Exception:
                 _log.exception('fedmsg.meta.msg2packages failed to handle %r', msg)
+
+        for username in list(usernames):
+            email_message.add_header('X-Fedmsg-Username', username.encode('utf-8'))
 
         for pkg in list(packages)[:10]:
             email_message.add_header('X-Fedmsg-Package', pkg.encode('utf-8'))
