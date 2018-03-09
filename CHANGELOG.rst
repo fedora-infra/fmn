@@ -14,6 +14,9 @@ Bug fixes
 * X-Fedmsg-Username headers should not be duplicated
   (`#281 <https://github.com/fedora-infra/fmn/pull/281>`_).
 
+* Set digest content limits to 1k messages and 500k content length
+  (`#280 <https://github.com/fedora-infra/fmn/pull/280>`_).
+
 
 v2.0.2
 ======
