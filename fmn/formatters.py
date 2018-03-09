@@ -584,7 +584,7 @@ def _base_email(recipient=None, messages=None):
             except Exception:
                 _log.exception('fedmsg.meta.msg2packages failed to handle %r', msg)
 
-        for username in list(usernames):
+        for username in sorted(list(usernames)):
             email_message.add_header('X-Fedmsg-Username', username.encode('utf-8'))
 
         for pkg in list(packages)[:10]:
