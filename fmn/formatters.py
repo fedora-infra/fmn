@@ -435,14 +435,15 @@ def email_batch(messages, recipient):
     if len(messages) == 1:
         return email(messages[0], recipient)
 
-    email_message = _base_email(recipient=recipient, messages=messages)
-
     if len(messages) >= 1000:
+        email_message = _base_email(recipient=recipient)
         email_message.add_header('Subject', u'Fedora Notifications Digest error')
         digest_error = (u'Too many messages were queued to be sent in this digest ({n})!\n'
                         u'Consider adjusting your FMN settings.\n'.format(n=len(messages)))
         email_message.set_payload(digest_error.encode('utf-8'), 'utf-8')
         return email_message.as_string()
+
+    email_message = _base_email(recipient=recipient, messages=messages)
 
     email_message.add_header(
         'Subject', u'Fedora Notifications Digest ({n} updates)'.format(n=len(messages)))
