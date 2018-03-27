@@ -380,6 +380,29 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
         actual = formatters.email(self.message, self.recipient)
         self.assertEqual(expected, actual)
 
+    @mock.patch('fmn.formatters.fedmsg.meta.msg2long_form', mock.Mock(return_value='a'*500000))
+    def test_email_too_big(self):
+        """Assert huge single message emails are handled gracefully."""
+        expected = (
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Username: jcline\n'
+            'X-Fedmsg-Num-Packages: 0\n'
+            'Subject: jcline updated the rules on a fmn email filter\n'
+            'MIME-Version: 1.0\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            'VGhpcyBtZXNzYWdlIHdhcyB0b28gbGFyZ2UgdG8gYmUgc2VudCEKVGhlIG1lc3NhZ2UgSUQgd2Fz\n'
+            'OiAyMDE3LTZhYTcxZDViLWZiZTQtNDllNy1hZmRkLWFmY2YwZDIyODAyYgoK\n'
+        )
+
+        actual = formatters.email(self.message, self.recipient)
+        self.assertEqual(expected, actual)
+
     @mock.patch.dict('fmn.formatters.config.app_conf', {'fmn.email.subject_prefix': 'PREFIX: '})
     def test_subject_prefix(self):
         """Assert the subject prefix is added if configured."""

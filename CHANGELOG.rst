@@ -20,6 +20,9 @@ Bug fixes
 * Add timestamp in single message emails
   (`#284 <https://github.com/fedora-infra/fmn/pull/287>`_).
 
+* Limit single message emails to 500K characters to ensure multi-MB emails
+  don't get stuck in the message queue
+  (`#288 <https://github.com/fedora-infra/fmn/pull/288>`_).
 
 v2.0.2
 ======

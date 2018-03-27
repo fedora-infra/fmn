@@ -415,6 +415,12 @@ def email(message, recipient):
     except Exception:
         _log.exception('fedmsg.meta.msg2link failed to handle %r', message)
 
+    if len(content) >= 500000:
+        # This email is enormous, too large to be sent. This happens if fedmsg_meta
+        # did something silly in its msg2long_form implementation.
+        content = (u'This message was too large to be sent!\n'
+                   u'The message ID was: {}\n\n').format(message['msg_id'])
+
     # Since we do simple text email, adding the footer to the content
     # before setting the payload.
     footer = config.app_conf.get('fmn.email.footer', u'')
