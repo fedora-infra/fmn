@@ -399,11 +399,13 @@ def email(message, recipient):
             subject_prefix.strip(), subject.strip())
     email_message.add_header('Subject', subject.encode('utf-8'))
 
+    timestamp = datetime.datetime.fromtimestamp(message['timestamp'])
+    content = timestamp.strftime('%c') + u'\n'
     try:
-        content = fedmsg.meta.msg2long_form(message, **config.app_conf) or u''
+        content += fedmsg.meta.msg2long_form(message, **config.app_conf) or u''
     except Exception:
         _log.exception('fedmsg.meta.msg2long_form failed to handle %r', message)
-        content = json.dumps(message, sort_keys=True, indent=4)
+        content += json.dumps(message, sort_keys=True, indent=4)
 
     try:
         link = fedmsg.meta.msg2link(message, **config.app_conf)
