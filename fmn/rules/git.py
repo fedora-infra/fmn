@@ -1,3 +1,4 @@
+"""Notification rules relating to dist-git."""
 from fmn.lib.hinting import hint, prefixed as _
 
 
@@ -99,3 +100,14 @@ def git_receive(config, message):
     ``fedpkg push`` on a package.
     """
     return message['topic'] == _('git.receive')
+
+
+@hint(topics=[_('pagure.project.new', prefix='org.fedoraproject')])
+def git_repo_new(config, message):
+    """
+    New repository in dist-git (https://src.fedoraproject.org).
+
+    This rule triggers when a new dist-git repository is added. This occurs once
+    a package has been reviewed and the SCM request has been approved.
+    """
+    return message['topic'] == _('pagure.project.new', prefix='org.fedoraproject')
