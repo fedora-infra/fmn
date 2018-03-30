@@ -399,8 +399,9 @@ def email(message, recipient):
             subject_prefix.strip(), subject.strip())
     email_message.add_header('Subject', subject.encode('utf-8'))
 
-    timestamp = datetime.datetime.fromtimestamp(message['timestamp'])
-    content = timestamp.strftime('%c') + u'\n'
+    timestamp = datetime.datetime.fromtimestamp(message['timestamp'], tz=pytz.utc)
+    timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S %Z')
+    content = u'Notification time stamped {}\n\n'.format(timestamp)
     try:
         content += fedmsg.meta.msg2long_form(message, **config.app_conf) or u''
     except Exception:
@@ -475,10 +476,10 @@ def email_batch(messages, recipient):
                 _log.exception('fedmsg.meta.msg2link failed to handle %r', message)
                 link = u'No link could be found in the message'
 
-            timestamp = datetime.datetime.fromtimestamp(message['timestamp'])
+            timestamp = datetime.datetime.fromtimestamp(message['timestamp'], tz=pytz.utc)
             summary.append(summary_template.format(number=message_number, short_title=shortform))
             formatted_messages.append(message_template.format(
-                ts=timestamp.strftime('%c'), short_title=shortform,
+                ts=timestamp.strftime('%Y-%m-%d %H:%M:%S %Z'), short_title=shortform,
                 link=link,
                 details=longform))
 
@@ -498,9 +499,9 @@ def email_batch(messages, recipient):
                 _log.exception('fedmsg.meta.msg2link failed to handle %r', message)
                 link = u'No link could be found in the message'
 
-            timestamp = datetime.datetime.fromtimestamp(message['timestamp'])
+            timestamp = datetime.datetime.fromtimestamp(message['timestamp'], tz=pytz.utc)
             formatted_messages.append(message_template.format(
-                ts=timestamp.strftime('%c'), short_title=shortform,
+                ts=timestamp.strftime('%Y-%m-%d %H:%M:%S %Z'), short_title=shortform,
                 link=link))
 
         digest_content = separator.join(formatted_messages)

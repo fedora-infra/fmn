@@ -18,7 +18,7 @@ Bug fixes
   (`#280 <https://github.com/fedora-infra/fmn/pull/280>`_).
 
 * Add timestamp in single message emails
-  (`#284 <https://github.com/fedora-infra/fmn/pull/284>`_).
+  (`#284 <https://github.com/fedora-infra/fmn/pull/287>`_).
 
 
 v2.0.2
