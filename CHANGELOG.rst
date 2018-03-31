@@ -17,6 +17,9 @@ Bug fixes
 * Set digest content limits to 1k messages and 500k content length
   (`#280 <https://github.com/fedora-infra/fmn/pull/280>`_).
 
+* Add timestamp in single message emails
+  (`#284 <https://github.com/fedora-infra/fmn/pull/287>`_).
+
 
 v2.0.2
 ======

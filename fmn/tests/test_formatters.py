@@ -372,8 +372,9 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            "amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9h\n"
-            "cHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n"
+            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
+            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
+            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -395,8 +396,9 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            "amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9h\n"
-            "cHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n"
+            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
+            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
+            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -415,6 +417,7 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
+            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoK\n'
         )
         self.message['topic'] = 'so.short'
 
@@ -437,8 +440,9 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            "amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9h\n"
-            "cHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n"
+            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
+            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
+            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -459,8 +463,9 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            "amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9h\n"
-            "cHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n"
+            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
+            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
+            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -483,8 +488,9 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            "amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9h\n"
-            "cHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n"
+            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
+            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
+            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -506,8 +512,9 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            "amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9h\n"
-            "cHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n"
+            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
+            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
+            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -529,13 +536,14 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'ewogICAgIm1zZyI6IHsKICAgICAgICAiY2hhbmdlZCI6ICJydWxlcyIsIAogICAgICAgICJjb250\n'
-            'ZXh0IjogImVtYWlsIiwgCiAgICAgICAgIm9wZW5pZCI6ICJqY2xpbmUuaWQuZmVkb3JhcHJvamVj\n'
-            'dC5vcmciCiAgICB9LCAKICAgICJtc2dfaWQiOiAiMjAxNy02YWE3MWQ1Yi1mYmU0LTQ5ZTctYWZk\n'
-            'ZC1hZmNmMGQyMjgwMmIiLCAKICAgICJ0aW1lc3RhbXAiOiAxNTA3MzEwNzMwLCAKICAgICJ0b3Bp\n'
-            'YyI6ICJvcmcuZmVkb3JhcHJvamVjdC5kZXYuZm1uLmZpbHRlci51cGRhdGUiLCAKICAgICJ1c2Vy\n'
-            'bmFtZSI6ICJ2YWdyYW50Igp9CglodHRwczovL2FwcHMuZmVkb3JhcHJvamVjdC5vcmcvbm90aWZp\n'
-            'Y2F0aW9ucy8=\n'
+            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKewogICAg\n'
+            'Im1zZyI6IHsKICAgICAgICAiY2hhbmdlZCI6ICJydWxlcyIsIAogICAgICAgICJjb250ZXh0Ijog\n'
+            'ImVtYWlsIiwgCiAgICAgICAgIm9wZW5pZCI6ICJqY2xpbmUuaWQuZmVkb3JhcHJvamVjdC5vcmci\n'
+            'CiAgICB9LCAKICAgICJtc2dfaWQiOiAiMjAxNy02YWE3MWQ1Yi1mYmU0LTQ5ZTctYWZkZC1hZmNm\n'
+            'MGQyMjgwMmIiLCAKICAgICJ0aW1lc3RhbXAiOiAxNTA3MzEwNzMwLCAKICAgICJ0b3BpYyI6ICJv\n'
+            'cmcuZmVkb3JhcHJvamVjdC5kZXYuZm1uLmZpbHRlci51cGRhdGUiLCAKICAgICJ1c2VybmFtZSI6\n'
+            'ICJ2YWdyYW50Igp9CglodHRwczovL2FwcHMuZmVkb3JhcHJvamVjdC5vcmcvbm90aWZpY2F0aW9u\n'
+            'cy8=\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -557,7 +565,8 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcg==\n'
+            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
+            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcg==\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -578,10 +587,11 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9h\n'
-            'cHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMvCgotLQpZb3UgcmVjZWl2ZWQgdGhp\n'
-            'cyBtZXNzYWdlIGR1ZSB0byB5b3VyIHByZWZlcmVuY2Ugc2V0dGluZ3MgYXQgCmh0dHA6Ly9sb2Nh\n'
-            'bGhvc3Q6NTAwMC9qY2xpbmUuaWQuZmVkb3JhcHJvamVjdC5vcmcvZW1haWwvMTE=\n'
+            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
+            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
+            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMvCgotLQpZb3UgcmVjZWl2ZWQgdGhpcyBtZXNz\n'
+            'YWdlIGR1ZSB0byB5b3VyIHByZWZlcmVuY2Ugc2V0dGluZ3MgYXQgCmh0dHA6Ly9sb2NhbGhvc3Q6\n'
+            'NTAwMC9qY2xpbmUuaWQuZmVkb3JhcHJvamVjdC5vcmcvZW1haWwvMTE=\n'
         )
         self.recipient['triggered_by_links'] = True
 
@@ -688,15 +698,15 @@ class EmailBatchTests(Base):
             'RGlnZXN0IFN1bW1hcnk6CjEuCWpjbGluZSB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFp\n'
             'bCBmaWx0ZXIKMi4JYm93bG9mZWdncyB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFpbCBm\n'
             'aWx0ZXIKCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t\n'
-            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCihGcmkgT2N0ICA2IDE3OjI1OjMwIDIwMTcp\n'
-            'IGpjbGluZSB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFpbCBmaWx0ZXIKLSBodHRwczov\n'
-            'L2FwcHMuZmVkb3JhcHJvamVjdC5vcmcvbm90aWZpY2F0aW9ucy8KCmpjbGluZSB1cGRhdGVkIHRo\n'
-            'ZSBydWxlcyBvbiBhIGZtbiBlbWFpbCBmaWx0ZXIKCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t\n'
-            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCihG\n'
-            'cmkgT2N0ICA2IDE3OjI1OjMwIDIwMTcpIGJvd2xvZmVnZ3MgdXBkYXRlZCB0aGUgcnVsZXMgb24g\n'
-            'YSBmbW4gZW1haWwgZmlsdGVyCi0gaHR0cHM6Ly9hcHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlm\n'
-            'aWNhdGlvbnMvCgpib3dsb2ZlZ2dzIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZp\n'
-            'bHRlcg==\n'
+            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCigyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQykg\n'
+            'amNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgotIGh0dHBzOi8v\n'
+            'YXBwcy5mZWRvcmFwcm9qZWN0Lm9yZy9ub3RpZmljYXRpb25zLwoKamNsaW5lIHVwZGF0ZWQgdGhl\n'
+            'IHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t\n'
+            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQoKKDIw\n'
+            'MTctMTAtMDYgMTc6MjU6MzAgVVRDKSBib3dsb2ZlZ2dzIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEg\n'
+            'Zm1uIGVtYWlsIGZpbHRlcgotIGh0dHBzOi8vYXBwcy5mZWRvcmFwcm9qZWN0Lm9yZy9ub3RpZmlj\n'
+            'YXRpb25zLwoKYm93bG9mZWdncyB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFpbCBmaWx0\n'
+            'ZXI=\n'
         )
 
         actual = formatters.email_batch(self.messages, self.verbose_recipient)
@@ -718,12 +728,12 @@ class EmailBatchTests(Base):
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'KEZyaSBPY3QgIDYgMTc6MjU6MzAgMjAxNykgamNsaW5lIHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEg\n'
-            'Zm1uIGVtYWlsIGZpbHRlcgotIGh0dHBzOi8vYXBwcy5mZWRvcmFwcm9qZWN0Lm9yZy9ub3RpZmlj\n'
-            'YXRpb25zLwoKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t\n'
-            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQoKKEZyaSBPY3QgIDYgMTc6MjU6MzAgMjAx\n'
-            'NykgYm93bG9mZWdncyB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFpbCBmaWx0ZXIKLSBo\n'
-            'dHRwczovL2FwcHMuZmVkb3JhcHJvamVjdC5vcmcvbm90aWZpY2F0aW9ucy8=\n'
+            'KDIwMTctMTAtMDYgMTc6MjU6MzAgVVRDKSBqY2xpbmUgdXBkYXRlZCB0aGUgcnVsZXMgb24gYSBm\n'
+            'bW4gZW1haWwgZmlsdGVyCi0gaHR0cHM6Ly9hcHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNh\n'
+            'dGlvbnMvCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t\n'
+            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgooMjAxNy0xMC0wNiAxNzoyNTozMCBVVEMp\n'
+            'IGJvd2xvZmVnZ3MgdXBkYXRlZCB0aGUgcnVsZXMgb24gYSBmbW4gZW1haWwgZmlsdGVyCi0gaHR0\n'
+            'cHM6Ly9hcHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
         )
 
         actual = formatters.email_batch(self.messages, self.not_verbose_recipient)
