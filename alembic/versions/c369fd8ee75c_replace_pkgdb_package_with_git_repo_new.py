@@ -22,8 +22,8 @@ def upgrade():
     for old, new in rule_changes.items():
         sql_statement = """
             UPDATE rules
-            SET code_path="{new}"
-            WHERE code_path="{old}"
+            SET code_path='{new}'
+            WHERE code_path='{old}'
         """.format(old=old, new=new)
 
         op.execute(sql_statement)
@@ -34,8 +34,8 @@ def downgrade():
     for old, new in rule_changes.items():
         sql_statement = """
             UPDATE rules
-            SET code_path="{old}"
-            WHERE code_path="{new}"
+            SET code_path='{old}'
+            WHERE code_path='{new}'
         """.format(old=old, new=new)
 
         op.execute(sql_statement)
