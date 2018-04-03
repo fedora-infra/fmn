@@ -2,11 +2,37 @@
 Changelog
 =========
 
-Master
+v2.1.0
 ======
+
+Features
+--------
+
+* Add support for ``git.repo.new`` messages from src.fedoraproject.org and
+  migrate users of the old ``pkgdb.package.new`` message over to it
+  (`#290 <https://github.com/fedora-infra/fmn/pull/290>`_).
+
+* Remove upgradepath from the critical taskotron tasks as that check has
+  been deprecated
+  (`#269 <https://github.com/fedora-infra/fmn/pull/269>`_).
+
+* Celery workers are now configured with the standard FMN logging config
+  (`#267 <https://github.com/fedora-infra/fmn/pull/267>`_).
+
+* Links shortened with da.gd now use HTTPS
+  (`#274 <https://github.com/fedora-infra/fmn/pull/274>`_).
 
 Bug fixes
 ---------
+
+* Fix a bug where messages that mentioned a lot of packages created an
+  email so large it couldn't be sent in a single email
+  (`#273 <https://github.com/fedora-infra/fmn/pull/273>`_),
+
+* Fix a bug where the database being unavailable caused FMN to crash
+  (`#268 <https://github.com/fedora-infra/fmn/pull/268>`_),
+  (`#271 <https://github.com/fedora-infra/fmn/pull/271>`_),
+  (`#272 <https://github.com/fedora-infra/fmn/pull/272>`_).
 
 * Restore summary in digest email when reporting verbose messages
   (`#278 <https://github.com/fedora-infra/fmn/pull/278>`_).
@@ -23,6 +49,27 @@ Bug fixes
 * Limit single message emails to 500K characters to ensure multi-MB emails
   don't get stuck in the message queue
   (`#288 <https://github.com/fedora-infra/fmn/pull/288>`_).
+
+Developer Improvements
+----------------------
+
+* Update the example Vagrantfile to Fedora 27
+  (`#282 <https://github.com/fedora-infra/fmn/pull/282>`_).
+
+Contributors
+------------
+
+This release contained code contributions from:
+
+* Jeremy Cline
+* Ricky Elrod
+* Kamil Páral
+* Patrick Uiterwijk
+* Mattia Verga
+
+Thank you! Many thanks to those who filed bug reports and feature suggestions,
+as well.
+
 
 v2.0.2
 ======
