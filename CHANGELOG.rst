@@ -2,6 +2,15 @@
 Changelog
 =========
 
+v2.1.1
+======
+
+Bug fixes
+---------
+
+* Fix a compatibility issue in the latest database migration
+  (`#292 <https://github.com/fedora-infra/fmn/pull/292>`_).
+
 v2.1.0
 ======
 
