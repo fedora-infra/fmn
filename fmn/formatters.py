@@ -29,7 +29,11 @@ import json
 import uuid
 import datetime
 import time
-import email as email_module
+from email import message_from_string
+from email.mime.nonmultipart import MIMENonMultipart
+from email.mime.multipart import MIMEMultipart
+from email.mime.message import MIMEMessage
+from sys import getsizeof
 
 import arrow
 import requests
@@ -386,7 +390,9 @@ def email(message, recipient):
     Returns:
         str: The email as a unicode string.
     """
-    email_message = _base_email(recipient=recipient, messages=[message])
+    email_message = _base_email(MIMENonMultipart('text', 'plain'),
+                                recipient=recipient,
+                                messages=[message])
 
     try:
         subject = fedmsg.meta.msg2subtitle(message, **config.app_conf) or u'fedmsg notification'
@@ -432,10 +438,6 @@ def email(message, recipient):
         content += u'\n\n--\n{0}'.format(footer.strip())
     email_message.set_payload(content.encode('utf-8'), 'utf-8')
 
-    # Explicitly declare encoding, but remove the transfer encoding
-    # https://github.com/fedora-infra/fmn/issues/94
-    email_message.set_charset('utf-8')
-
     return email_message.as_string()
 
 
@@ -445,53 +447,50 @@ def email_batch(messages, recipient):
         return email(messages[0], recipient)
 
     if len(messages) >= 1000:
-        email_message = _base_email(recipient=recipient)
-        email_message.add_header('Subject', u'Fedora Notifications Digest error')
+        email_message = _base_email(MIMENonMultipart('text', 'plain'),
+                                    recipient=recipient)
+        email_message['Subject'] = 'Fedora Notifications Digest error'
         digest_error = (u'Too many messages were queued to be sent in this digest ({n})!\n'
                         u'Consider adjusting your FMN settings.\n'.format(n=len(messages)))
         email_message.set_payload(digest_error.encode('utf-8'), 'utf-8')
         return email_message.as_string()
 
-    email_message = _base_email(recipient=recipient, messages=messages)
-
-    email_message.add_header(
-        'Subject', u'Fedora Notifications Digest ({n} updates)'.format(n=len(messages)))
-    separator = u'\n\n' + '-' * 79 + '\n\n'
-    formatted_messages = []
-
     if recipient.get('verbose', True):
-        summary_template = u'{number}.\t{short_title}'
-        message_template = u'({ts}) {short_title}\n- {link}\n\n{details}'
+        # Wrap the real digest in a multipart\mixed to add the summary
+        # We will add FMN private headers to single messages rather that to digest
+        email_message = _base_email(MIMEMultipart(boundary='=======fmn_email_boundary=='),
+                                    recipient=recipient)
+        digest = MIMEMultipart(_subtype='digest',
+                               boundary='=======next_message_in_digest==')
+
+        email_message['Subject'] = f'Fedora Notifications Digest ({len(messages)} updates)'
+
+        summary_template = '{number}.\t{short_title}'
         summary = [u'Digest Summary:', ]
         for message_number, message in enumerate(messages, start=1):
             try:
-                shortform = fedmsg.meta.msg2subtitle(message, **config.app_conf) or u''
+                subject = fedmsg.meta.msg2subtitle(message, **config.app_conf) or ''
             except Exception:
                 _log.exception('fedmsg.meta.msg2subtitle failed to handle %r', message)
-                shortform = u'Unparsable message subtitle'
+                subject = 'Unparsable message subtitle'
 
-            try:
-                longform = fedmsg.meta.msg2long_form(message, **config.app_conf) or u''
-            except Exception:
-                _log.exception('fedmsg.meta.msg2long_form failed to handle %r', message)
-                longform = u'Unparsable message details'
+            summary.append(summary_template.format(number=message_number, short_title=subject))
+            digest_message = message_from_string(email(message, recipient))
+            # Enclose the message in a 'message/rfc822' container
+            digest.attach(MIMEMessage(digest_message))
 
-            try:
-                link = fedmsg.meta.msg2link(message, **config.app_conf) or u''
-            except Exception:
-                _log.exception('fedmsg.meta.msg2link failed to handle %r', message)
-                link = u'No link could be found in the message'
-
-            timestamp = datetime.datetime.fromtimestamp(message['timestamp'], tz=pytz.utc)
-            summary.append(summary_template.format(number=message_number, short_title=shortform))
-            formatted_messages.append(message_template.format(
-                ts=timestamp.strftime('%Y-%m-%d %H:%M:%S %Z'), short_title=shortform,
-                link=link,
-                details=longform))
-
-        digest_content = u'\n'.join(summary) + separator + separator.join(formatted_messages)
+        summary_message = MIMENonMultipart('text', 'plain')
+        summary_message.set_payload('\n'.join(summary).encode('utf-8'), 'utf-8')
+        email_message.attach(summary_message)
+        email_message.attach(digest)
     else:
-        message_template = u'({ts}) {short_title}\n- {link}'
+        email_message = _base_email(MIMENonMultipart('text', 'plain'),
+                                    recipient=recipient,
+                                    messages=messages)
+        email_message['Subject'] = f'Fedora Notifications Recap ({len(messages)} updates)'
+        message_template = '({ts}) {short_title}\n- {link}'
+        recap_content = []
+        separator = f'\n\n{"-"*79}\n\n'
         for message_number, message in enumerate(messages, start=1):
             try:
                 shortform = fedmsg.meta.msg2subtitle(message, **config.app_conf) or u''
@@ -506,20 +505,22 @@ def email_batch(messages, recipient):
                 link = u'No link could be found in the message'
 
             timestamp = datetime.datetime.fromtimestamp(message['timestamp'], tz=pytz.utc)
-            formatted_messages.append(message_template.format(
+            recap_content.append(message_template.format(
                 ts=timestamp.strftime('%Y-%m-%d %H:%M:%S %Z'), short_title=shortform,
                 link=link))
+        email_message.set_payload(separator.join(recap_content).encode('utf-8'), 'utf-8')
 
-        digest_content = separator.join(formatted_messages)
-
-    if len(digest_content) >= 500000:
-        # This email is enormous, too large to be sent.
-        digest_content = (u'This message digest was too large to be sent!\n'
-                          u'The following messages were batched:\n\n')
+    if getsizeof(email_message.as_string()) > 5000000:
+        # This email is too large to be sent.
+        email_message = _base_email(MIMENonMultipart('text', 'plain'),
+                                    recipient=recipient)
+        email_message['Subject'] = 'Fedora Notifications Digest error'
+        digest_error = ('This message digest was too large to be sent!\n'
+                        'The following messages were batched:\n\n')
         for msg in messages:
-            digest_content += msg['msg_id'] + u'\n'
+            digest_error += msg['msg_id'] + '\n'
+        email_message.set_payload(digest_error.encode('utf-8'), 'utf-8')
 
-    email_message.set_payload(digest_content.encode('utf-8'), 'utf-8')
     return email_message.as_string()
 
 
@@ -533,9 +534,9 @@ def email_confirmation(confirmation):
     Returns:
         str: The email to send as a string.
     """
-    email_message = _base_email()
-    email_message.add_header('To', confirmation.detail_value)
-    email_message.add_header('Subject', u'Confirm notification email')
+    email_message = _base_email(MIMENonMultipart('text', 'plain'))
+    email_message['To'] = confirmation.detail_value
+    email_message['Subject'] = 'Confirm notification email'
     acceptance_url = config.app_conf['fmn.acceptance_url'].format(
         secret=confirmation.secret)
     rejection_url = config.app_conf['fmn.rejection_url'].format(
@@ -548,28 +549,34 @@ def email_confirmation(confirmation):
         support_email=config.app_conf['fmn.support_email'],
         username=confirmation.openid,
     ).strip()
-    email_message.set_payload(content)
+    email_message.set_payload(content.encode('utf-8'), 'utf-8')
     return email_message.as_string()
 
 
-def _base_email(recipient=None, messages=None):
+def _base_email(email_message, recipient=None, messages=None):
     """
-    Create an email Message with some basic headers to mark the email as auto-generated.
+    Create an email Message and add basic headers to mark the email as auto-generated.
+    If a recipient is provided, add it to 'To' header.
+    If a list of messages is provided, add related custom FMN headers.
+
+    Args:
+        email_message (email.message.Message): The email message to customize
+        recipient (dict): A dictionary containing (at a minimum) the
+            `email_address` (str) and `triggered_by_links` (bool) keys.
+        messages (list): A list of dictionaries, where each dictionary is a fedmsg.
 
     Returns:
-        email.Message.Message: The email message object with the 'Precedence' and 'Auto-Submitted'
-            headers set.
+        email.message.Message: The email message object with basic and custom headers set.
     """
-    email_message = email_module.message.EmailMessage()
+    email_message['From'] = config.app_conf['fmn.email.from_address']
+    if recipient and 'email address' in recipient:
+        email_message['To'] = recipient['email address']
+
     # Although this is a non-standard header and RFC 2076 discourages it, some
     # old clients don't honour RFC 3834 and will auto-respond unless this is set.
     email_message.add_header('Precedence', 'Bulk')
     # Mark this mail as auto-generated so auto-responders don't respond; see RFC 3834
     email_message.add_header('Auto-Submitted', 'auto-generated')
-    email_message.add_header('From', config.app_conf['fmn.email.from_address'])
-
-    if recipient and 'email address' in recipient:
-        email_message.add_header('To', recipient['email address'])
 
     if messages:
         try:

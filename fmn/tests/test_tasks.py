@@ -240,19 +240,25 @@ class ConfirmationsTests(Base):
             secret='a'*32, detail_value='jeremy@jcline.org', user=user, context=context)
         self.sess.add(confirmation)
         self.sess.commit()
-        expected_email = """Precedence: Bulk
-Auto-Submitted: auto-generated
-From: notifications@fedoraproject.org
-To: jeremy@jcline.org
-Subject: Confirm notification email
-
-jcline.id.fedoraproject.org has requested that notifications be sent to this email address
-* To accept, visit this address:
-  http://localhost:5000/confirm/accept/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-* Or, to reject you can visit this address:
-  http://localhost:5000/confirm/reject/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-Alternatively, you can ignore this.  This is an automated message, please
-email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
+        expected_email = (
+            'MIME-Version: 1.0\n'
+            'From: notifications@fedoraproject.org\n'
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'To: jeremy@jcline.org\n'
+            'Subject: Confirm notification email\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            'amNsaW5lLmlkLmZlZG9yYXByb2plY3Qub3JnIGhhcyByZXF1ZXN0ZWQgdGhhdCBub3RpZmljYXRp\n'
+            'b25zIGJlIHNlbnQgdG8gdGhpcyBlbWFpbCBhZGRyZXNzCiogVG8gYWNjZXB0LCB2aXNpdCB0aGlz\n'
+            'IGFkZHJlc3M6CiAgaHR0cDovL2xvY2FsaG9zdDo1MDAwL2NvbmZpcm0vYWNjZXB0L2FhYWFhYWFh\n'
+            'YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhCiogT3IsIHRvIHJlamVjdCB5b3UgY2FuIHZpc2l0IHRo\n'
+            'aXMgYWRkcmVzczoKICBodHRwOi8vbG9jYWxob3N0OjUwMDAvY29uZmlybS9yZWplY3QvYWFhYWFh\n'
+            'YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWEKQWx0ZXJuYXRpdmVseSwgeW91IGNhbiBpZ25vcmUg\n'
+            'dGhpcy4gIFRoaXMgaXMgYW4gYXV0b21hdGVkIG1lc3NhZ2UsIHBsZWFzZQplbWFpbCBub3RpZmlj\n'
+            'YXRpb25zQGZlZG9yYXByb2plY3Qub3JnIGlmIHlvdSBoYXZlIGFueSBjb25jZXJucy9pc3N1ZXMv\n'
+            'YWJ1c2Uu\n'
+        )
         expected_message = {
             'context': 'email',
             'recipient': {
