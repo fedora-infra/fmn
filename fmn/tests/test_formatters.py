@@ -332,6 +332,33 @@ class EmailTests(Base):
         self.assertEqual(message['Precedence'], 'Bulk')
         self.assertEqual(message['From'], 'notifications@fedoraproject.org')
 
+    @mock.patch('fmn.formatters.fedmsg.meta.msg2subtitle', mock.Mock(return_value=u'Sùbtìtlè'))
+    @mock.patch('fmn.formatters.fedmsg.meta.msg2usernames',
+                mock.Mock(return_value=[u'→Usèrnàmè←', ]))
+    def test_internationalized_headers(self):
+        """Assert headers containing utf-8 chars are correctly set."""
+        expected = (
+            'MIME-Version: 1.0\n'
+            'From: notifications@fedoraproject.org\n'
+            'To: jeremy@jcline.org\n'
+            'Precedence: Bulk\n'
+            'Auto-Submitted: auto-generated\n'
+            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
+            'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
+            'X-Fedmsg-Username: =?utf-8?b?4oaSVXPDqHJuw6Btw6jihpA=?=\n'
+            'X-Fedmsg-Num-Packages: 0\n'
+            'Subject: =?utf-8?b?U8O5YnTDrHRsw6g=?=\n'
+            'Content-Type: text/plain; charset="utf-8"\n'
+            'Content-Transfer-Encoding: base64\n\n'
+            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
+            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
+            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+        )
+
+        actual = formatters.email(self.message, self.recipient)
+        self.assertEqual(expected, actual)
+
     def test_confirmation(self):
         """Assert a :class:`models.Confirmation` is formatted to an email."""
         confirmation = models.Confirmation(

@@ -403,7 +403,7 @@ def email(message, recipient):
     if subject_prefix:
         subject = u'{0} {1}'.format(
             subject_prefix.strip(), subject.strip())
-    email_message.add_header('Subject', subject)
+    email_message['Subject'] = subject
 
     timestamp = datetime.datetime.fromtimestamp(message['timestamp'], tz=pytz.utc)
     timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S %Z')
