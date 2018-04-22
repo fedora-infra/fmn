@@ -592,6 +592,7 @@ def _base_email(email_message, recipient=None, messages=None):
         usernames = set()
         packages = set()
         for msg in messages:
+            email_message.add_header('X-Fedmsg-Id', msg['msg_id'])
             try:
                 for username in fedmsg.meta.msg2usernames(msg, **config.app_conf) or []:
                     usernames.add(username)

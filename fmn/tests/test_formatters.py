@@ -374,6 +374,7 @@ class EmailTests(Base):
             'Auto-Submitted: auto-generated\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
@@ -398,6 +399,7 @@ class EmailTests(Base):
             'Auto-Submitted: auto-generated\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
@@ -421,6 +423,7 @@ class EmailTests(Base):
             'Auto-Submitted: auto-generated\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: PREFIX: jcline updated the rules on a fmn email filter\n'
@@ -443,6 +446,7 @@ class EmailTests(Base):
             'Precedence: Bulk\n'
             'Auto-Submitted: auto-generated\n'
             'X-Fedmsg-Topic: so.short\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: fedmsg notification\n'
             'Content-Type: text/plain; charset="utf-8"\n'
@@ -465,6 +469,7 @@ class EmailTests(Base):
             'Auto-Submitted: auto-generated\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: fedmsg notification\n'
@@ -489,6 +494,7 @@ class EmailTests(Base):
             'Auto-Submitted: auto-generated\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
             'Content-Type: text/plain; charset="utf-8"\n'
@@ -512,6 +518,7 @@ class EmailTests(Base):
             'Auto-Submitted: auto-generated\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Package: pkg\n'
             'X-Fedmsg-Num-Packages: 1\n'
@@ -537,6 +544,7 @@ class EmailTests(Base):
             'Auto-Submitted: auto-generated\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
@@ -561,6 +569,7 @@ class EmailTests(Base):
             'Auto-Submitted: auto-generated\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
@@ -589,6 +598,7 @@ class EmailTests(Base):
             'Auto-Submitted: auto-generated\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
@@ -611,6 +621,7 @@ class EmailTests(Base):
             'Auto-Submitted: auto-generated\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
@@ -687,26 +698,12 @@ class EmailBatchTests(Base):
         )
 
     def test_unique_username_headers(self):
-        """Test that usernames are added only once for each in headers."""
+        """Test that usernames headers are added only once for each."""
         double_messages = self.messages * 2
-        expected_start = (
-            'MIME-Version: 1.0\n'
-            'From: notifications@fedoraproject.org\n'
-            'To: jeremy@jcline.org\n'
-            'Precedence: Bulk\n'
-            'Auto-Submitted: auto-generated\n'
-            'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
-            'X-Fedmsg-Category: fmn\n'
-            'X-Fedmsg-Username: bowlofeggs\n'
-            'X-Fedmsg-Username: jcline\n'
-            'X-Fedmsg-Num-Packages: 0\n'
-            'Subject: Fedora Notifications Recap (4 updates)\n'
-            'Content-Type: text/plain; charset="utf-8"\n'
-            'Content-Transfer-Encoding: base64\n\n'
-        )
 
         actual = formatters.email_batch(double_messages, self.not_verbose_recipient)
-        self.assertIn(expected_start, actual)
+        username_count = actual.count('X-Fedmsg-Username: bowlofeggs\n')
+        self.assertEqual(username_count, 1)
 
     def test_basic_batch_verbose(self):
         """Assert a well-formed digest is returned from a list of messages."""
@@ -738,6 +735,7 @@ class EmailBatchTests(Base):
             'Auto-Submitted: auto-generated\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
@@ -756,6 +754,7 @@ class EmailBatchTests(Base):
             'Auto-Submitted: auto-generated\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-aaaa-bbbb-cccc-afcf0d22802z\n'
             'X-Fedmsg-Username: bowlofeggs\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: bowlofeggs updated the rules on a fmn email filter\n'
@@ -781,6 +780,8 @@ class EmailBatchTests(Base):
             'Auto-Submitted: auto-generated\n'
             'X-Fedmsg-Topic: org.fedoraproject.dev.fmn.filter.update\n'
             'X-Fedmsg-Category: fmn\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
+            'X-Fedmsg-Id: 2017-6aa71d5b-aaaa-bbbb-cccc-afcf0d22802z\n'
             'X-Fedmsg-Username: bowlofeggs\n'
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
