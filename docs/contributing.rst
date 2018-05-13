@@ -5,16 +5,6 @@ FedMSG Notifications Development Guide
 FedMSG Notifications welcomes contributions! Our issue tracker is located on
 `GitHub <https://github.com/fedora-infra/fmn/issues>`_.
 
-This repository contains the FMN library. The follow repositories contain
-packages that interact with FMN:
-
-- `fmn.web <https://github.com/fedora-infra/fmn.web>`_
-- `fmn.sse <https://github.com/fedora-infra/fmn.sse>`_
-
-It is recommended that you check out all these repositories inside the
-`fmn <https://github.com/fedora-infra/fmn/>`_ repository that contains the
-Vagrantfile.
-
 
 Contribution Guidelines
 -----------------------
