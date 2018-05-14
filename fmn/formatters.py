@@ -33,6 +33,7 @@ from email import message_from_string
 from email.mime.nonmultipart import MIMENonMultipart
 from email.mime.multipart import MIMEMultipart
 from email.mime.message import MIMEMessage
+from email.utils import formatdate as email_formatdate
 from sys import getsizeof
 
 import arrow
@@ -405,14 +406,13 @@ def email(message, recipient):
             subject_prefix.strip(), subject.strip())
     email_message['Subject'] = subject
 
-    timestamp = datetime.datetime.fromtimestamp(message['timestamp'], tz=pytz.utc)
-    timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S %Z')
-    content = u'Notification time stamped {}\n\n'.format(timestamp)
+    email_message['Date'] = email_formatdate(message['timestamp'])
+
     try:
-        content += fedmsg.meta.msg2long_form(message, **config.app_conf) or u''
+        content = fedmsg.meta.msg2long_form(message, **config.app_conf) or ''
     except Exception:
         _log.exception('fedmsg.meta.msg2long_form failed to handle %r', message)
-        content += json.dumps(message, sort_keys=True, indent=4)
+        content = json.dumps(message, sort_keys=True, indent=4)
 
     try:
         link = fedmsg.meta.msg2link(message, **config.app_conf)

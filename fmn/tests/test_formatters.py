@@ -24,6 +24,8 @@ import fedmsg.meta
 import mock
 import requests
 from email.mime.nonmultipart import MIMENonMultipart
+from base64 import b64encode
+from textwrap import fill
 
 from . import Base
 from fmn import formatters
@@ -337,6 +339,10 @@ class EmailTests(Base):
                 mock.Mock(return_value=[u'→Usèrnàmè←', ]))
     def test_internationalized_headers(self):
         """Assert headers containing utf-8 chars are correctly set."""
+        b64content = b64encode(
+            'jcline updated the rules on a fmn email filter\n'
+            '\thttps://apps.fedoraproject.org/notifications/'.encode('utf-8')
+        )
         expected = (
             'MIME-Version: 1.0\n'
             'From: notifications@fedoraproject.org\n'
@@ -349,11 +355,10 @@ class EmailTests(Base):
             'X-Fedmsg-Username: =?utf-8?b?4oaSVXPDqHJuw6Btw6jihpA=?=\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: =?utf-8?b?U8O5YnTDrHRsw6g=?=\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -367,6 +372,17 @@ class EmailTests(Base):
             openid='jcline.id.fedoraproject.org',
             context_name='email',
         )
+        b64content = b64encode(
+            'jcline.id.fedoraproject.org has requested that notifications '
+            'be sent to this email address\n'
+            '* To accept, visit this address:\n'
+            '  http://localhost:5000/confirm/accept/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n'
+            '* Or, to reject you can visit this address:\n'
+            '  http://localhost:5000/confirm/reject/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n'
+            'Alternatively, you can ignore this.  This is an automated message, please\n'
+            'email notifications@fedoraproject.org if you have any '
+            'concerns/issues/abuse.'.encode('utf-8')
+        )
         expected = (
             'MIME-Version: 1.0\n'
             'From: notifications@fedoraproject.org\n'
@@ -376,15 +392,8 @@ class EmailTests(Base):
             'Subject: Confirm notification email\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'amNsaW5lLmlkLmZlZG9yYXByb2plY3Qub3JnIGhhcyByZXF1ZXN0ZWQgdGhhdCBub3RpZmljYXRp\n'
-            'b25zIGJlIHNlbnQgdG8gdGhpcyBlbWFpbCBhZGRyZXNzCiogVG8gYWNjZXB0LCB2aXNpdCB0aGlz\n'
-            'IGFkZHJlc3M6CiAgaHR0cDovL2xvY2FsaG9zdDo1MDAwL2NvbmZpcm0vYWNjZXB0L2FhYWFhYWFh\n'
-            'YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhCiogT3IsIHRvIHJlamVjdCB5b3UgY2FuIHZpc2l0IHRo\n'
-            'aXMgYWRkcmVzczoKICBodHRwOi8vbG9jYWxob3N0OjUwMDAvY29uZmlybS9yZWplY3QvYWFhYWFh\n'
-            'YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWEKQWx0ZXJuYXRpdmVseSwgeW91IGNhbiBpZ25vcmUg\n'
-            'dGhpcy4gIFRoaXMgaXMgYW4gYXV0b21hdGVkIG1lc3NhZ2UsIHBsZWFzZQplbWFpbCBub3RpZmlj\n'
-            'YXRpb25zQGZlZG9yYXByb2plY3Qub3JnIGlmIHlvdSBoYXZlIGFueSBjb25jZXJucy9pc3N1ZXMv\n'
-            'YWJ1c2Uu\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
+
         )
 
         message = formatters.email_confirmation(confirmation)
@@ -393,6 +402,10 @@ class EmailTests(Base):
 
     def test_email(self):
         """Assert a well-formed email is returned from a basic message."""
+        b64content = b64encode(
+            'jcline updated the rules on a fmn email filter\n'
+            '\thttps://apps.fedoraproject.org/notifications/'.encode('utf-8')
+        )
         expected = (
             'MIME-Version: 1.0\n'
             'From: notifications@fedoraproject.org\n'
@@ -405,11 +418,10 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -418,6 +430,11 @@ class EmailTests(Base):
     @mock.patch('fmn.formatters.fedmsg.meta.msg2long_form', mock.Mock(return_value='a'*500000))
     def test_email_too_big(self):
         """Assert huge single message emails are handled gracefully."""
+        b64content = b64encode(
+            'This message was too large to be sent!\n'
+            'The message ID was: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
+            '\n'.encode('utf-8')
+        )
         expected = (
             'MIME-Version: 1.0\n'
             'From: notifications@fedoraproject.org\n'
@@ -430,10 +447,10 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'VGhpcyBtZXNzYWdlIHdhcyB0b28gbGFyZ2UgdG8gYmUgc2VudCEKVGhlIG1lc3NhZ2UgSUQgd2Fz\n'
-            'OiAyMDE3LTZhYTcxZDViLWZiZTQtNDllNy1hZmRkLWFmY2YwZDIyODAyYgoK\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -442,6 +459,10 @@ class EmailTests(Base):
     @mock.patch.dict('fmn.formatters.config.app_conf', {'fmn.email.subject_prefix': 'PREFIX: '})
     def test_subject_prefix(self):
         """Assert the subject prefix is added if configured."""
+        b64content = b64encode(
+            'jcline updated the rules on a fmn email filter\n'
+            '\thttps://apps.fedoraproject.org/notifications/'.encode('utf-8')
+        )
         expected = (
             'MIME-Version: 1.0\n'
             'From: notifications@fedoraproject.org\n'
@@ -454,11 +475,10 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: PREFIX: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -476,9 +496,9 @@ class EmailTests(Base):
             'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: fedmsg notification\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoK\n'
         )
         self.message['topic'] = 'so.short'
 
@@ -488,6 +508,10 @@ class EmailTests(Base):
     @mock.patch('fmn.formatters.fedmsg.meta.msg2subtitle', mock.Mock(side_effect=Exception))
     def test_no_subtitle(self):
         """Assert an exception in msg2subtitle results in "fedmsg notification" as the subject."""
+        b64content = b64encode(
+            'jcline updated the rules on a fmn email filter\n'
+            '\thttps://apps.fedoraproject.org/notifications/'.encode('utf-8')
+        )
         expected = (
             'MIME-Version: 1.0\n'
             'From: notifications@fedoraproject.org\n'
@@ -500,11 +524,10 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: fedmsg notification\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -513,6 +536,10 @@ class EmailTests(Base):
     @mock.patch('fmn.formatters.fedmsg.meta.msg2usernames', mock.Mock(side_effect=Exception))
     def test_unparsable_usernames(self):
         """Assert unparsable usernames just exclude that header."""
+        b64content = b64encode(
+            'jcline updated the rules on a fmn email filter\n'
+            '\thttps://apps.fedoraproject.org/notifications/'.encode('utf-8')
+        )
         expected = (
             'MIME-Version: 1.0\n'
             'From: notifications@fedoraproject.org\n'
@@ -524,11 +551,10 @@ class EmailTests(Base):
             'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -537,6 +563,10 @@ class EmailTests(Base):
     @mock.patch('fmn.formatters.fedmsg.meta.msg2packages', mock.Mock(return_value=['pkg']))
     def test_packages(self):
         """Assert package headers are added."""
+        b64content = b64encode(
+            'jcline updated the rules on a fmn email filter\n'
+            '\thttps://apps.fedoraproject.org/notifications/'.encode('utf-8')
+        )
         expected = (
             'MIME-Version: 1.0\n'
             'From: notifications@fedoraproject.org\n'
@@ -550,11 +580,10 @@ class EmailTests(Base):
             'X-Fedmsg-Package: pkg\n'
             'X-Fedmsg-Num-Packages: 1\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -563,6 +592,10 @@ class EmailTests(Base):
     @mock.patch('fmn.formatters.fedmsg.meta.msg2packages', mock.Mock(side_effect=Exception))
     def test_unparsable_packages(self):
         """Assert unparsable usernames just exclude that header."""
+        b64content = b64encode(
+            'jcline updated the rules on a fmn email filter\n'
+            '\thttps://apps.fedoraproject.org/notifications/'.encode('utf-8')
+        )
         expected = (
             'MIME-Version: 1.0\n'
             'From: notifications@fedoraproject.org\n'
@@ -575,11 +608,10 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -588,6 +620,20 @@ class EmailTests(Base):
     @mock.patch('fmn.formatters.fedmsg.meta.msg2long_form', mock.Mock(side_effect=Exception))
     def test_unparsable_body(self):
         """Assert the message JSON is sent if the long form fails."""
+        b64content = b64encode(
+            '{\n'
+            '    "msg": {\n'
+            '        "changed": "rules",\n'
+            '        "context": "email",\n'
+            '        "openid": "jcline.id.fedoraproject.org"\n'
+            '    },\n'
+            '    "msg_id": "2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b",\n'
+            '    "timestamp": 1507310730,\n'
+            '    "topic": "org.fedoraproject.dev.fmn.filter.update",\n'
+            '    "username": "vagrant"\n'
+            '}\n'
+            '\thttps://apps.fedoraproject.org/notifications/'.encode('utf-8')
+        )
         expected = (
             'MIME-Version: 1.0\n'
             'From: notifications@fedoraproject.org\n'
@@ -600,15 +646,10 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKewogICAg\n'
-            'Im1zZyI6IHsKICAgICAgICAiY2hhbmdlZCI6ICJydWxlcyIsCiAgICAgICAgImNvbnRleHQiOiAi\n'
-            'ZW1haWwiLAogICAgICAgICJvcGVuaWQiOiAiamNsaW5lLmlkLmZlZG9yYXByb2plY3Qub3JnIgog\n'
-            'ICAgfSwKICAgICJtc2dfaWQiOiAiMjAxNy02YWE3MWQ1Yi1mYmU0LTQ5ZTctYWZkZC1hZmNmMGQy\n'
-            'MjgwMmIiLAogICAgInRpbWVzdGFtcCI6IDE1MDczMTA3MzAsCiAgICAidG9waWMiOiAib3JnLmZl\n'
-            'ZG9yYXByb2plY3QuZGV2LmZtbi5maWx0ZXIudXBkYXRlIiwKICAgICJ1c2VybmFtZSI6ICJ2YWdy\n'
-            'YW50Igp9CglodHRwczovL2FwcHMuZmVkb3JhcHJvamVjdC5vcmcvbm90aWZpY2F0aW9ucy8=\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -617,6 +658,9 @@ class EmailTests(Base):
     @mock.patch('fmn.formatters.fedmsg.meta.msg2link', mock.Mock(side_effect=Exception))
     def test_unparsable_link(self):
         """Assert no link is included if none can be derived."""
+        b64content = b64encode(
+            'jcline updated the rules on a fmn email filter'.encode('utf-8')
+        )
         expected = (
             'MIME-Version: 1.0\n'
             'From: notifications@fedoraproject.org\n'
@@ -629,10 +673,10 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcg==\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -640,6 +684,14 @@ class EmailTests(Base):
 
     def test_footer(self):
         """Assert no link is included if none can be derived."""
+        b64content = b64encode(
+            'jcline updated the rules on a fmn email filter\n'
+            '\thttps://apps.fedoraproject.org/notifications/\n'
+            '\n'
+            '--\n'
+            'You received this message due to your preference settings at \n'
+            'http://localhost:5000/jcline.id.fedoraproject.org/email/11'.encode('utf-8')
+        )
         expected = (
             'MIME-Version: 1.0\n'
             'From: notifications@fedoraproject.org\n'
@@ -652,13 +704,11 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMvCgotLQpZb3UgcmVjZWl2ZWQgdGhpcyBtZXNz\n'
-            'YWdlIGR1ZSB0byB5b3VyIHByZWZlcmVuY2Ugc2V0dGluZ3MgYXQgCmh0dHA6Ly9sb2NhbGhvc3Q6\n'
-            'NTAwMC9qY2xpbmUuaWQuZmVkb3JhcHJvamVjdC5vcmcvZW1haWwvMTE=\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
+
         )
         self.recipient['triggered_by_links'] = True
 
@@ -734,6 +784,19 @@ class EmailBatchTests(Base):
 
     def test_basic_batch_verbose(self):
         """Assert a well-formed digest is returned from a list of messages."""
+        b64content1 = b64encode(
+            'Digest Summary:\n'
+            '1.\tjcline updated the rules on a fmn email filter\n'
+            '2.\tbowlofeggs updated the rules on a fmn email filter'.encode('utf-8')
+        )
+        b64content2 = b64encode(
+            'jcline updated the rules on a fmn email filter\n'
+            '\thttps://apps.fedoraproject.org/notifications/'.encode('utf-8')
+        )
+        b64content3 = b64encode(
+            'bowlofeggs updated the rules on a fmn email filter\n'
+            '\thttps://apps.fedoraproject.org/notifications/'.encode('utf-8')
+        )
         expected = (
             'Content-Type: multipart/mixed; boundary="=======fmn_email_boundary=="\n'
             'MIME-Version: 1.0\n'
@@ -746,9 +809,7 @@ class EmailBatchTests(Base):
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'RGlnZXN0IFN1bW1hcnk6CjEuCWpjbGluZSB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFp\n'
-            'bCBmaWx0ZXIKMi4JYm93bG9mZWdncyB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFpbCBm\n'
-            'aWx0ZXI=\n\n'
+            + fill(b64content1.decode('utf-8'), 76) + '\n\n' +
             '--=======fmn_email_boundary==\n'
             'Content-Type: multipart/digest; boundary="=======next_message_in_digest=="\n'
             'MIME-Version: 1.0\n\n'
@@ -766,11 +827,10 @@ class EmailBatchTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n\n'
+            + fill(b64content2.decode('utf-8'), 76) + '\n\n' +
             '--=======next_message_in_digest==\n'
             'Content-Type: message/rfc822\n'
             'MIME-Version: 1.0\n\n'
@@ -785,11 +845,10 @@ class EmailBatchTests(Base):
             'X-Fedmsg-Username: bowlofeggs\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: bowlofeggs updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKYm93bG9m\n'
-            'ZWdncyB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFpbCBmaWx0ZXIKCWh0dHBzOi8vYXBw\n'
-            'cy5mZWRvcmFwcm9qZWN0Lm9yZy9ub3RpZmljYXRpb25zLw==\n\n'
+            + fill(b64content3.decode('utf-8'), 76) + '\n\n' +
             '--=======next_message_in_digest==--\n\n'
             '--=======fmn_email_boundary==--\n'
         )
@@ -799,6 +858,15 @@ class EmailBatchTests(Base):
 
     def test_basic_batch_not_verbose(self):
         """Assert a well-formed recap email is returned from a list of messages."""
+        b64content = b64encode(
+            '(2017-10-06 17:25:30 UTC) jcline updated the rules on a fmn email filter\n'
+            '- https://apps.fedoraproject.org/notifications/\n'
+            '\n'
+            '-------------------------------------------------------------------------------\n'
+            '\n'
+            '(2017-10-06 17:25:30 UTC) bowlofeggs updated the rules on a fmn email filter\n'
+            '- https://apps.fedoraproject.org/notifications/'.encode('utf-8')
+        )
         expected = (
             'MIME-Version: 1.0\n'
             'From: notifications@fedoraproject.org\n'
@@ -815,12 +883,7 @@ class EmailBatchTests(Base):
             'Subject: Fedora Notifications Recap (2 updates)\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'KDIwMTctMTAtMDYgMTc6MjU6MzAgVVRDKSBqY2xpbmUgdXBkYXRlZCB0aGUgcnVsZXMgb24gYSBm\n'
-            'bW4gZW1haWwgZmlsdGVyCi0gaHR0cHM6Ly9hcHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNh\n'
-            'dGlvbnMvCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t\n'
-            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgooMjAxNy0xMC0wNiAxNzoyNTozMCBVVEMp\n'
-            'IGJvd2xvZmVnZ3MgdXBkYXRlZCB0aGUgcnVsZXMgb24gYSBmbW4gZW1haWwgZmlsdGVyCi0gaHR0\n'
-            'cHM6Ly9hcHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
         )
 
         actual = formatters.email_batch(self.messages, self.not_verbose_recipient)
@@ -828,6 +891,10 @@ class EmailBatchTests(Base):
 
     def test_too_many_messages(self):
         """Test batch content when too many messages are queued."""
+        b64content = b64encode(
+            'Too many messages were queued to be sent in this digest (1000)!\n'
+            'Consider adjusting your FMN settings.\n'.encode('utf-8')
+        )
         big_batch = self.messages * 500
         expected = (
             'MIME-Version: 1.0\n'
@@ -838,8 +905,7 @@ class EmailBatchTests(Base):
             'Subject: Fedora Notifications Digest error\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'VG9vIG1hbnkgbWVzc2FnZXMgd2VyZSBxdWV1ZWQgdG8gYmUgc2VudCBpbiB0aGlzIGRpZ2VzdCAo\n'
-            'MTAwMCkhCkNvbnNpZGVyIGFkanVzdGluZyB5b3VyIEZNTiBzZXR0aW5ncy4K\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
         )
 
         actual = formatters.email_batch(big_batch, self.verbose_recipient)
@@ -848,6 +914,13 @@ class EmailBatchTests(Base):
     @mock.patch('fmn.formatters.getsizeof', mock.Mock(return_value=5000001))
     def test_digest_content_too_long(self):
         """Test batch content when email size is over limits."""
+        b64content = b64encode(
+            'This message digest was too large to be sent!\n'
+            'The following messages were batched:\n'
+            '\n'
+            '2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
+            '2017-6aa71d5b-aaaa-bbbb-cccc-afcf0d22802z\n'.encode('utf-8')
+        )
         expected = (
             'MIME-Version: 1.0\n'
             'From: notifications@fedoraproject.org\n'
@@ -857,9 +930,7 @@ class EmailBatchTests(Base):
             'Subject: Fedora Notifications Digest error\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'VGhpcyBtZXNzYWdlIGRpZ2VzdCB3YXMgdG9vIGxhcmdlIHRvIGJlIHNlbnQhClRoZSBmb2xsb3dp\n'
-            'bmcgbWVzc2FnZXMgd2VyZSBiYXRjaGVkOgoKMjAxNy02YWE3MWQ1Yi1mYmU0LTQ5ZTctYWZkZC1h\n'
-            'ZmNmMGQyMjgwMmIKMjAxNy02YWE3MWQ1Yi1hYWFhLWJiYmItY2NjYy1hZmNmMGQyMjgwMnoK\n'
+            + fill(b64content.decode('utf-8'), 76) + '\n'
         )
 
         actual = formatters.email_batch(self.messages, self.verbose_recipient)
