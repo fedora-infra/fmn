@@ -381,7 +381,7 @@ def email(message, recipient):
     Args:
         message (dict): The fedmsg to turn into an email.
         recipient (dict): A dictionary containing (at a minimum) the
-            `email_address` (str) and `triggered_by_links` (bool) keys.
+            `email address` (str) and `triggered_by_links` (bool) keys.
 
     Returns:
         str: The email as a unicode string.
