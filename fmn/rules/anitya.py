@@ -213,3 +213,26 @@ def anitya_by_upstream_project(config, message, projects=None, *args, **kw):
     targets = [target for target in targets if target]
 
     return project in targets
+
+
+@hint(topics=[_('anitya.project.flag',
+                prefix='org.release-monitoring')])
+def anitya_flag_new(config, message):
+    """ When new flag on project is created
+
+    Adding this rule will trigger notifications when a flag is added to project
+    in `anitya <https://release-monitoring.org>`_.
+    """
+    return message['topic'].endswith('anitya.project.flag')
+
+
+@hint(topics=[_('anitya.project.flag.set', prefix='org.release-monitoring')])
+def anitya_flag_update(config, message):
+    """ When a flag state is changed on project
+
+    Adding this rule will trigger notifications when a flag state is changed
+    in `anitya <https://release-monitoring.org>`_.
+    """
+    return message['topic'].endswith('anitya.project.flag.set')
+
+
