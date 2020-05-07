@@ -13,7 +13,7 @@ config = {
 
     # A regular expression using the standard Python re syntax that defines a
     # whitelist of queues exposed by the SSE server.
-    'fmn.sse.webserver.queue_whitelist': '.+\.id\.fedoraproject\.org$',
+    'fmn.sse.webserver.queue_whitelist': r'.+\.id\.fedoraproject\.org$',
 
     # A regular expression using the standard Python re syntax that defines a
     # blacklist for queues exposed by the SSE server. Any queue name that is
