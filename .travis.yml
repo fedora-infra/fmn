@@ -1,3 +1,4 @@
+os: linux
 dist: bionic
 
 language: python
@@ -19,10 +20,10 @@ after_success:
 env:
   global:
     - PYTHONWARNINGS=always::DeprecationWarning
-  matrix:
+  jobs:
     - TOXENV=lint
     - TOXENV=py27
-matrix:
+jobs:
   include:
     - python: "3.5"
       env: TOXENV=py35
