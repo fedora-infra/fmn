@@ -1,4 +1,5 @@
 import fedora.client
+import fasjson_client
 
 import logging
 log = logging.getLogger("fmn")
@@ -35,4 +36,17 @@ def get_fas_email(config, username):
         raise ValueError("No email found: %r" % username)
     except Exception:
         log.exception("Failed to get FAS email for %r" % username)
+        return '%s@fedoraproject.org' % username
+
+
+def get_fasjson_email(config, username):
+    """ Return FASJSON email associated with a username. """
+    try:
+        fasjson = config["fasjson"]
+        client = fasjson_client.Client(url=fasjson.get('url'))
+        person = client.get_user(username=username).result
+
+        return person.get('emails')[0]
+    except Exception:
+        log.exception("Failed to get FASJSON email for %r" % username)
         return '%s@fedoraproject.org' % username

@@ -225,7 +225,7 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
     detail_values = detail_values or {}
 
     if not user.openid.endswith('.fedoraproject.org'):
-        log.warn("New user not from fedoraproject.org.  No defaults set.")
+        log.warning("New user not from fedoraproject.org.  No defaults set.")
         return
 
     # the openid is of the form USERNAME.id.fedoraproject.org
@@ -249,7 +249,7 @@ def create_defaults_for(session, user, only_for=None, detail_values=None):
             if context:
                 yield context
             else:
-                log.warn("No such context %r is in the DB." % name)
+                log.warning("No such context %r is in the DB." % name)
 
     # For each context, build one little and two big filters
     for context in contexts():

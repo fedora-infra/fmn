@@ -416,7 +416,10 @@ def heat_fas_cache():  # pragma: no cover
     This is helpful to do once on startup since we'll need everyone's email or
     IRC nickname eventually.
     """
-    fmn_fasshim.make_fas_cache(**config.app_conf)
+    if config.app_conf['fasjson'].get('active'):
+        fmn_fasshim.make_fasjson_cache(**config.app_conf)
+    else:
+        fmn_fasshim.make_fas_cache(**config.app_conf)
 
 
 @app.task(name='fmn.tasks.confirmations', ignore_results=True)

@@ -25,6 +25,7 @@ from .util import (
     new_packager,
     new_badges_user,
     get_fas_email,
+    get_fasjson_email
 )
 from fmn.tasks import find_recipients, REFRESH_CACHE_TOPIC, heat_fas_cache
 
@@ -163,7 +164,11 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 log.info("Autocreating account for %r" % username)
                 openid = '%s.id.fedoraproject.org' % username
                 openid_url = 'https://%s.id.fedoraproject.org' % username
-                email = get_fas_email(config.app_conf, username)
+                fasjson = config.app_conf['fasjson'].get('active')
+                if fasjson:
+                    email = get_fasjson_email(config.app_conf, username)
+                else:
+                    email = get_fas_email(config.app_conf, username)
                 user = fmn.lib.models.User.get_or_create(
                     session, openid=openid, openid_url=openid_url,
                     create_defaults=True, detail_values=dict(email=email),
