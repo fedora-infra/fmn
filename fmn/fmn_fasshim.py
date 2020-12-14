@@ -9,10 +9,10 @@ import fedmsg
 import fedmsg.meta
 import fedora.client
 import fedora.client.fas2
-from fasjson_client import Client
 from dogpile.cache import make_region
 
 from fmn import config
+from .fasjson_client import Client
 
 fedmsg.meta.make_processors(**config.app_conf)
 
@@ -108,7 +108,7 @@ def update_nick(username):
         try:
             log.info("Downloading FASJSON cache for %s*" % username)
             response = client.get_user(username=username)
-            _add_to_cache([response.json().result])
+            _add_to_cache([response["result"]])
         except requests.exceptions.RequestException as e:
             log.error("Something went wrong updating the cache with error: %s" % e)
     else:
@@ -145,7 +145,7 @@ def update_email(email):
         try:
             log.info("Downloading FASJSON cache for %s*" % email)
             response = client.search(email=email)
-            _add_to_cache(response.json()['result'])
+            _add_to_cache(response['result'])
         except requests.exceptions.RequestException as e:
             log.error("Something went wrong updating the cache with error: %s" % e)
     else:
