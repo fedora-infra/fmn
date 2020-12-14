@@ -6,11 +6,11 @@ celery>=4.0
 datanommer.models
 docutils
 dogpile.cache
-fasjson-client
 fedmsg[consumers, commands]
 fedmsg_meta_fedora_infrastructure>=0.18.0
 Flask
 flask-openid>=1.2.4
+gssapi
 markupsafe
 moksha.hub
 pika
