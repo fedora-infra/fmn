@@ -164,7 +164,7 @@ class FMNConsumer(fedmsg.consumers.FedmsgConsumer):
                 log.info("Autocreating account for %r" % username)
                 openid = '%s.id.fedoraproject.org' % username
                 openid_url = 'https://%s.id.fedoraproject.org' % username
-                fasjson = config.app_conf['fasjson'].get('active')
+                fasjson = config.app_conf.get("fasjson", {}).get("active")
                 if fasjson:
                     email = get_fasjson_email(config.app_conf, username)
                 else:
