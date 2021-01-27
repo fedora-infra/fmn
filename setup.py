@@ -35,7 +35,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] <= 6:
 
 setup(
     name='fmn',
-    version='2.1.1',
+    version='2.2.0',
     description='Library for fedmsg Notifications',
     long_description=get_description(),
     author='Fedora Infrastructure Team',

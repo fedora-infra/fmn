@@ -2,6 +2,22 @@
 Changelog
 =========
 
+v2.2.0
+======
+
+Features
+--------
+
+* Add support for Fedora's new auth backend. This patch adds the ability
+  to interact with fasjson to build the cache of users.
+  (`#310 <https://github.com/fedora-infra/fmn/pull/310>`_).
+* Port the test suite to py3 only and make it pass
+  (`https://github.com/fedora-infra/fmn/pull/317`)
+* Add flag rules for anitya
+  (`https://github.com/fedora-infra/fmn/pull/303`)
+* Anitya: Fix error when project is missing
+  (`https://github.com/fedora-infra/fmn/pull/306`)
+
 v2.1.1
 ======
 
