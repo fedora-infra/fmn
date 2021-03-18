@@ -21,7 +21,7 @@ except ImportError:
     log.warning("Couldn't import the 're2' module.")
     import re
 
-# We cache fancy stuff here from pkgdb, etc.. stuff that we want to expire.
+# We cache fancy stuff here from pkgdb, etc.. stuff that wenwant to expire.
 _cache = make_region()
 _FAS = None
 
