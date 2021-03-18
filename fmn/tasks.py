@@ -31,7 +31,7 @@ from celery.utils.log import get_task_logger
 from fedmsg_meta_fedora_infrastructure import fasshim
 from kombu import Connection, Queue
 from kombu.pools import connections
-from celery import task
+from celery import Task
 import fedmsg
 import fedmsg.meta
 import fedmsg_meta_fedora_infrastructure
@@ -63,7 +63,7 @@ fedmsg_meta_fedora_infrastructure.mailman3.email2fas = fmn_fasshim.email2fas
 fedmsg_meta_fedora_infrastructure.pagure.email2fas = fmn_fasshim.email2fas
 
 
-class _FindRecipients(task.Task):
+class _FindRecipients(Task):
     """A Celery task sub-class that loads and caches user preferences."""
 
     name = 'fmn.tasks.find_recipients'
@@ -472,4 +472,5 @@ def confirmations():
 
 
 #: A Celery task that accepts a message as input and determines the recipients.
+app.tasks.register(_FindRecipients)
 find_recipients = app.tasks[_FindRecipients.name]
