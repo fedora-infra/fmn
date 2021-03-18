@@ -144,7 +144,7 @@ class _FmnConfigLoadConfig(unittest.TestCase):
         self.assertEqual(
             str(exc.exception),
             ('Invalid config values were set: \n\tfmn.junk_suffixes: "notalist"'
-             ' is not "<type \'list\'>"'))
+             ' is not "<class \'list\'>"'))
 
     @mock.patch('fmn.config.fedmsg.config.load_config')
     def test_with_settings(self, fedmsg_load):
