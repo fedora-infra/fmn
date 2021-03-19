@@ -463,19 +463,29 @@ class GetPackagersOfPackageTests(unittest.TestCase):
     @mock.patch('fmn.rules.utils._get_packagers_for')
     def test_cache_hit(self, mock_get_packagers_for):
         """Assert cache hits are used and the value isn't recreated."""
+        mock_get_packagers_for.return_value = 'jcline'
         cache_dict = {}
-        key = u'fmn.rules.utils|get_packagers_of_package|some-package'.encode('utf-8')
-        cache_dict[key] = cache.api.CachedValue('jcline', {'v': 1, 'ct': 1500000000.0})
         config = {
             'fmn.rules.cache': {
                 'backend': 'dogpile.cache.memory', 'arguments': {'cache_dict': cache_dict}
             }
         }
 
-        with mock.patch('fmn.rules.utils._cache', cache.make_region()):
-            packagers = utils.get_packagers_of_package(config, 'some-package')
+        # We used to call utils.get_packagers_of_package and check that
+        # fmn.rules.utils._get_packagers_for had not been called by manually
+        # populating the cache first. However, it looks like dogpile.cache
+        # changed between its version 0.9.0 and 1.+ which results in the
+        # get_or_create method to call _get_packagers_for in 1.+ while it wasn't
+        # called in 0.9.0.
+        # So as a way to still test the caching, we'll call the function twice
+        # and check that at the end the _get_packagers_for function was only
+        # called once.
 
         self.assertEqual(0, mock_get_packagers_for.call_count)
+        with mock.patch('fmn.rules.utils._cache', cache.make_region()):
+            packagers = utils.get_packagers_of_package(config, 'some-package')
+            packagers = utils.get_packagers_of_package(config, 'some-package')
+        self.assertEqual(1, mock_get_packagers_for.call_count)
         self.assertEqual('jcline', packagers)
 
 
