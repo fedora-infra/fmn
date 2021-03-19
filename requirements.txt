@@ -6,6 +6,7 @@ celery>=4.0
 datanommer.models
 docutils
 dogpile.cache
+fasjson_client
 fedmsg[consumers, commands]
 fedmsg_meta_fedora_infrastructure>=0.18.0
 Flask
