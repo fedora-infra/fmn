@@ -22,16 +22,13 @@ env:
     - PYTHONWARNINGS=always::DeprecationWarning
   jobs:
     - TOXENV=lint
-    - TOXENV=py27
 jobs:
   include:
-    - python: "3.5"
-      env: TOXENV=py35
     - python: "3.6"
       env: TOXENV=py36
     - python: "3.7"
       env: TOXENV=py37
-  allow_failures:
-    - python: "3.5"
-    - python: "3.6"
-    - python: "3.7"
+    - python: "3.8"
+      env: TOXENV=py38
+    - python: "3.9"
+      env: TOXENV=py39
