@@ -263,7 +263,7 @@ def get_packages_of_user(config, username, flags):
 
 
 def cache_key_generator(fn, arg):
-    return "|".join([fn.__module__, fn.__name__, arg]).encode('utf-8')
+    return "|".join([fn.__module__, fn.__name__, arg])
 
 
 def invalidate_cache_for(config, fn, arg):
