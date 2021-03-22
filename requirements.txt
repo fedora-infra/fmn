@@ -6,14 +6,15 @@ celery>=4.0
 datanommer.models
 docutils
 dogpile.cache
+fasjson_client
 fedmsg[consumers, commands]
 fedmsg_meta_fedora_infrastructure>=0.18.0
 Flask
 flask-openid>=1.2.4
+gssapi
 markupsafe
 moksha.hub
 pika
-pydns
 pylibravatar
 pyOpenSSL
 python-fedora
@@ -21,6 +22,7 @@ python-openid
 python-openid-cla
 python-openid-teams
 redis
+requests-gssapi
 urllib3
 requests
 six

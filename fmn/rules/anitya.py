@@ -202,7 +202,10 @@ def anitya_by_upstream_project(config, message, projects=None, *args, **kw):
         return False
 
     # Get the project for the message.
-    project = message.get('msg', {}).get('project', {}).get('name', None)
+    try:
+        project = message.get('msg', {}).get('project', {}).get('name', None)
+    except AttributeError:
+        project = None
 
     # Split the string into a list of targets
     targets = [p.strip() for p in projects.split(',')]

@@ -21,7 +21,7 @@ except ImportError:
     log.warning("Couldn't import the 're2' module.")
     import re
 
-# We cache fancy stuff here from pkgdb, etc.. stuff that we want to expire.
+# We cache fancy stuff here from pkgdb, etc.. stuff that wenwant to expire.
 _cache = make_region()
 _FAS = None
 
@@ -54,7 +54,7 @@ def get_fas(config):
     try:
         creds = config['fas_credentials']
     except KeyError:
-        log.warn("No fas_credentials available.  Unable to query FAS.")
+        log.warning("No fas_credentials available.  Unable to query FAS.")
         return None
 
     default_url = 'https://admin.fedoraproject.org/accounts/'
@@ -103,7 +103,7 @@ def _paginate_pagure_data(url, params):
                 next_page_url = None
 
         except requests.exceptions.Timeout as e:
-            log.warn('URL %s timed out %r', next_page_url, e)
+            log.warning('URL %s timed out %r', next_page_url, e)
             next_page_url = None
 
 
@@ -163,11 +163,11 @@ def _get_pagure_packagers_for(config, package):
     try:
         response = requests_session.get(url, params={'fork': False}, timeout=25)
     except requests.exceptions.Timeout as e:
-        log.warn('URL %s timed out %r', url, e)
+        log.warning('URL %s timed out %r', url, e)
         return set()
 
     if response.status_code != 200:
-        log.warn('URL %s returned code %s', response.url, response.status_code)
+        log.warning('URL %s returned code %s', response.url, response.status_code)
         return set()
 
     data = response.json()
@@ -201,7 +201,7 @@ def _get_pkgdb2_packagers_for(config, package):
     try:
         req = requests_session.get(url, timeout=15)
     except requests.exceptions.Timeout as e:
-        log.warn('URL %s timed out %r', url, e)
+        log.warning('URL %s timed out %r', url, e)
         return set()
 
     if not req.status_code == 200:
@@ -263,7 +263,7 @@ def get_packages_of_user(config, username, flags):
 
 
 def cache_key_generator(fn, arg):
-    return "|".join([fn.__module__, fn.__name__, arg]).encode('utf-8')
+    return "|".join([fn.__module__, fn.__name__, arg])
 
 
 def invalidate_cache_for(config, fn, arg):
@@ -320,7 +320,7 @@ def _get_pkgdb2_packages_for(config, username, flags):
     try:
         req = requests_session.get(url, timeout=15)
     except requests.exceptions.Timeout as e:
-        log.warn('URL %s timed out %r', url, e)
+        log.warning('URL %s timed out %r', url, e)
         return set()
 
     if not req.status_code == 200:

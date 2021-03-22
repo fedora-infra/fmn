@@ -31,7 +31,7 @@ from celery.utils.log import get_task_logger
 from fedmsg_meta_fedora_infrastructure import fasshim
 from kombu import Connection, Queue
 from kombu.pools import connections
-from celery import task
+from celery import Task
 import fedmsg
 import fedmsg.meta
 import fedmsg_meta_fedora_infrastructure
@@ -63,7 +63,7 @@ fedmsg_meta_fedora_infrastructure.mailman3.email2fas = fmn_fasshim.email2fas
 fedmsg_meta_fedora_infrastructure.pagure.email2fas = fmn_fasshim.email2fas
 
 
-class _FindRecipients(task.Task):
+class _FindRecipients(Task):
     """A Celery task sub-class that loads and caches user preferences."""
 
     name = 'fmn.tasks.find_recipients'
@@ -416,7 +416,10 @@ def heat_fas_cache():  # pragma: no cover
     This is helpful to do once on startup since we'll need everyone's email or
     IRC nickname eventually.
     """
-    fmn_fasshim.make_fas_cache(**config.app_conf)
+    if config.app_conf['fasjson'].get('active'):
+        fmn_fasshim.make_fasjson_cache(**config.app_conf)
+    else:
+        fmn_fasshim.make_fas_cache(**config.app_conf)
 
 
 @app.task(name='fmn.tasks.confirmations', ignore_results=True)
@@ -469,4 +472,5 @@ def confirmations():
 
 
 #: A Celery task that accepts a message as input and determines the recipients.
+app.tasks.register(_FindRecipients)
 find_recipients = app.tasks[_FindRecipients.name]

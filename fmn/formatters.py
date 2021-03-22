@@ -99,7 +99,7 @@ def shorten(link):
         response = requests.get('https://da.gd/s', params=dict(url=link), timeout=30)
         return response.text.strip()
     except Exception as e:
-        _log.warn("Link shortening failed: %r" % e)
+        _log.warning("Link shortening failed: %r" % e)
         return link
 
 
@@ -397,7 +397,7 @@ def email(message, recipient):
     if subject_prefix:
         subject = u'{0} {1}'.format(
             subject_prefix.strip(), subject.strip())
-    email_message.add_header('Subject', subject.encode('utf-8'))
+    email_message.add_header('Subject', subject)
 
     timestamp = datetime.datetime.fromtimestamp(message['timestamp'], tz=pytz.utc)
     timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S %Z')
@@ -560,25 +560,25 @@ def _base_email(recipient=None, messages=None):
         email.Message.Message: The email message object with the 'Precedence' and 'Auto-Submitted'
             headers set.
     """
-    email_message = email_module.Message.Message()
+    email_message = email_module.message.EmailMessage()
     # Although this is a non-standard header and RFC 2076 discourages it, some
     # old clients don't honour RFC 3834 and will auto-respond unless this is set.
     email_message.add_header('Precedence', 'Bulk')
     # Mark this mail as auto-generated so auto-responders don't respond; see RFC 3834
     email_message.add_header('Auto-Submitted', 'auto-generated')
-    email_message.add_header('From', config.app_conf['fmn.email.from_address'].encode('utf-8'))
+    email_message.add_header('From', config.app_conf['fmn.email.from_address'])
 
     if recipient and 'email address' in recipient:
-        email_message.add_header('To', recipient['email address'].encode('utf-8'))
+        email_message.add_header('To', recipient['email address'])
 
     if messages:
         try:
             topics = set([message['topic'] for message in messages])
             for topic in topics:
-                email_message.add_header('X-Fedmsg-Topic', topic.encode('utf-8'))
+                email_message.add_header('X-Fedmsg-Topic', topic)
             categories = set([topic.split('.')[3] for topic in topics])
             for cat in categories:
-                email_message.add_header('X-Fedmsg-Category', cat.encode('utf-8'))
+                email_message.add_header('X-Fedmsg-Category', cat)
         except Exception:
             _log.exception('Unable to parse message topic and category for %r', messages)
 
@@ -597,10 +597,10 @@ def _base_email(recipient=None, messages=None):
                 _log.exception('fedmsg.meta.msg2packages failed to handle %r', msg)
 
         for username in sorted(list(usernames)):
-            email_message.add_header('X-Fedmsg-Username', username.encode('utf-8'))
+            email_message.add_header('X-Fedmsg-Username', username)
 
         for pkg in list(packages)[:10]:
-            email_message.add_header('X-Fedmsg-Package', pkg.encode('utf-8'))
-        email_message.add_header('X-Fedmsg-Num-Packages', str(len(packages)).encode('utf-8'))
+            email_message.add_header('X-Fedmsg-Package', pkg)
+        email_message.add_header('X-Fedmsg-Num-Packages', str(len(packages)))
 
     return email_message

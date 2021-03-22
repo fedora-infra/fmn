@@ -110,6 +110,9 @@ class TestBasics(fmn.tests.Base):
 
     def test_filter_oneshot(self):
         filter = fmn.lib.models.Filter.create(self.sess, name="test filter")
+        # looks like we need to access the object a first time when running the
+        # tests in tox
+        filter.oneshot
         filter.oneshot = True
         self.assertEqual(filter.active, True)
         self.assertEqual(filter.oneshot, True)
@@ -117,6 +120,9 @@ class TestBasics(fmn.tests.Base):
         self.assertEqual(filter.active, False)
 
         filter = fmn.lib.models.Filter.create(self.sess, name="test filter 2")
+        # looks like we need to access the object a first time when running the
+        # tests in tox
+        filter.oneshot
         filter.oneshot = False
         self.assertEqual(filter.active, True)
         self.assertEqual(filter.oneshot, False)
