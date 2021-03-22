@@ -161,7 +161,7 @@ class DeliveryService(service.Service):
                 'irc': irc.IRCBackend(config=config.app_conf),
             }
         # Prune any backends that aren't enabled
-        for key, value in self.backends.items():
+        for key, value in list(self.backends.items()):
             if key not in config.app_conf['fmn.backends']:
                 del self.backends[key]
         # Also, check that we don't have something enabled that's not explicit
