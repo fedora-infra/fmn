@@ -157,7 +157,7 @@ class TestRecipients(BaseTestCase):
     def test_basic_recipients_list(self):
         self.create_user_and_context_data()
         self.create_preference_data_empty()
-        expected_recipients = sorted([
+        expected_recipients = [
             {
                 'triggered_by_links': True,
                 'markup_messages': False,
@@ -180,7 +180,7 @@ class TestRecipients(BaseTestCase):
                 'filter_oneshot': False,
                 'verbose': True,
             },
-        ])
+        ]
 
         code_path = "fmn.tests.example_rules:wat_rule"
         self.create_preference_data_basic(code_path)
@@ -191,7 +191,7 @@ class TestRecipients(BaseTestCase):
         preferences = load_preferences()
         recipients = get_recipients(
             preferences, msg, self.valid_paths, self.config)
-        self.assertEqual(expected_recipients, sorted(recipients['irc']))
+        self.assertEqual(expected_recipients, recipients['irc'])
 
     def test_miss_recipients_list(self):
         self.create_user_and_context_data()
@@ -250,7 +250,7 @@ class TestRecipients(BaseTestCase):
         preferences = load_preferences()
         recipients = get_recipients(
             preferences, msg, self.valid_paths, self.config)
-        expected_recipients = sorted([
+        expected_recipients = [
             {
                 'triggered_by_links': True,
                 'markup_messages': False,
@@ -273,8 +273,8 @@ class TestRecipients(BaseTestCase):
                 'filter_oneshot': False,
                 'verbose': True,
             },
-        ])
-        self.assertEqual(expected_recipients, sorted(recipients['irc']))
+        ]
+        self.assertEqual(expected_recipients, recipients['irc'])
 
     def test_multiple_different_filters_hit(self):
         self.create_user_and_context_data()
@@ -296,7 +296,7 @@ class TestRecipients(BaseTestCase):
         preferences = load_preferences()
         recipients = get_recipients(
             preferences, msg, self.valid_paths, self.config)
-        expected_recipients = sorted([
+        expected_recipients = [
             {
                 'triggered_by_links': True,
                 'markup_messages': False,
@@ -319,8 +319,8 @@ class TestRecipients(BaseTestCase):
                 'filter_oneshot': False,
                 'verbose': True,
             },
-        ])
-        self.assertEqual(expected_recipients, sorted(recipients['irc']))
+        ]
+        self.assertEqual(expected_recipients, recipients['irc'])
 
 
 if __name__ == '__main__':

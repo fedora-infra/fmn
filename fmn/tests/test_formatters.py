@@ -545,7 +545,7 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
 
     @mock.patch('fmn.formatters.fedmsg.meta.msg2long_form', mock.Mock(side_effect=Exception))
     def test_unparsable_body(self):
-        """Assert the message JSON is sent of the long form fails."""
+        """Assert the message JSON is sent if the long form fails."""
         expected = (
             'Precedence: Bulk\n'
             'Auto-Submitted: auto-generated\n'
@@ -560,13 +560,12 @@ email notifications@fedoraproject.org if you have any concerns/issues/abuse."""
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
             'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKewogICAg\n'
-            'Im1zZyI6IHsKICAgICAgICAiY2hhbmdlZCI6ICJydWxlcyIsIAogICAgICAgICJjb250ZXh0Ijog\n'
-            'ImVtYWlsIiwgCiAgICAgICAgIm9wZW5pZCI6ICJqY2xpbmUuaWQuZmVkb3JhcHJvamVjdC5vcmci\n'
-            'CiAgICB9LCAKICAgICJtc2dfaWQiOiAiMjAxNy02YWE3MWQ1Yi1mYmU0LTQ5ZTctYWZkZC1hZmNm\n'
-            'MGQyMjgwMmIiLCAKICAgICJ0aW1lc3RhbXAiOiAxNTA3MzEwNzMwLCAKICAgICJ0b3BpYyI6ICJv\n'
-            'cmcuZmVkb3JhcHJvamVjdC5kZXYuZm1uLmZpbHRlci51cGRhdGUiLCAKICAgICJ1c2VybmFtZSI6\n'
-            'ICJ2YWdyYW50Igp9CglodHRwczovL2FwcHMuZmVkb3JhcHJvamVjdC5vcmcvbm90aWZpY2F0aW9u\n'
-            'cy8=\n'
+            'Im1zZyI6IHsKICAgICAgICAiY2hhbmdlZCI6ICJydWxlcyIsCiAgICAgICAgImNvbnRleHQiOiAi\n'
+            'ZW1haWwiLAogICAgICAgICJvcGVuaWQiOiAiamNsaW5lLmlkLmZlZG9yYXByb2plY3Qub3JnIgog\n'
+            'ICAgfSwKICAgICJtc2dfaWQiOiAiMjAxNy02YWE3MWQ1Yi1mYmU0LTQ5ZTctYWZkZC1hZmNmMGQy\n'
+            'MjgwMmIiLAogICAgInRpbWVzdGFtcCI6IDE1MDczMTA3MzAsCiAgICAidG9waWMiOiAib3JnLmZl\n'
+            'ZG9yYXByb2plY3QuZGV2LmZtbi5maWx0ZXIudXBkYXRlIiwKICAgICJ1c2VybmFtZSI6ICJ2YWdy\n'
+            'YW50Igp9CglodHRwczovL2FwcHMuZmVkb3JhcHJvamVjdC5vcmcvbm90aWZpY2F0aW9ucy8=\n'
         )
 
         actual = formatters.email(self.message, self.recipient)

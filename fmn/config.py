@@ -444,6 +444,13 @@ class _FmnConfig(dict):
             'default': {'username': None, 'password': None},
             'validator': dict,
         },
+        'fasjson': {
+            'default': {
+                'active': False,
+                'url': None
+            },
+            'validator': dict,
+        },
         'fmn.web.default_login': {
             'default': 'login',
             'validator': None,
