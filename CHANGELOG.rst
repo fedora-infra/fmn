@@ -2,6 +2,31 @@
 Changelog
 =========
 
+v2.2.0
+======
+
+Bug fixes
+---------
+* Anitya: Fix error when project is missing
+  (`#306 <https://github.com/fedora-infra/fmn/pull/306>`_).
+
+Features
+--------
+* Add flag rules for anitya
+  (`#303 <https://github.com/fedora-infra/fmn/pull/303>`_).
+* Add ability to interact with fasjson
+  (`#310 <https://github.com/fedora-infra/fmn/pull/310>`_).
+* Port the test suite to py3 only and make it pass
+  (`#317 <https://github.com/fedora-infra/fmn/pull/317>`_).
+
+Developer Improvements
+----------------------
+* Don’t suggest to clone fmn.web and fmn.sse repositories
+  (`#296 <https://github.com/fedora-infra/fmn/pull/296>`_).
+* Fix Travis - use Ubuntu 18.04 instead of 14.04
+  (`#308 <https://github.com/fedora-infra/fmn/pull/308>`_).
+
+
 v2.1.1
 ======
 
