@@ -12,4 +12,5 @@ include requirements.txt
 include dev-requirements.txt
 recursive-include alembic *
 include usr/share/fmn.sse/sse_server.tac
+include usr/share/fmn/delivery_service.tac
 recursive-include systemd *
