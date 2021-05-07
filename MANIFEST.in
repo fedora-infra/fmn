@@ -1,4 +1,5 @@
 graft apache
+graft docs
 graft fedmsg.d/
 graft fmn/web/templates
 graft fmn/web/static
