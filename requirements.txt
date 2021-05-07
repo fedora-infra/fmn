@@ -1,7 +1,6 @@
 arrow
 beautifulsoup4
 bleach
-bunch
 celery>=4.0
 datanommer.models
 docutils
@@ -14,6 +13,7 @@ flask-openid>=1.2.4
 gssapi
 markupsafe
 moksha.hub
+munch
 pika
 pylibravatar
 pyOpenSSL

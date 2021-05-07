@@ -3,7 +3,7 @@ import copy
 import datetime
 import functools
 import os
-from bunch import Bunch
+from munch import Munch
 from pkg_resources import get_distribution
 
 import arrow
@@ -99,7 +99,7 @@ def extract_openid_identifier(openid_url):
 @app.before_request
 def check_auth():
     flask.g.fedmsg_config = config.app_conf
-    flask.g.auth = Bunch(
+    flask.g.auth = Munch(
         logged_in=False,
         method=None,
         id=None,
