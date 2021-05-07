@@ -2,6 +2,16 @@
 Changelog
 =========
 
+v2.2.1
+======
+
+Bug fixes
+---------
+
+* Drop python bunch for python munch (which is py3 compatible!)
+  (`#318 <https://github.com/fedora-infra/fmn/pull/318>`_).
+
+
 v2.2.0
 ======
 
