@@ -2,6 +2,15 @@
 Changelog
 =========
 
+v2.2.2
+======
+
+Bug fixes
+---------
+
+* Couple of fixes to the MANIFEST.in file
+  (`#319 <https://github.com/fedora-infra/fmn/pull/319>`_).
+
 v2.2.1
 ======
 
