@@ -118,7 +118,7 @@
               <input name="context" id="context" value="{{current}}" type="hidden">
               <input name="filter_id" id="filter_id" value="{{filter.id}}" type="hidden">
               <input name="rule_id" id="rule_id" value="{{rule.id}}" type="hidden">
-              {% for key, value in rule.arguments.iteritems() %}
+              {% for key, value in rule.arguments.items() %}
               <dt>{{key}}</dt><dd id="{{key}}{{rule.id}}">
                 <span class="read">{{value}}
                   <a href="#" data-parent="#{{key}}{{rule.id}}" class="btn btn-xs btn-edit btn-default">Edit</a></h1>
