@@ -15,7 +15,7 @@ import libravatar
 import markupsafe
 
 import flask
-from flask.ext.openid import OpenID
+from flask_openid import OpenID
 
 from fmn import config
 import fmn.lib
