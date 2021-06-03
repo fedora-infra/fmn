@@ -19,6 +19,7 @@ class Client(object):
     def __init__(self, url, principal=None):
         self.url = url
         self.principal = principal
+        creds = None
         try:
             creds = Credentials(usage="initiate")
         except exceptions.GSSError as e:
