@@ -270,7 +270,7 @@ class IRCBackend(BaseBackend):
                     ))
 
                     if rule.arguments:
-                        for key, value in rule.arguments.iteritems():
+                        for key, value in rule.arguments.items():
                             self.send(nick, '   {key} - {value}'.format(
                                 key=key,
                                 value=value

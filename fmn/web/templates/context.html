@@ -124,7 +124,7 @@
           <dd>{{rule.doc(valid_paths, no_links=True)}}
           {% if rule.arguments %}
           <table class="table">
-            {% for key, value in rule.arguments.iteritems() %}
+            {% for key, value in rule.arguments.items() %}
             <tr><th>{{key}}</th><td>{{value}}</td></tr>
             {% endfor %}
           </table>

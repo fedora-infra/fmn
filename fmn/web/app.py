@@ -15,7 +15,7 @@ import libravatar
 import markupsafe
 
 import flask
-from flask.ext.openid import OpenID
+from flask_openid import OpenID
 
 from fmn import config
 import fmn.lib
@@ -64,14 +64,10 @@ rule_types = list(set([
 ]))
 
 
-def _rule_type_comparator(x, y):
-    if x == 'generic':
-        return -1
-    elif y == 'generic':
-        return 1
-    return cmp(x, y)
-
-rule_types.sort(_rule_type_comparator)
+rule_types.sort()
+if "generic" in rule_types:
+    rule_types.pop(rule_types.index("generic"))
+    rule_types.insert(0, "generic")
 
 # Initialize our own db connection
 SESSION = fmn.lib.models.init(db_url, debug=False, create=False)

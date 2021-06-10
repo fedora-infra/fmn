@@ -5,7 +5,7 @@ Documentation=https://github.com/fedora-infra/fmn/
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/celery beat -A fmn
+ExecStart=/usr/bin/celery -A fmn beat
 
 [Install]
 WantedBy=multi-user.target
