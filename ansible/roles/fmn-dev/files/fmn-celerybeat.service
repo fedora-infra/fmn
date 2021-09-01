@@ -5,7 +5,7 @@ Documentation=https://github.com/fedora-infra/fmn/
 
 [Service]
 Type=simple
-ExecStart=/home/vagrant/.virtualenvs/fmn/bin/celery beat -A fmn -l info
+ExecStart=/home/vagrant/.virtualenvs/fmn/bin/celery -A fmn beat -l info
 
 [Install]
 WantedBy=multi-user.target

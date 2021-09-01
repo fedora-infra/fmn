@@ -2,7 +2,7 @@ arrow
 beautifulsoup4
 bleach
 celery>=4.0
-datanommer.models
+datanommer.models>=1.0.0a1
 docutils
 dogpile.cache
 fasjson_client
@@ -15,6 +15,8 @@ markupsafe
 moksha.hub
 munch
 pika
+psycopg2
+py3dns
 pylibravatar
 pyOpenSSL
 python-fedora
@@ -25,6 +27,7 @@ redis
 requests-gssapi
 urllib3
 requests
+service_identity
 six
 SQLAlchemy>=0.8
 twisted
