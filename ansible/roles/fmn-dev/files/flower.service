@@ -4,7 +4,7 @@ After=network.target
 Documentation=https://github.com/mher/flower
 
 [Service]
-ExecStart=/home/vagrant/.virtualenvs/fmn/bin/celery flower -A fmn --address=0.0.0.0 --port=5555
+ExecStart=/home/vagrant/.virtualenvs/fmn/bin/celery -A fmn flower --address=0.0.0.0 --port=5555
 Type=simple
 
 [Install]
