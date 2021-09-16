@@ -5,8 +5,8 @@
 %global with_docs 0
 
 Name:           python-%{srcname}
-Version:        2.2.2
-Release:        3%{?dist}
+Version:        2.2.3
+Release:        1%{?dist}
 Summary:        A system for generic fedmsg-driven notifications for end users
 
 License:        LGPLv2+
@@ -160,6 +160,11 @@ rm -rf %{buildroot}%{_datadir}/%{srcname}/static/bootstrap
 
 
 %changelog
+* Fri Sep 17 2021 Stephen Coady <scoady@redhat.com> - 2.2.3-1
+- Update to 2.2.3
+- Fix config accessor for fasjson
+- Actually use the datanommer.enabled config flag
+
 * Mon May 10 2021 Pierre-Yves Chibon <pingou@pingoured.fr> - 2.2.2-3
 - Fix sed command
 
