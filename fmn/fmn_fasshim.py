@@ -104,7 +104,7 @@ def _add_to_cache(users):
 
 def update_nick(username):
     global client
-    if config.get('fasjson'):
+    if fasjson.get('active'):
         try:
             log.info("Downloading FASJSON cache for %s*" % username)
             response = client.get_user(username=username)
@@ -141,7 +141,7 @@ def update_nick(username):
 
 def update_email(email):
     global client
-    if config.get('fasjson'):
+    if fasjson.get('active'):
         try:
             log.info("Downloading FASJSON cache for %s*" % email)
             response = client.search(email=email)

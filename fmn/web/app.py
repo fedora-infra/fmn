@@ -569,14 +569,17 @@ def example_messages(openid, context, filter_id, page, endtime):
         ))
 
     try:
-        total, pages, messages = datanommer.models.Message.grep(
-            start=end-delta,
-            end=end,
-            rows_per_page=bazillion,
-            page=page,
-            order='desc',
-            **hinting
-        )
+        if config.app_conf['datanommer.enabled']:
+            total, pages, messages = datanommer.models.Message.grep(
+                start=end-delta,
+                end=end,
+                rows_per_page=bazillion,
+                page=page,
+                order='desc',
+                **hinting
+            )
+        else:
+            raise Exception("Datanommer is not enabled.")
     except Exception as e:
         log.exception(e)
         raise APIError(500, dict(
