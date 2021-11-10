@@ -1,27 +1,31 @@
 ---
 
 - name: Install helpful development packages
-  dnf: name={{ item }} state=present
-  with_items:
-    - git
-    - python-virtualenvwrapper
-    - vim-enhanced
+  dnf:
+    state: present
+    name: [
+      git,
+      python-virtualenvwrapper,
+      vim-enhanced
+    ]
 
 - name: Install fmn system dependencies
-  dnf: name={{ item }} state=present
-  with_items:
-    - gcc
-    - graphviz
-    - libffi-devel
-    - make
-    - openssl-devel
-    - python3-devel
-    - rabbitmq-server
-    - redhat-rpm-config
-    - redis
-    - swig
-    - zeromq-devel
-    - libpq-devel
+  dnf:
+    state: present
+    name: [
+      gcc,
+      graphviz,
+      libffi-devel,
+      make,
+      openssl-devel,
+      python3-devel,
+      rabbitmq-server,
+      redhat-rpm-config,
+      redis,
+      swig,
+      zeromq-devel,
+      libpq-devel
+    ]
 
 # Add various helpful configuration files
 - name: Install a custom bashrc
