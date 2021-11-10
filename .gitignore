@@ -13,6 +13,7 @@ coverage.xml
 
 # Images are generated as part of the docs build process
 docs/images/*
+docs/_build/
 
 .dnf-cache/
 .vagrant/

@@ -6,7 +6,8 @@
     name: [
       git,
       python-virtualenvwrapper,
-      vim-enhanced
+      vim-enhanced,
+      tox
     ]
 
 - name: Install fmn system dependencies

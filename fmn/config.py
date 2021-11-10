@@ -300,28 +300,28 @@ Available Configuration Keys
 ``fmn.sse.url``
     :class:`str`: The URL to use when connecting to the SSE server.
 
-    Default: ``"http://localhost:8080/``
+    Default: ``"http://localhost:8080/"``
 
 .. _fmn-base_url:
 
 ``fmn.base_url``
     :class:`str`: The URL to use for the FMN web application.
 
-    Default: ``"http://localhost:5000/``
+    Default: ``"http://localhost:5000/"``
 
 .. _fmn-acceptance_url:
 
 ``fmn.acceptance_url``
     :class:`str`: The URL template to use for acceptance in confirmation messages.
 
-    Default: ``http://localhost:5000/confirm/accept/{secret}'
+    Default: ``'http://localhost:5000/confirm/accept/{secret}'``
 
 .. _fmn-rejection_url:
 
 ``fmn.rejection_url``
     :class:`str`: The URL template to use for rejection in confirmation messages.
 
-    Default: ``http://localhost:5000/confirm/reject/{secret}'``
+    Default: ``'http://localhost:5000/confirm/reject/{secret}'``
 
 .. _fmn-support_email:
 
@@ -336,6 +336,7 @@ Available Configuration Keys
     :class:`dict`: The Celery configuration dictionary.
 
     Default::
+
         {
             'broker': 'amqp://',
             'include': ['fmn.tasks'],
@@ -348,8 +349,8 @@ Available Configuration Keys
                     'schedule': 60.0,
                 },
                 'process-confirmations': {
-                  'task': 'fmn.tasks.confirmations',
-                  'schedule': 15.0,
+                    'task': 'fmn.tasks.confirmations',
+                    'schedule': 15.0,
                 },
             },
         }

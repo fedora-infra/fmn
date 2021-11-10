@@ -6,7 +6,7 @@ def copr_catchall(config, message):
     """ All Copr events
 
     Adding this rule will indiscriminately match notifications of all types
-    from `copr <https://copr.fedoraproject.org>`_, i.e. new
+    from `copr <https://copr.fedoraproject.org>`__, i.e. new
     and finished builds, newly spun up workers and chroots, etc..
     """
     return message['topic'].split('.')[3] == 'copr'
@@ -26,7 +26,7 @@ def copr_build_start(config, message):
 def copr_build_end(config, message):
     """ Copr builds ending
 
-    `Copr <https://copr.fedoraproject.org/>`_ publishes messages
+    `Copr <https://copr.fedoraproject.org/>`__ publishes messages
     when a new build ends.  Adding this rule will get you those messages.
     """
     return message['topic'].endswith('copr.build.end')
@@ -36,7 +36,7 @@ def copr_build_end(config, message):
 def copr_build_failed(config, message):
     """ Copr builds failing
 
-    `Copr <https://copr.fedoraproject.org/>`_ publishes messages
+    `Copr <https://copr.fedoraproject.org/>`__ publishes messages
     when a new build fails.  Adding this rule will get you those messages.
     """
     if not copr_build_end(config, message):
@@ -49,7 +49,7 @@ def copr_build_failed(config, message):
 def copr_build_success(config, message):
     """ Copr builds succeeding
 
-    `Copr <https://copr.fedoraproject.org/>`_ publishes messages
+    `Copr <https://copr.fedoraproject.org/>`__ publishes messages
     when a new build successfully ends.  Adding this rule will get you those messages.
     """
     if not copr_build_end(config, message):
@@ -62,7 +62,7 @@ def copr_build_success(config, message):
 def copr_build_skipped(config, message):
     """ Copr builds skipped
 
-    `Copr <https://copr.fedoraproject.org/>`_ publishes messages
+    `Copr <https://copr.fedoraproject.org/>`__ publishes messages
     when a new build is skipped.  Adding this rule will get you those messages.
     """
     if not copr_build_end(config, message):
@@ -75,7 +75,7 @@ def copr_build_skipped(config, message):
 def copr_chroot_start(config, message):
     """ New Copr chroots
 
-    `Copr <https://copr.fedoraproject.org/>`_ publishes messages
+    `Copr <https://copr.fedoraproject.org/>`__ publishes messages
     when a new chroot starts.  Adding this rule will get you those messages.
     """
     return message['topic'].endswith('copr.chroot.start')
@@ -85,7 +85,7 @@ def copr_chroot_start(config, message):
 def copr_worker_create(config, message):
     """ New Copr workers are spun up
 
-    `Copr <https://copr.fedoraproject.org/>`_ publishes messages
+    `Copr <https://copr.fedoraproject.org/>`__ publishes messages
     when a new worker is created.  Adding this rule will get you those
     messages.
     """

@@ -23,7 +23,7 @@ FedMsg Consumer
 ---------------
 
 FMN provides a `fedmsg consumer`_ which can be run by the ``fedmsg-hub`` service. This service
-subscribes to the ZeroMQ publishing sockets and dispatches `Celery`_ tasks to determine what
+subscribes to the ZeroMQ publishing sockets and dispatches `Celery project`_ tasks to determine what
 users are interested in notifications. These tasks are sent to `Celery workers`_ via RabbitMQ.
 
 
@@ -51,7 +51,7 @@ service.
 
 
 .. _Alembic: http://alembic.zzzcomputing.com/en/latest/
-.. _Celery: http://docs.celeryproject.org/en/latest/
+.. _Celery project: http://docs.celeryproject.org/en/latest/
 .. _Celery beat: http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html
 .. _Celery workers: http://docs.celeryproject.org/en/latest/userguide/workers.html
 .. _fedmsg consumer: https://fedmsg.readthedocs.io/en/stable/subscribing/
