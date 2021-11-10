@@ -117,15 +117,6 @@ Fedora Badges Rules
     :show-inheritance:
 
 
-Fedora Images Rules
--------------------
-
-.. automodule:: fmn.rules.fedbadges
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
 Fedora Calendar Rules
 ---------------------
 

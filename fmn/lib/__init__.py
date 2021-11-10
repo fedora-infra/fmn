@@ -112,14 +112,16 @@ def load_preferences(openid=None, cull_disabled=False, cull_backends=None):
     less expensive).
 
     Args:
-        openid (str): If provided, only the preferences of that user are loaded, rather
-            than all preferences for all users.
+        openid (str): If provided, only the preferences of that user\
+            are loaded, rather than all preferences for all users.
         cull_disabled (bool): Remove preferences that are configured to be disabled.
         cull_backends (list): Remove preferences related to the specified backends.
 
     Returns:
-        dict: A dictionary of dictionaries from the :meth:`fmn.lib.models.Preference.__json__`
-            method. The keys are in the format ``<openid>_<context_name>``.
+        dict: A dictionary of dictionaries from the
+            :meth:`fmn.lib.models.Preference.__json__` method.
+            The keys are in the format ``<openid>_<context_name>``.
+
     """
     cull_backends = cull_backends or []
     backends = [b for b in fmn_config.app_conf['fmn.backends'] if b not in cull_backends]
@@ -148,9 +150,10 @@ def update_preferences(openid, existing_preferences):
 
     Args:
         openid (str): The user to get fresh preferences for.
-        existing_preferences (dict): The existing preferences dictionary to
-            update. This is expected to be in the format returned by
+        existing_preferences (dict): The existing preferences dictionary to\
+            update. This is expected to be in the format returned by\
             :func:`load_preferences`.
+
     """
     user_prefs = load_preferences(openid=openid, cull_disabled=True)
     for backend in fmn_config.app_conf['fmn.backends']:

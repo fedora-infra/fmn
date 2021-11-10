@@ -15,7 +15,7 @@ def taskotron_result_new(config, message, **kwargs):
     """ New taskotron task result
 
     This rule lets through messages from the `taskotron
-    <https://taskotron.fedoraproject.org>`_ about new task result.
+    <https://taskotron.fedoraproject.org>`__ about new task result.
     """
     return message['topic'].endswith('.taskotron.result.new')
 
@@ -25,7 +25,7 @@ def taskotron_task(config, message, task=None):
     """ Particular taskotron task
 
     With this rule, you can limit messages to only those of particular
-    `taskotron <https://taskotron.fedoraproject.org/>`_ task. Some tasks are
+    `taskotron <https://taskotron.fedoraproject.org/>`__ task. Some tasks are
     documented on the `wiki <https://fedoraproject.org/wiki/Taskotron/Tasks>`_,
     and a full list of testcases (on which you can match) is visible in
     `resultsdb <https://taskotron.fedoraproject.org/resultsdb/testcases>`_.
@@ -82,7 +82,7 @@ def taskotron_task_outcome(config, message, outcome=None):
     """ Particular taskotron task outcome
 
     With this rule, you can limit messages to only those of particular
-    `taskotron <https://taskotron.fedoraproject.org/>`_ task outcome.
+    `taskotron <https://taskotron.fedoraproject.org/>`__ task outcome.
 
     You can specify several outcomes by separating them with a comma ',',
     i.e.: ``PASSED,FAILED``.
@@ -133,7 +133,7 @@ def taskotron_release_critical_task(config, message):
 
     With this rule, you can limit messages to only those of
     release-critical
-    `taskotron <https://taskotron.fedoraproject.org/>`_ task.
+    `taskotron <https://taskotron.fedoraproject.org/>`__ task.
 
     These are the tasks which are deemed extremely important
     by the distribution, and their failure should be carefully

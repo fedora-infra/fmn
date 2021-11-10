@@ -6,7 +6,7 @@ def wiki_catchall(config, message):
     """ All wiki events
 
     Adding this rule will indiscriminately match notifications of all types
-    from the Fedora Project `wiki <https://fedoraproject.org/wiki>`_ i.e.
+    from the Fedora Project `wiki <https://fedoraproject.org/wiki>`__ i.e.
     edits to wiki pages, new media uploads, etc...
     """
     return message['topic'].split('.')[3] == 'wiki'
@@ -16,7 +16,7 @@ def wiki_catchall(config, message):
 def wiki_article_edit(config, message):
     """ Wiki edits
 
-    Fedora's `Wiki <https://fedoraproject.org/wiki>`_ has a fedmsg hook
+    Fedora's `Wiki <https://fedoraproject.org/wiki>`__ has a fedmsg hook
     that publishes messages when a user **edits a page**.  Adding this rule
     will trigger notifications whenever that event occurs.
     """
@@ -27,7 +27,7 @@ def wiki_article_edit(config, message):
 def wiki_upload_complete(config, message):
     """ Wiki media uploads
 
-    Fedora's `Wiki <https://fedoraproject.org/wiki>`_ has a fedmsg hook
+    Fedora's `Wiki <https://fedoraproject.org/wiki>`__ has a fedmsg hook
     that publishes messages when a user **uploads some media** (like a video or
     a picture).  Adding this rule will trigger notifications whenever that
     event occurs.

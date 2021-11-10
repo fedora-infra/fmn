@@ -11,6 +11,12 @@ FMN, or FedMsg Notifications, is a way for users to receive notifications when
 certain `fedmsg`_ messages are sent. Notifications
 can be delivered via email, IRC, and Server-Sent Events (also known as EventSource).
 
+.. toctree::
+   :maxdepth: 2
+
+   architecture
+   glossary
+
 
 Administrator's Guide
 =====================
@@ -20,6 +26,7 @@ Administrator's Guide
 
    installation
    configuration
+   sse
 
 
 User's Guide
@@ -29,10 +36,18 @@ User's Guide
 API Guide
 =========
 
+.. toctree::
+   :maxdepth: 2
+
+   reference/index
 
 Contributor Guide
 =================
 
+.. toctree::
+   :maxdepth: 2
+
+   contributing
 
 Community
 =========

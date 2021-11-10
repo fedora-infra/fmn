@@ -6,7 +6,7 @@ def askbot_catchall(config, message):
     """ All askbot events
 
     Adding this rule will indiscriminately match notifications of all types
-    from `Ask Fedora <https://ask.fedoraproject.org>`_ i.e.
+    from `Ask Fedora <https://ask.fedoraproject.org>`__ i.e.
     answers to questions, tag changes, moderation flags, etc..
     """
     return message['topic'].split('.')[3] == 'askbot'
@@ -18,7 +18,7 @@ def askbot_post_deleted(config, message):
 
     This rule will let through messages that get sent when either
     a question or an answer are **deleted** from the `Ask Fedora
-    <https://ask.fedoraproject.org/questions>`_ forum system.
+    <https://ask.fedoraproject.org/questions>`__ forum system.
     """
     return message['topic'].endswith('askbot.post.delete')
 
@@ -29,7 +29,7 @@ def askbot_post_edited(config, message):
 
     This rule will let through messages that get sent when either
     a question or an answer are **edited** on the `Ask Fedora
-    <https://ask.fedoraproject.org/questions>`_ forum system.
+    <https://ask.fedoraproject.org/questions>`__ forum system.
     """
     return message['topic'].endswith('askbot.post.edit')
 
@@ -40,7 +40,7 @@ def askbot_post_flagged_offensive(config, message):
 
     Sometimes, people are rude.  This rule will let you get notified whenever
     a post is **flagged as offensive** on the `Ask Fedora
-    <https://ask.fedoraproject.org/questions>`_ forum system.
+    <https://ask.fedoraproject.org/questions>`__ forum system.
     """
     return message['topic'].endswith('askbot.post.flag_offensive.add')
 
@@ -51,7 +51,7 @@ def askbot_post_unflagged_offensive(config, message):
 
     Sometimes, people are rude.  This rule will let you get notified whenever
     a post is **unflagged as offensive** on the `Ask Fedora
-    <https://ask.fedoraproject.org/questions>`_ forum system.
+    <https://ask.fedoraproject.org/questions>`__ forum system.
     """
     return message['topic'].endswith('askbot.post.flag_offensive.delete')
 
@@ -61,7 +61,7 @@ def askbot_tag_update(config, message):
     """ Tags altered on Ask Fedora posts
 
     This rule lets through messages indicating that **tags** on an
-    `Ask Fedora <https://ask.fedoraproject.org/questions>`_ post have been
+    `Ask Fedora <https://ask.fedoraproject.org/questions>`__ post have been
     modified.
     """
     return message['topic'].endswith('askbot.tag.update')
