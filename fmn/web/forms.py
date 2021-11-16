@@ -1,51 +1,51 @@
-from wtforms import Form, TextField, IntegerField, validators
+from wtforms import Form, StringField, IntegerField, validators
 
 
 class FilterForm(Form):
     filter_id = IntegerField('filter_id')
-    openid = TextField('openid', [validators.Required()])
-    context = TextField('context', [validators.Required()])
-    filter_name = TextField('filter_name', [validators.Required()])
-    method = TextField('method')
+    openid = StringField('openid', [validators.InputRequired()])
+    context = StringField('context', [validators.InputRequired()])
+    filter_name = StringField('filter_name', [validators.InputRequired()])
+    method = StringField('method')
 
 
 class DetailsForm(Form):
-    openid = TextField('openid', [validators.Required()])
-    context = TextField('context', [validators.Required()])
-    detail_value = TextField('detail_value')
+    openid = StringField('openid', [validators.InputRequired()])
+    context = StringField('context', [validators.InputRequired()])
+    detail_value = StringField('detail_value')
 
     # We really want these to be integers, but I don't know how to allow that
     # to also be "None"
-    batch_delta = TextField('batch_delta')
-    batch_count = TextField('batch_delta')
+    batch_delta = StringField('batch_delta')
+    batch_count = StringField('batch_delta')
 
     # Did they press the button?
-    toggle_enable = TextField('toggle_enable')
-    toggle_triggered_by = TextField('toggle_triggered_by')
-    toggle_shorten = TextField('toggle_shorten')
-    toggle_markup = TextField('toggle_markup')
-    toggle_verbose = TextField('toggle_verbose')
+    toggle_enable = StringField('toggle_enable')
+    toggle_triggered_by = StringField('toggle_triggered_by')
+    toggle_shorten = StringField('toggle_shorten')
+    toggle_markup = StringField('toggle_markup')
+    toggle_verbose = StringField('toggle_verbose')
 
-    next_url = TextField('next_url')
+    next_url = StringField('next_url')
 
-    reset_to_defaults = TextField('reset_to_defaults')
-    delete_all_filters = TextField('delete_all_filters')
+    reset_to_defaults = StringField('reset_to_defaults')
+    delete_all_filters = StringField('delete_all_filters')
 
 
 class RuleForm(Form):
-    openid = TextField('openid', [validators.Required()])
-    context = TextField('context', [validators.Required()])
-    filter_id = IntegerField('filter_id', [validators.Required()])
-    rule_name = TextField('rule_name', [validators.Required()])
+    openid = StringField('openid', [validators.InputRequired()])
+    context = StringField('context', [validators.InputRequired()])
+    filter_id = IntegerField('filter_id', [validators.InputRequired()])
+    rule_name = StringField('rule_name', [validators.InputRequired()])
     rule_id = IntegerField('rule_id')
-    method = TextField('method')
+    method = StringField('method')
 
 
 class ArgumentForm(Form):
-    openid = TextField('openid', [validators.Required()])
-    context = TextField('context', [validators.Required()])
-    filter_id = IntegerField('filter_id', [validators.Required()])
-    rule_id = IntegerField('rule_id', [validators.Required()])
-    rule_name = TextField('rule_name', [validators.Required()])
-    key = TextField('key', [validators.Required()])
-    value = TextField('value', [validators.Required()])
+    openid = StringField('openid', [validators.InputRequired()])
+    context = StringField('context', [validators.InputRequired()])
+    filter_id = IntegerField('filter_id', [validators.InputRequired()])
+    rule_id = IntegerField('rule_id', [validators.InputRequired()])
+    rule_name = StringField('rule_name', [validators.InputRequired()])
+    key = StringField('key', [validators.InputRequired()])
+    value = StringField('value', [validators.InputRequired()])
