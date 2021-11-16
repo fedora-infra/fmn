@@ -70,7 +70,7 @@ class SSEServer(resource.Resource):
         self.blacklist = re.compile(blacklist) if blacklist else None
 
         self.allow_origin = config.app_conf['fmn.sse.webserver.allow_origin']
-        self.prefetch_count = config.app_conf['fmn.sse.pika.prefetch_count']
+        self.prefetch_count = config.app_conf['fmn.sse.webserver.prefetch_count']
         self.connection = None
         self.channel = None
 
