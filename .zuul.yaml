@@ -1,0 +1,8 @@
+- project:
+    check:
+      jobs:
+        - tox-lint
+        - tox-python37
+        - tox-python38
+        - tox-python39
+        - simple-tox-docs
