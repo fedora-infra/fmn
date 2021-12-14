@@ -12,7 +12,7 @@ import fedora.client.fas2
 from dogpile.cache import make_region
 
 from fmn import config
-from .fasjson_client import Client
+from fasjson_client import Client
 
 fedmsg.meta.make_processors(**config.app_conf)
 
