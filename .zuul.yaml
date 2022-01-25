@@ -3,13 +3,31 @@
       jobs:
         - tox-lint:
             override-checkout: master
+            vars:
+              dependencies:
+                - libpq-devel
         - tox-python37:
             override-checkout: master
+            vars:
+              dependencies:
+                - libpq-devel
         - tox-python38:
             override-checkout: master
+            vars:
+              dependencies:
+                - libpq-devel
         - tox-python39:
             override-checkout: master
+            vars:
+              dependencies:
+                - libpq-devel
         - simple-tox-docs:
             override-checkout: master
+            vars:
+              dependencies:
+                - libpq-devel
         - tox-diff-cover:
             override-checkout: master
+            vars:
+              dependencies:
+                - libpq-devel
