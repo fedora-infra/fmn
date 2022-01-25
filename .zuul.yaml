@@ -6,28 +6,34 @@
             vars:
               dependencies:
                 - libpq-devel
+                - gcc
         - tox-python37:
             override-checkout: master
             vars:
               dependencies:
                 - libpq-devel
+                - gcc
         - tox-python38:
             override-checkout: master
             vars:
               dependencies:
                 - libpq-devel
+                - gcc
         - tox-python39:
             override-checkout: master
             vars:
               dependencies:
                 - libpq-devel
+                - gcc
         - simple-tox-docs:
             override-checkout: master
             vars:
               dependencies:
                 - libpq-devel
+                - gcc
         - tox-diff-cover:
             override-checkout: master
             vars:
               dependencies:
                 - libpq-devel
+                - gcc
