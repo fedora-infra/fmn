@@ -1,9 +1,15 @@
 - project:
     check:
       jobs:
-        - tox-lint
-        - tox-python37
-        - tox-python38
-        - tox-python39
-        - simple-tox-docs
-        - tox-diff-cover
+        - tox-lint:
+            override-checkout: master
+        - tox-python37:
+            override-checkout: master
+        - tox-python38:
+            override-checkout: master
+        - tox-python39:
+            override-checkout: master
+        - simple-tox-docs:
+            override-checkout: master
+        - tox-diff-cover:
+            override-checkout: master
