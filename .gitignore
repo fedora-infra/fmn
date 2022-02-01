@@ -10,6 +10,7 @@ htmlcov/
 .coverage
 .tox/
 coverage.xml
+docs/fedmsg.d/
 
 # Images are generated as part of the docs build process
 docs/images/*
