@@ -28,7 +28,6 @@ from __future__ import absolute_import
 import datetime
 
 from celery.utils.log import get_task_logger
-from celery._state import connect_on_app_finalize
 from fedmsg_meta_fedora_infrastructure import fasshim
 from kombu import Connection, Queue
 from kombu.pools import connections
@@ -474,6 +473,6 @@ def confirmations():
 
 #: A Celery task that accepts a message as input and determines the recipients.
 # With Celery 4.0+ the registration needs to be done in different way
-# See https://docs.celeryproject.org/en/4.0/whatsnew-4.0.html#the-task-base-class-no-longer-automatically-register-tasks
+# See https://docs.celeryproject.org/en/4.0/whatsnew-4.0.html#the-task-base-class-no-longer-automatically-register-tasks # noqa: E501
 app.register_task(_FindRecipients())
 find_recipients = app.tasks[_FindRecipients.name]
