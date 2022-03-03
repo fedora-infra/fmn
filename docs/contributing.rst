@@ -58,8 +58,6 @@ Next, clone the repository and configure your Vagrantfile::
 
     $ git clone https://github.com/fedora-infra/fmn.git
     $ cd fmn
-    $ git clone https://github.com/fedora-infra/fmn.web.git
-    $ git clone https://github.com/fedora-infra/fmn.sse.git
     $ cp Vagrantfile.example Vagrantfile
     $ vagrant up
     $ vagrant reload
