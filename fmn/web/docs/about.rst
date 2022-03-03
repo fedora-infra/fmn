@@ -2,8 +2,8 @@ Fedora Notifications
 ====================
 
 Fedora Notifications is a family of systems built to manage end-user
-notifications triggered by `fedmsg <http://fedmsg.com>`_, the fedora FEDerated
-MeSsaGe bus.
+notifications triggered by `the Fedora Project deployment of fedmsg
+<https://fedora-fedmsg.readthedocs.io/en/latest/>`_.
 
 The wins here are:
 
@@ -32,7 +32,7 @@ In a nutshell, here's the way this application works:
 We maintain a `lot of applications <https://apps.fedoraproject.org>`_. Over
 time, there has been an initiative to get them all speaking a similar language
 on the backend with fedmsg. Take a look at the `list of fedmsg topics
-<http://fedmsg.com/en/latest/topics/>`_ to see what all is covered.
+<https://fedora-fedmsg.readthedocs.io/en/latest/topics.html>`_ to see what all is covered.
 
 Some Terminology
 ================

@@ -6,7 +6,7 @@ FedMSG Notifications
         :target: https://fmn.readthedocs.io/en/latest/
 
 ``fmn`` is a family of systems to manage end-user notifications triggered by
-`fedmsg, the FEDerated MESsage bus <http://fedmsg.com>`_. ``fmn`` provides a
+`fedmsg, the FEDerated MESsage bus <https://fedmsg.readthedocs.io/>`_. ``fmn`` provides a
 single place for all applications using ``fedmsg`` to notify users of events.
 Notifications can be delivered by email, irc, and server-sent events. Users
 can configure their notifications for all the applications they use in one
