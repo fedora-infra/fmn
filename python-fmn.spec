@@ -160,6 +160,13 @@ rm -rf %{buildroot}%{_datadir}/%{srcname}/static/bootstrap
 
 
 %changelog
+* Fri Mar 4 2022 Michal Konecny <mkonecny@redhat.com> - 2.3.0-1
+- Update to 2.3.0
+- Remove links to old website
+- Remove the archived repositories from documentation
+- Use fasjson library
+- Make the FMN work in Fedora 34
+
 * Fri Sep 17 2021 Stephen Coady <scoady@redhat.com> - 2.2.3-1
 - Update to 2.2.3
 - Fix config accessor for fasjson
