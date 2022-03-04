@@ -74,3 +74,64 @@ has some helpful tips, but the FMN service can be started in the virtual machine
 
 Log output is viewable with ``journalctl`` and you can navigate to http://localhost:5000/ to
 view the web user interface.
+
+Release guidelines
+------------------
+
+The FMN is released as RPM package in Fedora `fXX-infra <https://koji.fedoraproject.org/koji/search?terms=*infra&type=target&match=glob>`_
+tag. Where XX means the Fedora version.
+
+Step by step guide
+^^^^^^^^^^^^^^^^^^
+
+#. Update version in repository
+   * docs/conf.py
+   * setup.py
+
+#. Update CHANGELOG.rst
+
+#. Update python-fmn.spec
+   * Update version
+   * Add changelog to bottom (Only add devel changes, that are related to package itself)
+     
+#. Commit the changes
+
+   ``git commit -m "Prep for vX.X.X"`` (Replace X.X.X with version you want to release)
+
+#. Push the commit
+
+   ``git push origin/develop``
+
+#. Create tag
+
+   ``git tag X.X.X`` (Replace X.X.X with version you want to release)
+
+   Message of the tag: "Release X.X.X" (Replace X.X.X with version you want to release)
+
+#. Push the tag
+
+   ``git push --tags``
+
+#. Do a release on `GitHub releases <https://github.com/fedora-infra/fmn/releases>`_
+
+   Use the CHANGELOG.rst
+
+   Add contributors (check the previous release) - find names in git log
+
+#. Download the ``fmn-X.X.X.tar.gz`` from GitHub release
+
+#. Put it in ``SOURCES`` directory
+
+   Default is ``~/rpmbuild/SOURCES``
+
+#. Build the SRPM
+
+   ``rpmbuld -bs --define "dist .fcXX" python-fmn.spec`` (Replace XX with Fedora version)
+
+#. Build the package in koji ``fXX-infra`` tag (XX means Fedora release)
+
+   ``koji build fXX-infra ~/rpmbuild/SRPMS/python-fmn-X.X.X-1.fc35.src.rpm``
+   (Replace XX with Fedora version you want to build for and X.X.X with the release
+   you created by ``rpmbuild``)
+
+The RPM is now available in Koji.
