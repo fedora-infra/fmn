@@ -2,6 +2,45 @@
 Changelog
 =========
 
+v2.3.0
+======
+
+Bug fixes
+---------
+
+* Remove links to old website 
+  (`#337 <https://github.com/fedora-infra/fmn/pull/337>`_).
+* Remove the archived repositories from documentation
+  (`#338 <https://github.com/fedora-infra/fmn/pull/338>`_).
+
+Developer Improvements
+----------------------
+
+* Update vagrant to F34 
+  (`#328 <https://github.com/fedora-infra/fmn/pull/328>`_).
+* Migrate to Zuul CI
+  (`#330 <https://github.com/fedora-infra/fmn/pull/330>`_).
+* Add diff-cover
+  (`#333 <https://github.com/fedora-infra/fmn/pull/333>`_).
+* Use fasjson library
+  (`#332 <https://github.com/fedora-infra/fmn/pull/332>`_).
+* Fix CI tests
+  (`#335 <https://github.com/fedora-infra/fmn/pull/335>`_).
+* Add ReadTheDocs configuration file
+  (`#339 <https://github.com/fedora-infra/fmn/pull/339>`_).
+
+v2.2.3
+======
+
+Bug fixes
+---------
+
+* Fix config accessor for fasjson
+  (`#323 <https://github.com/fedora-infra/fmn/pull/323>`_).
+
+* Actually use the datanommer.enabled config flag
+  (`#324 <https://github.com/fedora-infra/fmn/pull/324>`_).
+
 v2.2.2
 ======
 

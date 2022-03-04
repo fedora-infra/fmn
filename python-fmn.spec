@@ -5,7 +5,7 @@
 %global with_docs 0
 
 Name:           python-%{srcname}
-Version:        2.2.3
+Version:        2.3.0
 Release:        1%{?dist}
 Summary:        A system for generic fedmsg-driven notifications for end users
 
