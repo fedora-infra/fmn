@@ -118,11 +118,4 @@
     src: fedmsg.d/
     dest: /home/{{ ansible_env.SUDO_USER }}/.fedmsg.d
 
-- name: Create fmn database
-  become_user: "{{ ansible_env.SUDO_USER }}"
-  shell: "source ~/.bashrc && workon fmn && fmn-createdb -c --with-dev-data"
-  args:
-    creates: /var/tmp/fmn-dev-db.sqlite
-
-
 - include: db.yml

@@ -9,15 +9,6 @@
       - postgresql
       - python-psycopg2
 
-- name: Install datanommer
-  dnf:
-      name: "{{ item }}"
-      state: present
-  with_items:
-      - datanommer-commands
-      - python-datanommer-models
-      - python-datanommer-consumer
-
 - name: Set up postgresql database
   command: postgresql-setup --initdb
   args:
@@ -37,15 +28,10 @@
 - name: Start and enable postgresql
   service: name=postgresql state=restarted enabled=yes
 
-- name: Set up the DB user
-  postgresql_user:
-      name: datanommer
-  become_user: postgres
-
 - name: Create the database
   postgresql_db:
-      name: datanommer
-      owner: datanommer
+      name: notifications
+      owner: postgres
   register: db_creation
   become_user: postgres
 
@@ -63,10 +49,8 @@
   replace:
     dest: /home/vagrant/alembic.ini
     regexp: "^sqlalchemy.url = sqlite.*$"
-    replace: "sqlalchemy.url = postgresql://postgres:anypasswordworkslocally@localhost/datanommer"
+    replace: "sqlalchemy.url = postgresql://postgres:anypasswordworkslocally@localhost/notifications"
 
-- name: Create the database schema
+- name: Create fmn database schema
   become_user: "{{ ansible_env.SUDO_USER }}"
-  command: /usr/bin/datanommer-create-db
-  args:
-      chdir: /home/vagrant/
+  shell: "source ~/.bashrc && workon fmn && fmn-createdb -c --with-dev-data"
