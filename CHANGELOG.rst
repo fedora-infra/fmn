@@ -10,7 +10,8 @@ Developer Improvements
 
 * Update vagrant to F36
   (`#345 <https://github.com/fedora-infra/fmn/pull/345>`_).
-
+* Fix twisted issue on F36
+  (`#346 <https://github.com/fedora-infra/fmn/pull/346>`_).
 
 v2.3.0
 ======
