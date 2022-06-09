@@ -418,6 +418,10 @@ class IRCBackendProtocol(twisted.words.protocols.irc.IRCClient):
     def nickname(self):
         return self.factory.parent.nickname
 
+    @nickname.setter
+    def nickname(self, nickname):
+        self.factory.parent.nickname = nickname
+
     @property
     def log(self):
         return self.factory.parent.log
