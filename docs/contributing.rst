@@ -30,7 +30,7 @@ Any bugfix should be accompanied by one or more unit tests to demonstrate the fi
 If you are unsure how to write unit tests for your code, we will be happy to help
 you during the code review process.
 
-You can run the unit tests by running ``python -m unittest discover`` in the root
+You can run the unit tests by running ``tox`` in the root
 of the repository.
 
 
@@ -85,12 +85,14 @@ Step by step guide
 ^^^^^^^^^^^^^^^^^^
 
 #. Update version in repository
+
    * docs/conf.py
    * setup.py
 
 #. Update CHANGELOG.rst
 
 #. Update python-fmn.spec
+
    * Update version
    * Add changelog to bottom (Only add devel changes, that are related to package itself)
      

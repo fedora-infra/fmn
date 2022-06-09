@@ -2,6 +2,16 @@
 Changelog
 =========
 
+v2.4.0
+======
+
+Developer Improvements
+----------------------
+
+* Update vagrant to F36
+  (`#345 <https://github.com/fedora-infra/fmn/pull/345>`_).
+
+
 v2.3.0
 ======
 
