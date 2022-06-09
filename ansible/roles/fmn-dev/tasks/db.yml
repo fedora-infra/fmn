@@ -12,7 +12,7 @@
 - name: Set up postgresql database
   command: postgresql-setup --initdb
   args:
-      creates: /var/lib/pgsql/data/base
+      creates: /var/lib/pgsql/data/pg_hba.conf
 
 - replace:
     dest: /var/lib/pgsql/data/pg_hba.conf
@@ -29,11 +29,9 @@
   service: name=postgresql state=restarted enabled=yes
 
 - name: Create the database
-  postgresql_db:
-      name: notifications
-      owner: postgres
-  register: db_creation
-  become_user: postgres
+  shell: runuser -l postgres -c 'createdb notifications' && touch /home/vagrant/.db-created
+  args:
+      creates: /home/vagrant/.db-created
 
 - name: Create /home/vagrant/alembic.ini
   become_user: "{{ ansible_env.SUDO_USER }}"

@@ -85,8 +85,20 @@
 - name: Start and enable redis
   service: name=redis state=started enabled=yes
 
-- name: Start and enable RabbitMQ
-  service: name=rabbitmq-server state=started enabled=yes
+#- name: start rabbitmq
+#  service: name=rabbitmq-server state=started enabled=yes
+
+# Because of the issue in rabbitmq systemd unit start rabbitmq as following
+# See https://bugzilla.redhat.com/show_bug.cgi?id=2091001
+- name: Start rabbitmq node
+  command: rabbitmq-server start -detached
+
+- name: Wait for rabbitmq node to start
+  pause:
+    seconds: 10
+
+- name: Start rabbitmq app
+  command: rabbitmqctl start_app
 
 - name: Create user systemd directory
   become_user: "{{ ansible_env.SUDO_USER }}"
