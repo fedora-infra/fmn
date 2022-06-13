@@ -1,38 +1,38 @@
 - project:
     check:
       jobs:
-        - tox-lint:
+        - fi-tox-lint:
             override-checkout: master
             vars:
               dependencies:
                 - libpq-devel
                 - krb5-devel
-        - tox-python37:
+        - fi-tox-python37:
             override-checkout: master
             vars:
               dependencies:
                 - libpq-devel
                 - krb5-devel
-        - tox-python38:
+        - fi-tox-python38:
             override-checkout: master
             vars:
               dependencies:
                 - libpq-devel
                 - krb5-devel
-        - tox-python39:
+        - fi-tox-python39:
             override-checkout: master
             vars:
               dependencies:
                 - libpq-devel
                 - krb5-devel
-        - simple-tox-docs:
+        - fi-tox-docs:
             override-checkout: master
             vars:
               dependencies:
                 - libpq-devel
                 - krb5-devel
                 - python3-pydot
-        - tox-diff-cover:
+        - fi-tox-diff-cover:
             override-checkout: master
             vars:
               dependencies:
