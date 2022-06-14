@@ -7,6 +7,7 @@ Documentation=https://github.com/fedora-infra/fmn.sse/
 ExecStart=/usr/bin/twistd-3 -n -l - -y /usr/lib/share/fmn_sse/sse_server.tac
 Type=simple
 Restart=on-failure
+Environment="KRB5_CLIENT_KTNAME=/etc/krb5.keytab"
 
 [Install]
 WantedBy=multi-user.target

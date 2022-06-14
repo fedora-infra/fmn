@@ -6,6 +6,7 @@ Documentation=https://github.com/fedora-infra/fmn/
 [Service]
 Type=simple
 ExecStart=/usr/bin/celery -A fmn worker --pool=prefork --concurrency=1 -E -l info -n fmn-worker%i@%H
+Environment="KRB5_CLIENT_KTNAME=/etc/krb5.keytab"
 
 [Install]
 WantedBy=multi-user.target
