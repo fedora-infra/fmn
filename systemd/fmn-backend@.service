@@ -7,6 +7,7 @@ Documentation=https://github.com/fedora-infra/fmn/
 ExecStart=/usr/bin/twistd -n -l - -y /usr/share/fmn/delivery_service.tac
 Type=simple
 Restart=on-failure
+Environment="KRB5_CLIENT_KTNAME=/etc/krb5.keytab"
 
 [Install]
 WantedBy=multi-user.target
