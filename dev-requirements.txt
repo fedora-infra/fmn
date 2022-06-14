@@ -9,5 +9,6 @@ vcrpy
 # Docs requirements
 sphinx
 sqlalchemy_schemadisplay
+jinja2<3.1.0
 # Nice to have
 flower
