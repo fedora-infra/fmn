@@ -87,6 +87,7 @@ Step by step guide
 #. Update version in repository
 
    * docs/conf.py
+
    * setup.py
 
 #. Update CHANGELOG.rst
@@ -94,6 +95,7 @@ Step by step guide
 #. Update python-fmn.spec
 
    * Update version
+
    * Add changelog to bottom (Only add devel changes, that are related to package itself)
      
 #. Commit the changes
