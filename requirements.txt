@@ -11,6 +11,7 @@ fedmsg_meta_fedora_infrastructure>=0.18.0
 Flask
 flask-openid>=1.2.4
 gssapi
+Jinja2<3.1.0
 markupsafe
 moksha.hub
 munch
