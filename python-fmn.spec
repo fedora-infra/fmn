@@ -5,7 +5,7 @@
 %global with_docs 0
 
 Name:           python-%{srcname}
-Version:        2.3.0
+Version:        2.4.0
 Release:        1%{?dist}
 Summary:        A system for generic fedmsg-driven notifications for end users
 
@@ -160,6 +160,11 @@ rm -rf %{buildroot}%{_datadir}/%{srcname}/static/bootstrap
 
 
 %changelog
+* Wed Jun 15 2022 Michal Konecny <mkonecny@redhat.com> - 2.4.0-1
+- Update to 2.4.0
+- Cleanup of systemd units
+- Make the FMN work in Fedora 36
+
 * Fri Mar 4 2022 Michal Konecny <mkonecny@redhat.com> - 2.3.0-1
 - Update to 2.3.0
 - Remove links to old website
