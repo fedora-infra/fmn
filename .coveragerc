@@ -1,0 +1,13 @@
+[run]
+branch = True
+source = fmn
+omit =
+
+[report]
+precision = 2
+fail_under = 100
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    if TYPE_CHECKING:
+show_missing = True
