@@ -22,16 +22,13 @@ from __future__ import unicode_literals
 import unittest
 
 from fedmsg.meta import make_processors
-from fedora.client.fas2 import AccountSystem
 import mock
 
 from fmn.rules import generic
 from fmn.tests import Base
 
 
-@mock.patch('fmn.rules.utils._FAS', new=AccountSystem(
-    'https://admin.fedoraproject.org/accounts/', username='jcline', password='dummypassword',
-    cache_session=False, insecure=False))
+@mock.patch('fmn.rules.utils._FAS', new=mock.MagicMock())
 class UserPackageFilterTests(Base):
 
     def setUp(self):
@@ -160,22 +157,30 @@ class UserPackageFilterTests(Base):
         """Assert that an empty message results in False."""
         self.assertFalse(generic.user_package_filter(self.config, {}))
 
-    def test_no_matching_packages(self):
+    @mock.patch('fmn.rules.utils.get_packages_of_user')
+    def test_no_matching_packages(self, mock_packages):
         """Assert that a message with no matching packages results in False."""
+        mock_packages.return_value = {"rpms": {"package1", "package2", "package3"}}
         self.assertFalse(generic.user_package_filter(self.config, self.rpm_msg, fasnick='jcline'))
 
-    def test_matching_packages(self):
+    @mock.patch('fmn.rules.utils.get_packages_of_user')
+    def test_matching_packages(self, mock_packages):
         """Assert that a message with matching packages results in True."""
+        mock_packages.return_value = {"rpms": {"python-pystray"}}
         self.assertTrue(generic.user_package_filter(self.config, self.rpm_msg, fasnick='besser82'))
 
-    def test_different_namespaces(self):
+    @mock.patch('fmn.rules.utils.get_packages_of_user')
+    def test_different_namespaces(self, mock_packages):
         """Assert packages with the same name in a different namespace results in False."""
         # remi owns the php RPM, but not the module.
+        mock_packages.return_value = {"rpms": {"php"}}
         self.assertFalse(generic.user_package_filter(self.config, self.module_msg, fasnick='remi'))
 
-    def test_namespaces(self):
+    @mock.patch('fmn.rules.utils.get_packages_of_user')
+    def test_namespaces(self, mock_packages):
         """Assert that a message with a namespaced package works correctly."""
         # ralph owns the php module
+        mock_packages.return_value = {"modules": {"php"}}
         self.assertTrue(generic.user_package_filter(self.config, self.module_msg, fasnick='ralph'))
 
 

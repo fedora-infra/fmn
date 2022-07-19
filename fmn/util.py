@@ -1,4 +1,3 @@
-import fedora.client
 import fasjson_client
 
 import logging
@@ -29,10 +28,12 @@ def get_fas_email(config, username):
     have that alias available yet.
     """
     try:
-        fas = fedora.client.AccountSystem(**config['fas_credentials'])
-        person = fas.person_by_username(username)
-        if person.get('email'):
-            return person['email']
+        fasjson = config["fasjson"]
+        client = fasjson_client.Client(url=fasjson.get('url'))
+        person = client.get_user(username=username).result
+
+        if person.get('emails'):
+            return person.get('emails')[0]
         raise ValueError("No email found: %r" % username)
     except Exception:
         log.exception("Failed to get FAS email for %r" % username)

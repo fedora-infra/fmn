@@ -21,7 +21,6 @@ from __future__ import unicode_literals
 
 import unittest
 
-from fedora.client.fas2 import AccountSystem
 from requests.exceptions import ConnectTimeout, ReadTimeout
 from dogpile import cache
 import mock
@@ -150,9 +149,6 @@ class GetPkgdb2PackagesForTests(Base):
         self.assertEqual(set(), packages)
 
 
-@mock.patch('fmn.rules.utils._FAS', new=AccountSystem(
-    'https://admin.fedoraproject.org/accounts/', username='jcline', password='dummypassword',
-    cache_session=False, insecure=False))
 class GetPkgdb2PackagersForTests(Base):
 
     def setUp(self):
@@ -176,19 +172,14 @@ class GetPkgdb2PackagersForTests(Base):
 
         self.assertTrue(expected_packagers.issubset(packagers))
 
-    def test_groups(self):
+    @mock.patch('fmn.rules.utils.get_fas')
+    def test_groups(self, mock_get_fas):
         infra_group = set([
             'abompard',
             'bochecha',
             'bowlofeggs',
             'codeblock',
             'jcline',
-            'kevin',
-            'lmacken',
-            'pingou',
-            'puiterwijk',
-            'sayanchowdhury',
-            'toshio',
         ])
         committers = set([
             'abompard',
@@ -197,6 +188,28 @@ class GetPkgdb2PackagersForTests(Base):
             'sagarun',
         ])
         expected_packagers = infra_group.union(committers)
+
+        mock_fasjson_client = mock.MagicMock()
+        mock_response = mock.MagicMock()
+        mock_response.result = [
+            {
+                "username": "abompard",
+            },
+            {
+                "username": "bochecha",
+            },
+            {
+                "username": "bowlofeggs",
+            },
+            {
+                "username": "codeblock",
+            },
+            {
+                "username": "jcline",
+            },
+        ]
+        mock_fasjson_client.list_group_members.return_value = mock_response
+        mock_get_fas.return_value = mock_fasjson_client
 
         packagers = utils._get_packagers_for(self.config, 'rpms/python-urllib3')
 
@@ -389,19 +402,14 @@ class GetPagurePackagersForTests(Base):
 
         self.assertEqual(expected_packagers, packagers)
 
-    def test_groups(self):
+    @mock.patch('fmn.rules.utils.get_fas')
+    def test_groups(self, mock_get_fas):
         infra_group = set([
             'abompard',
             'bochecha',
             'bowlofeggs',
             'codeblock',
             'jcline',
-            'kevin',
-            'lmacken',
-            'pingou',
-            'puiterwijk',
-            'sayanchowdhury',
-            'toshio',
         ])
         committers = set([
             'abompard',
@@ -410,9 +418,33 @@ class GetPagurePackagersForTests(Base):
             'sagarun',
         ])
 
+        expected_packagers = infra_group.union(committers)
+
+        mock_fasjson_client = mock.MagicMock()
+        mock_response = mock.MagicMock()
+        mock_response.result = [
+            {
+                "username": "abompard",
+            },
+            {
+                "username": "bochecha",
+            },
+            {
+                "username": "bowlofeggs",
+            },
+            {
+                "username": "codeblock",
+            },
+            {
+                "username": "jcline",
+            },
+        ]
+        mock_fasjson_client.list_group_members.return_value = mock_response
+        mock_get_fas.return_value = mock_fasjson_client
+
         packagers = utils._get_packagers_for(self.config, 'rpms/python-urllib3')
 
-        self.assertEqual(infra_group.union(committers), packagers)
+        self.assertEqual(expected_packagers, packagers)
 
     def test_no_namespace(self):
         """Assert packages without a namespace default to RPM."""

@@ -37,7 +37,6 @@ BuildRequires:      python3-docutils
 BuildRequires:      python3-dogpile-cache
 BuildRequires:      python3-fedmsg
 BuildRequires:      python3-fedmsg-meta-fedora-infrastructure
-BuildRequires:      python3-fedora
 BuildRequires:      python3-flake8
 BuildRequires:      python3-flask
 BuildRequires:      python3-flask-openid
