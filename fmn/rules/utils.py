@@ -11,7 +11,7 @@ import requests.exceptions
 import fedmsg.meta
 
 from dogpile.cache import make_region
-from fedora.client.fas2 import AccountSystem
+import fasjson_client
 
 log = logging.getLogger(__name__)
 
@@ -42,8 +42,8 @@ def compile_regex(pattern):
 
 
 def get_fas(config):
-    """ Return a fedora.client.fas2.AccountSystem object if the provided
-    configuration contains a FAS username and password.
+    """ Return a fasjson_client object if the provided
+    configuration contains a fasjson configuration.
     """
     global _FAS
     if _FAS is not None:
@@ -52,20 +52,12 @@ def get_fas(config):
     # In some development environments, having fas_credentials around is a
     # pain.. so, let things proceed here, but emit a warning.
     try:
-        creds = config['fas_credentials']
+        fasjson_config = config['fasjson']
     except KeyError:
-        log.warning("No fas_credentials available.  Unable to query FAS.")
+        log.warning("No fasjson config available.  Unable to query FAS.")
         return None
 
-    default_url = 'https://admin.fedoraproject.org/accounts/'
-
-    _FAS = AccountSystem(
-        creds.get('base_url', default_url),
-        username=creds['username'],
-        password=creds['password'],
-        cache_session=False,
-        insecure=creds.get('insecure', False)
-    )
+    client = fasjson_client.Client(url=fasjson.get('url'))
 
     return _FAS
 
@@ -395,7 +387,7 @@ def get_user_of_group(config, fas, groupname):
     ''' Return the list of users in the specified group.
 
     :arg config: a dict containing the fedmsg config
-    :arg fas: a fedora.client.fas2.AccountSystem object instanciated and loged
+    :arg fas: a fasjson_client object instanciated and loged
         into FAS.
     :arg groupname: the name of the group for which we want to retrieve the
         members.
@@ -409,7 +401,7 @@ def get_user_of_group(config, fas, groupname):
     def creator():
         if not fas:
             return set()
-        return set([u.username for u in fas.group_members(groupname)])
+        return set([u["username"] for u in fas.list_group_members(groupname).result])
     return _cache.get_or_create(key, creator)
 
 
@@ -417,7 +409,7 @@ def get_groups_of_user(config, fas, username):
     ''' Return the list of (pkgdb) groups to which the user belongs.
 
     :arg config: a dict containing the fedmsg config
-    :arg fas: a fedora.client.fas2.AccountSystem object instanciated and loged
+    :arg fas: a fasjson_client object instanciated and loged
         into FAS.
     :arg username: the name of a user for which we want to retrieve groups
     :return: a list of FAS groups to which the user belongs.
@@ -432,9 +424,10 @@ def get_groups_of_user(config, fas, username):
         if not fas:
             return []
         results = []
-        for group in fas.person_by_username(username).get('memberships', []):
-            if group['group_type'] == 'pkgdb':
-                results.append(group.name)
+        for group in fas.list_all_entities("groups"):
+            members = set([u["username"] for u in fas.list_group_members(group["groupname"]).result])
+            if username in members:
+                results.append(group["groupname"])
         return results
 
     return _cache.get_or_create(key, creator)
