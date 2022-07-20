@@ -5,7 +5,7 @@
 %global with_docs 0
 
 Name:           python-%{srcname}
-Version:        2.4.0
+Version:        2.4.1
 Release:        1%{?dist}
 Summary:        A system for generic fedmsg-driven notifications for end users
 
@@ -159,6 +159,10 @@ rm -rf %{buildroot}%{_datadir}/%{srcname}/static/bootstrap
 
 
 %changelog
+* Wed Jul 20 2022 Michal Konecny <mkonecny@redhat.com> - 2.4.1-1
+- Update to 2.4.1
+- Remove python3-fedora requirement
+
 * Wed Jun 15 2022 Michal Konecny <mkonecny@redhat.com> - 2.4.0-1
 - Update to 2.4.0
 - Cleanup of systemd units

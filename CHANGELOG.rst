@@ -2,6 +2,15 @@
 Changelog
 =========
 
+v2.4.1
+======
+
+Bug fixes
+---------
+
+* Remove old FAS calls from FMN
+  (`#357 <https://github.com/fedora-infra/fmn/pull/357>`_).
+
 v2.4.0
 ======
 
