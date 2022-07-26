@@ -1,3 +1,3 @@
 from fastapi import FastAPI
 
-api = FastAPI()
+app = FastAPI()
