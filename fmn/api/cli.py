@@ -12,4 +12,4 @@ def api():
 @api.command()
 def serve():
     """Serve the FMN API via HTTP"""
-    uvicorn.run(main.api)
+    uvicorn.run(main.app)
