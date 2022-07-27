@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo systemctl start fmn-api.service && echo 'fmn-api is running on http://fmn.tinystage.test:8000/'

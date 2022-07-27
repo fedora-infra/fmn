@@ -1,0 +1,35 @@
+---
+
+- name: Copy helper scripts for fmn-api
+  copy:
+    src: '{{item}}'
+    dest: '/home/vagrant/.local/bin/'
+    owner: vagrant
+    group: vagrant
+    mode: 0744
+  loop:
+    - fmn-api-logs
+    - fmn-api-restart
+    - fmn-api-start
+    - fmn-api-status
+    - fmn-api-stop
+
+- name: Install the systemd unit files for the fmn-api service
+  copy:
+      src: fmn-api.service
+      dest: /etc/systemd/system/fmn-api.service
+      mode: 0644
+
+- name: install the api with poetry
+  command: poetry install
+  become: yes
+  become_user: vagrant
+  args:
+    chdir: /home/vagrant/fmn/
+
+- name: Start the service using systemd
+  systemd:
+    state: started
+    name: fmn-api
+    daemon_reload: yes
+    enabled: yes

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo systemctl status fmn-api.service

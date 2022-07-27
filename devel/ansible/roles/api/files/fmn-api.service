@@ -1,0 +1,13 @@
+[Unit]
+Description=fmn-api
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=vagrant
+
+WorkingDirectory=/home/vagrant/fmn/fmn
+ExecStart=poetry run fmn api serve --host 0.0.0.0
+
+[Install]
+WantedBy=multi-user.target
