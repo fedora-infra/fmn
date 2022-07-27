@@ -1,0 +1,5 @@
+# .bashrc
+
+export PATH=$PATH:/home/vagrant/.local/bin
+
+cd "fmn"

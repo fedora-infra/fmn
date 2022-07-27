@@ -13,7 +13,6 @@ Vagrant.configure(2) do |config|
 
     fmn.vm.synced_folder '.', '/vagrant', disabled: true
     fmn.vm.synced_folder ".", "/home/vagrant/fmn", type: "sshfs"
-    fmn.vm.network "forwarded_port", guest: 3000, host: 3000
 
     fmn.vm.provider :libvirt do |libvirt|
       libvirt.cpus = 2

@@ -1,0 +1,27 @@
+---
+- name: Install RPM packages
+  dnf:
+      name:
+        - git
+        - vim
+        - poetry
+        - python3-pip
+        - python3-devel
+        - fedora-messaging
+        - npm
+      state: present
+
+
+- name: Install the .bashrc
+  copy:
+      src: bashrc
+      dest: /home/vagrant/.bashrc
+      mode: 0644
+      owner: vagrant
+      group: vagrant
+
+# running npm from systemd causes some selinux issues -- turn it off for now
+- name: Put SELinux in permissive mode, logging actions that would be blocked.
+  selinux:
+    policy: targeted
+    state: permissive

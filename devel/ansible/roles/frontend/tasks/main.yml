@@ -1,30 +1,18 @@
 ---
-- name: Install RPM packages
-  dnf:
-      name:
-        - git
-        - vim
-        - poetry
-        - python3-pip
-        - python3-devel
-        - fedora-messaging
-        - npm
-      state: present
 
-
-- name: Install the .bashrc
+- name: Copy helper scripts for fmn-frontend
   copy:
-      src: bashrc
-      dest: /home/vagrant/.bashrc
-      mode: 0644
-      owner: vagrant
-      group: vagrant
-
-# running npm from systemd causes some selinux issues -- turn it off for now
-- name: Put SELinux in permissive mode, logging actions that would be blocked.
-  selinux:
-    policy: targeted
-    state: permissive
+    src: '{{item}}'
+    dest: '/home/vagrant/.local/bin/'
+    owner: vagrant
+    group: vagrant
+    mode: 0744
+  loop:
+    - fmn-frontend-logs
+    - fmn-frontend-restart
+    - fmn-frontend-start
+    - fmn-frontend-status
+    - fmn-frontend-stop
 
 - name: Install the systemd unit files for the fmn-frontend service
   copy:
@@ -38,7 +26,6 @@
   become_user: vagrant
   args:
     chdir: /home/vagrant/fmn/frontend
-
 
 - name: Start the service using systemd
   systemd:

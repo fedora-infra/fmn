@@ -1,9 +1,0 @@
-# .bashrc
-
-alias fmn-frontend-start="sudo systemctl start fmn-frontend.service && echo 'fmn-frontend is runnings on http://fmn.tinystage.test:3000/'"
-alias fmn-frontend-logs="sudo journalctl -u fmn-frontend.service"
-alias fmn-frontend-restart="sudo systemctl restart fmn-frontend.service && echo 'fmn-frontend is runnings on http://fmn.tinystage.test:3000/'"
-alias fmn-frontend-stop="sudo systemctl stop fmn-frontend.service && echo 'fmn-frontend service stopped'"
-alias fmn-frontend-status="sudo systemctl status fmn-frontend.service"
-
-cd "fmn"

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo systemctl stop fmn-frontend.service && echo 'fmn-frontend service stopped'
