@@ -10,6 +10,7 @@ def api():
 
 
 @api.command()
-def serve():
+@click.option('--host', default='127.0.0.1', help='host to serve the api on')
+def serve(host):
     """Serve the FMN API via HTTP"""
-    uvicorn.run(main.app)
+    uvicorn.run(main.app, host=host)
