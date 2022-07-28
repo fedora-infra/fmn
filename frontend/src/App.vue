@@ -1,85 +1,76 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import MainNavLink from './components/MainNavLink.vue'
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  	<nav class="navbar navbar-expand-lg navbar-light masthead justify-content-between py-2">
+			<div class="container">
+				<a class="navbar-brand" href="/"><img src="@/assets/logo.png" alt="Fedora Account System logo" height="40"></a>
+        <ul class="navbar-nav fw-bold">
+          <MainNavLink to="/">Home</MainNavLink>
+          <MainNavLink to="/about">About</MainNavLink>
+        </ul>
+			</div>
+		</nav>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+    <div class="bg-light border-bottom py-5">
+      <div class="container">
+        <HelloWorld msg="You did it!!!" />
+      </div>
     </div>
   </header>
 
+  <div class="container py-5">
   <RouterView />
+  </div>
+
+  <footer class="footer">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-sm-3 col-4 mt-3">
+					   <div>
+						  <dl>
+							 <dt class="text-uppercase h5"><strong>About</strong></dt>
+							 <dd><a href="https://getfedora.org/">Get Fedora Linux</a></dd>
+							 <dd><a href="https://getfedora.org/en/sponsors/">Sponsors</a></dd>
+							 <dd><a href="https://fedoramagazine.org">Fedora Magazine</a></dd>
+							 <dd><a href="https://fedoraproject.org/wiki/Legal:Main#Legal">Legal</a></dd>
+						  </dl>
+					   </div>
+					</div>
+					<div class="col-sm-3 col-4 mt-3">
+					   <div>
+						  <dl>
+							 <dt class="text-uppercase h5"><strong>Support</strong></dt>
+							 <dd><a href="https://fedoraproject.org/wiki/Communicating_and_getting_help">Get Help</a></dd>
+							 <dd><a href="https://ask.fedoraproject.org/">Ask Fedora</a></dd>
+							 <dd><a href="https://fedoraproject.org/wiki/Common_F33_bugs">Common Bugs</a></dd>
+							 <dd><a href="https://developer.fedoraproject.org/">Fedora Developer Portal</a></dd>
+						  </dl>
+					   </div>
+					</div>
+					<div class="col-sm-3 col-4 mt-3">
+					   <div>
+						  <dl>
+							 <dt class="text-uppercase h5"><strong>Community</strong></dt>
+							 <dd><a href="https://fedoraproject.org/wiki/Join">Join Fedora</a></dd>
+							 <dd><a href="https://fedoraproject.org/wiki/Overview">About Fedora</a></dd>
+							 <dd><a href="http://fedoraplanet.org">Planet Fedora</a></dd>
+							 <dd><a href="https://accounts.fedoraproject.org/">Fedora Accounts</a></dd>
+						  </dl>
+					   </div>
+					</div>
+				 </div>
+				 <div class="row">
+					<div class="col-12 text-center">
+					   <p> Fedora is sponsored by Red Hat. <a href="https://www.redhat.com/en/technologies/linux-platforms/articles/relationship-between-fedora-and-rhel">Learn more about the relationship between Red Hat and Fedora »</a> </p>
+					   <div class="py-3"> <a href="https://www.redhat.com/"><img class="rh-logo" height=24px src="/theme/redhat-logo.png" alt="Red Hat Logo"></a> </div>
+					   <p> © 2022 Red Hat, Inc. and others. </p>
+					</div>
+				 </div>
+			</div>
+		</footer>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style>
