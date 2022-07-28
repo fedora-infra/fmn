@@ -6,6 +6,9 @@ import router from './router'
 
 import './assets/main.css'
 
+import "fedora-bootstrap/dist/fedora-bootstrap.min.css"
+import "bootstrap"
+
 const app = createApp(App)
 
 app.use(createPinia())
