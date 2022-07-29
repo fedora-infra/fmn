@@ -1,17 +1,19 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createPinia } from "pinia";
+import { createApp } from "vue";
+import { VueQueryPlugin } from "vue-query";
 
-import App from './App.vue'
-import router from './router'
+import App from "./App.vue";
+import router from "./router";
 
-import './assets/main.css'
+import "./assets/main.css";
 
-import "fedora-bootstrap/dist/fedora-bootstrap.min.css"
-import "bootstrap"
+import "bootstrap";
+import "fedora-bootstrap/dist/fedora-bootstrap.min.css";
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(createPinia())
-app.use(router)
+app.use(createPinia());
+app.use(router);
+app.use(VueQueryPlugin);
 
-app.mount('#app')
+app.mount("#app");
