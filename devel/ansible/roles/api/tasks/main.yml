@@ -27,6 +27,15 @@
   args:
     chdir: /home/vagrant/fmn/
 
+- name: Determine poetry venv path
+  command: poetry env info --path
+  register: _poetry_venv_path
+  changed_when: False
+
+- name: Set poetry venv path fact
+  set_fact:
+    poetryvenvpath: "{{ _poetry_venv_path.stdout | trim }}"
+
 - name: Start the service using systemd
   systemd:
     state: started
