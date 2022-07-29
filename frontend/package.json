@@ -11,9 +11,11 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "fedora-bootstrap": "2.0.2",
     "pinia": "^2.0.14",
     "vue": "^3.2.37",
+    "vue-query": "^1.25.2",
     "vue-router": "^4.1.2"
   },
   "devDependencies": {
