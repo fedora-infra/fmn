@@ -1,18 +1,11 @@
 <template>
-    <li class="nav-item">
-        <router-link v-bind="$props" class="nav-link"><slot /></router-link>
-    </li>
+  <li class="nav-item">
+    <router-link v-bind="$attrs" class="nav-link"><slot /></router-link>
+  </li>
 </template>
 
-<script>
-import { RouterLink } from 'vue-router'
-
+<script lang="ts">
 export default {
-  name: 'MainNavLink',
   inheritAttrs: false,
-
-  props: {
-    ...RouterLink.props,
-  },
-}
+};
 </script>
