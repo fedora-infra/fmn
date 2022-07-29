@@ -9,8 +9,61 @@
         - python3-devel
         - fedora-messaging
         - npm
+        - ipa-client
       state: present
+  
+- name: Determine Python version
+  command:
+    argv:
+      - python3
+      - -c
+      - "from sys import version_info as vi; print(f'{vi[0]}.{vi[1]}')"
+  register: _python3_version_result
+  changed_when: False
 
+- name: Set Python version fact
+  set_fact:
+    py3ver: "{{ _python3_version_result.stdout | trim }}"
+
+
+- name: Enroll system as IPA client
+  shell: ipa-client-install --hostname fmn.tinystage.test --domain tinystage.test --realm TINYSTAGE.TEST --server ipa.tinystage.test -p admin -w password -U -N --force-join
+
+- name: Generate and get SSL cert
+  shell: ipa-getcert request -f /etc/pki/tls/certs/server.pem -k /etc/pki/tls/private/server.key -K HTTP/fmn.tinystage.test
+
+- name: Check the cert is there
+  wait_for:
+    path: /etc/pki/tls/certs/server.pem
+    state: present
+
+- name: Check the key is there
+  wait_for:
+    path: /etc/pki/tls/private/server.key
+    state: present
+
+- name: Install oidc-register python package
+  pip:
+    name: oidc-register
+
+# not sure of how to do this another way, but without this, oidc_register fails
+- name: Get the content of the CA cert
+  slurp:
+    src: /etc/ipa/ca.crt
+  register: ca_crt
+
+- name: Put tinystage root CA in the list of CA's for httplib2
+  blockinfile:
+    block: "{{ ca_crt.content | b64decode }}"
+    path: "/usr/local/lib/python{{ py3ver }}/site-packages/httplib2/cacerts.txt"
+
+
+- name: register the application with oidc-register
+  shell:
+    cmd: poetry run oidc-register --debug https://ipsilon.tinystage.test/idp/openidc/ https://fmn.tinystage.test/oidc_callback
+    creates: /home/vagrant/fmn/client_secrets.json
+  args:
+    chdir: /home/vagrant/fmn
 
 - name: Install the .bashrc
   copy:
