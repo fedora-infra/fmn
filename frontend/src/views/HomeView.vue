@@ -1,13 +1,8 @@
 <script setup lang="ts">
-import axios from "axios";
 import { useQuery } from "vue-query";
+import { apiGet } from "../lib";
 
-const showJSON = async () => {
-  const response = await axios.get(import.meta.env.VITE_API_URL);
-  console.log(response);
-  return response.data;
-};
-const { isLoading, isError, data, error } = useQuery("root", showJSON);
+const { isLoading, isError, data, error } = useQuery("", apiGet);
 </script>
 
 <template>
