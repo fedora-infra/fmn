@@ -6,7 +6,7 @@ const { isLoading, isError, data, error } = useQuery("", apiGet);
 </script>
 
 <template>
-  <div class="about">
+  <div class="home">
     <h1>This is the home page</h1>
   </div>
   <p>Result of an API call to <code>/</code>:</p>
