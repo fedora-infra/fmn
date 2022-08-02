@@ -1,3 +1,4 @@
+import { plugin as FormKitPlugin } from "@formkit/vue";
 import { createPinia } from "pinia";
 import { createApp } from "vue";
 import { VueQueryPlugin } from "vue-query";
@@ -17,5 +18,6 @@ app.use(createPinia());
 app.use(router);
 app.use(auth);
 app.use(VueQueryPlugin);
+app.use(FormKitPlugin);
 
 app.mount("#app");
