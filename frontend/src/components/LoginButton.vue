@@ -20,6 +20,7 @@
 
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
+import type { AppAuthError } from "@openid/appauth";
 import { useRoute } from "vue-router";
 import { scope, useAuth } from "../auth";
 const auth = useAuth();
@@ -38,7 +39,7 @@ const login = async () => {
   } catch (err) {
     console.log(err);
     // TODO: Ewww. Use flash messages or snackbar
-    alert("Could not connect to Ipsilon: " + err);
+    alert("Could not connect to Ipsilon: " + (err as AppAuthError).message);
   }
   // Start the authentication dance
   await auth.makeAuthorizationRequest(scope);

@@ -1,4 +1,9 @@
 ---
+- name: Install RPM packages
+  dnf:
+      name:
+        - npm
+      state: present
 
 - name: Copy helper scripts for fmn-frontend
   copy:
@@ -26,6 +31,21 @@
   become_user: vagrant
   args:
     chdir: /home/vagrant/fmn/frontend
+
+- name: get the OIDC config
+  ansible.builtin.slurp:
+    src: /home/vagrant/frontend_oidc.json
+  register: oidc_config
+
+- name: extract the OIDC client_id
+  set_fact:
+    oidc_client_id: "{{ oidc_config['content'] | b64decode | from_json | json_query('web.client_id') }}"
+
+- name: set the env.development.local file
+  template:
+    src: env.development.local
+    dest: /home/vagrant/fmn/frontend/.env.development.local
+
 
 - name: Start the service using systemd
   systemd:

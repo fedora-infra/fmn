@@ -3,6 +3,13 @@
   become: true
   become_method: sudo
   roles:
+    - ipa-client
+    - cert
     - base
+    - oidc-register
     - api
+    - name: oidc-register
+      redirect_url: https://{{ ansible_fqdn }}:3000/login/fedora
+      dest: /home/vagrant/frontend_oidc.json
     - frontend
+

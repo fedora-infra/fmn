@@ -1,0 +1,3 @@
+redirect_path: ""
+redirect_url: https://{{ ansible_fqdn }}/{{ redirect_path }}
+dest: /home/vagrant/client_secrets.json
