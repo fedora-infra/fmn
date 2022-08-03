@@ -30,6 +30,11 @@ export const login = async (
   await auth.makeAuthorizationRequest(scopes.join(" "));
 };
 
+export const logout = async () => {
+  const userStore = useUserStore();
+  userStore.logout();
+};
+
 type Args = { router: Router };
 
 export default (app: App, { router }: Args) => {

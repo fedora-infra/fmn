@@ -11,7 +11,7 @@
         {{ userStore.fullName }}
       </a>
       <ul class="dropdown-menu">
-        <li><a class="dropdown-item" @click.prevent="logout">Logout</a></li>
+        <li><a class="dropdown-item" @click.prevent="doLogout">Logout</a></li>
       </ul>
     </template>
     <a v-else @click.prevent="doLogin()" href="#" class="nav-link">Login</a>
@@ -20,16 +20,20 @@
 
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
-import { useRoute } from "vue-router";
-import { login, useAuth } from "../auth";
+import { useRoute, useRouter } from "vue-router";
+import { login, logout, useAuth } from "../auth";
 
 const auth = useAuth();
 const route = useRoute();
 const userStore = useUserStore();
+const router = useRouter();
 
 const doLogin = () => login(auth, route.fullPath);
 
-const logout = () => {
-  userStore.logout();
+const doLogout = () => {
+  logout();
+  if (route.meta.auth) {
+    router.push("/");
+  }
 };
 </script>
