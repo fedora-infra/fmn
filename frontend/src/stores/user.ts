@@ -68,4 +68,7 @@ export const useUserStore = defineStore({
       this.$reset();
     },
   },
+  persist: {
+    storage: sessionStorage,
+  },
 });
