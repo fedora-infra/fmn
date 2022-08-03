@@ -53,6 +53,11 @@ export default (app: App, { router }: Args) => {
     name: "auth-login-fedora",
     component: () => import("../views/LoginFedora.vue"),
   });
+  router.isReady().then(() => {
+    // Initial routing has already happened, do it again with the new route added.
+    // https://router.vuejs.org/guide/advanced/dynamic-routing.html#adding-routes
+    router.replace(router.currentRoute.value.fullPath);
+  });
 
   // Check for the auth meta field before navigating to a route
   router.beforeEach(async (to) => {

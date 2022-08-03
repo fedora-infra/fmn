@@ -1,8 +1,9 @@
 <template>
   <p v-if="userStore.username">
-    Already authenticated as {{ userStore.fullName }} ({{ userStore.username }})
+    Authenticated as {{ userStore.fullName }} ({{ userStore.username }}),
+    redirecting...
   </p>
-  <p v-else-if="loading">Loading...</p>
+  <p v-else-if="loading">Loading user information...</p>
   <p v-else-if="error">{{ error }}</p>
   <p v-else>Authentication successful, redirecting you back...</p>
 </template>
