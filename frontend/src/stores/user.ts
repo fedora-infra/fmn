@@ -10,6 +10,7 @@ export const useUserStore = defineStore({
     refreshToken: null as string | null,
     idToken: null as string | null,
     tokenExpiresAt: null as number | null,
+    scopes: [],
     username: null as string | null,
     fullName: null as string | null,
     email: null as string | null,

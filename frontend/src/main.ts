@@ -16,7 +16,7 @@ const app = createApp(App);
 
 app.use(createPinia());
 app.use(router);
-app.use(auth);
+app.use(auth, { router });
 app.use(VueQueryPlugin);
 app.use(FormKitPlugin);
 

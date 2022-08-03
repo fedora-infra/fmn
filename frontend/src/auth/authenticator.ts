@@ -60,7 +60,12 @@ export default class Authenticator {
     this.authorizationHandler.setAuthorizationNotifier(this.notifier);
   }
 
-  fetchServiceConfiguration(): Promise<AuthorizationServiceConfiguration> {
+  fetchServiceConfiguration(
+    force = false
+  ): Promise<AuthorizationServiceConfiguration> {
+    if (this.configuration && !force) {
+      return Promise.resolve(this.configuration);
+    }
     return AuthorizationServiceConfiguration.fetchFromIssuer(
       this.openIdConnectUrl,
       requestor

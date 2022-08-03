@@ -20,6 +20,7 @@ import MainNavLink from "./components/MainNavLink.vue";
         <ul class="navbar-nav fw-bold">
           <MainNavLink to="/">Home</MainNavLink>
           <MainNavLink to="/about">About</MainNavLink>
+          <MainNavLink to="/rules">Rules</MainNavLink>
           <LoginButton />
         </ul>
       </div>
