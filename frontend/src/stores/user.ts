@@ -17,13 +17,11 @@ export const useUserStore = defineStore({
   }),
   getters: {
     user: (state) => ({ username: state.username, fullName: state.fullName }),
-    loggedIn: (state) => state.accessToken && state.username,
+    loggedIn: (state) => !!(state.accessToken && state.username),
   },
   actions: {
     importTokenResponse(response: TokenResponse) {
-      console.log(
-        `Access Token is ${response.accessToken}, Refresh Token is ${response.refreshToken}, Id Token is ${response.idToken}`
-      );
+      console.log("Got response:", response);
       if (response.accessToken) {
         this.accessToken = response.accessToken;
       }
@@ -39,9 +37,9 @@ export const useUserStore = defineStore({
     },
     importUserInfoResponse(response: UserInfoResponseJson) {
       console.log("User Info:", response);
-      this.username = response.nickname;
-      this.fullName = response.name;
-      this.email = response.email;
+      this.username = response.nickname || response.sub;
+      this.fullName = response.name || this.username;
+      this.email = response.email || "";
     },
     async getToken() {
       if (!this.accessToken) {
