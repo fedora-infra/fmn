@@ -19,11 +19,6 @@ const router = createRouter({
       component: () => import("../views/AboutView.vue"),
     },
     {
-      path: "/login/fedora",
-      name: "auth-login-fedora",
-      component: () => import("../views/LoginFedora.vue"),
-    },
-    {
       path: "/rules",
       name: "rules",
       component: () => import("../views/RulesView.vue"),

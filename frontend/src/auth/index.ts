@@ -33,6 +33,7 @@ export const login = async (
 type Args = { router: Router };
 
 export default (app: App, { router }: Args) => {
+  // Create the authenticator
   const redirectUri = new URL(
     `${import.meta.env.BASE_URL}login/${FedoraAuth.name}`,
     window.location.href
@@ -42,10 +43,19 @@ export default (app: App, { router }: Args) => {
     FedoraAuth.clientId,
     redirectUri
   );
+  // Make the authenticator available troughout the app
   app.config.globalProperties.$auth = auth;
   app.provide("auth", auth);
 
-  router.beforeEach(async (to, from) => {
+  // Register the new callback route
+  router.addRoute({
+    path: "/login/fedora",
+    name: "auth-login-fedora",
+    component: () => import("../views/LoginFedora.vue"),
+  });
+
+  // Check for the auth meta field before navigating to a route
+  router.beforeEach(async (to) => {
     const userStore = useUserStore();
     if (to.meta.auth && !userStore.loggedIn) {
       await login(auth, to.fullPath);
