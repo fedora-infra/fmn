@@ -7,7 +7,7 @@ Wants=network-online.target
 User=vagrant
 
 WorkingDirectory=/home/vagrant/fmn/frontend
-ExecStart=/usr/bin/npm run dev
+ExecStart=/usr/bin/npm run dev -- -c vite.vagrant.config.ts
 
 [Install]
 WantedBy=multi-user.target

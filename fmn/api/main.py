@@ -7,7 +7,9 @@ app = FastAPI()
 # This should come from the configuration file
 origins = [
     "http://localhost:3000",
+    "https://localhost:3000",
     "http://fmn.tinystage.test:3000",
+    "https://fmn.tinystage.test:3000",
     "https://notifications.fedoraproject.org",
 ]
 app.add_middleware(

@@ -1,7 +1,5 @@
-
-
 - name: Generate and get SSL cert
-  shell: ipa-getcert request -f /etc/pki/tls/certs/server.pem -k /etc/pki/tls/private/server.key -K {{ service }}/{{ ansible_fqdn }}
+  shell: ipa-getcert request -f /etc/pki/tls/certs/server.pem -k /etc/pki/tls/private/server.key -K {{ service }}/{{ ansible_fqdn }} -m 0644 -M 0644
   args:
     creates: /etc/pki/tls/certs/server.pem
 

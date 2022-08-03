@@ -6,8 +6,8 @@ Wants=network-online.target
 [Service]
 User=vagrant
 
-WorkingDirectory=/home/vagrant/fmn/fmn
-ExecStart=poetry run fmn api serve --host 0.0.0.0
+WorkingDirectory=/home/vagrant/fmn
+ExecStart=poetry run uvicorn fmn.api.main:app --host 0.0.0.0 --ssl-keyfile /etc/pki/tls/private/server.key --ssl-certfile /etc/pki/tls/certs/server.pem
 
 [Install]
 WantedBy=multi-user.target
