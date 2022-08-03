@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useQuery } from "vue-query";
-import { apiGet } from "../lib";
+import { apiGet } from "../api";
 
 const { isLoading, isError, data, error } = useQuery("", apiGet);
 </script>
