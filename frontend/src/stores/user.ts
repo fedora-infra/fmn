@@ -54,8 +54,13 @@ export const useUserStore = defineStore({
         if (!this.refreshToken) {
           return null;
         }
-        const result = await auth.makeAccessTokenRequest(this.refreshToken);
-        this.importTokenResponse(result);
+        try {
+          const result = await auth.makeAccessTokenRequest(this.refreshToken);
+          this.importTokenResponse(result);
+        } catch (err) {
+          console.log("Could not refresh the access token:", err);
+          this.logout();
+        }
       }
       return this.accessToken;
     },
