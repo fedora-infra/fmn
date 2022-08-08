@@ -17,7 +17,7 @@ import MainNavLink from "./components/MainNavLink.vue";
             alt="Fedora Account System logo"
             height="40"
         /></a>
-        <ul class="navbar-nav fw-bold">
+        <ul class="navbar-nav fw-bold align-items-center">
           <MainNavLink to="/">Home</MainNavLink>
           <MainNavLink to="/about">About</MainNavLink>
           <MainNavLink to="/rules">Rules</MainNavLink>

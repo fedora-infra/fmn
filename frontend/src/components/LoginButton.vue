@@ -4,13 +4,13 @@
       <a
         class="nav-link dropdown-toggle"
         href="#"
-        ole="button"
+        role="button"
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        {{ userStore.fullName }}
+        <img v-bind:src="avatarURL" /> 
       </a>
-      <ul class="dropdown-menu">
+      <ul class="dropdown-menu dropdown-menu-end">
         <li><a class="dropdown-item" @click.prevent="doLogout">Logout</a></li>
       </ul>
     </template>
@@ -20,6 +20,7 @@
 
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
+import { generateLibravatarURL } from "../util";
 import { useRoute, useRouter } from "vue-router";
 import { login, logout, useAuth } from "../auth";
 
@@ -27,6 +28,7 @@ const auth = useAuth();
 const route = useRoute();
 const userStore = useUserStore();
 const router = useRouter();
+const avatarURL = generateLibravatarURL("rlerch@redhat.com", 30, "retro");
 
 const doLogin = () => login(auth, route.fullPath);
 
