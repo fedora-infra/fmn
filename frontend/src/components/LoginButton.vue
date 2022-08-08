@@ -14,7 +14,7 @@
         <li><a class="dropdown-item" @click.prevent="doLogout">Logout</a></li>
       </ul>
     </template>
-    <a v-else @click.prevent="doLogin()" href="#" class="nav-link">Login</a>
+    <a v-else @click.prevent="doLogin()" href="#" class="btn btn-primary">Login</a>
   </li>
 </template>
 
