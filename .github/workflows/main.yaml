@@ -56,3 +56,24 @@ jobs:
              pushd frontend/
              npm run lint-check
              popd
+
+  frontend-typecheck:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install frontend
+        run: |
+             pushd frontend/
+             npm install
+             popd
+
+      - name: run type-check
+        run: |
+             pushd frontend/
+             npm run type-check
+             popd
