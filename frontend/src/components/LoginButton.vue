@@ -28,7 +28,7 @@ const auth = useAuth();
 const route = useRoute();
 const userStore = useUserStore();
 const router = useRouter();
-const avatarURL = generateLibravatarURL("rlerch@redhat.com", 30, "retro");
+const avatarURL = generateLibravatarURL(userStore.email, 30, "retro");
 
 const doLogin = () => login(auth, route.fullPath);
 
