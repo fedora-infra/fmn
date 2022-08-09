@@ -1,5 +1,5 @@
-import { useAuth } from "@/auth";
-import type { UserInfoResponseJson } from "@/auth/userinfo_request";
+import { useAuth } from "../auth";
+import type { UserInfoResponseJson } from "../auth/userinfo_request";
 import type { TokenResponse } from "@openid/appauth";
 import { defineStore } from "pinia";
 

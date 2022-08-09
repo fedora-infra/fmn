@@ -8,21 +8,23 @@
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <img v-bind:src="avatarURL" /> 
+        <img :src="avatarURL" />
       </a>
       <ul class="dropdown-menu dropdown-menu-end">
         <li><a class="dropdown-item" @click.prevent="doLogout">Logout</a></li>
       </ul>
     </template>
-    <a v-else @click.prevent="doLogin()" href="#" class="btn btn-primary">Login</a>
+    <a v-else @click.prevent="doLogin()" href="#" class="btn btn-primary">
+      Login
+    </a>
   </li>
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
-import { generateLibravatarURL } from "../util";
 import { useRoute, useRouter } from "vue-router";
 import { login, logout, useAuth } from "../auth";
+import { useUserStore } from "../stores/user";
+import { generateLibravatarURL } from "../util";
 
 const auth = useAuth();
 const route = useRoute();
