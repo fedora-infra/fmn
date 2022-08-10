@@ -2,7 +2,9 @@
 branch = True
 source = fmn
 omit =
-concurrency = greenlet
+concurrency =
+    greenlet
+    thread
 
 [report]
 precision = 2
