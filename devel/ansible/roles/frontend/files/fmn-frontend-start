@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo systemctl start fmn-frontend.service && echo 'fmn-frontend is running on http://fmn.tinystage.test:3000/'
+sudo systemctl start fmn-frontend.service && echo 'fmn-frontend is running on http://fmn.tinystage.test:5173/'
