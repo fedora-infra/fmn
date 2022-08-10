@@ -5,12 +5,11 @@
     "dev": "vite --host 0.0.0.0",
     "build": "run-p type-check build-only",
     "preview": "vite preview --port 4173",
-    "test:unit": "vitest --environment jsdom",
+    "test:unit": "vitest --environment jsdom --coverage",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "lint-check": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --max-warnings=0 --ignore-path .gitignore"
-
   },
   "dependencies": {
     "@formkit/vue": "^1.0.0-beta.10",
@@ -36,6 +35,7 @@
     "@vue/eslint-config-typescript": "^11.0.0",
     "@vue/test-utils": "^2.0.2",
     "@vue/tsconfig": "^0.1.3",
+    "c8": "^7.12.0",
     "eslint": "^8.5.0",
     "eslint-plugin-vue": "^9.0.0",
     "jsdom": "^20.0.0",
