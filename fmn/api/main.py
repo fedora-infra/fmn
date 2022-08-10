@@ -1,7 +1,7 @@
 from functools import lru_cache
 
-from fasjson_client import Client
-from fastapi import FastAPI
+from fasjson_client import Client as FasjsonClient
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .config import Settings
@@ -22,7 +22,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-c = Client("http://fasjson.tinystage.test/fasjson")
+
+def get_fasjson_client(settings: Settings = Depends(get_settings)):
+    return FasjsonClient(settings.fasjson_url)
 
 
 @app.get("/")
@@ -31,5 +33,5 @@ def read_root():
 
 
 @app.get("/userinfo/{username}")
-def get_userinfo(username):
-    return c.get_user(username=username).result
+def get_userinfo(username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)):
+    return fasjson_client.get_user(username=username).result
