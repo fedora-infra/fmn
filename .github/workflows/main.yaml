@@ -11,14 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
-
       - name: setup venv
         run: |
-             python${{ matrix.python-version }} -m pip install --upgrade virtualenv
              virtualenv --python /usr/bin/python${{ matrix.python-version }} venv
              source venv/bin/activate
              which python
@@ -40,9 +34,12 @@ jobs:
     strategy:
       fail-fast: false
     runs-on: ubuntu-latest
-    container: fedorapython/fedora-python-tox:latest
+    container: fedora:latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: install npm
+        run: dnf install -y npm
 
       - name: install frontend
         run: |
@@ -60,9 +57,12 @@ jobs:
     strategy:
       fail-fast: false
     runs-on: ubuntu-latest
-    container: fedorapython/fedora-python-tox:latest
+    container: fedora:latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: install npm
+        run: dnf install -y npm
 
       - name: install frontend
         run: |
@@ -80,9 +80,12 @@ jobs:
     strategy:
       fail-fast: false
     runs-on: ubuntu-latest
-    container: fedorapython/fedora-python-tox:latest
+    container: fedora:latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: install npm
+        run: dnf install -y npm
 
       - name: install frontend
         run: |
