@@ -1,19 +1,21 @@
+from functools import lru_cache
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .config import Settings
+
 app = FastAPI()
 
-# This should come from the configuration file
-origins = [
-    "http://localhost:3000",
-    "https://localhost:3000",
-    "http://fmn.tinystage.test:3000",
-    "https://fmn.tinystage.test:3000",
-    "https://notifications.fedoraproject.org",
-]
+
+@lru_cache()
+def get_settings():
+    return Settings()
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=get_settings().cors_origins.split(" "),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
