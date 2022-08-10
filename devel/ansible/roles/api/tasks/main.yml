@@ -1,9 +1,8 @@
 ---
-
 - name: Copy helper scripts for fmn-api
   copy:
-    src: '{{item}}'
-    dest: '/home/vagrant/.local/bin/'
+    src: "{{item}}"
+    dest: "/home/vagrant/.local/bin/"
     owner: vagrant
     group: vagrant
     mode: 0744
@@ -16,9 +15,9 @@
 
 - name: Install the systemd unit files for the fmn-api service
   copy:
-      src: fmn-api.service
-      dest: /etc/systemd/system/fmn-api.service
-      mode: 0644
+    src: fmn-api.service
+    dest: /etc/systemd/system/fmn-api.service
+    mode: 0644
 
 - name: install the api with poetry
   command: poetry install
@@ -35,6 +34,12 @@
 # - name: Set poetry venv path fact
 #   set_fact:
 #     poetryvenvpath: "{{ _poetry_venv_path.stdout | trim }}"
+
+- name: Install the configuration file
+  copy:
+    src: fmn.cfg
+    dest: /home/vagrant/fmn/fmn.cfg
+    mode: 0644
 
 - name: Start the service using systemd
   systemd:

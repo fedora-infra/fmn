@@ -12,3 +12,6 @@ __pycache__/
 
 # vagrant
 .vagrant/
+
+# configuration file
+/fmn.cfg
