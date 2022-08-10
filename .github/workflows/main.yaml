@@ -4,32 +4,19 @@ jobs:
   backend-ci:
     strategy:
       fail-fast: false
-      matrix:
-        python-version: ['3.8', '3.9', '3.10']
     runs-on: ubuntu-latest
     container: fedorapython/fedora-python-tox:latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: setup venv
-        run: |
-             dnf install -y which
-             virtualenv --python /usr/bin/python${{ matrix.python-version }} venv
-             source venv/bin/activate
-             which python
-
       - name: Install base dependencies
         run: |
-             source venv/bin/activate
-             python -m pip install --upgrade poetry
-             python -m pip install --upgrade pytest
-             python -m pip install --upgrade tox
-
+             python3 -m pip install --upgrade poetry
+             python3 -m pip install --upgrade pytest
+             python3 -m pip install --upgrade tox
 
       - name: execute tox
-        run: |
-             source venv/bin/activate
-             tox
+        run: tox
 
   frontend-ci:
     strategy:
