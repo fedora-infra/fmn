@@ -16,7 +16,7 @@ export const login = async (
   }
 
   // Store where we clicked the button
-  localStorage.setItem("redirect_to", redirectTo);
+  sessionStorage.setItem("redirect_to", redirectTo);
 
   // Get the URLs from Ipsilon
   try {

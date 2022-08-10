@@ -25,11 +25,13 @@
     "vue-router": "^4.1.2"
   },
   "devDependencies": {
+    "@pinia/testing": "^0.0.13",
     "@rushstack/eslint-patch": "^1.1.0",
+    "@testing-library/vue": "^6.6.1",
     "@types/crypto-js": "^4.1.1",
     "@types/jsdom": "^16.2.14",
     "@types/node": "^16.11.43",
-    "@vitejs/plugin-vue": "^2.3.3",
+    "@vitejs/plugin-vue": "^3.0.0",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^11.0.0",
     "@vue/test-utils": "^2.0.2",
@@ -40,8 +42,8 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "typescript": "~4.7.4",
-    "vite": "^2.9.14",
-    "vitest": "^0.18.0",
-    "vue-tsc": "^0.38.4"
+    "vite": "^3.0.0",
+    "vitest": "^0.21.0",
+    "vue-tsc": "^0.39.0"
   }
 }
