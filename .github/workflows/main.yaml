@@ -9,7 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install base dependencies
+      - name: Install RPM dependencies
+        run: |
+             dnf install -y krb5-devel
+
+      - name: Install base Python dependencies
         run: |
              python3 -m pip install --upgrade poetry
              python3 -m pip install --upgrade pytest
