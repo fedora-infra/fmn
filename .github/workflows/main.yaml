@@ -1,7 +1,7 @@
 name: CI
 on: [push, pull_request, workflow_dispatch]
 jobs:
-  ci:
+  backend-ci:
     strategy:
       fail-fast: false
       matrix:
@@ -13,6 +13,7 @@ jobs:
 
       - name: setup venv
         run: |
+             dnf install -y which
              virtualenv --python /usr/bin/python${{ matrix.python-version }} venv
              source venv/bin/activate
              which python
