@@ -76,7 +76,7 @@ jobs:
              npm run type-check
              popd
 
-  frontend-typecheck:
+  frontend-unit-tests:
     strategy:
       fail-fast: false
     runs-on: ubuntu-latest
