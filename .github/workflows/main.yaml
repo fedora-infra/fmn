@@ -31,7 +31,7 @@ jobs:
              source venv/bin/activate
              tox
 
-  frontend-lint:
+  frontend-ci:
     strategy:
       fail-fast: false
     runs-on: ubuntu-latest
@@ -54,44 +54,10 @@ jobs:
              npm run lint-check
              popd
 
-  frontend-typecheck:
-    strategy:
-      fail-fast: false
-    runs-on: ubuntu-latest
-    container: fedora:latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: install npm
-        run: dnf install -y npm
-
-      - name: install frontend
-        run: |
-             pushd frontend/
-             npm install
-             popd
-
       - name: run type-check
         run: |
              pushd frontend/
              npm run type-check
-             popd
-
-  frontend-unit-tests:
-    strategy:
-      fail-fast: false
-    runs-on: ubuntu-latest
-    container: fedora:latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: install npm
-        run: dnf install -y npm
-
-      - name: install frontend
-        run: |
-             pushd frontend/
-             npm install
              popd
 
       - name: run type-check
