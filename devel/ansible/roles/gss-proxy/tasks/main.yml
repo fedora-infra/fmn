@@ -8,12 +8,11 @@
 - name: kinit
   shell: echo "password" | kinit admin@TINYSTAGE.TEST
 
-- name: Delete any old service in IPA
-  command: ipa service-del FMN/fmn.tinystage.test
-  ignore_errors: yes
-
 - name: Create the service in IPA
   command: ipa service-add FMN/fmn.tinystage.test
+  register: service_add_result
+  changed_when: "'Added service' in service_add_result.stdout"
+  failed_when: "not ('Added service' in service_add_result.stdout or 'already exists' in service_add_result.stderr)"
 
 - name: Get service keytab for FMN
   shell: ipa-getkeytab -p FMN/fmn.tinystage.test@TINYSTAGE.TEST -k /var/lib/gssproxy/fmn.keytab
