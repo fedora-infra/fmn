@@ -8,7 +8,7 @@
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <img :src="avatarURL" />
+        <img :alt="userStore.user.username!" :src="avatarURL" />
       </a>
       <ul class="dropdown-menu dropdown-menu-end">
         <li><a class="dropdown-item" @click.prevent="doLogout">Logout</a></li>
