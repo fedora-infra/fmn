@@ -5,9 +5,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
         python-version: ['3.8', '3.9', '3.10']
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    container: fedorapython/fedora-python-tox:latest
     steps:
       - uses: actions/checkout@v3
 
@@ -18,8 +18,8 @@ jobs:
 
       - name: setup venv
         run: |
-             python -m pip install --upgrade virtualenv
-             virtualenv venv
+             python${{ matrix.python-version }} -m pip install --upgrade virtualenv
+             virtualenv --python /usr/bin/python${{ matrix.python-version }} venv
              source venv/bin/activate
              which python
 
@@ -40,6 +40,7 @@ jobs:
     strategy:
       fail-fast: false
     runs-on: ubuntu-latest
+    container: fedorapython/fedora-python-tox:latest
     steps:
       - uses: actions/checkout@v3
 
@@ -59,6 +60,7 @@ jobs:
     strategy:
       fail-fast: false
     runs-on: ubuntu-latest
+    container: fedorapython/fedora-python-tox:latest
     steps:
       - uses: actions/checkout@v3
 
@@ -78,6 +80,7 @@ jobs:
     strategy:
       fail-fast: false
     runs-on: ubuntu-latest
+    container: fedorapython/fedora-python-tox:latest
     steps:
       - uses: actions/checkout@v3
 
