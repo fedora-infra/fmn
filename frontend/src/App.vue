@@ -21,6 +21,7 @@ import MainNavLink from "./components/MainNavLink.vue";
           <MainNavLink to="/">Home</MainNavLink>
           <MainNavLink to="/about">About</MainNavLink>
           <MainNavLink to="/rules">Rules</MainNavLink>
+          <MainNavLink to="/destinations">Destinations</MainNavLink>
           <LoginButton />
         </ul>
       </div>

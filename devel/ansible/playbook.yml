@@ -7,9 +7,9 @@
     - cert
     - base
     - oidc-register
+    - gss-proxy
     - api
     - name: oidc-register
       redirect_url: https://{{ ansible_fqdn }}:5173/login/fedora
       dest: /home/vagrant/frontend_oidc.json
     - frontend
-
