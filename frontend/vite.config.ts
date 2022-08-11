@@ -1,4 +1,5 @@
 /// <reference types="vitest" />
+import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
 import vue from "@vitejs/plugin-vue";
 import { fileURLToPath, URL } from "url";
 import { defineConfig, type UserConfig } from "vite";
@@ -6,7 +7,12 @@ import { defineConfig, type UserConfig } from "vite";
 // https://vitejs.dev/config/
 
 export const config: UserConfig = {
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    VueI18nPlugin({
+      globalSFCScope: true,
+    }),
+  ],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

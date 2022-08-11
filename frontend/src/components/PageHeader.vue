@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import {
-  CNavbar,
-  CContainer,
-  CNavbarBrand,
-  CNavbarNav,
+CContainer,
+CNavbar,
+CNavbarBrand,
+CNavbarNav
 } from "@coreui/bootstrap-vue";
+import { useI18n } from "vue-i18n";
+import { useUserStore } from "../stores/user";
 import LoginButton from "./LoginButton.vue";
 import MainNavLink from "./MainNavLink.vue";
-import { useUserStore } from "../stores/user";
 const userStore = useUserStore();
+const { t } = useI18n();
 </script>
 
 <template>
@@ -22,14 +24,29 @@ const userStore = useUserStore();
         <img src="@/assets/logo.png" alt="FMN logo" height="40" />
       </CNavbarBrand>
       <CNavbarNav class="align-items-center">
-        <MainNavLink to="/">Home</MainNavLink>
-        <MainNavLink to="/about">About</MainNavLink>
-        <MainNavLink to="/rules" v-if="userStore.loggedIn">Rules</MainNavLink>
-        <MainNavLink to="/destinations" v-if="userStore.loggedIn"
-          >Destinations</MainNavLink
-        >
+        <MainNavLink to="/">{{ t("home") }}</MainNavLink>
+        <MainNavLink to="/about">{{ t("about") }}</MainNavLink>
+        <MainNavLink to="/rules" v-if="userStore.loggedIn">{{
+          t("rules")
+        }}</MainNavLink>
+        <MainNavLink to="/destinations" v-if="userStore.loggedIn">{{
+          t("destinations")
+        }}</MainNavLink>
         <LoginButton />
       </CNavbarNav>
     </CContainer>
   </CNavbar>
 </template>
+
+<i18n lang="yaml">
+en-US:
+  home: "Home"
+  about: "About"
+  rules: "Rules"
+  destinations: "Destinations"
+fr-FR:
+  home: "Accueil"
+  about: "À propos"
+  rules: "Règles"
+  destinations: "Destinations"
+</i18n>
