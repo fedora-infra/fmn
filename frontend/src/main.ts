@@ -8,10 +8,8 @@ import auth from "./auth";
 import router from "./router";
 import pinia from "./stores";
 
-import "./assets/main.css";
-
-import "bootstrap";
 import "fedora-bootstrap/dist/fedora-bootstrap.min.css";
+import "./assets/main.css";
 
 const app = createApp(App);
 
