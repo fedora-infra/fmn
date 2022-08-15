@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {
-CContainer,
-CNavbar,
-CNavbarBrand,
-CNavbarNav
+  CContainer,
+  CNavbar,
+  CNavbarBrand,
+  CNavbarNav,
 } from "@coreui/bootstrap-vue";
 import { useI18n } from "vue-i18n";
 import { useUserStore } from "../stores/user";
