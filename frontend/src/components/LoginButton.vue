@@ -16,12 +16,12 @@
 
 <script setup lang="ts">
 import {
-CButton,
-CDropdown,
-CDropdownItem,
-CDropdownMenu,
-CDropdownToggle,
-CNavItem
+  CButton,
+  CDropdown,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle,
+  CNavItem,
 } from "@coreui/bootstrap-vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";

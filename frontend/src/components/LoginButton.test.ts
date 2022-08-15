@@ -11,6 +11,7 @@ import {
   type Mock,
 } from "vitest";
 import type { Component } from "vue";
+import { createI18n } from "vue-i18n";
 import * as auth from "../auth";
 import router from "../router";
 import { useUserStore } from "../stores/user";
@@ -29,9 +30,15 @@ const loginUser = (userStore: ReturnType<typeof useUserStore>) => {
 
 const render = (component: Component) => {
   const pinia = getActivePinia() as Pinia;
+  const i18n = createI18n({
+    legacy: false,
+    locale: navigator.language,
+    fallbackLocale: "en-US",
+    messages: {},
+  });
   return baseRender(component, {
     global: {
-      plugins: [router, pinia],
+      plugins: [router, pinia, i18n],
       provide: {
         auth: vi.fn(),
       },
