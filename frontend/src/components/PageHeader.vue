@@ -7,6 +7,8 @@ import {
 } from "@coreui/bootstrap-vue";
 import LoginButton from "./LoginButton.vue";
 import MainNavLink from "./MainNavLink.vue";
+import { useUserStore } from "../stores/user";
+const userStore = useUserStore();
 </script>
 
 <template>
@@ -22,8 +24,10 @@ import MainNavLink from "./MainNavLink.vue";
       <CNavbarNav class="align-items-center">
         <MainNavLink to="/">Home</MainNavLink>
         <MainNavLink to="/about">About</MainNavLink>
-        <MainNavLink to="/rules">Rules</MainNavLink>
-        <MainNavLink to="/destinations">Destinations</MainNavLink>
+        <MainNavLink to="/rules" v-if="userStore.loggedIn">Rules</MainNavLink>
+        <MainNavLink to="/destinations" v-if="userStore.loggedIn"
+          >Destinations</MainNavLink
+        >
         <LoginButton />
       </CNavbarNav>
     </CContainer>
