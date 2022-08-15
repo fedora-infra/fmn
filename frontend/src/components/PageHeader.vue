@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import HelloWorld from "./HelloWorld.vue";
 import LoginButton from "./LoginButton.vue";
 import MainNavLink from "./MainNavLink.vue";
 </script>
@@ -25,11 +24,5 @@ import MainNavLink from "./MainNavLink.vue";
         </ul>
       </div>
     </nav>
-
-    <div class="bg-light border-bottom py-5">
-      <div class="container">
-        <HelloWorld msg="You did it!!!" />
-      </div>
-    </div>
   </header>
 </template>
