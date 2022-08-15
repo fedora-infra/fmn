@@ -1,26 +1,28 @@
 <template>
-  <li class="nav-item" :class="{ dropdown: userStore.loggedIn }">
-    <template v-if="userStore.loggedIn">
-      <a
-        class="nav-link dropdown-toggle"
-        href="#"
-        role="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        <img :alt="userStore.user.username!" :src="avatarURL" />
-      </a>
-      <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" @click.prevent="doLogout">Logout</a></li>
-      </ul>
-    </template>
-    <a v-else @click.prevent="doLogin()" href="#" class="btn btn-primary">
+  <CDropdown v-if="userStore.loggedIn" variant="nav-item" alignment="end">
+    <CDropdownToggle component="a">
+      <img :alt="userStore.user.username!" :src="avatarURL" />
+    </CDropdownToggle>
+    <CDropdownMenu>
+      <CDropdownItem @click="doLogout()">Logout</CDropdownItem>
+    </CDropdownMenu>
+  </CDropdown>
+  <CNavItem v-else>
+    <CButton @click.prevent="doLogin()" component="a" color="primary">
       Login
-    </a>
-  </li>
+    </CButton>
+  </CNavItem>
 </template>
 
 <script setup lang="ts">
+import {
+  CButton,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
+  CNavItem,
+} from "@coreui/bootstrap-vue";
 import { useRoute, useRouter } from "vue-router";
 import { login, logout, useAuth } from "../auth";
 import { useUserStore } from "../stores/user";
