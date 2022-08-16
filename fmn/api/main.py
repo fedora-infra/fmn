@@ -35,3 +35,42 @@ def read_root():
 @app.get("/user/{username}/info")
 def get_user_info(username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)):
     return fasjson_client.get_user(username=username).result
+
+
+@app.get("/user/{username}/destinations")
+def get_user_destinations(username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)):
+    user = fasjson_client.get_user(username=username).result
+    matrix_nicks = [n for n in user.get("ircnicks", []) if n.startswith("matrix:")]
+    irc_nicks = [n for n in user.get("ircnicks", []) if not n.startswith("matrix:")]
+    return [
+        {"name": "email", "title": "Email", "values": user["emails"]},
+        {"name": "irc", "title": "IRC", "values": irc_nicks},
+        {"name": "matrix", "title": "Matrix", "values": matrix_nicks},
+    ]
+
+
+@app.get("/rules")
+def get_rules():
+    return [
+        {"name": "artifact-owned", "title": "Artifacts owned by me"},
+        {"name": "artifact-group-owned", "title": "Artifacts owned by one of my groups"},
+        {"name": "artifact-followed", "title": "Artifacts I follow"},
+        {"name": "related-events", "title": "Events referring to me"},
+        {"name": "user-followed", "title": "Users I follow"},
+    ]
+
+
+@app.get("/filters")
+def get_filters():
+    # Read the installed schemas and extract the applications. Return sorted, please :-)
+    available_apps = [
+        "anitya",
+        "bodhi",
+        "koji",
+    ]
+    return [
+        {"name": "application", "title": "Application", "choices": available_apps},
+        {"name": "severity", "title": "Severity", "choices": ["debug", "info", "warning", "error"]},
+        {"name": "my-actions", "title": "My Actions"},
+        {"name": "topic", "title": "Topic", "str_arg": True},
+    ]

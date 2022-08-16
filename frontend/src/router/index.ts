@@ -25,6 +25,12 @@ const router = createRouter({
       meta: { auth: true },
     },
     {
+      path: "/rules/new",
+      name: "new-rule",
+      component: () => import("../views/NewRuleView.vue"),
+      meta: { auth: true },
+    },
+    {
       path: "/destinations",
       name: "destinations",
       component: () => import("../views/DestinationsView.vue"),
