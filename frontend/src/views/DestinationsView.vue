@@ -4,7 +4,7 @@ import { apiGet } from "../api";
 import { useUserStore } from "../stores/user";
 
 const userStore = useUserStore();
-const route = `/userinfo/${userStore.username}`;
+const route = `/user/${userStore.username}/info`;
 const { isLoading, isError, data, error } = useQuery(route, apiGet);
 </script>
 
