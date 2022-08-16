@@ -36,6 +36,6 @@ def test_get_userinfo(client, mocker):
         "http://fasjson.example.test/v1/users/dummy/",
         json={"result": user_data},
     )
-    response = client.get("/userinfo/dummy")
+    response = client.get("/user/dummy/info")
     assert response.status_code == 200
     assert response.json() == user_data

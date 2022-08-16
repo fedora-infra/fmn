@@ -32,6 +32,6 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/userinfo/{username}")
-def get_userinfo(username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)):
+@app.get("/user/{username}/info")
+def get_user_info(username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)):
     return fasjson_client.get_user(username=username).result
