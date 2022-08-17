@@ -36,31 +36,3 @@ export const TRACKING_RULES: TrackingRule[] = [
     description: "Users I follow",
   },
 ];
-export const TRACKING_RULES_2: { [key: string]: TrackingRule } = {
-  "artifact-owned": {
-    name: "artifact-owned",
-    label: "Artifacts owned by me",
-    description: "Artifacts (rpms, modules, containers) that are owned by me",
-  },
-  "artifact-group-owned": {
-    name: "artifact-group-owned",
-    label: "Artifacts owned by one of my groups",
-    description:
-      "Artifacts (rpms, modules, containers) that are owned by one of my groups",
-  },
-  "artifact-followed": {
-    name: "artifact-followed",
-    label: "Artifacts I follow",
-    description: "Artifacts I follow",
-  },
-  "related-events": {
-    name: "related-events",
-    label: "Events referring to me",
-    description: "Events referring to me",
-  },
-  "user-followed": {
-    name: "user-followed",
-    label: "Users I follow",
-    description: "Users I follow",
-  },
-};
