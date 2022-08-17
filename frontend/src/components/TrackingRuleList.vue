@@ -3,12 +3,15 @@ import type { QueryFunction } from "react-query/types/core";
 import { useQuery } from "vue-query";
 import { apiGet } from "../api";
 import type { TrackingRule } from "../api/types";
+import Multiselect from '@vueform/multiselect'
+
 
 const route = "/rules";
 const { isLoading, isError, data, error } = useQuery(
   route,
   apiGet as QueryFunction<TrackingRule[]>
 );
+
 </script>
 
 <template>
@@ -16,17 +19,20 @@ const { isLoading, isError, data, error } = useQuery(
   <span v-else-if="isError">Error: {{ error }}</span>
   <!-- We can assume by this point that `isSuccess === true` -->
   <div v-else>
-    <div v-for="rule in data" :key="rule.name" class="form-check">
-      <input
-        class="form-check-input"
-        type="radio"
-        name="trackingrule"
-        :id="`trackingrule-${rule.name}`"
-        :value="rule.name"
-      />
-      <label class="form-check-label" :for="`trackingrule-${rule.name}`">
-        {{ rule.title }}
-      </label>
-    </div>
+    <Multiselect
+      v-model="value"
+      placeholder="Choose a Tracking Rule"
+      :options="data"
+      searchable = true
+    >
+      <template v-slot:option="{ option }">
+      <div>
+        <strong>{{ option.label }}</strong>
+        <div>{{option.description}} </div>
+      </div>
+      </template>
+    </Multiselect>
   </div>
 </template>
+
+<style src="@vueform/multiselect/themes/default.css"></style>

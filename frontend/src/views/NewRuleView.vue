@@ -9,12 +9,10 @@ import TrackingRuleList from "../components/TrackingRuleList.vue";
     <h1>Add a New Rule</h1>
     <form>
       <div class="mb-3">
-        <p>Choose a tracking rule:</p>
         <TrackingRuleList />
       </div>
 
       <div class="mb-3">
-        <p>Choose a destination:</p>
         <DestinationList />
       </div>
 
