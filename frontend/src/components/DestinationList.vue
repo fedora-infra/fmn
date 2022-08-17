@@ -4,7 +4,6 @@ import { useQuery } from "vue-query";
 import { apiGet } from "../api";
 import type { Destination } from "../api/types";
 import { useUserStore } from "../stores/user";
-import Multiselect from '@vueform/multiselect'
 
 const userStore = useUserStore();
 const route = `/user/${userStore.username}/destinations`;
@@ -19,12 +18,18 @@ const { isLoading, isError, data, error } = useQuery(
   <span v-else-if="isError">Error: {{ error }}</span>
   <!-- We can assume by this point that `isSuccess === true` -->
   <div v-else>
-    <Multiselect
-  v-model="value"
-  mode="tags"
-  :close-on-select="false"
-  :groups="true"
-  :options="data"
-/>
+    <FormKit
+      type="multiselect"
+      wrapper-class="$reset"
+      inner-class="$reset"
+      name="destination"
+      mode="tags"
+      :close-on-select="false"
+      groups
+      group-hide-empty
+      :msOptions="data"
+      placeholder="Choose one or more Destinations"
+      validation="required"
+    />
   </div>
 </template>

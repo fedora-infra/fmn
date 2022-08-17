@@ -1,7 +1,8 @@
-import { useAuth } from "../auth";
-import type { UserInfoResponseJson } from "../auth/userinfo_request";
 import type { TokenResponse } from "@openid/appauth";
 import { defineStore } from "pinia";
+import { useRoute } from "vue-router";
+import { login, useAuth } from "../auth";
+import type { UserInfoResponseJson } from "../auth/userinfo_request";
 
 export const useUserStore = defineStore({
   id: "user",
@@ -60,6 +61,15 @@ export const useUserStore = defineStore({
         } catch (err) {
           console.log("Could not refresh the access token:", err);
           this.logout();
+          // TODO: redirect to the home page if we were on a protected page
+          const currentRoute = useRoute();
+          if (currentRoute.meta.auth) {
+            console.log(
+              "Logging in again, wlll redirect back to",
+              currentRoute
+            );
+            await login(auth, currentRoute.fullPath);
+          }
         }
       }
       return this.accessToken;

@@ -53,28 +53,11 @@ def get_user_destinations(
     ]
 
 
-@app.get("/rules")
-def get_rules():  # pragma: no cover
-    return [
-        {"value": "artifact-owned", "label": "Artifacts owned by me", "description": "Artifacts (rpms, modules, containers) that are owned by me"},
-        {"value": "artifact-group-owned", "label": "Artifacts owned by one of my groups", "description": "Artifacts (rpms, modules, containers) that are owned by one of my groups"},
-        {"value": "artifact-followed", "label": "Artifacts I follow", "description": "Artifacts I follow"},
-        {"value": "related-events", "label": "Events referring to me", "description": "Events referring to me"},
-        {"value": "user-followed", "label": "Users I follow", "description": "Users I follow"},
-    ]
-
-
-@app.get("/filters")
-def get_filters():  # pragma: no cover
+@app.get("/applications")
+def get_applications():  # pragma: no cover
     # Read the installed schemas and extract the applications. Return sorted, please :-)
-    available_apps = [
+    return [
         "anitya",
         "bodhi",
         "koji",
-    ]
-    return [
-        {"name": "application", "title": "Application", "choices": available_apps},
-        {"name": "severity", "title": "Severity", "choices": ["debug", "info", "warning", "error"]},
-        {"name": "my-actions", "title": "My Actions"},
-        {"name": "topic", "title": "Topic", "str_arg": True},
     ]

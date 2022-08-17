@@ -1,11 +1,14 @@
+import type { DEBUG, ERROR, INFO, WARNING } from "./constants";
+
 export interface TrackingRule {
   name: string;
-  title: string;
+  label: string;
+  description: string;
 }
 
 export interface Destination {
   name: string;
-  title: string;
+  label: string;
   values: string[];
 }
 
@@ -20,7 +23,8 @@ export interface Application {
   name: string;
 }
 
-export interface Severity {
-  name: string;
-  level: number;
-}
+export type Severity =
+  | typeof DEBUG
+  | typeof INFO
+  | typeof WARNING
+  | typeof ERROR;

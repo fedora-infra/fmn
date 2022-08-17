@@ -1,3 +1,4 @@
+import "@formkit/themes/genesis";
 import { plugin as FormKitPlugin } from "@formkit/vue";
 import { createApp } from "vue";
 import { VueQueryPlugin } from "vue-query";
@@ -7,6 +8,7 @@ import auth from "./auth";
 import i18n from "./i18n";
 import router from "./router";
 import pinia from "./stores";
+import { config as formkitConfig } from "./util/forms";
 
 import "fedora-bootstrap/dist/fedora-bootstrap.min.css";
 import "./assets/main.css";
@@ -17,7 +19,7 @@ app.use(pinia);
 app.use(router);
 app.use(auth, { router });
 app.use(VueQueryPlugin, vueQueryPluginOptions);
-app.use(FormKitPlugin);
+app.use(FormKitPlugin, formkitConfig);
 app.use(i18n);
 
 app.mount("#app");

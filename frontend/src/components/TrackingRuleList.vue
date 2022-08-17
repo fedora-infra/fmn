@@ -1,38 +1,31 @@
 <script setup lang="ts">
-import type { QueryFunction } from "react-query/types/core";
-import { useQuery } from "vue-query";
-import { apiGet } from "../api";
-import type { TrackingRule } from "../api/types";
-import Multiselect from '@vueform/multiselect'
-
-
-const route = "/rules";
-const { isLoading, isError, data, error } = useQuery(
-  route,
-  apiGet as QueryFunction<TrackingRule[]>
-);
-
+import { TRACKING_RULES } from "../api/constants";
 </script>
 
 <template>
-  <span v-if="isLoading">Loading...</span>
-  <span v-else-if="isError">Error: {{ error }}</span>
-  <!-- We can assume by this point that `isSuccess === true` -->
-  <div v-else>
-    <Multiselect
-      v-model="value"
-      placeholder="Choose a Tracking Rule"
-      :options="data"
-      searchable = true
-    >
-      <template v-slot:option="{ option }">
+  <FormKit
+    type="multiselect"
+    name="tracking_rule"
+    wrapper-class="$reset"
+    inner-class="$reset"
+    placeholder="Choose a Tracking Rule"
+    :msOptions="
+      TRACKING_RULES.map((tr) => ({
+        value: tr.name,
+        label: tr.label,
+        description: tr.description,
+      }))
+    "
+    searchable
+    validation="required"
+  >
+    <template v-slot:option="{ option }">
       <div>
         <strong>{{ option.label }}</strong>
-        <div>{{option.description}} </div>
+        <div>{{ option.description }}</div>
       </div>
-      </template>
-    </Multiselect>
-  </div>
+    </template>
+  </FormKit>
 </template>
 
 <style src="@vueform/multiselect/themes/default.css"></style>
