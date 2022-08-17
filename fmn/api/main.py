@@ -33,12 +33,16 @@ def read_root():
 
 
 @app.get("/user/{username}/info")
-def get_user_info(username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)):
+def get_user_info(
+    username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
+):  # pragma: no cover
     return fasjson_client.get_user(username=username).result
 
 
 @app.get("/user/{username}/destinations")
-def get_user_destinations(username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)):
+def get_user_destinations(
+    username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
+):  # pragma: no cover
     user = fasjson_client.get_user(username=username).result
     matrix_nicks = [n for n in user.get("ircnicks", []) if n.startswith("matrix:")]
     irc_nicks = [n for n in user.get("ircnicks", []) if not n.startswith("matrix:")]
@@ -50,7 +54,7 @@ def get_user_destinations(username, fasjson_client: FasjsonClient = Depends(get_
 
 
 @app.get("/rules")
-def get_rules():
+def get_rules():  # pragma: no cover
     return [
         {"name": "artifact-owned", "title": "Artifacts owned by me"},
         {"name": "artifact-group-owned", "title": "Artifacts owned by one of my groups"},
@@ -61,7 +65,7 @@ def get_rules():
 
 
 @app.get("/filters")
-def get_filters():
+def get_filters():  # pragma: no cover
     # Read the installed schemas and extract the applications. Return sorted, please :-)
     available_apps = [
         "anitya",
