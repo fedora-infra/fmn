@@ -47,20 +47,20 @@ def get_user_destinations(
     matrix_nicks = [n for n in user.get("ircnicks", []) if n.startswith("matrix:")]
     irc_nicks = [n for n in user.get("ircnicks", []) if not n.startswith("matrix:")]
     return [
-        {"name": "email", "title": "Email", "values": user["emails"]},
-        {"name": "irc", "title": "IRC", "values": irc_nicks},
-        {"name": "matrix", "title": "Matrix", "values": matrix_nicks},
+        {"name": "email", "label": "Email", "options": user["emails"]},
+        {"name": "irc", "label": "IRC", "options": irc_nicks},
+        {"name": "matrix", "label": "Matrix", "options": matrix_nicks},
     ]
 
 
 @app.get("/rules")
 def get_rules():  # pragma: no cover
     return [
-        {"name": "artifact-owned", "title": "Artifacts owned by me"},
-        {"name": "artifact-group-owned", "title": "Artifacts owned by one of my groups"},
-        {"name": "artifact-followed", "title": "Artifacts I follow"},
-        {"name": "related-events", "title": "Events referring to me"},
-        {"name": "user-followed", "title": "Users I follow"},
+        {"value": "artifact-owned", "label": "Artifacts owned by me", "description": "Artifacts (rpms, modules, containers) that are owned by me"},
+        {"value": "artifact-group-owned", "label": "Artifacts owned by one of my groups", "description": "Artifacts (rpms, modules, containers) that are owned by one of my groups"},
+        {"value": "artifact-followed", "label": "Artifacts I follow", "description": "Artifacts I follow"},
+        {"value": "related-events", "label": "Events referring to me", "description": "Events referring to me"},
+        {"value": "user-followed", "label": "Users I follow", "description": "Users I follow"},
     ]
 
 
