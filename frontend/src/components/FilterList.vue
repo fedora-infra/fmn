@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { QueryFunction } from "react-query/types/core";
+import type { QueryFunction } from "react-query/types/core";
 import { useQuery } from "vue-query";
 import { apiGet } from "../api";
-import { Filter } from "../api/types";
+import type { Filter } from "../api/types";
 
 const route = "/filters";
 const { isLoading, isError, data, error } = useQuery(
