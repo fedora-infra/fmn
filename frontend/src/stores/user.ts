@@ -56,6 +56,7 @@ export const useUserStore = defineStore({
           return null;
         }
         try {
+          await auth.fetchServiceConfiguration();
           const result = await auth.makeAccessTokenRequest(this.refreshToken);
           this.importTokenResponse(result);
         } catch (err) {
@@ -65,7 +66,8 @@ export const useUserStore = defineStore({
           const currentRoute = useRoute();
           if (currentRoute.meta.auth) {
             console.log(
-              "Logging in again, wlll redirect back to",
+              "Logging in again, will redirect back to",
+              currentRoute.fullPath,
               currentRoute
             );
             await login(auth, currentRoute.fullPath);
