@@ -53,6 +53,34 @@ def get_user_destinations(
     ]
 
 
+@app.get("/user/{username}/rules")
+def get_user_rules(username):  # pragma: no cover
+    return [
+        {
+            "name": "My Completed Koji Builds",
+            "tracking_rule": "artifact-owned",
+            "filters": {
+                "severity": None,
+                "my_actions": True,
+                "topic": "org.fedoraproject.koji.build-complete",
+                "application": "koji",
+            },
+            "destination": [f"matrix:/{username}"],
+        },
+        {
+            "name": "All Events related to me",
+            "tracking_rule": "related-events",
+            "filters": {
+                "severity": "warning",
+                "my_actions": True,
+                "topic": None,
+                "application": None,
+            },
+            "destination": [f"irc:/{username}", f"{username}@tinystage.test"],
+        },
+    ]
+
+
 @app.get("/applications")
 def get_applications():  # pragma: no cover
     # Read the installed schemas and extract the applications. Return sorted, please :-)
