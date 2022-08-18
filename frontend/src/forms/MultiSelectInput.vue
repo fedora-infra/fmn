@@ -3,6 +3,13 @@ import type { FormKitFrameworkContext } from "@formkit/core";
 import Multiselect from "@vueform/multiselect";
 
 const props = defineProps<{ context: FormKitFrameworkContext }>();
+const { msOptions, ...msProps } = props.context.node.props;
+msProps.options = msOptions;
+msProps.id = props.context.id;
+msProps.name = props.context.node.name;
+msProps.value = props.context._value;
+msProps.disabled = props.context.disabled;
+
 function handleChange(value: string) {
   props.context.node.input(value);
 }
@@ -11,15 +18,7 @@ function handleChange(value: string) {
 </script>
 
 <template>
-  <Multiselect
-    :id="props.context.id"
-    :name="props.context.node.name"
-    :value="props.context._value"
-    @change="handleChange"
-    :disabled="props.context.disabled"
-    v-bind="props.context.node.props"
-    :options="props.context.node.props.msOptions"
-  >
+  <Multiselect v-bind="msProps" @change="handleChange">
     <template
       v-for="(slot, slotName) of (props.context.slots as Record<string, () => void>)"
       :key="slotName"

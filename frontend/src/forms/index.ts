@@ -22,6 +22,9 @@ export const config = defaultConfig({
   },
   config: {
     classes: generateClasses({
+      global: {
+        messages: "list-unstyled text-danger",
+      },
       text: {
         outer: "$reset",
         input: "$reset form-control",
