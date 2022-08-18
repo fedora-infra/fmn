@@ -20,8 +20,6 @@ const { isLoading, isError, data, error } = useQuery(
   <div v-else>
     <FormKit
       type="multiselect"
-      wrapper-class="$reset"
-      inner-class="$reset"
       name="destination"
       mode="tags"
       :close-on-select="false"

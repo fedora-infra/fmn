@@ -6,8 +6,6 @@ import { TRACKING_RULES } from "../api/constants";
   <FormKit
     type="multiselect"
     name="tracking_rule"
-    wrapper-class="$reset"
-    inner-class="$reset"
     placeholder="Choose a Tracking Rule"
     :msOptions="
       TRACKING_RULES.map((tr) => ({

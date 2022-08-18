@@ -1,4 +1,3 @@
-import "@formkit/themes/genesis";
 import { plugin as FormKitPlugin } from "@formkit/vue";
 import { createApp } from "vue";
 import { VueQueryPlugin } from "vue-query";
