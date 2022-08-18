@@ -14,7 +14,7 @@ const { isLoading, isError, data, error } = useQuery(
 </script>
 
 <template>
-  <p>Only notify for the selected application:</p>
+  <p class="mb-0">Only notify for the selected application:</p>
   <p v-if="isLoading">Loading...</p>
   <p v-else-if="isError">Error: {{ error }}</p>
   <FilterWithSelect v-else name="application" :options="data || []" />

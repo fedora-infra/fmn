@@ -28,7 +28,7 @@ const handleSubmit = async (val: any) => {
     </div>
 
     <div class="mb-3">
-      <p>Choose a filter if you want:</p>
+      <h4>Choose a filter (optional)</h4>
       <FilterList />
     </div>
   </FormKit>

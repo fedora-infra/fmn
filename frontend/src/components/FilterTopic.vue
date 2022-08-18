@@ -4,7 +4,9 @@
 </script>
 
 <template>
-  <p>Only notify if the message topic matches the following pattern:</p>
+  <p class="mb-0">
+    Only notify if the message topic matches the following pattern:
+  </p>
   <FormKit
     type="text"
     name="topic"

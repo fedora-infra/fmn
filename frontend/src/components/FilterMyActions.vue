@@ -4,10 +4,6 @@
 </script>
 
 <template>
-  <FormKit
-    type="checkbox"
-    name="my_actions"
-    label="My actions"
-    help="Notify even if I'm the author of the action"
-  />
+  <p class="mb-0">Notify even if I'm the author of the action:</p>
+  <FormKit type="checkbox" name="my_actions" label="My actions" />
 </template>

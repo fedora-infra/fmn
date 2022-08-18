@@ -22,9 +22,6 @@ export const config = defaultConfig({
   },
   config: {
     classes: generateClasses({
-      // global: { // applies to all input types
-      //   //outer: 'SHAZAM'
-      // },
       text: {
         outer: "$reset",
         input: "$reset form-control",
