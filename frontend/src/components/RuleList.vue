@@ -1,36 +1,29 @@
 <script setup lang="ts">
 import {
+  CButton,
   CListGroup,
   CListGroupItem,
-  CButton,
   CModal,
+  CModalBody,
   CModalHeader,
   CModalTitle,
-  CModalBody,
 } from "@coreui/bootstrap-vue";
 import type { QueryFunction } from "react-query/types/core";
+import { ref } from "vue";
 import { useQuery } from "vue-query";
 import { apiGet } from "../api";
-import { useUserStore } from "../stores/user";
+import type { Rule } from "../api/types";
 import NewRuleForm from "../components/NewRuleForm.vue";
 import RuleListItem from "../components/RuleListItem.vue";
+import { useUserStore } from "../stores/user";
 
 const userStore = useUserStore();
 const route = `/user/${userStore.username}/rules`;
 const { isLoading, isError, data, error } = useQuery(
   route,
-  apiGet as QueryFunction<string[]>
+  apiGet as QueryFunction<Rule[]>
 );
-</script>
-
-<script lang="ts">
-export default {
-  data() {
-    return {
-      visibleNewRuleModal: false,
-    };
-  },
-};
+const visibleNewRuleModal = ref(false);
 </script>
 
 <template>
@@ -41,7 +34,7 @@ export default {
       <CListGroupItem
         class="d-flex justify-content-between align-items-center bg-light"
       >
-        <span class="fw-bold">{{ data.length }} rules </span>
+        <span class="fw-bold">{{ data ? data.length : "?" }} rules </span>
         <CButton
           color="primary"
           @click="
@@ -58,6 +51,7 @@ export default {
               visibleNewRuleModal = false;
             }
           "
+          size="lg"
         >
           <CModalHeader>
             <CModalTitle>Create New Rule</CModalTitle>
@@ -65,7 +59,7 @@ export default {
           <CModalBody><NewRuleForm /></CModalBody>
         </CModal>
       </CListGroupItem>
-      <RuleListItem v-for="rule in data" :rule="rule"/>
+      <RuleListItem v-for="rule in data" :key="rule.name" :rule="rule" />
     </CListGroup>
   </template>
 </template>

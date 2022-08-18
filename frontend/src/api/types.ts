@@ -28,3 +28,10 @@ export type Severity =
   | typeof INFO
   | typeof WARNING
   | typeof ERROR;
+
+export interface Rule {
+  name: string;
+  tracking_rule: TrackingRule;
+  destinations: Destination[];
+  filters: Filter[];
+}

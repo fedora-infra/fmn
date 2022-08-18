@@ -13,6 +13,9 @@ const handleSubmit = async (val: any) => {
 <template>
   <FormKit type="form" id="new-rule" :actions="false" @submit="handleSubmit">
     <div class="mb-3">
+      <FormKit name="name" type="text" placeholder="Rule name" />
+    </div>
+    <div class="mb-3">
       <TrackingRuleList />
     </div>
 
