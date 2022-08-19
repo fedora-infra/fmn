@@ -35,3 +35,12 @@ export interface Rule {
   destinations: Destination[];
   filters: Filter[];
 }
+
+interface PostErrorDetail {
+  loc: string[];
+  msg: string;
+  type: string;
+}
+export interface PostError {
+  detail: PostErrorDetail[];
+}

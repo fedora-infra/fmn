@@ -20,7 +20,7 @@ const { isLoading, isError, data, error } = useQuery(
   <div v-else>
     <FormKit
       type="multiselect"
-      name="destination"
+      name="destinations"
       mode="tags"
       :close-on-select="false"
       groups

@@ -1,14 +1,45 @@
 <script setup lang="ts">
+import { apiPost } from "@/api";
+import type { PostError } from "@/api/types";
 import { CButton } from "@coreui/bootstrap-vue";
-import { FormKit } from "@formkit/vue";
+import { FormKit, setErrors } from "@formkit/vue";
+import type { AxiosError } from "axios";
+import { useMutation } from "vue-query";
+import { useRouter } from "vue-router";
+import { useUserStore } from "../stores/user";
 import DestinationList from "./DestinationList.vue";
 import FilterList from "./FilterList.vue";
 import TrackingRuleList from "./TrackingRuleList.vue";
+
+const userStore = useUserStore();
+const router = useRouter();
+const { isLoading, error, isError, isSuccess, mutateAsync } = useMutation(
+  apiPost,
+  {
+    onSuccess: (data, variables, context) => {
+      // TODO: Add flash / snackbar message
+      router.push("/rules");
+    },
+    onError: (data: AxiosError<PostError>, variables, context) => {
+      console.log(data);
+      if (!data.response) {
+        return;
+      }
+      setErrors(
+        "new-rule",
+        data.response.data.detail.map(
+          (e) => `Server error: ${e.loc.at(-1)}: ${e.msg}`
+        )
+      );
+    },
+  }
+);
 
 /* eslint-disable */
 // warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
 const handleSubmit = async (val: any) => {
   console.log("Will submit the new rule:", val);
+  await mutateAsync({ url: `/user/${userStore.username}/rules`, data: val });
 };
 /* eslint-enable */
 </script>

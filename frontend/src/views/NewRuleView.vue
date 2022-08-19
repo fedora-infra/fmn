@@ -4,7 +4,7 @@ import NewRuleForm from "../components/NewRuleForm.vue";
 
 <template>
   <div class="rules">
-    <h1>Add a New Rule</h1>
+    <h1 class="mb-4">Add a New Rule</h1>
     <NewRuleForm />
   </div>
 </template>
