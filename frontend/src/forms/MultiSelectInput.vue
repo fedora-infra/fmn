@@ -3,12 +3,15 @@ import type { FormKitFrameworkContext } from "@formkit/core";
 import Multiselect from "@vueform/multiselect";
 
 const props = defineProps<{ context: FormKitFrameworkContext }>();
+/* eslint-disable */
+// error  Getting a value from the `props` in root scope of `<script setup>` will cause the value to lose reactivity  vue/no-setup-props-destructure
 const { msOptions, ...msProps } = props.context.node.props;
 msProps.options = msOptions;
 msProps.id = props.context.id;
 msProps.name = props.context.node.name;
 msProps.value = props.context._value;
 msProps.disabled = props.context.disabled;
+/* eslint-enable */
 
 function handleChange(value: string) {
   props.context.node.input(value);

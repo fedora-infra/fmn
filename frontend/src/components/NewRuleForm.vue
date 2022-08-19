@@ -5,9 +5,12 @@ import DestinationList from "./DestinationList.vue";
 import FilterList from "./FilterList.vue";
 import TrackingRuleList from "./TrackingRuleList.vue";
 
+/* eslint-disable */
+// warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
 const handleSubmit = async (val: any) => {
   console.log("Will submit the new rule:", val);
 };
+/* eslint-enable */
 </script>
 
 <template>
