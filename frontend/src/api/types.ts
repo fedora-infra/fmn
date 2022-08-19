@@ -31,7 +31,7 @@ export type Severity =
 
 export interface Rule {
   name: string;
-  tracking_rule: TrackingRule;
+  tracking_rule: string;
   destinations: Destination[];
   filters: Filter[];
 }
