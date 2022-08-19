@@ -35,29 +35,7 @@ const visibleNewRuleModal = ref(false);
         class="d-flex justify-content-between align-items-center bg-light"
       >
         <span class="fw-bold">{{ data ? data.length : "?" }} rules </span>
-        <CButton
-          color="primary"
-          @click="
-            () => {
-              visibleNewRuleModal = true;
-            }
-          "
-          >Add a new rule</CButton
-        >
-        <CModal
-          :visible="visibleNewRuleModal"
-          @close="
-            () => {
-              visibleNewRuleModal = false;
-            }
-          "
-          size="lg"
-        >
-          <CModalHeader>
-            <CModalTitle>Create New Rule</CModalTitle>
-          </CModalHeader>
-          <CModalBody><NewRuleForm /></CModalBody>
-        </CModal>
+        <router-link to="/rules/new">Add a new rule</router-link>
       </CListGroupItem>
       <RuleListItem v-for="rule in data" :key="rule.name" :rule="rule" />
     </CListGroup>
