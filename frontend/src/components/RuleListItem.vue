@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { CListGroupItem } from "@coreui/bootstrap-vue";
 import { TRACKING_RULES } from "../api/constants";
-import type { Rule } from "../api/types";
+
+import type { Rule, TrackingRule } from "../api/types";
 const props = defineProps<{
   rule: Rule;
 }>();
 defineEmits<{ (e: "change", value: string | null): void }>();
+const tracking_rule = TRACKING_RULES.find(
+  (o) => o.name === props.rule.tracking_rule
+) as TrackingRule;
 </script>
 
 <template>
@@ -15,9 +19,7 @@ defineEmits<{ (e: "change", value: string | null): void }>();
     <div>
       <div class="fw-bold">{{ props.rule.name }}</div>
       <div>
-        {{
-          TRACKING_RULES.find((o) => o.name === props.rule.tracking_rule).label
-        }}
+        {{ tracking_rule.label }}
       </div>
     </div>
     <div>
