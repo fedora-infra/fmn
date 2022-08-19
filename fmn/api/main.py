@@ -65,7 +65,7 @@ def get_user_rules(username):  # pragma: no cover
                 "topic": "org.fedoraproject.koji.build-complete",
                 "application": "koji",
             },
-            "destination": [f"matrix:/{username}"],
+            "destinations": [f"matrix:/{username}"],
         },
         {
             "name": "All Events related to me",
@@ -76,7 +76,7 @@ def get_user_rules(username):  # pragma: no cover
                 "topic": None,
                 "application": None,
             },
-            "destination": [f"irc:/{username}", f"{username}@tinystage.test"],
+            "destinations": [f"irc:/{username}", f"{username}@tinystage.test"],
         },
     ]
 
