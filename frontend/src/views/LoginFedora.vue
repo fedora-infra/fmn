@@ -46,11 +46,11 @@ watch(
     }
     loading.value = false;
     // TODO: handle errors
-    let redirectTo = localStorage.getItem("redirect_to");
+    let redirectTo = sessionStorage.getItem("redirect_to");
     if (!redirectTo || redirectTo.match(/^\/login.*/)) {
       redirectTo = "/";
     }
-    localStorage.removeItem("redirect_to");
+    sessionStorage.removeItem("redirect_to");
     // TODO: add a flash message
     console.log("Will redirect to", redirectTo);
     router.push(redirectTo);
