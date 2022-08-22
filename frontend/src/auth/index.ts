@@ -73,6 +73,10 @@ export default (app: App, { router }: Args) => {
   });
 };
 
-export function useAuth(): Authenticator | undefined {
-  return inject("auth");
+export function useAuth(): Authenticator {
+  const auth = inject<Authenticator>("auth");
+  if (!auth) {
+    throw Error("Authenticator is not ready");
+  }
+  return auth;
 }

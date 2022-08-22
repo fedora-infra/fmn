@@ -14,9 +14,9 @@ import "./assets/main.css";
 
 const app = createApp(App);
 
-app.use(pinia);
 app.use(router);
 app.use(auth, { router });
+app.use(pinia);
 app.use(VueQueryPlugin, vueQueryPluginOptions);
 app.use(FormKitPlugin, formkitConfig);
 app.use(i18n);

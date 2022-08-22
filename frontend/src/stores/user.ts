@@ -1,7 +1,6 @@
 import type { TokenResponse } from "@openid/appauth";
 import { defineStore } from "pinia";
-import { useRoute } from "vue-router";
-import { login, useAuth } from "../auth";
+import { login } from "../auth";
 import type { UserInfoResponseJson } from "../auth/userinfo_request";
 
 export const useUserStore = defineStore({
@@ -46,10 +45,7 @@ export const useUserStore = defineStore({
       if (!this.accessToken) {
         return null;
       }
-      const auth = useAuth();
-      if (!auth) {
-        return null;
-      }
+      const auth = this.$auth;
       if (this.tokenExpiresAt && Date.now() / 1000 > this.tokenExpiresAt) {
         // Refresh the token
         if (!this.refreshToken) {
@@ -62,8 +58,8 @@ export const useUserStore = defineStore({
         } catch (err) {
           console.log("Could not refresh the access token:", err);
           this.logout();
-          // TODO: redirect to the home page if we were on a protected page
-          const currentRoute = useRoute();
+          const currentRoute = this.$router.currentRoute.value;
+          console.log("current route:", currentRoute);
           if (currentRoute.meta.auth) {
             console.log(
               "Logging in again, will redirect back to",
