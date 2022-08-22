@@ -24,7 +24,17 @@ const tracking_rule = TRACKING_RULES.find(
     </div>
     <div>
       <div>{{ rule.destinations }}</div>
-      <div>{{ rule.filters }}</div>
+      <div class="text-end">
+        <template
+          v-for="(value, filtername, index) in rule.filters"
+          :key="index"
+        >
+          <span class="badge text-bg-warning fw-normal ms-1" v-if="value"
+            ><strong>{{ filtername }}</strong
+            >:{{ value }}</span
+          >
+        </template>
+      </div>
     </div>
   </CListGroupItem>
 </template>
