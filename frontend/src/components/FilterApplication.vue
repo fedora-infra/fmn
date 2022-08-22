@@ -2,7 +2,6 @@
 import type { QueryFunction } from "react-query/types/core";
 import { useQuery } from "vue-query";
 import { apiGet } from "../api";
-import FilterWithSelect from "./FilterWithSelect.vue";
 
 // const props = defineProps<{ value: string | null }>();
 
@@ -14,8 +13,23 @@ const { isLoading, isError, data, error } = useQuery(
 </script>
 
 <template>
-  <p class="mb-0">Only notify for the selected application:</p>
-  <p v-if="isLoading">Loading...</p>
+  <p class="mb-0">Only notify for the selected applications:</p>
+  <p v-if="isLoading">
+    <input
+      type="text"
+      class="form-control"
+      disabled
+      value="Loading applications..."
+    />
+  </p>
   <p v-else-if="isError">Error: {{ error }}</p>
-  <FilterWithSelect v-else name="application" :options="data || []" />
+  <FormKit
+    type="multiselect"
+    name="applications"
+    placeholder="Select applications"
+    mode="tags"
+    :msOptions="data"
+    searchable
+    :close-on-select="false"
+  />
 </template>

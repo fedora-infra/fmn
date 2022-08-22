@@ -29,7 +29,7 @@ class Rule(BaseModel):
     name: str
     tracking_rule: str
     destinations: list[str]
-    filters: dict[str, Union[str, bool, None]]
+    filters: dict[str, Union[str, bool, None, list[str]]]
 
 
 def get_fasjson_client(settings: Settings = Depends(get_settings)):
@@ -69,10 +69,10 @@ def get_user_rules(username):  # pragma: no cover
             "name": "My Completed Koji Builds",
             "tracking_rule": "artifact-owned",
             "filters": {
-                "severity": None,
+                "severities": [],
                 "my_actions": True,
                 "topic": "org.fedoraproject.koji.build-complete",
-                "application": "koji",
+                "applications": ["koji"],
             },
             "destinations": [f"matrix:/{username}"],
         },
@@ -80,10 +80,10 @@ def get_user_rules(username):  # pragma: no cover
             "name": "All Events related to me",
             "tracking_rule": "related-events",
             "filters": {
-                "severity": "warning",
+                "severities": ["warning"],
                 "my_actions": True,
                 "topic": None,
-                "application": None,
+                "applications": [],
             },
             "destinations": [f"irc:/{username}", f"{username}@tinystage.test"],
         },

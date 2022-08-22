@@ -16,7 +16,6 @@ export interface Filter {
   name: string;
   title: string;
   choices?: string[];
-  str_arg?: boolean;
 }
 
 export interface Application {

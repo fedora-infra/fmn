@@ -6,8 +6,8 @@ import FilterTopic from "./FilterTopic.vue";
 
 /*
 const filters = reactive({
-  application: null,
-  severity: null,
+  applications: [],
+  severities: [],
   my_actions: false,
   topic: null,
 });
