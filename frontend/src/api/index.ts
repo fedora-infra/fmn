@@ -1,6 +1,6 @@
 import { useUserStore } from "@/stores/user";
 import axios, { type AxiosRequestConfig } from "axios";
-import type { MutationFunction, QueryFunction } from "react-query/types/core";
+import type { QueryFunction } from "react-query/types/core";
 import type { VueQueryPluginOptions } from "vue-query";
 import pinia from "../stores";
 
@@ -30,14 +30,7 @@ export const apiGet: QueryFunction = async ({ queryKey }) => {
   return response.data;
 };
 
-interface ApiPostArgs {
-  url: string;
-  data: unknown;
-}
-export const apiPost: MutationFunction<unknown, ApiPostArgs> = async ({
-  url,
-  data,
-}) => {
+export const apiPost = async (url: string, data: unknown) => {
   const userStore = useUserStore(pinia);
   const token = await userStore.getToken();
   const axiosConfig: AxiosRequestConfig = {};

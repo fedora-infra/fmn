@@ -93,6 +93,7 @@ def get_user_rules(username):  # pragma: no cover
 @app.post("/user/{username}/rules")
 def create_user_rule(username, rule: Rule):  # pragma: no cover
     print("Creating rule:", rule)
+    return rule
 
 
 @app.get("/applications")
