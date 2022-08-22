@@ -12,6 +12,8 @@ const multiselect = createInput(MultiSelectInput, {
     "groups",
     "groupHideEmpty",
     "searchable",
+    "class",
+    "classes",
   ],
 });
 

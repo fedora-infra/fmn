@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useAddRuleMutation } from "@/api/rules";
 import type { PostError, Rule } from "@/api/types";
+import { useToastStore } from "@/stores/toast";
 import type { FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";
@@ -9,6 +10,7 @@ import DestinationList from "./DestinationList.vue";
 import FilterList from "./FilterList.vue";
 import TrackingRuleList from "./TrackingRuleList.vue";
 
+const toastStore = useToastStore();
 const router = useRouter();
 
 const { mutateAsync } = useAddRuleMutation();
@@ -20,7 +22,12 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
   }
   try {
     const response = await mutateAsync(data);
-    // TODO: Add flash / snackbar message
+    // Success!
+    toastStore.addToast({
+      color: "success",
+      title: "Rule created",
+      content: `Rule "${response.name}" has been successfully created.`,
+    });
     router.push("/rules");
   } catch (err) {
     const error = err as AxiosError<PostError>;
