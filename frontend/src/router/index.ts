@@ -30,12 +30,6 @@ const router = createRouter({
       component: () => import("../views/NewRuleView.vue"),
       meta: { auth: true },
     },
-    {
-      path: "/destinations",
-      name: "destinations",
-      component: () => import("../views/DestinationsView.vue"),
-      meta: { auth: true },
-    },
   ],
 });
 

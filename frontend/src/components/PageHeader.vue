@@ -29,9 +29,6 @@ const { t } = useI18n();
         <MainNavLink to="/rules" v-if="userStore.loggedIn">{{
           t("rules")
         }}</MainNavLink>
-        <MainNavLink to="/destinations" v-if="userStore.loggedIn">{{
-          t("destinations")
-        }}</MainNavLink>
         <LoginButton />
       </CNavbarNav>
     </CContainer>
@@ -43,10 +40,8 @@ en-US:
   home: "Home"
   about: "About"
   rules: "Rules"
-  destinations: "Destinations"
 fr-FR:
   home: "Accueil"
   about: "À propos"
   rules: "Règles"
-  destinations: "Destinations"
 </i18n>
