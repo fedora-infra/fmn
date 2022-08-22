@@ -87,3 +87,21 @@
     </div>
   </footer>
 </template>
+
+<style>
+body {
+  position: relative;
+  min-height: 100vh;
+}
+
+.footer{
+  bottom:0;
+  position:absolute;
+  width:100%;
+  height: 22rem;
+}
+
+.container.main{
+  padding-bottom: 24rem;
+}
+</style>
