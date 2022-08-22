@@ -52,7 +52,7 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
     submit-label="Create Rule"
     :submit-attrs="{ class: ['btn', 'btn-primary'] }"
   >
-    <div class="mb-3">
+    <div class="mb-4">
       <FormKit
         name="name"
         type="text"
@@ -61,15 +61,17 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
         validation="required"
       />
     </div>
-    <div class="mb-3">
+    <div class="mb-4">
+      <h4>Choose what you want to track</h4>
       <TrackingRuleList />
     </div>
 
-    <div class="mb-3">
+    <div class="mb-4">
+      <h4>Choose where you want the notifications to go</h4>
       <DestinationList />
     </div>
 
-    <div class="mb-3">
+    <div class="mb-4">
       <h4>Choose a filter (optional)</h4>
       <FilterList />
     </div>

@@ -20,9 +20,17 @@ const handleChange = (key: string, value: string | boolean | null) => {
 
 <template>
   <FormKit type="group" name="filters">
-    <FilterApplication />
-    <FilterSeverity />
-    <FilterMyActions />
-    <FilterTopic />
+    <div class="mb-2">
+      <FilterApplication />
+    </div>
+    <div class="mb-2">
+      <FilterSeverity />
+    </div>
+    <div class="mb-2">
+      <FilterMyActions />
+    </div>
+    <div class="mb-2">
+      <FilterTopic />
+    </div>
   </FormKit>
 </template>
