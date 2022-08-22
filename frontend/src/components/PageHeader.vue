@@ -20,11 +20,10 @@ const { t } = useI18n();
     class="masthead justify-content-between py-2"
   >
     <CContainer>
-      <CNavbarBrand href="/">
+      <router-link to="/" class="navbar-brand">
         <img src="@/assets/logo.png" alt="FMN logo" height="40" />
-      </CNavbarBrand>
+      </router-link>
       <CNavbarNav class="align-items-center">
-        <MainNavLink to="/">{{ t("home") }}</MainNavLink>
         <MainNavLink to="/rules" v-if="userStore.loggedIn">{{
           t("rules")
         }}</MainNavLink>
@@ -36,9 +35,7 @@ const { t } = useI18n();
 
 <i18n lang="yaml">
 en-US:
-  home: "Home"
   rules: "Rules"
 fr-FR:
-  home: "Accueil"
   rules: "Règles"
 </i18n>
