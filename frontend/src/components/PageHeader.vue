@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import {
-  CContainer,
-  CNavbar,
-  CNavbarBrand,
-  CNavbarNav,
-} from "@coreui/bootstrap-vue";
+import { CContainer, CNavbar, CNavbarNav } from "@coreui/bootstrap-vue";
 import { useI18n } from "vue-i18n";
 import { useUserStore } from "../stores/user";
 import LoginButton from "./LoginButton.vue";
