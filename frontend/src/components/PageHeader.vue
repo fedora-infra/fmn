@@ -25,7 +25,6 @@ const { t } = useI18n();
       </CNavbarBrand>
       <CNavbarNav class="align-items-center">
         <MainNavLink to="/">{{ t("home") }}</MainNavLink>
-        <MainNavLink to="/about">{{ t("about") }}</MainNavLink>
         <MainNavLink to="/rules" v-if="userStore.loggedIn">{{
           t("rules")
         }}</MainNavLink>
@@ -38,10 +37,8 @@ const { t } = useI18n();
 <i18n lang="yaml">
 en-US:
   home: "Home"
-  about: "About"
   rules: "Rules"
 fr-FR:
   home: "Accueil"
-  about: "À propos"
   rules: "Règles"
 </i18n>
