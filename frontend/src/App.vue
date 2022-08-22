@@ -21,7 +21,7 @@ watch(i18n.messages, (oldValue, newValue) => {
 
 <template>
   <PageHeader />
-  <div class="container py-5">
+  <div class="container pt-5 main">
     <RouterView />
   </div>
   <PageFooter />
