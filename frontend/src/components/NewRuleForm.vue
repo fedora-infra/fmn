@@ -13,6 +13,16 @@ import TrackingRuleList from "./TrackingRuleList.vue";
 
 const userStore = useUserStore();
 const router = useRouter();
+/* eslint-disable */
+// warning  'isLoading' is assigned a value but never used  @typescript-eslint/no-unused-vars
+// warning  'error' is assigned a value but never used      @typescript-eslint/no-unused-vars
+// warning  'isError' is assigned a value but never used    @typescript-eslint/no-unused-vars
+// warning  'isSuccess' is assigned a value but never used  @typescript-eslint/no-unused-vars
+// warning  'data' is defined but never used                @typescript-eslint/no-unused-vars
+// warning  'variables' is defined but never used           @typescript-eslint/no-unused-vars
+// warning  'context' is defined but never used             @typescript-eslint/no-unused-vars
+// warning  'variables' is defined but never used           @typescript-eslint/no-unused-vars
+// warning  'context' is defined but never used             @typescript-eslint/no-unused-vars
 const { isLoading, error, isError, isSuccess, mutateAsync } = useMutation(
   apiPost,
   {
@@ -34,6 +44,7 @@ const { isLoading, error, isError, isSuccess, mutateAsync } = useMutation(
     },
   }
 );
+/* eslint-enable */
 
 /* eslint-disable */
 // warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
