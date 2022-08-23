@@ -1,5 +1,6 @@
 import type { TokenResponse } from "@openid/appauth";
 import { defineStore } from "pinia";
+import { isRef } from "vue";
 import { login } from "../auth";
 import type { UserInfoResponseJson } from "../auth/userinfo_request";
 
@@ -49,7 +50,9 @@ export const useUserStore = defineStore({
       if (this.tokenExpiresAt && Date.now() / 1000 > this.tokenExpiresAt) {
         // Refresh the token
         if (!this.refreshToken) {
-          return null;
+          console.log("No refresh token, logging in again.");
+          await this.logoutAndLogin();
+          return this.accessToken;
         }
         try {
           await auth.fetchServiceConfiguration();
@@ -57,23 +60,28 @@ export const useUserStore = defineStore({
           this.importTokenResponse(result);
         } catch (err) {
           console.log("Could not refresh the access token:", err);
-          this.logout();
-          const currentRoute = this.$router.currentRoute.value;
-          console.log("current route:", currentRoute);
-          if (currentRoute.meta.auth) {
-            console.log(
-              "Logging in again, will redirect back to",
-              currentRoute.fullPath,
-              currentRoute
-            );
-            await login(auth, currentRoute.fullPath);
-          }
+          await this.logoutAndLogin();
         }
       }
       return this.accessToken;
     },
     logout() {
       this.$reset();
+    },
+    async logoutAndLogin() {
+      this.logout();
+      const currentRoute = isRef(this.$router.currentRoute)
+        ? this.$router.currentRoute.value
+        : this.$router.currentRoute;
+      console.log("current route:", currentRoute);
+      if (currentRoute.meta.auth) {
+        console.log(
+          "Logging in again, will redirect back to",
+          currentRoute.fullPath,
+          currentRoute
+        );
+        await login(this.$auth, currentRoute.fullPath);
+      }
     },
   },
   persist: {
