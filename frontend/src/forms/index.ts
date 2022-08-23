@@ -1,20 +1,11 @@
 import { generateClasses } from "@formkit/themes";
 import { createInput, defaultConfig } from "@formkit/vue";
 import MultiSelectInput from "./MultiSelectInput.vue";
+import { msProps } from "./MultiSelectInputConstants";
 
 // Define the multiselect Input for FormKit
 const multiselect = createInput(MultiSelectInput, {
-  props: [
-    "placeholder",
-    "msOptions",
-    "mode",
-    "closeOnSelect",
-    "groups",
-    "groupHideEmpty",
-    "searchable",
-    "class",
-    "classes",
-  ],
+  props: [...msProps, "msOptions"],
 });
 
 // Create the FormKit config, including the multiselect input
