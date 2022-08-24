@@ -10,29 +10,30 @@ export const SEVERITIES = [DEBUG, INFO, WARNING, ERROR];
 // Tracking rules
 export const TRACKING_RULES: TrackingRule[] = [
   {
-    name: "artifact-owned",
+    name: "artifacts-owned",
     label: "Artifacts owned by me",
-    description: "Artifacts (rpms, modules, containers) that are owned by me",
-  },
-  {
-    name: "artifact-group-owned",
-    label: "Artifacts owned by one of my groups",
     description:
-      "Artifacts (rpms, modules, containers) that are owned by one of my groups",
+      "Artifacts (packages, modules, containers) that are owned by me",
   },
   {
-    name: "artifact-followed",
+    name: "artifacts-group-owned",
+    label: "Artifacts owned by my groups",
+    description:
+      "Artifacts (packages, modules, containers) that are owned by my groups",
+  },
+  {
+    name: "artifacts-followed",
     label: "Artifacts I follow",
-    description: "Artifacts I follow",
+    description: "Artifacts (packages, modules, containers) I want to track",
   },
   {
     name: "related-events",
     label: "Events referring to me",
-    description: "Events referring to me",
+    description: "Events referring to me or affecting me",
   },
   {
-    name: "user-followed",
+    name: "users-followed",
     label: "Users I follow",
-    description: "Users I follow",
+    description: "Users whose actions I follow",
   },
 ];
