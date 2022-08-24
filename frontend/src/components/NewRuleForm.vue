@@ -4,6 +4,12 @@ import type { PostError, Rule } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
 import type { FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
+import {
+  CAccordion,
+  CAccordionBody,
+  CAccordionHeader,
+  CAccordionItem,
+} from "@coreui/bootstrap-vue";
 import type { AxiosError } from "axios";
 import { useRouter } from "vue-router";
 import DestinationList from "./DestinationList.vue";
@@ -42,6 +48,13 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
     );
   }
 };
+const additional_filters_accordion_vars = {
+  "--bs-accordion-btn-padding-x": 0,
+  "--bs-accordion-btn-padding-y": 0,
+  "--bs-accordion-bg": "transparent",
+  "--bs-accordion-btn-focus-box-shadow": "none",
+  "--bs-accordion-btn-focus-border-color": "none",
+};
 </script>
 
 <template>
@@ -53,6 +66,22 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
     :submit-attrs="{ class: ['btn', 'btn-primary'] }"
   >
     <div class="mb-4">
+      <h4>Choose what you want to track</h4>
+      <TrackingRuleList />
+    </div>
+
+    <CAccordion flush :style="additional_filters_accordion_vars">
+      <CAccordionItem :item-key="1">
+        <CAccordionHeader class="align-items-center">
+          <h4>Additional Filters</h4>
+        </CAccordionHeader>
+        <CAccordionBody class="bg-light">
+          <FilterList />
+        </CAccordionBody>
+      </CAccordionItem>
+    </CAccordion>
+
+    <div class="mb-4 mt-4">
       <FormKit
         name="name"
         type="text"
@@ -62,18 +91,8 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
       />
     </div>
     <div class="mb-4">
-      <h4>Choose what you want to track</h4>
-      <TrackingRuleList />
-    </div>
-
-    <div class="mb-4">
       <h4>Choose where you want the notifications to go</h4>
       <DestinationList />
-    </div>
-
-    <div class="mb-4">
-      <h4>Choose a filter (optional)</h4>
-      <FilterList />
     </div>
   </FormKit>
 </template>

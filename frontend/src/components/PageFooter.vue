@@ -102,6 +102,6 @@ body {
 }
 
 .container.main {
-  padding-bottom: 24rem;
+  padding-bottom: 22rem;
 }
 </style>
