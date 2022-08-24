@@ -67,7 +67,7 @@ def get_user_rules(username):  # pragma: no cover
     return [
         {
             "name": "My Completed Koji Builds",
-            "tracking_rule": "artifact-owned",
+            "tracking_rule": "artifacts-owned",
             "filters": {
                 "severities": [],
                 "my_actions": True,
