@@ -22,7 +22,7 @@ watch(i18n.messages, (oldValue, newValue) => {
 
 <template>
   <PageHeader />
-  <div class="container pt-5 main">
+  <div class="container main">
     <RouterView />
   </div>
   <ToastList />
