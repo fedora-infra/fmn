@@ -5,6 +5,7 @@ from fedora_messaging import config
 from .requester import Requester
 from .rule import Rule
 from .send_queue import SendQueue
+from .cache import cache
 
 log = logging.getLogger(__name__)
 
@@ -16,8 +17,8 @@ class Consumer:
         # Start the connection to RabbitMQ's FMN vhost
         self.send_queue = SendQueue(config.conf["consumer_config"]["send_queue"])
         # Caching and requesting
-        self._cache = get_cache(config.conf["consumer_config"]["cache"])  # noqa
-        self._requester = Requester(self._cache)
+        cache.configure_from_config(config.conf["consumer_config"]["cache"])
+        self._requester = Requester(config.conf["consumer_config"]["services"])
 
     def __call__(self, message):
         log.debug(f"Consuming {message!r}")
