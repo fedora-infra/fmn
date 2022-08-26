@@ -1,5 +1,5 @@
 import requests
-from fajson_client import Client as FasjsonClient
+from fasjson_client import Client as FasjsonClient
 
 from .cache import cache
 

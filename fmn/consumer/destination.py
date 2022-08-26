@@ -10,7 +10,7 @@ class Destination:
         self.address = address
 
     @classmethod
-    def from_rule(cls, rule: RuleRecord):  # noqa
+    def from_rule(cls, rule: "RuleRecord"):  # noqa
         def get_class(address):
             for subclass in cls.__subclasses__:
                 if address.startswith(f"{subclass.name}:"):
