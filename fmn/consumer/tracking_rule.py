@@ -81,13 +81,11 @@ class ArtifactsFollowed(TrackingRule):
         super().__init__(*args, **kwargs)
         self._artifacts = self._params["artifacts"]
         self.followed = {
-            msg_attr: set(
-                [
-                    a["name"]
-                    for a in self._artifacts
-                    if a["type"] == artifact_type or a["type"] == "all"
-                ]
-            )
+            msg_attr: {
+                a["name"]
+                for a in self._artifacts
+                if a["type"] == artifact_type or a["type"] == "all"
+            }
             for msg_attr, artifact_type in self.artifact_types.items()
         }
 
