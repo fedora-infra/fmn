@@ -68,6 +68,7 @@ greenlet = "^1.1.2"
 toml = "^0.10.2"
 responses = "^0.21.0"
 pytest-mock = "^3.8.2"
+flake8 = ">=4,<5"
 
 [tool.poetry.extras]
 consumer = [
