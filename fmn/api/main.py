@@ -1,5 +1,4 @@
 from functools import lru_cache
-from typing import Union
 
 from fasjson_client import Client as FasjsonClient
 from fastapi import Depends, FastAPI
@@ -29,7 +28,7 @@ class Rule(BaseModel):
     name: str
     tracking_rule: str
     destinations: list[str]
-    filters: dict[str, Union[str, bool, None, list[str]]]
+    filters: dict[str, str | list[str] | bool | None]
 
 
 def get_fasjson_client(settings: Settings = Depends(get_settings)):

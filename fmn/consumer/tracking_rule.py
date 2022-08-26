@@ -1,5 +1,3 @@
-from typing import Optional
-
 from fedora_messaging.message import Message
 
 from .requester import Requester
@@ -8,7 +6,7 @@ from .requester import Requester
 class TrackingRule:
 
     # This should be the name of the Tracking rule in the Database
-    name: Optional[str] = None
+    name: str | None = None
 
     def __init__(self, requester: Requester, **params):
         self._requester = requester
