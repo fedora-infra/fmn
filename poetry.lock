@@ -77,7 +77,6 @@ mypy-extensions = ">=0.4.3"
 pathspec = ">=0.9.0"
 platformdirs = ">=2"
 tomli = {version = ">=1.1.0", markers = "python_full_version < \"3.11.0a7\""}
-typing-extensions = {version = ">=3.10.0.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
@@ -543,37 +542,6 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
-name = "importlib-metadata"
-version = "4.12.0"
-description = "Read metadata from Python packages"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-zipp = ">=0.5"
-
-[package.extras]
-docs = ["jaraco.packaging (>=9)", "rst.linker (>=1.9)", "sphinx"]
-perf = ["ipython"]
-testing = ["flufl-flake8", "importlib-resources (>=1.3)", "packaging", "pyfakefs", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=1.3)", "pytest-flake8", "pytest-mypy (>=0.9.1)", "pytest-perf (>=0.9.2)"]
-
-[[package]]
-name = "importlib-resources"
-version = "5.9.0"
-description = "Read resources from Python packages"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-zipp = {version = ">=3.1.0", markers = "python_version < \"3.10\""}
-
-[package.extras]
-docs = ["jaraco.packaging (>=9)", "jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "sphinx"]
-testing = ["pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=1.3)", "pytest-flake8", "pytest-mypy (>=0.9.1)"]
-
-[[package]]
 name = "incremental"
 version = "21.3.0"
 description = "A small library that versions your Python projects."
@@ -657,10 +625,8 @@ python-versions = ">=3.7"
 attrs = ">=17.4.0"
 fqdn = {version = "*", optional = true, markers = "extra == \"format\""}
 idna = {version = "*", optional = true, markers = "extra == \"format\""}
-importlib-resources = {version = ">=1.4.0", markers = "python_version < \"3.9\""}
 isoduration = {version = "*", optional = true, markers = "extra == \"format\""}
 jsonpointer = {version = ">1.13", optional = true, markers = "extra == \"format\""}
-pkgutil-resolve-name = {version = ">=1.3.10", markers = "python_version < \"3.9\""}
 pyrsistent = ">=0.14.0,<0.17.0 || >0.17.0,<0.17.1 || >0.17.1,<0.17.2 || >0.17.2"
 rfc3339-validator = {version = "*", optional = true, markers = "extra == \"format\""}
 rfc3987 = {version = "*", optional = true, markers = "extra == \"format\""}
@@ -680,7 +646,6 @@ optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
-importlib-metadata = {version = ">=3.6", markers = "python_version < \"3.10\""}
 jeepney = {version = ">=0.4.2", markers = "sys_platform == \"linux\""}
 pywin32-ctypes = {version = "<0.1.0 || >0.1.0,<0.1.1 || >0.1.1", markers = "sys_platform == \"win32\""}
 SecretStorage = {version = ">=3.2", markers = "sys_platform == \"linux\""}
@@ -792,14 +757,6 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
 testing = ["coverage", "nose"]
 
 [[package]]
-name = "pkgutil-resolve-name"
-version = "1.3.10"
-description = "Resolve a name to an object."
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[[package]]
 name = "platformdirs"
 version = "2.5.2"
 description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
@@ -838,7 +795,6 @@ cleo = ">=1.0.0a5,<2.0.0"
 crashtest = ">=0.3.0,<0.4.0"
 dulwich = ">=0.20.44,<0.21.0"
 html5lib = ">=1.0,<2.0"
-importlib-metadata = {version = ">=4.4,<5.0", markers = "python_version < \"3.10\""}
 jsonschema = ">=4.10.0,<5.0.0"
 keyring = ">=21.2.0"
 packaging = ">=20.4"
@@ -1315,7 +1271,6 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 anyio = ">=3.4.0,<5"
-typing-extensions = {version = ">=3.10.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
 full = ["itsdangerous", "jinja2", "python-multipart", "pyyaml", "requests"]
@@ -1532,18 +1487,6 @@ python-versions = "*"
 cffi = ">=1.0"
 
 [[package]]
-name = "zipp"
-version = "3.8.1"
-description = "Backport of pathlib-compatible object wrapper for zip files"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-
-[package.extras]
-docs = ["jaraco.packaging (>=9)", "jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "sphinx"]
-testing = ["func-timeout", "jaraco-itertools", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=1.3)", "pytest-flake8", "pytest-mypy (>=0.9.1)"]
-
-[[package]]
 name = "zope-interface"
 version = "5.4.0"
 description = "Interfaces for Python"
@@ -1564,8 +1507,8 @@ consumer = ["fedora-messaging", "pika", "fasjson-client", "dogpile.cache"]
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.8"
-content-hash = "7ad3b2defdcec817f3704e29466fdfdcfd9d1fbb43f65bc2f6016ea12346c2c0"
+python-versions = "^3.10"
+content-hash = "d9fc6446d9548211b8231c89d057f5622d873394bd2dc837a5369b15c6ad4a27"
 
 [metadata.files]
 anyio = [
@@ -1967,14 +1910,6 @@ idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
     {file = "idna-3.3.tar.gz", hash = "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"},
 ]
-importlib-metadata = [
-    {file = "importlib_metadata-4.12.0-py3-none-any.whl", hash = "sha256:7401a975809ea1fdc658c3aa4f78cc2195a0e019c5cbc4c06122884e9ae80c23"},
-    {file = "importlib_metadata-4.12.0.tar.gz", hash = "sha256:637245b8bab2b6502fcbc752cc4b7a6f6243bb02b31c5c26156ad103d3d45670"},
-]
-importlib-resources = [
-    {file = "importlib_resources-5.9.0-py3-none-any.whl", hash = "sha256:f78a8df21a79bcc30cfd400bdc38f314333de7c0fb619763f6b9dabab8268bb7"},
-    {file = "importlib_resources-5.9.0.tar.gz", hash = "sha256:5481e97fb45af8dcf2f798952625591c58fe599d0735d86b10f54de086a61681"},
-]
 incremental = [
     {file = "incremental-21.3.0-py2.py3-none-any.whl", hash = "sha256:92014aebc6a20b78a8084cdd5645eeaa7f74b8933f70fa3ada2cfbd1e3b54321"},
     {file = "incremental-21.3.0.tar.gz", hash = "sha256:02f5de5aff48f6b9f665d99d48bfc7ec03b6e3943210de7cfc88856d755d6f57"},
@@ -2104,10 +2039,6 @@ pika = [
 pkginfo = [
     {file = "pkginfo-1.8.3-py2.py3-none-any.whl", hash = "sha256:848865108ec99d4901b2f7e84058b6e7660aae8ae10164e015a6dcf5b242a594"},
     {file = "pkginfo-1.8.3.tar.gz", hash = "sha256:a84da4318dd86f870a9447a8c98340aa06216bfc6f2b7bdc4b8766984ae1867c"},
-]
-pkgutil-resolve-name = [
-    {file = "pkgutil_resolve_name-1.3.10-py3-none-any.whl", hash = "sha256:ca27cc078d25c5ad71a9de0a7a330146c4e014c2462d9af19c6b828280649c5e"},
-    {file = "pkgutil_resolve_name-1.3.10.tar.gz", hash = "sha256:357d6c9e6a755653cfd78893817c0853af365dd51ec97f3d358a819373bbd174"},
 ]
 platformdirs = [
     {file = "platformdirs-2.5.2-py3-none-any.whl", hash = "sha256:027d8e83a2d7de06bbac4e5ef7e023c02b863d7ea5d079477e722bb41ab25788"},
@@ -2640,10 +2571,6 @@ xattr = [
     {file = "xattr-0.9.9-pp37-pypy37_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:5bc84ccec618b5aa089e7cee8b07fcc92d4069aac4053da604c8143a0d6b1381"},
     {file = "xattr-0.9.9-pp37-pypy37_pp73-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:baeff3e5dda8ea7e9424cfaee51829f46afe3836c30d02f343f9049c685681ca"},
     {file = "xattr-0.9.9.tar.gz", hash = "sha256:09cb7e1efb3aa1b4991d6be4eb25b73dc518b4fe894f0915f5b0dcede972f346"},
-]
-zipp = [
-    {file = "zipp-3.8.1-py3-none-any.whl", hash = "sha256:47c40d7fe183a6f21403a199b3e4192cca5774656965b0a4988ad2f8feb5f009"},
-    {file = "zipp-3.8.1.tar.gz", hash = "sha256:05b45f1ee8f807d0cc928485ca40a07cb491cf092ff587c0df9cb1fd154848d2"},
 ]
 zope-interface = [
     {file = "zope.interface-5.4.0-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:7df1e1c05304f26faa49fa752a8c690126cf98b40b91d54e6e9cc3b7d6ffe8b7"},
