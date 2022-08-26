@@ -15,7 +15,7 @@ class TrackingRule:
         self._params = params
 
     @classmethod
-    def from_rule(cls, rule: RuleRecord, requester: Requester):  # noqa
+    def from_rule(cls, rule: "RuleRecord", requester: Requester):  # noqa
         for subclass in cls.__subclasses__:
             if not subclass.name:
                 continue

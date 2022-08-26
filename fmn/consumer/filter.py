@@ -17,7 +17,7 @@ class Filter:
         self.params = params
 
     @classmethod
-    def from_rule(cls, rule: RuleRecord, requester: Requester):  # noqa
+    def from_rule(cls, rule: "RuleRecord", requester: Requester):  # noqa
         subclasses = {s.name: s for s in cls.__subclasses__}
         filters = []
         for filter_name in rule.filters:
