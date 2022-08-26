@@ -2,10 +2,10 @@ import logging
 
 from fedora_messaging import config
 
+from .cache import cache
 from .requester import Requester
 from .rule import Rule
 from .send_queue import SendQueue
-from .cache import cache
 
 log = logging.getLogger(__name__)
 
