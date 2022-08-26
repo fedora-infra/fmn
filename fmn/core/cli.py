@@ -1,9 +1,4 @@
-import sys
-
-if sys.version_info < (3, 10):
-    from importlib_metadata import entry_points  # pragma: no cover
-else:
-    from importlib.metadata import entry_points  # pragma: no cover
+from importlib.metadata import entry_points
 
 import click
 import click_plugins
