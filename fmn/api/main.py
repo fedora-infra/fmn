@@ -1,27 +1,22 @@
-from functools import lru_cache
-
 from fasjson_client import Client as FasjsonClient
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from .config import Settings
+from .config import Settings, get_settings
 
 app = FastAPI()
 
 
-@lru_cache
-def get_settings():
-    return Settings()
-
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=get_settings().cors_origins.split(" "),
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+@app.on_event("startup")
+def add_middlewares():
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=get_settings().cors_origins.split(" "),
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 
 class Rule(BaseModel):

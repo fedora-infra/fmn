@@ -1,6 +1,23 @@
+from unittest import mock
+
 import responses
 
 from fmn.api import main
+
+
+@mock.patch("fmn.api.main.get_settings")
+@mock.patch("fmn.api.main.app")
+def test_add_middlewares(app, get_settings):
+    get_settings.return_value = mock.Mock(cors_origins="https://foo")
+    main.add_middlewares()
+
+    app.add_middleware.assert_called_once_with(
+        main.CORSMiddleware,
+        allow_origins=["https://foo"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 
 def test_read_root():

@@ -7,7 +7,11 @@ Wants=network-online.target
 User=vagrant
 Environment=GSS_USE_PROXY=yes
 WorkingDirectory=/home/vagrant/fmn
-ExecStart=poetry run uvicorn fmn.api.main:app --host 0.0.0.0 --ssl-keyfile /etc/pki/tls/private/server.key --ssl-certfile /etc/pki/tls/certs/server.pem
+ExecStart=poetry run uvicorn fmn.api.main:app \
+    --env-file /home/vagrant/fmn/fmn.cfg \
+    --host 0.0.0.0 \
+    --ssl-keyfile /etc/pki/tls/private/server.key \
+    --ssl-certfile /etc/pki/tls/certs/server.pem
 
 [Install]
 WantedBy=multi-user.target
