@@ -3,6 +3,7 @@ branch = True
 source = fmn
 omit =
     fmn/consumer/*
+    fmn/sender/*
 concurrency =
     greenlet
     thread

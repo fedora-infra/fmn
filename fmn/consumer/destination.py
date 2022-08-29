@@ -31,8 +31,10 @@ class Email(Destination):
 
     def generate(self, message):
         return {
-            "to": self.address,
-            "subject": message.subject,
+            "headers": {
+                "To": self.address,
+                "Subject": message.subject,
+            },
             "body": str(message),
         }
 

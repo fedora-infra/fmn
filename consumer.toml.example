@@ -20,6 +20,18 @@ durable = true
 auto_delete = false
 arguments = {}
 
+[queues.fmn]
+durable = true
+auto_delete = false
+exclusive = false
+arguments = {}
+
+[[bindings]]
+queue = "fmn"
+exchange = "amq.topic"
+routing_keys = ["#"]
+
+
 [consumer_config]
 database_url = "sqlite:////:memory:"
 
