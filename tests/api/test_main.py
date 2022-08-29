@@ -1,3 +1,4 @@
+import datetime as dt
 from unittest import mock
 
 import responses
@@ -20,8 +21,19 @@ def test_add_middlewares(app, get_settings):
     )
 
 
-def test_read_root():
-    assert main.read_root()["Hello"] == "World"
+async def test_read_root():
+    request = mock.Mock()
+    creds = mock.Mock(scheme="bearer", credentials="abcd-1234")
+    identity = mock.Mock(expires_at=dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc))
+    identity.name = "foo"  # name can't be set in the constructor of Mock()
+
+    result = await main.read_root(request=request, creds=creds, identity=identity)
+
+    assert result["Hello"] == "World"
+    assert result["creds"].scheme == "bearer"
+    assert result["creds"].credentials == "abcd-1234"
+    assert result["identity"].name == "foo"
+    assert isinstance(result["identity"].expires_at, dt.datetime)
 
 
 def test_get_settings():

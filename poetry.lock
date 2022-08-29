@@ -487,7 +487,7 @@ lxml = ["lxml"]
 name = "httpcore"
 version = "0.15.0"
 description = "A minimal low-level HTTP client."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -505,7 +505,7 @@ socks = ["socksio (>=1.0.0,<2.0.0)"]
 name = "httpx"
 version = "0.23.0"
 description = "The next generation HTTP client."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -1164,7 +1164,7 @@ six = "*"
 name = "rfc3986"
 version = "1.5.0"
 description = "Validating URI References per RFC 3986"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -1491,7 +1491,7 @@ consumer = ["fedora-messaging", "pika", "fasjson-client", "dogpile.cache"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "d9fc6446d9548211b8231c89d057f5622d873394bd2dc837a5369b15c6ad4a27"
+content-hash = "af2823b6861a51beb7418ae37feac923839a172f674baa7f2e3de7f5e7ac5983"
 
 [metadata.files]
 anyio = [
