@@ -1,4 +1,8 @@
+from functools import cache
+
 from pydantic import BaseSettings
+
+settings_file = None  # will be set from CLI
 
 
 class Settings(BaseSettings):
@@ -7,3 +11,8 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = "fmn.cfg"
+
+
+@cache
+def get_settings() -> Settings:
+    return Settings(_env_file=settings_file)
