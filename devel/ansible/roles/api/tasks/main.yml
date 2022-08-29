@@ -35,9 +35,29 @@
 #   set_fact:
 #     poetryvenvpath: "{{ _poetry_venv_path.stdout | trim }}"
 
+- name: Register the API as an OIDC client with Ipsilon
+  command:
+    cmd: >
+      oidc-register --debug --output-file /home/vagrant/api-oidc-secrets.json
+      https://ipsilon.tinystage.test/idp/openidc/ https://fmn.tinystage.test/
+    creates: /home/vagrant/api-oidc-secrets.json
+  become: yes
+  become_user: vagrant
+
+- name: Read the OIDC credentials file
+  slurp:
+    src: /home/vagrant/api-oidc-secrets.json
+  register: api_oidc_secrets_out
+
+- name: Set OIDC client credentials
+  set_fact:
+    oidc_client_id: "{{ (api_oidc_secrets_out.content | b64decode | from_json).web.client_id }}"
+    oidc_client_secret: >-
+      {{ (api_oidc_secrets_out.content | b64decode | from_json).web.client_secret }}
+
 - name: Install the configuration file
-  copy:
-    src: fmn.cfg
+  template:
+    src: fmn.cfg.j2
     dest: /home/vagrant/fmn/fmn.cfg
     mode: 0644
 

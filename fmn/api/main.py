@@ -1,9 +1,15 @@
+import logging
+
 from fasjson_client import Client as FasjsonClient
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
 
+from .auth import Identity, get_identity_optional
 from .config import Settings, get_settings
+
+log = logging.getLogger(__name__)
 
 app = FastAPI()
 
@@ -31,8 +37,18 @@ def get_fasjson_client(settings: Settings = Depends(get_settings)):
 
 
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+async def read_root(
+    request: Request,
+    creds: HTTPAuthorizationCredentials | None = Depends(HTTPBearer(auto_error=False)),
+    identity: Identity | None = Depends(get_identity_optional),
+):
+    result = {
+        "Hello": "World",
+        "creds": creds,
+        "identity": identity,
+    }
+
+    return result
 
 
 @app.get("/user/{username}/info")
