@@ -18,7 +18,7 @@ class SendQueue:
     def send(self, notification: Notification):
         body = json.dumps(notification.content)
         self.channel.basic_publish(
-            exchange="amq.topic", routing_key=f"send.{notification.destination}", body=body
+            exchange="amq.direct", routing_key=f"send.{notification.destination}", body=body
         )
 
     def close(self):
