@@ -1,14 +1,22 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:base",
+    ":preserveSemverRanges",
+    "group:allNonMajor",
+    "schedule:weekdays",
+    ":maintainLockFilesMonthly",
+    ":separateMultipleMajorReleases",
+    ":automergeMinor"
   ],
+  "lockFileMaintenance": {
+    "extends": [
+      "group:allNonMajor"
+    ],
+    "commitMessageAction": "Update"
+  },
   "automergeStrategy": "rebase",
   "packageRules": [
-    {
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "automerge": true
-    },
     {
       "matchDepTypes": ["devDependencies"],
       "automerge": true
