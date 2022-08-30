@@ -7,7 +7,8 @@
     "schedule:weekdays",
     ":maintainLockFilesWeekly",
     ":separateMultipleMajorReleases",
-    ":automergeMinor"
+    ":automergeMinor",
+    ":gitSignOff"
   ],
   "lockFileMaintenance": {
     "extends": [
