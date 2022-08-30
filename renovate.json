@@ -5,7 +5,7 @@
     ":preserveSemverRanges",
     "group:allNonMajor",
     "schedule:weekdays",
-    ":maintainLockFilesMonthly",
+    ":maintainLockFilesWeekly",
     ":separateMultipleMajorReleases",
     ":automergeMinor"
   ],
@@ -16,10 +16,12 @@
     "commitMessageAction": "Update"
   },
   "automergeStrategy": "rebase",
+  "stabilityDays": 3,
   "packageRules": [
     {
       "matchDepTypes": ["devDependencies"],
-      "automerge": true
+      "automerge": true,
+      "groupName": "dev dependencies"
     }
   ]
 }
