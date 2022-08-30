@@ -17,6 +17,7 @@
     "commitMessageAction": "Update"
   },
   "automergeStrategy": "rebase",
+  "rangeStrategy": "widen",
   "stabilityDays": 3,
   "packageRules": [
     {
