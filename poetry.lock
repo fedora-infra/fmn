@@ -1,4 +1,46 @@
 [[package]]
+name = "aio-pika"
+version = "8.2.0"
+description = "Wrapper for the aiormq for asyncio and humans."
+category = "main"
+optional = true
+python-versions = ">3.6, <4"
+
+[package.dependencies]
+aiormq = ">=6.4.0,<6.5.0"
+yarl = "*"
+
+[package.extras]
+develop = ["aiomisc (>=16.0,<17.0)", "coverage (!=4.3)", "coveralls", "pylava", "pyflakes (<2.5)", "pytest", "pytest-cov", "shortuuid", "nox", "sphinx", "sphinx-autobuild", "timeout-decorator", "tox (>=2.4)"]
+
+[[package]]
+name = "aiormq"
+version = "6.4.1"
+description = "Pure python AMQP asynchronous client library"
+category = "main"
+optional = true
+python-versions = ">=3.7"
+
+[package.dependencies]
+pamqp = "3.2.0"
+yarl = "*"
+
+[package.extras]
+develop = ["aiomisc (>=16.0,<17.0)", "coverage (!=4.3)", "coveralls", "pylava", "pytest", "pytest-cov", "tox (>=2.4)"]
+
+[[package]]
+name = "aiosmtplib"
+version = "1.1.7"
+description = "asyncio SMTP client"
+category = "main"
+optional = true
+python-versions = ">=3.5.2,<4.0.0"
+
+[package.extras]
+uvloop = ["uvloop (>=0.13,<0.15)"]
+docs = ["sphinx (>=2,<4)", "sphinx_autodoc_typehints (>=1.7.0,<2.0.0)", "jinja2 (>=2.0,<3.1)"]
+
+[[package]]
 name = "anyio"
 version = "3.6.1"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
@@ -702,6 +744,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "multidict"
+version = "6.0.2"
+description = "multidict implementation"
+category = "main"
+optional = true
+python-versions = ">=3.7"
+
+[[package]]
 name = "mypy-extensions"
 version = "0.4.3"
 description = "Experimental type system extensions for programs checked with the mypy typechecker."
@@ -719,6 +769,18 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
+
+[[package]]
+name = "pamqp"
+version = "3.2.0"
+description = "RabbitMQ Focused AMQP low-level library"
+category = "main"
+optional = true
+python-versions = ">=3.7"
+
+[package.extras]
+codegen = ["lxml", "requests", "yapf"]
+testing = ["coverage", "flake8", "flake8-comprehensions", "flake8-deprecated", "flake8-import-order", "flake8-print", "flake8-quotes", "flake8-rst-docstrings", "flake8-tuple", "yapf"]
 
 [[package]]
 name = "pathspec"
@@ -1488,6 +1550,18 @@ python-versions = "*"
 cffi = ">=1.0"
 
 [[package]]
+name = "yarl"
+version = "1.8.1"
+description = "Yet another URL library"
+category = "main"
+optional = true
+python-versions = ">=3.7"
+
+[package.dependencies]
+idna = ">=2.0"
+multidict = ">=4.0"
+
+[[package]]
 name = "zope.interface"
 version = "5.4.0"
 description = "Interfaces for Python"
@@ -1502,14 +1576,17 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 
 [extras]
 consumer = ["fedora-messaging", "pika", "fasjson-client", "dogpile.cache"]
-sender-email = ["tomli", "pika"]
+sender-email = ["tomli", "aio-pika", "aiosmtplib"]
 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "b1bd94812cc275ebb0fadef619993a0553806a9716ba51e6b7cab04387307190"
+content-hash = "49a9004b659d81eaac3463b106c7ed76210d6aeba183eaee3f1c1e8f5faa09e0"
 
 [metadata.files]
+aio-pika = []
+aiormq = []
+aiosmtplib = []
 anyio = []
 arrow = []
 attrs = []
@@ -1565,8 +1642,10 @@ mccabe = []
 monotonic = []
 more-itertools = []
 msgpack = []
+multidict = []
 mypy-extensions = []
 packaging = []
+pamqp = []
 pathspec = []
 pbr = []
 pexpect = []
@@ -1632,4 +1711,5 @@ webcolors = []
 webencodings = []
 wrapt = []
 xattr = []
+yarl = []
 "zope.interface" = []

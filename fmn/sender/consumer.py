@@ -1,8 +1,12 @@
+import json
 import logging
 
-import pika
+import aio_pika
 
 _log = logging.getLogger(__name__)
+
+
+CLOSING = object()
 
 
 class Consumer:
@@ -12,23 +16,30 @@ class Consumer:
         self._handler = handler
         self._connection = None
         self._channel = None
+        self._queue = None
+        self._queue_iter = None
 
-    def connect(self):
-        self._connection = pika.BlockingConnection(pika.connection.URLParameters(self._url))
-        self._channel = self._connection.channel()
-        self._channel.queue_declare(
+    async def connect(self):
+        self._connection = await aio_pika.connect_robust(self._url)
+        self._channel = await self._connection.channel()
+        self._queue = await self._channel.declare_queue(
             self._destination, durable=True, auto_delete=False, exclusive=False
         )
-        self._channel.queue_bind(self._destination, "amq.direct", f"send.{self._destination}")
+        await self._queue.bind("amq.direct", f"send.{self._destination}")
 
-    def start(self):
-        self._channel.basic_consume(self._destination, self._handler.on_message)
-        _log.info("Started consuming")
-        self._channel.start_consuming()
+    async def start(self):
+        _log.info("Starting consuming messages")
+        async with self._queue.iterator() as self._queue_iter:
+            async for message in self._queue_iter:
+                if message == CLOSING:
+                    break
+                async with message.process():
+                    await self._handler.handle(json.loads(message.body))
 
-    def stop(self):
-        if self._channel:
-            self._channel.stop_consuming()
+    async def stop(self):
+        if self._queue_iter:
+            await self._queue_iter.on_message(CLOSING)
+            await self._queue_iter.close()
         if self._connection:
-            self._connection.close()
-        self._handler.stop()
+            await self._connection.close()
+        await self._handler.stop()
