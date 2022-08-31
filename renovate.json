@@ -18,7 +18,16 @@
   "automergeStrategy": "rebase",
   "rangeStrategy": "widen",
   "stabilityDays": 3,
+  "labels": ["dependencies"],
   "packageRules": [
+    {
+      "matchLanguages": ["python"],
+      "addLabels": ["python"]
+    },
+    {
+      "matchLanguages": ["js"],
+      "addLabels": ["javascript"]
+    },
     {
       "matchDepTypes": ["devDependencies"],
       "automerge": true,
