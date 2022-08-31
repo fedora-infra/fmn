@@ -8,6 +8,7 @@ class = "fmn.sender.email:EmailHandler"
 from = "FMN <fmn@fedoraproject.org>"
 smtp_host = "localhost"
 smtp_port = 25
+irc_url = "ircs://fedora-notif:fmnpassword@irc.libera.chat:6697"
 
 [log_config]
 version = 1
