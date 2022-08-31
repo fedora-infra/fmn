@@ -15,3 +15,5 @@ __pycache__/
 
 # configuration file
 /fmn.cfg
+/consumer.toml
+/sender.toml
