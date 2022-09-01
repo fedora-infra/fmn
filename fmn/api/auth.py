@@ -6,7 +6,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from httpx import AsyncClient
 from pydantic import BaseModel
 
-from .config import get_settings
+from ..core.config import get_settings
 
 log = logging.getLogger(__name__)
 

@@ -1,9 +1,9 @@
 from unittest import mock
 
-from fmn.api import config
+from fmn.core import config
 
 
-@mock.patch("fmn.api.config.Settings")
+@mock.patch("fmn.core.config.Settings")
 def test_get_settings(Settings):
     Settings.return_value = sentinel = object()
 
