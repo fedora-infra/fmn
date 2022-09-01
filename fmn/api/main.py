@@ -6,8 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
 
+from ..core.config import Settings, get_settings
 from .auth import Identity, get_identity_optional
-from .config import Settings, get_settings
 
 log = logging.getLogger(__name__)
 

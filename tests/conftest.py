@@ -1,5 +1,6 @@
 import json
 import os
+from unittest import mock
 
 import pytest
 import responses
@@ -7,7 +8,7 @@ from click.testing import CliRunner
 from fastapi.testclient import TestClient
 
 from fmn.api import main
-from fmn.api.config import Settings
+from fmn.core.config import Settings, get_settings
 
 
 @pytest.fixture
@@ -33,3 +34,12 @@ def client():
     main.app.dependency_overrides[main.get_settings] = get_settings_override
     main.app.dependency_overrides[main.get_fasjson_client] = get_fasjson_client_override
     return TestClient(main.app)
+
+
+@pytest.fixture(autouse=True)
+def clear_settings(tmp_path):
+    with mock.patch(
+        "fmn.core.cli.DEFAULT_CONFIG_FILE", new=str(tmp_path / "non-existing-file")
+    ), mock.patch("fmn.core.config.settings_file", new=None):
+        get_settings.cache_clear()
+        yield
