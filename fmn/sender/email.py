@@ -19,6 +19,7 @@ class EmailHandler(Handler):
         await self._smtp.quit()
 
     async def handle(self, message):
+        # Test with `python -m smtpd -c DebuggingServer -n`
         notif = EmailMessage()
         notif["From"] = self._config["from"]
         for name, value in message["headers"].items():

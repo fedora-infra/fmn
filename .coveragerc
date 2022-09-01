@@ -3,7 +3,7 @@ branch = True
 source = fmn
 omit =
     fmn/consumer/*
-    fmn/sender/*
+    fmn/sender/handler.py
 concurrency =
     greenlet
     thread
