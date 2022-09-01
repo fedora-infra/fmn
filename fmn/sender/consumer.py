@@ -1,7 +1,7 @@
 import json
 import logging
 
-import aio_pika
+from aio_pika import connect_robust
 
 _log = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ class Consumer:
         self._queue_iter = None
 
     async def connect(self):
-        self._connection = await aio_pika.connect_robust(self._url)
+        self._connection = await connect_robust(self._url)
         self._channel = await self._connection.channel()
         self._queue = await self._channel.declare_queue(
             self._destination, durable=True, auto_delete=False, exclusive=False
