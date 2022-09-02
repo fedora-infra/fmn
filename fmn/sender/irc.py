@@ -2,9 +2,8 @@ import asyncio
 import logging
 from urllib.parse import urlparse
 
-import irc.client
-import irc.client_aio
-import irc.connection
+from irc.client_aio import AioSimpleIRCClient
+from irc.connection import AioFactory
 
 from .handler import Handler
 
@@ -20,7 +19,7 @@ class IRCHandler(Handler):
             irc_url.port,
             irc_url.username,
             password=irc_url.password,
-            connect_factory=irc.connection.AioFactory(ssl=(irc_url.scheme == "ircs")),
+            connect_factory=AioFactory(ssl=(irc_url.scheme == "ircs")),
         )
         _log.debug("IRC connection established")
 
@@ -33,7 +32,7 @@ class IRCHandler(Handler):
         await self._client.privmsg(message["to"], message["message"])
 
 
-class IRCClient(irc.client_aio.AioSimpleIRCClient):
+class IRCClient(AioSimpleIRCClient):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._connection_future = None
