@@ -31,3 +31,4 @@ def main(config_path):
     except KeyboardInterrupt:
         loop.run_until_complete(consumer.stop())
         loop.close()
+        raise

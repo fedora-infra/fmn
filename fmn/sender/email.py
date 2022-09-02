@@ -1,7 +1,7 @@
 import logging
 from email.message import EmailMessage
 
-import aiosmtplib
+from aiosmtplib import SMTP
 
 from .handler import Handler
 
@@ -10,7 +10,7 @@ _log = logging.getLogger(__name__)
 
 class EmailHandler(Handler):
     async def setup(self):
-        self._smtp = aiosmtplib.SMTP(
+        self._smtp = SMTP(
             self._config.get("smtp_host", "localhost"), self._config.get("smtp_port", 25)
         )
         await self._smtp.connect()
