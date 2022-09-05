@@ -8,6 +8,9 @@
     - base
     - oidc-register
     - gss-proxy
+    - database/server
+    - database/client
+    - backend
     - api
     - name: oidc-register
       redirect_url: https://{{ ansible_fqdn }}:5173/login/fedora

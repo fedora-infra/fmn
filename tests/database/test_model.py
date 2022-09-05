@@ -1,0 +1,77 @@
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
+
+from fmn.database import model
+
+
+class ModelTestBase:
+    cls = None
+    attrs = {}
+    no_validate_attrs = ()
+
+    def test_create_obj_sync(self, db_sync_obj):
+        pass
+
+    async def test_create_obj_async(self, db_async_obj):
+        pass
+
+    def test_query_obj_sync(self, db_sync_obj, db_sync_session):
+        result = db_sync_session.execute(select(self.cls))
+        obj = result.scalar_one()
+        for key, value in self.attrs.items():
+            if key in self.no_validate_attrs:
+                continue
+            objvalue = getattr(obj, key)
+            if isinstance(objvalue, (int, str)):
+                assert objvalue == value
+        for key, value in self._db_obj_get_dependencies().items():
+            if key in self.no_validate_attrs:
+                continue
+            objvalue = getattr(obj, key)
+            if isinstance(objvalue, (int, str)):
+                assert objvalue == value
+
+    async def test_query_obj_async(self, db_async_obj, db_async_session):
+        # The selectinload() option tells SQLAlchemy to load related objects and lazy loading breaks
+        # things here. See here for details:
+        #
+        # https://docs.sqlalchemy.org/en/14/orm/extensions/asyncio.html#preventing-implicit-io-when-using-asyncsession
+        #
+        # You can specify which relation you're interested in but because this code doesn't know
+        # anything about the involved ORM class, we specify that we "want it all".
+        result = await db_async_session.execute(select(self.cls).options(selectinload("*")))
+        obj = result.scalar_one()
+        for key, value in self.attrs.items():
+            if key in self.no_validate_attrs:
+                continue
+            objvalue = getattr(obj, key)
+            if isinstance(objvalue, (int, str)):
+                assert objvalue == value
+        for key, value in self._db_obj_get_dependencies().items():
+            if key in self.no_validate_attrs:
+                continue
+            objvalue = getattr(obj, key)
+            if isinstance(objvalue, (int, str)):
+                assert objvalue == value
+
+    def _db_obj_get_dependencies(self):
+        """Get model test dependencies.
+
+        Use this method to pull in other objects that need to be created
+        for the tested model object to be built properly.
+        """
+        return {}
+
+
+class TestUser(ModelTestBase):
+    cls = model.User
+    attrs = {
+        "name": "beefymiracle",
+    }
+
+
+class TestRule(ModelTestBase):
+    cls = model.Rule
+
+    def _db_obj_get_dependencies(self):
+        return {"user": model.User(name="allkneelbeforezod")}

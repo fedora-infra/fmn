@@ -1,0 +1,26 @@
+---
+- tags:
+    - database
+    - database/server
+  block:
+    - name: Install RPM packages for database servers
+      package:
+        name: postgresql-server
+        state: present
+      tags:
+        - packages
+
+    - name: Set up PostgreSQL initially
+      command:
+        cmd: postgresql-setup --initdb
+        creates: /var/lib/pgsql/data/postgresql.conf
+      tags:
+        - config
+
+    - name: Enable and start PostgreSQL service
+      systemd:
+        name: postgresql.service
+        enabled: yes
+        state: started
+      tags:
+        - services

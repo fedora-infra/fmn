@@ -1,13 +1,14 @@
 import click
 import uvicorn
 
+from ..database.cli import verify_db_url_not_default
 from . import main
 
 
 @click.group()
 def api():
     """The FMN API service"""
-    pass
+    verify_db_url_not_default()
 
 
 @api.command()
