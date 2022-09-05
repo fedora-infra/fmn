@@ -9,6 +9,15 @@ from fastapi.testclient import TestClient
 
 from fmn.api import main
 from fmn.core.config import Settings, get_settings
+from fmn.database.main import (
+    Base,
+    async_session_maker,
+    get_async_engine,
+    get_sync_engine,
+    init_async_model,
+    init_sync_model,
+    sync_session_maker,
+)
 
 
 @pytest.fixture
@@ -43,3 +52,103 @@ def clear_settings(tmp_path):
     ), mock.patch("fmn.core.config.settings_file", new=None):
         get_settings.cache_clear()
         yield
+
+
+@pytest.fixture
+def db_sync_engine():
+    """A fixture which creates a synchronous database engine."""
+    return get_sync_engine()
+
+
+@pytest.fixture
+def db_async_engine():
+    """A fixture which creates an asynchronous database engine."""
+    return get_async_engine()
+
+
+@pytest.fixture
+def db_sync_schema(db_sync_engine):
+    """Fixture to install the database schema using the synchronous engine."""
+    with db_sync_engine.begin():
+        Base.metadata.create_all(db_sync_engine)
+
+
+@pytest.fixture
+async def db_async_schema(db_async_engine):
+    """Fixture to install the database schema using the asynchronous engine."""
+    async with db_async_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+
+@pytest.fixture
+def db_sync_model_initialized(db_sync_engine, db_sync_schema):
+    """Fixture to initialize the synchronous DB model.
+
+    This is used so db_sync_session is usable in tests.
+    """
+    init_sync_model(sync_engine=db_sync_engine)
+
+
+@pytest.fixture
+async def db_async_model_initialized(db_async_engine, db_async_schema):
+    """Fixture to initialize the asynchronous DB model.
+
+    This is used so db_async_session is usable in tests.
+    """
+    await init_async_model(async_engine=db_async_engine)
+
+
+@pytest.fixture
+def db_sync_session(db_sync_model_initialized):
+    """Fixture setting up a synchronous DB session."""
+    db_session = sync_session_maker()
+    try:
+        yield db_session
+    finally:
+        db_session.close()
+
+
+@pytest.fixture
+async def db_async_session(db_async_model_initialized):
+    """Fixture setting up an asynchronous DB session."""
+    db_session = async_session_maker()
+    try:
+        yield db_session
+    finally:
+        await db_session.close()
+
+
+@pytest.fixture
+def db_sync_obj(request, db_sync_session):
+    """Fixture to create an object of a tested model type.
+
+    This is for synchronous test functions/methods."""
+    with db_sync_session.begin():
+        db_obj_dependencies = request.instance._db_obj_get_dependencies()
+        attrs = {**request.instance.attrs, **db_obj_dependencies}
+        obj = request.instance.cls(**attrs)
+        obj._db_obj_dependencies = db_obj_dependencies
+        db_sync_session.add(obj)
+        db_sync_session.flush()
+
+        yield obj
+
+        db_sync_session.rollback()
+
+
+@pytest.fixture
+async def db_async_obj(request, db_async_session):
+    """Fixture to create an object of a tested model type.
+
+    This is for asynchronous test functions/methods."""
+    async with db_async_session.begin():
+        db_obj_dependencies = request.instance._db_obj_get_dependencies()
+        attrs = {**request.instance.attrs, **db_obj_dependencies}
+        obj = request.instance.cls(**attrs)
+        obj._db_obj_dependencies = db_obj_dependencies
+        db_async_session.add(obj)
+        await db_async_session.flush()
+
+        yield obj
+
+        await db_async_session.rollback()

@@ -2,9 +2,9 @@
 - name: Install RPM packages
   dnf:
       name:
+        - acl
         - git
         - vim
-        - poetry
         - python3-pip
         - python3-devel
         - fedora-messaging
@@ -12,7 +12,7 @@
         - gcc
         - krb5-devel
       state: present
-  
+
 - name: Determine Python version
   command:
     argv:

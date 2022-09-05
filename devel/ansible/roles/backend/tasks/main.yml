@@ -1,0 +1,79 @@
+---
+- become: yes
+  become_user: vagrant
+  tags:
+    - fmn-base
+  block:
+    - name: Install poetry using pip to ensure new enough version
+      pip:
+        name: poetry>=1.2.0
+      become_user: root
+      tags:
+        - packages
+
+    - name: Install the `fmn` Python package with poetry
+      command:
+        cmd: poetry install --all-extras
+        chdir: /home/vagrant/fmn/
+      tags:
+        - packages
+
+    # This needs to be here because the fmn.cfg.j2 template uses it.
+    - name: Register the API as an OIDC client with Ipsilon
+      command:
+        cmd: >
+          oidc-register --debug --output-file /home/vagrant/api-oidc-secrets.json
+          https://ipsilon.tinystage.test/idp/openidc/ https://fmn.tinystage.test/
+        creates: /home/vagrant/api-oidc-secrets.json
+
+    - name: Read the OIDC credentials file
+      slurp:
+        src: /home/vagrant/api-oidc-secrets.json
+      register: api_oidc_secrets_out
+
+    - name: Set OIDC client credentials
+      set_fact:
+        oidc_client_id: "{{ (api_oidc_secrets_out.content | b64decode | from_json).web.client_id }}"
+        oidc_client_secret: >-
+          {{ (api_oidc_secrets_out.content | b64decode | from_json).web.client_secret }}
+
+    - name: Install the configuration file
+      become_user: root
+      template:
+        src: fmn.cfg.j2
+        dest: /etc/fmn.cfg
+        owner: root
+        group: vagrant
+        mode: 0640
+
+    - become_user: postgres
+      become: yes
+      tags:
+        - database
+      block:
+        - name: Create the `vagrant` PostgreSQL user
+          command: createuser vagrant
+          register: createuser_out
+          changed_when: not createuser_out.failed
+          failed_when: createuser_out.failed and "already exists" not in createuser_out.stderr
+
+        - name: Create the `fmn` database
+          command: createdb fmn -O vagrant
+          register: createdb_out
+          changed_when: not createdb_out.failed
+          failed_when: createdb_out.failed and "already exists" not in createdb_out.stderr
+
+    - name: Set up FMN database schema
+      command: poetry run fmn database setup
+      register: database_setup_out
+      changed_when: not database_setup_out.failed
+      failed_when: >-
+        database_setup_out.failed
+        and "Refusing to change database schema" not in database_setup_out.stderr
+
+    - name: Apply database schema migrations
+      command: poetry run fmn database migration upgrade
+      register: database_migration_upgrade_out
+      changed_when: >-
+        not database_migration_upgrade_out.failed
+        and "Upgraded to" in database_migration_upgrade_out.stdout

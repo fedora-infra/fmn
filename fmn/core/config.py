@@ -1,8 +1,19 @@
 from functools import cache
 
-from pydantic import BaseSettings, root_validator
+from pydantic import BaseModel, BaseSettings, root_validator, stricturl
 
 settings_file = None  # will be set from CLI
+
+
+class SQLAlchemyModel(BaseModel):
+    url: stricturl(tld_required=False, host_required=False) = "sqlite:///:memory:"
+
+    class Config:
+        extra = "allow"
+
+
+class DBModel(BaseModel):
+    sqlalchemy: SQLAlchemyModel = SQLAlchemyModel()
 
 
 class Settings(BaseSettings):
@@ -16,8 +27,11 @@ class Settings(BaseSettings):
 
     id_cache_gc_interval: int = 300
 
+    database: DBModel = DBModel()
+
     class Config:
         env_file = "fmn.cfg"
+        env_nested_delimiter = "__"
 
     @root_validator
     def compute_compound_fields(cls, values) -> dict:
