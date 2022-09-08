@@ -11,7 +11,7 @@ jobs:
 
       - name: Install RPM dependencies
         run: |
-             dnf install -y krb5-devel
+             dnf install -y krb5-devel libpq-devel
 
       - name: Install base Python dependencies
         run: |
