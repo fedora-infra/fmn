@@ -23,8 +23,3 @@ def cli(settings_file: str | None):
     """Fedora Messaging Notifications"""
     config.settings_file = settings_file or DEFAULT_CONFIG_FILE
     config.get_settings.cache_clear()
-
-
-@cli.command(hidden=True)
-def test_helper():
-    pass
