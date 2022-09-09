@@ -6,6 +6,11 @@ from fmn.core import cli, config
 from fmn.core.version import __version__
 
 
+@cli.cli.command("test")
+def _fmn_test():
+    pass
+
+
 def test_cli_version(cli_runner):
     """Ensure `fmn --version` works."""
     result = cli_runner.invoke(cli.cli, ["--version"])
@@ -29,7 +34,7 @@ def test_settings(settings_file, default_config, cli_runner):
         args = [f"--config={__file__}"]
 
     with mock.patch("fmn.core.config.get_settings") as get_settings:
-        result = cli_runner.invoke(cli.cli, args + ["test-helper"])
+        result = cli_runner.invoke(cli.cli, args + ["test"])
         get_settings.cache_clear.assert_called_once_with()
 
     assert result.exit_code == 0
