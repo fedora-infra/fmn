@@ -28,7 +28,7 @@ def cli_runner():
 @pytest.fixture
 def client():
     def get_settings_override():
-        return Settings(fasjson_url="http://fasjson.example.test")
+        return Settings(services={"fasjson_url": "http://fasjson.example.test"})
 
     def get_fasjson_client_override():
         responses.add_passthru("https://json-schema.org")
@@ -36,7 +36,7 @@ def client():
         with open(fasjson_spec_path) as fasjson_spec_file:
             fasjson_spec = json.load(fasjson_spec_file)
         responses.get("http://fasjson.example.test/specs/v1.json", json=fasjson_spec)
-        base_url = get_settings_override().fasjson_url
+        base_url = get_settings_override().services.fasjson_url
 
         return main.FasjsonClient(base_url, auth=False)
 

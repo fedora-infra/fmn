@@ -16,6 +16,11 @@ class DBModel(BaseModel):
     sqlalchemy: SQLAlchemyModel = SQLAlchemyModel()
 
 
+class ServicesModel(BaseModel):
+    fasjson_url: stricturl() = "https://fasjson.fedoraproject.org"
+    distgit_url: stricturl() = "https://src.fedoraproject.org"
+
+
 class Settings(BaseSettings):
     cors_origins: str = "https://notifications.fedoraproject.org"
     oidc_provider_url: str = "https://id.fedoraproject.org/openidc"
@@ -23,11 +28,11 @@ class Settings(BaseSettings):
     oidc_token_info_endpoint: str = "/TokenInfo"
     oidc_client_id: str = "0123456789abcdef0123456789abcdef"
     oidc_client_secret: str = "0123456789abcdef0123456789abcdef"
-    fasjson_url: str = "https://fasjson.fedoraproject.org"
 
     id_cache_gc_interval: int = 300
 
     database: DBModel = DBModel()
+    services: ServicesModel = ServicesModel()
 
     class Config:
         env_file = "fmn.cfg"

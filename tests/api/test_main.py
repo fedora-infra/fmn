@@ -41,10 +41,10 @@ def test_get_settings():
 
 
 def test_get_fasjson_client(mocker):
-    settings = main.Settings(fasjson_url="http://fasjson.test/")
+    settings = main.Settings(services={"fasjson_url": "http://fasjson.test/"})
     mocker.patch.object(main.FasjsonClient, "_make_bravado_client")
     client = main.get_fasjson_client(settings)
-    assert client._base_url == settings.fasjson_url
+    assert client._base_url == settings.services.fasjson_url
 
 
 @responses.activate()

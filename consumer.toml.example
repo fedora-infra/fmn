@@ -41,10 +41,6 @@ expiration_time = 300
 # the next string value is a comma-separated list of urls
 arguments.url = "localhost"
 
-[consumer_config.services]
-distgit = "https://src.fedoraproject.org/"
-fasjson = "https://fasjson.fedoraproject.org/"
-
 [consumer_config.send_queue]
 url = "amqp://localhost/%2Ffmn"
 
