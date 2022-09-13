@@ -33,7 +33,7 @@ class Rule(BaseModel):
 
 
 def get_fasjson_client(settings: Settings = Depends(get_settings)):
-    return FasjsonClient(settings.fasjson_url)
+    return FasjsonClient(settings.services.fasjson_url)
 
 
 @app.get("/")
