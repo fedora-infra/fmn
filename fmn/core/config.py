@@ -2,7 +2,7 @@ from functools import cache
 
 from pydantic import BaseModel, BaseSettings, root_validator, stricturl
 
-settings_file = None  # will be set from CLI
+DEFAULT_CONFIG_FILE = _settings_file = "/etc/fmn.cfg"
 
 
 class SQLAlchemyModel(BaseModel):
@@ -48,4 +48,10 @@ class Settings(BaseSettings):
 
 @cache
 def get_settings() -> Settings:
-    return Settings(_env_file=settings_file)
+    return Settings(_env_file=_settings_file)
+
+
+def set_settings_file(path: str) -> None:
+    global _settings_file
+    _settings_file = path
+    get_settings.cache_clear()
