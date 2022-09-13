@@ -35,12 +35,6 @@ routing_keys = ["#"]
 [consumer_config]
 database_url = "sqlite:////:memory:"
 
-[consumer_config.cache]
-backend = "dogpile.cache.pylibmc"
-expiration_time = 300
-# the next string value is a comma-separated list of urls
-arguments.url = "localhost"
-
 [consumer_config.send_queue]
 url = "amqp://localhost/%2Ffmn"
 
