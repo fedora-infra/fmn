@@ -10,6 +10,8 @@ class Requester:
         self.req = requests.Session()
         self.urls = {}
         for service, url in config.items():
+            if service.endswith("_url"):
+                service = service[:-4]
             if not url.endswith("/"):
                 url = url + "/"
             self.urls[service] = url

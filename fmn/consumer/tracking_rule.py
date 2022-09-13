@@ -1,5 +1,7 @@
 from fedora_messaging.message import Message
 
+from fmn.database.model import Rule as RuleRecord
+
 from .requester import Requester
 
 
@@ -8,17 +10,17 @@ class TrackingRule:
     # This should be the name of the Tracking rule in the Database
     name: str | None = None
 
-    def __init__(self, requester: Requester, **params):
+    def __init__(self, requester: Requester, params):
         self._requester = requester
         self._params = params
 
     @classmethod
-    def from_rule(cls, rule: "RuleRecord", requester: Requester):  # noqa
-        for subclass in cls.__subclasses__:
+    def from_rule_record(cls, rule: RuleRecord, requester: Requester):  # noqa
+        for subclass in cls.__subclasses__():
             if not subclass.name:
                 continue
-            if subclass.name == rule.tracking_rule:
-                return subclass(requester, rule.tracking_rule_params)
+            if subclass.name == rule.tracking_rule.name:
+                return subclass(requester, rule.tracking_rule.params)
 
     def matches(self, message: Message):
         raise NotImplementedError
@@ -119,14 +121,11 @@ class ArtifactsFollowed(TrackingRule):
         "flatpaks": "flatpak",
     }
 
-    def __init__(self, args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._artifacts = self._params["artifacts"]
         self.followed = {
             msg_attr: {
-                a["name"]
-                for a in self._artifacts
-                if a["type"] == artifact_type or a["type"] == "all"
+                a["name"] for a in self._params if a["type"] == artifact_type or a["type"] == "all"
             }
             for msg_attr, artifact_type in self.artifact_types.items()
         }

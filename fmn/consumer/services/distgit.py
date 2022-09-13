@@ -1,5 +1,6 @@
 from itertools import chain
 
+import requests
 from fedora_messaging.message import Message
 
 from ..cache import cache
@@ -10,6 +11,7 @@ class DistGitService:
 
     def __init__(self, url):
         self.url = url
+        self.req = requests.Session()
 
     def _get(self, url, params=None):
         result = self.req.get(url=url, params=params)
@@ -23,14 +25,14 @@ class DistGitService:
             return response
         objects = response.get(key)
         while response["pagination"].get("next"):
-            response = self.get(response["pagination"]["next"])
+            response = self._get(response["pagination"]["next"])
             objects.extend(response.get(key))
         return objects
 
     @cache.cache_on_arguments()
     def get_owners(self, artifact_type, artifact_name, user_or_group):
         # cache this for a reasonable time
-        url = f"{self.url['distgit']}api/0/{artifact_type}/{artifact_name}"
+        url = f"{self.url}api/0/{artifact_type}/{artifact_name}"
         response = self._get(url)
         if user_or_group == "user":
             return response["access_users"]["owner"]
@@ -42,16 +44,18 @@ class DistGitService:
     @cache.cache_on_arguments()
     def get_owned(self, artifact_type, name, user_or_group):
         # cache this for a reasonable time
+        if artifact_type == "package":
+            artifact_type = "rpms"
         if user_or_group == "user":
             projects = self._all_values(
                 "projects",
-                f"{self.url['distgit']}api/0/projects",
+                f"{self.url}api/0/projects",
                 {"namespace": artifact_type, "owner": name, "short": "1"},
             )
         elif user_or_group == "group":
             projects = self._all_values(
                 "projects",
-                f"{self.url['distgit']}api/0/projects",
+                f"{self.url}api/0/projects",
                 {"namespace": artifact_type, "username": f"@{name}", "short": "1"},
             )
         else:
