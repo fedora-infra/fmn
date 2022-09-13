@@ -5,6 +5,14 @@ from pydantic import BaseModel, BaseSettings, root_validator, stricturl
 DEFAULT_CONFIG_FILE = _settings_file = "/etc/fmn.cfg"
 
 
+class CacheModel(BaseModel):
+    backend: str = "dogpile.cache.memory"
+    expiration_time: int = 300
+
+    class Config:
+        extra = "allow"
+
+
 class SQLAlchemyModel(BaseModel):
     url: stricturl(tld_required=False, host_required=False) = "sqlite:///:memory:"
 
@@ -32,6 +40,7 @@ class Settings(BaseSettings):
     id_cache_gc_interval: int = 300
 
     database: DBModel = DBModel()
+    cache: CacheModel = CacheModel()
     services: ServicesModel = ServicesModel()
 
     class Config:
