@@ -47,9 +47,10 @@ def client():
 
 @pytest.fixture(autouse=True)
 def clear_settings(tmp_path):
-    with mock.patch(
-        "fmn.core.cli.DEFAULT_CONFIG_FILE", new=str(tmp_path / "non-existing-file")
-    ), mock.patch("fmn.core.config.settings_file", new=None):
+    non_existing = str(tmp_path / "non-existing-file")
+    with mock.patch("fmn.core.config.DEFAULT_CONFIG_FILE", new=non_existing), mock.patch(
+        "fmn.core.config._settings_file", new=non_existing
+    ):
         get_settings.cache_clear()
         yield
 

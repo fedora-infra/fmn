@@ -9,4 +9,4 @@ def test_get_settings(Settings):
 
     assert config.get_settings() is sentinel
 
-    Settings.assert_called_once_with(_env_file=None)
+    Settings.assert_called_once_with(_env_file=config.DEFAULT_CONFIG_FILE)

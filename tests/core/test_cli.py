@@ -1,7 +1,5 @@
 from unittest import mock
 
-import pytest
-
 from fmn.core import cli, config
 from fmn.core.version import __version__
 
@@ -25,20 +23,17 @@ def test_cli_help(cli_runner):
     assert "Usage: fmn" in result.output
 
 
-@pytest.mark.parametrize("default_config", (True, False))
-@mock.patch.object(config, "settings_file")
-def test_settings(settings_file, default_config, cli_runner):
-    if default_config:
-        args = []
-    else:
-        args = [f"--config={__file__}"]
-
+@mock.patch.object(config, "_settings_file")
+def test_settings(settings_file, cli_runner):
     with mock.patch("fmn.core.config.get_settings") as get_settings:
-        result = cli_runner.invoke(cli.cli, args + ["test"])
+        result = cli_runner.invoke(cli.cli, [f"--config={__file__}", "test"])
         get_settings.cache_clear.assert_called_once_with()
 
     assert result.exit_code == 0
-    if default_config:
-        assert config.settings_file == cli.DEFAULT_CONFIG_FILE
-    else:
-        assert config.settings_file == __file__
+    assert config._settings_file == __file__
+
+
+def test_settings_defaults(cli_runner):
+    result = cli_runner.invoke(cli.cli, ["test"])
+    assert result.exit_code == 0
+    assert config._settings_file == config.DEFAULT_CONFIG_FILE
