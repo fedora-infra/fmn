@@ -2,31 +2,25 @@ from fnmatch import fnmatch
 
 from fedora_messaging import message
 
-from .destination import Destination
+from fmn.database.model import Filter as FilterRecord
+
 from .requester import Requester
 
 
 class Filter:
     name: str
-    username: str
-    destinations: list[Destination]
 
-    def __init__(self, username, requester, params):
-        self.username = username
+    def __init__(self, requester, params):
         self._requester = requester
         self.params = params
 
     @classmethod
-    def from_rule(cls, rule: "RuleRecord", requester: Requester):  # noqa
-        subclasses = {s.name: s for s in cls.__subclasses__}
-        filters = []
-        for filter_name in rule.filters:
-            f = subclasses[filter_name](
-                username=rule.username, requester=requester, params=rule.filter_params
-            )
-            f.destinations = Destination.from_rule(rule)
-            filters.append(f)
-        return filters
+    def from_record(cls, record: FilterRecord, requester: Requester):
+        subclasses = {s.name: s for s in cls.__subclasses__()}
+        return subclasses[record.name](
+            params=record.params,
+            requester=requester,
+        )
 
     def matches(self, message: message.Message):
         raise NotImplementedError
@@ -36,7 +30,7 @@ class ApplicationsFilter(Filter):
     name = "applications"
 
     def matches(self, message):
-        return message.app_name in self.params["applications"]
+        return message.app_name in self.params
 
 
 class SeveritiesFilter(Filter):
@@ -44,7 +38,7 @@ class SeveritiesFilter(Filter):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._severities = [getattr(message, level.upper()) for level in self.params["severities"]]
+        self._severities = [getattr(message, level.upper()) for level in self.params]
 
     def matches(self, message):
         return message.severity in self._severities
@@ -54,11 +48,11 @@ class NotMyActionsFilter(Filter):
     name = "not_my_actions"
 
     def matches(self, message):
-        return self.username != message.author
+        return self.params != message.author
 
 
 class TopicFilter(Filter):
     name = "topic"
 
     def matches(self, message):
-        return fnmatch(message.topic, self.params["topic"])
+        return fnmatch(message.topic, self.params)

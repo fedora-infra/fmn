@@ -1,6 +1,10 @@
 import logging
 
-from fedora_messaging import config, message
+from fedora_messaging import message
+from fedora_messaging.config import conf as fm_config
+
+from fmn.core import config
+from fmn.database import init_sync_model, sync_session_maker
 
 from .cache import cache
 from .requester import Requester
@@ -12,16 +16,21 @@ log = logging.getLogger(__name__)
 
 class Consumer:
     def __init__(self):
+        # Load the general config
+        if fm_config.get("settings_file"):
+            config.set_settings_file(fm_config["settings_file"])
         # Connect to the database
-        self.db = get_database_session(config.conf["consumer_config"]["database_url"])  # noqa
+        init_sync_model()
+        self.db = sync_session_maker()
         # Start the connection to RabbitMQ's FMN vhost
-        self.send_queue = SendQueue(config.conf["consumer_config"]["send_queue"])
+        self.send_queue = SendQueue(fm_config["consumer_config"]["send_queue"])
+        self.send_queue.connect()
         # Caching and requesting
-        cache.configure_from_config(config.conf["consumer_config"]["cache"])
-        self._requester = Requester(config.conf["consumer_config"]["services"])
+        cache.configure(**config.get_settings().dict()["cache"])
+        self._requester = Requester(config.get_settings().dict()["services"])
 
     def __call__(self, message):
-        log.debug(f"Consuming {message!r}")
+        log.debug(f"Consuming message {message.id}")
         try:
             self.handle(message)
         except Exception:
@@ -31,11 +40,14 @@ class Consumer:
     def handle(self, message: message.Message):
         self.refresh_cache_if_needed(message)
         if not self.is_tracked(message):
+            log.debug(f"Message {message.id} is not tracked")
             return
         for rule in Rule.collect(self.db, self._requester):
-            notifications = rule.handle(message)
-            for n in notifications:
-                self.send_queue.send(n)
+            for notification in rule.handle(message):
+                log.debug(
+                    f"Generating notification for message {message.id} via {notification.protocol}"
+                )
+                self.send_queue.send(notification)
 
     def is_tracked(self, message: message.Message):
         # This is cache-based and should save us running all the messages through all the rules. The

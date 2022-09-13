@@ -12,13 +12,14 @@ class SendQueue:
         self._channel = None
 
     def connect(self):
-        self._connection = pika.BlockingConnection(self.config["url"])
+        parameters = pika.URLParameters(self.config["url"])
+        self._connection = pika.BlockingConnection(parameters)
         self._channel = self._connection.channel()
 
     def send(self, notification: Notification):
         body = json.dumps(notification.content)
-        self.channel.basic_publish(
-            exchange="amq.direct", routing_key=f"send.{notification.destination}", body=body
+        self._channel.basic_publish(
+            exchange="amq.direct", routing_key=f"send.{notification.protocol}", body=body
         )
 
     def close(self):

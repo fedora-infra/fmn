@@ -1,13 +1,13 @@
 class Notification:
-    destination: str
+    protocol: str
     content: dict
 
-    def __init__(self, destination: str, content):
-        self.destination = destination
+    def __init__(self, protocol: str, content):
+        self.protocol = protocol
         self.content = content
 
     def to_json(self):
         return {
-            "destination": self.destination,
+            "protocol": self.protocol,
             "content": self.content,
         }

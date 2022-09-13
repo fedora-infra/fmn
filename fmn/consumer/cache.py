@@ -1,8 +1,6 @@
 from dogpile.cache import make_region
 from fedora_messaging.message import Message
 
-from .rule import Rule
-
 
 class Cache:
     def __init__(self):
@@ -19,6 +17,8 @@ class Cache:
         # We can have this consumer listen to those events as messages on the bus.
         # If this happens too frequently, we can just refresh after X minutes have passed and tell
         # users that their changes will take X minutes to be active.
+        from .rule import Rule
+
         tracked = {
             "packages": set(),
             "containers": set(),
@@ -33,14 +33,16 @@ class Cache:
 
     def get_tracked(self, db, requester):
         return self.region.get_or_create(
-            "tracked", creator=self.build_tracked, creator_args=[db, requester]
+            "tracked",
+            creator=self.build_tracked,
+            creator_args=(tuple(), {"db": db, "requester": requester}),
         )
 
     def cache_on_arguments(self, *args, **kwargs):
         return self.region.cache_on_arguments(*args, **kwargs)
 
-    def configure_from_config(self, *args, **kwargs):
-        return self.region.configure_from_config(*args, **kwargs)
+    def configure(self, *args, **kwargs):
+        return self.region.configure(*args, **kwargs)
 
     def invalidate_tracked(self):
         self.region.delete("tracked")
@@ -48,3 +50,6 @@ class Cache:
     def invalidate_on_message(self, message: Message):
         if message.topic.endswith("fmn.rule.updated"):  # XXX: correct topic?
             self.invalidate_tracked()
+
+
+cache = Cache()

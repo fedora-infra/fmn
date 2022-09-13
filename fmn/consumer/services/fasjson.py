@@ -1,4 +1,4 @@
-from fajson_client import Client
+from fasjson_client import Client
 from fedora_messaging.message import Message
 
 from ..cache import cache
