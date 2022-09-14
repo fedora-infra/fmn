@@ -5,13 +5,20 @@ from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..core.config import Settings, get_settings
+from ..database import init_async_model
+from ..database.model import User
 from .auth import Identity, get_identity_optional
+from .database import req_db_async_session
 
 log = logging.getLogger(__name__)
 
 app = FastAPI()
+
+init_async_model()
 
 
 @app.on_event("startup")
@@ -23,6 +30,11 @@ def add_middlewares():
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+
+@app.on_event("startup")
+async def init_model():  # pragma: no cover todo
+    await init_async_model()
 
 
 class Rule(BaseModel):
@@ -51,17 +63,40 @@ async def read_root(
     return result
 
 
+@app.get("/users/")
+async def get_users(
+    db_async_session: AsyncSession = Depends(req_db_async_session),
+):  # pragma: no cover todo
+    result = await db_async_session.execute(select(User))
+    return {"users": result.scalars().all()}
+
+
+@app.get("/user/{username}/")
+async def get_user(
+    username, db_async_session: AsyncSession = Depends(req_db_async_session)
+):  # pragma: no cover todo
+    query = select(User).filter_by(name=username)
+    result = await db_async_session.execute(query)
+    user = result.scalar_one_or_none()
+    if not user:
+        user = User(name=username)
+        db_async_session.add(user)
+        await db_async_session.flush()
+        await db_async_session.refresh(user)
+    return {"user": user}
+
+
 @app.get("/user/{username}/info")
 def get_user_info(
     username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
-):  # pragma: no cover
+):  # pragma: no cover todo
     return fasjson_client.get_user(username=username).result
 
 
 @app.get("/user/{username}/destinations")
 def get_user_destinations(
     username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
-):  # pragma: no cover
+):  # pragma: no cover todo
     user = fasjson_client.get_user(username=username).result
     matrix_nicks = [n for n in user.get("ircnicks", []) if n.startswith("matrix:")]
     irc_nicks = [n for n in user.get("ircnicks", []) if not n.startswith("matrix:")]
@@ -73,7 +108,7 @@ def get_user_destinations(
 
 
 @app.get("/user/{username}/rules")
-def get_user_rules(username):  # pragma: no cover
+def get_user_rules(username):  # pragma: no cover todo
     return [
         {
             "name": "My Completed Koji Builds",
@@ -101,13 +136,13 @@ def get_user_rules(username):  # pragma: no cover
 
 
 @app.post("/user/{username}/rules")
-def create_user_rule(username, rule: Rule):  # pragma: no cover
+def create_user_rule(username, rule: Rule):  # pragma: no cover todo
     print("Creating rule:", rule)
     return rule
 
 
 @app.get("/applications")
-def get_applications():  # pragma: no cover
+def get_applications():  # pragma: no cover todo
     # Read the installed schemas and extract the applications. Return sorted, please :-)
     return [
         "anitya",
