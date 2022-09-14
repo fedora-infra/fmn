@@ -14,6 +14,8 @@ const { isLoading, isError, data, error } = useQuery(
   route,
   apiGet as QueryFunction<Rule[]>
 );
+const userroute = `/user/${userStore.username}/`;
+useQuery(userroute, apiGet);
 const tracking_rule_filter = ref("");
 </script>
 
