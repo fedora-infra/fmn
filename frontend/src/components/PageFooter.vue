@@ -76,8 +76,7 @@
             <a href="https://www.redhat.com/"
               ><img
                 class="rh-logo"
-                height="24px"
-                src="/theme/redhat-logo.png"
+                src="@/assets/redhat-logo.png"
                 alt="Red Hat Logo"
             /></a>
           </div>
