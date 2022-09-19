@@ -33,7 +33,6 @@ class Identity(BaseModel):
         if not cls._client:
             cls._client = AsyncClient(
                 base_url=settings.oidc_provider_url,
-                auth=(settings.oidc_client_id, settings.oidc_client_secret),
                 timeout=None,
             )
         return cls._client
@@ -61,10 +60,16 @@ class Identity(BaseModel):
     async def from_oidc_token(cls, token: str) -> "Identity":
         identity = cls._token_to_identities_cache.get(token)
         if not identity:
+            settings = get_settings()
             response = await cls.client().post(
-                get_settings().oidc_token_info_url, data={"token": token}
+                settings.oidc_token_info_url,
+                data={
+                    "token": token,
+                    "client_id": settings.oidc_client_id,
+                    "client_secret": settings.oidc_client_secret,
+                },
             )
-            await response.raise_for_status()
+            response.raise_for_status()
             result = response.json()
 
             identity = cls(name=result["username"], expires_at=float(result["exp"]))
@@ -87,6 +92,8 @@ class IdentityFactory:
     async def process_oidc_auth(
         self, creds: HTTPAuthorizationCredentials | None
     ) -> Identity | None:
+        if not creds:
+            return None
         return await Identity.from_oidc_token(creds.credentials)
 
     async def __call__(

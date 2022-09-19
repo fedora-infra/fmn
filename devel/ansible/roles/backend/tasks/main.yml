@@ -18,6 +18,22 @@
       tags:
         - packages
 
+    # Add Tinystage's root CA to certifi's bundle
+    - name: Find where certifi's CA bundle is located
+      command:
+        cmd: poetry run python -c "import certifi; print(certifi.where())"
+        chdir: /home/vagrant/fmn/
+      register: _ca_bundle_path
+      changed_when: False
+    - name: Get the content of the CA cert
+      slurp:
+        src: /etc/ipa/ca.crt
+      register: ca_crt
+    - name: Put tinystage root CA in the list of CA's for certifi
+      blockinfile:
+        block: "{{ ca_crt.content | b64decode }}"
+        path: "{{ _ca_bundle_path.stdout }}"
+
     # This needs to be here because the fmn.cfg.j2 template uses it.
     - name: Register the API as an OIDC client with Ipsilon
       command:

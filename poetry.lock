@@ -248,7 +248,7 @@ redis = ["redis (>=3.3.6,<4.0.0)"]
 
 [[package]]
 name = "certifi"
-version = "2022.6.15.1"
+version = "2022.9.14"
 description = "Python package for providing Mozilla's CA Bundle."
 category = "main"
 optional = false
@@ -615,7 +615,7 @@ idna = ">=2.5"
 
 [[package]]
 name = "idna"
-version = "3.3"
+version = "3.4"
 description = "Internationalized Domain Names in Applications (IDNA)"
 category = "main"
 optional = false
@@ -860,7 +860,7 @@ format-nongpl = ["fqdn", "idna", "isoduration", "jsonpointer (>1.13)", "rfc3339-
 
 [[package]]
 name = "keyring"
-version = "23.9.1"
+version = "23.9.3"
 description = "Store and access your passwords safely."
 category = "dev"
 optional = false
@@ -1048,7 +1048,7 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "poetry"
-version = "1.2.0"
+version = "1.2.1"
 description = "Python dependency management and packaging made easy."
 category = "dev"
 optional = false
@@ -1059,7 +1059,7 @@ cachecontrol = {version = ">=0.12.9,<0.13.0", extras = ["filecache"]}
 cachy = ">=0.3.0,<0.4.0"
 cleo = ">=1.0.0a5,<2.0.0"
 crashtest = ">=0.3.0,<0.4.0"
-dulwich = ">=0.20.44,<0.21.0"
+dulwich = ">=0.20.46,<0.21.0"
 html5lib = ">=1.0,<2.0"
 jsonschema = ">=4.10.0,<5.0.0"
 keyring = ">=21.2.0"
@@ -1067,19 +1067,19 @@ packaging = ">=20.4"
 pexpect = ">=4.7.0,<5.0.0"
 pkginfo = ">=1.5,<2.0"
 platformdirs = ">=2.5.2,<3.0.0"
-poetry-core = "1.1.0"
-poetry-plugin-export = ">=1.0.6,<2.0.0"
+poetry-core = "1.2.0"
+poetry-plugin-export = ">=1.0.7,<2.0.0"
 requests = ">=2.18,<3.0"
 requests-toolbelt = ">=0.9.1,<0.10.0"
 shellingham = ">=1.5,<2.0"
 tomlkit = ">=0.11.1,<0.11.2 || >0.11.2,<0.11.3 || >0.11.3,<1.0.0"
 urllib3 = ">=1.26.0,<2.0.0"
-virtualenv = "*"
+virtualenv = ">=20.4.3,<20.4.5 || >20.4.5,<20.4.6 || >20.4.6"
 xattr = {version = ">=0.9.7,<0.10.0", markers = "sys_platform == \"darwin\""}
 
 [[package]]
 name = "poetry-core"
-version = "1.1.0"
+version = "1.2.0"
 description = "Poetry PEP 517 Build Backend"
 category = "dev"
 optional = false
@@ -1087,15 +1087,15 @@ python-versions = ">=3.7,<4.0"
 
 [[package]]
 name = "poetry-plugin-export"
-version = "1.0.6"
+version = "1.0.7"
 description = "Poetry plugin to export the dependencies to various formats"
 category = "dev"
 optional = false
 python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
-poetry = ">=1.2.0b3,<2.0.0"
-poetry-core = ">=1.1.0b3,<2.0.0"
+poetry = ">=1.2.0,<2.0.0"
+poetry-core = ">=1.1.0,<2.0.0"
 
 [[package]]
 name = "psycopg2"
@@ -1832,7 +1832,7 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "1e730711e499ade0b16402b8228e79c6eb6b2419ddc51a4ca74f36953879589f"
+content-hash = "1a81b06eeb6d7e6bcd3cd015bb87df3d7e9f1aac7b27d0667423dcfc79f46bb8"
 
 [metadata.files]
 aio-pika = []
