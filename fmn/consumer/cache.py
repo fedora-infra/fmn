@@ -5,7 +5,6 @@ from fedora_messaging.message import Message
 class Cache:
     def __init__(self):
         self.region = make_region(key_mangler=lambda key: f"fmn.c:v1:{key}")
-        self.fn_keys = set()
 
     def build_tracked(self, db, requester):
         # This will be used to quickly know whether we want to process an incoming message or not.
