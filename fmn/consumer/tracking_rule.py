@@ -23,10 +23,10 @@ class TrackingRule:
         raise ValueError(f"Unknown tracking rule: {tracking_rule.name}")
 
     def matches(self, message: Message):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def prime_cache(self):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class ArtifactsOwned(TrackingRule):
@@ -135,7 +135,7 @@ class ArtifactsFollowed(TrackingRule):
         for msg_attr, followed in self.followed.items():
             if not followed:
                 continue
-            if followed.intersection(set(getattr(message, msg_attr))):
+            if set(followed).intersection(set(getattr(message, msg_attr))):
                 return True
         return False
 
@@ -143,7 +143,7 @@ class ArtifactsFollowed(TrackingRule):
         for msg_attr, followed in self.followed.items():
             if not followed:
                 continue
-            cache[msg_attr].update(followed)
+            cache[msg_attr].update(set(followed))
 
 
 class RelatedEvents(TrackingRule):

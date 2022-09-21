@@ -119,3 +119,8 @@ class TestIdentityFactory:
                 assert result is result_sentinel
             elif optional:
                 assert result is None
+
+    async def test___call__anon(self):
+        factory = IdentityFactory(optional=True)
+        result = await factory(None)
+        assert result is None
