@@ -16,11 +16,11 @@ class TrackingRule:
 
     @classmethod
     def from_rule_record(cls, rule: RuleRecord, requester: Requester):  # noqa
+        tracking_rule = rule.tracking_rule
         for subclass in cls.__subclasses__():
-            if not subclass.name:
-                continue
-            if subclass.name == rule.tracking_rule.name:
-                return subclass(requester, rule.tracking_rule.params)
+            if subclass.name == tracking_rule.name:
+                return subclass(requester, tracking_rule.params)
+        raise ValueError(f"Unknown tracking rule: {tracking_rule.name}")
 
     def matches(self, message: Message):
         raise NotImplementedError
