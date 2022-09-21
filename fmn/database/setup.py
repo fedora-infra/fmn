@@ -14,8 +14,8 @@ from .main import get_sync_engine, metadata
 HERE = Path(__file__).parent
 
 
-def setup_db_schema():
-    engine = get_sync_engine()
+def setup_db_schema(engine=None):
+    engine = engine or get_sync_engine()
 
     inspection_result = inspect(engine)
 

@@ -23,7 +23,7 @@ class Filter:
         )
 
     def matches(self, message: message.Message):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class ApplicationsFilter(Filter):
@@ -48,7 +48,7 @@ class NotMyActionsFilter(Filter):
     name = "not_my_actions"
 
     def matches(self, message):
-        return self.params != message.author
+        return self.params != message.agent_name
 
 
 class TopicFilter(Filter):

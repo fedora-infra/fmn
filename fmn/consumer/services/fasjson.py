@@ -15,5 +15,5 @@ class FasjsonService:
 
     def invalidate_on_message(self, message: Message):
         if message.topic.endswith("fas.group.member.sponsor"):
-            self.get_user_groups.refresh(message.body["user"])
+            self.get_user_groups.refresh(self, message.body["user"])
             cache.invalidate_tracked()

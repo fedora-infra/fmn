@@ -17,8 +17,8 @@ log = logging.getLogger(__name__)
 class Consumer:
     def __init__(self):
         # Load the general config
-        if fm_config.get("settings_file"):
-            config.set_settings_file(fm_config["settings_file"])
+        if fm_config["consumer_config"].get("settings_file"):
+            config.set_settings_file(fm_config["consumer_config"]["settings_file"])
         # Connect to the database
         init_sync_model()
         self.db = sync_session_maker()

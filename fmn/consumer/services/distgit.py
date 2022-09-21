@@ -21,12 +21,11 @@ class DistGitService:
     def _all_values(self, key, url, params=None):
         params["page"] = "1"
         response = self._get(url, params)
-        if "pagination" not in response:
-            return response
         objects = response.get(key)
-        while response["pagination"].get("next"):
-            response = self._get(response["pagination"]["next"])
-            objects.extend(response.get(key))
+        if "pagination" in response:
+            while response["pagination"].get("next"):
+                response = self._get(response["pagination"]["next"])
+                objects.extend(response.get(key))
         return objects
 
     @cache.cache_on_arguments()
@@ -90,12 +89,10 @@ class DistGitService:
                     "group",
                 )
         elif message.topic.endswith("pagure.project.group.added"):
-            owners = list(
-                chain(
-                    message.body["project"]["access_groups"][level]
-                    for level in self.GROUP_OWNER_LEVELS
-                )
-            )
+            owner_accesses = [
+                message.body["project"]["access_groups"][level] for level in self.GROUP_OWNER_LEVELS
+            ]
+            owners = list(chain(*owner_accesses))
             if message.body["new_group"] in owners:
                 self._on_owner_changed(
                     message.body["project"]["namespace"],
@@ -113,6 +110,6 @@ class DistGitService:
                 )
 
     def _on_owner_changed(self, namespace, project_name, name, user_or_group):
-        self.get_owners.refresh(namespace, project_name, user_or_group)
-        self.get_owned.refresh(namespace, name, user_or_group)
+        self.get_owners.refresh(self, namespace, project_name, user_or_group)
+        self.get_owned.refresh(self, namespace, name, user_or_group)
         cache.invalidate_tracked()

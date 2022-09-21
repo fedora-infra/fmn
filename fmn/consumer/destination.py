@@ -17,12 +17,13 @@ class Destination:
             for subclass in cls.__subclasses__():
                 if subclass.protocol == protocol:
                     return subclass
+            raise ValueError(f"No such destination: {protocol}")
 
         subclass = get_class(record.protocol)
         return subclass(record.address)
 
     def generate(self, message: Message):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class Email(Destination):
