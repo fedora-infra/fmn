@@ -18,8 +18,6 @@ log = logging.getLogger(__name__)
 
 app = FastAPI()
 
-init_async_model()
-
 
 @app.on_event("startup")
 def add_middlewares():
