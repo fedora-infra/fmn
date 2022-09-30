@@ -33,7 +33,7 @@ export const config = defaultConfig({
         input: "$reset btn btn-primary",
       },
       checkbox: {
-        outer: "form-check",
+        outer: "form-check form-switch",
         input: "form-check-input",
         label: "form-check-label",
         help: "text-muted",

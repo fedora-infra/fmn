@@ -21,6 +21,21 @@ export interface Filter {
 export interface Application {
   name: string;
 }
+export interface User {
+  name: string;
+}
+export interface Group {
+  name: string;
+}
+export interface Artifact {
+  name: string;
+}
+
+export interface GenerationRule {
+  id: number;
+  destinations: Destination[];
+  filters: Filter[];
+}
 
 export type Severity =
   | typeof DEBUG
@@ -28,9 +43,13 @@ export type Severity =
   | typeof WARNING
   | typeof ERROR;
 
+interface TrackingRuleEditing {
+  name: string;
+  params?: string[] | Record<string, string>;
+}
 export interface Rule {
   name: string;
-  tracking_rule: string;
+  tracking_rule: TrackingRuleEditing;
   destinations: Destination[];
   filters: Filter[];
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { CCol, CRow } from "@coreui/bootstrap-vue";
 import FilterApplication from "./FilterApplication.vue";
 import FilterMyActions from "./FilterMyActions.vue";
 import FilterSeverity from "./FilterSeverity.vue";
@@ -16,21 +17,28 @@ const handleChange = (key: string, value: string | boolean | null) => {
   filters[key] = value;
 };
 */
+
+const props = defineProps<{
+  name?: string;
+}>();
 </script>
 
 <template>
-  <FormKit type="group" name="filters">
-    <div class="mb-2">
-      <FilterApplication />
-    </div>
-    <div class="mb-2">
-      <FilterSeverity />
-    </div>
-    <div class="mb-2">
-      <FilterMyActions />
-    </div>
-    <div class="mb-2">
-      <FilterTopic />
-    </div>
+  <h4>Optional Filters</h4>
+  <FormKit type="group" :name="props.name || 'filters'">
+    <CRow :xs="{ gutter: 3 }">
+      <CCol xs="6">
+        <FilterSeverity />
+      </CCol>
+      <CCol xs="6">
+        <FilterApplication />
+      </CCol>
+      <CCol xs="6">
+        <FilterMyActions />
+      </CCol>
+      <CCol xs="6">
+        <FilterTopic />
+      </CCol>
+    </CRow>
   </FormKit>
 </template>

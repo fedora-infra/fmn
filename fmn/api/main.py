@@ -35,11 +35,20 @@ async def init_model():  # pragma: no cover todo
     await init_async_model()
 
 
-class Rule(BaseModel):
+class TrackingRule(BaseModel):
     name: str
-    tracking_rule: str
+    params: list[str] | dict[str, str] | None
+
+
+class GenerationRule(BaseModel):
     destinations: list[str]
     filters: dict[str, str | list[str] | bool | None]
+
+
+class Rule(BaseModel):
+    name: str
+    tracking_rule: TrackingRule
+    generation_rules: list[GenerationRule]
 
 
 def get_fasjson_client(settings: Settings = Depends(get_settings)):

@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { apiGet } from "@/api";
 import type { QueryFunction } from "react-query/types/core";
 import { useQuery } from "vue-query";
-import { apiGet } from "../api";
 
 // const props = defineProps<{ value: string | null }>();
 
@@ -13,7 +13,7 @@ const { isLoading, isError, data, error } = useQuery(
 </script>
 
 <template>
-  <p class="mb-0">Only notify for the selected applications:</p>
+  <p class="mb-0 fw-bold">Applications:</p>
   <p v-if="isLoading">
     <input
       type="text"
@@ -26,7 +26,7 @@ const { isLoading, isError, data, error } = useQuery(
   <FormKit
     type="multiselect"
     name="applications"
-    placeholder="Select applications"
+    placeholder="Choose one or more applications"
     mode="tags"
     :msOptions="data"
     searchable

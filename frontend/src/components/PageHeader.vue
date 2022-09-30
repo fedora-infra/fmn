@@ -12,7 +12,7 @@ const { t } = useI18n();
   <CNavbar
     expand="lg"
     color-scheme="light"
-    class="masthead justify-content-between py-2"
+    class="masthead justify-content-between py-2 mb-5"
   >
     <CContainer>
       <router-link to="/" class="navbar-brand">

@@ -1,0 +1,47 @@
+<script setup lang="ts">
+import { apiGet } from "@/api";
+import type { Group } from "@/api/types";
+import { useUserStore } from "@/stores/user";
+import type { QueryFunction } from "react-query/types/core";
+import { ref } from "vue";
+import { useQuery } from "vue-query";
+import ArtifactsOwnedSummary from "./ArtifactsOwnedSummary.vue";
+
+const userStore = useUserStore();
+const username = userStore.username;
+const value = ref<Record<string, string>[]>([]);
+const apiGetUserGroups = apiGet as QueryFunction<{ groups: Group[] }>;
+const route = `/user/${username}/groups/`;
+const { isLoading, isError, data, error } = useQuery(route, apiGetUserGroups);
+</script>
+
+<template>
+  <p v-if="isLoading">
+    <input
+      type="text"
+      class="form-control"
+      disabled
+      value="Loading groups..."
+    />
+  </p>
+  <span v-else-if="isError">Could not load groups: {{ error }}</span>
+  <template v-else>
+    <FormKit
+      type="multiselect"
+      name="params"
+      label="Artifacts owned by groups:"
+      label-class="fw-bold"
+      mode="tags"
+      v-model="value"
+      :msOptions="
+        data ? data.groups.map((g) => ({ lablel: g.name, value: g.name })) : []
+      "
+      searchable
+      :close-on-select="false"
+      validation="required"
+    />
+    <ArtifactsOwnedSummary :groups="value.map((v) => v.value)" />
+  </template>
+</template>
+
+<style src="@vueform/multiselect/themes/default.css"></style>

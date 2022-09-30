@@ -37,3 +37,10 @@ export const TRACKING_RULES: TrackingRule[] = [
     description: "Users whose actions I follow",
   },
 ];
+
+export const ARTIFACT_TYPES = [
+  { label: "RPM", value: "rpms" },
+  { label: "Container", value: "containers" },
+  { label: "Module", value: "modules" },
+  { label: "Flatpak", value: "flatpaks" },
+];

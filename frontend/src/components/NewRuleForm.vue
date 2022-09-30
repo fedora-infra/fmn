@@ -1,25 +1,27 @@
 <script setup lang="ts">
 import { useAddRuleMutation } from "@/api/rules";
-import type { PostError, Rule } from "@/api/types";
+import type { GenerationRule, PostError, Rule } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
+import { CCol, CRow } from "@coreui/bootstrap-vue";
 import type { FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
-import {
-  CAccordion,
-  CAccordionBody,
-  CAccordionHeader,
-  CAccordionItem,
-} from "@coreui/bootstrap-vue";
 import type { AxiosError } from "axios";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
-import DestinationList from "./DestinationList.vue";
-import FilterList from "./FilterList.vue";
-import TrackingRuleList from "./TrackingRuleList.vue";
+import EditableName from "./EditableName.vue";
+import GenerationRuleList from "./rule-edit/generation-rule/GenerationRuleList.vue";
+import TrackingRule from "./rule-edit/tracking-rule/TrackingRule.vue";
 
 const toastStore = useToastStore();
 const router = useRouter();
 
 const { mutateAsync } = useAddRuleMutation();
+
+const trackingRuleName = ref("");
+const generationRulesCount = ref(0);
+const formReady = computed(
+  () => trackingRuleName.value !== "" && generationRulesCount.value > 0
+);
 
 const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
   console.log("Will submit the new rule:", data);
@@ -43,11 +45,19 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
     }
     form.setErrors(
       error.response.data.detail.map(
-        (e) => `Server error: ${e.loc.at(-1)}: ${e.msg}`
+        (e) => `Server error: ${e.loc[-1]}: ${e.msg}`
       )
     );
   }
 };
+
+const handleTrackingRuleSelected = (name: string) => {
+  trackingRuleName.value = name;
+};
+const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
+  generationRulesCount.value = rules.length;
+};
+
 const additional_filters_accordion_vars = {
   "--bs-accordion-btn-padding-x": 0,
   "--bs-accordion-btn-padding-y": 0,
@@ -58,41 +68,39 @@ const additional_filters_accordion_vars = {
 </script>
 
 <template>
-  <FormKit
-    type="form"
-    id="new-rule"
-    @submit="handleSubmit"
-    submit-label="Create Rule"
-    :submit-attrs="{ class: ['btn', 'btn-primary'] }"
-  >
-    <div class="mb-4">
-      <h4>Choose what you want to track</h4>
-      <TrackingRuleList />
-    </div>
+  <FormKit type="form" id="new-rule" @submit="handleSubmit" :actions="false">
+    <CRow class="mb-2">
+      <CCol xs="auto" class="me-auto">
+        <h4>
+          <EditableName
+            name="name"
+            value="New Rule 1"
+            button-class="fs-3"
+            input-class="form-control-lg"
+          />
+        </h4>
+      </CCol>
+      <CCol xs="auto">
+        <FormKit
+          type="submit"
+          :class="['btn', 'btn-primary', 'form-control-lg']"
+          :disabled="!formReady"
+        >
+          Create Rule
+        </FormKit>
+      </CCol>
+    </CRow>
 
-    <CAccordion flush :style="additional_filters_accordion_vars">
-      <CAccordionItem :item-key="1">
-        <CAccordionHeader class="align-items-center">
-          <h4>Additional Filters</h4>
-        </CAccordionHeader>
-        <CAccordionBody class="bg-light">
-          <FilterList />
-        </CAccordionBody>
-      </CAccordionItem>
-    </CAccordion>
-
-    <div class="mb-4 mt-4">
-      <FormKit
-        name="name"
-        type="text"
-        placeholder="Rule name"
-        help="Choose a name for your new Rule"
-        validation="required"
-      />
-    </div>
-    <div class="mb-4">
-      <h4>Choose where you want the notifications to go</h4>
-      <DestinationList />
-    </div>
+    <CRow>
+      <CCol sm="4" class="border-end">
+        <TrackingRule @selected="handleTrackingRuleSelected" />
+      </CCol>
+      <CCol>
+        <GenerationRuleList
+          v-if="!!trackingRuleName"
+          @change="handleGenerationRulesChanged"
+        />
+      </CCol>
+    </CRow>
   </FormKit>
 </template>

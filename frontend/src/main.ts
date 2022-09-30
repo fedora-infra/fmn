@@ -9,6 +9,7 @@ import i18n from "./i18n";
 import router from "./router";
 import pinia from "./stores";
 
+import "@coreui/coreui/dist/css/coreui.min.css";
 import "fedora-bootstrap/dist/fedora-bootstrap.min.css";
 import "./assets/main.css";
 
