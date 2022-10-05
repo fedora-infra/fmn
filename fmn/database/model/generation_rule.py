@@ -1,6 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer
 from sqlalchemy.orm import relationship
-from sqlalchemy.orm.collections import attribute_mapped_collection
 
 from ..main import Base
 from .rule import Rule
