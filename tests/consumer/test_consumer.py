@@ -78,7 +78,7 @@ def test_consumer_call_tracked(
 
     setup_db_schema(engine=c.db.get_bind())
     user = model.User(name="dummy")
-    record = model.Rule(user=user)
+    record = model.Rule(user=user, name="the name")
     tr = model.TrackingRule(rule=record, name="artifacts-owned", params={"username": "dummy"})
     gr = model.GenerationRule(rule=record)
     f = model.Filter(generation_rule=gr, name="not_my_actions", params="dummy")

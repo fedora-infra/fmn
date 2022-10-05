@@ -28,7 +28,7 @@ def db_session():
 def test_collect(db_session):
     requester = Mock()
     user = UserRecord(name="dummy")
-    record = RuleRecord(user=user)
+    record = RuleRecord(user=user, name="the name")
     tr = TrackingRuleRecord(rule=record, name="artifacts-owned", params={"username": "dummy"})
     gr = GenerationRuleRecord(rule=record)
     f = FilterRecord(generation_rule=gr, name="not_my_actions")
