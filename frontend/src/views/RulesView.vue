@@ -5,7 +5,6 @@ import RulesList from "../components/RulesList.vue";
 
 // Getting rules
 const { isLoading, isError, data, error } = useRulesQuery();
-console.log(data.value);
 </script>
 
 <template>
