@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { TRACKING_RULES } from "@/api/constants";
-import { useDeleteRuleMutation, useRulesQuery } from "@/api/rules";
+import { useDeleteRuleMutation } from "@/api/rules";
 import type { PostError, Rule, TrackingRule } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
 import {
@@ -13,13 +13,14 @@ import type { AxiosError } from "axios";
 import { computed, ref } from "vue";
 import RuleListItem from "../components/RuleListItem.vue";
 
-// Getting rules
-const { isLoading, isError, data, error } = useRulesQuery();
+const props = defineProps<{
+  rules: Rule[];
+}>();
 
 const tracking_rule_filter = ref("");
 const filteringOptions = computed(() => [
   ...new Set(
-    (data.value || [])
+    (props.rules || [])
       .map((rule) => rule.tracking_rule.name)
       .map((name) => TRACKING_RULES.find((tr) => tr.name === name))
       .filter((o) => typeof o !== "undefined") as TrackingRule[]
@@ -59,9 +60,7 @@ const handleDelete = async (rule: Rule) => {
 </script>
 
 <template>
-  <span v-if="isLoading">Loading...</span>
-  <span v-else-if="isError">Error: {{ error }}</span>
-  <CCard v-else-if="data && data.length === 0" class="border bg-light py-5">
+  <CCard v-if="props.rules.length === 0" class="border bg-light py-5">
     <CCardBody>
       <h2 class="text-center text-muted">No Rules.</h2>
       <div class="text-center mt-3">
@@ -72,7 +71,7 @@ const handleDelete = async (rule: Rule) => {
     </CCardBody>
   </CCard>
   <template v-else>
-    <span class="fw-bold">{{ data ? data.length : "?" }} rules </span>
+    <p class="fw-bold">{{ props.rules.length }} rule(s)</p>
 
     <CListGroup>
       <CListGroupItem
@@ -93,7 +92,7 @@ const handleDelete = async (rule: Rule) => {
         </router-link>
       </CListGroupItem>
       <RuleListItem
-        v-for="rule in (data || []).filter(
+        v-for="rule in props.rules.filter(
           (r) =>
             !tracking_rule_filter ||
             r.tracking_rule.name.includes(tracking_rule_filter)
