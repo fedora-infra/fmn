@@ -6,16 +6,27 @@ export interface TrackingRule {
   description: string;
 }
 
+export interface SelectOption<T> {
+  label: string;
+  value: T;
+}
+
 export interface Destination {
+  protocol: string;
+  address: string;
+}
+
+export interface DestinationGroup {
   name: string;
   label: string;
-  values: string[];
+  values: SelectOption<Destination>[];
 }
 
 export interface Filter {
-  name: string;
-  title: string;
-  choices?: string[];
+  applications?: string[];
+  severities?: string[];
+  my_actions?: boolean;
+  topic?: string | null;
 }
 
 export interface Application {
@@ -34,7 +45,7 @@ export interface Artifact {
 export interface GenerationRule {
   id: number;
   destinations: Destination[];
-  filters: Filter[];
+  filters: Filter;
 }
 
 export type Severity =
@@ -48,10 +59,10 @@ interface TrackingRuleEditing {
   params?: string[] | Record<string, string>;
 }
 export interface Rule {
+  id: number;
   name: string;
   tracking_rule: TrackingRuleEditing;
-  destinations: Destination[];
-  filters: Filter[];
+  generation_rules: GenerationRule[];
 }
 
 interface PostErrorDetail {

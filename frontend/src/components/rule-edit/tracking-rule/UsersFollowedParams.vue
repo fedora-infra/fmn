@@ -13,7 +13,7 @@ const getUsers = async (query: string) => {
     meta: undefined,
   });
   return results
-    ? results.users.map((u) => ({ lablel: u.name, value: u.name }))
+    ? results.users.map((u) => ({ label: u.name, value: u.name }))
     : [];
 };
 </script>

@@ -5,7 +5,7 @@ import { msProps } from "./MultiSelectInputConstants";
 
 // Define the multiselect Input for FormKit
 const multiselect = createInput(MultiSelectInput, {
-  props: [...msProps, "msOptions"],
+  props: [...msProps, "msOptions", "msLabel"],
 });
 
 // Create the FormKit config, including the multiselect input

@@ -10,7 +10,7 @@ const props = defineProps<{
   groups?: string[];
 }>();
 
-const route = "`/artifacts/owned";
+const route = "/artifacts/owned";
 const { isLoading, isError, data, error } = useQuery(
   [route, { user: props.users, groups: props.groups }],
   apiGet as QueryFunction<Artifact[]>

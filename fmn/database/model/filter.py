@@ -10,8 +10,10 @@ class Filter(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
 
-    generation_rule_id = Column(Integer, ForeignKey(GenerationRule.id), nullable=False)
-    generation_rule = relationship(GenerationRule, backref="filters")
+    generation_rule_id = Column(
+        Integer, ForeignKey(GenerationRule.id, ondelete="CASCADE"), nullable=False
+    )
+    generation_rule = relationship(GenerationRule, back_populates="filters")
 
     name = Column(String(length=255), nullable=False)
     params = Column(JSON)

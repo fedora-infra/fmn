@@ -42,3 +42,8 @@ const ruleName = ref("");
 </template>
 
 <style src="@vueform/multiselect/themes/default.css"></style>
+<style>
+:root {
+  --ms-max-height: 20rem;
+}
+</style>

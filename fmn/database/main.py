@@ -1,5 +1,6 @@
-from sqlalchemy import MetaData, create_engine
+from sqlalchemy import MetaData, create_engine, select
 from sqlalchemy.engine import URL, Engine, make_url
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
@@ -18,6 +19,33 @@ Base = declarative_base(metadata=metadata)
 
 async_session_maker = sessionmaker(class_=AsyncSession, expire_on_commit=False, future=True)
 sync_session_maker = sessionmaker(future=True, expire_on_commit=False)
+
+
+async def get_or_create(session, model, **attrs):
+    """Function like Django's ``get_or_create()`` method.
+
+    It will return a tuple, the first argument being the instance and the
+    second being a boolean: ``True`` if the instance has been created and
+    ``False`` otherwise.
+
+    Example: ``user, created = get_or_create(session, User, name="foo")``
+    """
+    query = select(model).filter_by(**attrs)
+    try:
+        result = await session.execute(query)
+        return result.scalar_one(), False
+    except NoResultFound:
+        obj = model(**attrs)
+        session.add(obj)
+        await session.flush()
+        await session.refresh(obj)
+        return obj, True
+
+
+async def get(session, model, **attrs):
+    query = select(model).filter_by(**attrs)
+    result = await session.execute(query)
+    return result.scalar_one()
 
 
 def init_sync_model(sync_engine: Engine = None):

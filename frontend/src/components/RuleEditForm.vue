@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useAddRuleMutation } from "@/api/rules";
+import { useEditRuleMutation } from "@/api/rules";
 import type { GenerationRule, PostError, Rule } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
-import { CCol, CRow } from "@coreui/bootstrap-vue";
+import { CAlert, CCol, CRow } from "@coreui/bootstrap-vue";
 import type { FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";
@@ -12,19 +12,17 @@ import EditableName from "./EditableName.vue";
 import GenerationRuleList from "./rule-edit/generation-rule/GenerationRuleList.vue";
 import TrackingRule from "./rule-edit/tracking-rule/TrackingRule.vue";
 
+const props = defineProps<{
+  rule: Rule;
+}>();
+
 const toastStore = useToastStore();
 const router = useRouter();
 
-const { mutateAsync } = useAddRuleMutation();
-
-const trackingRuleName = ref("");
-const generationRulesCount = ref(0);
-const formReady = computed(
-  () => trackingRuleName.value !== "" && generationRulesCount.value > 0
-);
+const { mutateAsync } = useEditRuleMutation(props.rule.id);
 
 const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
-  console.log("Will submit the new rule:", data);
+  console.log("Will edit the rule:", data);
   if (!form) {
     throw Error("No form node?");
   }
@@ -33,8 +31,8 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
     // Success!
     toastStore.addToast({
       color: "success",
-      title: "Rule created",
-      content: `Rule "${response.name}" has been successfully created.`,
+      title: "Rule edited",
+      content: `Rule "${response.name}" has been successfully edited.`,
     });
     router.push("/rules");
   } catch (err) {
@@ -51,24 +49,29 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
   }
 };
 
-const handleTrackingRuleSelected = (name: string) => {
-  trackingRuleName.value = name;
-};
+const generationRulesCount = ref(props.rule.generation_rules.length);
 const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
   generationRulesCount.value = rules.length;
 };
+const formReady = computed(() => generationRulesCount.value > 0);
 </script>
 
 <template>
-  <FormKit type="form" id="new-rule" @submit="handleSubmit" :actions="false">
+  <FormKit
+    type="form"
+    id="new-rule"
+    @submit="handleSubmit"
+    :actions="false"
+    :value="props.rule"
+  >
     <CRow class="mb-2">
       <CCol xs="auto" class="me-auto">
         <h4>
           <EditableName
             name="name"
-            value="New Rule 1"
             button-class="fs-3"
             input-class="form-control-lg"
+            :value="props.rule.name"
           />
         </h4>
       </CCol>
@@ -78,20 +81,23 @@ const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
           :class="['btn', 'btn-primary', 'form-control-lg']"
           :disabled="!formReady"
         >
-          Create Rule
+          Save Rule
         </FormKit>
       </CCol>
     </CRow>
 
     <CRow>
       <CCol sm="4" class="border-end">
-        <TrackingRule @selected="handleTrackingRuleSelected" />
+        <TrackingRule />
       </CCol>
       <CCol>
         <GenerationRuleList
-          v-if="!!trackingRuleName"
           @change="handleGenerationRulesChanged"
+          :rules="props.rule.generation_rules"
         />
+        <CAlert v-if="generationRulesCount === 0" color="warning" class="mt-2"
+          >There must be at least one destination</CAlert
+        >
       </CCol>
     </CRow>
   </FormKit>

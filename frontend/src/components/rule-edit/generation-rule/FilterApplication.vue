@@ -24,6 +24,7 @@ const { isLoading, isError, data, error } = useQuery(
   </p>
   <p v-else-if="isError">Error: {{ error }}</p>
   <FormKit
+    v-else
     type="multiselect"
     name="applications"
     placeholder="Choose one or more applications"

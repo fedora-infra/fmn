@@ -9,9 +9,9 @@ import {
 } from "@coreui/bootstrap-vue";
 import type { FormKitNode } from "@formkit/core";
 import { ref } from "vue";
-import DestinationList from "./DestinationList.vue";
-import FilterList from "./FilterList.vue";
 import NotificationPreview from "./NotificationPreview.vue";
+import FilterList from "./FilterList.vue";
+import DestinationList from "./DestinationList.vue";
 
 const props = defineProps<{
   visible: boolean;

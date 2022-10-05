@@ -21,5 +21,7 @@ app.use(pinia);
 app.use(VueQueryPlugin, vueQueryPluginOptions);
 app.use(FormKitPlugin, formkitConfig);
 app.use(i18n);
+// Avoid a warning about the icons object not being provided.
+app.provide("icons", {});
 
 app.mount("#app");

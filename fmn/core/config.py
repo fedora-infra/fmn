@@ -15,6 +15,7 @@ class CacheModel(BaseModel):
 
 class SQLAlchemyModel(BaseModel):
     url: stricturl(tld_required=False, host_required=False) = "sqlite:///:memory:"
+    echo: bool = False
 
     class Config:
         extra = "allow"

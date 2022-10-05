@@ -7,11 +7,15 @@ import { computed, ref } from "vue";
 import GenerationRuleListItem from "./GenerationRuleListItem.vue";
 import GenerationRuleModal from "./GenerationRuleModal.vue";
 
+const props = defineProps<{
+  rules?: GenerationRule[];
+}>();
+
 const emit = defineEmits<{
   (e: "change", rules: GenerationRule[]): void;
 }>();
 
-const generation_rules = ref<GenerationRule[]>([]);
+const generation_rules = ref<GenerationRule[]>([...(props.rules || [])]);
 const editing = ref<number | null>(null);
 const handleButtonClicked = (index: number) => {
   editing.value = index;
@@ -69,10 +73,10 @@ const editedRule = computed(() =>
           />
         </template>
       </FormKit>
-      <div class="text-center mt-3">
+      <div class="text-center mt-4">
         <CButton
           @click="() => handleButtonClicked(-1)"
-          color="primary"
+          :color="generation_rules.length === 0 ? 'primary' : 'secondary'"
           type="button"
         >
           <CIcon :icon="cilPlus" />

@@ -17,6 +17,7 @@ const bindableProps = computed(() => {
   val.value = props.context._value;
   val.disabled = props.context.disabled;
   val.options = props.context.node.props.msOptions;
+  val.label = props.context.node.props.msLabel;
   return val;
 });
 
