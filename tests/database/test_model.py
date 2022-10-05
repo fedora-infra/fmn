@@ -73,5 +73,9 @@ class TestUser(ModelTestBase):
 class TestRule(ModelTestBase):
     cls = model.Rule
 
+    attrs = {
+        "name": "darule",
+    }
+
     def _db_obj_get_dependencies(self):
         return {"user": model.User(name="allkneelbeforezod")}
