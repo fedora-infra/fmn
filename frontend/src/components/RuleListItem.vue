@@ -2,12 +2,12 @@
 import { CListGroupItem } from "@coreui/bootstrap-vue";
 import { TRACKING_RULES } from "../api/constants";
 
-import type { Rule, TrackingRule } from "../api/types";
+import type { Rule, TrackingRule, TrackingRuleEditing } from "../api/types";
 const props = defineProps<{
   rule: Rule;
 }>();
 defineEmits<{ (e: "change", value: string | null): void }>();
-const tracking_rule = TRACKING_RULES.find(
+const tracking_rule: TrackingRuleEditing = TRACKING_RULES.find(
   (o) => o.name === props.rule.tracking_rule
 ) as TrackingRule;
 </script>

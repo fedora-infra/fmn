@@ -57,14 +57,6 @@ const handleTrackingRuleSelected = (name: string) => {
 const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
   generationRulesCount.value = rules.length;
 };
-
-const additional_filters_accordion_vars = {
-  "--bs-accordion-btn-padding-x": 0,
-  "--bs-accordion-btn-padding-y": 0,
-  "--bs-accordion-bg": "transparent",
-  "--bs-accordion-btn-focus-box-shadow": "none",
-  "--bs-accordion-btn-focus-border-color": "none",
-};
 </script>
 
 <template>
