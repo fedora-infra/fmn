@@ -54,6 +54,7 @@ def test_get_sync_engine(create_engine):
     create_engine.assert_called_once_with(
         url=get_settings().database.sqlalchemy.url,
         isolation_level="SERIALIZABLE",
+        echo=False,
     )
 
 
@@ -83,4 +84,5 @@ def test_get_async_engine(create_async_engine):
     create_async_engine.assert_called_once_with(
         url=async_url,
         isolation_level="SERIALIZABLE",
+        echo=False,
     )
