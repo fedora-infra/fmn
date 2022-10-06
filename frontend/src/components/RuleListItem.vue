@@ -71,9 +71,8 @@ const tracking_rule = TRACKING_RULES.find(
         <CIcon :icon="cilPen" />
       </router-link>
       <CButton
-        @click="handleDeleteClicked"
+        @click.prevent="handleDeleteClicked"
         color="danger"
-        type="button"
         variant="outline"
         class="ms-1"
       >

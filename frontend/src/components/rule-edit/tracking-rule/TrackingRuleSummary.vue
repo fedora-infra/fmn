@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import type { Artifact } from "@/api/types";
 import {
   CAccordion,
   CAccordionBody,
   CAccordionHeader,
   CAccordionItem,
+  CBadge,
 } from "@coreui/bootstrap-vue";
 
 const props = defineProps<{
-  tracked: string[];
+  tracked: Artifact[];
 }>();
 const additional_filters_accordion_vars = {
   "--bs-accordion-btn-padding-x": 0,
@@ -22,15 +24,21 @@ const additional_filters_accordion_vars = {
 
 <template>
   <div class="mt-3">
-    <CAccordion flush :style="additional_filters_accordion_vars">
+    <!-- prevent the default action of click events on the accordion button, or it will submit the form -->
+    <CAccordion
+      flush
+      :style="additional_filters_accordion_vars"
+      @click.prevent=""
+    >
       <CAccordionItem :item-key="1">
         <CAccordionHeader>
           This Rule will track {{ props.tracked.length }} artefacts:
         </CAccordionHeader>
         <CAccordionBody>
           <ul class="list-unstyled">
-            <li v-for="artifact in props.tracked" :key="artifact">
-              {{ artifact }}
+            <li v-for="artifact in props.tracked" :key="artifact.name">
+              <CBadge color="info">{{ artifact.type }}</CBadge>
+              {{ artifact.name }}
             </li>
           </ul>
         </CAccordionBody>

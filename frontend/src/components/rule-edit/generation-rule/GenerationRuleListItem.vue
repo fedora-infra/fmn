@@ -34,18 +34,16 @@ const handleDeleteClicked = () => {
     <span>
       <span>X avg messages a day</span>
       <CButton
-        @click="handleEditClicked"
+        @click.prevent="handleEditClicked"
         color="primary"
-        type="button"
         variant="outline"
         class="ms-1"
       >
         <CIcon :icon="cilPen" />
       </CButton>
       <CButton
-        @click="handleDeleteClicked"
+        @click.prevent="handleDeleteClicked"
         color="danger"
-        type="button"
         variant="outline"
         class="ms-1"
       >

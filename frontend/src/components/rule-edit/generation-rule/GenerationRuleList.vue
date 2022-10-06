@@ -75,9 +75,8 @@ const editedRule = computed(() =>
       </FormKit>
       <div class="text-center mt-4">
         <CButton
-          @click="() => handleButtonClicked(-1)"
+          @click.prevent="() => handleButtonClicked(-1)"
           :color="generation_rules.length === 0 ? 'primary' : 'secondary'"
-          type="button"
         >
           <CIcon :icon="cilPlus" />
           Add Destination

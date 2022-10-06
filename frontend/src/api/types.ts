@@ -40,6 +40,7 @@ export interface Group {
 }
 export interface Artifact {
   name: string;
+  type: "rpm" | "container" | "module" | "flatpak";
 }
 
 export interface GenerationRule {

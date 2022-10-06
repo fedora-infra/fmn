@@ -45,9 +45,8 @@ onUpdated(() => {
   <span :class="{ 'd-none': editing }">
     <CButton
       variant="ghost"
-      @click="toggleEditing"
+      @click.prevent="toggleEditing"
       :class="props.buttonClass"
-      type="button"
     >
       <CIcon :icon="cilPen" class="me-2 align-baseline" />
       {{ value }}

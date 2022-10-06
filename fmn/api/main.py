@@ -1,7 +1,7 @@
 import logging
 
 from fasjson_client import Client as FasjsonClient
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy import select
@@ -251,3 +251,28 @@ def get_applications():  # pragma: no cover todo
         "bodhi",
         "koji",
     ]
+
+
+@app.get("/artifacts/owned")
+def get_owned_artifacts(
+    users: list[str] = Query(default=[]), groups: list[str] = Query(default=[])
+):
+    # TODO: Get artifacts owned by a user or a group
+
+    artifacts = []
+    artifact_names = []
+
+    def _add_artifact(a):
+        if a["name"] in artifact_names:
+            return
+        artifacts.append(a)
+        artifact_names.append(a["name"])
+
+    for username in users or []:
+        # Add artifacts owned by the user to the list
+        _add_artifact({"type": "rpm", "name": "foobar-user-owned"})
+    for groupname in groups or []:
+        # Add artifacts owned by the user to the list
+        _add_artifact({"type": "rpm", "name": "foobar-group-owned"})
+    artifacts.sort(key=lambda a: a["name"])
+    return artifacts

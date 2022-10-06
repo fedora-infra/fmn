@@ -27,6 +27,7 @@
     "npm": "^8.17.0",
     "pinia": "^2.0.14",
     "pinia-plugin-persistedstate": "^2.1.0",
+    "qs": "^6.11.0",
     "vue": "^3.2.37",
     "vue-i18n": "^9.2.2",
     "vue-query": "^1.25.2",

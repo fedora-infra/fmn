@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { GenerationRule } from "@/api/types";
 import {
-  CButton,
   CModal,
   CModalBody,
   CModalHeader,
@@ -9,9 +8,9 @@ import {
 } from "@coreui/bootstrap-vue";
 import type { FormKitNode } from "@formkit/core";
 import { ref } from "vue";
-import NotificationPreview from "./NotificationPreview.vue";
-import FilterList from "./FilterList.vue";
 import DestinationList from "./DestinationList.vue";
+import FilterList from "./FilterList.vue";
+import NotificationPreview from "./NotificationPreview.vue";
 
 const props = defineProps<{
   visible: boolean;
@@ -42,15 +41,9 @@ const handleClose = async () => {
     backdrop="static"
     @close="handleClose"
   >
-    <!-- We can't use the default close button because it's not set with type="button" and formkit will think it's a submit button -->
-    <CModalHeader :close-button="false">
+    <!-- Catch and prevent the click event on the close button so that it does not submit the form -->
+    <CModalHeader @click.prevent="">
       <CModalTitle>{{ props.title }}</CModalTitle>
-      <CButton
-        type="button"
-        class="btn btn-close"
-        aria-label="Close"
-        @click="handleClose"
-      />
     </CModalHeader>
     <CModalBody>
       <FormKit

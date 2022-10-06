@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { apiGet } from "@/api";
 import type { Artifact } from "@/api/types";
+import { CSpinner } from "@coreui/bootstrap-vue";
 import type { QueryFunction } from "react-query/types/core";
 import { useQuery } from "vue-query";
 import TrackingRuleSummary from "./TrackingRuleSummary.vue";
@@ -12,15 +13,20 @@ const props = defineProps<{
 
 const route = "/artifacts/owned";
 const { isLoading, isError, data, error } = useQuery(
-  [route, { user: props.users, groups: props.groups }],
+  [route, { users: props.users, groups: props.groups }],
   apiGet as QueryFunction<Artifact[]>
 );
 </script>
 
 <template>
-  <span v-if="isLoading">Checking how many artifacts will be tracked…</span>
-  <span v-else-if="isError"
-    >Could not check how many artifacts will be tracked: {{ error }}</span
-  >
-  <TrackingRuleSummary v-else :tracked="data ? data.map((a) => a.name) : []" />
+  <div class="mt-3">
+    <p v-if="isLoading">
+      Checking how many artifacts will be tracked…
+      <CSpinner size="sm" />
+    </p>
+    <p v-else-if="isError">
+      Could not check how many artifacts will be tracked: {{ error }}
+    </p>
+    <TrackingRuleSummary v-else-if="data" :tracked="data" />
+  </div>
 </template>
