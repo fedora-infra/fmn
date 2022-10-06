@@ -25,6 +25,7 @@ export const config: UserConfig = {
   },
   test: {
     environment: "jsdom",
+    testTimeout: 20000,
     coverage: {
       reporter: ["text", "json", "html"],
       all: true,

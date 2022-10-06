@@ -7,13 +7,13 @@ import { ref } from "vue";
 import ArtifactsOwnedSummary from "./ArtifactsOwnedSummary.vue";
 
 const userStore = useUserStore();
-const username = userStore.username!;
-const value = ref<string[]>([username]);
+const username = userStore.username;
+const value = ref<string[]>(username ? [username] : []);
 const apiGetUsers = apiGet as QueryFunction<{ users: User[] }>;
 const route = "/users/";
 const getUsers = async (query: string) => {
   if (!query) {
-    return [username];
+    return value.value;
   }
   const results = await apiGetUsers({
     queryKey: [route, { search: query }],
