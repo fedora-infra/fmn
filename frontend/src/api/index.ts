@@ -1,6 +1,5 @@
 import { useUserStore } from "@/stores/user";
 import axios, { type AxiosRequestConfig } from "axios";
-import { stringify } from "qs";
 import type { QueryFunction } from "react-query/types/core";
 import type { VueQueryPluginOptions } from "vue-query";
 import pinia from "../stores";
@@ -24,7 +23,9 @@ async function getAxiosConfig() {
   const token = await userStore.getToken();
   const axiosConfig: AxiosRequestConfig = {
     // Don't add brackets to arrays
-    paramsSerializer: (params) => stringify(params, { arrayFormat: "repeat" }),
+    // paramsSerializer: (params) => stringify(params, { arrayFormat: "repeat" }),
+    // For Axios 1.0+
+    paramsSerializer: { indexes: null },
   };
   if (token) {
     axiosConfig["headers"] = { Authorization: `Bearer ${token}` };
