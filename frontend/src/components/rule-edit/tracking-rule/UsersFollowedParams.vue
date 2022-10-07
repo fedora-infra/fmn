@@ -4,7 +4,7 @@ import type { User } from "@/api/types";
 import type { QueryFunction } from "react-query/types/core";
 import { ref } from "vue";
 
-const value = ref<Record<string, string>[]>([]);
+const value = ref<string[]>([]);
 const apiGetUsers = apiGet as QueryFunction<{ users: User[] }>;
 const route = "/users/";
 const getUsers = async (query: string) => {
@@ -12,9 +12,7 @@ const getUsers = async (query: string) => {
     queryKey: [route, { search: query }],
     meta: undefined,
   });
-  return results
-    ? results.users.map((u) => ({ label: u.name, value: u.name }))
-    : [];
+  return results ? results.users.map((u) => u.name) : [];
 };
 </script>
 
@@ -35,7 +33,6 @@ const getUsers = async (query: string) => {
     validation="required"
     :min-chars="3"
     :delay="0"
-    :object="true"
   />
 </template>
 

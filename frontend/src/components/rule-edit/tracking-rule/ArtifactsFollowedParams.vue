@@ -5,8 +5,8 @@ import type { Artifact } from "@/api/types";
 import type { QueryFunction } from "react-query/types/core";
 import { ref } from "vue";
 
-const artifactName = ref<Record<string, string>[]>([]);
-const artifactType = ref<Record<string, string> | string>("");
+const artifactName = ref<string[]>([]);
+const artifactType = ref<string>("");
 const apiGetArtifacts = apiGet as QueryFunction<{ artifacts: Artifact[] }>;
 const route = "/artifacts/";
 const getArtifacts = async (query: string) => {
@@ -14,9 +14,7 @@ const getArtifacts = async (query: string) => {
     queryKey: [route, { type: artifactType.value, name: query }],
     meta: undefined,
   });
-  return results
-    ? results.artifacts.map((a) => ({ lablel: a.name, value: a.name }))
-    : [];
+  return results ? results.artifacts.map((a) => a.name) : [];
 };
 </script>
 
@@ -29,7 +27,7 @@ const getArtifacts = async (query: string) => {
         label="Artifact type:"
         label-class="fw-bold"
         placeholder="Choose an Artifact Type"
-        :msOptions="ARTIFACT_TYPES.map((t) => t.label)"
+        :msOptions="ARTIFACT_TYPES"
         v-model="artifactType"
       />
     </div>
@@ -47,7 +45,7 @@ const getArtifacts = async (query: string) => {
       :resolve-on-load="false"
       validation="required"
       :delay="0"
-      :object="true"
+      :min-chars="1"
       :disabled="artifactType === ''"
     />
   </FormKit>

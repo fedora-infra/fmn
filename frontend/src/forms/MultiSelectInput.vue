@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormKitFrameworkContext } from "@formkit/core";
+import type { FormKitFrameworkContext, FormKitProps } from "@formkit/core";
 import Multiselect from "@vueform/multiselect";
 import { computed } from "vue";
 import { msProps } from "./MultiSelectInputConstants";
@@ -7,11 +7,13 @@ import { msProps } from "./MultiSelectInputConstants";
 const props = defineProps<{ context: FormKitFrameworkContext }>();
 
 const bindableProps = computed(() => {
-  const val = Object.fromEntries(
-    Object.entries(props.context.node.props).filter(([key]) =>
-      msProps.includes(key)
-    )
-  );
+  const val: Partial<FormKitProps> = Object.keys(props.context.node.props)
+    .filter((key) => msProps.includes(key))
+    .reduce(
+      (obj, key) =>
+        Object.assign(obj, { [key]: props.context.node.props[key] }),
+      {}
+    );
   val.id = props.context.id;
   val.name = props.context.name;
   val.value = props.context._value;
@@ -35,7 +37,7 @@ function handleChange(value: string) {
       :key="slotName"
       v-slot:[slotName]="slotParams"
     >
-      <component :is="slot.bind(null, slotParams)" />
+      <component :is="slot" v-bind="slotParams" />
     </template>
   </Multiselect>
 </template>

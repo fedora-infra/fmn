@@ -3,8 +3,8 @@ import { apiGet } from "@/api";
 import type { Group } from "@/api/types";
 import { useUserStore } from "@/stores/user";
 import type { QueryFunction } from "react-query/types/core";
-import { ref } from "vue";
-import { useQuery } from "vue-query";
+import { onUnmounted, ref } from "vue";
+import { useQuery, useQueryClient } from "vue-query";
 import ArtifactsOwnedSummary from "./ArtifactsOwnedSummary.vue";
 
 const userStore = useUserStore();
@@ -13,6 +13,10 @@ const value = ref<Record<string, string>[]>([]);
 const apiGetUserGroups = apiGet as QueryFunction<{ groups: Group[] }>;
 const route = `/user/${username}/groups/`;
 const { isLoading, isError, data, error } = useQuery(route, apiGetUserGroups);
+onUnmounted(async () => {
+  const client = useQueryClient();
+  await client.cancelQueries([route]);
+});
 </script>
 
 <template>
@@ -34,7 +38,7 @@ const { isLoading, isError, data, error } = useQuery(route, apiGetUserGroups);
       mode="tags"
       v-model="value"
       :msOptions="
-        data ? data.groups.map((g) => ({ lablel: g.name, value: g.name })) : []
+        data ? data.groups.map((g) => ({ label: g.name, value: g.name })) : []
       "
       searchable
       :close-on-select="false"

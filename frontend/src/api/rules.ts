@@ -7,7 +7,7 @@ import type { Rule } from "./types";
 // Get all rules
 export const useRulesQuery = () => {
   const userStore = useUserStore();
-  const url = `/user/${userStore.username}/rules`;
+  const url = `/user/${userStore.username}/rules/`;
   return useQuery(url, apiGet as QueryFunction<Rule[]>);
 };
 
@@ -17,10 +17,10 @@ export const useAddRuleMutation = () => {
   const client = useQueryClient();
 
   return useMutation<Rule, unknown, Rule>(
-    (data) => apiPost(`/user/${userStore.username}/rules`, data),
+    (data) => apiPost(`/user/${userStore.username}/rules/`, data),
     {
-      onSuccess: () => {
-        client.invalidateQueries([`/user/${userStore.username}/rules/`]);
+      onSuccess: async () => {
+        await client.invalidateQueries([`/user/${userStore.username}/rules/`]);
       },
     }
   );
@@ -32,9 +32,9 @@ export const useEditRuleMutation = (id: number) => {
   const client = useQueryClient();
   const url = `/user/${userStore.username}/rules/${id}`;
   return useMutation<Rule, unknown, Rule>((data) => apiPut(url, data), {
-    onSuccess: () => {
-      client.invalidateQueries([url]);
-      client.invalidateQueries([`/user/${userStore.username}/rules/`]);
+    onSuccess: async () => {
+      await client.invalidateQueries([url]);
+      await client.invalidateQueries([`/user/${userStore.username}/rules/`]);
     },
   });
 };
@@ -46,8 +46,9 @@ export const useDeleteRuleMutation = () => {
   return useMutation<void, unknown, number>(
     (id) => apiDelete(`/user/${userStore.username}/rules/${id}`),
     {
-      onSuccess: () => {
-        client.invalidateQueries([`/user/${userStore.username}/rules/`]);
+      onSuccess: async () => {
+        const url = `/user/${userStore.username}/rules/`;
+        await client.invalidateQueries(url, { refetchActive: true });
       },
     }
   );
