@@ -10,10 +10,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fmn.database.main import get, get_or_create
 
 from ..core.config import Settings, get_settings
-from ..database import init_async_model, model
+from ..database import init_async_model
+from ..database.model import Destination, Filter, GenerationRule, Rule, TrackingRule, User
+from . import api_models
 from .auth import Identity, get_identity, get_identity_optional
 from .database import gen_db_session
-from .model import Destination, Rule
 
 log = logging.getLogger(__name__)
 
@@ -59,7 +60,7 @@ async def read_root(
 async def get_users(
     db_session: AsyncSession = Depends(gen_db_session),
 ):  # pragma: no cover todo
-    result = await db_session.execute(select(model.User))
+    result = await db_session.execute(select(User))
     return {"users": result.scalars().all()}
 
 
@@ -67,7 +68,7 @@ async def get_users(
 async def get_user(
     username, db_session: AsyncSession = Depends(gen_db_session)
 ):  # pragma: no cover todo
-    user, _created = await get_or_create(db_session, model.User, name=username)
+    user, _created = await get_or_create(db_session, User, name=username)
     return {"user": user}
 
 
@@ -78,7 +79,7 @@ def get_user_info(
     return fasjson_client.get_user(username=username).result
 
 
-@app.get("/user/{username}/destinations", response_model=list[Destination])
+@app.get("/user/{username}/destinations", response_model=list[api_models.Destination])
 def get_user_destinations(
     username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
 ):  # pragma: no cover todo
@@ -94,7 +95,7 @@ def get_user_destinations(
     return result
 
 
-@app.get("/user/{username}/rules", response_model=list[Rule])
+@app.get("/user/{username}/rules", response_model=list[api_models.Rule])
 async def get_user_rules(
     username,
     identity: Identity = Depends(get_identity),
@@ -104,11 +105,11 @@ async def get_user_rules(
         raise HTTPException(status_code=403, detail="Not allowed to see someone else's rules")
 
     return (
-        await db_session.execute(Rule.select_related().filter(model.Rule.user.has(name=username)))
+        await db_session.execute(Rule.select_related().filter(Rule.user.has(name=username)))
     ).scalars()
 
 
-@app.get("/user/{username}/rules/{id}", response_model=Rule)
+@app.get("/user/{username}/rules/{id}", response_model=api_models.Rule)
 async def get_user_rule(
     username: str,
     id: int,
@@ -120,16 +121,16 @@ async def get_user_rule(
 
     return (
         await db_session.execute(
-            Rule.select_related().filter(model.Rule.id == id, model.Rule.user.has(name=username))
+            Rule.select_related().filter(Rule.id == id, Rule.user.has(name=username))
         )
     ).scalar_one()
 
 
-@app.put("/user/{username}/rules/{id}", response_model=Rule)
+@app.put("/user/{username}/rules/{id}", response_model=api_models.Rule)
 async def edit_user_rule(
     username: str,
     id: int,
-    rule: Rule,
+    rule: api_models.Rule,
     identity: Identity = Depends(get_identity),
     db_session: AsyncSession = Depends(gen_db_session),
 ):  # pragma: no cover todo
@@ -139,7 +140,7 @@ async def edit_user_rule(
     print(rule)
     rule_db = (
         await db_session.execute(
-            Rule.select_related().filter(model.Rule.id == id, model.Rule.user.has(name=username))
+            Rule.select_related().filter(Rule.id == id, Rule.user.has(name=username))
         )
     ).scalar_one()
     rule_db.name = rule.name
@@ -151,7 +152,7 @@ async def edit_user_rule(
         try:
             gr_db = rule_db.generation_rules[index]
         except IndexError:
-            gr_db = model.GenerationRule(rule=rule_db)
+            gr_db = GenerationRule(rule=rule_db)
             rule_db.generation_rules.append(gr_db)
         for to_delete in gr_db.destinations[len(gr.destinations) :]:
             await db_session.delete(to_delete)
@@ -159,7 +160,7 @@ async def edit_user_rule(
             try:
                 dst_db = gr_db.destinations[index]
             except IndexError:
-                dst_db = model.Destination(
+                dst_db = Destination(
                     generation_rule=gr_db, protocol=dst.protocol, address=dst.address
                 )
                 gr_db.destinations.append(dst_db)
@@ -174,7 +175,7 @@ async def edit_user_rule(
             try:
                 f_db = existing_filters[f_name]
             except KeyError:
-                f_db = model.Filter(generation_rule=gr_db, name=f_name, params=f_params)
+                f_db = Filter(generation_rule=gr_db, name=f_name, params=f_params)
                 gr_db.filters.append(f_db)
             else:
                 f_db.name = f_name
@@ -186,7 +187,7 @@ async def edit_user_rule(
     # Refresh using the full query to get relationships
     return (
         await db_session.execute(
-            Rule.select_related().filter(model.Rule.id == id, model.Rule.user.has(name=username))
+            Rule.select_related().filter(Rule.id == id, Rule.user.has(name=username))
         )
     ).scalar_one()
 
@@ -201,7 +202,7 @@ async def delete_user_rule(
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to delete someone else's rules")
 
-    rule = await get(db_session, model.Rule, id=id)
+    rule = await get(db_session, Rule, id=id)
     await db_session.delete(rule)
     await db_session.flush()
 
@@ -211,34 +212,32 @@ async def delete_user_rule(
 @app.post("/user/{username}/rules")
 async def create_user_rule(
     username,
-    rule: Rule,
+    rule: api_models.Rule,
     identity: Identity = Depends(get_identity),
     db_session: AsyncSession = Depends(gen_db_session),
 ):  # pragma: no cover todo
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to edit someone else's rules")
     log.info("Creating rule:", rule)
-    user, _created = await get_or_create(db_session, model.User, name=username)
-    rule_db = model.Rule(user=user, name=rule.name)
+    user, _created = await get_or_create(db_session, User, name=username)
+    rule_db = Rule(user=user, name=rule.name)
     db_session.add(rule_db)
     await db_session.flush()
-    tr = model.TrackingRule(
-        rule=rule_db, name=rule.tracking_rule.name, params=rule.tracking_rule.params
-    )
+    tr = TrackingRule(rule=rule_db, name=rule.tracking_rule.name, params=rule.tracking_rule.params)
     db_session.add(tr)
     await db_session.flush()
     for generation_rule in rule.generation_rules:
-        gr = model.GenerationRule(rule=rule_db)
+        gr = GenerationRule(rule=rule_db)
         db_session.add(gr)
         await db_session.flush()
         for destination in generation_rule.destinations:
             db_session.add(
-                model.Destination(
+                Destination(
                     generation_rule=gr, protocol=destination.protocol, address=destination.address
                 )
             )
         for name, params in generation_rule.filters.dict().items():
-            db_session.add(model.Filter(generation_rule=gr, name=name, params=params))
+            db_session.add(Filter(generation_rule=gr, name=name, params=params))
         await db_session.flush()
 
     # TODO: emit a fedmsg
@@ -246,7 +245,7 @@ async def create_user_rule(
     # Refresh using the full query to get relationships
     return (
         await db_session.execute(
-            Rule.select_related().filter(model.Rule.id == id, model.Rule.user.has(name=username))
+            Rule.select_related().filter(Rule.id == id, Rule.user.has(name=username))
         )
     ).scalar_one()
 
