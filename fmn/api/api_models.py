@@ -1,26 +1,25 @@
 import logging
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel as PydanticBaseModel
 from pydantic.utils import GetterDict
 
 log = logging.getLogger(__name__)
+
+
+class BaseModel(PydanticBaseModel):
+    class Config:
+        orm_mode = True
 
 
 class TrackingRule(BaseModel):
     name: str
     params: list[str] | dict[str, str] | None
 
-    class Config:
-        orm_mode = True
-
 
 class Destination(BaseModel):
     protocol: str
     address: str
-
-    class Config:
-        orm_mode = True
 
 
 class Filters(BaseModel):
@@ -42,7 +41,6 @@ class GenerationRule(BaseModel):
     filters: Filters
 
     class Config:
-        orm_mode = True
         getter_dict = GRGetterDict
 
 
@@ -51,6 +49,3 @@ class Rule(BaseModel):
     name: str
     tracking_rule: TrackingRule
     generation_rules: list[GenerationRule]
-
-    class Config:
-        orm_mode = True
