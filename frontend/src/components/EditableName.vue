@@ -43,13 +43,13 @@ onUpdated(() => {
     />
   </span>
   <span :class="{ 'd-none': editing }">
+    {{ value }}
     <CButton
-      variant="ghost"
+      color="link"
       @click.prevent="toggleEditing"
       :class="props.buttonClass"
     >
-      <CIcon :icon="cilPen" class="me-2 align-baseline" />
-      {{ value }}
+      <CIcon :icon="cilPen" class="align-baseline" />
     </CButton>
   </span>
 </template>
