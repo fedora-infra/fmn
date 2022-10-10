@@ -62,12 +62,12 @@ const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
 <template>
   <FormKit type="form" id="new-rule" @submit="handleSubmit" :actions="false">
     <CRow class="mb-2">
-      <CCol xs="auto" class="me-auto">
+      <CCol xs="auto" class="flex-fill">
         <h4>
           <EditableName
             name="name"
             value="New Rule 1"
-            button-class="fs-3"
+            button-class=""
             input-class="form-control-lg"
           />
         </h4>
