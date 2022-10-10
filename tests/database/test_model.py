@@ -78,4 +78,16 @@ class TestRule(ModelTestBase):
     }
 
     def _db_obj_get_dependencies(self):
-        return {"user": model.User(name="allkneelbeforezod")}
+        return {
+            "user": model.User(name="allkneelbeforezod"),
+            "tracking_rule": model.TrackingRule(name="datrackingrule"),
+            "generation_rules": [model.GenerationRule()],
+        }
+
+    async def test_select_related(self, db_async_session, db_async_obj):
+        rule = (await db_async_session.execute(model.Rule.select_related())).scalar_one()
+
+        assert rule.user.name == "allkneelbeforezod"
+        assert rule.tracking_rule.name == "datrackingrule"
+        assert len(rule.generation_rules) == 1
+        assert all(isinstance(gr, model.GenerationRule) for gr in rule.generation_rules)
