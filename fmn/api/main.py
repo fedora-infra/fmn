@@ -12,7 +12,7 @@ from fmn.database.main import get, get_or_create
 from ..core.config import Settings, get_settings
 from ..database import init_async_model, model
 from .auth import Identity, get_identity, get_identity_optional
-from .database import gen_db_session, query_rule
+from .database import gen_db_session
 from .model import Destination, Rule
 
 log = logging.getLogger(__name__)
@@ -103,8 +103,9 @@ async def get_user_rules(
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to see someone else's rules")
 
-    db_result = await query_rule(db_session, model.User.name == username)
-    return [Rule.from_orm(rule) for rule in db_result.scalars()]
+    return (
+        await db_session.execute(Rule.select_related().filter(model.Rule.user.has(name=username)))
+    ).scalars()
 
 
 @app.get("/user/{username}/rules/{id}", response_model=Rule)
@@ -117,9 +118,11 @@ async def get_user_rule(
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to see someone else's rules")
 
-    db_result = await query_rule(db_session, model.User.name == username, model.Rule.id == id)
-    rule = db_result.scalar_one()
-    return Rule.from_orm(rule)
+    return (
+        await db_session.execute(
+            Rule.select_related().filter(model.Rule.id == id, model.Rule.user.has(name=username))
+        )
+    ).scalar_one()
 
 
 @app.put("/user/{username}/rules/{id}", response_model=Rule)
@@ -134,8 +137,11 @@ async def edit_user_rule(
         raise HTTPException(status_code=403, detail="Not allowed to edit someone else's rules")
 
     print(rule)
-    db_result = await query_rule(db_session, model.User.name == username, model.Rule.id == id)
-    rule_db = db_result.scalar_one()
+    rule_db = (
+        await db_session.execute(
+            Rule.select_related().filter(model.Rule.id == id, model.Rule.user.has(name=username))
+        )
+    ).scalar_one()
     rule_db.name = rule.name
     rule_db.tracking_rule.name = rule.tracking_rule.name
     rule_db.tracking_rule.params = rule.tracking_rule.params
@@ -178,9 +184,11 @@ async def edit_user_rule(
     # TODO: emit a fedmsg
 
     # Refresh using the full query to get relationships
-    db_result = await query_rule(db_session, model.User.name == username, model.Rule.id == id)
-    rule_db = db_result.scalar_one()
-    return Rule.from_orm(rule_db)
+    return (
+        await db_session.execute(
+            Rule.select_related().filter(model.Rule.id == id, model.Rule.user.has(name=username))
+        )
+    ).scalar_one()
 
 
 @app.delete("/user/{username}/rules/{id}")
@@ -236,11 +244,11 @@ async def create_user_rule(
     # TODO: emit a fedmsg
 
     # Refresh using the full query to get relationships
-    db_result = await query_rule(
-        db_session, model.User.name == username, model.Rule.id == rule_db.id
-    )
-    rule_db = db_result.scalar_one()
-    return Rule.from_orm(rule_db)
+    return (
+        await db_session.execute(
+            Rule.select_related().filter(model.Rule.id == id, model.Rule.user.has(name=username))
+        )
+    ).scalar_one()
 
 
 @app.get("/applications")
