@@ -1,11 +1,15 @@
 import logging
 
 from fasjson_client import Client as FasjsonClient
-from fastapi import Depends, FastAPI, HTTPException, Query, Request
+from fastapi import Depends, FastAPI, HTTPException, Query, Request, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.middleware.errors import ServerErrorMiddleware
+from starlette.requests import Request as StarletteRequest
+from starlette.types import ASGIApp
 
 from ..core.config import Settings, get_settings
 from ..database import init_async_model
@@ -16,11 +20,25 @@ from .database import gen_db_session
 
 log = logging.getLogger(__name__)
 
+
+async def global_execution_handler(
+    request: StarletteRequest, exc: Exception
+) -> ASGIApp:  # pragma: no cover todo
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content="Unknown Error",
+    )
+
+
 app = FastAPI()
 
 
 @app.on_event("startup")
 def add_middlewares():
+    app.add_middleware(
+        ServerErrorMiddleware,
+        handler=global_execution_handler,
+    )
     app.add_middleware(
         CORSMiddleware,
         allow_origins=get_settings().cors_origins.split(" "),
