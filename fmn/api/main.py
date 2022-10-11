@@ -7,8 +7,6 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from fmn.database.main import get, get_or_create
-
 from ..core.config import Settings, get_settings
 from ..database import init_async_model
 from ..database.model import Destination, Filter, GenerationRule, Rule, TrackingRule, User
@@ -68,7 +66,7 @@ async def get_users(
 async def get_user(
     username, db_session: AsyncSession = Depends(gen_db_session)
 ):  # pragma: no cover todo
-    user, _created = await get_or_create(db_session, User, name=username)
+    user = await User.async_get_or_create(db_session, name=username)
     return {"user": user}
 
 
@@ -202,7 +200,7 @@ async def delete_user_rule(
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to delete someone else's rules")
 
-    rule = await get(db_session, Rule, id=id)
+    rule = await Rule.async_get(db_session, id=id)
     await db_session.delete(rule)
     await db_session.flush()
 
@@ -219,7 +217,7 @@ async def create_user_rule(
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to edit someone else's rules")
     log.info("Creating rule:", rule)
-    user, _created = await get_or_create(db_session, User, name=username)
+    user = await User.async_get_or_create(db_session, name=username)
     rule_db = Rule(user=user, name=rule.name)
     db_session.add(rule_db)
     await db_session.flush()
