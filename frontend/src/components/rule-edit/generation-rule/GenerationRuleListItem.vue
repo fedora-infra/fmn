@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { GenerationRule } from "@/api/types";
-import { CButton } from "@coreui/bootstrap-vue";
+import { CButton, CListGroupItem } from "@coreui/bootstrap-vue";
 import { cilPen, cilTrash } from "@coreui/icons";
 import { CIcon } from "@coreui/icons-vue";
 import DestinationTag from "../../DestinationTag.vue";
@@ -23,7 +23,7 @@ const handleDeleteClicked = () => {
 </script>
 
 <template>
-  <div class="d-flex align-items-center">
+  <CListGroupItem class="d-flex align-items-center">
     <span class="me-auto">
       <DestinationTag
         :destination="dest"
@@ -50,5 +50,5 @@ const handleDeleteClicked = () => {
         <CIcon :icon="cilTrash" />
       </CButton>
     </span>
-  </div>
+  </CListGroupItem>
 </template>

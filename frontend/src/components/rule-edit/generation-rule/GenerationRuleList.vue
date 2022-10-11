@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { GenerationRule } from "@/api/types";
-import { CButton, CCard, CCardBody } from "@coreui/bootstrap-vue";
+import { CButton, CListGroup, CListGroupItem } from "@coreui/bootstrap-vue";
 import { cilPlus } from "@coreui/icons";
 import { CIcon } from "@coreui/icons-vue";
 import { computed, ref } from "vue";
@@ -54,36 +54,40 @@ const editedRule = computed(() =>
 </script>
 
 <template>
-  <CCard class="border bg-light p-2">
-    <CCardBody>
-      <div v-if="generation_rules.length === 0">
-        <h4 class="text-center text-muted my-4">No Destinations Defined</h4>
-      </div>
-      <FormKit
-        v-else
-        type="list"
-        name="generation_rules"
-        v-model="generation_rules"
+  <CListGroup>
+    <FormKit
+      v-if="generation_rules.length > 0"
+      type="list"
+      name="generation_rules"
+      v-model="generation_rules"
+    >
+      <template v-for="(gr, index) in generation_rules" :key="gr.id">
+        <GenerationRuleListItem
+          :rule="gr"
+          @edit="() => handleButtonClicked(index)"
+          @delete="() => handleRuleDeleted(index)"
+        />
+      </template>
+    </FormKit>
+    <CListGroupItem class="bg-light">
+      <h4
+        v-if="generation_rules.length === 0"
+        class="text-center text-muted my-4"
       >
-        <template v-for="(gr, index) in generation_rules" :key="gr.id">
-          <GenerationRuleListItem
-            :rule="gr"
-            @edit="() => handleButtonClicked(index)"
-            @delete="() => handleRuleDeleted(index)"
-          />
-        </template>
-      </FormKit>
-      <div class="text-center mt-4">
+        No Destinations Defined
+      </h4>
+      <div class="text-center">
         <CButton
           @click.prevent="() => handleButtonClicked(-1)"
           :color="generation_rules.length === 0 ? 'primary' : 'secondary'"
+          class="my-1"
         >
           <CIcon :icon="cilPlus" />
           Add Destination
         </CButton>
       </div>
-    </CCardBody>
-  </CCard>
+    </CListGroupItem>
+  </CListGroup>
   <GenerationRuleModal
     @submit="handleRuleSubmitted"
     @close="handleModalClosed"
