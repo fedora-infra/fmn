@@ -6,6 +6,43 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 from ..core.config import get_settings
 
+
+# use custom base for common convenience methods
+class CustomBase:
+    @classmethod
+    async def async_get(cls, db_session: AsyncSession, **attrs) -> "Base":
+        """Get an object from the datbase.
+
+        :param db_session: The SQLAlchemy session to use
+        :return: the object
+        """
+        return (await db_session.execute(select(cls).filter_by(**attrs))).scalar_one()
+
+    @classmethod
+    async def async_get_or_create(cls, db_session: AsyncSession, **attrs) -> "Base":
+        """Get an object from the database or create if missing.
+
+        :param db_session: The SQLAlchemy session to use
+        :return: the object
+
+        The returned object will have an (ephemeral) boolean attribute
+        `_was_created` which allows finding out if it existed previously or
+        not.
+        """
+        obj = (await db_session.execute(select(cls).filter_by(**attrs))).scalar_one_or_none()
+        try:
+            obj = await cls.async_get(db_session, **attrs)
+        except NoResultFound:
+            obj = cls(**attrs)
+            db_session.add(obj)
+            obj._obj_created = True
+            await db_session.flush()
+        else:
+            obj._obj_created = False
+
+        return obj
+
+
 # use custom metadata to specify naming convention
 naming_convention = {
     "ix": "%(column_0_N_label)s_index",
@@ -15,37 +52,10 @@ naming_convention = {
     "pk": "%(table_name)s_pkey",
 }
 metadata = MetaData(naming_convention=naming_convention)
-Base = declarative_base(metadata=metadata)
+Base = declarative_base(cls=CustomBase, metadata=metadata)
 
 async_session_maker = sessionmaker(class_=AsyncSession, expire_on_commit=False, future=True)
 sync_session_maker = sessionmaker(future=True, expire_on_commit=False)
-
-
-async def get_or_create(session, model, **attrs):
-    """Function like Django's ``get_or_create()`` method.
-
-    It will return a tuple, the first argument being the instance and the
-    second being a boolean: ``True`` if the instance has been created and
-    ``False`` otherwise.
-
-    Example: ``user, created = get_or_create(session, User, name="foo")``
-    """
-    query = select(model).filter_by(**attrs)
-    try:
-        result = await session.execute(query)
-        return result.scalar_one(), False
-    except NoResultFound:
-        obj = model(**attrs)
-        session.add(obj)
-        await session.flush()
-        await session.refresh(obj)
-        return obj, True
-
-
-async def get(session, model, **attrs):
-    query = select(model).filter_by(**attrs)
-    result = await session.execute(query)
-    return result.scalar_one()
 
 
 def init_sync_model(sync_engine: Engine = None):

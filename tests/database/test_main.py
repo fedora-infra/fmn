@@ -1,9 +1,43 @@
+from contextlib import nullcontext
 from unittest import mock
 
 import pytest
+from sqlalchemy.exc import NoResultFound
 
 from fmn.core.config import get_settings
-from fmn.database import main
+from fmn.database import main, model
+
+
+class TestCustomBase:
+    @pytest.mark.parametrize("obj_exists", (True, False))
+    async def test_async_get(self, obj_exists, db_async_session):
+        if obj_exists:
+            user = model.User(name="username")
+            db_async_session.add(user)
+            await db_async_session.flush()
+            expectation = nullcontext()
+        else:
+            expectation = pytest.raises(NoResultFound)
+
+        with expectation:
+            result = await model.User.async_get(db_async_session, name="username")
+
+        if obj_exists:
+            assert user.id == result.id
+
+    @pytest.mark.parametrize("obj_exists", (True, False))
+    async def test_async_get_or_create(self, obj_exists, db_async_session):
+        if obj_exists:
+            user = model.User(name="username")
+            db_async_session.add(user)
+            await db_async_session.flush()
+
+        result = await model.User.async_get_or_create(db_async_session, name="username")
+
+        if obj_exists:
+            assert result is user
+
+        assert result._obj_created != obj_exists
 
 
 @pytest.mark.parametrize("default_engine", (True, False))
