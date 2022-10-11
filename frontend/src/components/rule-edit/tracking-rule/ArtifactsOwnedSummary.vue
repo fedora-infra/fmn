@@ -3,6 +3,7 @@ import { apiGet } from "@/api";
 import type { Artifact } from "@/api/types";
 import { CSpinner } from "@coreui/bootstrap-vue";
 import type { QueryFunction } from "react-query/types/core";
+import { computed } from "vue";
 import { useQuery } from "vue-query";
 import TrackingRuleSummary from "./TrackingRuleSummary.vue";
 
@@ -12,8 +13,12 @@ const props = defineProps<{
 }>();
 
 const route = "/artifacts/owned";
+const queryParams = computed(() => ({
+  users: props.users,
+  groups: props.groups,
+}));
 const { isLoading, isError, data, error } = useQuery(
-  [route, { users: props.users, groups: props.groups }],
+  [route, queryParams],
   apiGet as QueryFunction<Artifact[]>
 );
 </script>

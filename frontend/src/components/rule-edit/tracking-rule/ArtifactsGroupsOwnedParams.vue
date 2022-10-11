@@ -8,14 +8,13 @@ import { useQuery, useQueryClient } from "vue-query";
 import ArtifactsOwnedSummary from "./ArtifactsOwnedSummary.vue";
 
 const userStore = useUserStore();
-const username = userStore.username;
-const value = ref<Record<string, string>[]>([]);
-const apiGetUserGroups = apiGet as QueryFunction<{ groups: Group[] }>;
-const route = `/user/${username}/groups/`;
-const { isLoading, isError, data, error } = useQuery(route, apiGetUserGroups);
+const value = ref<string[]>([]);
+const apiGetUserGroups = apiGet as QueryFunction<Group[]>;
+const url = `/user/${userStore.username}/groups/`;
+const { isLoading, isError, data, error } = useQuery(url, apiGetUserGroups);
 onUnmounted(async () => {
   const client = useQueryClient();
-  await client.cancelQueries([route]);
+  await client.cancelQueries([url]);
 });
 </script>
 
@@ -37,14 +36,12 @@ onUnmounted(async () => {
       label-class="fw-bold"
       mode="tags"
       v-model="value"
-      :msOptions="
-        data ? data.groups.map((g) => ({ label: g.name, value: g.name })) : []
-      "
+      :msOptions="data || []"
       searchable
       :close-on-select="false"
       validation="required"
     />
-    <ArtifactsOwnedSummary :groups="value.map((v) => v.value)" />
+    <ArtifactsOwnedSummary :groups="value" />
   </template>
 </template>
 

@@ -77,6 +77,13 @@ def get_user_info(
     return fasjson_client.get_user(username=username).result
 
 
+@app.get("/user/{username}/groups")
+def get_user_groups(
+    username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
+):  # pragma: no cover todo
+    return [g["groupname"] for g in fasjson_client.list_user_groups(username=username).result]
+
+
 @app.get("/user/{username}/destinations", response_model=list[api_models.Destination])
 def get_user_destinations(
     username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
