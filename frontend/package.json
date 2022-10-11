@@ -42,7 +42,7 @@
     "@types/node": "^16.11.43",
     "@types/qs": "^6.9.7",
     "@vitejs/plugin-vue": "^3.0.0",
-    "@vitest/coverage-c8": "^0.22.1 || ^0.23.0",
+    "@vitest/coverage-c8": "^0.22.1 || ^0.23.0 || ^0.24.0",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^11.0.0",
     "@vue/test-utils": "^2.0.2",
@@ -55,7 +55,7 @@
     "prettier": "^2.5.1",
     "typescript": "~4.7.4 || ~4.8.0",
     "vite": "^3.0.0",
-    "vitest": "^0.21.0 || ^0.22.0 || ^0.23.0",
+    "vitest": "^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0",
     "vue-tsc": "^0.39.0 || ^0.40.0"
   }
 }
