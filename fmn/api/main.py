@@ -137,7 +137,7 @@ async def get_user_rule(
     id: int,
     identity: Identity = Depends(get_identity),
     db_session: AsyncSession = Depends(gen_db_session),
-):  # pragma: no cover todo
+):
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to see someone else's rules")
 

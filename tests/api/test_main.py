@@ -83,3 +83,23 @@ def test_get_user_rules(testcase, client, api_identity, db_rule):
     elif testcase == "wrong-user":
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert isinstance(response.json()["detail"], str)
+
+
+@pytest.mark.parametrize("testcase", ("happy-path", "wrong-user"))
+def test_get_user_rule(testcase, client, api_identity, db_rule):
+    username = api_identity.name
+    if testcase == "wrong-user":
+        username = f"not-really-{username}"
+
+    response = client.get(f"/user/{username}/rules/{db_rule.id}")
+
+    if testcase == "happy-path":
+        assert response.status_code == status.HTTP_200_OK
+
+        result = response.json()
+        assert result["name"] == db_rule.name
+        assert result["tracking_rule"]["name"] == db_rule.tracking_rule.name
+        assert result["tracking_rule"]["params"] == db_rule.tracking_rule.params
+    elif testcase == "wrong-user":
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert isinstance(response.json()["detail"], str)
