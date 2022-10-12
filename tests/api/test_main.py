@@ -4,7 +4,7 @@ from unittest import mock
 import pytest
 from fastapi import status
 
-from fmn.api import main
+from fmn.api import api_models, main
 
 
 @mock.patch("fmn.api.main.get_settings")
@@ -99,6 +99,57 @@ def test_get_user_rule(testcase, client, api_identity, db_rule):
         result = response.json()
         assert result["name"] == db_rule.name
         assert result["tracking_rule"]["name"] == db_rule.tracking_rule.name
+        assert result["tracking_rule"]["params"] == db_rule.tracking_rule.params
+    elif testcase == "wrong-user":
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert isinstance(response.json()["detail"], str)
+
+
+@pytest.mark.parametrize(
+    "testcase",
+    (
+        "success",
+        "success-delete-generation-rule",
+        "success-delete-destination",
+        "success-delete-filter",
+        "wrong-user",
+    ),
+)
+def test_edit_user_rule(testcase, client, api_identity, db_rule):
+    username = api_identity.name
+    if testcase == "wrong-user":
+        username = f"not-really-{username}"
+
+    edited_rule = api_models.Rule.from_orm(db_rule)
+    edited_rule.tracking_rule.name = "daothertrackingrule"
+    if "delete-generation-rule" in testcase:
+        del edited_rule.generation_rules[-1]
+    elif "delete-destination" in testcase:
+        del edited_rule.generation_rules[-1].destinations[-1]
+    elif "delete-filter" in testcase:
+        del edited_rule.generation_rules[-1].filters.applications
+    elif "modify-filter" in testcase:
+        edited_rule.generation_rules[-1].filters.applications = ["koji"]
+    else:
+        edited_rule.generation_rules.append(
+            api_models.GenerationRule(destinations=[], filters=api_models.Filters())
+        )
+        edited_rule.generation_rules[-1].destinations.append(
+            api_models.Destination(protocol="foo", address="bar")
+        )
+        edited_rule.generation_rules[-1].filters.severities = ["very severe"]
+
+    response = client.put(
+        f"/user/{username}/rules/{db_rule.id}", data=edited_rule.json(exclude_unset=True)
+    )
+
+    if "success" in testcase:
+        assert response.status_code == status.HTTP_200_OK
+
+        result = response.json()
+        assert result["id"] == edited_rule.id
+        assert result["name"] == db_rule.name
+        assert result["tracking_rule"]["name"] == "daothertrackingrule"
         assert result["tracking_rule"]["params"] == db_rule.tracking_rule.params
     elif testcase == "wrong-user":
         assert response.status_code == status.HTTP_403_FORBIDDEN
