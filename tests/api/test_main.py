@@ -1,6 +1,7 @@
 import datetime as dt
 from unittest import mock
 
+import pytest
 from fastapi import status
 
 from fmn.api import main
@@ -57,3 +58,28 @@ def test_get_user_info(fasjson_user, fasjson_user_data, client):
     response = client.get(f"/user/{username}/info")
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == fasjson_user_data
+
+
+@pytest.mark.parametrize("testcase", ("happy-path", "wrong-user"))
+def test_get_user_rules(testcase, client, api_identity, db_rule):
+    """Verify the results of get_user_rules()."""
+    username = api_identity.name
+    if testcase == "wrong-user":
+        username = f"not-really-{username}"
+
+    response = client.get(f"/user/{username}/rules")
+
+    if testcase == "happy-path":
+        assert response.status_code == status.HTTP_200_OK
+
+        results = response.json()
+        assert isinstance(results, list)
+        assert len(results) == 1
+
+        result = results[0]
+        assert result["name"] == db_rule.name
+        assert result["tracking_rule"]["name"] == db_rule.tracking_rule.name
+        assert result["tracking_rule"]["params"] == db_rule.tracking_rule.params
+    elif testcase == "wrong-user":
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert isinstance(response.json()["detail"], str)
