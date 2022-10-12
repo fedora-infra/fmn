@@ -2,6 +2,7 @@ import datetime as dt
 from unittest import mock
 
 import responses
+from fastapi import status
 
 from fmn.api import main
 
@@ -52,8 +53,8 @@ def test_get_fasjson_client(mocker):
 
 
 @responses.activate()
-def test_get_userinfo(client, mocker):
-
+def test_get_user_info(client):
+    """Test that get_user_info() dispatches to FASJSON."""
     user_data = {
         "username": "dummy",
         "surname": "User",
@@ -70,5 +71,5 @@ def test_get_userinfo(client, mocker):
         json={"result": user_data},
     )
     response = client.get("/user/dummy/info")
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert response.json() == user_data
