@@ -173,3 +173,47 @@ async def test_delete_user_rule(testcase, client, api_identity, db_rule, db_asyn
     else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert isinstance(response.json()["detail"], str)
+
+
+@pytest.mark.parametrize("testcase", ("success", "wrong-user"))
+def test_create_user_rule(testcase, client, api_identity, db_rule):
+    username = api_identity.name
+    if testcase == "wrong-user":
+        username = f"not-really-{username}"
+
+    created_rule = api_models.Rule(
+        **{
+            "name": "daotherrule",
+            "tracking_rule": {"name": "yetanothertrackingrule"},
+            "generation_rules": [
+                {
+                    "destinations": [{"protocol": "irc", "address": "..."}],
+                    "filters": {},
+                },
+            ],
+        }
+    )
+
+    response = client.post(f"/user/{username}/rules", data=created_rule.json(exclude_unset=True))
+
+    if "success" in testcase:
+        assert response.status_code == status.HTTP_200_OK
+
+        result = response.json()
+        assert result["id"] not in (None, db_rule.id)
+        assert result["name"] == "daotherrule"
+        assert result["tracking_rule"]["name"] == "yetanothertrackingrule"
+        assert result["generation_rules"] == [
+            {
+                "destinations": [{"protocol": "irc", "address": "..."}],
+                "filters": {
+                    "applications": [],
+                    "severities": [],
+                    "topic": None,
+                    "my_actions": False,
+                },
+            },
+        ]
+    elif testcase == "wrong-user":
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert isinstance(response.json()["detail"], str)

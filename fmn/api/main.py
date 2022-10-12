@@ -236,7 +236,7 @@ async def create_user_rule(
     rule: api_models.Rule,
     identity: Identity = Depends(get_identity),
     db_session: AsyncSession = Depends(gen_db_session),
-):  # pragma: no cover todo
+):
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to edit someone else's rules")
     log.info("Creating rule:", rule)
