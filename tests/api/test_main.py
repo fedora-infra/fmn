@@ -3,8 +3,10 @@ from unittest import mock
 
 import pytest
 from fastapi import status
+from sqlalchemy.exc import NoResultFound
 
 from fmn.api import api_models, main
+from fmn.database.model import Rule
 
 
 @mock.patch("fmn.api.main.get_settings")
@@ -152,5 +154,22 @@ def test_edit_user_rule(testcase, client, api_identity, db_rule):
         assert result["tracking_rule"]["name"] == "daothertrackingrule"
         assert result["tracking_rule"]["params"] == db_rule.tracking_rule.params
     elif testcase == "wrong-user":
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert isinstance(response.json()["detail"], str)
+
+
+@pytest.mark.parametrize("testcase", ("happy-path", "wrong-user"))
+async def test_delete_user_rule(testcase, client, api_identity, db_rule, db_async_session):
+    username = api_identity.name
+    if testcase == "wrong-user":
+        username = f"not-really-{username}"
+
+    response = client.delete(f"/user/{username}/rules/{db_rule.id}")
+
+    if testcase == "happy-path":
+        assert response.status_code == status.HTTP_200_OK
+        with pytest.raises(NoResultFound):
+            await Rule.async_get(db_async_session, id=db_rule.id)
+    else:
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert isinstance(response.json()["detail"], str)
