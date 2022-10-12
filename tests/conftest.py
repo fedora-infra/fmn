@@ -153,3 +153,33 @@ async def db_async_obj(request, db_async_session):
         yield obj
 
         await db_async_session.rollback()
+
+
+# FASJSON
+
+
+@pytest.fixture
+def fasjson_user_data():
+    user_data = {
+        "username": "testuser",
+        "surname": "User",
+        "givenname": "Test",
+        "human_name": "Test User",
+        "emails": ["testuser@example.test"],
+        "ircnicks": ["irc://testuser", "matrix://testuser"],
+        "locale": "en-US",
+        "uri": "http://fasjson.example.test/v1/users/testuser/",
+    }
+
+    return user_data
+
+
+@pytest.fixture
+def fasjson_user(fasjson_user_data):
+    with responses.mock:
+        responses.get(
+            f"http://fasjson.example.test/v1/users/{fasjson_user_data['username']}/",
+            json={"result": fasjson_user_data},
+        )
+
+        yield
