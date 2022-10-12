@@ -72,7 +72,7 @@ async def read_root(
     return result
 
 
-@app.get("/users/")
+@app.get("/users/", response_model=list[api_models.User])
 async def get_users(
     db_session: AsyncSession = Depends(gen_db_session),
 ):  # pragma: no cover todo
@@ -80,7 +80,7 @@ async def get_users(
     return result.scalars().all()
 
 
-@app.get("/user/{username}/")
+@app.get("/user/{username}/", response_model=api_models.User)
 async def get_user(
     username, db_session: AsyncSession = Depends(gen_db_session)
 ):  # pragma: no cover todo
