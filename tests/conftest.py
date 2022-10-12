@@ -18,6 +18,7 @@ from fmn.database.main import (
     init_sync_model,
     sync_session_maker,
 )
+from fmn.database.model import Destination, Filter, GenerationRule, Rule, TrackingRule, User
 
 
 @pytest.fixture
@@ -183,3 +184,43 @@ def fasjson_user(fasjson_user_data):
         )
 
         yield
+
+
+# Database test data
+
+
+@pytest.fixture
+async def db_user(fasjson_user_data, db_async_session):
+    user = User(name=fasjson_user_data["username"])
+    db_async_session.add(user)
+    await db_async_session.flush()
+
+    yield user
+
+
+@pytest.fixture
+async def db_rule(db_async_session, db_user):
+    tracking_rule = TrackingRule(name="datrackingrule", params={"foo": "bar"})
+
+    generation_rules = []
+    for destination_proto_addrs in ({"email": "foo@bar"}, {"irc": "...", "matrix": "..."}):
+        destinations = [
+            Destination(protocol=proto, address=addr)
+            for proto, addr in destination_proto_addrs.items()
+        ]
+        generation_rules.append(
+            GenerationRule(
+                destinations=destinations,
+                filters=[Filter(name="applications", params=["koji", "bodhi"])],
+            )
+        )
+    rule = Rule(
+        name="darule",
+        user=db_user,
+        tracking_rule=tracking_rule,
+        generation_rules=generation_rules,
+    )
+    db_async_session.add(rule)
+    await db_async_session.flush()
+
+    yield rule
