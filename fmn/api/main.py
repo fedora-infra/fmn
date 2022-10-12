@@ -159,7 +159,6 @@ async def edit_user_rule(
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to edit someone else's rules")
 
-    print(rule)
     rule_db = (
         await db_session.execute(
             Rule.select_related().filter(Rule.id == id, Rule.user.has(name=username))
