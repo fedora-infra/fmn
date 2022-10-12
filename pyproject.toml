@@ -72,7 +72,7 @@ pytest-isort = "^3.0.0"
 tox = "^3.25.1"
 greenlet = "^1.1.2"
 toml = "^0.10.2"
-responses = "^0.21.0"
+responses = "^0.21.0 || ^0.22.0"
 pytest-mock = "^3.8.2"
 flake8 = ">=4,<6"
 
