@@ -77,7 +77,7 @@ async def get_users(
     db_session: AsyncSession = Depends(gen_db_session),
 ):  # pragma: no cover todo
     result = await db_session.execute(select(User))
-    return {"users": result.scalars().all()}
+    return result.scalars().all()
 
 
 @app.get("/user/{username}/")
@@ -85,7 +85,7 @@ async def get_user(
     username, db_session: AsyncSession = Depends(gen_db_session)
 ):  # pragma: no cover todo
     user = await User.async_get_or_create(db_session, name=username)
-    return {"user": user}
+    return user
 
 
 @app.get("/user/{username}/info")
