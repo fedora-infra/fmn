@@ -49,3 +49,8 @@ class Rule(BaseModel):
     name: str
     tracking_rule: TrackingRule
     generation_rules: list[GenerationRule]
+
+
+class User(BaseModel):
+    id: int | None
+    name: str
