@@ -81,9 +81,7 @@ async def get_users(
 
 
 @app.get("/user/{username}/", response_model=api_models.User)
-async def get_user(
-    username, db_session: AsyncSession = Depends(gen_db_session)
-):  # pragma: no cover todo
+async def get_user(username, db_session: AsyncSession = Depends(gen_db_session)):
     user = await User.async_get_or_create(db_session, name=username)
     return user
 
