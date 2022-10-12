@@ -155,7 +155,7 @@ async def edit_user_rule(
     rule: api_models.Rule,
     identity: Identity = Depends(get_identity),
     db_session: AsyncSession = Depends(gen_db_session),
-):  # pragma: no cover todo
+):
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to edit someone else's rules")
 
@@ -188,11 +188,11 @@ async def edit_user_rule(
             else:
                 dst_db.protocol = dst.protocol
                 dst_db.address = dst.address
-        to_delete = [f for f in gr_db.filters if f.name not in gr.filters.dict()]
+        to_delete = [f for f in gr_db.filters if f.name not in gr.filters.dict(exclude_unset=True)]
         for f in to_delete:
             await db_session.delete(f)
         existing_filters = {f.name: f for f in gr_db.filters}
-        for f_name, f_params in gr.filters.dict().items():
+        for f_name, f_params in gr.filters.dict(exclude_unset=True).items():
             try:
                 f_db = existing_filters[f_name]
             except KeyError:
