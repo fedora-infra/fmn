@@ -127,9 +127,8 @@ async def get_user_rules(
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to see someone else's rules")
 
-    return (
-        await db_session.execute(Rule.select_related().filter(Rule.user.has(name=username)))
-    ).scalars()
+    db_result = await db_session.execute(Rule.select_related().filter(Rule.user.has(name=username)))
+    return db_result.scalars().all()
 
 
 @app.get("/user/{username}/rules/{id}", response_model=api_models.Rule)
@@ -232,7 +231,7 @@ async def delete_user_rule(
     # TODO: emit a fedmsg
 
 
-@app.post("/user/{username}/rules")
+@app.post("/user/{username}/rules", response_model=api_models.Rule)
 async def create_user_rule(
     username,
     rule: api_models.Rule,
@@ -268,7 +267,7 @@ async def create_user_rule(
     # Refresh using the full query to get relationships
     return (
         await db_session.execute(
-            Rule.select_related().filter(Rule.id == id, Rule.user.has(name=username))
+            Rule.select_related().filter(Rule.id == rule_db.id, Rule.user.has(name=username))
         )
     ).scalar_one()
 
