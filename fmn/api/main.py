@@ -5,7 +5,6 @@ from fastapi import Depends, FastAPI, HTTPException, Query, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.requests import Request as StarletteRequest
@@ -72,12 +71,11 @@ async def read_root(
     return result
 
 
-@app.get("/users/", response_model=list[api_models.User])
-async def get_users(
-    db_session: AsyncSession = Depends(gen_db_session),
+@app.get("/users/", response_model=list[str])
+def get_users(
+    search: str, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
 ):  # pragma: no cover todo
-    result = await db_session.execute(select(User))
-    return result.scalars().all()
+    return [u["username"] for u in fasjson_client.search(username=search).result]
 
 
 @app.get("/user/{username}/", response_model=api_models.User)
