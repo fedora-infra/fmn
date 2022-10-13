@@ -279,10 +279,10 @@ def get_applications():
     ]
 
 
-@app.get("/artifacts/owned")
+@app.get("/artifacts/owned", response_model=list[dict[str, str]])
 def get_owned_artifacts(
     users: list[str] = Query(default=[]), groups: list[str] = Query(default=[])
-):  # pragma: no cover todo
+):
     # TODO: Get artifacts owned by a user or a group
 
     artifacts = []
