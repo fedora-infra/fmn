@@ -238,3 +238,34 @@ def test_get_applications(client):
     assert all(isinstance(item, str) for item in result)
     # Verify list is sorted and items are unique
     assert sorted(set(result)) == result
+
+
+@pytest.mark.parametrize(
+    "testcase", ("query-users", "query-users-duplicate", "query-groups", "query-nothing")
+)
+def test_get_owned_artifacts(testcase, client):
+    # get_owned_artifacts() looks straw-manny, so just check structure
+
+    params = {}
+    if "users" in testcase:
+        params["users"] = ["foobar"]
+        if "users-duplicate" in testcase:
+            params["users"].append("foobar")
+    if "groups" in testcase:
+        params["groups"] = ["foobar"]
+
+    response = client.get("/artifacts/owned", params=params)
+
+    assert response.status_code == status.HTTP_200_OK
+
+    artifacts = response.json()
+    assert isinstance(artifacts, list)
+    assert all(isinstance(item, dict) for item in artifacts)
+    assert all("type" in item for item in artifacts)
+    assert all("name" in item for item in artifacts)
+    if "users" in testcase:
+        assert any("user-owned" in item["name"] for item in artifacts)
+    if "groups" in testcase:
+        assert any("group-owned" in item["name"] for item in artifacts)
+    if "nothing" in testcase:
+        assert len(artifacts) == 0
