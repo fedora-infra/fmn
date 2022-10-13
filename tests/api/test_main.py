@@ -12,13 +12,17 @@ def test_add_middlewares(app, get_settings):
     get_settings.return_value = mock.Mock(cors_origins="https://foo")
     main.add_middlewares()
 
-    app.add_middleware.assert_called_once_with(
-        main.CORSMiddleware,
-        allow_origins=["https://foo"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+    calls = [
+        mock.call(
+            main.CORSMiddleware,
+            allow_origins=["https://foo"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+    ]
+    app.add_middleware.assert_has_calls(calls)
+    assert app.add_middleware.call_count == 2
 
 
 async def test_read_root():
