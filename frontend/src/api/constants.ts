@@ -11,20 +11,21 @@ export const SEVERITIES = [DEBUG, INFO, WARNING, ERROR];
 export const TRACKING_RULES: TrackingRule[] = [
   {
     name: "artifacts-owned",
-    label: "Artifacts owned by me",
+    label: "Artifacts owned by specific users",
     description:
-      "Artifacts (packages, modules, containers) that are owned by me",
+      "Messages about artifacts (packages, modules, containers) that are owned by specific users",
   },
   {
     name: "artifacts-group-owned",
-    label: "Artifacts owned by my groups",
+    label: "Artifacts owned by specific groups",
     description:
-      "Artifacts (packages, modules, containers) that are owned by my groups",
+      "Messages about artifacts (packages, modules, containers) that are owned by specific groups",
   },
   {
     name: "artifacts-followed",
     label: "Artifacts I follow",
-    description: "Artifacts (packages, modules, containers) I want to track",
+    description:
+      "Messages about specific artifacts (packages, modules, containers)",
   },
   {
     name: "related-events",
