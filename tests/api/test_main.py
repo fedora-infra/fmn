@@ -80,6 +80,18 @@ def test_get_user(fasjson_user, db_user, client):
     assert result["name"] == db_user.name
 
 
+def test_get_user_destinations(fasjson_user, client):
+    response = client.get(f"/user/{fasjson_user['username']}/destinations")
+
+    assert response.status_code == status.HTTP_200_OK
+
+    destinations = response.json()
+    assert isinstance(destinations, list)
+    assert all(isinstance(item, dict) for item in destinations)
+    assert all("protocol" in item for item in destinations)
+    assert all("address" in item for item in destinations)
+
+
 @pytest.mark.parametrize("testcase", ("happy-path", "wrong-user"))
 def test_get_user_rules(testcase, client, api_identity, db_rule):
     """Verify the results of get_user_rules()."""
