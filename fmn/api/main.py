@@ -49,7 +49,7 @@ def add_middlewares():
 
 
 @app.on_event("startup")
-async def init_model():  # pragma: no cover todo
+async def init_model():
     await init_async_model()
 
 

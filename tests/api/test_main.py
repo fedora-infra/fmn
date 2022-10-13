@@ -28,6 +28,15 @@ def test_add_middlewares(app, get_settings):
     assert app.add_middleware.call_count == 2
 
 
+@mock.patch("fmn.api.main.init_async_model")
+async def test_init_model(init_async_model):
+    assert main.init_model in main.app.router.on_startup
+
+    await main.init_model()
+
+    init_async_model.assert_awaited_once_with()
+
+
 async def test_read_root():
     request = mock.Mock()
     creds = mock.Mock(scheme="bearer", credentials="abcd-1234")
