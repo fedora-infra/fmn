@@ -226,3 +226,15 @@ def test_create_user_rule(testcase, client, api_identity, db_rule):
     elif testcase == "wrong-user":
         assert response.status_code == status.HTTP_403_FORBIDDEN
         assert isinstance(response.json()["detail"], str)
+
+
+def test_get_applications(client):
+    response = client.get("/applications")
+
+    assert response.status_code == status.HTTP_200_OK
+
+    result = response.json()
+    assert isinstance(result, list)
+    assert all(isinstance(item, str) for item in result)
+    # Verify list is sorted and items are unique
+    assert sorted(set(result)) == result

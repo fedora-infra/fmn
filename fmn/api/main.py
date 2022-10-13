@@ -269,8 +269,8 @@ async def create_user_rule(
     ).scalar_one()
 
 
-@app.get("/applications")
-def get_applications():  # pragma: no cover todo
+@app.get("/applications", response_model=list[str])
+def get_applications():
     # TODO: Read the installed schemas and extract the applications. Return sorted, please :-)
     return [
         "anitya",
