@@ -12,7 +12,7 @@ import fedora.client.fas2
 from dogpile.cache import make_region
 
 from fmn import config
-from fasjson_client import Client
+import fasjson_client
 
 fedmsg.meta.make_processors(**config.app_conf)
 
@@ -27,7 +27,7 @@ creds = config.app_conf['fas_credentials']
 
 fasjson = config.app_conf['fasjson']
 if fasjson.get('active'):
-    client = Client(url=fasjson.get('url', default_url))
+    client = fasjson_client.Client(url=fasjson.get('url', default_url))
 else:
     client = fedora.client.fas2.AccountSystem(
         base_url=creds.get('base_url', default_url),
@@ -92,14 +92,17 @@ def make_fas_cache(**config):
 
 
 def _add_to_cache(users):
-    for user in users:
-        nicks = user.get('ircnicks', [])
-        for nick in nicks:
-            _cache.set(nick, user['username'])
+    if users is not None:
+        for user in users:
+            if type(user) is dict:
+                nicks = user.get('ircnicks', [])
+                if nicks is not None:
+                    for nick in nicks:
+                        _cache.set(nick.removeprefix("irc:/").removeprefix("matrix:/"), user['username'])
 
-        emails = user.get('emails', [])
-        for email in emails:
-            _cache.set(email, user['username'])
+                emails = user.get('emails', [])
+                for email in emails:
+                    _cache.set(email, user['username'])
 
 
 def update_nick(username):
@@ -108,8 +111,14 @@ def update_nick(username):
         try:
             log.info("Downloading FASJSON cache for %s*" % username)
             response = client.get_user(username=username)
-            _add_to_cache([response["result"]])
+            if response:
+                # Result is string, not dict
+                # This means it contains error message
+                if type(response.result) is dict:
+                    _add_to_cache(response.result)
         except requests.exceptions.RequestException as e:
+            log.error("Something went wrong updating the cache with error: %s" % e)
+        except fasjson_client.errors.APIError as e:
             log.error("Something went wrong updating the cache with error: %s" % e)
     else:
         try:
@@ -145,8 +154,14 @@ def update_email(email):
         try:
             log.info("Downloading FASJSON cache for %s*" % email)
             response = client.search(email=email)
-            _add_to_cache(response['result'])
+            if response:
+                # Result is string, not dict
+                # This means it contains error message
+                if type(response.result) is not str:
+                    _add_to_cache(response.result)
         except requests.exceptions.RequestException as e:
+            log.error("Something went wrong updating the cache with error: %s" % e)
+        except fasjson_client.errors.APIError as e:
             log.error("Something went wrong updating the cache with error: %s" % e)
     else:
         try:

@@ -57,7 +57,7 @@ def get_fas(config):
         log.warning("No fasjson config available.  Unable to query FAS.")
         return None
 
-    client = fasjson_client.Client(url=fasjson.get('url'))
+    _FAS = fasjson_client.Client(url=fasjson.get('url'))
 
     return _FAS
 
@@ -401,7 +401,7 @@ def get_user_of_group(config, fas, groupname):
     def creator():
         if not fas:
             return set()
-        return set([u["username"] for u in fas.list_group_members(groupname).result])
+        return set([u["username"] for u in fas.list_group_members(groupname=groupname).result])
     return _cache.get_or_create(key, creator)
 
 
@@ -424,10 +424,12 @@ def get_groups_of_user(config, fas, username):
         if not fas:
             return []
         results = []
-        for group in fas.list_all_entities("groups"):
-            members = set([u["username"] for u in fas.list_group_members(group["groupname"]).result])
-            if username in members:
+        try:
+            for group in fas.list_user_groups(username=username).result:
                 results.append(group["groupname"])
+        except fasjson_client.errors.APIError as error:
+            # Error on FAS side
+                return []
         return results
 
     return _cache.get_or_create(key, creator)
