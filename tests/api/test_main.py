@@ -54,16 +54,16 @@ def test_get_fasjson_client(mocker):
     assert client._base_url == settings.services.fasjson_url
 
 
-def test_get_user_info(fasjson_user, fasjson_user_data, client):
+def test_get_user_info(fasjson_user, client):
     """Test that get_user_info() dispatches to FASJSON."""
-    username = fasjson_user_data["username"]
+    username = fasjson_user["username"]
     response = client.get(f"/user/{username}/info")
     assert response.status_code == status.HTTP_200_OK
-    assert response.json() == fasjson_user_data
+    assert response.json() == fasjson_user
 
 
-def test_get_user(fasjson_user_data, db_user, client):
-    username = fasjson_user_data["username"]
+def test_get_user(fasjson_user, db_user, client):
+    username = fasjson_user["username"]
     response = client.get(f"/user/{username}")
     assert response.status_code == status.HTTP_200_OK
     result = response.json()
