@@ -94,9 +94,7 @@ def get_user_info(
 
 
 @app.get("/user/{username}/groups")
-def get_user_groups(
-    username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
-):  # pragma: no cover todo
+def get_user_groups(username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)):
     return [g["groupname"] for g in fasjson_client.list_user_groups(username=username).result]
 
 

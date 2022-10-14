@@ -80,6 +80,17 @@ def test_get_user(fasjson_user, db_user, client):
     assert result["name"] == db_user.name
 
 
+def test_get_user_groups(fasjson_user, fasjson_groups, client):
+    username = fasjson_user["username"]
+
+    response = client.get(f"/user/{username}/groups")
+
+    assert response.status_code == status.HTTP_200_OK
+
+    groups = response.json()
+    assert sorted(groups) == sorted(item["groupname"] for item in fasjson_groups)
+
+
 def test_get_user_destinations(fasjson_user, client):
     response = client.get(f"/user/{fasjson_user['username']}/destinations")
 
