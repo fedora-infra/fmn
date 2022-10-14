@@ -176,14 +176,39 @@ def fasjson_user_data():
 
 
 @pytest.fixture
-def fasjson_user(fasjson_user_data):
-    with responses.mock:
-        responses.get(
-            f"http://fasjson.example.test/v1/users/{fasjson_user_data['username']}/",
-            json={"result": fasjson_user_data},
-        )
+def fasjson_group_data():
+    group_data = [
+        {"groupname": name, "uri": f"http://fasjson.example.test/v1/groups/{name}/"}
+        for name in ("testgroup", "fedora-contributors")
+    ]
 
-        yield
+    return group_data
+
+
+@pytest.fixture
+def responses_mocker():
+    with responses.mock as rm:
+        yield rm
+
+
+@pytest.fixture
+def fasjson_user(responses_mocker, fasjson_user_data):
+    responses_mocker.get(
+        f"http://fasjson.example.test/v1/users/{fasjson_user_data['username']}/",
+        json={"result": fasjson_user_data},
+    )
+
+    return fasjson_user_data
+
+
+@pytest.fixture
+def fasjson_groups(responses_mocker, fasjson_user_data, fasjson_group_data):
+    responses_mocker.get(
+        f"http://fasjson.example.test/v1/users/{fasjson_user_data['username']}/groups/",
+        json={"result": fasjson_group_data},
+    )
+
+    return fasjson_group_data
 
 
 # Database test data
