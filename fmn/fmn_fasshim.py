@@ -157,7 +157,7 @@ def update_email(email):
             if response:
                 # Result is string, not dict
                 # This means it contains error message
-                if type(response.result) is not str:
+                if type(response.result) is dict:
                     _add_to_cache(response.result)
         except requests.exceptions.RequestException as e:
             log.error("Something went wrong updating the cache with error: %s" % e)

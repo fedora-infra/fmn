@@ -117,7 +117,7 @@ class IRCBackend(BaseBackend):
 
     def send(self, nick, line):
         for client in self.clients:
-            client.msg(nick.encode('utf-8'), line.encode('utf-8'))
+            client.msg(nick, line)
 
     def cmd_start(self, nick, message):
         log.info("CMD start: %r sent us %r" % (nick, message))
@@ -299,7 +299,12 @@ class IRCBackend(BaseBackend):
         if message.startswith('***'):
             return
 
-        log.info("CMD unk:   %r sent us %r" % (nick, message))
+        log.info("CMD unk:   %r sent us %r" % (nick, message.encode('utf-8')))
+
+        if nick.lower() == 'nickserv':
+            log.info("  Bailing, no need to explain to NickServ how to interact with us")
+            return
+
         self.send(nick, "say 'help' for help or 'stop' to stop messages")
 
     def deliver(self, formatted_message, recipient, raw_fedmsg):
@@ -349,8 +354,8 @@ class IRCBackend(BaseBackend):
 
         for client in self.clients:
             getattr(client, recipient.get('method', 'msg'))(
-                nickname.encode('utf-8'),
-                formatted_message.encode('utf-8'),
+                nickname,
+                formatted_message,
             )
 
     def _handle_confirmation(self, nick):
