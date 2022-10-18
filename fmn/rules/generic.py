@@ -162,7 +162,7 @@ def package_regex_filter(config, message, pattern=None, *args, **kw):
     pattern = kw.get('pattern', pattern)
     if pattern:
         packages = fmn.rules.utils.msg2packages(message, **config)
-        regex = fmn.rules.utils.compile_regex(pattern.encode('utf-8'))
+        regex = fmn.rules.utils.compile_regex(pattern)
         return any([regex.search(p.encode('utf-8')) for p in packages])
 
 
@@ -180,7 +180,7 @@ def regex_filter(config, message, pattern=None, *args, **kw):
 
     pattern = kw.get('pattern', pattern)
     if pattern:
-        regex = fmn.rules.utils.compile_regex(pattern.encode('utf-8'))
+        regex = fmn.rules.utils.compile_regex(pattern)
         return bool(regex.search(
             fedmsg.encoding.dumps(message['msg']).encode('utf-8')
         ))
