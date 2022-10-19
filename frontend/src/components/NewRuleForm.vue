@@ -8,7 +8,6 @@ import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
-import EditableName from "./EditableName.vue";
 import GenerationRuleList from "./rule-edit/generation-rule/GenerationRuleList.vue";
 import TrackingRule from "./rule-edit/tracking-rule/TrackingRule.vue";
 
@@ -18,6 +17,8 @@ const router = useRouter();
 const { mutateAsync } = useAddRuleMutation();
 
 const trackingRuleName = ref("");
+const value = ref("New Rule 1");
+
 const generationRulesCount = ref(0);
 const formReady = computed(
   () => trackingRuleName.value !== "" && generationRulesCount.value > 0
@@ -64,10 +65,10 @@ const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
     <CRow class="mb-2">
       <CCol xs="auto" class="flex-fill">
         <h4>
-          <EditableName
+          <FormKit
+            type="text"
             name="name"
-            value="New Rule 1"
-            button-class=""
+            v-model="value"
             input-class="form-control-lg"
           />
         </h4>
