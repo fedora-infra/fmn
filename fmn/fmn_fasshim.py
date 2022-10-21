@@ -98,7 +98,9 @@ def _add_to_cache(users):
                 nicks = user.get('ircnicks', [])
                 if nicks is not None:
                     for nick in nicks:
-                        _cache.set(nick.removeprefix("irc:/").removeprefix("matrix:/"), user['username'])
+                        _cache.set(
+                            nick.removeprefix("irc:/").removeprefix("matrix:/"), user['username']
+                        )
 
                 emails = user.get('emails', [])
                 for email in emails:
