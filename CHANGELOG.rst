@@ -2,6 +2,15 @@
 Changelog
 =========
 
+v2.4.2
+======
+
+Bug fixes
+---------
+
+* Fixes for production environment
+  (`#619 <https://github.com/fedora-infra/fmn/pull/619>`_).
+
 v2.4.1
 ======
 
