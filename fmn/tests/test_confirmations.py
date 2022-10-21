@@ -39,7 +39,7 @@ class TestConfirmations(fmn.tests.Base):
 
         try:
             preference.update_details(self.sess, 'wat')
-            assert(False)
+            assert False
         except Exception:
             self.sess.rollback()
 
