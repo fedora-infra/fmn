@@ -10,12 +10,13 @@ from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.requests import Request as StarletteRequest
 from starlette.types import ASGIApp
 
-from ..core.config import Settings, get_settings
+from ..core.config import get_settings
 from ..database import init_async_model
 from ..database.model import Destination, Filter, GenerationRule, Rule, TrackingRule, User
 from . import api_models
 from .auth import Identity, get_identity, get_identity_optional
 from .database import gen_db_session
+from .fasjson import get_fasjson_client
 
 log = logging.getLogger(__name__)
 
@@ -50,10 +51,6 @@ def add_middlewares():
 @app.on_event("startup")
 async def init_model():
     await init_async_model()
-
-
-def get_fasjson_client(settings: Settings = Depends(get_settings)):
-    return FasjsonClient(settings.services.fasjson_url)
 
 
 @app.get("/")

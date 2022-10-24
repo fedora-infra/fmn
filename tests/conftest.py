@@ -7,7 +7,7 @@ import responses
 from click.testing import CliRunner
 from fastapi.testclient import TestClient
 
-from fmn.api import main
+from fmn.api import fasjson, main
 from fmn.core.config import Settings, get_settings
 from fmn.database.main import (
     Base,
@@ -42,7 +42,7 @@ def client():
         return main.FasjsonClient(base_url, auth=False)
 
     main.app.dependency_overrides[main.get_settings] = get_settings_override
-    main.app.dependency_overrides[main.get_fasjson_client] = get_fasjson_client_override
+    main.app.dependency_overrides[fasjson.get_fasjson_client] = get_fasjson_client_override
     return TestClient(main.app)
 
 
