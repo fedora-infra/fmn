@@ -1,10 +1,9 @@
 import logging
 
 from fasjson_client import Client as FasjsonClient
-from fastapi import Depends, FastAPI, HTTPException, Query, Request, status
+from fastapi import Depends, FastAPI, HTTPException, Query, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.requests import Request as StarletteRequest
@@ -14,7 +13,7 @@ from ..core.config import get_settings
 from ..database import init_async_model
 from ..database.model import Destination, Filter, GenerationRule, Rule, TrackingRule, User
 from . import api_models
-from .auth import Identity, get_identity, get_identity_optional
+from .auth import Identity, get_identity
 from .database import gen_db_session
 from .fasjson import get_fasjson_client
 
@@ -51,21 +50,6 @@ def add_middlewares():
 @app.on_event("startup")
 async def init_model():
     await init_async_model()
-
-
-@app.get("/")
-async def read_root(
-    request: Request,
-    creds: HTTPAuthorizationCredentials | None = Depends(HTTPBearer(auto_error=False)),
-    identity: Identity | None = Depends(get_identity_optional),
-):
-    result = {
-        "Hello": "World",
-        "creds": creds,
-        "identity": identity,
-    }
-
-    return result
 
 
 @app.get("/users/", response_model=list[str])

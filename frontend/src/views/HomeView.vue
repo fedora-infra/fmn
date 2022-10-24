@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { useQuery } from "vue-query";
-import { apiGet } from "../api";
-
-const { isLoading, isError, data, error } = useQuery("", apiGet);
+const api_docs_url = import.meta.env.VITE_API_URL + "/docs";
 </script>
 
 <template>
@@ -16,13 +13,7 @@ const { isLoading, isError, data, error } = useQuery("", apiGet);
     </div>
   </div>
   <div class="mt-5">
-    <p>Result of an API call to <code>/</code>:</p>
-    <p>
-      <span v-if="isLoading">Loading...</span>
-      <span v-else-if="isError">Error: {{ error }}</span>
-      <!-- We can assume by this point that `isSuccess === true` -->
-      <code v-else>{{ data }}</code>
-    </p>
+    <p>View online API docs <a :href="api_docs_url">here</a>.</p>
   </div>
 </template>
 
