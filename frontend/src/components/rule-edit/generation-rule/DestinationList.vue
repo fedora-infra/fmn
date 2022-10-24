@@ -11,7 +11,7 @@ const props = defineProps<{
 }>();
 
 const userStore = useUserStore();
-const route = `/user/${userStore.username}/destinations`;
+const route = `/api/v1/users/${userStore.username}/destinations`;
 const { isLoading, isError, data, error } = useQuery(
   route,
   apiGet as QueryFunction<Destination[]>

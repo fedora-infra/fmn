@@ -10,7 +10,7 @@ import ArtifactsOwnedSummary from "./ArtifactsOwnedSummary.vue";
 const userStore = useUserStore();
 const value = ref<string[]>([]);
 const apiGetUserGroups = apiGet as QueryFunction<Group[]>;
-const url = `/user/${userStore.username}/groups/`;
+const url = `/api/v1/users/${userStore.username}/groups`;
 const { isLoading, isError, data, error } = useQuery(url, apiGetUserGroups);
 onUnmounted(async () => {
   const client = useQueryClient();

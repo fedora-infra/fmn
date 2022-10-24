@@ -12,7 +12,7 @@ const props = defineProps<{
   groups?: string[];
 }>();
 
-const route = "/artifacts/owned";
+const route = "/api/v1/artifacts/owned";
 const queryParams = computed(() => ({
   users: props.users,
   groups: props.groups,
