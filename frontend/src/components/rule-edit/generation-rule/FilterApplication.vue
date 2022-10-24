@@ -5,7 +5,7 @@ import { useQuery } from "vue-query";
 
 // const props = defineProps<{ value: string | null }>();
 
-const route = "/applications";
+const route = "/api/v1/applications";
 const { isLoading, isError, data, error } = useQuery(
   route,
   apiGet as QueryFunction<string[]>

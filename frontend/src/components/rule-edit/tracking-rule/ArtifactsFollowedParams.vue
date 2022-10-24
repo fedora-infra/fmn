@@ -8,7 +8,7 @@ import { ref } from "vue";
 const artifactName = ref<string[]>([]);
 const artifactType = ref<string>("");
 const apiGetArtifacts = apiGet as QueryFunction<{ artifacts: Artifact[] }>;
-const route = "/artifacts/";
+const route = "/api/v1/artifacts";
 const getArtifacts = async (query: string) => {
   const results = await apiGetArtifacts({
     queryKey: [route, { type: artifactType.value, name: query }],

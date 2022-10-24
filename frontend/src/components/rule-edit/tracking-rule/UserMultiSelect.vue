@@ -15,7 +15,7 @@ const props = defineProps<{
 const value = ref<string[]>(props.initialvalue);
 
 const apiGetUsers = apiGet as QueryFunction<{ users: User[] }>;
-const url = "/users/";
+const url = "/api/v1/users";
 const getUsers = async (query: string) => {
   const results = await apiGetUsers({
     queryKey: [url, { search: query }],

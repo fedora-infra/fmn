@@ -11,7 +11,7 @@ import RuleEditForm from "../components/RuleEditForm.vue";
 const route = useRoute();
 const userStore = useUserStore();
 
-const url = `/user/${userStore.username}/rules/${route.params.id}`;
+const url = `/api/v1/users/${userStore.username}/rules/${route.params.id}`;
 const { isLoading, isError, data, error } = useQuery(
   url,
   apiGet as QueryFunction<Rule>

@@ -39,7 +39,7 @@ def client():
         responses.get("http://fasjson.example.test/specs/v1.json", json=fasjson_spec)
         base_url = get_settings_override().services.fasjson_url
 
-        return main.FasjsonClient(base_url, auth=False)
+        return fasjson.FasjsonClient(base_url, auth=False)
 
     main.app.dependency_overrides[main.get_settings] = get_settings_override
     main.app.dependency_overrides[fasjson.get_fasjson_client] = get_fasjson_client_override
