@@ -52,17 +52,6 @@ async def test_read_root():
     assert isinstance(result["identity"].expires_at, dt.datetime)
 
 
-def test_get_settings():
-    assert isinstance(main.get_settings(), main.Settings)
-
-
-def test_get_fasjson_client(mocker):
-    settings = main.Settings(services={"fasjson_url": "http://fasjson.test/"})
-    mocker.patch.object(main.FasjsonClient, "_make_bravado_client")
-    client = main.get_fasjson_client(settings)
-    assert client._base_url == settings.services.fasjson_url
-
-
 def test_get_user_info(fasjson_user, client):
     """Test that get_user_info() dispatches to FASJSON."""
     username = fasjson_user["username"]
