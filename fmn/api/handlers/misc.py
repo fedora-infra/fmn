@@ -7,7 +7,7 @@ log = logging.getLogger(__name__)
 router = APIRouter()
 
 
-@router.get("/applications", response_model=list[str])
+@router.get("/applications", response_model=list[str], tags=["misc"])
 def get_applications():
     # TODO: Read the installed schemas and extract the applications. Return sorted, please :-)
     return [
@@ -17,7 +17,7 @@ def get_applications():
     ]
 
 
-@router.get("/artifacts/owned", response_model=list[dict[str, str]])
+@router.get("/artifacts/owned", response_model=list[dict[str, str]], tags=["misc"])
 def get_owned_artifacts(
     users: list[str] = Query(default=[]), groups: list[str] = Query(default=[])
 ):
