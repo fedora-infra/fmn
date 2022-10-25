@@ -13,7 +13,13 @@ from . import handlers
 
 log = logging.getLogger(__name__)
 
-app = FastAPI()
+tags_metadata = [
+    {"name": "users", "description": "Work with users"},
+    {"name": "users/rules", "description": "Work with users’ rules"},
+    {"name": "misc", "description": "Miscellaneous"},
+]
+
+app = FastAPI(title="Fedora Messaging Notifications", openapi_tags=tags_metadata)
 
 
 # API v1

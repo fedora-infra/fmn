@@ -15,32 +15,32 @@ log = logging.getLogger(__name__)
 router = APIRouter(prefix="/users")
 
 
-@router.get("", response_model=list[str])
+@router.get("", response_model=list[str], tags=["users"])
 async def get_users(
     search: str, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
 ):  # pragma: no cover todo
     return [u["username"] for u in fasjson_client.search(username=search).result]
 
 
-@router.get("/{username}", response_model=api_models.User)
+@router.get("/{username}", response_model=api_models.User, tags=["users"])
 async def get_user(username, db_session: AsyncSession = Depends(gen_db_session)):
     user = await User.async_get_or_create(db_session, name=username)
     return user
 
 
-@router.get("/{username}/info")
+@router.get("/{username}/info", tags=["users"])
 def get_user_info(
     username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
 ):  # pragma: no cover todo
     return fasjson_client.get_user(username=username).result
 
 
-@router.get("/{username}/groups")
+@router.get("/{username}/groups", tags=["users"])
 def get_user_groups(username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)):
     return [g["groupname"] for g in fasjson_client.list_user_groups(username=username).result]
 
 
-@router.get("/{username}/destinations", response_model=list[api_models.Destination])
+@router.get("/{username}/destinations", response_model=list[api_models.Destination], tags=["users"])
 def get_user_destinations(
     username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
 ):  # pragma: no cover todo
@@ -56,7 +56,7 @@ def get_user_destinations(
     return result
 
 
-@router.get("/{username}/rules", response_model=list[api_models.Rule])
+@router.get("/{username}/rules", response_model=list[api_models.Rule], tags=["users/rules"])
 async def get_user_rules(
     username,
     identity: Identity = Depends(get_identity),
@@ -69,7 +69,7 @@ async def get_user_rules(
     return db_result.scalars().all()
 
 
-@router.get("/{username}/rules/{id}", response_model=api_models.Rule)
+@router.get("/{username}/rules/{id}", response_model=api_models.Rule, tags=["users/rules"])
 async def get_user_rule(
     username: str,
     id: int,
@@ -86,7 +86,7 @@ async def get_user_rule(
     ).scalar_one()
 
 
-@router.put("/{username}/rules/{id}", response_model=api_models.Rule)
+@router.put("/{username}/rules/{id}", response_model=api_models.Rule, tags=["users/rules"])
 async def edit_user_rule(
     username: str,
     id: int,
@@ -151,7 +151,7 @@ async def edit_user_rule(
     ).scalar_one()
 
 
-@router.delete("/{username}/rules/{id}")
+@router.delete("/{username}/rules/{id}", tags=["users/rules"])
 async def delete_user_rule(
     username: str,
     id: int,
@@ -168,7 +168,7 @@ async def delete_user_rule(
     # TODO: emit a fedmsg
 
 
-@router.post("/{username}/rules", response_model=api_models.Rule)
+@router.post("/{username}/rules", response_model=api_models.Rule, tags=["users/rules"])
 async def create_user_rule(
     username,
     rule: api_models.Rule,
