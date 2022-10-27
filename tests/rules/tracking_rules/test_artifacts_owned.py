@@ -1,8 +1,6 @@
 import pytest
 
-from fmn.consumer.tracking_rule import ArtifactsOwned
-
-from ..conftest import Message
+from fmn.rules.tracking_rules import ArtifactsOwned
 
 
 @pytest.mark.parametrize(
@@ -14,11 +12,11 @@ from ..conftest import Message
         "flatpaks",
     ],
 )
-def test_artifacts_owned(requester, artifact_type):
+def test_artifacts_owned(requester, make_mocked_message, artifact_type):
     tr = ArtifactsOwned(requester, {"username": "dummy"})
-    message = Message(topic="dummy", body={artifact_type: ["art-dummy", "art-other"]})
+    message = make_mocked_message(topic="dummy", body={artifact_type: ["art-dummy", "art-other"]})
     assert tr.matches(message) is True
-    message = Message(topic="dummy", body={artifact_type: ["art-other"]})
+    message = make_mocked_message(topic="dummy", body={artifact_type: ["art-other"]})
     assert tr.matches(message) is False
 
 

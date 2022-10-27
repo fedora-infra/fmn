@@ -2,8 +2,8 @@ from unittest.mock import Mock
 
 import pytest
 
-from fmn.consumer.notification import Notification
 from fmn.consumer.send_queue import SendQueue
+from fmn.rules.notification import Notification
 
 
 @pytest.fixture

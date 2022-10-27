@@ -1,9 +1,12 @@
 from itertools import chain
+from typing import TYPE_CHECKING
 
 import requests
-from fedora_messaging.message import Message
 
 from ..cache import cache
+
+if TYPE_CHECKING:
+    from fedora_messaging.message import Message
 
 
 class DistGitService:
@@ -61,7 +64,7 @@ class DistGitService:
             raise ValueError("Argument user_or_group must be either user or group, duh.")
         return [p["name"] for p in projects]
 
-    def invalidate_on_message(self, message: Message):
+    def invalidate_on_message(self, message: "Message"):
         if message.topic.endswith("pagure.project.user.access.updated"):
             if message.body["new_access"] == "owner":
                 self._on_owner_changed(

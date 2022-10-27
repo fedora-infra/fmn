@@ -1,8 +1,6 @@
 import pytest
 
-from fmn.consumer.tracking_rule import ArtifactsFollowed
-
-from ..conftest import Message
+from fmn.rules.tracking_rules import ArtifactsFollowed
 
 
 @pytest.mark.parametrize(
@@ -14,19 +12,19 @@ from ..conftest import Message
         "flatpak",
     ],
 )
-def test_artifacts_followed(requester, artifact_type):
+def test_artifacts_followed(requester, make_mocked_message, artifact_type):
     tr = ArtifactsFollowed(
         requester,
         [{"name": "art1", "type": artifact_type}, {"name": "art3", "type": artifact_type}],
     )
-    msg1 = Message(
+    msg1 = make_mocked_message(
         topic="dummy",
         body={
             f"{artifact_type}s": ["art1", "art2"],
         },
     )
     assert tr.matches(msg1) is True
-    msg2 = Message(
+    msg2 = make_mocked_message(
         topic="dummy",
         body={
             f"{artifact_type}s": ["art2", "art4"],

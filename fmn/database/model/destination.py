@@ -1,8 +1,13 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy import Column, ForeignKey, Integer, String, UnicodeText
 from sqlalchemy.orm import relationship
 
 from ..main import Base
 from .generation_rule import GenerationRule
+
+if TYPE_CHECKING:
+    from fedora_messaging.message import Message
 
 
 class Destination(Base):
@@ -17,3 +22,20 @@ class Destination(Base):
 
     protocol = Column(String(length=255), nullable=False)
     address = Column(UnicodeText, nullable=False)
+
+    def generate(self, message: "Message"):
+        if self.protocol == "email":
+            return {
+                "headers": {
+                    "To": self.address,
+                    "Subject": message.summary,
+                },
+                "body": str(message),
+            }
+        elif self.protocol == "irc":
+            return {
+                "to": self.address,
+                "message": message.summary,
+            }
+        else:
+            raise ValueError(f"Unknown destination protocol: {self.protocol}")
