@@ -47,6 +47,8 @@ const getArtifacts = async (query: string) => {
       :delay="0"
       :min-chars="1"
       :disabled="artifactType === ''"
+      placeholder="Search by artifact name"
+      noOptionsText="No matches on that artifact found"
     />
   </FormKit>
 </template>

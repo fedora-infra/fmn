@@ -14,4 +14,6 @@ export const msProps = [
   "object",
   "class",
   "classes",
+  "noOptionsText",
+  "clearOnSearch",
 ];
