@@ -14,7 +14,7 @@ class BaseModel(PydanticBaseModel):
 
 class TrackingRule(BaseModel):
     name: str
-    params: list[str] | dict[str, str] | None
+    params: list[str] | dict[str, str] | dict[str, list[str] | str] | None
 
 
 class Destination(BaseModel):
