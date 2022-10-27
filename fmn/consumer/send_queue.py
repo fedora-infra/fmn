@@ -2,7 +2,7 @@ import json
 
 import pika
 
-from .notification import Notification
+from fmn.rules.notification import Notification
 
 
 class SendQueue:

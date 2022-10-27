@@ -5,10 +5,10 @@ from fedora_messaging.config import conf as fm_config
 
 from fmn.core import config
 from fmn.database import init_sync_model, sync_session_maker
+from fmn.database.model import Rule
+from fmn.rules.cache import cache
+from fmn.rules.requester import Requester
 
-from .cache import cache
-from .requester import Requester
-from .rule import Rule
 from .send_queue import SendQueue
 
 log = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ class Consumer:
         self.send_queue = SendQueue(fm_config["consumer_config"]["send_queue"])
         self.send_queue.connect()
         # Caching and requesting
-        cache.configure(**config.get_settings().dict()["cache"])
+        cache.configure()
         self._requester = Requester(config.get_settings().dict()["services"])
 
     def __call__(self, message):
@@ -42,8 +42,10 @@ class Consumer:
         if not self.is_tracked(message):
             log.debug(f"Message {message.id} is not tracked")
             return
-        for rule in Rule.collect(self.db, self._requester):
-            for notification in rule.handle(message):
+        # TODO: Cache this!
+        rules = self.db.execute(Rule.select_related()).scalars()
+        for rule in rules:
+            for notification in rule.handle(message, self._requester):
                 log.debug(
                     f"Generating notification for message {message.id} via {notification.protocol}"
                 )

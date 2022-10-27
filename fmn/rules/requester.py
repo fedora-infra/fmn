@@ -1,8 +1,12 @@
+from typing import TYPE_CHECKING
+
 import requests
-from fedora_messaging.message import Message
 
 from .services.distgit import DistGitService
 from .services.fasjson import FasjsonService
+
+if TYPE_CHECKING:
+    from fedora_messaging.message import Message
 
 
 class Requester:
@@ -51,6 +55,6 @@ class Requester:
     def get_user_groups(self, name: str):
         return self.fasjson_client.get_user_groups(name)
 
-    def invalidate_on_message(self, message: Message):
+    def invalidate_on_message(self, message: "Message"):
         self.distgit_client.invalidate_on_message(message)
         self.fasjson_client.invalidate_on_message(message)

@@ -8,8 +8,6 @@ from fmn.core import config
 from fmn.database import model
 from fmn.database.setup import setup_db_schema
 
-from .conftest import Message
-
 
 @pytest.fixture
 def mocked_cache(mocker):
@@ -40,9 +38,7 @@ def mocked_send_queue_class(mocker):
 
 def test_consumer_init(mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class):
     Consumer()
-    mocked_cache.configure.assert_called_once_with(
-        backend="dogpile.cache.memory", expiration_time=300
-    )
+    mocked_cache.configure.assert_called_once_with()
     mocked_requester_class.assert_called_once_with(
         {
             "fasjson_url": "https://fasjson.fedoraproject.org",
@@ -53,10 +49,14 @@ def test_consumer_init(mocker, mocked_cache, mocked_requester_class, mocked_send
 
 
 def test_consumer_call_not_tracked(
-    mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class
+    mocker,
+    mocked_cache,
+    mocked_requester_class,
+    mocked_send_queue_class,
+    make_mocked_message,
 ):
     c = Consumer()
-    message = Message(topic="dummy.topic", body={"foo": "bar"})
+    message = make_mocked_message(topic="dummy.topic", body={"foo": "bar"})
     c(message)
     mocked_cache.invalidate_on_message.assert_called_with(message)
     c._requester.invalidate_on_message.assert_called_with(message)
@@ -64,7 +64,7 @@ def test_consumer_call_not_tracked(
 
 
 def test_consumer_call_tracked(
-    mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class
+    mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class, make_mocked_message
 ):
     c = Consumer()
     mocked_cache.get_tracked.return_value = {
@@ -89,12 +89,14 @@ def test_consumer_call_tracked(
     c._requester.get_package_owners.return_value = "dummy"
 
     # Filtered out because of not_my_actions
-    message = Message(topic="dummy.topic", body={"packages": ["pkg1"], "agent_name": "dummy"})
+    message = make_mocked_message(
+        topic="dummy.topic", body={"packages": ["pkg1"], "agent_name": "dummy"}
+    )
     c(message)
     c.send_queue.send.assert_not_called()
 
     # Should generate a notification
-    message = Message(
+    message = make_mocked_message(
         topic="dummy.topic",
         body={"packages": ["pkg1"], "agent_name": "someone"},
     )
@@ -118,12 +120,16 @@ def test_consumer_init_settings_file(
 
 
 def test_consumer_call_failure(
-    mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class
+    mocker,
+    mocked_cache,
+    mocked_requester_class,
+    mocked_send_queue_class,
+    make_mocked_message,
 ):
     c = Consumer()
     c.db = Mock(name="db")
     mocked_cache.get_tracked.side_effect = ValueError
-    message = Message(topic="dummy.topic", body={})
+    message = make_mocked_message(topic="dummy.topic", body={})
     with pytest.raises(ValueError):
         c(message)
     c.db.rollback.assert_called_once()
@@ -131,7 +137,7 @@ def test_consumer_call_failure(
 
 
 def test_consumer_call_tracked_agent_name(
-    mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class
+    mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class, make_mocked_message
 ):
     c = Consumer()
     mocked_cache.get_tracked.return_value = {
@@ -143,6 +149,8 @@ def test_consumer_call_tracked_agent_name(
         "agent_name": {"dummy"},
     }
 
-    message = Message(topic="dummy.topic", body={"packages": ["pkg1"], "agent_name": "dummy"})
+    message = make_mocked_message(
+        topic="dummy.topic", body={"packages": ["pkg1"], "agent_name": "dummy"}
+    )
     assert c.is_tracked(message) is True
     c.send_queue.send.assert_not_called()

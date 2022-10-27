@@ -104,6 +104,20 @@ database = ["SQLAlchemy", "alembic"]
 sqlite = ["aiosqlite"]
 postgresql = ["psycopg2", "asyncpg"]
 
+[tool.poetry.plugins."fmn.tracking_rules"]
+"artifacts-owned" = "fmn.rules.tracking_rules:ArtifactsOwned"
+"artifacts-group-owned" = "fmn.rules.tracking_rules:ArtifactsGroupOwned"
+"artifacts-followed" = "fmn.rules.tracking_rules:ArtifactsFollowed"
+"related-events" = "fmn.rules.tracking_rules:RelatedEvents"
+"users-followed" = "fmn.rules.tracking_rules:UsersFollowed"
+
+[tool.poetry.plugins."fmn.filters"]
+"applications" = "fmn.rules.filter:Applications"
+"severities" = "fmn.rules.filter:Severities"
+"not_my_actions" = "fmn.rules.filter:NotMyActions"
+"topic" = "fmn.rules.filter:Topic"
+
+
 [tool.pytest.ini_options]
 addopts = "--black --cov-config .coveragerc --cov=fmn --cov-report term --cov-report xml --cov-report html --flake8 --isort --ignore fmn/consumer --ignore fmn/sender"
 flake8-max-line-length = 100

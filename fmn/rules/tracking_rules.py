@@ -1,8 +1,9 @@
-from fedora_messaging.message import Message
-
-from fmn.database.model import Rule as RuleRecord
+from typing import TYPE_CHECKING
 
 from .requester import Requester
+
+if TYPE_CHECKING:
+    from fedora_messaging.message import Message
 
 
 class TrackingRule:
@@ -14,18 +15,10 @@ class TrackingRule:
         self._requester = requester
         self._params = params
 
-    @classmethod
-    def from_rule_record(cls, rule: RuleRecord, requester: Requester):  # noqa
-        tracking_rule = rule.tracking_rule
-        for subclass in cls.__subclasses__():
-            if subclass.name == tracking_rule.name:
-                return subclass(requester, tracking_rule.params)
-        raise ValueError(f"Unknown tracking rule: {tracking_rule.name}")
-
-    def matches(self, message: Message):
+    def matches(self, message: "Message"):
         raise NotImplementedError  # pragma: no cover
 
-    def prime_cache(self):
+    def prime_cache(self, cache):
         raise NotImplementedError  # pragma: no cover
 
 

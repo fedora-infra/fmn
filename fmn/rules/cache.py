@@ -1,5 +1,12 @@
+from typing import TYPE_CHECKING
+
 from dogpile.cache import make_region
-from fedora_messaging.message import Message
+
+from fmn.core import config
+from fmn.database.model import Rule
+
+if TYPE_CHECKING:
+    from fedora_messaging.message import Message
 
 
 class Cache:
@@ -16,7 +23,6 @@ class Cache:
         # We can have this consumer listen to those events as messages on the bus.
         # If this happens too frequently, we can just refresh after X minutes have passed and tell
         # users that their changes will take X minutes to be active.
-        from .rule import Rule
 
         tracked = {
             "packages": set(),
@@ -26,8 +32,9 @@ class Cache:
             "usernames": set(),
             "agent_name": set(),
         }
-        for rule in Rule.collect(db, requester):
-            rule.tracking_rule.prime_cache(tracked)
+        rules = db.execute(Rule.select_related()).scalars()
+        for rule in rules:
+            rule.tracking_rule.prime_cache(tracked, requester)
         return tracked
 
     def get_tracked(self, db, requester):
@@ -40,13 +47,15 @@ class Cache:
     def cache_on_arguments(self, *args, **kwargs):
         return self.region.cache_on_arguments(*args, **kwargs)
 
-    def configure(self, *args, **kwargs):
-        return self.region.configure(*args, **kwargs)
+    def configure(self, **kwargs):
+        conf = config.get_settings().dict()["cache"]
+        conf.update(kwargs)
+        return self.region.configure(**conf)
 
     def invalidate_tracked(self):
         self.region.delete("tracked")
 
-    def invalidate_on_message(self, message: Message):
+    def invalidate_on_message(self, message: "Message"):
         if message.topic.endswith("fmn.rule.updated"):  # XXX: correct topic?
             self.invalidate_tracked()
 

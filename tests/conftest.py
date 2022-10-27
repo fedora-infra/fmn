@@ -6,6 +6,7 @@ import pytest
 import responses
 from click.testing import CliRunner
 from fastapi.testclient import TestClient
+from fedora_messaging import message
 
 from fmn.api import fasjson, main
 from fmn.core.config import Settings, get_settings
@@ -19,6 +20,8 @@ from fmn.database.main import (
     sync_session_maker,
 )
 from fmn.database.model import Destination, Filter, GenerationRule, Rule, TrackingRule, User
+
+from .message import Message
 
 
 @pytest.fixture
@@ -249,3 +252,12 @@ async def db_rule(db_async_session, db_user):
     await db_async_session.flush()
 
     yield rule
+
+
+@pytest.fixture(scope="session")
+def make_mocked_message():
+    message._schema_name_to_class["testmessage"] = Message
+    message._class_to_schema_name[Message] = "testmessage"
+    yield Message
+    del message._schema_name_to_class["testmessage"]
+    del message._class_to_schema_name[Message]

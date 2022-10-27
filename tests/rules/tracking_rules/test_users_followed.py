@@ -1,17 +1,15 @@
 import pytest
 
-from fmn.consumer.tracking_rule import UsersFollowed
-
-from ..conftest import Message
+from fmn.rules.tracking_rules import UsersFollowed
 
 
 @pytest.mark.parametrize(
     "received,expected",
     [("user1", True), ("user2", False)],
 )
-def test_users_followed(requester, received, expected):
+def test_users_followed(requester, make_mocked_message, received, expected):
     tr = UsersFollowed(requester, {"username": ["user1"]})
-    msg = Message(topic="dummy", body={"agent_name": received})
+    msg = make_mocked_message(topic="dummy", body={"agent_name": received})
     assert tr.matches(msg) is expected
 
 

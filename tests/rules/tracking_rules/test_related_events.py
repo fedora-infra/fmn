@@ -1,17 +1,15 @@
 import pytest
 
-from fmn.consumer.tracking_rule import RelatedEvents
-
-from ..conftest import Message
+from fmn.rules.tracking_rules import RelatedEvents
 
 
 @pytest.mark.parametrize(
     "received,expected",
     [(["user1", "user2"], True), (["user2"], False)],
 )
-def test_related_events(requester, received, expected):
+def test_related_events(requester, make_mocked_message, received, expected):
     tr = RelatedEvents(requester, {"username": "user1"})
-    msg = Message(topic="dummy", body={"usernames": received})
+    msg = make_mocked_message(topic="dummy", body={"usernames": received})
     assert tr.matches(msg) is expected
 
 

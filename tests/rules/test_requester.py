@@ -4,11 +4,9 @@ import pytest
 import responses
 from fasjson_client import Client
 
-from fmn.consumer.cache import cache
-from fmn.consumer.requester import Requester
 from fmn.core.config import get_settings
-
-from .conftest import Message
+from fmn.rules.cache import cache
+from fmn.rules.requester import Requester
 
 
 @pytest.fixture(autouse=True)
@@ -20,7 +18,7 @@ def mocked_responses():
 @pytest.fixture(scope="module")
 def mocked_fasjson(module_mocker):
     module_mocker.patch(
-        "fmn.consumer.services.fasjson.Client",
+        "fmn.rules.services.fasjson.Client",
         side_effect=lambda *a, **kw: Client(*a, **kw, auth=False),
     )
     responses.add_passthru(re.compile("https://json-schema.org/.*"))
@@ -187,9 +185,9 @@ def test_get_user_groups(requester):
         ),
     ],
 )
-def test_invalidate_on_message(requester, topic, body, mocker):
+def test_invalidate_on_message(requester, topic, body, mocker, make_mocked_message):
     mocker.patch.object(cache, "region")
-    message = Message(topic=topic, body=body)
+    message = make_mocked_message(topic=topic, body=body)
     responses.get(
         "https://src.fedoraproject.org/api/0/rpms/pkg-1",
         json={"access_users": {"owner": []}, "access_groups": {"admin": [], "commit": []}},
@@ -248,9 +246,9 @@ def test_invalidate_on_message(requester, topic, body, mocker):
         ),
     ],
 )
-def test_no_invalidate_on_message(requester, topic, body, mocker):
+def test_no_invalidate_on_message(requester, topic, body, mocker, make_mocked_message):
     mocker.patch.object(cache, "region")
-    message = Message(topic=topic, body=body)
+    message = make_mocked_message(topic=topic, body=body)
     responses.get(
         "https://src.fedoraproject.org/api/0/rpms/pkg-1",
         json={"access_users": {"owner": []}, "access_groups": {"admin": [], "commit": []}},

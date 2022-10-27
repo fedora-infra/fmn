@@ -2,12 +2,8 @@ from unittest.mock import Mock
 
 import pytest
 
-from fmn.consumer.cache import Cache
-from fmn.consumer.rule import Rule
-from fmn.consumer.tracking_rule import ArtifactsOwned
-from fmn.core.config import get_settings
-
-from .conftest import Message
+from fmn.database.model import Rule, TrackingRule, User
+from fmn.rules.cache import Cache
 
 
 @pytest.fixture
@@ -16,12 +12,9 @@ def requester():
 
 
 @pytest.fixture
-def rule(mocker, requester):
-    requester = Mock()
-    tr = ArtifactsOwned(requester, params={"username": "dummy"})
-    rule = Rule(id=1, username="dummy", tracking_rule=tr, generation_rules=[])
-    mocker.patch.object(Rule, "collect", return_value=[rule])
-    return rule
+def rule():
+    tr = TrackingRule(id=1, name="artifacts-owned", params={"username": "dummy"})
+    return Rule(id=1, user=User(name="dummy"), tracking_rule=tr, generation_rules=[])
 
 
 def test_cache_proxy():
@@ -31,25 +24,27 @@ def test_cache_proxy():
     cache.cache_on_arguments(foo="bar")
     region.cache_on_arguments.assert_called_with(foo="bar")
     cache.configure(foo="bar")
-    region.configure.assert_called_with(foo="bar")
+    region.configure.assert_called_with(
+        backend="dogpile.cache.memory", expiration_time=300, foo="bar"
+    )
     cache.invalidate_tracked()
     region.delete.assert_called_with("tracked")
 
 
-def test_build_tracked(mocker, requester, rule):
-    db = Mock()
-    collect = mocker.patch.object(Rule, "collect", return_value=[rule])
-    prime_cache = mocker.patch.object(rule.tracking_rule, "prime_cache")
+def test_build_tracked(mocker, requester, db_sync_session):
+    tr = TrackingRule(id=1, name="artifacts-owned", params={"username": "dummy"})
+    rule = Rule(id=1, name="dummy", user=User(name="dummy"), tracking_rule=tr, generation_rules=[])
+    db_sync_session.add_all([rule, tr])
+    prime_cache = mocker.patch.object(tr, "prime_cache")
     cache = Cache()
-    tracked = cache.build_tracked(db, requester)
-    collect.assert_called_once_with(db, requester)
-    prime_cache.assert_called_once_with(tracked)
+    tracked = cache.build_tracked(db_sync_session, requester)
+    prime_cache.assert_called_once_with(tracked, requester)
 
 
 def test_get_tracked(mocker, requester):
     db = Mock()
     cache = Cache()
-    cache.configure(**get_settings().dict()["cache"])
+    cache.configure()
     mocker.patch.object(cache, "build_tracked", return_value="tracked_value")
     result1 = cache.get_tracked(db, requester)
     result2 = cache.get_tracked(db, requester)
@@ -65,8 +60,8 @@ def test_get_tracked(mocker, requester):
         ("fmn.rule.updated", True),
     ],
 )
-def test_invalidate_on_message(topic, expected):
-    message = Message(topic=topic, body={})
+def test_invalidate_on_message(topic, expected, make_mocked_message):
+    message = make_mocked_message(topic=topic, body={})
     cache = Cache()
     cache.region = Mock()
     cache.invalidate_on_message(message)
