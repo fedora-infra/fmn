@@ -32,7 +32,7 @@ const additional_filters_accordion_vars = {
     >
       <CAccordionItem :item-key="1">
         <CAccordionHeader>
-          This Rule will track {{ props.tracked.length }} artefacts:
+          This Rule will track {{ props.tracked.length }} artifacts:
         </CAccordionHeader>
         <CAccordionBody>
           <ul class="list-unstyled">
