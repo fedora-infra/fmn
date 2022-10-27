@@ -10,6 +10,8 @@ const username = userStore.username;
   <UserMultiSelect
     :initialvalue="username ? [username] : []"
     label="Artifacts owned by:"
+    placeholder="Search by FAS Username"
+    nooptionstext="No matches on that username found"
     showArtifactsOwnedSummary
   />
 </template>

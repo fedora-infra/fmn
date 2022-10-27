@@ -10,6 +10,7 @@ const props = defineProps<{
   label: string;
   showArtifactsOwnedSummary?: boolean;
   placeholder?: string;
+  nooptionstext?: string;
 }>();
 
 const value = ref<string[]>(props.initialvalue);
@@ -33,6 +34,7 @@ const getUsers = async (query: string) => {
     label-class="fw-bold"
     mode="tags"
     :placeholder="props.placeholder"
+    :noOptionsText="props.nooptionstext"
     v-model="value"
     :msOptions="getUsers"
     :close-on-select="false"
@@ -42,6 +44,7 @@ const getUsers = async (query: string) => {
     validation="required"
     :min-chars="3"
     :delay="0"
+    :clearOnSearch="true"
   />
 
   <ArtifactsOwnedSummary
