@@ -40,3 +40,16 @@ def get_owned_artifacts(
         _add_artifact({"type": "rpm", "name": "foobar-group-owned"})
     artifacts.sort(key=lambda a: a["name"])
     return artifacts
+
+
+@router.get("/artifacts", response_model=list[str], tags=["misc"])
+def get_artifacts(type: str, name: str):  # pragma: no cover todo
+    # TODO: Get artifacts
+
+    artifacts = []
+
+    artifacts.append(f"foobar-{name}")
+    artifacts.append(f"foo-{name}")
+    artifacts.append(f"bar-{name}")
+
+    return artifacts

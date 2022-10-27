@@ -14,7 +14,7 @@ const getArtifacts = async (query: string) => {
     queryKey: [route, { type: artifactType.value, name: query }],
     meta: undefined,
   });
-  return results ? results.artifacts.map((a) => a.name) : [];
+  return results;
 };
 </script>
 
