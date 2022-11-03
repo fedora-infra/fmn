@@ -82,7 +82,7 @@ name = "anyio"
 version = "3.6.2"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.6.2"
 
 [package.dependencies]
@@ -677,7 +677,7 @@ name = "h11"
 version = "0.12.0"
 description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.6"
 
 [[package]]
@@ -703,7 +703,7 @@ name = "httpcore"
 version = "0.15.0"
 description = "A minimal low-level HTTP client."
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
@@ -721,7 +721,7 @@ name = "httpx"
 version = "0.23.0"
 description = "The next generation HTTP client."
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
@@ -735,6 +735,22 @@ brotli = ["brotli", "brotlicffi"]
 cli = ["click (>=8.0.0,<9.0.0)", "pygments (>=2.0.0,<3.0.0)", "rich (>=10,<13)"]
 http2 = ["h2 (>=3,<5)"]
 socks = ["socksio (>=1.0.0,<2.0.0)"]
+
+[[package]]
+name = "httpx-gssapi"
+version = "0.1.7"
+description = "A Python GSSAPI authentication handler for HTTPX"
+category = "main"
+optional = true
+python-versions = ">=3.6"
+
+[package.dependencies]
+gssapi = "*"
+httpx = ">=0.16,<0.24"
+
+[package.extras]
+all = ["k5test", "pytest"]
+test = ["k5test", "pytest"]
 
 [[package]]
 name = "hyperlink"
@@ -1630,6 +1646,17 @@ urllib3 = ">=1.25.10"
 tests = ["coverage (>=6.0.0)", "flake8", "mypy", "pytest (>=7.0.0)", "pytest-asyncio", "pytest-cov", "pytest-httpserver", "types-requests"]
 
 [[package]]
+name = "respx"
+version = "0.20.0"
+description = "A utility for mocking out the Python HTTPX and HTTP Core libraries."
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+httpx = ">=0.21.0"
+
+[[package]]
 name = "rfc3339-validator"
 version = "0.1.4"
 description = "A pure python RFC3339 validator"
@@ -1645,7 +1672,7 @@ name = "rfc3986"
 version = "1.5.0"
 description = "Validating URI References per RFC 3986"
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [package.dependencies]
@@ -1737,7 +1764,7 @@ name = "sniffio"
 version = "1.3.0"
 description = "Sniff out which async library your code is running under"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.7"
 
 [[package]]
@@ -2063,7 +2090,7 @@ test = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 
 [extras]
-api = ["fastapi", "uvicorn", "httpx", "SQLAlchemy"]
+api = ["fastapi", "uvicorn", "httpx", "httpx-gssapi", "SQLAlchemy"]
 consumer = ["fedora-messaging", "pika", "fasjson-client", "dogpile.cache", "SQLAlchemy"]
 database = ["SQLAlchemy", "alembic"]
 postgresql = ["psycopg2", "asyncpg"]
@@ -2075,7 +2102,7 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "46a9ce855b974b35b26ea75c8b770d01e3f95f7ed46c0593d17edfc88da33a5e"
+content-hash = "0c22df931bdef014b398499f4a80cd0e12d0c010150b71ca64fbafbcbd064ba2"
 
 [metadata.files]
 aio-pika = [
@@ -2623,6 +2650,10 @@ httpcore = [
 httpx = [
     {file = "httpx-0.23.0-py3-none-any.whl", hash = "sha256:42974f577483e1e932c3cdc3cd2303e883cbfba17fe228b0f63589764d7b9c4b"},
     {file = "httpx-0.23.0.tar.gz", hash = "sha256:f28eac771ec9eb4866d3fb4ab65abd42d38c424739e80c08d8d20570de60b0ef"},
+]
+httpx-gssapi = [
+    {file = "httpx-gssapi-0.1.7.tar.gz", hash = "sha256:7bdcbab8725bc15702dd756eec638e36d700e5f534af6f7584ec283c34c8dc69"},
+    {file = "httpx_gssapi-0.1.7-py3-none-any.whl", hash = "sha256:e2d4c595b39702d557bc6f0150186b3d040e04788875a759c92f959f2d0d09a3"},
 ]
 hyperlink = [
     {file = "hyperlink-21.0.0-py2.py3-none-any.whl", hash = "sha256:e6b14c37ecb73e89c77d78cdb4c2cc8f3fb59a885c5b3f819ff4ed80f25af1b4"},
@@ -3180,6 +3211,10 @@ requests-toolbelt = [
 responses = [
     {file = "responses-0.22.0-py3-none-any.whl", hash = "sha256:dcf294d204d14c436fddcc74caefdbc5764795a40ff4e6a7740ed8ddbf3294be"},
     {file = "responses-0.22.0.tar.gz", hash = "sha256:396acb2a13d25297789a5866b4881cf4e46ffd49cc26c43ab1117f40b973102e"},
+]
+respx = [
+    {file = "respx-0.20.0-py2.py3-none-any.whl", hash = "sha256:61e26ddf66b2b0d1bcd78c4e18a06533e50493f8c0179e5542ebfffd3ed3d0c5"},
+    {file = "respx-0.20.0.tar.gz", hash = "sha256:27ef411ca9622ae1e032c3f355506f62de5efe08c4296f64ae2c0621888e710a"},
 ]
 rfc3339-validator = [
     {file = "rfc3339_validator-0.1.4-py2.py3-none-any.whl", hash = "sha256:24f6ec1eda14ef823da9e36ec7113124b39c04d50a4d3d3a3c2859577e7791fa"},

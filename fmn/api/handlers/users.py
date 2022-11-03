@@ -1,6 +1,5 @@
 import logging
 
-from fasjson_client import Client as FasjsonClient
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -8,7 +7,7 @@ from ...database.model import Destination, Filter, GenerationRule, Rule, User
 from .. import api_models
 from ..auth import Identity, get_identity, get_identity_optional
 from ..database import gen_db_session
-from ..fasjson import get_fasjson_client
+from ..fasjson import FASJSONAsyncProxy, get_fasjson_proxy
 from .utils import db_rule_from_api_rule
 
 log = logging.getLogger(__name__)
@@ -20,14 +19,14 @@ router = APIRouter(prefix="/users")
 async def get_users(
     search: str,
     identity: Identity = Depends(get_identity_optional),
-    fasjson_client: FasjsonClient = Depends(get_fasjson_client),
+    fasjson_proxy: FASJSONAsyncProxy = Depends(get_fasjson_proxy),
 ):  # pragma: no cover todo
     if not search:
         if identity and identity.name:
             return [identity.name]
         else:
             return []
-    return [u["username"] for u in fasjson_client.search(username=search).result]
+    return [u["username"] async for u in fasjson_proxy.search_users(username=search)]
 
 
 @router.get("/{username}", response_model=api_models.User, tags=["users"])
@@ -37,22 +36,20 @@ async def get_user(username, db_session: AsyncSession = Depends(gen_db_session))
 
 
 @router.get("/{username}/info", tags=["users"])
-def get_user_info(
-    username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
-):  # pragma: no cover todo
-    return fasjson_client.get_user(username=username).result
+async def get_user_info(username, fasjson_proxy: FASJSONAsyncProxy = Depends(get_fasjson_proxy)):
+    return await fasjson_proxy.get_user(username=username)
 
 
 @router.get("/{username}/groups", tags=["users"])
-def get_user_groups(username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)):
-    return [g["groupname"] for g in fasjson_client.list_user_groups(username=username).result]
+async def get_user_groups(username, fasjson_proxy: FASJSONAsyncProxy = Depends(get_fasjson_proxy)):
+    return [g["groupname"] for g in await fasjson_proxy.list_user_groups(username=username)]
 
 
 @router.get("/{username}/destinations", response_model=list[api_models.Destination], tags=["users"])
-def get_user_destinations(
-    username, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
-):  # pragma: no cover todo
-    user = fasjson_client.get_user(username=username).result
+async def get_user_destinations(
+    username, fasjson_proxy: FASJSONAsyncProxy = Depends(get_fasjson_proxy)
+):
+    user = await fasjson_proxy.get_user(username=username)
     result = [{"protocol": "email", "address": email} for email in user["emails"]]
     for nick in user.get("ircnicks", []):
         address = nick.split(":", 1)[1] if ":" in nick else nick
