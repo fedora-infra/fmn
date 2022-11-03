@@ -58,6 +58,7 @@ psycopg2 = {version = "^2.9.3", optional = true}
 asyncpg = {version = "^0.26.0 || ^0.27.0", optional = true}
 alembic = {version = "^1.8.1", optional = true}
 SQLAlchemy = {version = "^1.4.41", optional = true}
+
 # Schema packages
 anitya-schema = {version = "*", optional = true}
 bodhi-messages = {version = "*", optional = true}
@@ -74,7 +75,9 @@ noggin-messages = {version = "*", optional = true}
 nuancier-messages = {version = "*", optional = true}
 pagure-messages = {version = "*", optional = true}
 
-[tool.poetry.dev-dependencies]
+httpx-gssapi = {version = "^0.1.7", optional = true}
+
+[tool.poetry.group.dev.dependencies]
 poetry = "^1.2.0b2"
 black = "^22.6.0"
 isort = "^5.10.1"
@@ -90,12 +93,14 @@ toml = "^0.10.2"
 responses = "^0.21.0 || ^0.22.0"
 pytest-mock = "^3.8.2"
 flake8 = ">=4,<6"
+respx = "^0.20.0"
 
 [tool.poetry.extras]
 api = [
     "fastapi",
     "uvicorn",
     "httpx",
+    "httpx-gssapi",
     "SQLAlchemy",
 ]
 consumer = [
