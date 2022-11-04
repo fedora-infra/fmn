@@ -134,7 +134,7 @@ name = "automat"
 version = "22.10.0"
 description = "Self-service finite-state machines for the programmer on the go."
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [package.dependencies]
@@ -326,7 +326,7 @@ name = "constantly"
 version = "15.1.0"
 description = "Symbolic constants in Python"
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [[package]]
@@ -620,7 +620,7 @@ name = "hyperlink"
 version = "21.0.0"
 description = "A featureful, immutable, and correct URL for Python."
 category = "main"
-optional = true
+optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.dependencies]
@@ -655,7 +655,7 @@ name = "incremental"
 version = "22.10.0"
 description = "\"A small library that versions your Python projects.\""
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [package.extras]
@@ -1535,7 +1535,7 @@ name = "setuptools"
 version = "65.5.1"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.7"
 
 [package.extras]
@@ -1712,7 +1712,7 @@ name = "twisted"
 version = "22.10.0"
 description = "An asynchronous networking framework written in Python"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.7.1"
 
 [package.dependencies]
@@ -1747,7 +1747,7 @@ name = "twisted-iocpsupport"
 version = "1.0.2"
 description = "An extension for use in the twisted I/O Completion Ports reactor."
 category = "main"
-optional = true
+optional = false
 python-versions = "*"
 
 [[package]]
@@ -1763,7 +1763,7 @@ name = "typing-extensions"
 version = "4.4.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.7"
 
 [[package]]
@@ -1886,7 +1886,7 @@ name = "zope-interface"
 version = "5.5.1"
 description = "Interfaces for Python"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.dependencies]
