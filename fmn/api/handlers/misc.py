@@ -1,6 +1,8 @@
 import logging
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
+
+from ..distgit import DistGitClient, get_distgit_client
 
 log = logging.getLogger(__name__)
 
@@ -43,13 +45,7 @@ def get_owned_artifacts(
 
 
 @router.get("/artifacts", response_model=list[str], tags=["misc"])
-def get_artifacts(type: str, name: str):  # pragma: no cover todo
-    # TODO: Get artifacts
-
-    artifacts = []
-
-    artifacts.append(f"foobar-{name}")
-    artifacts.append(f"foo-{name}")
-    artifacts.append(f"bar-{name}")
-
-    return artifacts
+async def get_artifacts(
+    type: str, name: str, distgit_client: DistGitClient = Depends(get_distgit_client)
+):  # pragma: no cover todo
+    return await distgit_client.get_artifacts(pattern=name)
