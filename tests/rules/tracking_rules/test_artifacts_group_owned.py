@@ -24,8 +24,8 @@ def test_artifacts_group_owned_cache(requester, cache):
     tr = ArtifactsGroupOwned(requester, ["group1"], owner="testuser")
     tr.prime_cache(cache)
     assert cache == {
-        "packages": set(["package-1", "package-2"]),
-        "containers": set(["container-1", "container-2"]),
-        "modules": set(["module-1", "module-2"]),
-        "flatpaks": set(["flatpak-1", "flatpak-2"]),
+        "packages": set(["packages-1", "packages-2"]),
+        "containers": set(["containers-1", "containers-2"]),
+        "modules": set(["modules-1", "modules-2"]),
+        "flatpaks": set(["flatpaks-1", "flatpaks-2"]),
     }
