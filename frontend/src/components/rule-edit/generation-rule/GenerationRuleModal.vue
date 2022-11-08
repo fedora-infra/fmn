@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { GenerationRule } from "@/api/types";
+import type { GenerationRule, Rule, TrackingRule } from "@/api/types";
 import {
   CModal,
   CModalBody,
@@ -7,7 +7,7 @@ import {
   CModalTitle,
 } from "@coreui/bootstrap-vue";
 import type { FormKitNode } from "@formkit/core";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import DestinationList from "./DestinationList.vue";
 import FilterList from "./FilterList.vue";
 import NotificationPreview from "./NotificationPreview.vue";
@@ -24,6 +24,21 @@ const emit = defineEmits<{
 }>();
 
 const node = ref<{ node: FormKitNode } | null>(null);
+const previzData = computed(() => {
+  if (!node.value) {
+    return null;
+  }
+  const root = node.value.node.at("$root");
+  if (!root || !root.context) {
+    return null;
+  }
+  const result: Omit<Rule, "id"> = {
+    name: root.context._value.name as string,
+    tracking_rule: root.context._value.tracking_rule as TrackingRule,
+    generation_rules: [node.value.node.value as GenerationRule],
+  };
+  return result;
+});
 
 const handleSubmit = async (data: GenerationRule) => {
   emit("submit", data);
@@ -61,7 +76,7 @@ const handleClose = async () => {
           }}</FormKit>
         </div>
       </FormKit>
-      <NotificationPreview />
+      <NotificationPreview v-if="previzData" :data="previzData" />
     </CModalBody>
   </CModal>
 </template>

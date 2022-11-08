@@ -77,6 +77,15 @@ class Rule(BaseModel):
     generation_rules: list[GenerationRule]
 
 
+class GenerationRulePreview(GenerationRule):
+    destinations: list[Destination] = []
+
+
+class RulePreview(Rule):
+    name: str = "preview"
+    generation_rules: list[GenerationRulePreview]
+
+
 class User(BaseModel):
     id: int | None
     name: str
