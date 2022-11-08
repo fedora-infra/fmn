@@ -7,6 +7,8 @@ from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.requests import Request as StarletteRequest
 from starlette.types import ASGIApp
 
+from fmn.rules.cache import cache
+
 from ..core.config import get_settings
 from ..database import init_async_model
 from . import handlers
@@ -60,3 +62,8 @@ def add_middlewares():
 @app.on_event("startup")
 async def init_model():
     await init_async_model()
+
+
+@app.on_event("startup")
+def configure_cache():
+    cache.configure()
