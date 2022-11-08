@@ -81,14 +81,14 @@ def test_consumer_call_tracked(
     record = model.Rule(user=user, name="the name")
     tr = model.TrackingRule(rule=record, name="artifacts-owned", params={"username": "dummy"})
     gr = model.GenerationRule(rule=record)
-    f = model.Filter(generation_rule=gr, name="not_my_actions", params="dummy")
+    f = model.Filter(generation_rule=gr, name="my_actions", params=False)
     d = model.Destination(generation_rule=gr, protocol="email", address="dummy@example.com")
     c.db.add_all([user, record, tr, gr, f, d])
     c.db.commit()
 
     c._requester.get_package_owners.return_value = "dummy"
 
-    # Filtered out because of not_my_actions
+    # Filtered out because of my_actions
     message = make_mocked_message(
         topic="dummy.topic", body={"packages": ["pkg1"], "agent_name": "dummy"}
     )

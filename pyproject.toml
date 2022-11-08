@@ -114,7 +114,7 @@ postgresql = ["psycopg2", "asyncpg"]
 [tool.poetry.plugins."fmn.filters"]
 "applications" = "fmn.rules.filter:Applications"
 "severities" = "fmn.rules.filter:Severities"
-"not_my_actions" = "fmn.rules.filter:NotMyActions"
+"my_actions" = "fmn.rules.filter:MyActions"
 "topic" = "fmn.rules.filter:Topic"
 
 
