@@ -1,9 +1,15 @@
+import logging
 from typing import TYPE_CHECKING
+
+from fmn.core.constants import ArtifactType
 
 from .requester import Requester
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
+
+
+log = logging.getLogger(__name__)
 
 
 class TrackingRule:
@@ -48,16 +54,16 @@ class ArtifactsOwned(TrackingRule):
     def prime_cache(self, cache):
         for username in self.usernames:
             cache["packages"].update(
-                self._requester.get_owned_by_user(artifact_type="package", username=username)
+                self._requester.get_owned_by_user(artifact_type="packages", username=username)
             )
             cache["containers"].update(
-                self._requester.get_owned_by_user(artifact_type="container", username=username)
+                self._requester.get_owned_by_user(artifact_type="containers", username=username)
             )
             cache["modules"].update(
-                self._requester.get_owned_by_user(artifact_type="module", username=username)
+                self._requester.get_owned_by_user(artifact_type="modules", username=username)
             )
             cache["flatpaks"].update(
-                self._requester.get_owned_by_user(artifact_type="flatpak", username=username)
+                self._requester.get_owned_by_user(artifact_type="flatpaks", username=username)
             )
 
 
@@ -86,36 +92,27 @@ class ArtifactsGroupOwned(TrackingRule):
     def prime_cache(self, cache):
         for group in self.groups:
             cache["packages"].update(
-                self._requester.get_owned_by_group(artifact_type="package", group=group)
+                self._requester.get_owned_by_group(artifact_type="packages", group=group)
             )
             cache["containers"].update(
-                self._requester.get_owned_by_group(artifact_type="container", group=group)
+                self._requester.get_owned_by_group(artifact_type="containers", group=group)
             )
             cache["modules"].update(
-                self._requester.get_owned_by_group(artifact_type="module", group=group)
+                self._requester.get_owned_by_group(artifact_type="modules", group=group)
             )
             cache["flatpaks"].update(
-                self._requester.get_owned_by_group(artifact_type="flatpak", group=group)
+                self._requester.get_owned_by_group(artifact_type="flatpaks", group=group)
             )
 
 
 class ArtifactsFollowed(TrackingRule):
     name = "artifacts-followed"
-    artifact_types = {
-        # message attribute : artifact type in FMN
-        "packages": "package",
-        "containers": "container",
-        "modules": "module",
-        "flatpaks": "flatpak",
-    }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.followed = {
-            msg_attr: {
-                a["name"] for a in self._params if a["type"] == artifact_type or a["type"] == "all"
-            }
-            for msg_attr, artifact_type in self.artifact_types.items()
+            atype.name: {p["name"] for p in self._params if p["type"] == atype.value}
+            for atype in ArtifactType
         }
         # → packages: {"pkg1", "pkg2", "pkg3"}
 
