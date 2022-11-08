@@ -29,3 +29,10 @@ async def test_init_model(init_async_model):
     await main.init_model()
 
     init_async_model.assert_awaited_once_with()
+
+
+@mock.patch("fmn.api.main.cache")
+def test_configure_cache(cache):
+    assert main.configure_cache in main.app.router.on_startup
+    main.configure_cache()
+    cache.configure.assert_called_once_with()
