@@ -13,7 +13,7 @@ from fmn.rules.tracking_rules import ArtifactsGroupOwned
     ],
 )
 def test_artifacts_group_owned(requester, make_mocked_message, artifact_type):
-    tr = ArtifactsGroupOwned(requester, {"username": "dummy", "groups": None})
+    tr = ArtifactsGroupOwned(requester, ["group1"], owner="testuser")
     message = make_mocked_message(topic="dummy", body={artifact_type: ["art-group1", "art-group2"]})
     assert tr.matches(message) is True
     message = make_mocked_message(topic="dummy", body={artifact_type: ["art-group2"]})
@@ -21,7 +21,7 @@ def test_artifacts_group_owned(requester, make_mocked_message, artifact_type):
 
 
 def test_artifacts_group_owned_cache(requester, cache):
-    tr = ArtifactsGroupOwned(requester, {"username": "dummy", "groups": None})
+    tr = ArtifactsGroupOwned(requester, ["group1"], owner="testuser")
     tr.prime_cache(cache)
     assert cache == {
         "packages": set(["package-1", "package-2"]),

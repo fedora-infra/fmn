@@ -13,15 +13,17 @@ from fmn.rules.tracking_rules import ArtifactsOwned
     ],
 )
 def test_artifacts_owned(requester, make_mocked_message, artifact_type):
-    tr = ArtifactsOwned(requester, {"username": "dummy"})
-    message = make_mocked_message(topic="dummy", body={artifact_type: ["art-dummy", "art-other"]})
+    tr = ArtifactsOwned(requester, ["dummy"], "testuser")
+    message = make_mocked_message(
+        topic="dummy.topic", body={artifact_type: ["art-dummy", "art-other"]}
+    )
     assert tr.matches(message) is True
-    message = make_mocked_message(topic="dummy", body={artifact_type: ["art-other"]})
+    message = make_mocked_message(topic="dummy.topic", body={artifact_type: ["art-other"]})
     assert tr.matches(message) is False
 
 
 def test_artifacts_owned_cache(requester, cache):
-    tr = ArtifactsOwned(requester, {"username": "dummy"})
+    tr = ArtifactsOwned(requester, {"username": "dummy"}, "testuser")
     tr.prime_cache(cache)
     assert cache == {
         "packages": set(["package-1", "package-2"]),
