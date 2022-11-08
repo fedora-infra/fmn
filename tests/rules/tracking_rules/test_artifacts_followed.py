@@ -15,7 +15,11 @@ from fmn.rules.tracking_rules import ArtifactsFollowed
 def test_artifacts_followed(requester, make_mocked_message, artifact_type):
     tr = ArtifactsFollowed(
         requester,
-        [{"name": "art1", "type": artifact_type}, {"name": "art3", "type": artifact_type}],
+        [
+            {"name": "art1", "type": artifact_type},
+            {"name": "art3", "type": artifact_type},
+        ],
+        owner="testuser",
     )
     msg1 = make_mocked_message(
         topic="dummy",
@@ -44,6 +48,7 @@ def test_artifacts_followed_cache(requester, cache):
                 "module",
             ]
         ],
+        owner="testuser",
     )
     tr.prime_cache(cache)
     assert cache == {

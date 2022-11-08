@@ -29,7 +29,8 @@ class TrackingRule(Base):
         if len(eps) != 1:
             raise ValueError(f"Unknown tracking rule: {self.name}")
         impl_class = eps[self.name].load()
-        return impl_class(requester, self.params)
+        owner = self.rule.user.name
+        return impl_class(requester, self.params, owner)
 
     def matches(self, message: "Message", requester: "Requester"):
         impl = self.get_implementation(requester)

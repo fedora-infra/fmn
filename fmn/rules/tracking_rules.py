@@ -11,9 +11,10 @@ class TrackingRule:
     # This should be the name of the Tracking rule in the Database
     name: str | None = None
 
-    def __init__(self, requester: Requester, params):
+    def __init__(self, requester: Requester, params, owner):
         self._requester = requester
         self._params = params
+        self._owner = owner
 
     def matches(self, message: "Message"):
         raise NotImplementedError  # pragma: no cover
@@ -144,13 +145,12 @@ class RelatedEvents(TrackingRule):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.username = self._params["username"]
 
     def matches(self, message):
-        return self.username in message.usernames
+        return self._owner in message.usernames
 
     def prime_cache(self, cache):
-        cache["usernames"].add(self.username)
+        cache["usernames"].add(self._owner)
 
 
 class UsersFollowed(TrackingRule):
