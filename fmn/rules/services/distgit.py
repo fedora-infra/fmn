@@ -1,3 +1,4 @@
+import logging
 from itertools import chain
 from typing import TYPE_CHECKING
 
@@ -7,6 +8,9 @@ from ..cache import cache
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
+
+
+log = logging.getLogger(__name__)
 
 
 class DistGitService:
