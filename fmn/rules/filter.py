@@ -35,8 +35,8 @@ class Severities(Filter):
         return message.severity in self._severities
 
 
-class NotMyActions(Filter):
-    name = "not_my_actions"
+class MyActions(Filter):
+    name = "my_actions"
 
     def matches(self, message):
         if not self.params and self.username == message.agent_name:

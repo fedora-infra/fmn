@@ -3,7 +3,7 @@ from unittest.mock import Mock
 import pytest
 from fedora_messaging import message
 
-from fmn.rules.filter import Applications, NotMyActions, Severities, Topic
+from fmn.rules.filter import Applications, MyActions, Severities, Topic
 
 
 @pytest.fixture
@@ -43,9 +43,9 @@ def test_severities(requester, make_mocked_message, received, filtered, expected
         ("user2", "user1", False, True),
     ],
 )
-def test_not_my_actions(requester, make_mocked_message, received, filtered, expected):
+def test_my_actions(requester, make_mocked_message, received, filtered, active, expected):
     msg = make_mocked_message(topic="dummy", body={"agent_name": received})
-    f = NotMyActions(requester, active, username=filtered)
+    f = MyActions(requester, active, username=filtered)
     assert f.matches(msg) is expected
 
 
