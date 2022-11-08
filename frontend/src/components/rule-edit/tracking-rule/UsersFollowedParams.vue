@@ -3,9 +3,5 @@ import UserMultiSelect from "./UserMultiSelect.vue";
 </script>
 
 <template>
-  <UserMultiSelect
-    :initialvalue="[]"
-    label="Users:"
-    placeholder="Search for users by username"
-  />
+  <UserMultiSelect label="Users:" placeholder="Search for users by username" />
 </template>
