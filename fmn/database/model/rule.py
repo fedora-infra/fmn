@@ -56,7 +56,6 @@ class Rule(Base):
     def handle(self, message: "Message", requester: "Requester"):
         log.debug(f"Rule {self.id} handling message {message.id}")
         if not self.tracking_rule.matches(message, requester):
-            log.debug(f"Tracking rule {self.tracking_rule.name} did not match with {message.id}")
             return
         for generation_rule in self.generation_rules:
             yield from generation_rule.handle(message, requester)

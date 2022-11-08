@@ -59,7 +59,7 @@ const formReady = computed(() => generationRulesCount.value > 0);
 <template>
   <FormKit
     type="form"
-    id="new-rule"
+    id="rule"
     @submit="handleSubmit"
     :actions="false"
     :value="props.rule"
