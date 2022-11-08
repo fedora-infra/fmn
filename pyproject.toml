@@ -58,6 +58,21 @@ psycopg2 = {version = "^2.9.3", optional = true}
 asyncpg = {version = "^0.26.0 || ^0.27.0", optional = true}
 alembic = {version = "^1.8.1", optional = true}
 SQLAlchemy = {version = "^1.4.41", optional = true}
+# Schema packages
+anitya-schema = {version = "*", optional = true}
+bodhi-messages = {version = "*", optional = true}
+ci-messages = {version = "*", optional = true}
+copr-messaging = {version = "*", optional = true}
+discourse2fedmsg-messages = {version = "*", optional = true}
+fedocal-messages = {version = "*", optional = true}
+fedorainfra-ansible-messages = {version = "*", optional = true}
+fedora-elections-messages = {version = "*", optional = true}
+fedora-messaging-the-new-hotness-schema = {version = "*", optional = true}
+fedora-planet-messages = {version = "*", optional = true}
+mdapi-messages = {version = "*", optional = true}
+noggin-messages = {version = "*", optional = true}
+nuancier-messages = {version = "*", optional = true}
+pagure-messages = {version = "*", optional = true}
 
 [tool.poetry.dev-dependencies]
 poetry = "^1.2.0b2"
@@ -103,6 +118,22 @@ sender-irc = [
 database = ["SQLAlchemy", "alembic"]
 sqlite = ["aiosqlite"]
 postgresql = ["psycopg2", "asyncpg"]
+schemas = [
+  "anitya-schema",
+  "bodhi-messages",
+  "ci-messages",
+  "copr-messaging",
+  "discourse2fedmsg-messages",
+  "fedocal-messages",
+  "fedorainfra-ansible-messages",
+  "fedora-elections-messages",
+  "fedora-messaging-the-new-hotness-schema",
+  "fedora-planet-messages",
+  "mdapi-messages",
+  "noggin-messages",
+  "nuancier-messages",
+  "pagure-messages",
+]
 
 [tool.poetry.plugins."fmn.tracking_rules"]
 "artifacts-owned" = "fmn.rules.tracking_rules:ArtifactsOwned"
