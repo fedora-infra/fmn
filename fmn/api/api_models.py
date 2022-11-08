@@ -1,9 +1,12 @@
 import logging
-from typing import Annotated, Any, Generic, Literal,  Union
+from typing import Annotated, Any, Generic, Literal, TypeVar, Union
 
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import Field
+from pydantic.generics import GenericModel
 from pydantic.utils import GetterDict
+
+from fmn.core.constants import ArtifactType
 
 log = logging.getLogger(__name__)
 
@@ -77,3 +80,23 @@ class Rule(BaseModel):
 class User(BaseModel):
     id: int | None
     name: str
+
+
+# Dropdown options
+
+T = TypeVar("T")
+
+
+class Option(GenericModel, Generic[T]):
+    label: str
+    value: T
+
+
+class Artifact(BaseModel):
+    type: ArtifactType
+    name: str
+
+
+class ArtifactOptionsGroup(BaseModel):
+    label: str
+    options: list[Option[Artifact]]

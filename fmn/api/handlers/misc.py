@@ -2,6 +2,9 @@ import logging
 
 from fastapi import APIRouter, Depends, Query
 
+from fmn.api import api_models
+from fmn.core.constants import ArtifactType
+
 from ..distgit import DistGitClient, get_distgit_client
 
 log = logging.getLogger(__name__)
@@ -44,8 +47,37 @@ def get_owned_artifacts(
     return artifacts
 
 
-@router.get("/artifacts", response_model=list[str], tags=["misc"])
+@router.get("/artifacts", response_model=list[api_models.ArtifactOptionsGroup], tags=["misc"])
 async def get_artifacts(
-    type: str, name: str, distgit_client: DistGitClient = Depends(get_distgit_client)
+    name: str, distgit_client: DistGitClient = Depends(get_distgit_client)
 ):  # pragma: no cover todo
-    return await distgit_client.get_artifacts(pattern=name)
+    artifacts = [
+        {
+            "label": "RPMs",
+            "options": [],
+        },
+        {
+            "label": "Containers",
+            "options": [],
+        },
+        {
+            "label": "Modules",
+            "options": [],
+        },
+        {
+            "label": "Flatpaks",
+            "options": [],
+        },
+    ]
+    namespaces = [at.value for at in ArtifactType]
+    projects = await distgit_client.get_projects(pattern=name)
+    for project in projects:
+        for index, namespace in enumerate(namespaces):
+            if project["namespace"] == namespace:
+                artifacts[index]["options"].append(
+                    {
+                        "label": project["name"],
+                        "value": {"type": namespace, "name": project["name"]},
+                    }
+                )
+    return artifacts

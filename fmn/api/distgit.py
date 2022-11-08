@@ -12,7 +12,7 @@ class DistGitClient:
     def __init__(self, settings):
         self.client = AsyncClient(base_url=settings.services.distgit_url, timeout=None)
 
-    async def get_artifacts(self, pattern):
+    async def get_projects(self, pattern):
         response = await self.client.get(
             "/api/0/projects",
             params={
