@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ArtifactsFollowedParams from "./ArtifactsFollowedParams.vue";
-import ArtifactsGroupsOwnedParams from "./ArtifactsGroupsOwnedParams.vue";
+import ArtifactsGroupOwnedParams from "./ArtifactsGroupOwnedParams.vue";
 import ArtifactsOwnedParams from "./ArtifactsOwnedParams.vue";
 import UsersFollowedParams from "./UsersFollowedParams.vue";
 const props = defineProps<{
@@ -14,7 +14,7 @@ const props = defineProps<{
       <ArtifactsOwnedParams />
     </template>
     <template v-if="props.ruleName == 'artifacts-group-owned'">
-      <ArtifactsGroupsOwnedParams />
+      <ArtifactsGroupOwnedParams />
     </template>
     <template v-if="props.ruleName == 'artifacts-followed'">
       <ArtifactsFollowedParams />
