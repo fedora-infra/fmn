@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { TRACKING_RULES } from "@/api/constants";
+import { useUserStore } from "@/stores/user";
+import type { FormKitNode } from "@formkit/core";
 import { ref } from "vue";
 import TrackingRuleParams from "./TrackingRuleParams.vue";
 
@@ -7,7 +9,24 @@ const emit = defineEmits<{
   (e: "selected", name: string): void;
 }>();
 
+const userStore = useUserStore();
+const username = userStore.username;
+
 const ruleName = ref("");
+const oldRuleName = ref("");
+const node = ref<{ node: FormKitNode } | null>(null);
+
+const onTrackingRuleChange = (value: string, node: FormKitNode) => {
+  // console.log("old tr name was", oldRuleName.value, ", new tr name is", value);
+  if (value === oldRuleName.value) {
+    return;
+  }
+  oldRuleName.value = value;
+  emit("selected", value);
+  const paramsNode = node.at("params");
+  const initialValue = value === "artifacts-owned" ? [username] : [];
+  paramsNode?.input(initialValue);
+};
 </script>
 
 <template>
@@ -18,6 +37,7 @@ const ruleName = ref("");
       label="Tracking Rule:"
       label-class="fw-bold"
       placeholder="Choose a Tracking Rule"
+      ref="node"
       v-model="ruleName"
       :msOptions="
         TRACKING_RULES.map((tr) => ({
@@ -27,7 +47,7 @@ const ruleName = ref("");
         }))
       "
       validation="required"
-      @input="(value) => emit('selected', value)"
+      @input="onTrackingRuleChange"
     >
       <template v-slot:option="{ option }">
         <div>

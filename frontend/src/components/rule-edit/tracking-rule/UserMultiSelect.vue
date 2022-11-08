@@ -7,15 +7,14 @@ import { ref } from "vue";
 import ArtifactsOwnedSummary from "./ArtifactsOwnedSummary.vue";
 
 const props = defineProps<{
-  initialvalue: string[];
   label: string;
   showArtifactsOwnedSummary?: boolean;
   placeholder?: string;
   nooptionstext?: string;
 }>();
 
-const value = ref<string[]>(props.initialvalue);
 const userStore = useUserStore();
+const value = ref<string[]>([]);
 
 const apiGetUsers = apiGet as QueryFunction<User[]>;
 const url = "/api/v1/users";
