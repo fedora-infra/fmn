@@ -17,7 +17,7 @@ def requester():
 )
 def test_applications(requester, make_mocked_message, received, filtered, expected):
     msg = make_mocked_message(topic="dummy", body={"app": received})
-    f = Applications(requester, filtered)
+    f = Applications(requester, filtered, username="testuser")
     assert f.matches(msg) is expected
 
 
@@ -30,17 +30,22 @@ def test_applications(requester, make_mocked_message, received, filtered, expect
 )
 def test_severities(requester, make_mocked_message, received, filtered, expected):
     msg = make_mocked_message(topic="dummy", body={}, severity=received)
-    f = Severities(requester, filtered)
+    f = Severities(requester, filtered, username="testuser")
     assert f.matches(msg) is expected
 
 
 @pytest.mark.parametrize(
-    "received,filtered,expected",
-    [("user1", "user1", False), ("user2", "user1", True)],
+    "received,filtered,active,expected",
+    [
+        ("user1", "user1", True, True),
+        ("user2", "user1", True, True),
+        ("user1", "user1", False, False),
+        ("user2", "user1", False, True),
+    ],
 )
 def test_not_my_actions(requester, make_mocked_message, received, filtered, expected):
     msg = make_mocked_message(topic="dummy", body={"agent_name": received})
-    f = NotMyActions(requester, filtered)
+    f = NotMyActions(requester, active, username=filtered)
     assert f.matches(msg) is expected
 
 
@@ -50,5 +55,5 @@ def test_not_my_actions(requester, make_mocked_message, received, filtered, expe
 )
 def test_topic(requester, make_mocked_message, received, filtered, expected):
     msg = make_mocked_message(topic=received, body={})
-    f = Topic(requester, filtered)
+    f = Topic(requester, filtered, username="testuser")
     assert f.matches(msg) is expected
