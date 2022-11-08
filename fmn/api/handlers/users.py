@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...database.model import Destination, Filter, GenerationRule, Rule, TrackingRule, User
 from .. import api_models
-from ..auth import Identity, get_identity
+from ..auth import Identity, get_identity, get_identity_optional
 from ..database import gen_db_session
 from ..fasjson import get_fasjson_client
 
@@ -17,8 +17,15 @@ router = APIRouter(prefix="/users")
 
 @router.get("", response_model=list[str], tags=["users"])
 async def get_users(
-    search: str, fasjson_client: FasjsonClient = Depends(get_fasjson_client)
+    search: str,
+    identity: Identity = Depends(get_identity_optional),
+    fasjson_client: FasjsonClient = Depends(get_fasjson_client),
 ):  # pragma: no cover todo
+    if not search:
+        if identity and identity.name:
+            return [identity.name]
+        else:
+            return []
     return [u["username"] for u in fasjson_client.search(username=search).result]
 
 
