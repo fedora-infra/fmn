@@ -23,7 +23,7 @@ def test_artifacts_owned(requester, make_mocked_message, artifact_type):
 
 
 def test_artifacts_owned_cache(requester, cache):
-    tr = ArtifactsOwned(requester, {"username": "dummy"}, "testuser")
+    tr = ArtifactsOwned(requester, ["dummy"], "testuser")
     tr.prime_cache(cache)
     assert cache == {
         "packages": set(["package-1", "package-2"]),

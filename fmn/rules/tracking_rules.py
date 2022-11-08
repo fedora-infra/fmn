@@ -28,36 +28,37 @@ class ArtifactsOwned(TrackingRule):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.username = self._params["username"]
+        self.usernames = set(self._params)
 
     def matches(self, message):
         for package in message.packages:
-            if self.username in self._requester.get_package_owners(package):
+            if self.usernames & set(self._requester.get_package_owners(package)):
                 return True
         for container in message.containers:
-            if self.username in self._requester.get_container_owners(container):
+            if self.usernames & set(self._requester.get_container_owners(container)):
                 return True
         for module in message.modules:
-            if self.username in self._requester.get_module_owners(module):
+            if self.usernames & set(self._requester.get_module_owners(module)):
                 return True
         for flatpak in message.flatpaks:
-            if self.username in self._requester.get_flatpak_owners(flatpak):
+            if self.usernames & set(self._requester.get_flatpak_owners(flatpak)):
                 return True
         return False
 
     def prime_cache(self, cache):
-        cache["packages"].update(
-            self._requester.get_owned_by_user(artifact_type="package", username=self.username)
-        )
-        cache["containers"].update(
-            self._requester.get_owned_by_user(artifact_type="container", username=self.username)
-        )
-        cache["modules"].update(
-            self._requester.get_owned_by_user(artifact_type="module", username=self.username)
-        )
-        cache["flatpaks"].update(
-            self._requester.get_owned_by_user(artifact_type="flatpak", username=self.username)
-        )
+        for username in self.usernames:
+            cache["packages"].update(
+                self._requester.get_owned_by_user(artifact_type="package", username=username)
+            )
+            cache["containers"].update(
+                self._requester.get_owned_by_user(artifact_type="container", username=username)
+            )
+            cache["modules"].update(
+                self._requester.get_owned_by_user(artifact_type="module", username=username)
+            )
+            cache["flatpaks"].update(
+                self._requester.get_owned_by_user(artifact_type="flatpak", username=username)
+            )
 
 
 class ArtifactsGroupOwned(TrackingRule):
@@ -137,7 +138,7 @@ class ArtifactsFollowed(TrackingRule):
         for msg_attr, followed in self.followed.items():
             if not followed:
                 continue
-            cache[msg_attr].update(set(followed))
+            cache[msg_attr].update(followed)
 
 
 class RelatedEvents(TrackingRule):
@@ -158,7 +159,7 @@ class UsersFollowed(TrackingRule):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.followed = self._params["username"]
+        self.followed = set(self._params)
 
     def matches(self, message):
         return message.agent_name in self.followed

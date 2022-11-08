@@ -13,7 +13,7 @@ def requester():
 
 @pytest.mark.parametrize(
     "received,filtered,expected",
-    [("app1", ["app1", "app2"], True), ("app3", ["app1", "app2"], False)],
+    [("app1", ["app1", "app2"], True), ("app3", ["app1", "app2"], False), ("app1", None, True)],
 )
 def test_applications(requester, make_mocked_message, received, filtered, expected):
     msg = make_mocked_message(topic="dummy", body={"app": received})
@@ -26,6 +26,7 @@ def test_applications(requester, make_mocked_message, received, filtered, expect
     [
         (message.ERROR, ["warning", "error"], True),
         (message.INFO, ["warning", "error"], False),
+        (message.DEBUG, None, True),
     ],
 )
 def test_severities(requester, make_mocked_message, received, filtered, expected):
@@ -51,7 +52,7 @@ def test_my_actions(requester, make_mocked_message, received, filtered, active, 
 
 @pytest.mark.parametrize(
     "received,filtered,expected",
-    [("foo.bar", "*bar*", True), ("foo.baz", "*bar*", False)],
+    [("foo.bar", "*bar*", True), ("foo.baz", "*bar*", False), ("foo", None, True)],
 )
 def test_topic(requester, make_mocked_message, received, filtered, expected):
     msg = make_mocked_message(topic=received, body={})

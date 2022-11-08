@@ -21,6 +21,8 @@ class Applications(Filter):
     name = "applications"
 
     def matches(self, message):
+        if not self.params:
+            return True
         return message.app_name in self.params
 
 
@@ -29,9 +31,11 @@ class Severities(Filter):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._severities = [getattr(message, level.upper()) for level in self.params]
+        self._severities = [getattr(message, level.upper()) for level in (self.params or [])]
 
     def matches(self, message):
+        if not self._severities:
+            return True
         return message.severity in self._severities
 
 
@@ -48,4 +52,6 @@ class Topic(Filter):
     name = "topic"
 
     def matches(self, message):
+        if not self.params:
+            return True
         return fnmatch(message.topic, self.params)
