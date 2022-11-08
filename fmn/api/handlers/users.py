@@ -4,11 +4,12 @@ from fasjson_client import Client as FasjsonClient
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ...database.model import Destination, Filter, GenerationRule, Rule, TrackingRule, User
+from ...database.model import Destination, Filter, GenerationRule, Rule, User
 from .. import api_models
 from ..auth import Identity, get_identity, get_identity_optional
 from ..database import gen_db_session
 from ..fasjson import get_fasjson_client
+from .utils import db_rule_from_api_rule
 
 log = logging.getLogger(__name__)
 
@@ -186,25 +187,9 @@ async def create_user_rule(
         raise HTTPException(status_code=403, detail="Not allowed to edit someone else's rules")
     log.info("Creating rule:", rule)
     user = await User.async_get_or_create(db_session, name=username)
-    rule_db = Rule(user=user, name=rule.name)
+    rule_db = db_rule_from_api_rule(rule, user)
     db_session.add(rule_db)
     await db_session.flush()
-    tr = TrackingRule(rule=rule_db, name=rule.tracking_rule.name, params=rule.tracking_rule.params)
-    db_session.add(tr)
-    await db_session.flush()
-    for generation_rule in rule.generation_rules:
-        gr = GenerationRule(rule=rule_db)
-        db_session.add(gr)
-        await db_session.flush()
-        for destination in generation_rule.destinations:
-            db_session.add(
-                Destination(
-                    generation_rule=gr, protocol=destination.protocol, address=destination.address
-                )
-            )
-        for name, params in generation_rule.filters.dict().items():
-            db_session.add(Filter(generation_rule=gr, name=name, params=params))
-        await db_session.flush()
 
     # TODO: emit a fedmsg
 
