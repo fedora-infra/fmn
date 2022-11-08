@@ -74,3 +74,16 @@ interface PostErrorDetail {
 export interface PostError {
   detail: PostErrorDetail[];
 }
+
+export interface NotificationContent {
+  date: string;
+  topic: string;
+  summary: string;
+  priority?: string;
+  application?: string;
+  author?: string;
+}
+export interface Notification {
+  protocol: string;
+  content: NotificationContent;
+}

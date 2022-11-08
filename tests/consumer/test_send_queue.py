@@ -24,9 +24,9 @@ def test_send_queue_connect(connection):
 def test_send_queue_send(connection):
     sq = SendQueue({"url": "amqp://"})
     sq.connect()
-    sq.send(Notification(protocol="email", content="dummy content"))
+    sq.send(Notification(protocol="email", content={"dummy": "content"}))
     connection._channel.basic_publish.assert_called_with(
-        exchange="amq.direct", routing_key="send.email", body='"dummy content"'
+        exchange="amq.direct", routing_key="send.email", body='{"dummy": "content"}'
     )
 
 

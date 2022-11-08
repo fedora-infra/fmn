@@ -28,6 +28,7 @@ class DBModel(BaseModel):
 class ServicesModel(BaseModel):
     fasjson_url: stricturl() = "https://fasjson.fedoraproject.org"
     distgit_url: stricturl() = "https://src.fedoraproject.org"
+    datagrepper_url: stricturl() = "https://apps.fedoraproject.org/datagrepper/"
 
 
 class Settings(BaseSettings):

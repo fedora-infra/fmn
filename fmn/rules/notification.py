@@ -1,7 +1,6 @@
-class Notification:
+from pydantic import BaseModel
+
+
+class Notification(BaseModel):
     protocol: str
     content: dict
-
-    def __init__(self, protocol: str, content):
-        self.protocol = protocol
-        self.content = content
