@@ -1,7 +1,8 @@
 import logging
-from typing import Any
+from typing import Annotated, Any, Generic, Literal,  Union
 
 from pydantic import BaseModel as PydanticBaseModel
+from pydantic import Field
 from pydantic.utils import GetterDict
 
 log = logging.getLogger(__name__)
@@ -12,9 +13,31 @@ class BaseModel(PydanticBaseModel):
         orm_mode = True
 
 
-class TrackingRule(BaseModel):
-    name: str
-    params: list[str] | dict[str, str] | dict[str, list[str] | str] | None
+# Tracking rules with specific types for params
+
+
+class ListParamTrackingRule(BaseModel):
+    name: Literal["artifacts-owned", "artifacts-group-owned", "users-followed"]
+    params: list[str]
+
+
+class NoParamTrackingRule(BaseModel):
+    name: Literal["related-events"]
+    params: str
+
+
+class ArtifactsFollowedTrackingRule(BaseModel):
+    name: Literal["artifacts-followed"]
+    params: list[dict[Literal["name", "type"], str]]
+
+
+TrackingRule = Annotated[
+    Union[ListParamTrackingRule, NoParamTrackingRule, ArtifactsFollowedTrackingRule],
+    Field(discriminator="name"),
+]
+
+
+# DB models
 
 
 class Destination(BaseModel):

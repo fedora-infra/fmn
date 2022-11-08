@@ -2,26 +2,26 @@ import pytest
 
 
 class MockedRequester:
-    def _get_owner(self, artifact):
-        return artifact[4:]
+    def _get_owners(self, artifact):
+        return [artifact[4:]]
 
     def _get_group_owner(self, artifact):
-        return [self._get_owner(artifact)]
+        return self._get_owners(artifact)
 
     def get_user_groups(self, username):
         return ["group1"]
 
     def get_package_owners(self, artifact):
-        return self._get_owner(artifact)
+        return self._get_owners(artifact)
 
     def get_container_owners(self, artifact):
-        return self._get_owner(artifact)
+        return self._get_owners(artifact)
 
     def get_module_owners(self, artifact):
-        return self._get_owner(artifact)
+        return self._get_owners(artifact)
 
     def get_flatpak_owners(self, artifact):
-        return self._get_owner(artifact)
+        return self._get_owners(artifact)
 
     def get_package_group_owners(self, artifact):
         return self._get_group_owner(artifact)

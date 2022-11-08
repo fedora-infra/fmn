@@ -254,7 +254,7 @@ async def db_user(fasjson_user_data, db_async_session):
 
 @pytest.fixture
 async def db_rule(db_async_session, db_user):
-    tracking_rule = TrackingRule(name="datrackingrule", params={"foo": "bar"})
+    tracking_rule = TrackingRule(name="artifacts-owned", params=["foo", "bar"])
 
     generation_rules = []
     for destination_proto_addrs in ({"email": "foo@bar"}, {"irc": "...", "matrix": "..."}):

@@ -118,7 +118,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
             username = f"not-really-{username}"
 
         edited_rule = api_models.Rule.from_orm(db_rule)
-        edited_rule.tracking_rule.name = "daothertrackingrule"
+        edited_rule.tracking_rule.name = "artifacts-group-owned"
         if "delete-generation-rule" in testcase:
             del edited_rule.generation_rules[-1]
         elif "delete-destination" in testcase:
@@ -146,7 +146,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
             result = response.json()
             assert result["id"] == edited_rule.id
             assert result["name"] == db_rule.name
-            assert result["tracking_rule"]["name"] == "daothertrackingrule"
+            assert result["tracking_rule"]["name"] == "artifacts-group-owned"
             assert result["tracking_rule"]["params"] == db_rule.tracking_rule.params
         elif testcase == "wrong-user":
             assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -179,7 +179,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
         created_rule = api_models.Rule(
             **{
                 "name": "daotherrule",
-                "tracking_rule": {"name": "yetanothertrackingrule"},
+                "tracking_rule": {"name": "users-followed", "params": ["dummy"]},
                 "generation_rules": [
                     {
                         "destinations": [{"protocol": "irc", "address": "..."}],
@@ -199,7 +199,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
             result = response.json()
             assert result["id"] not in (None, db_rule.id)
             assert result["name"] == "daotherrule"
-            assert result["tracking_rule"]["name"] == "yetanothertrackingrule"
+            assert result["tracking_rule"]["name"] == "users-followed"
             assert result["generation_rules"] == [
                 {
                     "destinations": [{"protocol": "irc", "address": "..."}],
