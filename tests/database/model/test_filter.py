@@ -3,14 +3,15 @@ from unittest.mock import Mock
 import pytest
 
 from fmn.database import model
-from fmn.rules.filter import NotMyActions
+from fmn.rules.filter import Applications
 
 
-def test_get_implementation():
+def test_get_implementation(db_rule):
     requester = Mock()
-    f = model.Filter(name="not_my_actions")
+    f = db_rule.generation_rules[0].filters[0]
     impl = f.get_implementation(requester)
-    assert isinstance(impl, NotMyActions)
+    assert isinstance(impl, Applications)
+    assert f.params == ["koji", "bodhi"]
 
 
 def test_get_implementation_ep_not_found(mocker):

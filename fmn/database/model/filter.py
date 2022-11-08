@@ -31,7 +31,8 @@ class Filter(Base):
         if len(eps) != 1:
             raise ValueError(f"Unknown filter: {self.name}")
         impl_class = eps[self.name].load()
-        return impl_class(requester=requester, params=self.params)
+        username = self.generation_rule.rule.user.name
+        return impl_class(requester=requester, params=self.params, username=username)
 
     def matches(self, message: "Message", requester: "Requester"):
         impl = self.get_implementation(requester)
