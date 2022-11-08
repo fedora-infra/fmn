@@ -72,6 +72,12 @@ def mocked_fasjson_client(mocker, mocked_fasjson):
 
 
 @pytest.fixture
+def responses_mocker():
+    with responses.mock as rm:
+        yield rm
+
+
+@pytest.fixture
 def cli_runner():
     return CliRunner()
 

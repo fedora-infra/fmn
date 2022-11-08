@@ -254,3 +254,19 @@ def test_guard_bad_argument(requester):
         requester.distgit_client.get_owners("rpms", "dummy", "wrong")
     with pytest.raises(ValueError):
         requester.distgit_client.get_owned("rpms", "dummy", "wrong")
+
+
+def test_guard_http_exception(requester, caplog):
+    responses.get(
+        re.compile(r"https://src\.fedoraproject\.org/api/.*"),
+        body="Server Error",
+        status=500,
+    )
+    resp = requester.get_owned_by_user("package", "dummy")
+    assert resp == []
+    assert len(caplog.messages) == 1
+    assert caplog.messages[0].startswith(
+        "Request failed: 500 Server Error: Internal Server Error for url: "
+        "https://src.fedoraproject.org/api/"
+    )
+    assert caplog.records[0].levelname == "WARNING"
