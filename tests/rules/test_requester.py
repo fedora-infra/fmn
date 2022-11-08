@@ -2,36 +2,19 @@ import re
 
 import pytest
 import responses
-from fasjson_client import Client
 
 from fmn.core.config import get_settings
 from fmn.rules.cache import cache
 from fmn.rules.requester import Requester
 
 
-@pytest.fixture(autouse=True)
-def mocked_responses():
-    with responses.mock:
-        yield
-
-
-@pytest.fixture(scope="module")
-def mocked_fasjson(module_mocker):
-    module_mocker.patch(
-        "fmn.rules.services.fasjson.Client",
-        side_effect=lambda *a, **kw: Client(*a, **kw, auth=False),
-    )
-    responses.add_passthru(re.compile("https://json-schema.org/.*"))
-    responses.add_passthru("https://fasjson.fedoraproject.org/specs/v1.json")
-
-
-@pytest.fixture(scope="module")
-def requester(mocked_fasjson):
+@pytest.fixture
+def requester(mocked_fasjson_client):
     settings = get_settings()
     return Requester(settings.dict()["services"])
 
 
-def test_constructor_urls(mocked_fasjson):
+def test_constructor_urls(mocked_fasjson_client):
     config = get_settings().dict()["services"].copy()
     config["srv"] = "http://srv.example.com/"
     r = Requester(config)

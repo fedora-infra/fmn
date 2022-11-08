@@ -6,6 +6,7 @@ from fmn.api import api_models
 from fmn.database.model import Rule
 
 
+@pytest.mark.usefixtures("mocked_fasjson", "mocked_fasjson_client")
 class BaseTestHandler:
     api_prefix = None
     handler_prefix = None
