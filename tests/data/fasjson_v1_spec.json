@@ -1,0 +1,1211 @@
+{
+  "basePath": "/v1",
+  "consumes": [
+    "application/json"
+  ],
+  "definitions": {
+    "Cert": {
+      "properties": {
+        "cacn": {
+          "type": "string"
+        },
+        "certificate": {
+          "type": "string"
+        },
+        "certificate_chain": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "revoked": {
+          "type": "boolean"
+        },
+        "san_other": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "san_other_kpn": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "san_other_upn": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "serial_number": {
+          "type": "integer"
+        },
+        "serial_number_hex": {
+          "type": "string"
+        },
+        "sha1_fingerprint": {
+          "type": "string"
+        },
+        "sha256_fingerprint": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string"
+        },
+        "valid_not_after": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "valid_not_before": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Group": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "groupname": {
+          "type": "string"
+        },
+        "irc": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "mailing_list": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Me": {
+      "properties": {
+        "dn": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Member": {
+      "properties": {
+        "certificates": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "creation": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "emails": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "github_username": {
+          "type": "string"
+        },
+        "gitlab_username": {
+          "type": "string"
+        },
+        "givenname": {
+          "type": "string"
+        },
+        "gpgkeyids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "human_name": {
+          "type": "string"
+        },
+        "ircnicks": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "is_private": {
+          "type": "boolean"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "pronouns": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "rhbzemail": {
+          "type": "string"
+        },
+        "sshpubkeys": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "x-mask": "{username,uri}"
+    },
+    "Sponsor": {
+      "properties": {
+        "certificates": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "creation": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "emails": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "github_username": {
+          "type": "string"
+        },
+        "gitlab_username": {
+          "type": "string"
+        },
+        "givenname": {
+          "type": "string"
+        },
+        "gpgkeyids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "human_name": {
+          "type": "string"
+        },
+        "ircnicks": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "is_private": {
+          "type": "boolean"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "pronouns": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "rhbzemail": {
+          "type": "string"
+        },
+        "sshpubkeys": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "x-mask": "{username,uri}"
+    },
+    "User": {
+      "properties": {
+        "certificates": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "creation": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "emails": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "github_username": {
+          "type": "string"
+        },
+        "gitlab_username": {
+          "type": "string"
+        },
+        "givenname": {
+          "type": "string"
+        },
+        "gpgkeyids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "human_name": {
+          "type": "string"
+        },
+        "ircnicks": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "is_private": {
+          "type": "boolean"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "locked": {
+          "default": false,
+          "type": "boolean"
+        },
+        "pronouns": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "rhbzemail": {
+          "type": "string"
+        },
+        "sshpubkeys": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UserAgreement": {
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UserGroup": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "groupname": {
+          "type": "string"
+        },
+        "irc": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "mailing_list": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "x-mask": "{groupname,uri}"
+    }
+  },
+  "info": {
+    "description": "The Fedora Accounts System JSON API",
+    "license": {
+      "name": "GPLv3",
+      "url": "https://www.gnu.org/licenses/gpl-3.0.html"
+    },
+    "title": "FAS-JSON",
+    "version": "1.0"
+  },
+  "paths": {
+    "/certs/": {
+      "post": {
+        "operationId": "sign_csr",
+        "parameters": [
+          {
+            "description": "User name.",
+            "in": "query",
+            "name": "user",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Certificate Signing Request.",
+            "in": "query",
+            "name": "csr",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Certificate Profile.",
+            "in": "query",
+            "name": "profile",
+            "type": "string"
+          },
+          {
+            "description": "An optional fields mask",
+            "format": "mask",
+            "in": "header",
+            "name": "X-Fields",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/Cert"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The CSR could not be signed"
+          },
+          "401": {
+            "description": "Unauthorized. You need to be logged in."
+          }
+        },
+        "summary": "Send a CSR and get a signed certificate in return",
+        "tags": [
+          "certs"
+        ]
+      }
+    },
+    "/certs/{serial_number}/": {
+      "get": {
+        "description": "Certificates are also present on users' results, but this method gives more details.",
+        "operationId": "get_cert",
+        "parameters": [
+          {
+            "description": "An optional fields mask",
+            "format": "mask",
+            "in": "header",
+            "name": "X-Fields",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/Cert"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. You need to be logged in."
+          },
+          "404": {
+            "description": "Certificate not found"
+          }
+        },
+        "summary": "Fetch a certificate given its serial number",
+        "tags": [
+          "certs"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The certificate's serial number",
+          "in": "path",
+          "name": "serial_number",
+          "required": true,
+          "type": "integer"
+        }
+      ]
+    },
+    "/groups/": {
+      "get": {
+        "operationId": "list_groups",
+        "parameters": [
+          {
+            "description": "Page size.",
+            "in": "query",
+            "name": "page_size",
+            "type": "integer"
+          },
+          {
+            "default": 1,
+            "description": "Page number.",
+            "in": "query",
+            "name": "page_number",
+            "type": "integer"
+          },
+          {
+            "description": "An optional fields mask",
+            "format": "mask",
+            "in": "header",
+            "name": "X-Fields",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "result": {
+                  "items": {
+                    "$ref": "#/definitions/Group"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. You need to be logged in."
+          }
+        },
+        "summary": "List all groups",
+        "tags": [
+          "groups"
+        ]
+      }
+    },
+    "/groups/{groupname}/": {
+      "get": {
+        "operationId": "get_group",
+        "parameters": [
+          {
+            "description": "An optional fields mask",
+            "format": "mask",
+            "in": "header",
+            "name": "X-Fields",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/Group"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. You need to be logged in."
+          },
+          "404": {
+            "description": "Group not found"
+          }
+        },
+        "summary": "Fetch a group given their name",
+        "tags": [
+          "groups"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The group name",
+          "in": "path",
+          "name": "groupname",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "/groups/{groupname}/is-member/{username}": {
+      "get": {
+        "operationId": "check_membership",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. You need to be logged in."
+          },
+          "404": {
+            "description": "Group not found"
+          }
+        },
+        "summary": "Check whether a user is a member of the group",
+        "tags": [
+          "groups"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The user name",
+          "in": "path",
+          "name": "username",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "The group name",
+          "in": "path",
+          "name": "groupname",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "/groups/{groupname}/members/": {
+      "get": {
+        "operationId": "list_group_members",
+        "parameters": [
+          {
+            "description": "Page size.",
+            "in": "query",
+            "name": "page_size",
+            "type": "integer"
+          },
+          {
+            "default": 1,
+            "description": "Page number.",
+            "in": "query",
+            "name": "page_number",
+            "type": "integer"
+          },
+          {
+            "description": "An optional fields mask",
+            "format": "mask",
+            "in": "header",
+            "name": "X-Fields",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "result": {
+                  "items": {
+                    "$ref": "#/definitions/Member"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. You need to be logged in."
+          },
+          "404": {
+            "description": "Group not found"
+          }
+        },
+        "summary": "Fetch group members given the group name",
+        "tags": [
+          "groups"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The group name",
+          "in": "path",
+          "name": "groupname",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "/groups/{groupname}/sponsors/": {
+      "get": {
+        "operationId": "list_group_sponsors",
+        "parameters": [
+          {
+            "description": "An optional fields mask",
+            "format": "mask",
+            "in": "header",
+            "name": "X-Fields",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/Sponsor"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. You need to be logged in."
+          },
+          "404": {
+            "description": "Group not found"
+          }
+        },
+        "summary": "Fetch group sponsors given the group name",
+        "tags": [
+          "groups"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The group name",
+          "in": "path",
+          "name": "groupname",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "/me/": {
+      "get": {
+        "operationId": "whoami",
+        "parameters": [
+          {
+            "description": "An optional fields mask",
+            "format": "mask",
+            "in": "header",
+            "name": "X-Fields",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/Me"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. You need to be logged in."
+          }
+        },
+        "summary": "Fetch the connected user",
+        "tags": [
+          "me"
+        ]
+      }
+    },
+    "/search/users/": {
+      "get": {
+        "operationId": "search",
+        "parameters": [
+          {
+            "description": "Page size.",
+            "in": "query",
+            "name": "page_size",
+            "type": "integer"
+          },
+          {
+            "default": 1,
+            "description": "Page number.",
+            "in": "query",
+            "name": "page_number",
+            "type": "integer"
+          },
+          {
+            "description": "The email to search for",
+            "in": "query",
+            "name": "email",
+            "type": "string"
+          },
+          {
+            "description": "The username to search for",
+            "in": "query",
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "description": "The ircnick to search for",
+            "in": "query",
+            "name": "ircnick",
+            "type": "string"
+          },
+          {
+            "description": "The first name to search for",
+            "in": "query",
+            "name": "givenname",
+            "type": "string"
+          },
+          {
+            "description": "The surname to search for",
+            "in": "query",
+            "name": "surname",
+            "type": "string"
+          },
+          {
+            "description": "The full human name to search for",
+            "in": "query",
+            "name": "human_name",
+            "type": "string"
+          },
+          {
+            "description": "The username in GitHub.com",
+            "in": "query",
+            "name": "github_username",
+            "type": "string"
+          },
+          {
+            "description": "Search for users created before this date",
+            "format": "date-time",
+            "in": "query",
+            "name": "creation__before",
+            "type": "string"
+          },
+          {
+            "description": "The bugzilla email to search for",
+            "in": "query",
+            "name": "rhbzemail",
+            "type": "string"
+          },
+          {
+            "description": "The email to search for (exact match)",
+            "in": "query",
+            "name": "email__exact",
+            "type": "string"
+          },
+          {
+            "description": "The username to search for (exact match)",
+            "in": "query",
+            "name": "username__exact",
+            "type": "string"
+          },
+          {
+            "description": "The ircnick to search for (exact match)",
+            "in": "query",
+            "name": "ircnick__exact",
+            "type": "string"
+          },
+          {
+            "description": "The first name to search for (exact match)",
+            "in": "query",
+            "name": "givenname__exact",
+            "type": "string"
+          },
+          {
+            "description": "The surname to search for (exact match)",
+            "in": "query",
+            "name": "surname__exact",
+            "type": "string"
+          },
+          {
+            "description": "The full human name to search for (exact match)",
+            "in": "query",
+            "name": "human_name__exact",
+            "type": "string"
+          },
+          {
+            "description": "The username in GitHub.com (exact match)",
+            "in": "query",
+            "name": "github_username__exact",
+            "type": "string"
+          },
+          {
+            "description": "The bugzilla email to search for (exact match)",
+            "in": "query",
+            "name": "rhbzemail__exact",
+            "type": "string"
+          },
+          {
+            "description": "An optional fields mask",
+            "format": "mask",
+            "in": "header",
+            "name": "X-Fields",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "result": {
+                  "items": {
+                    "$ref": "#/definitions/User"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized. You need to be logged in."
+          }
+        },
+        "summary": "Fetch users given a search term",
+        "tags": [
+          "search"
+        ]
+      }
+    },
+    "/users/": {
+      "get": {
+        "operationId": "list_users",
+        "parameters": [
+          {
+            "description": "Page size.",
+            "in": "query",
+            "name": "page_size",
+            "type": "integer"
+          },
+          {
+            "default": 1,
+            "description": "Page number.",
+            "in": "query",
+            "name": "page_number",
+            "type": "integer"
+          },
+          {
+            "description": "An optional fields mask",
+            "format": "mask",
+            "in": "header",
+            "name": "X-Fields",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "result": {
+                  "items": {
+                    "$ref": "#/definitions/User"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. You need to be logged in."
+          }
+        },
+        "summary": "List all users",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/users/{username}/": {
+      "get": {
+        "operationId": "get_user",
+        "parameters": [
+          {
+            "description": "An optional fields mask",
+            "format": "mask",
+            "in": "header",
+            "name": "X-Fields",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. You need to be logged in."
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "summary": "Fetch a user given their name",
+        "tags": [
+          "users"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The user name",
+          "in": "path",
+          "name": "username",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "/users/{username}/agreements/": {
+      "get": {
+        "operationId": "list_user_agreements",
+        "parameters": [
+          {
+            "description": "Page size.",
+            "in": "query",
+            "name": "page_size",
+            "type": "integer"
+          },
+          {
+            "default": 1,
+            "description": "Page number.",
+            "in": "query",
+            "name": "page_number",
+            "type": "integer"
+          },
+          {
+            "description": "An optional fields mask",
+            "format": "mask",
+            "in": "header",
+            "name": "X-Fields",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "result": {
+                  "items": {
+                    "$ref": "#/definitions/UserAgreement"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. You need to be logged in."
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "summary": "Fetch a user's agreements given their username",
+        "tags": [
+          "users"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The user name",
+          "in": "path",
+          "name": "username",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "/users/{username}/groups/": {
+      "get": {
+        "operationId": "list_user_groups",
+        "parameters": [
+          {
+            "description": "Page size.",
+            "in": "query",
+            "name": "page_size",
+            "type": "integer"
+          },
+          {
+            "default": 1,
+            "description": "Page number.",
+            "in": "query",
+            "name": "page_number",
+            "type": "integer"
+          },
+          {
+            "description": "An optional fields mask",
+            "format": "mask",
+            "in": "header",
+            "name": "X-Fields",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "result": {
+                  "items": {
+                    "$ref": "#/definitions/UserGroup"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. You need to be logged in."
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "summary": "Fetch a user's groups given their username",
+        "tags": [
+          "users"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The user name",
+          "in": "path",
+          "name": "username",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "produces": [
+    "application/json"
+  ],
+  "responses": {
+    "BadRequest": {
+      "description": "When a JSON-RPC error occurs, return a 400 status code"
+    },
+    "LOCAL_ERROR": {
+      "description": "When an LDAP local error occurs, return a 500 status code"
+    },
+    "MaskError": {
+      "description": "When any error occurs on mask"
+    },
+    "ParseError": {
+      "description": "When a mask can't be parsed"
+    },
+    "SERVER_DOWN": {
+      "description": "When the LDAP server is down, return a 500 status code"
+    }
+  },
+  "swagger": "2.0",
+  "tags": [
+    {
+      "description": "Information about the connected user",
+      "name": "me"
+    },
+    {
+      "description": "Users related operations",
+      "name": "users"
+    },
+    {
+      "description": "Groups related operations",
+      "name": "groups"
+    },
+    {
+      "description": "Certificates related operations",
+      "name": "certs"
+    },
+    {
+      "description": "Search related operations",
+      "name": "search"
+    }
+  ]
+}

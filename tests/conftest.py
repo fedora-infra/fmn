@@ -1,15 +1,15 @@
-import json
-import os
+import pathlib
 from unittest import mock
 
 import pytest
 import responses
 from click.testing import CliRunner
+from fasjson_client import Client
 from fastapi.testclient import TestClient
 from fedora_messaging import message
 
-from fmn.api import fasjson, main
-from fmn.core.config import Settings, get_settings
+from fmn.api import main
+from fmn.core.config import get_settings
 from fmn.database.main import (
     Base,
     async_session_maker,
@@ -23,30 +23,57 @@ from fmn.database.model import Destination, Filter, GenerationRule, Rule, Tracki
 
 from .message import Message
 
+TESTROOT = pathlib.Path(__file__).parent
+TESTDATA = TESTROOT / "data"
+FASJSON_V1_SPEC_JSON = TESTDATA / "fasjson_v1_spec.json"
+JSONSCHEMA_BASE_URL = "https://json-schema.org/draft/2019-09"
+JSONSCHEMA_LINKS_URL = f"{JSONSCHEMA_BASE_URL}/links"
+JSONSCHEMA_LINKS_JSON = TESTDATA / "jsonschema_links.json"
+JSONSCHEMA_HYPERSCHEMA_URL = f"{JSONSCHEMA_BASE_URL}/hyper-schema"
+JSONSCHEMA_HYPERSCHEMA_JSON = TESTDATA / "jsonschema_hyperschema.json"
+
+
+@pytest.fixture
+def mocked_responses():
+    with responses.mock as rm:
+        yield rm
+
+
+@pytest.fixture
+def fasjson_url() -> str:
+    settings = get_settings()
+    return settings.services.fasjson_url
+
+
+@pytest.fixture
+def mocked_fasjson(mocked_responses, fasjson_url):
+    spec_v1_url = fasjson_url + "/specs/v1.json"
+
+    with (
+        FASJSON_V1_SPEC_JSON.open("r") as fasjson_v1_spec,
+        JSONSCHEMA_LINKS_JSON.open("r") as jsonschema_links_spec,
+        JSONSCHEMA_HYPERSCHEMA_JSON.open("r") as jsonschema_hyperschema_spec,
+    ):
+        responses.get(spec_v1_url, body=fasjson_v1_spec.read())
+        responses.get(JSONSCHEMA_LINKS_URL, body=jsonschema_links_spec.read())
+        responses.get(JSONSCHEMA_HYPERSCHEMA_URL, body=jsonschema_hyperschema_spec.read())
+
+
+@pytest.fixture
+def mocked_fasjson_client(mocker, mocked_fasjson):
+    """This disables authentication in the FASJSON client."""
+    real_init = Client.__init__
+
+    def unauth_init(self, url, **kwargs):
+        kwargs["auth"] = False
+        real_init(self, url, **kwargs)
+
+    mocker.patch.object(Client, "__init__", unauth_init)
+
 
 @pytest.fixture
 def cli_runner():
     return CliRunner()
-
-
-@pytest.fixture
-def client():
-    def get_settings_override():
-        return Settings(services={"fasjson_url": "http://fasjson.example.test"})
-
-    def get_fasjson_client_override():
-        responses.add_passthru("https://json-schema.org")
-        fasjson_spec_path = os.path.join(os.path.dirname(__file__), "fixtures", "fasjson-v1.json")
-        with open(fasjson_spec_path) as fasjson_spec_file:
-            fasjson_spec = json.load(fasjson_spec_file)
-        responses.get("http://fasjson.example.test/specs/v1.json", json=fasjson_spec)
-        base_url = get_settings_override().services.fasjson_url
-
-        return fasjson.FasjsonClient(base_url, auth=False)
-
-    main.app.dependency_overrides[main.get_settings] = get_settings_override
-    main.app.dependency_overrides[fasjson.get_fasjson_client] = get_fasjson_client_override
-    return TestClient(main.app)
 
 
 @pytest.fixture(autouse=True)
@@ -57,6 +84,11 @@ def clear_settings(tmp_path):
     ):
         get_settings.cache_clear()
         yield
+
+
+@pytest.fixture
+def client():
+    return TestClient(main.app)
 
 
 @pytest.fixture
@@ -189,15 +221,9 @@ def fasjson_group_data():
 
 
 @pytest.fixture
-def responses_mocker():
-    with responses.mock as rm:
-        yield rm
-
-
-@pytest.fixture
-def fasjson_user(responses_mocker, fasjson_user_data):
-    responses_mocker.get(
-        f"http://fasjson.example.test/v1/users/{fasjson_user_data['username']}/",
+def fasjson_user(mocked_responses, fasjson_user_data, fasjson_url):
+    mocked_responses.get(
+        f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/",
         json={"result": fasjson_user_data},
     )
 
@@ -205,9 +231,9 @@ def fasjson_user(responses_mocker, fasjson_user_data):
 
 
 @pytest.fixture
-def fasjson_groups(responses_mocker, fasjson_user_data, fasjson_group_data):
-    responses_mocker.get(
-        f"http://fasjson.example.test/v1/users/{fasjson_user_data['username']}/groups/",
+def fasjson_groups(mocked_responses, fasjson_user_data, fasjson_group_data, fasjson_url):
+    mocked_responses.get(
+        f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/groups/",
         json={"result": fasjson_group_data},
     )
 
