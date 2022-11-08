@@ -66,32 +66,25 @@ class ArtifactsGroupOwned(TrackingRule):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.username = self._params["username"]
-
-    def _get_groups(self):
-        groups = self._params["groups"]
-        # If no groups were set, then match for all groups
-        return set(groups if groups else self._requester.get_user_groups(self.username))
+        self.groups = set(self._params)
 
     def matches(self, message):
-        groups = self._get_groups()
         for package in message.packages:
-            if groups.intersection(set(self._requester.get_package_group_owners(package))):
+            if self.groups & set(self._requester.get_package_group_owners(package)):
                 return True
         for container in message.containers:
-            if groups.intersection(set(self._requester.get_container_group_owners(container))):
+            if self.groups & set(self._requester.get_container_group_owners(container)):
                 return True
         for module in message.modules:
-            if groups.intersection(set(self._requester.get_module_group_owners(module))):
+            if self.groups & set(self._requester.get_module_group_owners(module)):
                 return True
         for flatpak in message.flatpaks:
-            if groups.intersection(set(self._requester.get_flatpak_group_owners(flatpak))):
+            if self.groups & set(self._requester.get_flatpak_group_owners(flatpak)):
                 return True
         return False
 
     def prime_cache(self, cache):
-        groups = self._get_groups()
-        for group in groups:
+        for group in self.groups:
             cache["packages"].update(
                 self._requester.get_owned_by_group(artifact_type="package", group=group)
             )
