@@ -312,35 +312,66 @@ class TestMisc(BaseTestAPIV1Handler):
             "planet",
         ]
 
-    @pytest.mark.parametrize(
-        "testcase", ("query-users", "query-users-duplicate", "query-groups", "query-nothing")
-    )
-    def test_get_owned_artifacts(self, testcase, client):
-        # get_owned_artifacts() looks straw-manny, so just check structure
+    @pytest.mark.parametrize("ownertype", ("user", "group"))
+    async def test_get_projects(self, client, mocker, async_respx_mocker, ownertype):
+        settings = get_settings()
+        settings.services.distgit_url = "http://distgit.test"
+        mocker.patch("fmn.api.handlers.utils.get_settings", return_value=settings)
 
-        params = {}
-        if "users" in testcase:
-            params["users"] = ["foobar"]
-            if "users-duplicate" in testcase:
-                params["users"].append("foobar")
-        if "groups" in testcase:
-            params["groups"] = ["foobar"]
+        # async_respx_mocker.route(host="distgit.test").pass_through()
 
-        response = client.get(f"{self.path}/artifacts/owned", params=params)
+        if ownertype == "user":
+            params = {"fork": "false", "short": "true", "page": 1, "owner": "dudemcpants"}
+        elif ownertype == "group":
+            params = {"fork": "false", "short": "true", "page": 1, "username": "@dudegroup"}
 
+        distgit_json_response = {
+            "pagination": {
+                "pages": 1,
+            },
+            "projects": [
+                {
+                    "description": "pants containers",
+                    "fullname": "containers/pants",
+                    "name": "pants",
+                    "namespace": "containers",
+                },
+                {
+                    "description": "trousers rpms",
+                    "fullname": "rpms/trousers",
+                    "name": "trousers",
+                    "namespace": "rpms",
+                },
+            ],
+        }
+
+        route = async_respx_mocker.get(
+            f"{settings.services.distgit_url}/api/0/projects", params=params
+        ).mock(
+            side_effect=[
+                Response(
+                    status.HTTP_200_OK,
+                    json=distgit_json_response,
+                )
+            ]
+        )
+
+        if ownertype == "user":
+            response = client.get(f"{self.path}/artifacts/owned", params={"users": ["dudemcpants"]})
+        elif ownertype == "group":
+            response = client.get(f"{self.path}/artifacts/owned", params={"groups": ["dudegroup"]})
+
+        assert route.called
+
+        assert response.json() == [
+            {"name": "pants", "type": "containers"},
+            {"name": "trousers", "type": "rpms"},
+        ]
+
+    def test_get_projects_no_user_or_group(self, client):
+        response = client.get(f"{self.path}/artifacts/owned")
         assert response.status_code == status.HTTP_200_OK
-
-        artifacts = response.json()
-        assert isinstance(artifacts, list)
-        assert all(isinstance(item, dict) for item in artifacts)
-        assert all("type" in item for item in artifacts)
-        assert all("name" in item for item in artifacts)
-        if "users" in testcase:
-            assert any("user-owned" in item["name"] for item in artifacts)
-        if "groups" in testcase:
-            assert any("group-owned" in item["name"] for item in artifacts)
-        if "nothing" in testcase:
-            assert len(artifacts) == 0
+        assert response.json() == []
 
     def test_liveness(self, client):
         response = client.get(f"{self.path}/healthz/live")
