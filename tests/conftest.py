@@ -12,7 +12,7 @@ from fastapi import status
 from fastapi.testclient import TestClient
 from fedora_messaging import message
 
-from fmn.api import main
+from fmn.api import distgit, main
 from fmn.core.config import get_settings
 from fmn.database.main import (
     Base,
@@ -54,6 +54,18 @@ async def async_respx_mocker():
 def fasjson_url() -> str:
     settings = get_settings()
     return settings.services.fasjson_url
+
+
+@pytest.fixture
+def distgit_url() -> str:
+    settings = get_settings()
+    return settings.services.distgit_url
+
+
+@pytest.fixture
+def distgit_client():
+    settings = get_settings()
+    return distgit.get_distgit_client(settings)
 
 
 @pytest.fixture
