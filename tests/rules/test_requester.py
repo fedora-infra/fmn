@@ -1,7 +1,6 @@
 import re
 
 import pytest
-import responses
 
 from fmn.core.config import get_settings
 from fmn.rules.cache import cache
@@ -22,8 +21,8 @@ def test_constructor_urls(mocked_fasjson_client):
     assert r.urls["srv"] == "http://srv.example.com/"
 
 
-def test_get_owned_by_user(requester):
-    responses.get(
+def test_get_owned_by_user(requester, responses_mocker):
+    responses_mocker.get(
         "https://src.fedoraproject.org/api/0/projects?namespace=rpms&owner=dummy&short=1&page=1",
         json={
             "projects": [
@@ -36,12 +35,12 @@ def test_get_owned_by_user(requester):
     assert resp == ["project-1", "project-2"]
 
 
-def test_get_owned_by_group(requester):
+def test_get_owned_by_group(requester, responses_mocker):
     baseurl = (
         "https://src.fedoraproject.org/api/0/projects"
         "?namespace=container&username=@dummy&short=1"
     )
-    responses.get(
+    responses_mocker.get(
         baseurl + "&page=1",
         json={
             "projects": [
@@ -56,7 +55,7 @@ def test_get_owned_by_group(requester):
             },
         },
     )
-    responses.get(
+    responses_mocker.get(
         baseurl + "&page=2",
         json={
             "projects": [
@@ -76,8 +75,8 @@ def test_get_owned_by_group(requester):
 
 
 @pytest.mark.parametrize("artifact_type", ["package", "container", "module", "flatpak"])
-def test_get_owners(requester, artifact_type):
-    responses.get(
+def test_get_owners(requester, artifact_type, responses_mocker):
+    responses_mocker.get(
         re.compile(r"https://src.fedoraproject.org/api/0/\w+/pkg1"),
         json={"access_users": {"owner": ["dummy"]}},
     )
@@ -87,8 +86,8 @@ def test_get_owners(requester, artifact_type):
 
 
 @pytest.mark.parametrize("artifact_type", ["package", "container", "module", "flatpak"])
-def test_get_group_owners(requester, artifact_type):
-    responses.get(
+def test_get_group_owners(requester, artifact_type, responses_mocker):
+    responses_mocker.get(
         re.compile(r"https://src.fedoraproject.org/api/0/\w+/pkg1"),
         json={"access_groups": {"admin": ["dummy-1"], "commit": ["dummy-2"]}},
     )
@@ -97,8 +96,8 @@ def test_get_group_owners(requester, artifact_type):
     assert resp == ["dummy-1", "dummy-2"]
 
 
-def test_get_user_groups(requester):
-    responses.get(
+def test_get_user_groups(requester, responses_mocker):
+    responses_mocker.get(
         "https://fasjson.fedoraproject.org/v1/users/dummy/groups/",
         json={
             "result": [
@@ -168,18 +167,20 @@ def test_get_user_groups(requester):
         ),
     ],
 )
-def test_invalidate_on_message(requester, topic, body, mocker, make_mocked_message):
+def test_invalidate_on_message(
+    responses_mocker, requester, topic, body, mocker, make_mocked_message
+):
     mocker.patch.object(cache, "region")
     message = make_mocked_message(topic=topic, body=body)
-    responses.get(
+    responses_mocker.get(
         "https://src.fedoraproject.org/api/0/rpms/pkg-1",
         json={"access_users": {"owner": []}, "access_groups": {"admin": [], "commit": []}},
     )
-    responses.get(
+    responses_mocker.get(
         re.compile(r"https://src.fedoraproject.org/api/0/projects\?.*"),
         json={"projects": []},
     )
-    responses.get(
+    responses_mocker.get(
         "https://fasjson.fedoraproject.org/v1/users/dummy/groups/",
         json={"result": []},
     )
@@ -229,14 +230,16 @@ def test_invalidate_on_message(requester, topic, body, mocker, make_mocked_messa
         ),
     ],
 )
-def test_no_invalidate_on_message(requester, topic, body, mocker, make_mocked_message):
+def test_no_invalidate_on_message(
+    responses_mocker, requester, topic, body, mocker, make_mocked_message
+):
     mocker.patch.object(cache, "region")
     message = make_mocked_message(topic=topic, body=body)
-    responses.get(
+    responses_mocker.get(
         "https://src.fedoraproject.org/api/0/rpms/pkg-1",
         json={"access_users": {"owner": []}, "access_groups": {"admin": [], "commit": []}},
     )
-    responses.get(
+    responses_mocker.get(
         re.compile(r"https://src.fedoraproject.org/api/0/projects\?.*"),
         json={"projects": []},
     )
@@ -245,8 +248,8 @@ def test_no_invalidate_on_message(requester, topic, body, mocker, make_mocked_me
     cache.region.delete.assert_not_called()
 
 
-def test_guard_bad_argument(requester):
-    responses.get(
+def test_guard_bad_argument(responses_mocker, requester):
+    responses_mocker.get(
         "https://src.fedoraproject.org/api/0/rpms/dummy",
         json={},
     )
@@ -256,8 +259,8 @@ def test_guard_bad_argument(requester):
         requester.distgit_client.get_owned("rpms", "dummy", "wrong")
 
 
-def test_guard_http_exception(requester, caplog):
-    responses.get(
+def test_guard_http_exception(responses_mocker, requester, caplog):
+    responses_mocker.get(
         re.compile(r"https://src\.fedoraproject\.org/api/.*"),
         body="Server Error",
         status=500,
