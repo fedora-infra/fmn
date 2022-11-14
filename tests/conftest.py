@@ -34,7 +34,7 @@ JSONSCHEMA_HYPERSCHEMA_JSON = TESTDATA / "jsonschema_hyperschema.json"
 
 
 @pytest.fixture
-def mocked_responses():
+def responses_mocker():
     with responses.mock as rm:
         yield rm
 
@@ -46,7 +46,7 @@ def fasjson_url() -> str:
 
 
 @pytest.fixture
-def mocked_fasjson(mocked_responses, fasjson_url):
+def mocked_fasjson(responses_mocker, fasjson_url):
     spec_v1_url = fasjson_url + "/specs/v1.json"
 
     with (
@@ -69,12 +69,6 @@ def mocked_fasjson_client(mocker, mocked_fasjson):
         real_init(self, url, **kwargs)
 
     mocker.patch.object(Client, "__init__", unauth_init)
-
-
-@pytest.fixture
-def responses_mocker():
-    with responses.mock as rm:
-        yield rm
 
 
 @pytest.fixture
@@ -227,8 +221,8 @@ def fasjson_group_data():
 
 
 @pytest.fixture
-def fasjson_user(mocked_responses, fasjson_user_data, fasjson_url):
-    mocked_responses.get(
+def fasjson_user(responses_mocker, fasjson_user_data, fasjson_url):
+    responses_mocker.get(
         f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/",
         json={"result": fasjson_user_data},
     )
@@ -237,8 +231,8 @@ def fasjson_user(mocked_responses, fasjson_user_data, fasjson_url):
 
 
 @pytest.fixture
-def fasjson_groups(mocked_responses, fasjson_user_data, fasjson_group_data, fasjson_url):
-    mocked_responses.get(
+def fasjson_groups(responses_mocker, fasjson_user_data, fasjson_group_data, fasjson_url):
+    responses_mocker.get(
         f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/groups/",
         json={"result": fasjson_group_data},
     )
