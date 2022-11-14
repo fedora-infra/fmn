@@ -89,7 +89,7 @@ async def get_artifacts(
 
 
 @router.post("/rule-preview", response_model=list[Notification], tags=["users/rules"])
-def preview_rule(
+async def preview_rule(
     rule: api_models.RulePreview,
     identity: Identity = Depends(get_identity),
     requester: Requester = Depends(gen_requester),
@@ -108,7 +108,7 @@ def preview_rule(
     rule_db.id = 0
     notifs = []
     # TODO make the delta a setting
-    for message in get_last_messages(24):
+    async for message in get_last_messages(24):
         log.debug(f"Processing message: {message.body}")
         for notif in rule_db.handle(message, requester):
             notifs.append(notif)
