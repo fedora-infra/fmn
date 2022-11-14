@@ -1,6 +1,6 @@
 from typing import Iterator
 
-import requests
+import httpx
 from fedora_messaging import message
 
 from fmn.core.config import get_settings
@@ -38,15 +38,17 @@ def gen_requester() -> Iterator[Requester]:
 
 
 # TODO: absolutely cache this
-def get_last_messages(hours):
+async def get_last_messages(hours):
     datagrepper_url = get_settings().dict()["services"]["datagrepper_url"]
     if not datagrepper_url.endswith("/"):
         datagrepper_url += "/"
     datagrepper_url += "v2/search"
-    req = requests.Session()
+    client = httpx.AsyncClient(base_url=datagrepper_url)
     page = 1
     while True:
-        response = req.get(datagrepper_url, params={"page": page, "delta": int(hours * 60 * 60)})
+        response = await client.get(
+            datagrepper_url, params={"page": page, "delta": int(hours * 60 * 60)}
+        )
         response.raise_for_status()
         data = response.json()
         for msg_dict in data["raw_messages"]:
