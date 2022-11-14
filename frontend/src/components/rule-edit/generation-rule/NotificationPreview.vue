@@ -2,12 +2,14 @@
 import { usePreviewRuleQuery } from "@/api/rules";
 import type { Rule } from "@/api/types";
 import { CListGroup, CListGroupItem, CSpinner } from "@coreui/bootstrap-vue";
-import relativeDate from "tiny-relative-date";
+import { formatRelative } from "date-fns";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps<{
   data: Omit<Rule, "id">;
 }>();
 
+const { locale } = useI18n();
 const { isLoading, isError, data, error } = usePreviewRuleQuery(props.data);
 </script>
 
@@ -28,7 +30,11 @@ const { isLoading, isError, data, error } = usePreviewRuleQuery(props.data);
       <div class="d-flex justify-content-between align-items-center">
         <div class="fw-bold">{{ notif.content.summary }}</div>
         <div>
-          <small>{{ relativeDate(notif.content.date) }}</small>
+          <small>{{
+            formatRelative(new Date(notif.content.date), new Date(), {
+              locale: { code: locale },
+            })
+          }}</small>
         </div>
       </div>
       <div>
