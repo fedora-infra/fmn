@@ -3,13 +3,12 @@ import { usePreviewRuleQuery } from "@/api/rules";
 import type { Rule } from "@/api/types";
 import { CListGroup, CListGroupItem, CSpinner } from "@coreui/bootstrap-vue";
 import { formatRelative } from "date-fns";
-import { useI18n } from "vue-i18n";
+import { enUS } from "date-fns/locale";
 
 const props = defineProps<{
   data: Omit<Rule, "id">;
 }>();
 
-const { locale } = useI18n();
 const { isLoading, isError, data, error } = usePreviewRuleQuery(props.data);
 </script>
 
@@ -32,7 +31,7 @@ const { isLoading, isError, data, error } = usePreviewRuleQuery(props.data);
         <div>
           <small>{{
             formatRelative(new Date(notif.content.date), new Date(), {
-              locale: { code: locale },
+              locale: enUS,
             })
           }}</small>
         </div>
