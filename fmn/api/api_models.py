@@ -1,5 +1,5 @@
 import logging
-from typing import Annotated, Any, Generic, Literal, TypeVar, Union
+from typing import Annotated, Any, Generic, Literal, TypeVar
 
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import Field
@@ -35,7 +35,7 @@ class ArtifactsFollowedTrackingRule(BaseModel):
 
 
 TrackingRule = Annotated[
-    Union[ListParamTrackingRule, NoParamTrackingRule, ArtifactsFollowedTrackingRule],
+    ListParamTrackingRule | NoParamTrackingRule | ArtifactsFollowedTrackingRule,
     Field(discriminator="name"),
 ]
 
