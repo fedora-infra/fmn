@@ -111,7 +111,8 @@ def preview_rule(
     rule_db.id = 0
     notifs = []
     # TODO make the delta a setting
-    for message in get_last_messages(24):
+    # TODO: this takes ridiculously long.
+    for message in get_last_messages(1):
         log.debug(f"Processing message: {message.body}")
         for notif in rule_db.handle(message, requester):
             notifs.append(notif)

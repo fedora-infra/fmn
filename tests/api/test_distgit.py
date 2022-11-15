@@ -14,24 +14,23 @@ def test_get_distgit_client():
 
 @mock.patch.object(distgit, "AsyncClient")
 async def test_get_projects(mock_httpx):
+    mocked_projects = [
+        {
+            "description": "0ad-data containers",
+            "fullname": "containers/0ad-data",
+            "name": "0ad-data",
+            "namespace": "containers",
+        },
+        {
+            "description": "0install rpms",
+            "fullname": "rpms/0install",
+            "name": "0install",
+            "namespace": "rpms",
+        },
+    ]
     mock_httpx.return_value = mock_client = mock.AsyncMock()
     mock_client.get.return_value.json = mock.Mock()
-    mock_client.get.return_value.json.return_value = {
-        "projects": [
-            {
-                "description": "0ad-data containers",
-                "fullname": "containers/0ad-data",
-                "name": "0ad-data",
-                "namespace": "containers",
-            },
-            {
-                "description": "0install rpms",
-                "fullname": "rpms/0install",
-                "name": "0install",
-                "namespace": "rpms",
-            },
-        ]
-    }
+    mock_client.get.return_value.json.return_value = {"projects": mocked_projects}
 
     settings = distgit.Settings(services={"distgit_url": "http://src.distgit.test"})
     distgit_client = distgit.get_distgit_client(settings)
@@ -42,4 +41,4 @@ async def test_get_projects(mock_httpx):
         "/api/0/projects", params={"fork": "false", "pattern": "*0*", "short": "true"}
     )
 
-    assert artifacts == ["0ad-data", "0install"]
+    assert artifacts == mocked_projects

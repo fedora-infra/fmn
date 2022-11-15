@@ -46,7 +46,10 @@ def get_last_messages(hours):
     req = requests.Session()
     page = 1
     while True:
-        response = req.get(datagrepper_url, params={"page": page, "delta": int(hours * 60 * 60)})
+        response = req.get(
+            datagrepper_url,
+            params={"page": page, "rows_per_page": 100, "delta": int(hours * 60 * 60)},
+        )
         response.raise_for_status()
         data = response.json()
         for msg_dict in data["raw_messages"]:

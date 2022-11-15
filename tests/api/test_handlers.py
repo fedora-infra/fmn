@@ -284,7 +284,8 @@ class TestPreviewRule(BaseTestAPIV1Handler):
     ):
         mocker.patch("fmn.rules.services.fasjson.Client")
         responses_mocker.get(
-            "https://apps.fedoraproject.org/datagrepper/v2/search?page=1&delta=86400",
+            "https://apps.fedoraproject.org/datagrepper/v2/search?"
+            "page=1&rows_per_page=100&delta=3600",
             json={
                 "raw_messages": [
                     {
@@ -341,7 +342,8 @@ class TestPreviewRule(BaseTestAPIV1Handler):
 
     def test_get_last_messages_pages(self, mocker, responses_mocker, make_mocked_message):
         rsp1 = responses_mocker.get(
-            "https://apps.fedoraproject.org/datagrepper/v2/search?page=1&delta=3600",
+            "https://apps.fedoraproject.org/datagrepper/v2/search?"
+            "page=1&rows_per_page=100&delta=3600",
             json={
                 "raw_messages": [
                     {
@@ -358,7 +360,8 @@ class TestPreviewRule(BaseTestAPIV1Handler):
             },
         )
         rsp2 = responses_mocker.get(
-            "https://apps.fedoraproject.org/datagrepper/v2/search?page=2&delta=3600",
+            "https://apps.fedoraproject.org/datagrepper/v2/search?"
+            "page=2&rows_per_page=100&delta=3600",
             json={
                 "raw_messages": [
                     {
