@@ -23,8 +23,7 @@ class DistGitClient:
         )
         response.raise_for_status()
         result = response.json()
-
-        return [project["name"] for project in result["projects"]]
+        return result["projects"]
 
 
 def get_distgit_client(settings: Settings = Depends(get_settings)):
