@@ -2,7 +2,6 @@ import re
 
 import pytest
 from fastapi import status
-from httpx import Response
 from sqlalchemy.exc import NoResultFound
 
 from fmn.api import api_models
@@ -281,29 +280,25 @@ class TestPreviewRule(BaseTestAPIV1Handler):
     }
 
     def test_preview_basic(
-        self, mocker, async_respx_mocker, client, api_identity, make_mocked_message
+        self, mocker, responses_mocker, client, api_identity, make_mocked_message
     ):
         mocker.patch("fmn.rules.services.fasjson.Client")
-        async_respx_mocker.get(
-            "https://apps.fedoraproject.org/datagrepper/v2/search?page=1&delta=86400"
-        ).mock(
-            return_value=Response(
-                status.HTTP_200_OK,
-                json={
-                    "raw_messages": [
-                        {
-                            "id": "id-foobar",
-                            "topic": "topic.foobar",
-                            "headers": {
-                                "fedora_messaging_schema": "testmessage",
-                                "sent-at": "2022-01-01T00:00:00+00:00",
-                            },
-                            "body": {"app": "koji", "packages": ["foobar"]},
-                        }
-                    ],
-                    "pages": 1,
-                },
-            )
+        responses_mocker.get(
+            "https://apps.fedoraproject.org/datagrepper/v2/search?page=1&delta=86400",
+            json={
+                "raw_messages": [
+                    {
+                        "id": "id-foobar",
+                        "topic": "topic.foobar",
+                        "headers": {
+                            "fedora_messaging_schema": "testmessage",
+                            "sent-at": "2022-01-01T00:00:00+00:00",
+                        },
+                        "body": {"app": "koji", "packages": ["foobar"]},
+                    }
+                ],
+                "pages": 1,
+            },
         )
         response = client.post(f"{self.path}/rule-preview", json=self._dummy_rule_dict)
 
@@ -329,62 +324,58 @@ class TestPreviewRule(BaseTestAPIV1Handler):
 
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    async def test_dg_url_fix(self, mocker, async_respx_mocker):
+    def test_dg_url_fix(self, mocker, responses_mocker):
         settings = get_settings()
         settings.services.datagrepper_url = "http://datagrepper.test"
         mocker.patch("fmn.api.handlers.utils.get_settings", return_value=settings)
-        resp = async_respx_mocker.get(re.compile(r"http://datagrepper\.test/v2/search.*")).mock(
-            return_value=Response(status.HTTP_200_OK, json={"raw_messages": [], "pages": 0})
+        resp = responses_mocker.get(
+            re.compile(r"http://datagrepper\.test/v2/search.*"),
+            json={
+                "raw_messages": [],
+                "pages": 0,
+            },
         )
-        messages = [msg async for msg in get_last_messages(1)]
+        messages = list(get_last_messages(1))
         assert messages == []
         assert resp.call_count == 1
 
-    async def test_get_last_messages_pages(self, mocker, async_respx_mocker, make_mocked_message):
-        rsp1 = async_respx_mocker.get(
-            "https://apps.fedoraproject.org/datagrepper/v2/search?page=1&delta=3600"
-        ).mock(
-            return_value=Response(
-                status.HTTP_200_OK,
-                json={
-                    "raw_messages": [
-                        {
-                            "id": "id-foobar-1",
-                            "topic": "topic.foobar",
-                            "headers": {
-                                "fedora_messaging_schema": "testmessage",
-                                "sent-at": "2022-01-01T00:00:00+00:00",
-                            },
-                            "body": {"app": "koji", "packages": ["foobar"]},
-                        }
-                    ],
-                    "pages": 2,
-                },
-            )
+    def test_get_last_messages_pages(self, mocker, responses_mocker, make_mocked_message):
+        rsp1 = responses_mocker.get(
+            "https://apps.fedoraproject.org/datagrepper/v2/search?page=1&delta=3600",
+            json={
+                "raw_messages": [
+                    {
+                        "id": "id-foobar-1",
+                        "topic": "topic.foobar",
+                        "headers": {
+                            "fedora_messaging_schema": "testmessage",
+                            "sent-at": "2022-01-01T00:00:00+00:00",
+                        },
+                        "body": {"app": "koji", "packages": ["foobar"]},
+                    }
+                ],
+                "pages": 2,
+            },
         )
-        rsp2 = async_respx_mocker.get(
-            "https://apps.fedoraproject.org/datagrepper/v2/search?page=2&delta=3600"
-        ).mock(
-            return_value=Response(
-                status.HTTP_200_OK,
-                json={
-                    "raw_messages": [
-                        {
-                            "id": "id-foobar-2",
-                            "topic": "topic.foobar",
-                            "headers": {
-                                "fedora_messaging_schema": "testmessage",
-                                "sent-at": "2022-01-01T00:00:00+00:00",
-                            },
-                            "body": {"app": "koji", "packages": ["foobar"]},
-                        }
-                    ],
-                    "pages": 2,
-                },
-            )
+        rsp2 = responses_mocker.get(
+            "https://apps.fedoraproject.org/datagrepper/v2/search?page=2&delta=3600",
+            json={
+                "raw_messages": [
+                    {
+                        "id": "id-foobar-2",
+                        "topic": "topic.foobar",
+                        "headers": {
+                            "fedora_messaging_schema": "testmessage",
+                            "sent-at": "2022-01-01T00:00:00+00:00",
+                        },
+                        "body": {"app": "koji", "packages": ["foobar"]},
+                    }
+                ],
+                "pages": 2,
+            },
         )
 
-        messages = [msg async for msg in get_last_messages(1)]
+        messages = list(get_last_messages(1))
 
         assert len(messages) == 2
         assert rsp1.call_count == 1

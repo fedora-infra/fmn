@@ -88,8 +88,11 @@ async def get_artifacts(
     return artifacts
 
 
+# Note: this function can't be async.
+# The message handling by the rules is synchronous because it is run by the consumer in a thread
+# that fedora-messaging provides (via Twisted) and we don't dare mix Twisted async with asyncio.
 @router.post("/rule-preview", response_model=list[Notification], tags=["users/rules"])
-async def preview_rule(
+def preview_rule(
     rule: api_models.RulePreview,
     identity: Identity = Depends(get_identity),
     requester: Requester = Depends(gen_requester),
@@ -108,7 +111,7 @@ async def preview_rule(
     rule_db.id = 0
     notifs = []
     # TODO make the delta a setting
-    async for message in get_last_messages(24):
+    for message in get_last_messages(24):
         log.debug(f"Processing message: {message.body}")
         for notif in rule_db.handle(message, requester):
             notifs.append(notif)
