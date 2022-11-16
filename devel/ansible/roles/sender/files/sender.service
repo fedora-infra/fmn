@@ -1,0 +1,12 @@
+[Unit]
+Description=fmn-sender
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=vagrant
+WorkingDirectory=/home/vagrant/fmn
+ExecStart=poetry run fmn-sender --config /etc/fmn/sender.toml
+
+[Install]
+WantedBy=multi-user.target

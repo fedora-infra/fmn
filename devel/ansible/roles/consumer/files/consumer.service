@@ -1,0 +1,16 @@
+[Unit]
+Description=fmn-consumer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=vagrant
+Environment=GSS_USE_PROXY=yes
+WorkingDirectory=/home/vagrant/fmn
+ExecStart=poetry run fedora-messaging \
+    --conf /etc/fmn/consumer.toml \
+    consume \
+    --callback fmn.consumer:Consumer
+
+[Install]
+WantedBy=multi-user.target

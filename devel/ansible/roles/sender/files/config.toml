@@ -1,0 +1,45 @@
+# A sample configuration for the FMN sender. This file is in the TOML format.
+
+amqp_url = "amqp://tinystage.tinystage.test/%2Ffmn"
+queue = "email"
+
+[handler]
+class = "fmn.sender.email:EmailHandler"
+# class = "fmn.sender.irc:IRCHandler"
+from = "FMN <fmn@tinystage.test>"
+smtp_host = "tinystage.tinystage.test"
+smtp_port = 1025
+# irc_url = "ircs://fedora-notif:fmnpassword@irc.libera.chat:6697"
+
+[log_config]
+version = 1
+disable_existing_loggers = true
+
+[log_config.formatters.simple]
+format = "[%(levelname)s %(name)s] %(message)s"
+
+[log_config.handlers.console]
+class = "logging.StreamHandler"
+formatter = "simple"
+stream = "ext://sys.stdout"
+
+[log_config.loggers.fmn]
+level = "DEBUG"
+propagate = false
+handlers = ["console"]
+
+# Pika is the underlying AMQP client library. When debugging you may want to
+# lower this log level.
+[log_config.loggers.pika]
+level = "WARNING"
+propagate = false
+handlers = ["console"]
+
+[log_config.loggers.irc]
+level = "DEBUG"
+propagate = false
+handlers = ["console"]
+
+[log_config.root]
+level = "ERROR"
+handlers = ["console"]
