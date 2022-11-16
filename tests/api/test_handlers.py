@@ -1,10 +1,12 @@
 import re
+from unittest import mock
 
 import pytest
 from fastapi import status
+from httpx import Response
 from sqlalchemy.exc import NoResultFound
 
-from fmn.api import api_models
+from fmn.api import api_models, auth
 from fmn.api.handlers.utils import get_last_messages
 from fmn.core.config import get_settings
 from fmn.database.model import Rule
@@ -26,6 +28,38 @@ class BaseTestAPIV1Handler(BaseTestHandler):
 
 class TestUserHandler(BaseTestAPIV1Handler):
     handler_prefix = "/users"
+
+    @pytest.mark.parametrize("testcase", ("search", "logged-in", "logged-out"))
+    def test_get_users(self, testcase, fasjson_user, async_respx_mocker, fasjson_url, client):
+        params = {}
+        if "search" in testcase:
+            params["search"] = search_term = fasjson_user["username"][:3]
+            async_respx_mocker.get(f"{fasjson_url}/v1/search/users/?username={search_term}").mock(
+                side_effect=[
+                    Response(
+                        status.HTTP_200_OK,
+                        json={
+                            "result": [fasjson_user],
+                            "page": {"page_number": 1, "total_pages": 1},
+                        },
+                    )
+                ]
+            )
+            expected_result = [fasjson_user["username"]]
+        elif "logged" in testcase:
+            fake_identity = mock.Mock()
+            if "logged-in" in testcase:
+                fake_identity.name = "logged-in-user"
+                expected_result = [fake_identity.name]
+            else:  # logged-out
+                fake_identity.name = None
+                expected_result = []
+            client.app.dependency_overrides[auth.get_identity_optional] = lambda: fake_identity
+
+        response = client.get(f"{self.path}", params=params)
+        assert response.status_code == status.HTTP_200_OK
+
+        assert response.json() == expected_result
 
     def test_get_user_info(self, fasjson_user, client):
         """Test that get_user_info() dispatches to FASJSON."""
