@@ -17,10 +17,10 @@ router = APIRouter(prefix="/users")
 
 @router.get("", response_model=list[str], tags=["users"])
 async def get_users(
-    search: str,
+    search: str = None,
     identity: Identity = Depends(get_identity_optional),
     fasjson_proxy: FASJSONAsyncProxy = Depends(get_fasjson_proxy),
-):  # pragma: no cover todo
+):
     if not search:
         if identity and identity.name:
             return [identity.name]
