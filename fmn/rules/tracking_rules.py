@@ -54,16 +54,16 @@ class ArtifactsOwned(TrackingRule):
     def prime_cache(self, cache):
         for username in self.usernames:
             cache["packages"].update(
-                self._requester.get_owned_by_user(artifact_type="packages", username=username)
+                self._requester.get_owned_by_user(artifact_type="packages", name=username)
             )
             cache["containers"].update(
-                self._requester.get_owned_by_user(artifact_type="containers", username=username)
+                self._requester.get_owned_by_user(artifact_type="containers", name=username)
             )
             cache["modules"].update(
-                self._requester.get_owned_by_user(artifact_type="modules", username=username)
+                self._requester.get_owned_by_user(artifact_type="modules", name=username)
             )
             cache["flatpaks"].update(
-                self._requester.get_owned_by_user(artifact_type="flatpaks", username=username)
+                self._requester.get_owned_by_user(artifact_type="flatpaks", name=username)
             )
 
 
@@ -92,16 +92,16 @@ class ArtifactsGroupOwned(TrackingRule):
     def prime_cache(self, cache):
         for group in self.groups:
             cache["packages"].update(
-                self._requester.get_owned_by_group(artifact_type="packages", group=group)
+                self._requester.get_owned_by_group(artifact_type="packages", name=group)
             )
             cache["containers"].update(
-                self._requester.get_owned_by_group(artifact_type="containers", group=group)
+                self._requester.get_owned_by_group(artifact_type="containers", name=group)
             )
             cache["modules"].update(
-                self._requester.get_owned_by_group(artifact_type="modules", group=group)
+                self._requester.get_owned_by_group(artifact_type="modules", name=group)
             )
             cache["flatpaks"].update(
-                self._requester.get_owned_by_group(artifact_type="flatpaks", group=group)
+                self._requester.get_owned_by_group(artifact_type="flatpaks", name=group)
             )
 
 

@@ -35,10 +35,10 @@ class MockedRequester:
     def get_flatpak_group_owners(self, artifact):
         return self._get_group_owner(artifact)
 
-    def get_owned_by_user(self, artifact_type, username):
+    def get_owned_by_user(self, artifact_type, name):
         return [f"{artifact_type}-1", f"{artifact_type}-2"]
 
-    def get_owned_by_group(self, artifact_type, group):
+    def get_owned_by_group(self, artifact_type, name):
         return [f"{artifact_type}-1", f"{artifact_type}-2"]
 
 

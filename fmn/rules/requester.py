@@ -43,14 +43,14 @@ class Requester:
         self.fasjson_client = FasjsonService(self.urls["fasjson"])
 
     @handle_http_error(list)
-    def get_owned_by_user(self, artifact_type, username):
-        log.debug(f"Getting owned {artifact_type} by {username}")
-        return self.distgit_client.get_owned(artifact_type, username, "user")
+    def get_owned_by_user(self, artifact_type: str, name: str):
+        log.debug(f"Getting owned {artifact_type} by {name}")
+        return self.distgit_client.get_owned(artifact_type, name, "user")
 
     @handle_http_error(list)
-    def get_owned_by_group(self, artifact_type, groupname):
-        log.debug(f"Getting owned {artifact_type} by group {groupname}")
-        return self.distgit_client.get_owned(artifact_type, groupname, "group")
+    def get_owned_by_group(self, artifact_type: str, name: str):
+        log.debug(f"Getting owned {artifact_type} by group {name}")
+        return self.distgit_client.get_owned(artifact_type, name, "group")
 
     @handle_http_error(list)
     def get_package_owners(self, name: str):
