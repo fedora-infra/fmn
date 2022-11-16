@@ -8,7 +8,7 @@ User=vagrant
 Environment=GSS_USE_PROXY=yes
 WorkingDirectory=/home/vagrant/fmn
 ExecStart=poetry run uvicorn fmn.api.main:app \
-    --env-file /etc/fmn.cfg \
+    --env-file /etc/fmn/fmn.cfg \
     --host 0.0.0.0 \
     --ssl-keyfile /etc/pki/tls/private/server.key \
     --ssl-certfile /etc/pki/tls/certs/server.pem

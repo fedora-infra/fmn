@@ -2,7 +2,7 @@ from functools import cache
 
 from pydantic import BaseModel, BaseSettings, root_validator, stricturl
 
-DEFAULT_CONFIG_FILE = _settings_file = "/etc/fmn.cfg"
+DEFAULT_CONFIG_FILE = _settings_file = "/etc/fmn/fmn.cfg"
 
 
 class CacheModel(BaseModel):

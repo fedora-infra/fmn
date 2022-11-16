@@ -53,11 +53,20 @@
         oidc_client_secret: >-
           {{ (api_oidc_secrets_out.content | b64decode | from_json).web.client_secret }}
 
+    - name: Prepare the configuration directory
+      become_user: root
+      file:
+        path: /etc/fmn
+        state: directory
+        owner: root
+        group: vagrant
+        mode: 0750
+
     - name: Install the configuration file
       become_user: root
       template:
         src: fmn.cfg.j2
-        dest: /etc/fmn.cfg
+        dest: /etc/fmn/fmn.cfg
         owner: root
         group: vagrant
         mode: 0640

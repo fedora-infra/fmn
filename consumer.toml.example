@@ -33,7 +33,7 @@ routing_keys = ["#"]
 
 
 [consumer_config]
-# settings_file = "/etc/fmn.cfg"
+# settings_file = "/etc/fmn/fmn.cfg"
 
 [consumer_config.send_queue]
 url = "amqp://localhost/%2Ffmn"
