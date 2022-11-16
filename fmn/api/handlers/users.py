@@ -42,7 +42,7 @@ async def get_user_info(username, fasjson_proxy: FASJSONAsyncProxy = Depends(get
 
 @router.get("/{username}/groups", tags=["users"])
 async def get_user_groups(username, fasjson_proxy: FASJSONAsyncProxy = Depends(get_fasjson_proxy)):
-    return [g["groupname"] for g in await fasjson_proxy.list_user_groups(username=username)]
+    return [g["groupname"] for g in await fasjson_proxy.get_user_groups(username=username)]
 
 
 @router.get("/{username}/destinations", response_model=list[api_models.Destination], tags=["users"])

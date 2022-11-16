@@ -1,6 +1,5 @@
 import logging
-from collections.abc import Awaitable
-from typing import Any
+from typing import Any, AsyncIterator
 
 from fastapi import Depends
 from httpx import AsyncClient
@@ -26,41 +25,42 @@ class FASJSONAsyncProxy:
             timeout=None,
         )
 
-    async def get(self, url, **kwargs) -> JSON_RESULT:
-        """Query the API and merge paginated results if applicable."""
+    async def get(self, url, **kwargs) -> JSON_DICT:
+        """Query the API for a single result."""
+        response = await self.client.get(url, **kwargs)
+        response.raise_for_status()
+        return response.json()
+
+    async def get_result(self, url, **kwargs) -> JSON_RESULT:
+        return (await self.get(url, **kwargs))["result"]
+
+    async def get_paginated(self, url, **kwargs) -> AsyncIterator[JSON_DICT]:
+        """Query the API and iterate over paginated results if applicable."""
         params = kwargs.pop("params", {})
 
-        complete_result = None
-        partial_result = []
+        while True:
+            result = await self.get(url, params=params, **kwargs)
+            if "page" not in result:
+                raise ValueError("missing pagination metadata")
 
-        while complete_result is None:
-            response = await self.client.get(url, params=params, **kwargs)
-            response.raise_for_status()
+            for item in result["result"]:
+                yield item
 
-            result = response.json()
+            page_number = result["page"]["page_number"]
+            if page_number >= result["page"]["total_pages"]:
+                return
 
-            if "page" in result:
-                partial_result.extend(result["result"])
-                page_number = result["page"]["page_number"]
-                if page_number < result["page"]["total_pages"]:
-                    params["page_number"] = page_number + 1
-                else:
-                    complete_result = partial_result
-            else:
-                if partial_result:
-                    raise RuntimeError("Can't merge paginated with unpaginated result.")
-                complete_result = result["result"]
+            params["page_number"] = page_number + 1
 
-        return complete_result
+    async def search_users(self, **params: dict[str, Any]) -> AsyncIterator[JSON_RESULT]:
+        async for user in self.get_paginated("/search/users/", params=params):
+            yield user
 
-    def search_users(self, **kwargs) -> Awaitable[JSON_RESULT]:
-        return self.get("/search/users/", **kwargs)
+    async def get_user(self, *, username: str) -> JSON_RESULT:
+        return await self.get_result(f"/users/{username}/")
 
-    def get_user(self, *, username: str, **kwargs) -> Awaitable[JSON_RESULT]:
-        return self.get(f"/users/{username}/", **kwargs)
-
-    def list_user_groups(self, *, username: str, **kwargs) -> Awaitable[JSON_RESULT]:
-        return self.get(f"/users/{username}/groups/", **kwargs)
+    async def get_user_groups(self, *, username: str) -> JSON_RESULT:
+        return await self.get_result(f"/users/{username}/groups/")
 
 
 def get_fasjson_proxy(settings: Settings = Depends(get_settings)) -> FASJSONAsyncProxy:
