@@ -13,6 +13,7 @@ def api():
 
 @api.command()
 @click.option("--host", default="127.0.0.1", help="host to serve the api on")
-def serve(host):
+@click.option("--port", default="8080", type=int, help="port to serve the api on")
+def serve(host, port):
     """Serve the FMN API via HTTP"""
-    uvicorn.run(main.app, host=host)
+    uvicorn.run(main.app, host=host, port=port)

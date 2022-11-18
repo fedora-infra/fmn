@@ -27,4 +27,4 @@ def test_api_help(cli_runner):
 def test_api_serve(uvicorn, cli_runner):
     result = cli_runner.invoke(api, ["serve"])
     assert result.exit_code == 0
-    uvicorn.run.assert_called_once_with(main.app, host="127.0.0.1")
+    uvicorn.run.assert_called_once_with(main.app, host="127.0.0.1", port=8080)
