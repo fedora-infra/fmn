@@ -1,4 +1,5 @@
 import json
+import ssl
 from unittest.mock import AsyncMock, MagicMock, Mock
 from uuid import uuid4
 
@@ -24,6 +25,14 @@ def make_message(channel, content):
 
 
 @pytest.fixture
+def consumer():
+    handler = MagicMock(name="handler", spec=Handler)
+    config = {"amqp_url": "amqp://rmq.example.com/%2Fvhost", "queue": "testdest"}
+    consumer = Consumer(config, handler)
+    return consumer
+
+
+@pytest.fixture
 def mocked_connection(mocker):
     connection = Mock(name="connection")
     mocker.patch("fmn.sender.consumer.connect_robust", AsyncMock(return_value=connection))
@@ -46,9 +55,7 @@ def mocked_channel(mocked_connection):
     return channel
 
 
-async def test_connect(mocked_connection, mocked_channel):
-    handler = Mock(name="handler")
-    consumer = Consumer("amqp://rmq.example.com/%2Fvhost", "testdest", handler)
+async def test_connect(mocked_connection, mocked_channel, consumer):
     await consumer.connect()
     mocked_connection.channel.assert_called_once_with()
     mocked_channel.declare_queue.assert_called_once_with(
@@ -57,9 +64,7 @@ async def test_connect(mocked_connection, mocked_channel):
     mocked_channel.mocked_queue.bind.assert_called_once_with("amq.direct", "send.testdest")
 
 
-async def test_consume(mocked_channel):
-    handler = MagicMock(name="handler", spec=Handler)
-    consumer = Consumer("amqp://rmq.example.com/%2Fvhost", "testdest", handler)
+async def test_consume(mocked_channel, consumer):
     consumer._queue = Queue(
         mocked_channel,
         name="testqueue",
@@ -76,29 +81,23 @@ async def test_consume(mocked_channel):
     await iterator.on_message(make_message(mocked_channel, {"foo": "bar"}))
     await iterator.on_message(CLOSING)
     await future
-    handler.handle.assert_called_once_with({"foo": "bar"})
+    consumer._handler.handle.assert_called_once_with({"foo": "bar"})
 
 
-async def test_stop_not_connected(mocked_channel):
-    handler = MagicMock(name="handler", spec=Handler)
-    consumer = Consumer("amqp://rmq.example.com/%2Fvhost", "testdest", handler)
+async def test_stop_not_connected(mocked_channel, consumer):
     await consumer.stop()
-    handler.stop.assert_called_once_with()
+    consumer._handler.stop.assert_called_once_with()
 
 
-async def test_stop_not_consuming(mocked_channel):
-    handler = MagicMock(name="handler", spec=Handler)
-    consumer = Consumer("amqp://rmq.example.com/%2Fvhost", "testdest", handler)
+async def test_stop_not_consuming(mocked_channel, consumer):
     consumer._connection = Mock()
     consumer._connection.close = AsyncMock()
     await consumer.stop()
     consumer._connection.close.assert_called_once_with()
-    handler.stop.assert_called_once_with()
+    consumer._handler.stop.assert_called_once_with()
 
 
-async def test_stop_consuming(mocked_channel):
-    handler = MagicMock(name="handler", spec=Handler)
-    consumer = Consumer("amqp://rmq.example.com/%2Fvhost", "testdest", handler)
+async def test_stop_consuming(mocked_channel, consumer):
     consumer._connection = Mock()
     consumer._connection.close = AsyncMock()
     consumer._queue_iter = MagicMock(spec=QueueIterator)
@@ -106,4 +105,32 @@ async def test_stop_consuming(mocked_channel):
     consumer._queue_iter.on_message.assert_called_once_with(CLOSING)
     consumer._queue_iter.close.assert_called_once_with()
     consumer._connection.close.assert_called_once_with()
-    handler.stop.assert_called_once_with()
+    consumer._handler.stop.assert_called_once_with()
+
+
+async def test_with_ssl(mocker):
+    connect_robust = AsyncMock()
+    mocker.patch("fmn.sender.consumer.connect_robust", connect_robust)
+    handler = MagicMock(name="handler", spec=Handler)
+    config = {
+        "amqp_url": "amqp://rmq.example.com/%2Fvhost",
+        "queue": "testdest",
+        "tls": {
+            "ca_cert": "/path/to/cacert",
+            "certfile": "/path/to/certfile",
+            "keyfile": "/path/to/keyfile",
+        },
+    }
+    consumer = Consumer(config, handler)
+    assert consumer._ssl_options is not None
+    await consumer.connect()
+    connect_robust.assert_called_once_with(
+        "amqp://rmq.example.com/%2Fvhost",
+        ssl_options={
+            "cafile": "/path/to/cacert",
+            "certfile": "/path/to/certfile",
+            "keyfile": "/path/to/keyfile",
+            "no_verify_ssl": ssl.CERT_REQUIRED,
+        },
+        client_properties={"connection_name": "FMN"},
+    )

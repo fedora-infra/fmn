@@ -24,7 +24,7 @@ def main(config_path):
     config = get_config(config_path)
     setup_logging(config)
     handler = get_handler(config)
-    consumer = Consumer(config["amqp_url"], config["queue"], handler)
+    consumer = Consumer(config, handler)
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(_main(handler, consumer))
