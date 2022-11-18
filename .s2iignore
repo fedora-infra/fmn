@@ -2,3 +2,4 @@
 .pytest_cache
 .vagrant
 tests
+frontend/node_modules
