@@ -6,4 +6,4 @@ set -e
 export PATH=/opt/app-root/src/.local/venvs/fmn/bin:$PATH
 
 # Run the application
-fmn-sender --config /etc/fmn/sender-email.toml
+fmn-sender --config /etc/fmn/sender-irc.toml
