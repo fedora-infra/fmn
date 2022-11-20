@@ -4,6 +4,8 @@ import pika
 
 from fmn.rules.notification import Notification
 
+from .utils import configure_tls_parameters
+
 
 class SendQueue:
     def __init__(self, config):
@@ -13,6 +15,9 @@ class SendQueue:
 
     def connect(self):
         parameters = pika.URLParameters(self.config["url"])
+        if "tls" in self.config:
+            configure_tls_parameters(parameters, self.config["tls"])
+        parameters.client_properties = {"connection_name": "FMN consumer to sender"}
         self._connection = pika.BlockingConnection(parameters)
         self._channel = self._connection.channel()
 

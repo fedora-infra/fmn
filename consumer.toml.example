@@ -38,6 +38,11 @@ routing_keys = ["#"]
 [consumer_config.send_queue]
 url = "amqp://localhost/%2Ffmn"
 
+# [consumer_config.send_queue.tls]
+# ca_cert = "/etc/fedora-messaging/cacert.pem"
+# keyfile = "/etc/fedora-messaging/sender-key.pem"
+# certfile = "/etc/fedora-messaging/sender-cert.pem"
+
 [qos]
 prefetch_size = 0
 prefetch_count = 25
