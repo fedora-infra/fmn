@@ -19,7 +19,14 @@ pip install . --no-deps
 # Build the frontend
 cd frontend
 npm install
-npm run build
+
+env
+
+if [ "$FEDORA_ENV" == "staging" ]; then
+    npm run build:staging
+else
+    npm run build
+fi
 
 # set permissions for any installed artifacts
 fix-permissions /opt/app-root -P
