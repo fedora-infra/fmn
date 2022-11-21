@@ -3,6 +3,7 @@ branch = True
 source = fmn
 omit =
     fmn/sender/handler.py
+    fmn/database/migrations/versions/*.py
 concurrency =
     greenlet
     thread

@@ -296,6 +296,38 @@ class TestMisc(BaseTestAPIV1Handler):
         if "nothing" in testcase:
             assert len(artifacts) == 0
 
+    def test_liveness(self, client):
+        response = client.get(f"{self.path}/healthz/live")
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() == {"detail": "OK"}
+
+    async def test_readiness_not_setup(self, client, db_async_session, mocker):
+        await db_async_session.execute("DROP TABLE IF EXISTS alembic_version")
+        mocker.patch("fmn.api.database.async_session_maker", return_value=db_async_session)
+        response = client.get(f"{self.path}/healthz/ready")
+        assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+        assert "no such table" in response.json()["detail"]
+
+    async def test_readiness(self, client, db_async_schema, mocker):
+        mocker.patch("fmn.api.database.async_session_maker", return_value=db_async_schema)
+        response = client.get(f"{self.path}/healthz/ready")
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() == {"detail": "OK"}
+
+    async def test_readiness_needs_upgrade(self, client, db_async_session, mocker):
+        await db_async_session.execute("UPDATE alembic_version SET version_num='foobar'")
+        mocker.patch("fmn.api.database.async_session_maker", return_value=db_async_session)
+        response = client.get(f"{self.path}/healthz/ready")
+        assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+        assert response.json()["detail"] == "Database schema needs to be upgraded"
+
+    async def test_readiness_not_stamped(self, client, db_async_session, mocker):
+        await db_async_session.execute("DELETE FROM alembic_version")
+        mocker.patch("fmn.api.database.async_session_maker", return_value=db_async_session)
+        response = client.get(f"{self.path}/healthz/ready")
+        assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+        assert response.json()["detail"] == "Database schema needs to be upgraded"
+
 
 class TestPreviewRule(BaseTestAPIV1Handler):
 

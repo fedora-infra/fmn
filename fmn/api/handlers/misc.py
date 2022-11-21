@@ -1,11 +1,14 @@
 import logging
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from fmn.api import api_models
 from fmn.api.auth import Identity, get_identity
+from fmn.api.database import gen_db_session
 from fmn.api.distgit import DistGitClient, get_distgit_client
 from fmn.core.constants import ArtifactType
+from fmn.database.migrations.main import alembic_migration
 from fmn.database.model import User
 from fmn.rules.notification import Notification
 from fmn.rules.requester import Requester
@@ -117,3 +120,20 @@ def preview_rule(
         for notif in rule_db.handle(message, requester):
             notifs.append(notif)
     return notifs
+
+
+@router.get("/healthz/live", tags=["healthz"])
+async def liveness_check():
+    return {"detail": "OK"}
+
+
+@router.get("/healthz/ready", tags=["healthz"])
+async def readiness_check(db_session: AsyncSession = Depends(gen_db_session)):
+    try:
+        needs_upgrade = await alembic_migration.needs_upgrade(db_session)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    if needs_upgrade:
+        raise HTTPException(status_code=500, detail="Database schema needs to be upgraded")
+    else:
+        return {"detail": "OK"}

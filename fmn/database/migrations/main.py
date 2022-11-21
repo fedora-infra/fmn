@@ -4,6 +4,7 @@ from pathlib import Path
 
 import alembic.command
 import alembic.config
+import alembic.migration
 import alembic.runtime.environment
 import alembic.script
 
@@ -73,6 +74,24 @@ class AlembicMigration:
             print("Nothing to downgrade.")
         else:
             print("Downgraded to:", ", ".join(post_revs) if post_revs else "<base>")
+
+    async def needs_upgrade(self, async_connection):
+        script = alembic.script.ScriptDirectory.from_config(self.config)
+        latest = script.get_current_head()
+        context = alembic.migration.MigrationContext.configure(
+            url=self.config.get_main_option("sqlalchemy.url")
+        )
+        # In sync mode we could do: current = context.get_current_revision()
+        result = await async_connection.execute(context._version.select())
+        current_versions = [row[0] for row in result]
+        if len(current_versions) != 1:
+            # Database is not setup
+            return True
+        current = current_versions[0]
+        if current != latest:
+            return True
+        else:
+            return False
 
 
 alembic_migration = AlembicMigration()

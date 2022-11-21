@@ -1,6 +1,7 @@
 import pathlib
 from unittest import mock
 
+import alembic.command
 import httpx
 import pytest
 import responses
@@ -22,6 +23,7 @@ from fmn.database.main import (
     init_sync_model,
     sync_session_maker,
 )
+from fmn.database.migrations.main import alembic_migration
 from fmn.database.model import Destination, Filter, GenerationRule, Rule, TrackingRule, User
 
 from .message import Message
@@ -129,6 +131,7 @@ def db_sync_schema(db_sync_engine):
     """Fixture to install the database schema using the synchronous engine."""
     with db_sync_engine.begin():
         Base.metadata.create_all(db_sync_engine)
+        alembic.command.stamp(alembic_migration.config, "head")
 
 
 @pytest.fixture
@@ -136,6 +139,15 @@ async def db_async_schema(db_async_engine):
     """Fixture to install the database schema using the asynchronous engine."""
     async with db_async_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        script_dir = alembic.script.ScriptDirectory.from_config(alembic_migration.config)
+        latest = script_dir.get_current_head()
+        context = alembic.migration.MigrationContext.configure(
+            # Not "conn" because it's async
+            url=alembic_migration.config.get_main_option("sqlalchemy.url")
+        )
+        await conn.run_sync(context._version.create)
+        await conn.execute(context._version.insert().values(version_num=latest))
+        yield conn
 
 
 @pytest.fixture
