@@ -17,10 +17,9 @@ class Consumer:
         self._url = URL(config["amqp_url"])
         self._destination = config["queue"]
         self._handler = handler
-        self._url = self._url.update_query(
-            {"connection_name": f"FMN sender on {self._destination}"}
-        )
+        self._url = self._url.update_query(connection_name=f"FMN sender on {self._destination}")
         if "tls" in config:
+            self._url = self._url.update_query(auth="EXTERNAL")
             self._url = self._url.update_query(
                 SSLOptions(
                     cafile=config["tls"]["ca_cert"],
