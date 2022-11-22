@@ -265,6 +265,25 @@ class TestMisc(BaseTestAPIV1Handler):
         assert all(isinstance(item, str) for item in result)
         # Verify list is sorted and items are unique
         assert sorted(set(result)) == result
+        assert len(result) == 15
+        assert "base" not in result
+        assert result == [
+            "anitya",
+            "ansible",
+            "bodhi",
+            "ci_messages",
+            "copr",
+            "discourse",
+            "fedocal",
+            "fedora_elections",
+            "git",
+            "hotness",
+            "mdapi",
+            "noggin",
+            "nuancier",
+            "pagure",
+            "planet",
+        ]
 
     @pytest.mark.parametrize(
         "testcase", ("query-users", "query-users-duplicate", "query-groups", "query-nothing")
