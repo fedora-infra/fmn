@@ -1,4 +1,5 @@
 import logging
+from importlib import metadata
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,12 +23,13 @@ router = APIRouter()
 
 @router.get("/applications", response_model=list[str], tags=["misc"])
 def get_applications():
-    # TODO: Read the installed schemas and extract the applications. Return sorted, please :-)
-    return [
-        "anitya",
-        "bodhi",
-        "koji",
-    ]
+    entrypoints = metadata.entry_points().select(group="fedora.messages")
+    applications = {s.name.partition(".")[0] for s in entrypoints}
+
+    # we will always have the base message in there, so lets discard that
+    applications.discard("base")
+
+    return sorted(list(applications))
 
 
 @router.get("/artifacts/owned", response_model=list[dict[str, str]], tags=["misc"])
