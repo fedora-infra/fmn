@@ -1,4 +1,5 @@
 from functools import cache
+from typing import Any, Mapping
 
 from pydantic import BaseModel, BaseSettings, root_validator, stricturl
 
@@ -8,6 +9,7 @@ DEFAULT_CONFIG_FILE = _settings_file = "/etc/fmn/fmn.cfg"
 class CacheModel(BaseModel):
     backend: str = "dogpile.cache.memory"
     expiration_time: int = 300
+    arguments: Mapping[str, Any] | None = None
 
     class Config:
         extra = "allow"

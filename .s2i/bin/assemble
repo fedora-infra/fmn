@@ -16,6 +16,9 @@ micropipenv install --deploy
 # Now install the root project too, micropipenv does not do that
 pip install . --no-deps
 
+# Install deployment-specific dependencies
+pip install redis
+
 # Build the frontend
 cd frontend
 npm install
