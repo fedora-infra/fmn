@@ -8,6 +8,7 @@ from aio_pika.channel import Channel
 from aio_pika.message import IncomingMessage
 from aio_pika.queue import Queue, QueueIterator
 from aiormq.abc import ContentHeader, DeliveredMessage, spec
+from yarl import URL
 
 from fmn.sender.consumer import CLOSING, Consumer
 from fmn.sender.handler import Handler
@@ -122,15 +123,15 @@ async def test_with_ssl(mocker):
         },
     }
     consumer = Consumer(config, handler)
-    assert consumer._ssl_options is not None
     await consumer.connect()
     connect_robust.assert_called_once_with(
-        "amqp://rmq.example.com/%2Fvhost",
-        ssl_options={
-            "cafile": "/path/to/cacert",
-            "certfile": "/path/to/certfile",
-            "keyfile": "/path/to/keyfile",
-            "no_verify_ssl": ssl.CERT_REQUIRED,
-        },
-        client_properties={"connection_name": "FMN"},
+        URL(
+            "amqp://rmq.example.com/%2Fvhost?"
+            "connection_name=FMN+sender+on+testdest"
+            "&auth=EXTERNAL"
+            "&cafile=/path/to/cacert"
+            "&certfile=/path/to/certfile"
+            "&keyfile=/path/to/keyfile"
+            f"&no_verify_ssl={ssl.CERT_REQUIRED}"
+        )
     )
