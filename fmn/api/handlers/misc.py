@@ -24,7 +24,17 @@ router = APIRouter()
 @router.get("/applications", response_model=list[str], tags=["misc"])
 def get_applications():
     entrypoints = metadata.entry_points().select(group="fedora.messages")
-    applications = {s.name.partition(".")[0] for s in entrypoints}
+    applications = set()
+    for ep in entrypoints:
+        msg_cls = ep.load()
+        try:
+            app_name = msg_cls.app_name.fget(None)
+            if app_name is None:
+                raise ValueError("app_name is None")
+        except Exception:
+            # Sometimes the schema hasn't set the app_name. Fallback on the entry point name.
+            app_name = ep.name.partition(".")[0]
+        applications.add(app_name)
 
     # we will always have the base message in there, so lets discard that
     applications.discard("base")
