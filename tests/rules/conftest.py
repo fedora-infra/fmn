@@ -3,6 +3,9 @@ import pytest
 from fmn.rules.cache import cache
 
 
-@pytest.fixture(autouse=True, scope="session")
+@pytest.fixture(autouse=True)
 def configured_cache():
-    cache.configure()
+    if not cache.region.is_configured:
+        cache.configure()
+    yield
+    cache.region.invalidate()
