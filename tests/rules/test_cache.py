@@ -25,7 +25,7 @@ def test_cache_proxy():
     region.cache_on_arguments.assert_called_with(foo="bar")
     cache.configure(foo="bar")
     region.configure.assert_called_with(
-        backend="dogpile.cache.memory", expiration_time=300, foo="bar"
+        backend="dogpile.cache.memory", expiration_time=300, arguments=None, foo="bar"
     )
     cache.invalidate_tracked()
     region.delete.assert_called_with("tracked")
