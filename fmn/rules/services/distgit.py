@@ -29,10 +29,9 @@ class DistGitService:
         params["page"] = "1"
         response = self._get(url, params)
         objects = response.get(key)
-        if "pagination" in response:
-            while response["pagination"].get("next"):
-                response = self._get(response["pagination"]["next"])
-                objects.extend(response.get(key))
+        while response.get("pagination", {}).get("next"):
+            response = self._get(response["pagination"]["next"])
+            objects.extend(response.get(key))
         return objects
 
     @cache.cache_on_arguments()
