@@ -18,3 +18,4 @@
     - frontend
     - consumer
     - sender
+    - redis

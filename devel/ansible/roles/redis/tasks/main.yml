@@ -1,0 +1,13 @@
+---
+- name: Install RPM packages
+  dnf:
+      name:
+        - redis
+      state: present
+      
+- name: Start the service using systemd
+  systemd:
+    state: started
+    name: redis
+    daemon_reload: yes
+    enabled: yes
