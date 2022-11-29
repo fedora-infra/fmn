@@ -76,6 +76,7 @@ nuancier-messages = {version = "*", optional = true}
 pagure-messages = {version = "*", optional = true}
 
 httpx-gssapi = {version = "^0.1.7", optional = true}
+backoff = {version = "^2.2.1", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 poetry = "^1.2.0b2"
@@ -102,6 +103,8 @@ api = [
     "httpx",
     "httpx-gssapi",
     "SQLAlchemy",
+    "fedora-messaging",
+    "backoff",
 ]
 consumer = [
     "fedora-messaging",
@@ -152,6 +155,11 @@ schemas = [
 "severities" = "fmn.rules.filter:Severities"
 "my_actions" = "fmn.rules.filter:MyActions"
 "topic" = "fmn.rules.filter:Topic"
+
+[tool.poetry.plugins."fedora.messages"]
+"fmn.rule.create.v1"="fmn.messages.rule:RuleCreateV1"
+"fmn.rule.update.v1"="fmn.messages.rule:RuleUpdateV1"
+"fmn.rule.delete.v1"="fmn.messages.rule:RuleDeleteV1"
 
 
 [tool.pytest.ini_options]

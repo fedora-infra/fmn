@@ -57,7 +57,9 @@ def test_get_tracked(mocker, requester):
     "topic,expected",
     [
         ("dummy.topic", False),
-        ("fmn.rule.updated", True),
+        ("fmn.rule.create.v1", True),
+        ("fmn.rule.update.v1", True),
+        ("fmn.rule.delete.v1", True),
     ],
 )
 def test_invalidate_on_message(topic, expected, make_mocked_message):

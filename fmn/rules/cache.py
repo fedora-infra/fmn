@@ -56,7 +56,11 @@ class Cache:
         self.region.delete("tracked")
 
     def invalidate_on_message(self, message: "Message"):
-        if message.topic.endswith("fmn.rule.updated"):  # XXX: correct topic?
+        if (
+            message.topic.endswith("fmn.rule.create.v1")
+            or message.topic.endswith("fmn.rule.update.v1")
+            or message.topic.endswith("fmn.rule.delete.v1")
+        ):
             self.invalidate_tracked()
 
 

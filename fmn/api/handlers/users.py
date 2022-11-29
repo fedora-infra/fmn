@@ -1,13 +1,16 @@
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ...database.model import Destination, Filter, GenerationRule, Rule, User
+from fmn.database.model import Destination, Filter, GenerationRule, Rule, User
+from fmn.messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
+
 from .. import api_models
 from ..auth import Identity, get_identity, get_identity_optional
 from ..database import gen_db_session
 from ..fasjson import FASJSONAsyncProxy, get_fasjson_proxy
+from ..messaging import publish
 from .utils import db_rule_from_api_rule
 
 log = logging.getLogger(__name__)
@@ -96,6 +99,7 @@ async def edit_user_rule(
     username: str,
     id: int,
     rule: api_models.Rule,
+    background_tasks: BackgroundTasks,
     identity: Identity = Depends(get_identity),
     db_session: AsyncSession = Depends(gen_db_session),
 ):
@@ -146,38 +150,60 @@ async def edit_user_rule(
                 f_db.params = f_params
         await db_session.flush()
 
-    # TODO: emit a fedmsg
-
     # Refresh using the full query to get relationships
     db_session.expire(rule_db)
-    return (
+    rule_db = (
         await db_session.execute(
             Rule.select_related().filter(Rule.id == id, Rule.user.has(name=username))
         )
     ).scalar_one()
+
+    message = RuleUpdateV1(
+        body={
+            "rule": api_models.Rule.from_orm(rule_db).dict(),
+            "user": api_models.User.from_orm(rule_db.user).dict(),
+        }
+    )
+    background_tasks.add_task(publish, message)
+
+    return rule_db
 
 
 @router.delete("/{username}/rules/{id}", tags=["users/rules"])
 async def delete_user_rule(
     username: str,
     id: int,
+    background_tasks: BackgroundTasks,
     identity: Identity = Depends(get_identity),
     db_session: AsyncSession = Depends(gen_db_session),
 ):
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to delete someone else's rules")
 
-    rule = await Rule.async_get(db_session, id=id)
+    # We need the full query to populate the outgoing message
+    rule = (
+        await db_session.execute(
+            Rule.select_related().filter(Rule.id == id, Rule.user.has(name=username))
+        )
+    ).scalar_one()
+
+    message = RuleDeleteV1(
+        body={
+            "rule": api_models.Rule.from_orm(rule).dict(),
+            "user": api_models.User.from_orm(rule.user).dict(),
+        }
+    )
+
     await db_session.delete(rule)
     await db_session.flush()
-
-    # TODO: emit a fedmsg
+    background_tasks.add_task(publish, message)
 
 
 @router.post("/{username}/rules", response_model=api_models.Rule, tags=["users/rules"])
 async def create_user_rule(
     username,
     rule: api_models.Rule,
+    background_tasks: BackgroundTasks,
     identity: Identity = Depends(get_identity),
     db_session: AsyncSession = Depends(gen_db_session),
 ):
@@ -189,11 +215,19 @@ async def create_user_rule(
     db_session.add(rule_db)
     await db_session.flush()
 
-    # TODO: emit a fedmsg
-
     # Refresh using the full query to get relationships
-    return (
+    rule_db = (
         await db_session.execute(
             Rule.select_related().filter(Rule.id == rule_db.id, Rule.user.has(name=username))
         )
     ).scalar_one()
+
+    message = RuleCreateV1(
+        body={
+            "rule": api_models.Rule.from_orm(rule_db).dict(),
+            "user": api_models.User.from_orm(rule_db.user).dict(),
+        }
+    )
+    background_tasks.add_task(publish, message)
+
+    return rule_db
