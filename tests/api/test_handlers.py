@@ -264,8 +264,6 @@ class TestMisc(BaseTestAPIV1Handler):
         assert isinstance(result, list)
         assert all(isinstance(item, str) for item in result)
         # Verify list is sorted and items are unique
-        assert sorted(set(result)) == result
-        assert len(result) == 15
         assert "base" not in result
         assert result == [
             "anitya",
