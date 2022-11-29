@@ -38,8 +38,10 @@ def get_applications():
 
     # we will always have the base message in there, so lets discard that
     applications.discard("base")
+    applications = list(applications)
+    applications.sort(key=lambda name: name.lower())
 
-    return sorted(list(applications))
+    return applications
 
 
 @router.get("/artifacts/owned", response_model=list[dict[str, str]], tags=["misc"])
