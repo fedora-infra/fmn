@@ -102,6 +102,8 @@ def cli_runner():
 @pytest.fixture(autouse=True)
 def clear_settings(tmp_path):
     non_existing = str(tmp_path / "non-existing-file")
+    # with open(non_existing, "w") as fh:
+    #     fh.write("DATABASE__SQLALCHEMY__ECHO=true\n")
     with mock.patch("fmn.core.config.DEFAULT_CONFIG_FILE", new=non_existing), mock.patch(
         "fmn.core.config._settings_file", new=non_existing
     ):

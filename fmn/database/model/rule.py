@@ -49,8 +49,8 @@ class Rule(Base):
             selectinload(cls.user),
             selectinload(cls.tracking_rule),
             selectinload(cls.generation_rules),
-            selectinload(cls.generation_rules, GenerationRule.destinations),
-            selectinload(cls.generation_rules, GenerationRule.filters),
+            selectinload(cls.generation_rules).selectinload(GenerationRule.destinations),
+            selectinload(cls.generation_rules).selectinload(GenerationRule.filters),
         )
 
     def handle(self, message: "Message", requester: "Requester"):

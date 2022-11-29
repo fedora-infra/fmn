@@ -3,6 +3,7 @@ from unittest import mock
 
 import pytest
 from fastapi import status
+from fedora_messaging.testing import mock_sends
 from httpx import Response
 from sqlalchemy.exc import NoResultFound
 
@@ -10,6 +11,7 @@ from fmn.api import api_models, auth
 from fmn.api.handlers.utils import get_last_messages
 from fmn.core.config import get_settings
 from fmn.database.model import Rule
+from fmn.messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
 
 
 @pytest.mark.usefixtures("mocked_fasjson", "mocked_fasjson_client")
@@ -174,9 +176,19 @@ class TestUserHandler(BaseTestAPIV1Handler):
             )
             edited_rule.generation_rules[-1].filters.severities = ["very severe"]
 
-        response = client.put(
-            f"{self.path}/{username}/rules/{db_rule.id}", data=edited_rule.json(exclude_unset=True)
+        success_message = RuleUpdateV1(
+            body={
+                "rule": edited_rule.dict(),
+                "user": api_models.User.from_orm(db_rule.user).dict(),
+            }
         )
+        if "delete-filter" in testcase:
+            success_message.body["rule"]["generation_rules"][-1]["filters"]["applications"] = []
+        with mock_sends(*([success_message] if "success" in testcase else [])):
+            response = client.put(
+                f"{self.path}/{username}/rules/{db_rule.id}",
+                data=edited_rule.json(exclude_unset=True),
+            )
 
         if "success" in testcase:
             assert response.status_code == status.HTTP_200_OK
@@ -198,7 +210,14 @@ class TestUserHandler(BaseTestAPIV1Handler):
         if testcase == "wrong-user":
             username = f"not-really-{username}"
 
-        response = client.delete(f"{self.path}/{username}/rules/{db_rule.id}")
+        message = RuleDeleteV1(
+            body={
+                "rule": api_models.Rule.from_orm(db_rule).dict(),
+                "user": api_models.User.from_orm(db_rule.user).dict(),
+            }
+        )
+        with mock_sends(*([message] if testcase == "happy-path" else [])):
+            response = client.delete(f"{self.path}/{username}/rules/{db_rule.id}")
 
         if testcase == "happy-path":
             assert response.status_code == status.HTTP_200_OK
@@ -227,9 +246,18 @@ class TestUserHandler(BaseTestAPIV1Handler):
             }
         )
 
-        response = client.post(
-            f"{self.path}/{username}/rules", data=created_rule.json(exclude_unset=True)
+        message = RuleCreateV1(
+            body={
+                "rule": created_rule.dict(),
+                "user": api_models.User.from_orm(db_rule.user).dict(),
+            }
         )
+        # Assume the rule will be created with id = 2 (because db_rule already exists)
+        message.body["rule"]["id"] = 2
+        with mock_sends(*([message] if "success" in testcase else [])):
+            response = client.post(
+                f"{self.path}/{username}/rules", data=created_rule.json(exclude_unset=True)
+            )
 
         if "success" in testcase:
             assert response.status_code == status.HTTP_200_OK
@@ -275,6 +303,7 @@ class TestMisc(BaseTestAPIV1Handler):
             "distgit",
             "elections",
             "fedocal",
+            "FMN",
             "hotness",
             "mdapi",
             "noggin",
