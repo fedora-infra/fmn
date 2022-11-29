@@ -149,6 +149,7 @@ async def edit_user_rule(
     # TODO: emit a fedmsg
 
     # Refresh using the full query to get relationships
+    db_session.expire(rule_db)
     return (
         await db_session.execute(
             Rule.select_related().filter(Rule.id == id, Rule.user.has(name=username))
