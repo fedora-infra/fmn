@@ -32,7 +32,7 @@ const handleDeleteClicked = () => {
       />
     </span>
     <span>
-      <span>X avg messages a day</span>
+      <!--<span>X avg messages a day</span>-->
       <CButton
         @click.prevent="handleEditClicked"
         color="primary"
