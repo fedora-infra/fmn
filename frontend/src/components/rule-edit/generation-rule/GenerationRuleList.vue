@@ -79,11 +79,14 @@ const editedRule = computed(() =>
       <div class="text-center">
         <CButton
           @click.prevent="() => handleButtonClicked(-1)"
-          :color="generation_rules.length === 0 ? 'primary' : 'secondary'"
+          :color="generation_rules.length === 0 ? 'primary' : 'outline-primary'"
           class="my-1"
         >
           <CIcon :icon="cilPlus" />
-          Add Destination
+          <template v-if="generation_rules.length === 0"
+            >Add Destination</template
+          >
+          <template v-else>Add Another Destination</template>
         </CButton>
       </div>
     </CListGroupItem>
