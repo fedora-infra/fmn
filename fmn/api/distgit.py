@@ -32,14 +32,13 @@ class DistGitClient:
                 artifacts.append({"type": p["namespace"], "name": p["name"]})
 
         artifacts = []
-        endpoint = "/api/0/projects"
         for name in names:
-            params = {"short": "true", "fork": "false"}
-
             if user_or_group == "user":
-                params["owner"] = name
+                params = {"short": "true", "fork": "false", "page": 1, "owner": name}
+                endpoint = "/api/0/projects"
             elif user_or_group == "group":
-                params["username"] = f"@{name}"
+                params = {"projects": "true", "page": 1}
+                endpoint = f"/api/0/group/{name}"
             else:
                 raise ValueError("Argument user_or_group must be either user or group")
 

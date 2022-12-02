@@ -321,9 +321,12 @@ class TestMisc(BaseTestAPIV1Handler):
         # async_respx_mocker.route(host="distgit.test").pass_through()
 
         if ownertype == "user":
+            distgit_endpoint = f"{settings.services.distgit_url}/api/0/projects"
             params = {"fork": "false", "short": "true", "page": 1, "owner": "dudemcpants"}
         elif ownertype == "group":
-            params = {"fork": "false", "short": "true", "page": 1, "username": "@dudegroup"}
+            name = "dudegroup"
+            distgit_endpoint = f"{settings.services.distgit_url}/api/0/group/{name}"
+            params = {"projects": "true", "page": 1}
 
         distgit_json_response = {
             "pagination": {
@@ -345,9 +348,7 @@ class TestMisc(BaseTestAPIV1Handler):
             ],
         }
 
-        route = async_respx_mocker.get(
-            f"{settings.services.distgit_url}/api/0/projects", params=params
-        ).mock(
+        route = async_respx_mocker.get(distgit_endpoint, params=params).mock(
             side_effect=[
                 Response(
                     status.HTTP_200_OK,

@@ -60,8 +60,8 @@ class DistGitService:
         elif user_or_group == "group":
             projects = self._all_values(
                 "projects",
-                f"{self.url}api/0/projects",
-                {"namespace": artifact_type, "username": f"@{name}", "short": "1"},
+                f"{self.url}api/0/group/{name}",
+                {"projects": "true"},
             )
         else:
             raise ValueError("Argument user_or_group must be either user or group, duh.")

@@ -36,10 +36,8 @@ def test_get_owned_by_user(requester, responses_mocker):
 
 
 def test_get_owned_by_group(requester, responses_mocker):
-    baseurl = (
-        "https://src.fedoraproject.org/api/0/projects"
-        "?namespace=container&username=@dummy&short=1"
-    )
+    baseurl = "https://src.fedoraproject.org/api/0/group/dummy?projects=true"
+
     responses_mocker.get(
         baseurl + "&page=1",
         json={
@@ -133,6 +131,39 @@ def test_get_user_groups(requester, responses_mocker):
             },
         ),
         (
+            "fas.group.member.sponsor",
+            {
+                "user": "dummy",
+            },
+        ),
+    ],
+)
+def test_invalidate_on_message_user(
+    responses_mocker, requester, topic, body, mocker, make_mocked_message
+):
+    mocker.patch.object(cache, "region")
+    message = make_mocked_message(topic=topic, body=body)
+    responses_mocker.get(
+        "https://src.fedoraproject.org/api/0/rpms/pkg-1",
+        json={"access_users": {"owner": []}, "access_groups": {"admin": [], "commit": []}},
+    )
+    responses_mocker.get(
+        re.compile(r"https://src.fedoraproject.org/api/0/projects\?.*"),
+        json={"projects": []},
+    )
+    responses_mocker.get(
+        "https://fasjson.fedoraproject.org/v1/users/dummy/groups/",
+        json={"result": []},
+    )
+
+    requester.invalidate_on_message(message)
+    cache.region.delete.assert_called_once_with("tracked")
+
+
+@pytest.mark.parametrize(
+    "topic,body",
+    [
+        (
             "pagure.project.group.access.updated",
             {
                 "new_access": "commit",
@@ -159,15 +190,9 @@ def test_get_user_groups(requester, responses_mocker):
                 "new_group": "dummy",
             },
         ),
-        (
-            "fas.group.member.sponsor",
-            {
-                "user": "dummy",
-            },
-        ),
     ],
 )
-def test_invalidate_on_message(
+def test_invalidate_on_message_group(
     responses_mocker, requester, topic, body, mocker, make_mocked_message
 ):
     mocker.patch.object(cache, "region")
@@ -177,7 +202,7 @@ def test_invalidate_on_message(
         json={"access_users": {"owner": []}, "access_groups": {"admin": [], "commit": []}},
     )
     responses_mocker.get(
-        re.compile(r"https://src.fedoraproject.org/api/0/projects\?.*"),
+        re.compile(r"https://src.fedoraproject.org/api/0/group/.*\?.*"),
         json={"projects": []},
     )
     responses_mocker.get(
