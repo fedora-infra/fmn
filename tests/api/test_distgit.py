@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 import fastapi
 import httpx
 import pytest
@@ -46,11 +48,13 @@ async def test_get_projects(async_respx_mocker, distgit_url, distgit_client):
 @pytest.mark.parametrize("ownertype", ("user", "group"))
 async def test_get_owned_singlepage(async_respx_mocker, distgit_url, distgit_client, ownertype):
     if ownertype == "user":
-        param = "owner"
-        value = "johnnyjones"
+        name = "johnnyjones"
+        endpoint = f"{distgit_url}/api/0/projects"
+        params = {"fork": "false", "short": "true", "page": 1, "owner": name}
     elif ownertype == "group":
-        param = "username"
-        value = "@johnnygroup"
+        name = "johnnygroup"
+        endpoint = f"{distgit_url}/api/0/group/{name}"
+        params = {"projects": "true", "page": 1}
     distgit_json_response = {
         "pagination": {"pages": 1, "next": None},
         "projects": [
@@ -65,9 +69,7 @@ async def test_get_owned_singlepage(async_respx_mocker, distgit_url, distgit_cli
         ],
     }
 
-    params = {"fork": "false", "short": "true", "page": 1, param: value}
-
-    page1_route = async_respx_mocker.get(f"{distgit_url}/api/0/projects", params=params).mock(
+    page1_route = async_respx_mocker.get(f"{endpoint}", params=params).mock(
         side_effect=[
             httpx.Response(
                 fastapi.status.HTTP_200_OK,
@@ -76,7 +78,7 @@ async def test_get_owned_singlepage(async_respx_mocker, distgit_url, distgit_cli
         ]
     )
 
-    response = await distgit_client.get_owned([value.lstrip("@")], ownertype)
+    response = await distgit_client.get_owned([name], ownertype)
 
     assert page1_route.called
 
@@ -89,16 +91,26 @@ async def test_get_owned_singlepage(async_respx_mocker, distgit_url, distgit_cli
 @pytest.mark.parametrize("ownertype", ("user", "group"))
 async def test_get_owned_twopages(async_respx_mocker, distgit_url, distgit_client, ownertype):
     if ownertype == "user":
-        param = "owner"
-        val = "johnnyjones"
+        endpoint = f"{distgit_url}/api/0/projects"
+        name = "johnnyjones"
+        params = {"short": "true", "fork": "false", "page": 2, "owner": name}
+        next = f"{endpoint}?{urlencode(params)}"
+        params["page"] = 1
     elif ownertype == "group":
-        param = "username"
-        val = "@johnnygroup"
+        name = "johnnygroup"
+        endpoint = f"/api/0/group/{name}"
+        params = {"projects": "true", "page": 2}
+        next = f"{endpoint}?{urlencode(params)}"
+        params["page"] = 1
+    print(name)
+    print(endpoint)
+    print(params)
+    print(next)
     distgit_json_response = [
         {
             "pagination": {
                 "pages": 2,
-                "next": f"{distgit_url}/api/0/projects?fork=false&short=true&page=2&{param}={val}",
+                "next": next,
             },
             "projects": [
                 {
@@ -126,9 +138,7 @@ async def test_get_owned_twopages(async_respx_mocker, distgit_url, distgit_clien
         },
     ]
 
-    params = {"fork": "false", "short": "true", "page": 1, param: val}
-
-    page1_route = async_respx_mocker.get(f"{distgit_url}/api/0/projects", params=params).mock(
+    page1_route = async_respx_mocker.get(f"{endpoint}", params=params).mock(
         side_effect=[
             httpx.Response(
                 fastapi.status.HTTP_200_OK,
@@ -138,7 +148,7 @@ async def test_get_owned_twopages(async_respx_mocker, distgit_url, distgit_clien
     )
 
     params["page"] = 2
-    page2_route = async_respx_mocker.get(f"{distgit_url}/api/0/projects", params=params).mock(
+    page2_route = async_respx_mocker.get(f"{endpoint}", params=params).mock(
         side_effect=[
             httpx.Response(
                 fastapi.status.HTTP_200_OK,
@@ -147,7 +157,7 @@ async def test_get_owned_twopages(async_respx_mocker, distgit_url, distgit_clien
         ]
     )
 
-    response = await distgit_client.get_owned([val.lstrip("@")], ownertype)
+    response = await distgit_client.get_owned([name], ownertype)
 
     assert page1_route.called
     assert page2_route.called
