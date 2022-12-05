@@ -102,10 +102,6 @@ async def test_get_owned_twopages(async_respx_mocker, distgit_url, distgit_clien
         params = {"projects": "true", "page": 2}
         next = f"{endpoint}?{urlencode(params)}"
         params["page"] = 1
-    print(name)
-    print(endpoint)
-    print(params)
-    print(next)
     distgit_json_response = [
         {
             "pagination": {
