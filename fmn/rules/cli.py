@@ -14,8 +14,8 @@ def cache_cmd():
     """Work with the cache in FMN."""
 
 
-@cache_cmd.command("show-tracked")
-def show_tracked():
+@cache_cmd.command("get-tracked")
+def get_tracked():
     """Show the current tracked value."""
     cache.configure()
     init_sync_model()
