@@ -16,6 +16,12 @@ micropipenv install --deploy
 # Now install the root project too, micropipenv does not do that
 pip install . --no-deps
 
+# Add patches
+# https://pagure.io/pagure-messages/pull-request/7
+pushd /opt/app-root/lib/python3.10/site-packages
+curl https://pagure.io/pagure-messages/pull-request/7.patch | patch -p1
+popd
+
 # Install deployment-specific dependencies
 pip install redis
 
