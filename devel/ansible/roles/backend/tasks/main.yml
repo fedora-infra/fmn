@@ -71,6 +71,14 @@
         group: vagrant
         mode: 0640
 
+    - name: Install the configuration file for Fedora Messaging
+      copy:
+        src: config.toml
+        dest: /etc/fmn/api.toml
+        owner: root
+        group: vagrant
+        mode: 0640
+
     - become_user: postgres
       become: yes
       tags:

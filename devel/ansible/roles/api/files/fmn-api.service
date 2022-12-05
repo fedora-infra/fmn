@@ -5,7 +5,9 @@ Wants=network-online.target
 
 [Service]
 User=vagrant
-Environment=GSS_USE_PROXY=yes
+Environment=
+    GSS_USE_PROXY=yes
+    FEDORA_MESSAGING_CONF=/etc/fmn/api.toml
 WorkingDirectory=/home/vagrant/fmn
 ExecStart=poetry run uvicorn fmn.api.main:app \
     --env-file /etc/fmn/fmn.cfg \
