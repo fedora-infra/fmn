@@ -155,3 +155,26 @@ def test_consumer_call_tracked_agent_name(
     )
     assert c.is_tracked(message) is True
     c.send_queue.send.assert_not_called()
+
+
+def test_consumer_deprecated_schema(
+    mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class, make_mocked_message
+):
+    c = Consumer()
+    mocked_cache.get_tracked.return_value = {
+        "packages": {"pkg1"},
+        "containers": set(),
+        "modules": set(),
+        "flatpaks": set(),
+        "usernames": set(),
+        "agent_name": set(),
+    }
+
+    mocker.patch.object(c, "_get_rules", return_value=[])
+    message = make_mocked_message(
+        topic="dummy.topic",
+        body={"packages": ["pkg1"]},
+    )
+    message.__class__.deprecated = True
+    c(message)
+    c._get_rules.assert_not_called()

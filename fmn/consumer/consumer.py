@@ -42,14 +42,20 @@ class Consumer:
         if not self.is_tracked(message):
             log.debug(f"Message {message.id} is not tracked")
             return
-        # TODO: Cache this!
-        rules = self.db.execute(Rule.select_related()).scalars()
-        for rule in rules:
+        if message.deprecated:
+            # The sender will also send the message with the new schema, don't duplicate
+            # notifications.
+            return
+        for rule in self._get_rules():
             for notification in rule.handle(message, self._requester):
                 log.debug(
                     f"Generating notification for message {message.id} via {notification.protocol}"
                 )
                 self.send_queue.send(notification)
+
+    def _get_rules(self):
+        # TODO: Cache this!
+        return self.db.execute(Rule.select_related()).scalars()
 
     def is_tracked(self, message: message.Message):
         # This is cache-based and should save us running all the messages through all the rules. The
