@@ -31,7 +31,7 @@ def test_get_owned_by_user(requester, responses_mocker):
             ]
         },
     )
-    resp = requester.get_owned_by_user("package", "dummy")
+    resp = requester.get_owned_by_user("packages", "dummy")
     assert resp == ["project-1", "project-2"]
 
 
@@ -290,7 +290,7 @@ def test_guard_http_exception(responses_mocker, requester, caplog):
         body="Server Error",
         status=500,
     )
-    resp = requester.get_owned_by_user("package", "dummy")
+    resp = requester.get_owned_by_user("packages", "dummy")
     assert resp == []
     assert len(caplog.messages) == 1
     assert caplog.messages[0].startswith(

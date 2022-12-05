@@ -49,7 +49,7 @@ class DistGitService:
     @cache.cache_on_arguments()
     def get_owned(self, artifact_type, name, user_or_group):
         # cache this for a reasonable time
-        if artifact_type == "package":
+        if artifact_type == "packages":
             artifact_type = "rpms"
         if user_or_group == "user":
             projects = self._all_values(
