@@ -65,8 +65,10 @@ class Consumer:
         tracked = cache.get_tracked(self.db, self._requester)
         for msg_attr in ("packages", "containers", "modules", "flatpaks", "usernames"):
             if not set(getattr(message, msg_attr)).isdisjoint(tracked[msg_attr]):
+                log.debug(f"Message {message.id} is tracked by {msg_attr}")
                 return True
         if message.agent_name in tracked["agent_name"]:
+            log.debug(f"Message {message.id} is tracked by agent_name")
             return True
         return False
 
