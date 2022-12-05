@@ -185,3 +185,4 @@ fmn-sender = "fmn.sender.cli:main"
 [tool.poetry.plugins."fmn.cli"]
 api = "fmn.api.cli:api"
 database = "fmn.database.cli:database"
+cache = "fmn.rules.cli:cache_cmd"
