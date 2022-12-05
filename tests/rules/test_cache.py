@@ -66,8 +66,13 @@ def test_invalidate_on_message(topic, expected, make_mocked_message):
     message = make_mocked_message(topic=topic, body={})
     cache = Cache()
     cache.region = Mock()
-    cache.invalidate_on_message(message)
+    cache.build_tracked = Mock()
+    db = Mock()
+    requester = Mock()
+    cache.invalidate_on_message(message, db, requester)
     if expected:
         cache.region.delete.assert_called_once_with("tracked")
+        cache.build_tracked.assert_called_once_with(db, requester)
     else:
         cache.region.delete.assert_not_called()
+        cache.build_tracked.assert_not_called()

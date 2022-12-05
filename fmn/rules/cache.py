@@ -55,13 +55,14 @@ class Cache:
     def invalidate_tracked(self):
         self.region.delete("tracked")
 
-    def invalidate_on_message(self, message: "Message"):
+    def invalidate_on_message(self, message: "Message", db, requester):
         if (
             message.topic.endswith("fmn.rule.create.v1")
             or message.topic.endswith("fmn.rule.update.v1")
             or message.topic.endswith("fmn.rule.delete.v1")
         ):
             self.invalidate_tracked()
+            self.build_tracked(db, requester)
 
 
 cache = Cache()

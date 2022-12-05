@@ -71,5 +71,5 @@ class Consumer:
         return False
 
     def refresh_cache_if_needed(self, message: message.Message):
-        cache.invalidate_on_message(message)
+        cache.invalidate_on_message(message, self.db, self._requester)
         self._requester.invalidate_on_message(message)
