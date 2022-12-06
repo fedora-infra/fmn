@@ -3,7 +3,6 @@ from unittest import mock
 
 import pytest
 from fastapi import status
-from fedora_messaging.testing import mock_sends
 from httpx import Response
 from sqlalchemy.exc import NoResultFound
 
@@ -152,7 +151,8 @@ class TestUserHandler(BaseTestAPIV1Handler):
             "wrong-user",
         ),
     )
-    def test_edit_user_rule(self, testcase, client, api_identity, db_rule):
+    @mock.patch("fmn.api.handlers.users.publish")
+    async def test_edit_user_rule(self, publish, testcase, client, api_identity, db_rule):
         username = api_identity.name
         if testcase == "wrong-user":
             username = f"not-really-{username}"
@@ -184,13 +184,15 @@ class TestUserHandler(BaseTestAPIV1Handler):
         )
         if "delete-filter" in testcase:
             success_message.body["rule"]["generation_rules"][-1]["filters"]["applications"] = []
-        with mock_sends(*([success_message] if "success" in testcase else [])):
-            response = client.put(
-                f"{self.path}/{username}/rules/{db_rule.id}",
-                data=edited_rule.json(exclude_unset=True),
-            )
+
+        response = client.put(
+            f"{self.path}/{username}/rules/{db_rule.id}",
+            content=edited_rule.json(exclude_unset=True),
+        )
 
         if "success" in testcase:
+            publish.assert_awaited_once_with(success_message)
+
             assert response.status_code == status.HTTP_200_OK
 
             result = response.json()
@@ -198,13 +200,16 @@ class TestUserHandler(BaseTestAPIV1Handler):
             assert result["name"] == db_rule.name
             assert result["tracking_rule"]["name"] == "artifacts-group-owned"
             assert result["tracking_rule"]["params"] == db_rule.tracking_rule.params
-        elif testcase == "wrong-user":
-            assert response.status_code == status.HTTP_403_FORBIDDEN
-            assert isinstance(response.json()["detail"], str)
+        else:
+            publish.assert_not_called()
+            if testcase == "wrong-user":
+                assert response.status_code == status.HTTP_403_FORBIDDEN
+                assert isinstance(response.json()["detail"], str)
 
     @pytest.mark.parametrize("testcase", ("happy-path", "wrong-user"))
+    @mock.patch("fmn.api.handlers.users.publish")
     async def test_delete_user_rule(
-        self, testcase, client, api_identity, db_rule, db_async_session
+        self, publish, testcase, client, api_identity, db_rule, db_async_session
     ):
         username = api_identity.name
         if testcase == "wrong-user":
@@ -216,19 +221,22 @@ class TestUserHandler(BaseTestAPIV1Handler):
                 "user": api_models.User.from_orm(db_rule.user).dict(),
             }
         )
-        with mock_sends(*([message] if testcase == "happy-path" else [])):
-            response = client.delete(f"{self.path}/{username}/rules/{db_rule.id}")
+
+        response = client.delete(f"{self.path}/{username}/rules/{db_rule.id}")
 
         if testcase == "happy-path":
+            publish.assert_awaited_once_with(message)
             assert response.status_code == status.HTTP_200_OK
             with pytest.raises(NoResultFound):
                 await Rule.async_get(db_async_session, id=db_rule.id)
         else:
+            publish.assert_not_called()
             assert response.status_code == status.HTTP_403_FORBIDDEN
             assert isinstance(response.json()["detail"], str)
 
     @pytest.mark.parametrize("testcase", ("success", "wrong-user"))
-    def test_create_user_rule(self, testcase, client, api_identity, db_rule):
+    @mock.patch("fmn.api.handlers.users.publish")
+    async def test_create_user_rule(self, publish, testcase, client, api_identity, db_rule):
         username = api_identity.name
         if testcase == "wrong-user":
             username = f"not-really-{username}"
@@ -254,12 +262,13 @@ class TestUserHandler(BaseTestAPIV1Handler):
         )
         # Assume the rule will be created with id = 2 (because db_rule already exists)
         message.body["rule"]["id"] = 2
-        with mock_sends(*([message] if "success" in testcase else [])):
-            response = client.post(
-                f"{self.path}/{username}/rules", data=created_rule.json(exclude_unset=True)
-            )
+
+        response = client.post(
+            f"{self.path}/{username}/rules", content=created_rule.json(exclude_unset=True)
+        )
 
         if "success" in testcase:
+            publish.assert_awaited_once_with(message)
             assert response.status_code == status.HTTP_200_OK
 
             result = response.json()
@@ -277,9 +286,11 @@ class TestUserHandler(BaseTestAPIV1Handler):
                     },
                 },
             ]
-        elif testcase == "wrong-user":
-            assert response.status_code == status.HTTP_403_FORBIDDEN
-            assert isinstance(response.json()["detail"], str)
+        else:
+            publish.assert_not_called()
+            if testcase == "wrong-user":
+                assert response.status_code == status.HTTP_403_FORBIDDEN
+                assert isinstance(response.json()["detail"], str)
 
 
 class TestMisc(BaseTestAPIV1Handler):

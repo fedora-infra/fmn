@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from fmn.database.model import Destination, Filter, GenerationRule, Rule, User
@@ -99,7 +99,6 @@ async def edit_user_rule(
     username: str,
     id: int,
     rule: api_models.Rule,
-    background_tasks: BackgroundTasks,
     identity: Identity = Depends(get_identity),
     db_session: AsyncSession = Depends(gen_db_session),
 ):
@@ -164,7 +163,7 @@ async def edit_user_rule(
             "user": api_models.User.from_orm(rule_db.user).dict(),
         }
     )
-    background_tasks.add_task(publish, message)
+    await publish(message)
 
     return rule_db
 
@@ -173,7 +172,6 @@ async def edit_user_rule(
 async def delete_user_rule(
     username: str,
     id: int,
-    background_tasks: BackgroundTasks,
     identity: Identity = Depends(get_identity),
     db_session: AsyncSession = Depends(gen_db_session),
 ):
@@ -196,14 +194,13 @@ async def delete_user_rule(
 
     await db_session.delete(rule)
     await db_session.flush()
-    background_tasks.add_task(publish, message)
+    await publish(message)
 
 
 @router.post("/{username}/rules", response_model=api_models.Rule, tags=["users/rules"])
 async def create_user_rule(
     username,
     rule: api_models.Rule,
-    background_tasks: BackgroundTasks,
     identity: Identity = Depends(get_identity),
     db_session: AsyncSession = Depends(gen_db_session),
 ):
@@ -228,6 +225,6 @@ async def create_user_rule(
             "user": api_models.User.from_orm(rule_db.user).dict(),
         }
     )
-    background_tasks.add_task(publish, message)
+    await publish(message)
 
     return rule_db
