@@ -112,6 +112,7 @@ consumer = [
     "fasjson-client",
     "dogpile.cache",
     "SQLAlchemy",
+    "backoff",
 ]
 sender-email = [
     "tomli",

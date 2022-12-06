@@ -2099,7 +2099,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 
 [extras]
 api = ["fastapi", "uvicorn", "httpx", "httpx-gssapi", "SQLAlchemy", "fedora-messaging", "backoff"]
-consumer = ["fedora-messaging", "pika", "fasjson-client", "dogpile.cache", "SQLAlchemy"]
+consumer = ["fedora-messaging", "pika", "fasjson-client", "dogpile.cache", "SQLAlchemy", "backoff"]
 database = ["SQLAlchemy", "alembic"]
 postgresql = ["psycopg2", "asyncpg"]
 schemas = ["anitya-schema", "bodhi-messages", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedorainfra-ansible-messages", "fedora-elections-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "mdapi-messages", "noggin-messages", "nuancier-messages", "pagure-messages"]
@@ -2110,7 +2110,7 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "6c0ca086342a028b171d423c2e1ea304f4dafe12ee549da5bc2ac348aeb8791c"
+content-hash = "63e999afa37d4dc1fd9f08df499ca57d72b673a6b7025545cfa22339f0718fbd"
 
 [metadata.files]
 aio-pika = [

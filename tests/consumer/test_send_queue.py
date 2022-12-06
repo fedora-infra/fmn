@@ -1,7 +1,9 @@
+import logging
 import ssl
 from pathlib import Path
 from unittest.mock import Mock
 
+import pika
 import pytest
 
 from fmn.consumer.send_queue import SendQueue
@@ -65,3 +67,37 @@ def test_send_queue_connect_ssl(mocker, tmp_path: Path):
     assert ssl_context.minimum_version == ssl.TLSVersion.TLSv1_2
     assert ssl_context.check_hostname is True
     assert url_parameters.ssl_options.server_hostname == "localhost"
+
+
+def test_send_queue_reconnect_give_up(connection, caplog):
+    sq = SendQueue({"url": "amqp://"})
+    sq.connect()
+    error = pika.exceptions.AMQPConnectionError("dummy error")
+    connection._channel.basic_publish.side_effect = error
+
+    with pytest.raises(pika.exceptions.AMQPConnectionError):
+        sq.send(Notification(protocol="email", content={"dummy": "content"}))
+
+    assert connection._channel.basic_publish.call_count == 3
+
+    logs = [r for r in caplog.records if r.name.startswith("fmn.consumer.send_queue")]
+    assert len(logs) == 3
+    for log in logs[:2]:
+        assert log.levelno == logging.WARNING
+        assert log.msg.startswith("Publishing message failed. Retrying.")
+    assert logs[2].levelno == logging.ERROR
+    assert logs[2].msg.startswith("Publishing message failed. Giving up.")
+
+
+def test_send_queue_reconnect_success(connection, caplog):
+    sq = SendQueue({"url": "amqp://"})
+    sq.connect()
+    error = pika.exceptions.AMQPConnectionError("dummy error")
+    connection._channel.basic_publish.side_effect = [error, error, None]
+
+    sq.send(Notification(protocol="email", content={"dummy": "content"}))
+
+    assert connection._channel.basic_publish.call_count == 3
+
+    logs = [r for r in caplog.records if r.name.startswith("fmn.consumer.send_queue")]
+    assert len(logs) == 2
