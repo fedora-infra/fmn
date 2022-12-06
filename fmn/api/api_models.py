@@ -26,7 +26,7 @@ class ListParamTrackingRule(BaseModel):
 
 class NoParamTrackingRule(BaseModel):
     name: Literal["related-events"]
-    params: str
+    params: str | None
 
 
 class ArtifactsFollowedTrackingRule(BaseModel):
