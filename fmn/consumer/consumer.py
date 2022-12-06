@@ -1,7 +1,9 @@
 import logging
 
+import pika
 from fedora_messaging import message
 from fedora_messaging.config import conf as fm_config
+from fedora_messaging.exceptions import Nack
 
 from fmn.core import config
 from fmn.database import init_sync_model, sync_session_maker
@@ -48,10 +50,17 @@ class Consumer:
             return
         for rule in self._get_rules():
             for notification in rule.handle(message, self._requester):
-                log.debug(
-                    f"Generating notification for message {message.id} via {notification.protocol}"
-                )
-                self.send_queue.send(notification)
+                self._send(notification, message)
+
+    def _send(self, notification, from_msg):
+        log.debug(f"Generating notification for message {from_msg.id} via {notification.protocol}")
+        try:
+            self.send_queue.send(notification)
+        except pika.exceptions.AMQPConnectionError as e:
+            log.error(
+                f"Could not send notification for {from_msg.id} via {notification.protocol}: {e}"
+            )
+            raise Nack()
 
     def _get_rules(self):
         # TODO: Cache this!

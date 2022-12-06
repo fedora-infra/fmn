@@ -1,12 +1,15 @@
 from unittest.mock import Mock
 
+import pika
 import pytest
 from fedora_messaging.config import conf as fm_config
+from fedora_messaging.exceptions import Nack
 
 from fmn.consumer.consumer import Consumer
 from fmn.core import config
 from fmn.database import model
 from fmn.database.setup import setup_db_schema
+from fmn.rules.notification import Notification
 
 
 @pytest.fixture
@@ -154,7 +157,6 @@ def test_consumer_call_tracked_agent_name(
         topic="dummy.topic", body={"packages": ["pkg1"], "agent_name": "dummy"}
     )
     assert c.is_tracked(message) is True
-    c.send_queue.send.assert_not_called()
 
 
 def test_consumer_deprecated_schema(
@@ -178,3 +180,16 @@ def test_consumer_deprecated_schema(
     message.__class__.deprecated = True
     c(message)
     c._get_rules.assert_not_called()
+
+
+def test_consumer_send_error(
+    make_mocked_message,
+    mocked_requester_class,
+    mocked_send_queue_class,
+):
+    c = Consumer()
+    c.send_queue.send.side_effect = pika.exceptions.AMQPConnectionError()
+    message = make_mocked_message(topic="dummy.topic", body={})
+
+    with pytest.raises(Nack):
+        c._send(Notification(protocol="email", content={}), message)
