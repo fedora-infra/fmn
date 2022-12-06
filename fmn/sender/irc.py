@@ -28,7 +28,7 @@ class IRCHandler(Handler):
         await self._client.disconnect()
 
     async def handle(self, message):
-        _log.debug(f"Trying to send {message}")
+        _log.info(f"Sending messsage to {message['to']}: {message['message']}")
         await self._client.privmsg(message["to"], message["message"])
 
 

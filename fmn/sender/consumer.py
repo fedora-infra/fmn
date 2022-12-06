@@ -51,6 +51,7 @@ class Consumer:
                     await self._handler.handle(json.loads(message.body))
 
     async def stop(self):
+        _log.info("Stopping messages consumption")
         if self._queue_iter:
             await self._queue_iter.on_message(CLOSING)
             await self._queue_iter.close()
