@@ -142,11 +142,11 @@ describe("User Store", () => {
     store.$auth.makeAuthorizationRequest = vi.fn().mockResolvedValue(null);
 
     store.$router = router;
-    const rulesRoute = store.$router
+    const newruleRoute = store.$router
       .getRoutes()
-      .filter((r) => r.name === "rules")[0];
+      .filter((r) => r.name === "new-rule")[0];
     await store.$router.isReady();
-    await store.$router.replace(rulesRoute.path);
+    await store.$router.replace(newruleRoute.path);
 
     await store.logoutAndLogin();
     expect(store.loggedIn).toBeFalsy();

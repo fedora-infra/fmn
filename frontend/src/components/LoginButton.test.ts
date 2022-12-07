@@ -104,12 +104,14 @@ describe("LoginButton", () => {
     const userStore = useUserStore();
     loginUser(userStore);
 
-    const rulesRoute = router.getRoutes().filter((r) => r.name === "rules")[0];
+    const newruleRoute = router
+      .getRoutes()
+      .filter((r) => r.name === "new-rule")[0];
     const routerSpy = vi.spyOn(router, "push");
 
     const { getByText } = render(LoginButton);
     await router.isReady();
-    await router.replace(rulesRoute.path);
+    await router.replace(newruleRoute.path);
 
     const logoutLink = getByText("Logout");
     await fireEvent.click(logoutLink);

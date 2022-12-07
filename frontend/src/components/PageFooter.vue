@@ -1,6 +1,15 @@
+<script setup lang="ts">
+const api_docs_url = import.meta.env.VITE_API_URL + "/docs";
+</script>
+
 <template>
   <footer class="footer">
     <div class="container">
+      <div class="row justify-content-center">
+        <div class="col text-center">
+          <a :href="api_docs_url">FMN API Documentation</a>
+        </div>
+      </div>
       <div class="row justify-content-center">
         <div class="col-sm-3 col-4 mt-3">
           <div>
