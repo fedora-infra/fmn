@@ -3,7 +3,7 @@ from fmn.core.cli import cli
 # from fmn.rules import cli as rules_cli
 
 
-def test_get_tracked(mocker, cli_runner, mocked_fasjson_client):
+def test_get_tracked(mocker, cli_runner, mocked_fasjson_proxy):
     cache = mocker.patch("fmn.rules.cli.cache")
     mocker.patch("fmn.rules.cli.init_sync_model")
     cache.get_tracked.return_value = {"foo": "bar"}

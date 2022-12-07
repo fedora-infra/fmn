@@ -14,7 +14,7 @@ from fmn.database.model import Rule
 from fmn.messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
 
 
-@pytest.mark.usefixtures("mocked_fasjson", "mocked_fasjson_client")
+@pytest.mark.usefixtures("mocked_fasjson", "mocked_fasjson_proxy")
 class BaseTestHandler:
     api_prefix = None
     handler_prefix = None
@@ -476,7 +476,7 @@ class TestPreviewRule(BaseTestAPIV1Handler):
     def test_preview_basic(
         self, mocker, responses_mocker, client, api_identity, make_mocked_message
     ):
-        mocker.patch("fmn.rules.services.fasjson.Client")
+        mocker.patch("fmn.rules.services.fasjson.FASJSONSyncProxy")
         responses_mocker.get(
             "https://apps.fedoraproject.org/datagrepper/v2/search?"
             "page=1&rows_per_page=100&delta=3600",
@@ -514,7 +514,7 @@ class TestPreviewRule(BaseTestAPIV1Handler):
 
     def test_preview_anonymous(self, mocker, client, api_identity):
         api_identity.name = None
-        mocker.patch("fmn.rules.services.fasjson.Client")
+        mocker.patch("fmn.rules.services.fasjson.FASJSONSyncProxy")
         response = client.post(f"{self.path}/rule-preview", json=self._dummy_rule_dict)
 
         assert response.status_code == status.HTTP_403_FORBIDDEN

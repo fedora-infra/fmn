@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
-from fasjson_client import Client
-
+from ...backends import FASJSONSyncProxy
 from ..cache import cache
 
 if TYPE_CHECKING:
@@ -11,11 +10,11 @@ if TYPE_CHECKING:
 class FasjsonService:
     def __init__(self, url):
         self.url = url
-        self.fasjson_client = Client(self.url)
+        self.fasjson_proxy = FASJSONSyncProxy(self.url)
 
     @cache.cache_on_arguments()
     def get_user_groups(self, name: str):
-        return [g["groupname"] for g in self.fasjson_client.list_user_groups(username=name).result]
+        return [g["groupname"] for g in self.fasjson_proxy.get_user_groups(username=name)]
 
     def invalidate_on_message(self, message: "Message"):
         if message.topic.endswith("fas.group.member.sponsor"):

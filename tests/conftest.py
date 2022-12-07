@@ -7,12 +7,12 @@ import pytest
 import responses
 import respx
 from click.testing import CliRunner
-from fasjson_client import Client
 from fastapi import status
 from fastapi.testclient import TestClient
 from fedora_messaging import message
 
 from fmn.api import distgit, main
+from fmn.backends import FASJSONAsyncProxy
 from fmn.core.config import get_settings
 from fmn.database.main import (
     Base,
@@ -95,15 +95,15 @@ def mocked_fasjson(responses_mocker, fasjson_url):
 
 
 @pytest.fixture
-def mocked_fasjson_client(mocker, mocked_fasjson):
-    """This disables authentication in the FASJSON client."""
-    real_init = Client.__init__
+def mocked_fasjson_proxy(mocker, mocked_fasjson):
+    """This disables authentication in the FASJSON proxy."""
+    real_init = FASJSONAsyncProxy.__init__
 
-    def unauth_init(self, url, **kwargs):
-        kwargs["auth"] = False
-        real_init(self, url, **kwargs)
+    def unauth_init(self, *args, **kwargs):
+        real_init(self, *args, **kwargs)
+        self.client.auth = None
 
-    mocker.patch.object(Client, "__init__", unauth_init)
+    mocker.patch.object(FASJSONAsyncProxy, "__init__", unauth_init)
 
 
 @pytest.fixture

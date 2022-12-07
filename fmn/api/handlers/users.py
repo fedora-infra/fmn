@@ -7,10 +7,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fmn.database.model import Destination, Filter, GenerationRule, Rule, User
 from fmn.messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
 
+from ...backends import FASJSONAsyncProxy
 from .. import api_models
 from ..auth import Identity, get_identity, get_identity_optional
 from ..database import gen_db_session
-from ..fasjson import FASJSONAsyncProxy, get_fasjson_proxy
+from ..fasjson import get_fasjson_proxy
 from ..messaging import publish
 from .utils import db_rule_from_api_rule
 
