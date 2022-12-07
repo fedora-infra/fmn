@@ -1,6 +1,8 @@
 import re
 
+import httpx
 import pytest
+from fastapi import status
 
 from fmn.core.config import get_settings
 from fmn.rules.cache import cache
@@ -8,12 +10,12 @@ from fmn.rules.requester import Requester
 
 
 @pytest.fixture
-def requester(mocked_fasjson_client):
+def requester(mocked_fasjson_proxy):
     settings = get_settings()
     return Requester(settings.dict()["services"])
 
 
-def test_constructor_urls(mocked_fasjson_client):
+def test_constructor_urls(mocked_fasjson_proxy):
     config = get_settings().dict()["services"].copy()
     config["srv"] = "http://srv.example.com/"
     r = Requester(config)
@@ -94,15 +96,17 @@ def test_get_group_owners(requester, artifact_type, responses_mocker):
     assert resp == ["dummy-1", "dummy-2"]
 
 
-def test_get_user_groups(requester, responses_mocker):
-    responses_mocker.get(
-        "https://fasjson.fedoraproject.org/v1/users/dummy/groups/",
-        json={
-            "result": [
-                {"groupname": "group-1"},
-                {"groupname": "group-2"},
-            ]
-        },
+def test_get_user_groups(requester, async_respx_mocker, mocked_fasjson_proxy):
+    async_respx_mocker.get("https://fasjson.fedoraproject.org/v1/users/dummy/groups/").mock(
+        return_value=httpx.Response(
+            status.HTTP_200_OK,
+            json={
+                "result": [
+                    {"groupname": "group-1"},
+                    {"groupname": "group-2"},
+                ]
+            },
+        )
     )
     resp = requester.get_user_groups("dummy")
     assert resp == ["group-1", "group-2"]
@@ -139,7 +143,14 @@ def test_get_user_groups(requester, responses_mocker):
     ],
 )
 def test_invalidate_on_message_user(
-    responses_mocker, requester, topic, body, mocker, make_mocked_message
+    responses_mocker,
+    async_respx_mocker,
+    requester,
+    topic,
+    body,
+    mocker,
+    make_mocked_message,
+    mocked_fasjson_proxy,
 ):
     mocker.patch.object(cache, "region")
     message = make_mocked_message(topic=topic, body=body)
@@ -151,9 +162,8 @@ def test_invalidate_on_message_user(
         re.compile(r"https://src.fedoraproject.org/api/0/projects\?.*"),
         json={"projects": []},
     )
-    responses_mocker.get(
-        "https://fasjson.fedoraproject.org/v1/users/dummy/groups/",
-        json={"result": []},
+    async_respx_mocker.get("https://fasjson.fedoraproject.org/v1/users/dummy/groups/").mock(
+        return_value=httpx.Response(status.HTTP_200_OK, json={"result": []})
     )
 
     requester.invalidate_on_message(message)

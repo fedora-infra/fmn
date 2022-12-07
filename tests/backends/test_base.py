@@ -115,9 +115,9 @@ class TestAPIClient:
         with mock.patch.object(client, "get") as client_get:
             client_get.return_value = {"result": "boo"}
 
-            result = await client.get_payload("boo")
+            result = await client.get_payload("https://boo.test")
 
-            client_get.assert_awaited_once_with("boo")
+            client_get.assert_awaited_once_with("https://boo.test")
             assert result == "boo"
 
     @pytest.mark.parametrize(
