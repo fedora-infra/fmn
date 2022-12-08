@@ -1,4 +1,5 @@
 import logging
+from urllib.parse import urlparse
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -55,10 +56,10 @@ async def get_user_destinations(
     user = await fasjson_proxy.get_user(username=username)
     result = [{"protocol": "email", "address": email} for email in user["emails"]]
     for nick in user.get("ircnicks", []):
-        address = nick.split(":", 1)[1] if ":" in nick else nick
-        if nick.startswith("matrix:"):
-            protocol = "matrix"
-        else:
+        url = urlparse(nick)
+        address = url.path.lstrip("/")
+        protocol = url.scheme
+        if not protocol:
             protocol = "irc"
         result.append({"protocol": protocol, "address": address})
     return result

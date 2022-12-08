@@ -1,6 +1,7 @@
 import re
 from unittest import mock
 
+import httpx
 import pytest
 from fastapi import status
 from httpx import Response
@@ -97,6 +98,37 @@ class TestUserHandler(BaseTestAPIV1Handler):
         assert all(isinstance(item, dict) for item in destinations)
         assert all("protocol" in item for item in destinations)
         assert all("address" in item for item in destinations)
+
+    def test_get_user_destinations_other_format(
+        self, fasjson_user_data, async_respx_mocker, fasjson_url, client
+    ):
+
+        fasjson_user_data["ircnicks"] = [
+            "irc:///testuser",
+            "irc:/testuser",
+            "irc:testuser",
+            "irc://example.com/testuser",
+            "matrix:///testuser",
+            "matrix://example.com/testuser",
+            "testuser",
+        ]
+        expected = [
+            {"protocol": "irc", "address": "testuser"},
+            {"protocol": "irc", "address": "testuser"},
+            {"protocol": "irc", "address": "testuser"},
+            {"protocol": "irc", "address": "testuser"},
+            {"protocol": "matrix", "address": "testuser"},
+            {"protocol": "matrix", "address": "testuser"},
+            {"protocol": "irc", "address": "testuser"},
+        ]
+        async_respx_mocker.get(f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/").mock(
+            return_value=httpx.Response(status.HTTP_200_OK, json={"result": fasjson_user_data})
+        )
+        response = client.get(f"{self.path}/{fasjson_user_data['username']}/destinations")
+
+        assert response.status_code == status.HTTP_200_OK
+        destinations = response.json()
+        assert destinations[1:] == expected
 
     @pytest.mark.parametrize("testcase", ("happy-path", "wrong-user"))
     def test_get_user_rules(self, testcase, client, api_identity, db_rule):
