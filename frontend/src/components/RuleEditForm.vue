@@ -34,7 +34,7 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
       title: "Rule edited",
       content: `Rule "${response.name}" has been successfully edited.`,
     });
-    router.push("/rules");
+    router.push("/");
   } catch (err) {
     const error = err as AxiosError<PostError>;
     console.log("Got error response from server:", error);

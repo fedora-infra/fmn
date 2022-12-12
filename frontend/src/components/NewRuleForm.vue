@@ -37,7 +37,7 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
       title: "Rule created",
       content: `Rule "${response.name}" has been successfully created.`,
     });
-    router.push("/rules");
+    router.push("/");
   } catch (err) {
     const error = err as AxiosError<PostError>;
     console.log("Got error response from server:", error);
