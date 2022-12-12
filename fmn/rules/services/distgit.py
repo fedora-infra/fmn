@@ -2,8 +2,7 @@ import logging
 from itertools import chain
 from typing import TYPE_CHECKING
 
-import requests
-
+from ...backends import PagureSyncProxy
 from ..cache import cache
 
 if TYPE_CHECKING:
@@ -18,31 +17,16 @@ class DistGitService:
 
     def __init__(self, url):
         self.url = url
-        self.req = requests.Session()
-
-    def _get(self, url, params=None):
-        result = self.req.get(url=url, params=params)
-        result.raise_for_status()
-        return result.json()
-
-    def _all_values(self, key, url, params=None):
-        params["page"] = "1"
-        response = self._get(url, params)
-        objects = response.get(key)
-        while response.get("pagination", {}).get("next"):
-            response = self._get(response["pagination"]["next"])
-            objects.extend(response.get(key))
-        return objects
+        self.proxy = PagureSyncProxy(base_url=url)
 
     @cache.cache_on_arguments()
     def get_owners(self, artifact_type, artifact_name, user_or_group):
         # cache this for a reasonable time
-        url = f"{self.url}api/0/{artifact_type}/{artifact_name}"
-        response = self._get(url)
+        result = self.proxy.get(f"{artifact_type}/{artifact_name}")
         if user_or_group == "user":
-            return response["access_users"]["owner"]
+            return result["access_users"]["owner"]
         elif user_or_group == "group":
-            return response["access_groups"]["admin"] + response["access_groups"]["commit"]
+            return result["access_groups"]["admin"] + result["access_groups"]["commit"]
         else:
             raise ValueError("Argument user_or_group must be either user or group, duh.")
 
@@ -51,20 +35,18 @@ class DistGitService:
         # cache this for a reasonable time
         if artifact_type == "packages":
             artifact_type = "rpms"
+
         if user_or_group == "user":
-            projects = self._all_values(
-                "projects",
-                f"{self.url}api/0/projects",
-                {"namespace": artifact_type, "owner": name, "short": "1"},
-            )
+            endpoint = "/projects"
+            params = {"namespace": artifact_type, "owner": name, "short": "1"}
         elif user_or_group == "group":
-            projects = self._all_values(
-                "projects",
-                f"{self.url}api/0/group/{name}",
-                {"projects": "true"},
-            )
+            endpoint = f"/group/{name}"
+            params = {"projects": "true"}
         else:
             raise ValueError("Argument user_or_group must be either user or group, duh.")
+
+        projects = list(self.proxy.get_paginated(endpoint, params=params, payload_field="projects"))
+
         return [p["name"] for p in projects]
 
     def invalidate_on_message(self, message: "Message"):

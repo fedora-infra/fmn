@@ -2,7 +2,7 @@ import logging
 from functools import wraps
 from typing import TYPE_CHECKING
 
-import requests
+import httpx
 
 from .services.distgit import DistGitService
 from .services.fasjson import FasjsonService
@@ -20,7 +20,7 @@ def handle_http_error(default_factory):
         def wrapper(*args, **kw):
             try:
                 return f(*args, **kw)
-            except requests.HTTPError as e:
+            except httpx.HTTPStatusError as e:
                 log.warning(f"Request failed: {e}")
                 return default_factory()
 
@@ -31,7 +31,6 @@ def handle_http_error(default_factory):
 
 class Requester:
     def __init__(self, config):
-        self.req = requests.Session()
         self.urls = {}
         for service, url in config.items():
             if service.endswith("_url"):
