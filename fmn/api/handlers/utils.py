@@ -9,7 +9,7 @@ from fmn.rules.requester import Requester
 
 
 def db_rule_from_api_rule(rule, user):
-    rule_db = Rule(user=user, name=rule.name)
+    rule_db = Rule(user=user, name=rule.name, disabled=rule.disabled)
     rule_db.tracking_rule = TrackingRule(
         name=rule.tracking_rule.name, params=rule.tracking_rule.params
     )

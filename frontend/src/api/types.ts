@@ -62,6 +62,7 @@ interface TrackingRuleEditing {
 export interface Rule {
   id: number;
   name: string;
+  disabled: boolean;
   tracking_rule: TrackingRuleEditing;
   generation_rules: GenerationRule[];
 }

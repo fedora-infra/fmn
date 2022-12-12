@@ -73,6 +73,7 @@ class GenerationRule(BaseModel):
 class Rule(BaseModel):
     id: int | None
     name: str
+    disabled: bool = False
     tracking_rule: TrackingRule
     generation_rules: list[GenerationRule]
 

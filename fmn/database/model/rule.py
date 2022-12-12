@@ -2,9 +2,9 @@ import logging
 from functools import cache
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Column, ForeignKey, Integer, UnicodeText, select
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, UnicodeText, select
 from sqlalchemy.orm import relationship, selectinload
-from sqlalchemy.sql import Select
+from sqlalchemy.sql import Select, expression
 
 from ..main import Base
 from .generation_rule import GenerationRule
@@ -25,6 +25,9 @@ class Rule(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(UnicodeText, nullable=False)
+    disabled = Column(
+        Boolean, default=False, nullable=False, index=True, server_default=expression.text("FALSE")
+    )
 
     user_id = Column(Integer, ForeignKey(User.id, ondelete="CASCADE"), nullable=False)
     user = relationship(User, back_populates="rules")

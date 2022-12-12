@@ -39,7 +39,7 @@ class Cache:
             "usernames": set(),
             "agent_name": set(),
         }
-        rules = db.execute(Rule.select_related()).scalars()
+        rules = db.execute(Rule.select_related().filter_by(disabled=False)).scalars()
         for rule in rules:
             rule.tracking_rule.prime_cache(tracked, requester)
         log.debug("Built the tracked cache")

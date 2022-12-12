@@ -148,6 +148,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
 
             result = results[0]
             assert result["name"] == db_rule.name
+            assert result["disabled"] == db_rule.disabled
             assert result["tracking_rule"]["name"] == db_rule.tracking_rule.name
             assert result["tracking_rule"]["params"] == db_rule.tracking_rule.params
         elif testcase == "wrong-user":
@@ -167,6 +168,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
 
             result = response.json()
             assert result["name"] == db_rule.name
+            assert result["disabled"] == db_rule.disabled
             assert result["tracking_rule"]["name"] == db_rule.tracking_rule.name
             assert result["tracking_rule"]["params"] == db_rule.tracking_rule.params
         elif testcase == "wrong-user":
@@ -180,6 +182,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
             "success-delete-generation-rule",
             "success-delete-destination",
             "success-delete-filter",
+            "success-disable",
             "wrong-user",
         ),
     )
@@ -199,6 +202,8 @@ class TestUserHandler(BaseTestAPIV1Handler):
             del edited_rule.generation_rules[-1].filters.applications
         elif "modify-filter" in testcase:
             edited_rule.generation_rules[-1].filters.applications = ["koji"]
+        elif "disable" in testcase:
+            edited_rule.disabled = True
         else:
             edited_rule.generation_rules.append(
                 api_models.GenerationRule(destinations=[], filters=api_models.Filters())
@@ -232,6 +237,8 @@ class TestUserHandler(BaseTestAPIV1Handler):
             assert result["name"] == db_rule.name
             assert result["tracking_rule"]["name"] == "artifacts-group-owned"
             assert result["tracking_rule"]["params"] == db_rule.tracking_rule.params
+            if "disable" in testcase:
+                assert result["disabled"] is True
         else:
             publish.assert_not_called()
             if testcase == "wrong-user":

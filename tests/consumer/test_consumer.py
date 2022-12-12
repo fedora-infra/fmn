@@ -115,6 +115,16 @@ def test_consumer_call_tracked(
     }
 
 
+def test_consumer_rule_disabled(mocked_cache, mocked_requester_class, mocked_send_queue_class):
+    c = Consumer()
+    setup_db_schema(engine=c.db.get_bind())
+    user = model.User(name="dummy")
+    rule = model.Rule(user=user, name="the name", disabled=True)
+    c.db.add_all([user, rule])
+    c.db.commit()
+    assert list(c._get_rules()) == []
+
+
 def test_consumer_init_settings_file(
     mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class
 ):
