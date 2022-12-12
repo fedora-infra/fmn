@@ -64,7 +64,7 @@ class Consumer:
 
     def _get_rules(self):
         # TODO: Cache this!
-        return self.db.execute(Rule.select_related()).scalars()
+        return self.db.execute(Rule.select_related().filter_by(disabled=False)).scalars()
 
     def is_tracked(self, message: message.Message):
         # This is cache-based and should save us running all the messages through all the rules. The

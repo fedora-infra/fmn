@@ -112,6 +112,7 @@ async def edit_user_rule(
         )
     ).scalar_one()
     rule_db.name = rule.name
+    rule_db.disabled = rule.disabled
     rule_db.tracking_rule.name = rule.tracking_rule.name
     rule_db.tracking_rule.params = rule.tracking_rule.params
     for to_delete in rule_db.generation_rules[len(rule.generation_rules) :]:
