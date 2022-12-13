@@ -1,8 +1,8 @@
 from typing import Iterator
 
-import requests
 from fedora_messaging import message
 
+from fmn.backends import DatagrepperSyncProxy
 from fmn.core.config import get_settings
 from fmn.database.model import Destination, Filter, GenerationRule, Rule, TrackingRule
 from fmn.rules.requester import Requester
@@ -39,25 +39,10 @@ def gen_requester() -> Iterator[Requester]:
 
 # TODO: absolutely cache this
 def get_last_messages(hours):
-    datagrepper_url = get_settings().dict()["services"]["datagrepper_url"]
-    if not datagrepper_url.endswith("/"):
-        datagrepper_url += "/"
-    datagrepper_url += "v2/search"
-    req = requests.Session()
-    page = 1
-    while True:
-        response = req.get(
-            datagrepper_url,
-            params={"page": page, "rows_per_page": 100, "delta": int(hours * 60 * 60)},
-        )
-        response.raise_for_status()
-        data = response.json()
-        for msg_dict in data["raw_messages"]:
-            yield get_message(msg_dict)
-        total_pages = data["pages"]
-        if page >= total_pages:
-            break
-        page += 1
+    proxy = DatagrepperSyncProxy(get_settings().services.datagrepper_url)
+
+    for msg_dict in proxy.search(delta=int(hours) * 60 * 60, rows_per_page=100):
+        yield get_message(msg_dict)
 
 
 # Replace this with fedora_messaging.message.load_message() when it's published.
