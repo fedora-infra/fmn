@@ -69,6 +69,12 @@ def distgit_client():
 
 
 @pytest.fixture
+def datagrepper_url() -> str:
+    settings = get_settings()
+    return settings.services.datagrepper_url
+
+
+@pytest.fixture
 def mocked_fasjson(responses_mocker, fasjson_url):
     spec_v1_url = fasjson_url + "/specs/v1.json"
 
