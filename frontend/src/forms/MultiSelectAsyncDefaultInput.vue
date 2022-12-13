@@ -4,12 +4,41 @@ import Multiselect from "@vueform/multiselect";
 import { computed } from "vue";
 import { getBindableProps } from "./MultiSelectInputUtils";
 
+/*
+ * This is useful when we want to have a default value and an async loader.
+ * https://github.com/vueform/multiselect#async-options-with-default-values
+ */
+
 const props = defineProps<{ context: FormKitFrameworkContext }>();
 
-const bindableProps = computed(() => getBindableProps(props.context));
+type Option = { [key in "label" | "value"]: string };
 
-function handleChange(value: string) {
-  props.context.node.input(value);
+const asOptions = (values: string[]) => {
+  return values.map(
+    (value): Option => ({
+      label: value,
+      value: value,
+    })
+  );
+};
+
+const getAsOptions = async (query: string, select$: Multiselect) => {
+  // According to Multiselect's API, we must return a list of objects when using an async function for options.
+  const result = await props.context.node.props.msOptions(query, select$);
+  console.log("Got:", result);
+  return asOptions(result);
+};
+
+const bindableProps = computed(() => {
+  const values = getBindableProps(props.context);
+  values.object = true;
+  values.options = getAsOptions;
+  values.value = asOptions(props.context._value);
+  return values;
+});
+
+function handleChange(value: Option) {
+  props.context.node.input(value.value);
 }
 
 // This helped: https://codesandbox.io/s/0w1c1h?file=/src/FormKitMultiselect.vue

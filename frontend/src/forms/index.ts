@@ -1,10 +1,14 @@
 import { generateClasses } from "@formkit/themes";
 import { createInput, defaultConfig } from "@formkit/vue";
+import MultiSelectAsyncDefaultInput from "./MultiSelectAsyncDefaultInput.vue";
 import MultiSelectInput from "./MultiSelectInput.vue";
-import { msProps } from "./MultiSelectInputConstants";
+import { msProps } from "./MultiSelectInputUtils";
 
 // Define the multiselect Input for FormKit
 const multiselect = createInput(MultiSelectInput, {
+  props: [...msProps, "msOptions", "msLabel"],
+});
+const multiSelectAsyncDefault = createInput(MultiSelectAsyncDefaultInput, {
   props: [...msProps, "msOptions", "msLabel"],
 });
 
@@ -12,6 +16,7 @@ const multiselect = createInput(MultiSelectInput, {
 export const config = defaultConfig({
   inputs: {
     multiselect,
+    multiselectasyncdefault: multiSelectAsyncDefault,
   },
   config: {
     classes: generateClasses({

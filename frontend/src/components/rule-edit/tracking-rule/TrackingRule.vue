@@ -13,12 +13,17 @@ const userStore = useUserStore();
 const username = userStore.username;
 
 const ruleName = ref("");
-const oldRuleName = ref("");
+const oldRuleName = ref<string | null>("");
 const node = ref<{ node: FormKitNode } | null>(null);
 
 const onTrackingRuleChange = (value: string, node: FormKitNode) => {
   // console.log("old tr name was", oldRuleName.value, ", new tr name is", value);
   if (value === oldRuleName.value) {
+    return;
+  }
+  if (oldRuleName.value === "") {
+    // oldRuleName is empty string on init, don't overwrite the params.
+    oldRuleName.value = value;
     return;
   }
   oldRuleName.value = value;
