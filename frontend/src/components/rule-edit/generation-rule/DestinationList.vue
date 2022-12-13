@@ -3,45 +3,36 @@ import { apiGet } from "@/api";
 import type { Destination } from "@/api/types";
 import { useUserStore } from "@/stores/user";
 import type { QueryFunction } from "react-query/types/core";
-import { computed } from "vue";
-import { useQuery } from "vue-query";
 
 const props = defineProps<{
   name?: string;
 }>();
 
 const userStore = useUserStore();
-const route = `/api/v1/users/${userStore.username}/destinations`;
-const { isLoading, isError, data, error } = useQuery(
-  route,
-  apiGet as QueryFunction<Destination[]>
-);
-type Option = { name: string; label: string; options: Destination[] };
-const options = computed(() => {
+const apiGetDestinations = apiGet as QueryFunction<Destination[]>;
+const url = `/api/v1/users/${userStore.username}/destinations`;
+
+const getDestinations = async () => {
+  type Option = { name: string; label: string; options: Destination[] };
+  const data = await apiGetDestinations({
+    queryKey: [url],
+    meta: undefined,
+  });
   const result: Option[] = [
     { name: "email", label: "Email", options: [] },
     { name: "irc", label: "IRC", options: [] },
     { name: "matrix", label: "Matrix", options: [] },
   ];
-  (data.value || []).forEach((d: Destination) => {
+  (data || []).forEach((d: Destination) => {
     const group = result.filter((g) => g.name === d.protocol)[0];
     group.options.push(d);
   });
   return result;
-});
+};
 </script>
 
 <template>
-  <span v-if="isLoading"
-    ><input
-      type="text"
-      class="form-control"
-      disabled
-      value="Loading destinations..."
-  /></span>
-  <span v-else-if="isError">Error: {{ error }}</span>
-  <!-- We can assume by this point that `isSuccess === true` -->
-  <div v-else class="mb-4">
+  <div class="mb-4">
     <FormKit
       type="multiselect"
       :name="props.name || 'destinations'"
@@ -50,7 +41,7 @@ const options = computed(() => {
       groups
       group-hide-empty
       :groupSelect="false"
-      :msOptions="options"
+      :msOptions="getDestinations"
       label="Destinations:"
       label-class="fw-bold"
       msLabel="address"
