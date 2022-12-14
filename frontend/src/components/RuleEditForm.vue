@@ -1,8 +1,16 @@
 <script setup lang="ts">
-import { useEditRuleMutation } from "@/api/rules";
+import { useEditRuleMutation, useDeleteRuleMutation } from "@/api/rules";
 import type { GenerationRule, PostError, Rule } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
-import { CAlert, CCol, CRow } from "@coreui/bootstrap-vue";
+import {
+  CAlert,
+  CCol,
+  CRow,
+  CButton,
+  CButtonGroup,
+} from "@coreui/bootstrap-vue";
+import { cilTrash } from "@coreui/icons";
+import { CIcon } from "@coreui/icons-vue";
 import type { FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";
@@ -19,7 +27,7 @@ const props = defineProps<{
 const toastStore = useToastStore();
 const router = useRouter();
 
-const { mutateAsync } = useEditRuleMutation(props.rule.id);
+const { mutateAsync: editMutation } = useEditRuleMutation(props.rule.id);
 
 const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
   console.log("Will edit the rule:", data);
@@ -27,7 +35,7 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
     throw Error("No form node?");
   }
   try {
-    const response = await mutateAsync(data);
+    const response = await editMutation(data);
     // Success!
     toastStore.addToast({
       color: "success",
@@ -46,6 +54,36 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
         (e) => `Server error: ${e.loc[-1]}: ${e.msg}`
       )
     );
+  }
+};
+
+const { mutateAsync: deleteMutate } = useDeleteRuleMutation();
+
+const handleDelete = async (rule: Rule) => {
+  console.log("Will delete the rule:", rule);
+  try {
+    await deleteMutate(props.rule.id);
+    // Success!
+    toastStore.addToast({
+      color: "success",
+      title: "Rule deleted",
+      content: `Rule "${props.rule.name}" has been successfully deleted.`,
+    });
+    router.push("/");
+  } catch (err) {
+    const error = err as AxiosError<PostError>;
+    console.log("Got error response from server:", error);
+    if (!error.response) {
+      return;
+    }
+    const errors = error.response.data.detail
+      .map((e) => `${e.loc[-1]}: ${e.msg}`)
+      .join("\n");
+    toastStore.addToast({
+      color: "danger",
+      title: "Deletion failed!",
+      content: `Rule "${props.rule.name}" could not be deleted!\n${errors}`,
+    });
   }
 };
 
@@ -76,13 +114,23 @@ const formReady = computed(() => generationRulesCount.value > 0);
         </h4>
       </CCol>
       <CCol xs="auto">
-        <FormKit
-          type="submit"
-          :class="['btn', 'btn-primary', 'form-control-lg']"
-          :disabled="!formReady"
-        >
-          Save Rule
-        </FormKit>
+        <CButtonGroup>
+          <CButton
+            @click.prevent="handleDelete"
+            color="danger"
+            variant="outline"
+            class="ms-1"
+          >
+            <CIcon :icon="cilTrash" /> Delete Rule
+          </CButton>
+          <FormKit
+            type="submit"
+            :classes="{ input: 'rounded-0 rounded-end' }"
+            :disabled="!formReady"
+          >
+            Save Rule
+          </FormKit>
+        </CButtonGroup>
       </CCol>
     </CRow>
 

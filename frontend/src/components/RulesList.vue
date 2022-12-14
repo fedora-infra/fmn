@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { TRACKING_RULES } from "@/api/constants";
-import { useDeleteRuleMutation } from "@/api/rules";
-import type { PostError, Rule, TrackingRule } from "@/api/types";
-import { useToastStore } from "@/stores/toast";
+import type { Rule, TrackingRule } from "@/api/types";
 import {
   CCard,
   CCardBody,
   CListGroup,
   CListGroupItem,
 } from "@coreui/bootstrap-vue";
-import type { AxiosError } from "axios";
 import { computed, ref } from "vue";
 import RuleListItem from "../components/RuleListItem.vue";
 
@@ -26,37 +23,6 @@ const filteringOptions = computed(() => [
       .filter((o) => typeof o !== "undefined") as TrackingRule[]
   ),
 ]);
-
-// Deleting rules
-const toastStore = useToastStore();
-const { mutateAsync } = useDeleteRuleMutation();
-
-const handleDelete = async (rule: Rule) => {
-  console.log("Will delete the rule:", rule);
-  try {
-    await mutateAsync(rule.id);
-    // Success!
-    toastStore.addToast({
-      color: "success",
-      title: "Rule deleted",
-      content: `Rule "${rule.name}" has been successfully deleted.`,
-    });
-  } catch (err) {
-    const error = err as AxiosError<PostError>;
-    console.log("Got error response from server:", error);
-    if (!error.response) {
-      return;
-    }
-    const errors = error.response.data.detail
-      .map((e) => `${e.loc[-1]}: ${e.msg}`)
-      .join("\n");
-    toastStore.addToast({
-      color: "danger",
-      title: "Deletion failed!",
-      content: `Rule "${rule.name}" could not be deleted!\n${errors}`,
-    });
-  }
-};
 </script>
 
 <template>
@@ -99,7 +65,6 @@ const handleDelete = async (rule: Rule) => {
         )"
         :key="rule.id"
         :rule="rule"
-        @delete="handleDelete"
       />
     </CListGroup>
   </template>

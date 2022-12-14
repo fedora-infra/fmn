@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { CButton, CListGroupItem } from "@coreui/bootstrap-vue";
-import { cilPen, cilTrash } from "@coreui/icons";
+import { CListGroupItem } from "@coreui/bootstrap-vue";
+import { cilPen } from "@coreui/icons";
 import { CIcon } from "@coreui/icons-vue";
 
 import { TRACKING_RULES } from "../api/constants";
@@ -10,14 +10,6 @@ import DestinationTag from "./DestinationTag.vue";
 const props = defineProps<{
   rule: Rule;
 }>();
-
-const emit = defineEmits<{
-  (e: "delete", rule: Rule): void;
-}>();
-
-const handleDeleteClicked = async () => {
-  emit("delete", props.rule);
-};
 
 const tracking_rule = TRACKING_RULES.find(
   (o) => o.name === props.rule.tracking_rule.name
@@ -70,14 +62,6 @@ const tracking_rule = TRACKING_RULES.find(
       >
         <CIcon :icon="cilPen" />
       </router-link>
-      <CButton
-        @click.prevent="handleDeleteClicked"
-        color="danger"
-        variant="outline"
-        class="ms-1"
-      >
-        <CIcon :icon="cilTrash" />
-      </CButton>
     </div>
   </CListGroupItem>
 </template>
