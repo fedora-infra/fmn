@@ -13,7 +13,7 @@ def test_get_distgit_client(distgit_client):
     assert distgit_client.client.base_url == settings.services.distgit_url
 
 
-async def test_get_projects(async_respx_mocker, distgit_url, distgit_client):
+async def test_get_projects(respx_mocker, distgit_url, distgit_client):
     mocked_projects = [
         {
             "description": "0ad-data containers",
@@ -28,7 +28,7 @@ async def test_get_projects(async_respx_mocker, distgit_url, distgit_client):
             "namespace": "rpms",
         },
     ]
-    route = async_respx_mocker.get(
+    route = respx_mocker.get(
         f"{distgit_url}/api/0/projects", params={"fork": "false", "pattern": "*0*", "short": "true"}
     ).mock(
         side_effect=[
@@ -46,7 +46,7 @@ async def test_get_projects(async_respx_mocker, distgit_url, distgit_client):
 
 
 @pytest.mark.parametrize("ownertype", ("user", "group"))
-async def test_get_owned_singlepage(async_respx_mocker, distgit_url, distgit_client, ownertype):
+async def test_get_owned_singlepage(respx_mocker, distgit_url, distgit_client, ownertype):
     if ownertype == "user":
         name = "johnnyjones"
         endpoint = f"{distgit_url}/api/0/projects"
@@ -69,7 +69,7 @@ async def test_get_owned_singlepage(async_respx_mocker, distgit_url, distgit_cli
         ],
     }
 
-    page1_route = async_respx_mocker.get(f"{endpoint}", params=params).mock(
+    page1_route = respx_mocker.get(f"{endpoint}", params=params).mock(
         side_effect=[
             httpx.Response(
                 fastapi.status.HTTP_200_OK,
@@ -89,7 +89,7 @@ async def test_get_owned_singlepage(async_respx_mocker, distgit_url, distgit_cli
 
 
 @pytest.mark.parametrize("ownertype", ("user", "group"))
-async def test_get_owned_twopages(async_respx_mocker, distgit_url, distgit_client, ownertype):
+async def test_get_owned_twopages(respx_mocker, distgit_url, distgit_client, ownertype):
     if ownertype == "user":
         endpoint = f"{distgit_url}/api/0/projects"
         name = "johnnyjones"
@@ -134,7 +134,7 @@ async def test_get_owned_twopages(async_respx_mocker, distgit_url, distgit_clien
         },
     ]
 
-    page1_route = async_respx_mocker.get(f"{endpoint}", params=params).mock(
+    page1_route = respx_mocker.get(f"{endpoint}", params=params).mock(
         side_effect=[
             httpx.Response(
                 fastapi.status.HTTP_200_OK,
@@ -144,7 +144,7 @@ async def test_get_owned_twopages(async_respx_mocker, distgit_url, distgit_clien
     )
 
     params["page"] = 2
-    page2_route = async_respx_mocker.get(f"{endpoint}", params=params).mock(
+    page2_route = respx_mocker.get(f"{endpoint}", params=params).mock(
         side_effect=[
             httpx.Response(
                 fastapi.status.HTTP_200_OK,
