@@ -1,6 +1,6 @@
 # A sample configuration for the FMN sender. This file is in the TOML format.
 
-amqp_url = "amqp://tinystage.tinystage.test/%2Ffmn"
+amqp_url = "amqp://fedoramessages:fedoramessages@tinystage.tinystage.test/%2Ffmn"
 queue = "email"
 
 [handler]
