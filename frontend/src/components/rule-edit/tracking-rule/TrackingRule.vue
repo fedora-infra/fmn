@@ -17,20 +17,28 @@ const oldRuleName = ref<string | null>("");
 const node = ref<{ node: FormKitNode } | null>(null);
 
 const onTrackingRuleChange = (value: string, node: FormKitNode) => {
-  // console.log("old tr name was", oldRuleName.value, ", new tr name is", value);
+  console.log("old tr name was", oldRuleName.value, ", new tr name is", value);
   if (value === oldRuleName.value) {
     return;
   }
-  if (oldRuleName.value === "") {
-    // oldRuleName is empty string on init, don't overwrite the params.
-    oldRuleName.value = value;
-    return;
-  }
+  const isInit = oldRuleName.value === "";
   oldRuleName.value = value;
   emit("selected", value);
+  // Pre-fill the parameters with sensible defaults
   const paramsNode = node.at("params");
-  const initialValue = value === "artifacts-owned" ? [username] : [];
-  paramsNode?.input(initialValue);
+  if (!paramsNode) {
+    return;
+  }
+  const previousParamsValue: string[] = paramsNode.props._init;
+  let initialValue: string[] = isInit ? previousParamsValue : [];
+  if (
+    value === "artifacts-owned" &&
+    previousParamsValue.length === 0 &&
+    username
+  ) {
+    initialValue = [username];
+  }
+  paramsNode.input(initialValue);
 };
 </script>
 
