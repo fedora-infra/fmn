@@ -34,6 +34,7 @@ const previzData = computed(() => {
   }
   const result: Omit<Rule, "id"> = {
     name: root.context._value.name as string,
+    disabled: false,
     tracking_rule: root.context._value.tracking_rule as TrackingRule,
     generation_rules: [node.value.node.value as GenerationRule],
   };
