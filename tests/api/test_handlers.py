@@ -32,11 +32,11 @@ class TestUserHandler(BaseTestAPIV1Handler):
     handler_prefix = "/users"
 
     @pytest.mark.parametrize("testcase", ("search", "logged-in", "logged-out"))
-    def test_get_users(self, testcase, fasjson_user, async_respx_mocker, fasjson_url, client):
+    def test_get_users(self, testcase, fasjson_user, respx_mocker, fasjson_url, client):
         params = {}
         if "search" in testcase:
             params["search"] = search_term = fasjson_user["username"][:3]
-            async_respx_mocker.get(f"{fasjson_url}/v1/search/users/?username={search_term}").mock(
+            respx_mocker.get(f"{fasjson_url}/v1/search/users/?username={search_term}").mock(
                 side_effect=[
                     Response(
                         status.HTTP_200_OK,
@@ -100,7 +100,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
         assert all("address" in item for item in destinations)
 
     def test_get_user_destinations_other_format(
-        self, fasjson_user_data, async_respx_mocker, fasjson_url, client
+        self, fasjson_user_data, respx_mocker, fasjson_url, client
     ):
 
         fasjson_user_data["ircnicks"] = [
@@ -121,7 +121,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
             {"protocol": "matrix", "address": "testuser"},
             {"protocol": "irc", "address": "testuser"},
         ]
-        async_respx_mocker.get(f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/").mock(
+        respx_mocker.get(f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/").mock(
             return_value=httpx.Response(status.HTTP_200_OK, json={"result": fasjson_user_data})
         )
         response = client.get(f"{self.path}/{fasjson_user_data['username']}/destinations")
@@ -363,12 +363,10 @@ class TestMisc(BaseTestAPIV1Handler):
         ]
 
     @pytest.mark.parametrize("ownertype", ("user", "group"))
-    async def test_get_projects(self, client, mocker, async_respx_mocker, ownertype):
+    async def test_get_projects(self, client, mocker, respx_mocker, ownertype):
         settings = get_settings()
         settings.services.distgit_url = "http://distgit.test"
         mocker.patch("fmn.api.handlers.utils.get_settings", return_value=settings)
-
-        # async_respx_mocker.route(host="distgit.test").pass_through()
 
         if ownertype == "user":
             distgit_endpoint = f"{settings.services.distgit_url}/api/0/projects"
@@ -398,7 +396,7 @@ class TestMisc(BaseTestAPIV1Handler):
             ],
         }
 
-        route = async_respx_mocker.get(distgit_endpoint, params=params).mock(
+        route = respx_mocker.get(distgit_endpoint, params=params).mock(
             side_effect=[
                 Response(
                     status.HTTP_200_OK,
@@ -473,11 +471,9 @@ class TestPreviewRule(BaseTestAPIV1Handler):
         ],
     }
 
-    def test_preview_basic(
-        self, mocker, async_respx_mocker, client, api_identity, make_mocked_message
-    ):
+    def test_preview_basic(self, mocker, respx_mocker, client, api_identity, make_mocked_message):
         mocker.patch("fmn.rules.services.fasjson.FASJSONSyncProxy")
-        async_respx_mocker.get(
+        respx_mocker.get(
             "https://apps.fedoraproject.org/datagrepper/v2/search?rows_per_page=100&delta=3600"
         ).mock(
             httpx.Response(
@@ -523,19 +519,19 @@ class TestPreviewRule(BaseTestAPIV1Handler):
 
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    def test_dg_url_fix(self, mocker, async_respx_mocker):
+    def test_dg_url_fix(self, mocker, respx_mocker):
         settings = get_settings()
         settings.services.datagrepper_url = "http://datagrepper.test"
         mocker.patch("fmn.api.handlers.utils.get_settings", return_value=settings)
-        resp = async_respx_mocker.get(re.compile(r"http://datagrepper\.test/v2/search.*")).mock(
+        resp = respx_mocker.get(re.compile(r"http://datagrepper\.test/v2/search.*")).mock(
             httpx.Response(status.HTTP_200_OK, json={"raw_messages": [], "pages": 0})
         )
         messages = list(get_last_messages(1))
         assert messages == []
         assert resp.call_count == 1
 
-    def test_get_last_messages_pages(self, mocker, async_respx_mocker, make_mocked_message):
-        rsp1 = async_respx_mocker.get(
+    def test_get_last_messages_pages(self, mocker, respx_mocker, make_mocked_message):
+        rsp1 = respx_mocker.get(
             "https://apps.fedoraproject.org/datagrepper/v2/search?rows_per_page=100&delta=3600"
         ).mock(
             httpx.Response(
@@ -557,7 +553,7 @@ class TestPreviewRule(BaseTestAPIV1Handler):
                 },
             )
         )
-        rsp2 = async_respx_mocker.get(
+        rsp2 = respx_mocker.get(
             "https://apps.fedoraproject.org/datagrepper/v2/search?"
             "page=2&rows_per_page=100&delta=3600"
         ).mock(

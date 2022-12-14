@@ -23,8 +23,8 @@ def test_constructor_urls(mocked_fasjson_proxy):
     assert r.urls["srv"] == "http://srv.example.com/"
 
 
-def test_get_owned_by_user(requester, async_respx_mocker):
-    async_respx_mocker.get(
+def test_get_owned_by_user(requester, respx_mocker):
+    respx_mocker.get(
         "https://src.fedoraproject.org/api/0/projects?namespace=rpms&owner=dummy&short=1"
     ).mock(
         return_value=httpx.Response(
@@ -41,7 +41,7 @@ def test_get_owned_by_user(requester, async_respx_mocker):
     assert resp == ["project-1", "project-2"]
 
 
-def test_get_owned_by_group(requester, async_respx_mocker):
+def test_get_owned_by_group(requester, respx_mocker):
     baseurl = "https://src.fedoraproject.org/api/0/group/dummy?projects=true"
 
     num_projects = 2
@@ -50,7 +50,7 @@ def test_get_owned_by_group(requester, async_respx_mocker):
         if num == 1:
             urls.append(baseurl)
         for url in urls:
-            async_respx_mocker.get(url).mock(
+            respx_mocker.get(url).mock(
                 return_value=httpx.Response(
                     status.HTTP_200_OK,
                     json={
@@ -73,8 +73,8 @@ def test_get_owned_by_group(requester, async_respx_mocker):
 
 
 @pytest.mark.parametrize("artifact_type", ["package", "container", "module", "flatpak"])
-def test_get_owners(requester, artifact_type, async_respx_mocker):
-    async_respx_mocker.get(re.compile(r"https://src.fedoraproject.org/api/0/\w+/pkg1")).mock(
+def test_get_owners(requester, artifact_type, respx_mocker):
+    respx_mocker.get(re.compile(r"https://src.fedoraproject.org/api/0/\w+/pkg1")).mock(
         return_value=httpx.Response(status.HTTP_200_OK, json={"access_users": {"owner": ["dummy"]}})
     )
     method = getattr(requester, f"get_{artifact_type}_owners")
@@ -83,8 +83,8 @@ def test_get_owners(requester, artifact_type, async_respx_mocker):
 
 
 @pytest.mark.parametrize("artifact_type", ["package", "container", "module", "flatpak"])
-def test_get_group_owners(requester, artifact_type, async_respx_mocker):
-    async_respx_mocker.get(re.compile(r"https://src.fedoraproject.org/api/0/\w+/pkg1")).mock(
+def test_get_group_owners(requester, artifact_type, respx_mocker):
+    respx_mocker.get(re.compile(r"https://src.fedoraproject.org/api/0/\w+/pkg1")).mock(
         return_value=httpx.Response(
             status.HTTP_200_OK,
             json={"access_groups": {"admin": ["dummy-1"], "commit": ["dummy-2"]}},
@@ -95,8 +95,8 @@ def test_get_group_owners(requester, artifact_type, async_respx_mocker):
     assert resp == ["dummy-1", "dummy-2"]
 
 
-def test_get_user_groups(requester, async_respx_mocker, mocked_fasjson_proxy):
-    async_respx_mocker.get("https://fasjson.fedoraproject.org/v1/users/dummy/groups/").mock(
+def test_get_user_groups(requester, respx_mocker, mocked_fasjson_proxy):
+    respx_mocker.get("https://fasjson.fedoraproject.org/v1/users/dummy/groups/").mock(
         return_value=httpx.Response(
             status.HTTP_200_OK,
             json={
@@ -142,7 +142,7 @@ def test_get_user_groups(requester, async_respx_mocker, mocked_fasjson_proxy):
     ],
 )
 def test_invalidate_on_message_user(
-    async_respx_mocker,
+    respx_mocker,
     requester,
     topic,
     body,
@@ -152,16 +152,16 @@ def test_invalidate_on_message_user(
 ):
     mocker.patch.object(cache, "region")
     message = make_mocked_message(topic=topic, body=body)
-    async_respx_mocker.get("https://src.fedoraproject.org/api/0/rpms/pkg-1",).mock(
+    respx_mocker.get("https://src.fedoraproject.org/api/0/rpms/pkg-1",).mock(
         return_value=httpx.Response(
             status.HTTP_200_OK,
             json={"access_users": {"owner": []}, "access_groups": {"admin": [], "commit": []}},
         )
     )
-    async_respx_mocker.get(re.compile(r"https://src.fedoraproject.org/api/0/projects\?.*")).mock(
+    respx_mocker.get(re.compile(r"https://src.fedoraproject.org/api/0/projects\?.*")).mock(
         return_value=httpx.Response(status.HTTP_200_OK, json={"projects": []})
     )
-    async_respx_mocker.get("https://fasjson.fedoraproject.org/v1/users/dummy/groups/").mock(
+    respx_mocker.get("https://fasjson.fedoraproject.org/v1/users/dummy/groups/").mock(
         return_value=httpx.Response(status.HTTP_200_OK, json={"result": []})
     )
 
@@ -202,20 +202,20 @@ def test_invalidate_on_message_user(
     ],
 )
 def test_invalidate_on_message_group(
-    async_respx_mocker, requester, topic, body, mocker, make_mocked_message
+    respx_mocker, requester, topic, body, mocker, make_mocked_message
 ):
     mocker.patch.object(cache, "region")
     message = make_mocked_message(topic=topic, body=body)
-    async_respx_mocker.get("https://src.fedoraproject.org/api/0/rpms/pkg-1").mock(
+    respx_mocker.get("https://src.fedoraproject.org/api/0/rpms/pkg-1").mock(
         return_value=httpx.Response(
             status.HTTP_200_OK,
             json={"access_users": {"owner": []}, "access_groups": {"admin": [], "commit": []}},
         )
     )
-    async_respx_mocker.get(re.compile(r"https://src.fedoraproject.org/api/0/group/.*\?.*")).mock(
+    respx_mocker.get(re.compile(r"https://src.fedoraproject.org/api/0/group/.*\?.*")).mock(
         return_value=httpx.Response(status.HTTP_200_OK, json={"projects": []})
     )
-    async_respx_mocker.get("https://fasjson.fedoraproject.org/v1/users/dummy/groups/").mock(
+    respx_mocker.get("https://fasjson.fedoraproject.org/v1/users/dummy/groups/").mock(
         return_value=httpx.Response(status.HTTP_200_OK, json={"result": []})
     )
 
@@ -265,17 +265,17 @@ def test_invalidate_on_message_group(
     ],
 )
 def test_no_invalidate_on_message(
-    async_respx_mocker, requester, topic, body, mocker, make_mocked_message
+    respx_mocker, requester, topic, body, mocker, make_mocked_message
 ):
     mocker.patch.object(cache, "region")
     message = make_mocked_message(topic=topic, body=body)
-    async_respx_mocker.get("https://src.fedoraproject.org/api/0/rpms/pkg-1").mock(
+    respx_mocker.get("https://src.fedoraproject.org/api/0/rpms/pkg-1").mock(
         return_value=httpx.Response(
             status.HTTP_200_OK,
             json={"access_users": {"owner": []}, "access_groups": {"admin": [], "commit": []}},
         )
     )
-    async_respx_mocker.get(re.compile(r"https://src.fedoraproject.org/api/0/projects\?.*")).mock(
+    respx_mocker.get(re.compile(r"https://src.fedoraproject.org/api/0/projects\?.*")).mock(
         return_value=httpx.Response(status.HTTP_200_OK, json={"projects": []})
     )
 
@@ -283,8 +283,8 @@ def test_no_invalidate_on_message(
     cache.region.delete.assert_not_called()
 
 
-def test_guard_bad_argument(async_respx_mocker, requester):
-    async_respx_mocker.get("https://src.fedoraproject.org/api/0/rpms/dummy").mock(
+def test_guard_bad_argument(respx_mocker, requester):
+    respx_mocker.get("https://src.fedoraproject.org/api/0/rpms/dummy").mock(
         return_value=httpx.Response(status.HTTP_200_OK, json={})
     )
     with pytest.raises(ValueError):
@@ -293,8 +293,8 @@ def test_guard_bad_argument(async_respx_mocker, requester):
         requester.distgit_client.get_owned("rpms", "dummy", "wrong")
 
 
-def test_guard_http_exception(async_respx_mocker, requester, caplog):
-    async_respx_mocker.get(re.compile(r"https://src\.fedoraproject\.org/api/.*")).mock(
+def test_guard_http_exception(respx_mocker, requester, caplog):
+    respx_mocker.get(re.compile(r"https://src\.fedoraproject\.org/api/.*")).mock(
         return_value=httpx.Response(status.HTTP_500_INTERNAL_SERVER_ERROR, content="Server Error")
     )
     resp = requester.get_owned_by_user("packages", "dummy")

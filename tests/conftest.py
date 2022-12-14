@@ -38,7 +38,7 @@ JSONSCHEMA_HYPERSCHEMA_JSON = TESTDATA / "jsonschema_hyperschema.json"
 
 
 @pytest.fixture
-async def async_respx_mocker():
+async def respx_mocker():
     async with respx.mock as rxm:
         yield rxm
 
@@ -263,8 +263,8 @@ def fasjson_group_data():
 
 
 @pytest.fixture
-def fasjson_user(async_respx_mocker, fasjson_user_data, fasjson_url):
-    async_respx_mocker.get(f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/").mock(
+def fasjson_user(respx_mocker, fasjson_user_data, fasjson_url):
+    respx_mocker.get(f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/").mock(
         return_value=httpx.Response(status.HTTP_200_OK, json={"result": fasjson_user_data})
     )
 
@@ -272,8 +272,8 @@ def fasjson_user(async_respx_mocker, fasjson_user_data, fasjson_url):
 
 
 @pytest.fixture
-def fasjson_groups(async_respx_mocker, fasjson_user_data, fasjson_group_data, fasjson_url):
-    async_respx_mocker.get(f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/groups/").mock(
+def fasjson_groups(respx_mocker, fasjson_user_data, fasjson_group_data, fasjson_url):
+    respx_mocker.get(f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/groups/").mock(
         return_value=httpx.Response(status.HTTP_200_OK, json={"result": fasjson_group_data})
     )
 
