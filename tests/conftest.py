@@ -4,7 +4,6 @@ from unittest import mock
 import alembic.command
 import httpx
 import pytest
-import responses
 import respx
 from click.testing import CliRunner
 from fastapi import status
@@ -39,12 +38,6 @@ JSONSCHEMA_HYPERSCHEMA_JSON = TESTDATA / "jsonschema_hyperschema.json"
 
 
 @pytest.fixture
-def responses_mocker():
-    with responses.mock as rm:
-        yield rm
-
-
-@pytest.fixture
 async def async_respx_mocker():
     async with respx.mock as rxm:
         yield rxm
@@ -75,7 +68,7 @@ def datagrepper_url() -> str:
 
 
 @pytest.fixture
-def mocked_fasjson(responses_mocker, fasjson_url):
+def mocked_fasjson(fasjson_url):
     spec_v1_url = fasjson_url + "/specs/v1.json"
 
     with (
@@ -86,10 +79,6 @@ def mocked_fasjson(responses_mocker, fasjson_url):
         fasjson_v1 = fasjson_v1_spec.read()
         jsonschema_links = jsonschema_links_spec.read()
         jsonschema_hyperschema = jsonschema_hyperschema_spec.read()
-
-    responses.get(spec_v1_url, body=fasjson_v1)
-    responses.get(JSONSCHEMA_LINKS_URL, body=jsonschema_links)
-    responses.get(JSONSCHEMA_HYPERSCHEMA_URL, body=jsonschema_hyperschema)
 
     respx.get(spec_v1_url).mock(return_value=httpx.Response(status.HTTP_200_OK, json=fasjson_v1))
     respx.get(JSONSCHEMA_LINKS_URL).mock(
@@ -274,11 +263,7 @@ def fasjson_group_data():
 
 
 @pytest.fixture
-def fasjson_user(responses_mocker, async_respx_mocker, fasjson_user_data, fasjson_url):
-    responses_mocker.get(
-        f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/",
-        json={"result": fasjson_user_data},
-    )
+def fasjson_user(async_respx_mocker, fasjson_user_data, fasjson_url):
     async_respx_mocker.get(f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/").mock(
         return_value=httpx.Response(status.HTTP_200_OK, json={"result": fasjson_user_data})
     )
@@ -287,13 +272,7 @@ def fasjson_user(responses_mocker, async_respx_mocker, fasjson_user_data, fasjso
 
 
 @pytest.fixture
-def fasjson_groups(
-    responses_mocker, async_respx_mocker, fasjson_user_data, fasjson_group_data, fasjson_url
-):
-    responses_mocker.get(
-        f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/groups/",
-        json={"result": fasjson_group_data},
-    )
+def fasjson_groups(async_respx_mocker, fasjson_user_data, fasjson_group_data, fasjson_url):
     async_respx_mocker.get(f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/groups/").mock(
         return_value=httpx.Response(status.HTTP_200_OK, json={"result": fasjson_group_data})
     )
