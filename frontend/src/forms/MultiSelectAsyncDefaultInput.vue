@@ -13,7 +13,10 @@ const props = defineProps<{ context: FormKitFrameworkContext }>();
 
 type Option = { [key in "label" | "value"]: string };
 
-const asOptions = (values: string[]) => {
+const asOptions = (values: string[] | undefined) => {
+  if (!values) {
+    return values;
+  }
   return values.map(
     (value): Option => ({
       label: value,
@@ -25,7 +28,6 @@ const asOptions = (values: string[]) => {
 const getAsOptions = async (query: string, select$: Multiselect) => {
   // According to Multiselect's API, we must return a list of objects when using an async function for options.
   const result = await props.context.node.props.msOptions(query, select$);
-  console.log("Got:", result);
   return asOptions(result);
 };
 
@@ -37,8 +39,8 @@ const bindableProps = computed(() => {
   return values;
 });
 
-function handleChange(value: Option) {
-  props.context.node.input(value.value);
+function handleChange(value: Option[]) {
+  props.context.node.input(value.map((v) => v.value));
 }
 
 // This helped: https://codesandbox.io/s/0w1c1h?file=/src/FormKitMultiselect.vue
