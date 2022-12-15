@@ -102,9 +102,15 @@ const formReady = computed(() => generationRulesCount.value > 0);
     :actions="false"
     :value="props.rule"
   >
-    <CRow class="mb-2">
-      <CCol xs="auto" class="me-auto">
-        <h4>
+    <CRow class="mb-2 d-flex">
+      <CCol xs="auto" class="flex-grow-1 d-flex align-items-center h3">
+        <FormKit
+          type="checkbox"
+          name="disabled"
+          :on-value="false"
+          :off-value="true"
+        />
+        <h4 class="mb-0 flex-grow-1">
           <EditableName
             name="name"
             button-class="fs-3"
@@ -113,7 +119,7 @@ const formReady = computed(() => generationRulesCount.value > 0);
           />
         </h4>
       </CCol>
-      <CCol xs="auto">
+      <CCol xs="auto" class="d-flex align-items-center">
         <CButtonGroup>
           <CButton
             @click.prevent="handleDelete"

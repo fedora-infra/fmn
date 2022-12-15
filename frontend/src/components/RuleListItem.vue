@@ -17,7 +17,10 @@ const tracking_rule = TRACKING_RULES.find(
 </script>
 
 <template>
-  <CListGroupItem class="d-flex justify-content-between align-items-center">
+  <CListGroupItem
+    class="d-flex justify-content-between align-items-center"
+    :class="{ 'bg-light text-muted': props.rule.disabled }"
+  >
     <div>
       <div class="fw-bold">{{ props.rule.name }}</div>
       <div>
