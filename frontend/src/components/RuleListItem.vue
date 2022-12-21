@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { CListGroupItem } from "@coreui/bootstrap-vue";
-import { cilPen } from "@coreui/icons";
-import { CIcon } from "@coreui/icons-vue";
 
 import { TRACKING_RULES } from "../api/constants";
 
@@ -18,11 +16,18 @@ const tracking_rule = TRACKING_RULES.find(
 
 <template>
   <CListGroupItem
-    class="d-flex justify-content-between align-items-center"
-    :class="{ 'bg-light text-muted': props.rule.disabled }"
+    class="d-flex justify-content-between align-items-center list-group-item-action"
+    :class="{ 'text-muted bg-light': props.rule.disabled }"
+    style="--bs-bg-opacity: 0.4"
   >
     <div>
-      <div class="fw-bold">{{ props.rule.name }}</div>
+      <div class="fw-bold">
+        <router-link
+          :to="`/rules/${props.rule.id}`"
+          class="text-decoration-none"
+          >{{ props.rule.name }}</router-link
+        >
+      </div>
       <div>
         {{ tracking_rule.label }}
       </div>
@@ -57,14 +62,6 @@ const tracking_rule = TRACKING_RULES.find(
           </template>
         </template>
       </div>
-    </div>
-    <div>
-      <router-link
-        :to="`/rules/${props.rule.id}`"
-        class="btn btn-outline-primary ms-1"
-      >
-        <CIcon :icon="cilPen" />
-      </router-link>
     </div>
   </CListGroupItem>
 </template>
