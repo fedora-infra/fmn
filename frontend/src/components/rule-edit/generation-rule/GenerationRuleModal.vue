@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { GenerationRule, Rule, TrackingRule } from "@/api/types";
+import type { GenerationRule, Rule, TrackingRuleEditing } from "@/api/types";
 import {
   CModal,
   CModalBody,
@@ -35,7 +35,7 @@ const previzData = computed(() => {
   const result: Omit<Rule, "id"> = {
     name: root.context._value.name as string,
     disabled: false,
-    tracking_rule: root.context._value.tracking_rule as TrackingRule,
+    tracking_rule: root.context._value.tracking_rule as TrackingRuleEditing,
     generation_rules: [node.value.node.value as GenerationRule],
   };
   return result;

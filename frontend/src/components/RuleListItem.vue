@@ -43,11 +43,9 @@ const tracking_rule = TRACKING_RULES.find(
         >
         <template
           v-if="
-            [
-              'artifacts-owned',
-              'artifacts-group-owned',
-              'users-followed',
-            ].includes(rule.tracking_rule.name)
+            rule.tracking_rule.name == 'artifacts-owned' ||
+            rule.tracking_rule.name == 'artifacts-group-owned' ||
+            rule.tracking_rule.name == 'users-followed'
           "
         >
           <template
@@ -57,14 +55,12 @@ const tracking_rule = TRACKING_RULES.find(
             ><strong>&nbsp;{{ name }}</strong></template
           >
         </template>
-        <template
-          v-if="['artifacts-followed'].includes(rule.tracking_rule.name)"
-        >
+        <template v-if="rule.tracking_rule.name == 'artifacts-followed'">
           <template
             v-for="(artifact, index) in rule.tracking_rule.params"
             :key="index"
             ><span v-if="index != 0">,</span>
-            <strong> {{ artifact.type }}/{{ artifact.name }}</strong></template
+            <strong>{{ artifact.type }}/{{ artifact.name }}</strong></template
           >
         </template>
       </div>
