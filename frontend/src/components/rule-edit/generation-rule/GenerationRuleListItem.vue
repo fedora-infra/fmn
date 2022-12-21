@@ -31,6 +31,26 @@ const handleDeleteClicked = () => {
         :key="`${dest.protocol}:${dest.address}`"
       />
     </span>
+    <div class="text-end">
+      <template v-for="(f_params, f_name) in props.rule.filters" :key="f_name">
+        <span
+          class="badge text-bg-warning fw-normal ms-1"
+          v-if="
+            f_params !== null &&
+            f_params !== false &&
+            !(Array.isArray(f_params) && f_params.length === 0)
+          "
+          ><strong>{{ f_name }}</strong>
+          <template v-if="typeof f_params !== 'boolean'"> : </template>
+          <template v-if="Array.isArray(f_params)">{{
+            f_params.join(", ")
+          }}</template
+          ><template v-else-if="typeof f_params !== 'boolean'">{{
+            f_params
+          }}</template></span
+        >
+      </template>
+    </div>
     <span>
       <!--<span>X avg messages a day</span>-->
       <CButton
