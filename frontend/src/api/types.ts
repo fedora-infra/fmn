@@ -56,10 +56,26 @@ export type Severity =
   | typeof WARNING
   | typeof ERROR;
 
-interface TrackingRuleEditing {
-  name: string;
-  params?: string[] | Record<string, string>;
+interface ListParamTrackingRule {
+  name: "artifacts-owned" | "artifacts-group-owned" | "users-followed";
+  params: string[];
 }
+
+interface NoParamTrackingRule {
+  name: "related-events";
+  params?: string;
+}
+
+interface ArtifactsFollowedTrackingRule {
+  name: "artifacts-followed";
+  params: Record<string, string>[];
+}
+
+export type TrackingRuleEditing =
+  | ListParamTrackingRule
+  | NoParamTrackingRule
+  | ArtifactsFollowedTrackingRule;
+
 export interface Rule {
   id: number;
   name: string;
