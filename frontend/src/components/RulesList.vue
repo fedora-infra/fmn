@@ -23,10 +23,17 @@ const filteringOptions = computed(() => [
       .filter((o) => typeof o !== "undefined") as TrackingRule[]
   ),
 ]);
+const rules = computed(() => {
+  return [...props.rules].sort(
+    (a, b) =>
+      Number(a.disabled) - Number(b.disabled) ||
+      b.tracking_rule.name.localeCompare(a.tracking_rule.name)
+  );
+});
 </script>
 
 <template>
-  <CCard v-if="props.rules.length === 0" class="border bg-light py-5">
+  <CCard v-if="rules.length === 0" class="border bg-light py-5">
     <CCardBody>
       <h2 class="text-center text-muted">No Rules.</h2>
       <div class="text-center mt-3">
@@ -37,7 +44,7 @@ const filteringOptions = computed(() => [
     </CCardBody>
   </CCard>
   <template v-else>
-    <p class="fw-bold">{{ props.rules.length }} rule(s)</p>
+    <p class="fw-bold">{{ rules.length }} rule(s)</p>
 
     <CListGroup>
       <CListGroupItem
@@ -58,7 +65,7 @@ const filteringOptions = computed(() => [
         </router-link>
       </CListGroupItem>
       <RuleListItem
-        v-for="rule in props.rules.filter(
+        v-for="rule in rules.filter(
           (r) =>
             !tracking_rule_filter ||
             r.tracking_rule.name.includes(tracking_rule_filter)
