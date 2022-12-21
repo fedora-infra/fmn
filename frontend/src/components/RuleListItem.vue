@@ -21,7 +21,7 @@ const tracking_rule = TRACKING_RULES.find(
     style="--bs-bg-opacity: 0.4"
   >
     <div>
-      <div class="fw-bold">
+      <div class="fw-bold fs-4">
         <router-link
           :to="`/rules/${props.rule.id}`"
           class="text-decoration-none"
@@ -29,7 +29,44 @@ const tracking_rule = TRACKING_RULES.find(
         >
       </div>
       <div>
-        {{ tracking_rule.label }}
+        {{ tracking_rule.prefixlabel
+        }}<template
+          v-if="
+            rule.tracking_rule.params && rule.tracking_rule.params.length > 1
+          "
+          >s:</template
+        ><template
+          v-else-if="
+            rule.tracking_rule.params && rule.tracking_rule.params.length == 1
+          "
+          >:</template
+        >
+        <template
+          v-if="
+            [
+              'artifacts-owned',
+              'artifacts-group-owned',
+              'users-followed',
+            ].includes(rule.tracking_rule.name)
+          "
+        >
+          <template
+            v-for="(name, index) in rule.tracking_rule.params"
+            :key="index"
+            ><span v-if="index != 0">,</span
+            ><strong>&nbsp;{{ name }}</strong></template
+          >
+        </template>
+        <template
+          v-if="['artifacts-followed'].includes(rule.tracking_rule.name)"
+        >
+          <template
+            v-for="(artifact, index) in rule.tracking_rule.params"
+            :key="index"
+            ><span v-if="index != 0">,</span>
+            <strong> {{ artifact.type }}/{{ artifact.name }}</strong></template
+          >
+        </template>
       </div>
     </div>
     <div>
