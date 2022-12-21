@@ -3,6 +3,7 @@ import type { DEBUG, ERROR, INFO, WARNING } from "./constants";
 export interface TrackingRule {
   name: string;
   label: string;
+  prefixlabel: string;
   description: string;
 }
 
