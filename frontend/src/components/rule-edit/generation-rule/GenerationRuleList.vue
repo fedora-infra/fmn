@@ -79,7 +79,8 @@ const editedRule = computed(() =>
       <div class="text-center">
         <CButton
           @click.prevent="() => handleButtonClicked(-1)"
-          :color="generation_rules.length === 0 ? 'primary' : 'outline-primary'"
+          color="primary"
+          :variant="generation_rules.length === 0 ? undefined : 'outline'"
           class="my-1"
         >
           <CIcon :icon="cilPlus" />
