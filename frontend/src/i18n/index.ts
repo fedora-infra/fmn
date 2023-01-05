@@ -19,6 +19,8 @@ const i18n = createI18n({
   locale: navigator.language,
   fallbackLocale: "en-US",
   messages: {},
+  fallbackWarn: false,
+  missingWarn: false,
 });
 
 export default i18n;
