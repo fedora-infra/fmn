@@ -17,7 +17,7 @@ const oldRuleName = ref<string | null>("");
 const node = ref<{ node: FormKitNode } | null>(null);
 
 const onTrackingRuleChange = (value: string, node: FormKitNode) => {
-  console.log("old tr name was", oldRuleName.value, ", new tr name is", value);
+  // console.log("old tr name was", oldRuleName.value, ", new tr name is", value);
   if (value === oldRuleName.value) {
     return;
   }
