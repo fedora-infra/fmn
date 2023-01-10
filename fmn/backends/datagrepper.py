@@ -1,8 +1,6 @@
 import logging
 from typing import Any, AsyncIterator
 
-from httpx import AsyncClient
-
 from ..core.util import make_synchronous
 from .base import APIClient, NextPageParams
 
@@ -17,9 +15,7 @@ class DatagrepperAsyncProxy(APIClient):
     payload_field = "raw_messages"
 
     def __init__(self, base_url: str):
-        self.client = AsyncClient(
-            base_url=f"{base_url.rstrip('/')}/{self.API_VERSION}", timeout=None
-        )
+        super().__init__(f"{base_url.rstrip('/')}/{self.API_VERSION}")
 
     def determine_next_page_params(self, url: str, params: dict, result: dict) -> NextPageParams:
         if "arguments" in result and "page" in result["arguments"] and "pages" in result:
