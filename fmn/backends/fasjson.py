@@ -1,7 +1,6 @@
 import logging
 from typing import Any, AsyncIterator
 
-from httpx import AsyncClient
 from httpx_gssapi import HTTPSPNEGOAuth
 
 from ..core.util import make_synchronous
@@ -18,11 +17,7 @@ class FASJSONAsyncProxy(APIClient):
     payload_field = "result"
 
     def __init__(self, base_url: str):
-        self.client = AsyncClient(
-            base_url=f"{base_url.rstrip('/')}/{self.API_VERSION}",
-            auth=HTTPSPNEGOAuth(),
-            timeout=None,
-        )
+        super().__init__(f"{base_url.rstrip('/')}/{self.API_VERSION}", auth=HTTPSPNEGOAuth())
 
     def determine_next_page_params(self, url: str, params: dict, result: dict) -> NextPageParams:
         if "page" in result and "page_number" in result["page"] and "total_pages" in result["page"]:

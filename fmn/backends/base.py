@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from copy import deepcopy
+from functools import cache as ft_cache
 from typing import Any, AsyncIterator
 
 from httpx import AsyncClient
@@ -11,11 +12,19 @@ class APIClient(ABC):
     payload_field: str | None
     """The payload field in a paginated response."""
 
-    def __init__(self, base_url: str = None):
-        kwargs = {"timeout": None}
+    def __init__(self, base_url: str = None, **kwargs):
+        self.base_url = base_url
+
+        kwargs.setdefault("timeout", None)
         if base_url is not None:
             kwargs["base_url"] = base_url
+
         self.client = AsyncClient(**kwargs)
+
+    @ft_cache
+    def __str__(self) -> str:
+        clsname = type(self).__name__
+        return f"{clsname}({self.base_url!r})"
 
     def extract_payload(self, result: dict, payload_field: str = None) -> Any:
         if payload_field is None:

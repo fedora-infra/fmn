@@ -44,6 +44,10 @@ class TestAPIClient:
         else:
             assert client.client.base_url == ""
 
+    def test___str__(self):
+        client = ConcreteAPIClient("https://example.com")
+        assert str(client) == "ConcreteAPIClient('https://example.com')"
+
     @pytest.mark.parametrize("testcase", ("set-on-call", "set-on-class", "unset"))
     def test_extract_payload(self, testcase):
         test_result = {
