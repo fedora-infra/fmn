@@ -40,6 +40,10 @@ class Settings(BaseSettings):
     oidc_client_id: str = "0123456789abcdef0123456789abcdef"
     oidc_client_secret: str = "0123456789abcdef0123456789abcdef"
 
+    # these fields are computed from the above
+    oidc_conf_url: str | None
+    oidc_token_info_url: str | None
+
     id_cache_gc_interval: int = 300
 
     database: DBModel = DBModel()
