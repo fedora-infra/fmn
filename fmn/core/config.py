@@ -1,17 +1,27 @@
+from datetime import timedelta
 from functools import cache
-from typing import Any, Mapping
+from typing import Any
 
 from pydantic import BaseModel, BaseSettings, root_validator, stricturl
 
 DEFAULT_CONFIG_FILE = _settings_file = "/etc/fmn/fmn.cfg"
 
+CashewsTTLTypes = int | float | str | timedelta
 
-class CacheModel(BaseModel):
-    url: str = "mem://"
-    arguments: Mapping[str, Any] | None = None
+
+class CacheArgsModel(BaseModel):
+    ttl: CashewsTTLTypes | None = None
 
     class Config:
         extra = "allow"
+
+
+class CacheModel(BaseModel):
+    url: stricturl(tld_required=False, host_required=False) = None
+    setup_args: dict[str, Any] | None = None
+
+    default_args: CacheArgsModel = CacheArgsModel(ttl="1h")
+    scoped_args: dict[str, CacheArgsModel] = {}
 
 
 class SQLAlchemyModel(BaseModel):
