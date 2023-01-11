@@ -4,7 +4,6 @@ import pytest
 from cashews import cache
 from cashews.formatter import get_templates_for_func
 
-from fmn.cache import configure_cache
 from fmn.cache.tracked import TrackedCache
 from fmn.database.model import Rule, TrackingRule, User
 
@@ -18,12 +17,6 @@ def requester():
 def rule():
     tr = TrackingRule(id=1, name="artifacts-owned", params={"username": "dummy"})
     return Rule(id=1, user=User(name="dummy"), tracking_rule=tr, generation_rules=[])
-
-
-async def test_cache_configure(mocker):
-    mocker.patch.object(cache, "setup")
-    configure_cache()
-    cache.setup.assert_called_with("mem://")
 
 
 async def test_build_tracked(mocker, requester, db_async_session):

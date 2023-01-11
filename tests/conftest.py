@@ -5,6 +5,7 @@ import alembic.command
 import httpx
 import pytest
 import respx
+from cashews import cache
 from click.testing import CliRunner
 from fastapi import status
 from fastapi.testclient import TestClient
@@ -12,6 +13,7 @@ from fedora_messaging import message
 
 from fmn.api import distgit, main
 from fmn.backends import FASJSONAsyncProxy
+from fmn.cache.util import cache_arg
 from fmn.core.config import get_settings
 from fmn.database.main import (
     Base,
@@ -35,6 +37,18 @@ JSONSCHEMA_LINKS_URL = f"{JSONSCHEMA_BASE_URL}/links"
 JSONSCHEMA_LINKS_JSON = TESTDATA / "jsonschema_links.json"
 JSONSCHEMA_HYPERSCHEMA_URL = f"{JSONSCHEMA_BASE_URL}/hyper-schema"
 JSONSCHEMA_HYPERSCHEMA_JSON = TESTDATA / "jsonschema_hyperschema.json"
+
+
+@pytest.fixture(autouse=True)
+def ensure_fresh_settings():
+    get_settings.cache_clear()
+
+
+@pytest.fixture(autouse=True)
+def ensure_in_memory_cache(monkeypatch):
+    # Use in-memory instead of shared Redis cache for testing.
+    monkeypatch.setenv("CACHE__URL", "mem://")
+    cache.setup("mem://")
 
 
 @pytest.fixture
@@ -327,3 +341,24 @@ def make_mocked_message():
     yield Message
     del message._schema_name_to_class["testmessage"]
     del message._class_to_schema_name[Message]
+
+
+@pytest.fixture(scope="session")
+def register_cache_arg_fns():
+    cached_fns = set()
+
+    def wrap_cache_arg(*args, **kwargs):
+        fn = cache_arg(*args, **kwargs)
+        cached_fns.add(fn)
+        return fn
+
+    with mock.patch("fmn.cache.util.cache_arg", wraps=wrap_cache_arg):
+        yield cached_fns
+
+
+@pytest.fixture(autouse=True)
+def reset_cache_arg_caches(register_cache_arg_fns):
+    yield
+
+    for cached_fn in register_cache_arg_fns:
+        cached_fn.cache_clear()
