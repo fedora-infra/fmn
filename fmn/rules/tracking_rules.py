@@ -1,8 +1,7 @@
 import logging
 from typing import TYPE_CHECKING
 
-from fmn.core.constants import ArtifactType
-
+from ..core.constants import ArtifactType
 from .requester import Requester
 
 if TYPE_CHECKING:

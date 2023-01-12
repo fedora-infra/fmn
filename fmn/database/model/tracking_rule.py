@@ -9,7 +9,7 @@ from ..main import Base
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
 
-    from fmn.rules.requester import Requester
+    from ...rules.requester import Requester
 
 
 class TrackingRule(Base):

@@ -7,13 +7,12 @@ from fedora_messaging import message
 from fedora_messaging.config import conf as fm_config
 from fedora_messaging.exceptions import Nack
 
-from fmn.cache import configure_cache
-from fmn.cache.tracked import TrackedCache
-from fmn.core import config
-from fmn.database import async_session_maker, init_async_model
-from fmn.database.model import Rule
-from fmn.rules.requester import Requester
-
+from ..cache import configure_cache
+from ..cache.tracked import TrackedCache
+from ..core import config
+from ..database import async_session_maker, init_async_model
+from ..database.model import Rule
+from ..rules.requester import Requester
 from .send_queue import SendQueue
 
 log = logging.getLogger(__name__)

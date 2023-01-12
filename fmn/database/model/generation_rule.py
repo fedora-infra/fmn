@@ -3,14 +3,13 @@ from typing import TYPE_CHECKING
 from sqlalchemy import Column, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 
-from fmn.rules.notification import Notification
-
+from ...rules.notification import Notification
 from ..main import Base
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
 
-    from fmn.rules.requester import Requester
+    from ...rules.requester import Requester
 
 
 class GenerationRule(Base):

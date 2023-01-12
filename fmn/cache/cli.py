@@ -3,12 +3,11 @@ from pprint import pprint
 
 import click
 
-from fmn.cache import configure_cache
-from fmn.cache.tracked import TrackedCache
-from fmn.core.config import get_settings
-from fmn.database import async_session_maker, init_async_model
-
+from ..core.config import get_settings
+from ..database import async_session_maker, init_async_model
 from ..rules.requester import Requester
+from . import configure_cache
+from .tracked import TrackedCache
 
 
 @click.group("cache")

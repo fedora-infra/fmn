@@ -1,6 +1,6 @@
 from cashews import cache
 
-from fmn.core import config
+from ..core import config
 
 
 def configure_cache(**kwargs):

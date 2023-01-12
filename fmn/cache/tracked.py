@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from cashews import cache
 from cashews.formatter import get_templates_for_func
 
-from fmn.database.model import Rule
+from ..database.model import Rule
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message

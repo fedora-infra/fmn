@@ -2,10 +2,10 @@ from typing import Iterator
 
 from fedora_messaging import message
 
-from fmn.backends import DatagrepperAsyncProxy
-from fmn.core.config import get_settings
-from fmn.database.model import Destination, Filter, GenerationRule, Rule, TrackingRule
-from fmn.rules.requester import Requester
+from ...backends import DatagrepperAsyncProxy
+from ...core.config import get_settings
+from ...database.model import Destination, Filter, GenerationRule, Rule, TrackingRule
+from ...rules.requester import Requester
 
 
 def db_rule_from_api_rule(rule, user):

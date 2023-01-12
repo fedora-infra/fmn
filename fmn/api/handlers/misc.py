@@ -4,16 +4,15 @@ from importlib import metadata
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from fmn.api import api_models
-from fmn.api.auth import Identity, get_identity
-from fmn.api.database import gen_db_session
-from fmn.api.distgit import DistGitClient, get_distgit_client
-from fmn.core.constants import ArtifactType
-from fmn.database.migrations.main import alembic_migration
-from fmn.database.model import User
-from fmn.rules.notification import Notification
-from fmn.rules.requester import Requester
-
+from ...core.constants import ArtifactType
+from ...database.migrations.main import alembic_migration
+from ...database.model import User
+from ...rules.notification import Notification
+from ...rules.requester import Requester
+from .. import api_models
+from ..auth import Identity, get_identity
+from ..database import gen_db_session
+from ..distgit import DistGitClient, get_distgit_client
 from .utils import db_rule_from_api_rule, gen_requester, get_last_messages
 
 log = logging.getLogger(__name__)
