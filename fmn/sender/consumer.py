@@ -3,7 +3,7 @@ import logging
 
 from aio_pika import connect_robust
 
-from fmn.core.amqp import get_url_from_config
+from ..core.amqp import get_url_from_config
 
 _log = logging.getLogger(__name__)
 

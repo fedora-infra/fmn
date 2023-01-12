@@ -14,7 +14,7 @@ from .user import User
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
 
-    from fmn.rules.requester import Requester
+    from ...rules.requester import Requester
 
 
 log = logging.getLogger(__name__)

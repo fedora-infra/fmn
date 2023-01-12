@@ -10,7 +10,7 @@ from .generation_rule import GenerationRule
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
 
-    from fmn.rules.requester import Requester
+    from ...rules.requester import Requester
 
 
 class Filter(Base):

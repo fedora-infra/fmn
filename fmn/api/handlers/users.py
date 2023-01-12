@@ -4,10 +4,9 @@ from urllib.parse import urlparse
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from fmn.database.model import Destination, Filter, GenerationRule, Rule, User
-from fmn.messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
-
 from ...backends import FASJSONAsyncProxy
+from ...database.model import Destination, Filter, GenerationRule, Rule, User
+from ...messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
 from .. import api_models
 from ..auth import Identity, get_identity, get_identity_optional
 from ..database import gen_db_session

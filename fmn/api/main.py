@@ -7,8 +7,7 @@ from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.requests import Request as StarletteRequest
 from starlette.types import ASGIApp
 
-from fmn.cache import configure_cache
-
+from ..cache import configure_cache
 from ..core.config import get_settings
 from ..database import init_async_model
 from . import handlers

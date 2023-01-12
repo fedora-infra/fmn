@@ -6,7 +6,7 @@ from pydantic import Field
 from pydantic.generics import GenericModel
 from pydantic.utils import GetterDict
 
-from fmn.core.constants import ArtifactType
+from ..core.constants import ArtifactType
 
 log = logging.getLogger(__name__)
 
