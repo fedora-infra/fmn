@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
 from copy import deepcopy
-from typing import Any
+from typing import Any, AsyncIterator
 
 from httpx import AsyncClient
+
+NextPageParams = tuple[str, dict] | tuple[None, None]
 
 
 class APIClient(ABC):
@@ -27,7 +29,7 @@ class APIClient(ABC):
     @abstractmethod
     def determine_next_page_params(
         self, url: str, params: dict, result: dict
-    ) -> tuple[str, dict] | tuple[None, None]:  # pragma: no cover
+    ) -> NextPageParams:  # pragma: no cover
         """Determine parameters for next page.
 
         :param url:     API endpoint URL
@@ -38,18 +40,18 @@ class APIClient(ABC):
         """
         raise NotImplementedError()
 
-    async def get(self, url: str, **kwargs):
+    async def get(self, url: str, **kwargs) -> Any:
         """Query the API for a single result."""
         response = await self.client.get(url, **kwargs)
         response.raise_for_status()
         return response.json()
 
-    async def get_payload(self, url: str, *, payload_field: str = None, **kwargs):
+    async def get_payload(self, url: str, *, payload_field: str = None, **kwargs) -> Any:
         return self.extract_payload(await self.get(url, **kwargs), payload_field=payload_field)
 
     async def get_paginated(
         self, url: str, *, params: dict = None, payload_field: str = None, **kwargs
-    ):
+    ) -> AsyncIterator:
         """Query the API and iterate over paginated results if applicable."""
         if params is None:
             params = {}

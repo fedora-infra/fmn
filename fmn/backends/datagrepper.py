@@ -4,7 +4,7 @@ from typing import Any, AsyncIterator
 from httpx import AsyncClient
 
 from ..core.util import make_synchronous
-from .base import APIClient
+from .base import APIClient, NextPageParams
 
 log = logging.getLogger(__name__)
 
@@ -21,9 +21,7 @@ class DatagrepperAsyncProxy(APIClient):
             base_url=f"{base_url.rstrip('/')}/{self.API_VERSION}", timeout=None
         )
 
-    def determine_next_page_params(
-        self, url: str, params: dict, result: dict
-    ) -> tuple[str, dict] | tuple[None, None]:
+    def determine_next_page_params(self, url: str, params: dict, result: dict) -> NextPageParams:
         if "arguments" in result and "page" in result["arguments"] and "pages" in result:
             page_number = result["arguments"]["page"]
             if page_number < result["pages"]:
@@ -32,7 +30,7 @@ class DatagrepperAsyncProxy(APIClient):
 
         return None, None
 
-    async def search(self, **params: dict[str, Any]) -> AsyncIterator:
+    async def search(self, **params: dict[str, Any]) -> AsyncIterator[dict]:
         async for msg in self.get_paginated("/search", params=params):
             yield msg
 

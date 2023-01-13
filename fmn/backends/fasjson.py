@@ -5,7 +5,7 @@ from httpx import AsyncClient
 from httpx_gssapi import HTTPSPNEGOAuth
 
 from ..core.util import make_synchronous
-from .base import APIClient
+from .base import APIClient, NextPageParams
 
 log = logging.getLogger(__name__)
 
@@ -24,9 +24,7 @@ class FASJSONAsyncProxy(APIClient):
             timeout=None,
         )
 
-    def determine_next_page_params(
-        self, url: str, params: dict, result: dict
-    ) -> tuple[str, dict] | tuple[None, None]:
+    def determine_next_page_params(self, url: str, params: dict, result: dict) -> NextPageParams:
         if "page" in result and "page_number" in result["page"] and "total_pages" in result["page"]:
             page_number = result["page"]["page_number"]
             if page_number < result["page"]["total_pages"]:

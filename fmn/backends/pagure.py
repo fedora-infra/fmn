@@ -3,7 +3,7 @@ import logging
 from httpx import AsyncClient
 
 from ..core.util import make_synchronous
-from .base import APIClient
+from .base import APIClient, NextPageParams
 
 log = logging.getLogger(__name__)
 
@@ -18,9 +18,7 @@ class PagureAsyncProxy(APIClient):
             base_url=f"{base_url.rstrip('/')}/api/{self.API_VERSION}", timeout=None
         )
 
-    def determine_next_page_params(
-        self, url: str, params: dict, result: dict
-    ) -> tuple[str, dict] | tuple[None, None]:
+    def determine_next_page_params(self, url: str, params: dict, result: dict) -> NextPageParams:
         next_url = result.get("pagination", {}).get("next")
         if next_url:
             return next_url, params
