@@ -2,7 +2,7 @@ from typing import Iterator
 
 from fedora_messaging import message
 
-from fmn.backends import DatagrepperSyncProxy
+from fmn.backends import DatagrepperAsyncProxy
 from fmn.core.config import get_settings
 from fmn.database.model import Destination, Filter, GenerationRule, Rule, TrackingRule
 from fmn.rules.requester import Requester
@@ -33,15 +33,15 @@ def gen_requester() -> Iterator[Requester]:
     :return: A :class:`fmn.rules.requester.Requester` object for the
         current request
     """
-    requester = Requester(get_settings().dict()["services"])
+    requester = Requester(get_settings().services)
     yield requester
 
 
 # TODO: absolutely cache this
-def get_last_messages(hours):
-    proxy = DatagrepperSyncProxy(get_settings().services.datagrepper_url)
+async def get_last_messages(hours):
+    proxy = DatagrepperAsyncProxy(get_settings().services.datagrepper_url)
 
-    for msg_dict in proxy.search(delta=int(hours) * 60 * 60, rows_per_page=100):
+    async for msg_dict in proxy.search(delta=int(hours) * 60 * 60, rows_per_page=100):
         yield get_message(msg_dict)
 
 

@@ -472,7 +472,7 @@ class TestPreviewRule(BaseTestAPIV1Handler):
     }
 
     def test_preview_basic(self, mocker, respx_mocker, client, api_identity, make_mocked_message):
-        mocker.patch("fmn.rules.services.fasjson.FASJSONSyncProxy")
+        mocker.patch("fmn.rules.services.fasjson.FASJSONAsyncProxy")
         respx_mocker.get(
             "https://apps.fedoraproject.org/datagrepper/v2/search?rows_per_page=100&delta=3600"
         ).mock(
@@ -514,23 +514,23 @@ class TestPreviewRule(BaseTestAPIV1Handler):
 
     def test_preview_anonymous(self, mocker, client, api_identity):
         api_identity.name = None
-        mocker.patch("fmn.rules.services.fasjson.FASJSONSyncProxy")
+        mocker.patch("fmn.rules.services.fasjson.FASJSONAsyncProxy")
         response = client.post(f"{self.path}/rule-preview", json=self._dummy_rule_dict)
 
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    def test_dg_url_fix(self, mocker, respx_mocker):
+    async def test_dg_url_fix(self, mocker, respx_mocker):
         settings = get_settings()
         settings.services.datagrepper_url = "http://datagrepper.test"
         mocker.patch("fmn.api.handlers.utils.get_settings", return_value=settings)
         resp = respx_mocker.get(re.compile(r"http://datagrepper\.test/v2/search.*")).mock(
             httpx.Response(status.HTTP_200_OK, json={"raw_messages": [], "pages": 0})
         )
-        messages = list(get_last_messages(1))
+        messages = [m async for m in get_last_messages(1)]
         assert messages == []
         assert resp.call_count == 1
 
-    def test_get_last_messages_pages(self, mocker, respx_mocker, make_mocked_message):
+    async def test_get_last_messages_pages(self, mocker, respx_mocker, make_mocked_message):
         rsp1 = respx_mocker.get(
             "https://apps.fedoraproject.org/datagrepper/v2/search?rows_per_page=100&delta=3600"
         ).mock(
@@ -577,7 +577,7 @@ class TestPreviewRule(BaseTestAPIV1Handler):
             )
         )
 
-        messages = list(get_last_messages(1))
+        messages = [m async for m in get_last_messages(1)]
 
         assert len(messages) == 2
         assert rsp1.call_count == 1

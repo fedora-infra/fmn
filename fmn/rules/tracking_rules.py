@@ -22,10 +22,10 @@ class TrackingRule:
         self._params = params
         self._owner = owner
 
-    def matches(self, message: "Message"):
+    async def matches(self, message: "Message"):
         raise NotImplementedError  # pragma: no cover
 
-    def prime_cache(self, cache):
+    async def prime_cache(self, cache):
         raise NotImplementedError  # pragma: no cover
 
 
@@ -36,35 +36,23 @@ class ArtifactsOwned(TrackingRule):
         super().__init__(*args, **kwargs)
         self.usernames = set(self._params)
 
-    def matches(self, message):
-        for package in message.packages:
-            if self.usernames & set(self._requester.get_package_owners(package)):
-                return True
-        for container in message.containers:
-            if self.usernames & set(self._requester.get_container_owners(container)):
-                return True
-        for module in message.modules:
-            if self.usernames & set(self._requester.get_module_owners(module)):
-                return True
-        for flatpak in message.flatpaks:
-            if self.usernames & set(self._requester.get_flatpak_owners(flatpak)):
-                return True
+    async def matches(self, message):
+        for artifact_type in ArtifactType:
+            for artifact in getattr(message, artifact_type.name):
+                owners = await self._requester.distgit.get_owners(
+                    artifact_type.value, artifact, "user"
+                )
+                if self.usernames & set(owners):
+                    return True
         return False
 
-    def prime_cache(self, cache):
+    async def prime_cache(self, cache):
         for username in self.usernames:
-            cache["packages"].update(
-                self._requester.get_owned_by_user(artifact_type="packages", name=username)
-            )
-            cache["containers"].update(
-                self._requester.get_owned_by_user(artifact_type="containers", name=username)
-            )
-            cache["modules"].update(
-                self._requester.get_owned_by_user(artifact_type="modules", name=username)
-            )
-            cache["flatpaks"].update(
-                self._requester.get_owned_by_user(artifact_type="flatpaks", name=username)
-            )
+            for artifact_type in ArtifactType:
+                owned = await self._requester.distgit.get_owned(
+                    artifact_type.value, username, "user"
+                )
+                getattr(cache, artifact_type.name).update(set(owned))
 
 
 class ArtifactsGroupOwned(TrackingRule):
@@ -74,35 +62,21 @@ class ArtifactsGroupOwned(TrackingRule):
         super().__init__(*args, **kwargs)
         self.groups = set(self._params)
 
-    def matches(self, message):
-        for package in message.packages:
-            if self.groups & set(self._requester.get_package_group_owners(package)):
-                return True
-        for container in message.containers:
-            if self.groups & set(self._requester.get_container_group_owners(container)):
-                return True
-        for module in message.modules:
-            if self.groups & set(self._requester.get_module_group_owners(module)):
-                return True
-        for flatpak in message.flatpaks:
-            if self.groups & set(self._requester.get_flatpak_group_owners(flatpak)):
-                return True
+    async def matches(self, message):
+        for artifact_type in ArtifactType:
+            for artifact in getattr(message, artifact_type.name):
+                owners = await self._requester.distgit.get_owners(
+                    artifact_type.value, artifact, "group"
+                )
+                if self.groups & set(owners):
+                    return True
         return False
 
-    def prime_cache(self, cache):
+    async def prime_cache(self, cache):
         for group in self.groups:
-            cache["packages"].update(
-                self._requester.get_owned_by_group(artifact_type="packages", name=group)
-            )
-            cache["containers"].update(
-                self._requester.get_owned_by_group(artifact_type="containers", name=group)
-            )
-            cache["modules"].update(
-                self._requester.get_owned_by_group(artifact_type="modules", name=group)
-            )
-            cache["flatpaks"].update(
-                self._requester.get_owned_by_group(artifact_type="flatpaks", name=group)
-            )
+            for artifact_type in ArtifactType:
+                owned = await self._requester.distgit.get_owned(artifact_type.value, group, "group")
+                getattr(cache, artifact_type.name).update(set(owned))
 
 
 class ArtifactsFollowed(TrackingRule):
@@ -116,7 +90,7 @@ class ArtifactsFollowed(TrackingRule):
         }
         # → packages: {"pkg1", "pkg2", "pkg3"}
 
-    def matches(self, message):
+    async def matches(self, message):
         for msg_attr, followed in self.followed.items():
             if not followed:
                 continue
@@ -124,11 +98,11 @@ class ArtifactsFollowed(TrackingRule):
                 return True
         return False
 
-    def prime_cache(self, cache):
+    async def prime_cache(self, cache):
         for msg_attr, followed in self.followed.items():
             if not followed:
                 continue
-            cache[msg_attr].update(followed)
+            getattr(cache, msg_attr).update(followed)
 
 
 class RelatedEvents(TrackingRule):
@@ -137,11 +111,11 @@ class RelatedEvents(TrackingRule):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def matches(self, message):
+    async def matches(self, message):
         return self._owner in message.usernames
 
-    def prime_cache(self, cache):
-        cache["usernames"].add(self._owner)
+    async def prime_cache(self, cache):
+        cache.usernames.add(self._owner)
 
 
 class UsersFollowed(TrackingRule):
@@ -151,8 +125,8 @@ class UsersFollowed(TrackingRule):
         super().__init__(*args, **kwargs)
         self.followed = set(self._params)
 
-    def matches(self, message):
+    async def matches(self, message):
         return message.agent_name in self.followed
 
-    def prime_cache(self, cache):
-        cache["agent_name"].update(self.followed)
+    async def prime_cache(self, cache):
+        cache.agent_name.update(self.followed)

@@ -1,11 +1,13 @@
 import pytest
+from cashews import cache
 
-from fmn.rules.cache import cache
+from fmn.cache import configure_cache
 
 
 @pytest.fixture(autouse=True)
-def configured_cache():
-    if not cache.region.is_configured:
-        cache.configure()
+async def configured_cache():
+    configure_cache()
     yield
-    cache.region.invalidate()
+    await cache.clear()
+    await cache.close()
+    cache._get_backend_and_config.cache_clear()

@@ -1,10 +1,9 @@
 import json
 import logging
-import ssl
 
 from aio_pika import connect_robust
-from aio_pika.abc import SSLOptions
-from aio_pika.connection import URL
+
+from fmn.core.amqp import get_url_from_config
 
 _log = logging.getLogger(__name__)
 
@@ -14,20 +13,11 @@ CLOSING = object()
 
 class Consumer:
     def __init__(self, config, handler):
-        self._url = URL(config["amqp_url"])
         self._destination = config["queue"]
+        self._url = get_url_from_config(config).update_query(
+            connection_name=f"FMN sender on {self._destination}"
+        )
         self._handler = handler
-        self._url = self._url.update_query(connection_name=f"FMN sender on {self._destination}")
-        if "tls" in config:
-            self._url = self._url.update_query(auth="EXTERNAL")
-            self._url = self._url.update_query(
-                SSLOptions(
-                    cafile=config["tls"]["ca_cert"],
-                    certfile=config["tls"]["certfile"],
-                    keyfile=config["tls"]["keyfile"],
-                    no_verify_ssl=ssl.CERT_REQUIRED,
-                )
-            )
         self._connection = None
         self._channel = None
         self._queue = None

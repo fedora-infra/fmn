@@ -32,6 +32,7 @@ class TestIdentity:
             then = now + 3600
 
         client.return_value = mock_client = mock.AsyncMock()
+        mock_client.post.return_value.raise_for_status = mock.Mock()
         mock_client.post.return_value.json = mock.Mock()
         mock_client.post.return_value.json.return_value = token_info_result = {
             "username": "karlheinzschinkenwurst",

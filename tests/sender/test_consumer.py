@@ -125,13 +125,14 @@ async def test_with_ssl(mocker):
     consumer = Consumer(config, handler)
     await consumer.connect()
     connect_robust.assert_called_once_with(
-        URL(
-            "amqp://rmq.example.com/%2Fvhost?"
-            "connection_name=FMN+sender+on+testdest"
-            "&auth=EXTERNAL"
-            "&cafile=/path/to/cacert"
-            "&certfile=/path/to/certfile"
-            "&keyfile=/path/to/keyfile"
-            f"&no_verify_ssl={ssl.CERT_REQUIRED}"
+        URL("amqp://rmq.example.com/%2Fvhost").with_query(
+            {
+                "auth": "EXTERNAL",
+                "cafile": "/path/to/cacert",
+                "certfile": "/path/to/certfile",
+                "keyfile": "/path/to/keyfile",
+                "no_verify_ssl": ssl.CERT_REQUIRED,
+                "connection_name": "FMN sender on testdest",
+            },
         )
     )

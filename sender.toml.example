@@ -3,10 +3,10 @@
 amqp_url = "amqp://localhost/%2Ffmn"
 queue = "email"
 
-[tls]
-ca_cert = "/etc/fedora-messaging/cacert.pem"
-keyfile = "/etc/fedora-messaging/fmn-key.pem"
-certfile = "/etc/fedora-messaging/fmn-cert.pem"
+# [tls]
+# ca_cert = "/etc/fedora-messaging/cacert.pem"
+# keyfile = "/etc/fedora-messaging/sender-key.pem"
+# certfile = "/etc/fedora-messaging/sender-cert.pem"
 
 [handler]
 class = "fmn.sender.email:EmailHandler"

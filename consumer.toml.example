@@ -36,7 +36,7 @@ routing_keys = ["#"]
 # settings_file = "/etc/fmn/fmn.cfg"
 
 [consumer_config.send_queue]
-url = "amqp://localhost/%2Ffmn"
+amqp_url = "amqp://localhost/%2Ffmn"
 
 # [consumer_config.send_queue.tls]
 # ca_cert = "/etc/fedora-messaging/cacert.pem"
@@ -73,7 +73,7 @@ handlers = ["console"]
 
 # Pika is the underlying AMQP client library. When debugging you may want to
 # lower this log level.
-[log_config.loggers.pika]
+[log_config.loggers.aio_pika]
 level = "WARNING"
 propagate = false
 handlers = ["console"]

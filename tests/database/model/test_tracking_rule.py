@@ -38,10 +38,10 @@ def test_get_implementation_conflicting_eps(mocker, rule_db):
         tr.get_implementation(requester)
 
 
-def test_prime_cache(mocker, rule_db):
+async def test_prime_cache(mocker, rule_db):
     cache = Mock(name="cache")
     requester = Mock(name="requester")
     tr = model.TrackingRule(name="artifacts-followed", params={}, rule=rule_db)
     impl_prime_cache = mocker.patch.object(ArtifactsFollowed, "prime_cache")
-    tr.prime_cache(cache, requester)
+    await tr.prime_cache(cache, requester)
     impl_prime_cache.assert_called_once_with(cache)

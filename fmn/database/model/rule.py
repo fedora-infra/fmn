@@ -56,9 +56,10 @@ class Rule(Base):
             selectinload(cls.generation_rules).selectinload(GenerationRule.filters),
         )
 
-    def handle(self, message: "Message", requester: "Requester"):
+    async def handle(self, message: "Message", requester: "Requester"):
         log.debug(f"Rule {self.id} handling message {message.id}")
-        if not self.tracking_rule.matches(message, requester):
+        if not await self.tracking_rule.matches(message, requester):
             return
         for generation_rule in self.generation_rules:
-            yield from generation_rule.handle(message, requester)
+            async for notification in generation_rule.handle(message, requester):
+                yield notification

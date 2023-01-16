@@ -7,8 +7,7 @@ DEFAULT_CONFIG_FILE = _settings_file = "/etc/fmn/fmn.cfg"
 
 
 class CacheModel(BaseModel):
-    backend: str = "dogpile.cache.memory"
-    expiration_time: int = 300
+    url: str = "mem://"
     arguments: Mapping[str, Any] | None = None
 
     class Config:
