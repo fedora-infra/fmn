@@ -41,7 +41,7 @@ def gen_requester() -> Iterator[Requester]:
 async def get_last_messages(hours):
     proxy = DatagrepperAsyncProxy(get_settings().services.datagrepper_url)
 
-    async for msg_dict in proxy.search(delta=int(hours) * 60 * 60, rows_per_page=100):
+    async for msg_dict in proxy.search(delta=int(hours * 60 * 60), rows_per_page=100):
         yield get_message(msg_dict)
 
 
