@@ -90,8 +90,10 @@ class TestAPIClient:
             }
             for pageidx in range(total_pages)
         ]
-        if broken:
+        if broken == "missing-pagination":
             pages[-1] = {"result": {"this is": "broken"}}
+        elif broken == "pagination-recursion":
+            pages[-1]["page"]["page_number"] -= 1
         return pages
 
     @classmethod
@@ -125,7 +127,13 @@ class TestAPIClient:
             assert result == "boo"
 
     @pytest.mark.parametrize(
-        "testcase", ("success", "success-with-params", "failure-missing-pagination")
+        "testcase",
+        (
+            "success",
+            "success-with-params",
+            "failure-missing-pagination",
+            "failure-pagination-recursion",
+        ),
     )
     async def test_get_paginated(self, testcase, client):
         expectation = nullcontext()
@@ -133,8 +141,16 @@ class TestAPIClient:
         if "success" in testcase:
             client.client.get.side_effect = self.get_paginated_responses()
         else:
-            client.client.get.side_effect = self.get_paginated_responses(broken=True)
-            expectation = pytest.raises(KeyError)
+            if "missing-pagination" in testcase:
+                client.client.get.side_effect = self.get_paginated_responses(
+                    broken="missing-pagination"
+                )
+                expectation = pytest.raises(KeyError)
+            if "pagination-recursion" in testcase:
+                client.client.get.side_effect = self.get_paginated_responses(
+                    broken="pagination-recursion"
+                )
+                expectation = pytest.raises(base.PaginationRecursionError)
 
         if "with-params" in testcase:
             kwargs = {"params": {"foo": "bar"}}

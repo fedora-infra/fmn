@@ -1,3 +1,4 @@
+import logging
 from abc import ABC, abstractmethod
 from copy import deepcopy
 from functools import cache as ft_cache
@@ -5,7 +6,13 @@ from typing import Any, AsyncIterator
 
 from httpx import AsyncClient
 
+log = logging.getLogger(__name__)
+
 NextPageParams = tuple[str, dict] | tuple[None, None]
+
+
+class PaginationRecursionError(RuntimeError):
+    pass
 
 
 class APIClient(ABC):
@@ -68,10 +75,19 @@ class APIClient(ABC):
             # determine_next_page_params may modify this, ensure original object stays untouched
             params = deepcopy(params)
 
+        visited_urls_params = set()
+
         while url:
             result = await self.get(url, params=params, **kwargs)
+
+            visited_urls_params.add((url, repr(params)))
 
             for item in self.extract_payload(result, payload_field=payload_field):
                 yield item
 
             url, params = self.determine_next_page_params(url, params, result)
+
+            if (url, repr(params)) in visited_urls_params:
+                raise PaginationRecursionError(
+                    f"Paginated results seem to cause recursion: {url=!r} {params=!r}"
+                )
