@@ -1,9 +1,13 @@
+from datetime import datetime, timedelta
 from unittest.mock import Mock
 
 import pytest
+from cashews import cache
+from cashews.formatter import get_templates_for_func
 
+from fmn.cache import configure_cache
+from fmn.cache.tracked import Tracked, TrackedCache
 from fmn.database.model import Rule, TrackingRule, User
-from fmn.rules.cache import Cache
 
 
 @pytest.fixture
@@ -17,40 +21,40 @@ def rule():
     return Rule(id=1, user=User(name="dummy"), tracking_rule=tr, generation_rules=[])
 
 
-def test_cache_proxy():
-    region = Mock()
-    cache = Cache()
-    cache.region = region
-    cache.cache_on_arguments(foo="bar")
-    region.cache_on_arguments.assert_called_with(foo="bar")
-    cache.configure(foo="bar")
-    region.configure.assert_called_with(
-        backend="dogpile.cache.memory", expiration_time=300, arguments=None, foo="bar"
-    )
-    cache.invalidate_tracked()
-    region.delete.assert_called_with("tracked")
+async def test_cache_configure(mocker):
+    mocker.patch.object(cache, "setup")
+    configure_cache()
+    cache.setup.assert_called_with("mem://")
 
 
-def test_build_tracked(mocker, requester, db_sync_session):
+async def test_build_tracked(mocker, requester, db_async_session):
     tr = TrackingRule(id=1, name="artifacts-owned", params={"username": "dummy"})
     rule = Rule(id=1, name="dummy", user=User(name="dummy"), tracking_rule=tr, generation_rules=[])
-    db_sync_session.add_all([rule, tr])
+    db_async_session.add_all([rule, tr])
     prime_cache = mocker.patch.object(tr, "prime_cache")
-    cache = Cache()
-    tracked = cache.build_tracked(db_sync_session, requester)
+    tracked_cache = TrackedCache()
+    tracked = await tracked_cache.build(db_async_session, requester)
     prime_cache.assert_called_once_with(tracked, requester)
 
 
-def test_get_tracked(mocker, requester):
+async def test_get_tracked(mocker, requester):
     db = Mock()
-    cache = Cache()
-    cache.configure()
-    mocker.patch.object(cache, "build_tracked", return_value="tracked_value")
-    result1 = cache.get_tracked(db, requester)
-    result2 = cache.get_tracked(db, requester)
-    cache.build_tracked.assert_called_once_with(db=db, requester=requester)
+    tracked_cache = TrackedCache()
+    # configure_cache()
+    mocker.patch.object(tracked_cache, "build", return_value="tracked_value")
+    result1 = await tracked_cache.get_tracked(db, requester)
+    result2 = await tracked_cache.get_tracked(db, requester)
+    tracked_cache.build.assert_called_once_with(db=db, requester=requester)
     assert result1 == "tracked_value"
     assert result2 == "tracked_value"
+
+
+async def test_invalidate_tracked(mocker, requester):
+    mocker.patch.object(cache, "delete")
+    tracked_cache = TrackedCache()
+    await tracked_cache.invalidate()
+    cache_key = list(get_templates_for_func(tracked_cache.get_tracked))[0]
+    cache.delete.assert_called_with(cache_key)
 
 
 @pytest.mark.parametrize(
@@ -62,17 +66,25 @@ def test_get_tracked(mocker, requester):
         ("fmn.rule.delete.v1", True),
     ],
 )
-def test_invalidate_on_message(topic, expected, make_mocked_message):
+async def test_invalidate_on_message(mocker, topic, expected, make_mocked_message):
     message = make_mocked_message(topic=topic, body={})
-    cache = Cache()
-    cache.region = Mock()
-    cache.build_tracked = Mock()
+    built_value = Tracked(packages={"built"}, usernames={"built"})
+    tracked_cache = TrackedCache()
+    mocker.patch.object(tracked_cache, "build", return_value=built_value)
     db = Mock()
     requester = Mock()
-    cache.invalidate_on_message(message, db, requester)
+    # Set an existing value that will be invalidated
+    existing_value = Tracked(packages={"existing"}, usernames={"existing"})
+    cache_key = list(get_templates_for_func(tracked_cache.get_tracked))[0]
+    # It's an "early" strategy so we need to store according to the interface
+    early_expire_at = datetime.utcnow() + timedelta(seconds=3600)
+    await cache.set(cache_key, [early_expire_at, existing_value], expire=86400)
+    await tracked_cache.invalidate_on_message(message, db, requester)
     if expected:
-        cache.region.delete.assert_called_once_with("tracked")
-        cache.build_tracked.assert_called_once_with(db, requester)
+        tracked_cache.build.assert_called_once_with(db=db, requester=requester)
+        value = await tracked_cache.get_tracked(db=db, requester=requester)
+        assert value == built_value
     else:
-        cache.region.delete.assert_not_called()
-        cache.build_tracked.assert_not_called()
+        tracked_cache.build.assert_not_called()
+        value = await tracked_cache.get_tracked(db=db, requester=requester)
+        assert value == existing_value

@@ -32,10 +32,10 @@ class TrackingRule(Base):
         owner = self.rule.user.name
         return impl_class(requester, self.params, owner)
 
-    def matches(self, message: "Message", requester: "Requester"):
+    async def matches(self, message: "Message", requester: "Requester"):
         impl = self.get_implementation(requester)
-        return impl.matches(message)
+        return await impl.matches(message)
 
-    def prime_cache(self, cache, requester: "Requester"):
+    async def prime_cache(self, cache, requester: "Requester"):
         impl = self.get_implementation(requester)
-        return impl.prime_cache(cache)
+        return await impl.prime_cache(cache)

@@ -30,7 +30,7 @@ handlers = ["console"]
 
 # Pika is the underlying AMQP client library. When debugging you may want to
 # lower this log level.
-[log_config.loggers.pika]
+[log_config.loggers.aio_pika]
 level = "WARNING"
 propagate = false
 handlers = ["console"]

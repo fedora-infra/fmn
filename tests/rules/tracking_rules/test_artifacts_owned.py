@@ -1,5 +1,6 @@
 import pytest
 
+from fmn.cache.tracked import Tracked
 from fmn.rules.tracking_rules import ArtifactsOwned
 
 
@@ -12,22 +13,22 @@ from fmn.rules.tracking_rules import ArtifactsOwned
         "flatpaks",
     ],
 )
-def test_artifacts_owned(requester, make_mocked_message, artifact_type):
+async def test_artifacts_owned(requester, make_mocked_message, artifact_type):
     tr = ArtifactsOwned(requester, ["dummy"], "testuser")
     message = make_mocked_message(
         topic="dummy.topic", body={artifact_type: ["art-dummy", "art-other"]}
     )
-    assert tr.matches(message) is True
+    assert (await tr.matches(message)) is True
     message = make_mocked_message(topic="dummy.topic", body={artifact_type: ["art-other"]})
-    assert tr.matches(message) is False
+    assert (await tr.matches(message)) is False
 
 
-def test_artifacts_owned_cache(requester, cache):
+async def test_artifacts_owned_cache(requester, cache):
     tr = ArtifactsOwned(requester, ["dummy"], "testuser")
-    tr.prime_cache(cache)
-    assert cache == {
-        "packages": set(["packages-1", "packages-2"]),
-        "containers": set(["containers-1", "containers-2"]),
-        "modules": set(["modules-1", "modules-2"]),
-        "flatpaks": set(["flatpaks-1", "flatpaks-2"]),
-    }
+    await tr.prime_cache(cache)
+    assert cache == Tracked(
+        packages=set(["rpms-1", "rpms-2"]),
+        containers=set(["containers-1", "containers-2"]),
+        modules=set(["modules-1", "modules-2"]),
+        flatpaks=set(["flatpaks-1", "flatpaks-2"]),
+    )

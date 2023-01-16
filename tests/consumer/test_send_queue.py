@@ -1,10 +1,8 @@
 import logging
-import ssl
-from pathlib import Path
-from unittest.mock import Mock
+from unittest.mock import AsyncMock
 
-import pika
 import pytest
+from aio_pika.exceptions import AMQPConnectionError
 
 from fmn.consumer.send_queue import SendQueue
 from fmn.rules.notification import Notification
@@ -12,73 +10,79 @@ from fmn.rules.notification import Notification
 
 @pytest.fixture
 def connection(mocker):
-    connection = Mock(name="connection")
-    mocker.patch("fmn.consumer.send_queue.pika.BlockingConnection", return_value=connection)
-    connection._channel = Mock(name="channel")
+    connection = AsyncMock(name="connection")
+    mocker.patch("fmn.consumer.send_queue.connect_robust", return_value=connection)
+    connection._channel = AsyncMock(name="channel")
     connection.channel.return_value = connection._channel
+    connection._exchange = AsyncMock(name="exchange")
+    connection._channel.get_exchange.return_value = connection._exchange
     return connection
 
 
-def test_send_queue_connect(connection):
-    sq = SendQueue({"url": "amqp://"})
-    sq.connect()
+async def test_send_queue_connect(connection):
+    sq = SendQueue({"amqp_url": "amqp://"})
+    await sq.connect()
     connection.channel.assert_called_once()
+    assert sq._channel is connection._channel
+    connection._channel.get_exchange.assert_called_once_with("amq.direct")
+    assert sq._exchange is connection._exchange
 
 
-def test_send_queue_send(connection):
-    sq = SendQueue({"url": "amqp://"})
-    sq.connect()
-    sq.send(Notification(protocol="email", content={"dummy": "content"}))
-    connection._channel.basic_publish.assert_called_with(
-        exchange="amq.direct", routing_key="send.email", body='{"dummy": "content"}'
-    )
+async def test_send_queue_send(connection):
+    sq = SendQueue({"amqp_url": "amqp://"})
+    await sq.connect()
+    await sq.send(Notification(protocol="email", content={"dummy": "content"}))
+    sq._exchange.publish.assert_called_once()
+    assert sq._exchange.publish.call_args.kwargs.get("routing_key") == "send.email"
+    sent_msg = sq._exchange.publish.call_args.args[0]
+    assert sent_msg.body == b'{"dummy": "content"}'
 
 
-def test_send_queue_close(connection):
-    sq = SendQueue({"url": "amqp://"})
-    sq.connect()
-    sq.close()
+async def test_send_queue_close(connection):
+    sq = SendQueue({"amqp_url": "amqp://"})
+    await sq.connect()
+    await sq.close()
     connection.close.assert_called_once()
 
 
-def test_send_queue_connect_ssl(mocker, tmp_path: Path):
+async def test_send_queue_close_not_connected(connection):
+    sq = SendQueue({"amqp_url": "amqp://"})
+    await sq.close()
+    connection.close.assert_not_called()
+
+
+async def test_send_queue_connect_ssl(mocker):
     tls_config = {
-        "ca_cert": tmp_path.joinpath("ca.crt"),
-        "certfile": tmp_path.joinpath("cert.pem"),
-        "keyfile": tmp_path.joinpath("key.pem"),
+        "ca_cert": "ca.crt",
+        "certfile": "cert.pem",
+        "keyfile": "key.pem",
     }
-    for name, path in tls_config.items():
-        with open(path, "w") as fh:
-            fh.write(name)
-    connection_factory = mocker.patch("fmn.consumer.send_queue.pika.BlockingConnection")
-    mocker.patch.object(ssl.SSLContext, "load_verify_locations")
-    mocker.patch.object(ssl.SSLContext, "load_cert_chain")
+    connection_factory = mocker.patch("fmn.consumer.send_queue.connect_robust")
     sq = SendQueue(
         {
-            "url": "amqp://",
+            "amqp_url": "amqp://",
             "tls": tls_config,
         }
     )
-    sq.connect()
+    await sq.connect()
     connection_factory.assert_called_once()
-    url_parameters = connection_factory.call_args_list[0][0][0]
-    assert url_parameters.ssl_options is not None
-    ssl_context = url_parameters.ssl_options.context
-    assert ssl_context.minimum_version == ssl.TLSVersion.TLSv1_2
-    assert ssl_context.check_hostname is True
-    assert url_parameters.ssl_options.server_hostname == "localhost"
+    url = connection_factory.call_args.args[0]
+    assert url.query.get("connection_name") == "FMN consumer to sender"
+    assert url.query.get("cafile") == "ca.crt"
+    assert url.query.get("certfile") == "cert.pem"
+    assert url.query.get("keyfile") == "key.pem"
 
 
-def test_send_queue_reconnect_give_up(connection, caplog):
-    sq = SendQueue({"url": "amqp://"})
-    sq.connect()
-    error = pika.exceptions.AMQPConnectionError("dummy error")
-    connection._channel.basic_publish.side_effect = error
+async def test_send_queue_reconnect_give_up(connection, caplog):
+    sq = SendQueue({"amqp_url": "amqp://"})
+    await sq.connect()
+    error = AMQPConnectionError("dummy error")
+    connection._exchange.publish.side_effect = error
 
-    with pytest.raises(pika.exceptions.AMQPConnectionError):
-        sq.send(Notification(protocol="email", content={"dummy": "content"}))
+    with pytest.raises(AMQPConnectionError):
+        await sq.send(Notification(protocol="email", content={"dummy": "content"}))
 
-    assert connection._channel.basic_publish.call_count == 3
+    assert connection._exchange.publish.call_count == 3
 
     logs = [r for r in caplog.records if r.name.startswith("fmn.consumer.send_queue")]
     assert len(logs) == 3
@@ -89,15 +93,15 @@ def test_send_queue_reconnect_give_up(connection, caplog):
     assert logs[2].msg.startswith("Publishing message failed. Giving up.")
 
 
-def test_send_queue_reconnect_success(connection, caplog):
-    sq = SendQueue({"url": "amqp://"})
-    sq.connect()
-    error = pika.exceptions.AMQPConnectionError("dummy error")
-    connection._channel.basic_publish.side_effect = [error, error, None]
+async def test_send_queue_reconnect_success(connection, caplog):
+    sq = SendQueue({"amqp_url": "amqp://"})
+    await sq.connect()
+    error = AMQPConnectionError("dummy error")
+    connection._exchange.publish.side_effect = [error, error, None]
 
-    sq.send(Notification(protocol="email", content={"dummy": "content"}))
+    await sq.send(Notification(protocol="email", content={"dummy": "content"}))
 
-    assert connection._channel.basic_publish.call_count == 3
+    assert connection._exchange.publish.call_count == 3
 
     logs = [r for r in caplog.records if r.name.startswith("fmn.consumer.send_queue")]
     assert len(logs) == 2

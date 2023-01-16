@@ -4,23 +4,19 @@ import sys
 import traceback
 
 import backoff
-import pika
+from aio_pika import Message, connect_robust
+from aio_pika.exceptions import AMQPConnectionError
 
-from fmn.rules.notification import Notification
-
-from .utils import configure_tls_parameters
+from ..core.amqp import get_url_from_config
+from ..rules.notification import Notification
 
 log = logging.getLogger(__name__)
 
 
-# Reconnection example:
-# https://pika.readthedocs.io/en/stable/examples/blocking_consume_recover_multiple_hosts.html
-
-
-def backoff_hdlr(details):
+async def backoff_hdlr(details):
     log.warning(f"Publishing message failed. Retrying. {traceback.format_tb(sys.exc_info()[2])}")
     self = details["args"][0]
-    self.connect()
+    await self.connect()
 
 
 def giveup_hdlr(details):
@@ -28,31 +24,34 @@ def giveup_hdlr(details):
 
 
 class SendQueue:
-    def __init__(self, config):
+    def __init__(self, config: dict):
         self.config = config
+        self._url = get_url_from_config(config).update_query(
+            connection_name="FMN consumer to sender"
+        )
         self._connection = None
         self._channel = None
+        self._exchange = None
 
-    def connect(self):
-        parameters = pika.URLParameters(self.config["url"])
-        if "tls" in self.config:
-            configure_tls_parameters(parameters, self.config["tls"])
-        parameters.client_properties = {"connection_name": "FMN consumer to sender"}
-        self._connection = pika.BlockingConnection(parameters)
-        self._channel = self._connection.channel()
+    async def connect(self):
+        self._connection = await connect_robust(self._url)
+        self._channel = await self._connection.channel()
+        self._exchange = await self._channel.get_exchange("amq.direct")
 
     @backoff.on_exception(
         backoff.expo,
-        pika.exceptions.AMQPConnectionError,
+        AMQPConnectionError,
         max_tries=3,
         on_backoff=backoff_hdlr,
         on_giveup=giveup_hdlr,
     )
-    def send(self, notification: Notification):
+    async def send(self, notification: Notification):
         body = json.dumps(notification.content)
-        self._channel.basic_publish(
-            exchange="amq.direct", routing_key=f"send.{notification.protocol}", body=body
+        await self._exchange.publish(
+            Message(body=body.encode("utf-8")),
+            routing_key=f"send.{notification.protocol}",
         )
 
-    def close(self):
-        self._connection.close()
+    async def close(self):
+        if self._connection:
+            await self._connection.close()
