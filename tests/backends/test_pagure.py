@@ -13,23 +13,26 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
     @pytest.mark.parametrize("testcase", ("normal", "last-page", "pagination-missing"))
     def test_determine_next_page_params(self, testcase, proxy):
         if "normal" in testcase:
-            result_next = "/boo?page=2"
+            expected_next_url = "/boo"
         else:
-            result_next = None
+            expected_next_url = None
 
         if "pagination-missing" in testcase:
             result = {}
+        elif "last-page" in testcase:
+            result = {"pagination": {"next": None}}
         else:
-            result = {"pagination": {"next": result_next}}
+            result = {"pagination": {"next": "/boo?page=2"}}
 
-        params_sentinel = object()
+        params = {}
 
-        next_url, params = proxy.determine_next_page_params(
-            "/boo", params=params_sentinel, result=result
+        next_url, next_params = proxy.determine_next_page_params(
+            "/boo", params=params, result=result
         )
 
         if "normal" in testcase:
-            assert next_url == result_next
-            assert params is params_sentinel
+            assert next_url == expected_next_url
+            assert next_params == params | {"page": "2"}
         else:
             assert next_url is None
+            assert next_params is None
