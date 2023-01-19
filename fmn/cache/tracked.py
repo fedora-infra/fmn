@@ -9,7 +9,7 @@ from fmn.database.model import Rule
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
-    from sqlalchemy.orm import Session
+    from sqlalchemy.ext.asyncio import AsyncSession
 
     from ..rules.requester import Requester
 
@@ -42,7 +42,7 @@ class TrackedCache:
     users that their changes will take X minutes to be active.
     """
 
-    async def build(self, db: "Session", requester: "Requester"):
+    async def build(self, db: "AsyncSession", requester: "Requester"):
         log.debug("Building the tracked cache")
         tracked = Tracked()
         db_result = await db.execute(Rule.select_related().filter_by(disabled=False))
@@ -53,7 +53,7 @@ class TrackedCache:
 
     @cache.early(key="tracked", prefix="v1", ttl="1d", early_ttl="23h")
     # @cache(key="tracked", prefix="v1", ttl="1d")
-    async def get_tracked(self, db: "Session", requester: "Requester"):
+    async def get_tracked(self, db: "AsyncSession", requester: "Requester"):
         return await self.build(db=db, requester=requester)
 
     async def invalidate(self):
@@ -62,7 +62,7 @@ class TrackedCache:
         await cache.delete(cache_key)
 
     async def invalidate_on_message(
-        self, message: "Message", db: "Session", requester: "Requester"
+        self, message: "Message", db: "AsyncSession", requester: "Requester"
     ):
         if (
             message.topic.endswith("fmn.rule.create.v1")
