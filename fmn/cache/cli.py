@@ -6,9 +6,9 @@ import click
 from fmn.cache import configure_cache
 from fmn.cache.tracked import TrackedCache
 from fmn.core.config import get_settings
-from fmn.database import async_session_maker, init_sync_model
+from fmn.database import async_session_maker, init_async_model
 
-from .requester import Requester
+from ..rules.requester import Requester
 
 
 @click.group("cache")
@@ -19,12 +19,16 @@ def cache_cmd():
 @cache_cmd.command("get-tracked")
 def get_tracked():
     """Show the current tracked value."""
-    configure_cache()
-    init_sync_model()
-    db = async_session_maker()
-    requester = Requester(get_settings().services)
-    tracked_cache = TrackedCache()
-    result = asyncio.run(tracked_cache.get_tracked(db, requester))
+
+    async def _get_tracked():
+        configure_cache()
+        await init_async_model()
+        requester = Requester(get_settings().services)
+        tracked_cache = TrackedCache()
+        async with async_session_maker() as db:
+            return await tracked_cache.get_tracked(db, requester)
+
+    result = asyncio.run(_get_tracked())
     pprint(result)
 
 
