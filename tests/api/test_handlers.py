@@ -6,6 +6,7 @@ import pytest
 from fastapi import status
 from httpx import Response
 from sqlalchemy.exc import NoResultFound
+from sqlalchemy.sql import text
 
 from fmn.api import api_models, auth
 from fmn.api.handlers.utils import get_last_messages
@@ -428,7 +429,7 @@ class TestMisc(BaseTestAPIV1Handler):
         assert response.json() == {"detail": "OK"}
 
     async def test_readiness_not_setup(self, client, db_async_session, mocker):
-        await db_async_session.execute("DROP TABLE IF EXISTS alembic_version")
+        await db_async_session.execute(text("DROP TABLE IF EXISTS alembic_version"))
         mocker.patch("fmn.api.database.async_session_maker", return_value=db_async_session)
         response = client.get(f"{self.path}/healthz/ready")
         assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -441,14 +442,14 @@ class TestMisc(BaseTestAPIV1Handler):
         assert response.json() == {"detail": "OK"}
 
     async def test_readiness_needs_upgrade(self, client, db_async_session, mocker):
-        await db_async_session.execute("UPDATE alembic_version SET version_num='foobar'")
+        await db_async_session.execute(text("UPDATE alembic_version SET version_num='foobar'"))
         mocker.patch("fmn.api.database.async_session_maker", return_value=db_async_session)
         response = client.get(f"{self.path}/healthz/ready")
         assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert response.json()["detail"] == "Database schema needs to be upgraded"
 
     async def test_readiness_not_stamped(self, client, db_async_session, mocker):
-        await db_async_session.execute("DELETE FROM alembic_version")
+        await db_async_session.execute(text("DELETE FROM alembic_version"))
         mocker.patch("fmn.api.database.async_session_maker", return_value=db_async_session)
         response = client.get(f"{self.path}/healthz/ready")
         assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
