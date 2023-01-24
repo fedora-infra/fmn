@@ -104,8 +104,6 @@ class DistGitService:
                     )
 
     async def _on_owner_changed(self, namespace, project_name, name, user_or_group):
-        # Don't use the cache.invalidate() decorator as it will invalidate the cache *after* the
-        # function has been run, and we want to refresh it here.
         await cache.invalidate_func(
             self.get_owners,
             {
@@ -122,10 +120,5 @@ class DistGitService:
                 "user_or_group": user_or_group,
             },
         )
-        # Now rebuild the cache to ease the work on the next incoming message
-        await self.get_owners(namespace, project_name, user_or_group)
-        await self.get_owned(namespace, name, user_or_group)
         tracked_cache = TrackedCache()
         await tracked_cache.invalidate()
-        # We can't rebuild the tracked cache here because we don't have access to the DB and
-        # Requester objects.

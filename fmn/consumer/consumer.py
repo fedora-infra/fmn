@@ -97,5 +97,5 @@ class Consumer:
         return False
 
     async def refresh_cache_if_needed(self, message: message.Message):
-        await self._tracked_cache.invalidate_on_message(message, self.db, self._requester)
+        await self._tracked_cache.invalidate_on_message(message)
         await self._requester.invalidate_on_message(message)

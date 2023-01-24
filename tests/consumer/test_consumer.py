@@ -61,7 +61,7 @@ def test_consumer_call_not_tracked(
     c = Consumer()
     message = make_mocked_message(topic="dummy.topic", body={"foo": "bar"})
     c(message)
-    mocked_cache.invalidate_on_message.assert_called_with(message, c.db, c._requester)
+    mocked_cache.invalidate_on_message.assert_called_with(message)
     c._requester.invalidate_on_message.assert_called_with(message)
     c.send_queue.send.assert_not_called()
 
