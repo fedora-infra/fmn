@@ -122,20 +122,8 @@ async def test_invalidate_on_message_user(
 ):
     mocker.patch.object(cache, "delete")
     message = make_mocked_message(topic=topic, body=body)
-    mocked_req_1 = respx_mocker.get("https://src.fedoraproject.org/api/0/rpms/pkg-1",).mock(
-        return_value=httpx.Response(
-            status.HTTP_200_OK,
-            json={"access_users": {"owner": []}, "access_groups": {"admin": [], "commit": []}},
-        )
-    )
-    mocked_req_2 = respx_mocker.get(
-        re.compile(r"https://src.fedoraproject.org/api/0/projects\?.*")
-    ).mock(return_value=httpx.Response(status.HTTP_200_OK, json={"projects": []}))
-
     await service.invalidate_on_message(message)
     cache.delete.assert_called_once_with(tracked_cache_key)
-    mocked_req_1.calls.assert_called_once()
-    mocked_req_2.calls.assert_called_once()
 
 
 @pytest.mark.parametrize(
@@ -175,20 +163,8 @@ async def test_invalidate_on_message_group(
 ):
     mocker.patch.object(cache, "delete")
     message = make_mocked_message(topic=topic, body=body)
-    mocked_req_1 = respx_mocker.get("https://src.fedoraproject.org/api/0/rpms/pkg-1").mock(
-        return_value=httpx.Response(
-            status.HTTP_200_OK,
-            json={"access_users": {"owner": []}, "access_groups": {"admin": [], "commit": []}},
-        )
-    )
-    mocked_req_2 = respx_mocker.get(
-        re.compile(r"https://src.fedoraproject.org/api/0/group/.*\?.*")
-    ).mock(return_value=httpx.Response(status.HTTP_200_OK, json={"projects": []}))
-
     await service.invalidate_on_message(message)
     cache.delete.assert_called_once_with(tracked_cache_key)
-    mocked_req_1.calls.assert_called_once()
-    mocked_req_2.calls.assert_called_once()
 
 
 @pytest.mark.parametrize(
@@ -243,16 +219,6 @@ async def test_no_invalidate_on_message(
 ):
     mocker.patch.object(cache, "delete")
     message = make_mocked_message(topic=topic, body=body)
-    respx_mocker.get("https://src.fedoraproject.org/api/0/rpms/pkg-1").mock(
-        return_value=httpx.Response(
-            status.HTTP_200_OK,
-            json={"access_users": {"owner": []}, "access_groups": {"admin": [], "commit": []}},
-        )
-    )
-    respx_mocker.get(re.compile(r"https://src.fedoraproject.org/api/0/projects\?.*")).mock(
-        return_value=httpx.Response(status.HTTP_200_OK, json={"projects": []})
-    )
-
     await service.invalidate_on_message(message)
     cache.delete.assert_not_called()
 

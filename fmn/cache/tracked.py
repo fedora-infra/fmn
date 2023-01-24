@@ -61,13 +61,10 @@ class TrackedCache:
         cache_key = list(get_templates_for_func(self.get_tracked))[0]
         await cache.delete(cache_key)
 
-    async def invalidate_on_message(
-        self, message: "Message", db: "AsyncSession", requester: "Requester"
-    ):
+    async def invalidate_on_message(self, message: "Message"):
         if (
             message.topic.endswith("fmn.rule.create.v1")
             or message.topic.endswith("fmn.rule.update.v1")
             or message.topic.endswith("fmn.rule.delete.v1")
         ):
             await self.invalidate()
-            await self.get_tracked(db, requester)
