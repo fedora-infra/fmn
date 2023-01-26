@@ -1,7 +1,8 @@
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-# This can't be a relative import, otherwise Alembic will trip.
+# Alembic imports this module in a way that it can’t do relative imports from outside the
+# fmn/database/migrations directory, therefore it has to use absolute imports.
 from fmn.database.main import metadata
 
 # this is the Alembic Config object, which provides

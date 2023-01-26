@@ -1,6 +1,29 @@
 name: CI
 on: [push, pull_request, workflow_dispatch]
 jobs:
+  python-smoketests-ci:
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    container: fedorapython/fedora-python-tox:latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install absolufy
+        run: |
+             python3 -m pip install absolufy-imports
+
+      # Alembic imports its env.py file in a way that it can’t do relative imports from outside the
+      # fmn/database/migrations directory, therefore it has to use absolute imports.
+      - name: Enforce relative imports in package (except Alembic migrations)
+        run: >
+             find fmn -name \*.py -a \! -path fmn/database/migrations/env.py -print0
+             | xargs -0 absolufy-imports --never
+
+      - name: Preserve absolute import in Alembic env.py file
+        run: >
+             absolufy-imports fmn/database/migrations/env.py
+
   backend-ci:
     strategy:
       fail-fast: false
