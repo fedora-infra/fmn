@@ -4,6 +4,7 @@ from importlib import metadata
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from ...backends import PagureAsyncProxy
 from ...core.constants import ArtifactType
 from ...database.migrations.main import alembic_migration
 from ...database.model import User
@@ -12,7 +13,7 @@ from ...rules.requester import Requester
 from .. import api_models
 from ..auth import Identity, get_identity
 from ..database import gen_db_session
-from ..distgit import DistGitClient, get_distgit_client
+from ..distgit import get_distgit_proxy
 from .utils import db_rule_from_api_rule, gen_requester, get_last_messages
 
 log = logging.getLogger(__name__)
@@ -47,19 +48,24 @@ def get_applications():
 async def get_owned_artifacts(
     users: list[str] = Query(default=[]),
     groups: list[str] = Query(default=[]),
-    distgit_client: DistGitClient = Depends(get_distgit_client),
+    distgit_proxy: PagureAsyncProxy = Depends(get_distgit_proxy),
 ):
-    if users:
-        return await distgit_client.get_owned(users, "user")
-    elif groups:
-        return await distgit_client.get_owned(groups, "group")
-    else:
-        return []
+    artifacts = {}
+
+    for user in users:
+        for project in await distgit_proxy.get_projects(username=user):
+            artifacts[project["fullname"]] = {"type": project["namespace"], "name": project["name"]}
+
+    for group in groups:
+        for project in await distgit_proxy.get_group_projects(name=group):
+            artifacts[project["fullname"]] = {"type": project["namespace"], "name": project["name"]}
+
+    return sorted(artifacts.values(), key=lambda a: (a["name"], a["type"]))
 
 
 @router.get("/artifacts", response_model=list[api_models.ArtifactOptionsGroup], tags=["misc"])
 async def get_artifacts(
-    name: str, distgit_client: DistGitClient = Depends(get_distgit_client)
+    name: str, distgit_proxy: PagureAsyncProxy = Depends(get_distgit_proxy)
 ):  # pragma: no cover todo
     artifacts = [
         {
@@ -80,8 +86,7 @@ async def get_artifacts(
         },
     ]
     namespaces = [at.value for at in ArtifactType]
-    projects = await distgit_client.get_projects(pattern=name)
-    for project in projects:
+    for project in await distgit_proxy.get_projects(pattern=f"*{name}*"):
         for index, namespace in enumerate(namespaces):
             if project["namespace"] == namespace:
                 artifacts[index]["options"].append(

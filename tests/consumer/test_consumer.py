@@ -91,7 +91,7 @@ async def test_consumer_call_tracked(
     c.db.add_all([user, record, tr, gr, f, d])
     await c.db.commit()
 
-    c._requester.distgit.get_owners = AsyncMock(return_value=["dummy"])
+    c._requester.distgit.get_project_users = AsyncMock(return_value=["dummy"])
 
     # Filtered out because of my_actions
     message = make_mocked_message(

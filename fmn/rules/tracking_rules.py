@@ -37,8 +37,8 @@ class ArtifactsOwned(TrackingRule):
     async def matches(self, message):
         for artifact_type in ArtifactType:
             for artifact in getattr(message, artifact_type.name):
-                owners = await self._requester.distgit.get_owners(
-                    artifact_type.value, artifact, "user"
+                owners = await self._requester.distgit.get_project_users(
+                    project_path=f"{artifact_type.value}/{artifact}"
                 )
                 if self.usernames & set(owners):
                     return True
@@ -46,11 +46,11 @@ class ArtifactsOwned(TrackingRule):
 
     async def prime_cache(self, cache):
         for username in self.usernames:
+            owned = await self._requester.distgit.get_projects(username=username)
             for artifact_type in ArtifactType:
-                owned = await self._requester.distgit.get_owned(
-                    artifact_type.value, username, "user"
+                getattr(cache, artifact_type.name).update(
+                    p["name"] for p in owned if p["namespace"] == artifact_type.value
                 )
-                getattr(cache, artifact_type.name).update(set(owned))
 
 
 class ArtifactsGroupOwned(TrackingRule):
@@ -63,8 +63,8 @@ class ArtifactsGroupOwned(TrackingRule):
     async def matches(self, message):
         for artifact_type in ArtifactType:
             for artifact in getattr(message, artifact_type.name):
-                owners = await self._requester.distgit.get_owners(
-                    artifact_type.value, artifact, "group"
+                owners = await self._requester.distgit.get_project_groups(
+                    project_path=f"{artifact_type.value}/{artifact}"
                 )
                 if self.groups & set(owners):
                     return True
@@ -73,8 +73,10 @@ class ArtifactsGroupOwned(TrackingRule):
     async def prime_cache(self, cache):
         for group in self.groups:
             for artifact_type in ArtifactType:
-                owned = await self._requester.distgit.get_owned(artifact_type.value, group, "group")
-                getattr(cache, artifact_type.name).update(set(owned))
+                owned = await self._requester.distgit.get_group_projects(
+                    name=group, acl=artifact_type.value
+                )
+                getattr(cache, artifact_type.name).update(p["name"] for p in owned)
 
 
 class ArtifactsFollowed(TrackingRule):

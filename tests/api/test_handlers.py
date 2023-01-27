@@ -363,18 +363,17 @@ class TestMisc(BaseTestAPIV1Handler):
         ]
 
     @pytest.mark.parametrize("ownertype", ("user", "group"))
-    async def test_get_projects(self, client, mocker, respx_mocker, ownertype):
+    async def test_get_projects(self, client, respx_mocker, ownertype):
         settings = get_settings()
         settings.services.distgit_url = "http://distgit.test"
-        mocker.patch("fmn.api.handlers.utils.get_settings", return_value=settings)
 
         if ownertype == "user":
             distgit_endpoint = f"{settings.services.distgit_url}/api/0/projects"
-            params = {"fork": "false", "short": "true", "page": 1, "owner": "dudemcpants"}
+            params = {"fork": False, "short": True, "username": "dudemcpants"}
         elif ownertype == "group":
             name = "dudegroup"
             distgit_endpoint = f"{settings.services.distgit_url}/api/0/group/{name}"
-            params = {"projects": "true", "page": 1}
+            params = {"projects": True}
 
         distgit_json_response = {
             "pagination": {

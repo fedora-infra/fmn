@@ -2,9 +2,9 @@ from unittest.mock import AsyncMock
 
 import pytest
 
+from fmn.backends import PagureAsyncProxy
 from fmn.core.config import get_settings
 from fmn.rules.requester import Requester
-from fmn.rules.services.distgit import DistGitService
 from fmn.rules.services.fasjson import FasjsonService
 
 
@@ -17,7 +17,7 @@ def requester(mocked_fasjson_proxy):
 def test_requester_attributes(mocked_fasjson_proxy):
     requester = Requester(get_settings().services)
     assert hasattr(requester, "distgit")
-    assert isinstance(requester.distgit, DistGitService)
+    assert isinstance(requester.distgit, PagureAsyncProxy)
     assert hasattr(requester, "fasjson")
     assert isinstance(requester.fasjson, FasjsonService)
 
