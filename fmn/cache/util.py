@@ -1,8 +1,10 @@
 from functools import cache as ft_cache
 from functools import partial
-from typing import Any, Callable
+from typing import Any, Callable, Iterator
 
 from cashews import cache
+from cashews.formatter import get_templates_for_func, template_to_pattern
+from cashews.key import get_func_params
 
 from ..core import config
 
@@ -38,3 +40,16 @@ def cache_arg(arg: str, scope: str | None = None) -> Callable[[str, str | None],
 
 
 cache_ttl = partial(cache_arg, "ttl")
+
+
+def _get_pattern_for_cached_calls_iter(func: Callable, **kwargs: dict[str, Any]) -> Iterator[str]:
+    # This is taken from cashews.validation.invalidate_func(), minus the actual deletion part. This
+    # allows making decisions on the (cached) return values.
+    values = {**{param: "*" for param in get_func_params(func)}, **kwargs}
+    for template in get_templates_for_func(func):
+        yield template_to_pattern(template, **values)
+
+
+@ft_cache
+def get_pattern_for_cached_calls(func: Callable, **kwargs: dict[str, Any]) -> list[str]:
+    return list(_get_pattern_for_cached_calls_iter(func, **kwargs))

@@ -70,9 +70,9 @@ def distgit_url() -> str:
 
 
 @pytest.fixture
-def distgit_client():
+def distgit_proxy():
     settings = get_settings()
-    return distgit.get_distgit_client(settings)
+    return distgit.get_distgit_proxy(settings)
 
 
 @pytest.fixture
