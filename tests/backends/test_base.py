@@ -44,6 +44,21 @@ class TestAPIClient:
         else:
             assert client.client.base_url == ""
 
+    @pytest.mark.parametrize("initialized_with_trailing_slash", (True, False))
+    def test_base_url_with_trailing_slash(self, initialized_with_trailing_slash):
+        base_url = "https://foo"
+        expected_result = base_url + "/"
+        if initialized_with_trailing_slash:
+            base_url += "/"
+
+        client = ConcreteAPIClient(base_url)
+
+        assert client.base_url_with_trailing_slash == expected_result
+
+    def test_api_url(self):
+        base_url = "https://foo"
+        assert ConcreteAPIClient(base_url).api_url == base_url
+
     def test___str__(self):
         client = ConcreteAPIClient("https://example.com")
         assert str(client) == "ConcreteAPIClient('https://example.com')"

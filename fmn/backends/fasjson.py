@@ -1,4 +1,5 @@
 import logging
+from functools import cached_property as ft_cached_property
 from typing import Any, AsyncIterator
 
 from httpx_gssapi import HTTPSPNEGOAuth
@@ -16,8 +17,12 @@ class FASJSONAsyncProxy(APIClient):
 
     payload_field = "result"
 
-    def __init__(self, base_url: str):
-        super().__init__(f"{base_url.rstrip('/')}/{self.API_VERSION}", auth=HTTPSPNEGOAuth())
+    def __init__(self, base_url: str) -> None:
+        super().__init__(base_url=base_url, auth=HTTPSPNEGOAuth())
+
+    @ft_cached_property
+    def api_url(self) -> str:
+        return f"{self.base_url.rstrip('/')}/{self.API_VERSION}"
 
     def determine_next_page_params(self, url: str, params: dict, result: dict) -> NextPageParams:
         if "page" in result and "page_number" in result["page"] and "total_pages" in result["page"]:

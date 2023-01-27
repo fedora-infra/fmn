@@ -8,7 +8,7 @@ from .base import BaseTestAsyncProxy
 class TestPagureAsyncProxy(BaseTestAsyncProxy):
     CLS = pagure.PagureAsyncProxy
     URL = "https://pagure.test"
-    EXPECTED_BASE_URL = f"{URL}/api/0/"
+    EXPECTED_API_URL = f"{URL}/api/0"
 
     @pytest.mark.parametrize("testcase", ("normal", "last-page", "pagination-missing"))
     def test_determine_next_page_params(self, testcase, proxy):

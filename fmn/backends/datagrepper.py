@@ -1,4 +1,5 @@
 import logging
+from functools import cached_property as ft_cached_property
 from typing import Any, AsyncIterator
 
 from ..core.util import make_synchronous
@@ -14,8 +15,9 @@ class DatagrepperAsyncProxy(APIClient):
 
     payload_field = "raw_messages"
 
-    def __init__(self, base_url: str):
-        super().__init__(f"{base_url.rstrip('/')}/{self.API_VERSION}")
+    @ft_cached_property
+    def api_url(self) -> str:
+        return f"{self.base_url.rstrip('/')}/{self.API_VERSION}"
 
     def determine_next_page_params(self, url: str, params: dict, result: dict) -> NextPageParams:
         if "arguments" in result and "page" in result["arguments"] and "pages" in result:

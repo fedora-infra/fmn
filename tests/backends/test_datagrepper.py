@@ -8,6 +8,7 @@ from .base import BaseTestAsyncProxy
 class TestDatagrepperAsyncProxy(BaseTestAsyncProxy):
     CLS = datagrepper.DatagrepperAsyncProxy
     URL = "https://datagrepper.test"
+    EXPECTED_API_URL = f"{URL}/v2"
     WRAPPER_METHODS = (
         {
             "method": "search",

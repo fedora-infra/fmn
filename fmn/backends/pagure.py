@@ -1,4 +1,5 @@
 import logging
+from functools import cached_property as ft_cached_property
 
 from httpx import URL, QueryParams
 
@@ -13,8 +14,9 @@ class PagureAsyncProxy(APIClient):
 
     API_VERSION = "0"
 
-    def __init__(self, base_url: str):
-        super().__init__(f"{base_url.rstrip('/')}/api/{self.API_VERSION}")
+    @ft_cached_property
+    def api_url(self) -> str:
+        return f"{self.base_url.rstrip('/')}/api/{self.API_VERSION}"
 
     def determine_next_page_params(self, url: str, params: dict, result: dict) -> NextPageParams:
         next_url = result.get("pagination", {}).get("next")
