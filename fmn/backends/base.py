@@ -2,6 +2,7 @@ import logging
 from abc import ABC, abstractmethod
 from copy import deepcopy
 from functools import cache as ft_cache
+from functools import cached_property as ft_cached_property
 from typing import Any, AsyncIterator
 
 from httpx import AsyncClient
@@ -19,14 +20,22 @@ class APIClient(ABC):
     payload_field: str | None
     """The payload field in a paginated response."""
 
-    def __init__(self, base_url: str = None, **kwargs):
+    def __init__(self, base_url: str | None = None, **kwargs):
         self.base_url = base_url
 
         kwargs.setdefault("timeout", None)
-        if base_url is not None:
-            kwargs["base_url"] = base_url
+        if self.api_url is not None:
+            kwargs["base_url"] = self.api_url
 
         self.client = AsyncClient(**kwargs)
+
+    @ft_cached_property
+    def base_url_with_trailing_slash(self) -> str:
+        return self.base_url.rstrip("/") + "/"
+
+    @ft_cached_property
+    def api_url(self) -> str | None:
+        return self.base_url
 
     @ft_cache
     def __str__(self) -> str:

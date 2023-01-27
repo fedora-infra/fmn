@@ -5,16 +5,19 @@ from unittest import mock
 class BaseTestAsyncProxy:
     CLS: type
     URL: str
-    EXPECTED_BASE_URL: str | None
+    EXPECTED_API_URL: str | None
     WRAPPER_METHODS: Sequence[dict[str, Any]] = ()
 
-    def test___init__(self, proxy):
-        expected_base_url = (
-            getattr(self, "EXPECTED_BASE_URL", None)
-            or f"{self.URL.rstrip('/')}/{self.CLS.API_VERSION.strip('/')}/"
-        )
+    @property
+    def expected_api_url(self):
+        return getattr(self, "EXPECTED_API_URL", self.URL)
 
-        assert proxy.client.base_url == expected_base_url
+    def test___init__(self, proxy):
+        # httpx.AsyncClient.base_url always ends in "/"
+        assert proxy.client.base_url == self.expected_api_url.rstrip("/") + "/"
+
+    def test_api_url(self, proxy):
+        assert proxy.api_url == self.expected_api_url
 
     async def _test_wrapper_method(self, method, kwargs, params, expected_path, is_iterator, proxy):
         sentinel = object()
