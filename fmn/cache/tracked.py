@@ -42,6 +42,7 @@ class TrackedCache:
     users that their changes will take X minutes to be active.
     """
 
+    @cache.locked(key="tracked", prefix="v1", ttl="1h")
     async def build(self, db: "AsyncSession", requester: "Requester"):
         log.debug("Building the tracked cache")
         tracked = Tracked()
@@ -51,8 +52,7 @@ class TrackedCache:
         log.debug("Built the tracked cache")
         return tracked
 
-    @cache.early(key="tracked", prefix="v1", ttl="1d", early_ttl="23h")
-    # @cache(key="tracked", prefix="v1", ttl="1d")
+    @cache.early(key="tracked", prefix="v1", ttl="1d", early_ttl="22h")
     async def get_tracked(self, db: "AsyncSession", requester: "Requester"):
         return await self.build(db=db, requester=requester)
 
