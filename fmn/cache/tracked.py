@@ -52,7 +52,7 @@ class TrackedCache:
         for rule in db_result.scalars():
             await rule.tracking_rule.prime_cache(tracked, requester)
         after = monotonic()
-        duration = before - after
+        duration = after - before
         log.debug(f"Built the tracked cache in {duration:.2f} seconds")
         return tracked
 
