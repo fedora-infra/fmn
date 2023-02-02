@@ -6,7 +6,6 @@ from .base import BaseTestAsyncProxy
 
 
 class TestPagureAsyncProxy(BaseTestAsyncProxy):
-
     CLS = pagure.PagureAsyncProxy
     URL = "https://pagure.test"
     EXPECTED_BASE_URL = f"{URL}/api/0/"

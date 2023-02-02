@@ -6,7 +6,6 @@ from .base import BaseTestAsyncProxy
 
 
 class TestDatagrepperAsyncProxy(BaseTestAsyncProxy):
-
     CLS = datagrepper.DatagrepperAsyncProxy
     URL = "https://datagrepper.test"
     WRAPPER_METHODS = (

@@ -3,7 +3,6 @@ from unittest import mock
 
 
 class BaseTestAsyncProxy:
-
     CLS: type
     URL: str
     EXPECTED_BASE_URL: str | None

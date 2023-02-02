@@ -6,7 +6,6 @@ from .base import BaseTestAsyncProxy
 
 
 class TestFASJSONAsyncProxy(BaseTestAsyncProxy):
-
     CLS = fasjson.FASJSONAsyncProxy
     URL = "http://fasjson.test"
     EXPECTED_BASE_URL = f"{URL}/v1/"

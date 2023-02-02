@@ -13,7 +13,6 @@ log = logging.getLogger(__name__)
 
 
 class TrackingRule:
-
     # This should be the name of the Tracking rule in the Database
     name: str | None = None
 

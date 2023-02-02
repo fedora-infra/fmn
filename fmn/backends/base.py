@@ -6,7 +6,6 @@ from httpx import AsyncClient
 
 
 class APIClient(ABC):
-
     payload_field: str | None
     """The payload field in a paginated response."""
 

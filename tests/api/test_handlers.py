@@ -103,7 +103,6 @@ class TestUserHandler(BaseTestAPIV1Handler):
     def test_get_user_destinations_other_format(
         self, fasjson_user_data, respx_mocker, fasjson_url, client
     ):
-
         fasjson_user_data["ircnicks"] = [
             "irc:///testuser",
             "irc:/testuser",
@@ -457,7 +456,6 @@ class TestMisc(BaseTestAPIV1Handler):
 
 
 class TestPreviewRule(BaseTestAPIV1Handler):
-
     _dummy_rule_dict = rule = {
         "tracking_rule": {
             "name": "artifacts-followed",

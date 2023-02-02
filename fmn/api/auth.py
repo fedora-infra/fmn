@@ -16,7 +16,6 @@ class TokenExpired(ValueError):
 
 
 class Identity(BaseModel):
-
     _client = None
     _token_to_identities_cache = {}
     _cache_next_gc_after = None
