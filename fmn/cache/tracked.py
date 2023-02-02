@@ -1,5 +1,6 @@
 import logging
 from dataclasses import dataclass, field
+from time import monotonic
 from typing import TYPE_CHECKING
 
 from cashews import cache
@@ -45,11 +46,14 @@ class TrackedCache:
     @cache.locked(key="tracked", prefix="v1", ttl="1h")
     async def build(self, db: "AsyncSession", requester: "Requester"):
         log.debug("Building the tracked cache")
+        before = monotonic()
         tracked = Tracked()
         db_result = await db.execute(Rule.select_related().filter_by(disabled=False))
         for rule in db_result.scalars():
             await rule.tracking_rule.prime_cache(tracked, requester)
-        log.debug("Built the tracked cache")
+        after = monotonic()
+        duration = before - after
+        log.debug(f"Built the tracked cache in {duration:.2f} seconds")
         return tracked
 
     @cache.early(key="tracked", prefix="v1", ttl="1d", early_ttl="22h")
