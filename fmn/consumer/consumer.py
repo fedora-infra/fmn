@@ -11,7 +11,7 @@ from ..cache import configure_cache
 from ..cache.tracked import TrackedCache
 from ..core import config
 from ..database import async_session_maker, init_async_model
-from ..database.model import Rule
+from ..database.model import Generated, Rule
 from ..rules.requester import Requester
 from .send_queue import SendQueue
 
@@ -70,6 +70,9 @@ class Consumer:
         for rule in await self._get_rules():
             async for notification in rule.handle(message, self._requester):
                 await self._send(notification, message)
+                # Record that the rule generated a notification
+                self.db.add(Generated(rule=rule, count=1))
+                await self.db.commit()
 
     async def _send(self, notification, from_msg):
         log.debug(f"Generating notification for message {from_msg.id} via {notification.protocol}")

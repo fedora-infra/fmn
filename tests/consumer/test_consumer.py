@@ -5,6 +5,7 @@ import pytest
 from aio_pika.exceptions import AMQPConnectionError
 from fedora_messaging.config import conf as fm_config
 from fedora_messaging.exceptions import Nack
+from sqlalchemy import select
 
 from fmn.cache.tracked import Tracked, TrackedCache
 from fmn.consumer.consumer import Consumer
@@ -114,6 +115,12 @@ async def test_consumer_call_tracked(
         "body": "Body of message on dummy.topic",
         "headers": {"Subject": "Message on dummy.topic", "To": "dummy@example.com"},
     }
+
+    result = await c.db.execute(select(model.Generated))
+    generated = list(result.scalars())
+    assert len(generated) == 1
+    assert generated[0].count == 1
+
     await c.db.close()
 
 
