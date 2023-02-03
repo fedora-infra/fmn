@@ -1,11 +1,13 @@
 import logging
+from datetime import datetime, timedelta
 from urllib.parse import urlparse
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...backends import FASJSONAsyncProxy
-from ...database.model import Destination, Filter, GenerationRule, Rule, User
+from ...database.model import Destination, Filter, Generated, GenerationRule, Rule, User
 from ...messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
 from .. import api_models
 from ..auth import Identity, get_identity, get_identity_optional
@@ -75,7 +77,21 @@ async def get_user_rules(
         raise HTTPException(status_code=403, detail="Not allowed to see someone else's rules")
 
     db_result = await db_session.execute(Rule.select_related().filter(Rule.user.has(name=username)))
-    return db_result.scalars().all()
+    rules = db_result.scalars().all()
+
+    # Collect the number of notifications sent
+    last_week = datetime.now() - timedelta(days=7)
+    db_result = await db_session.execute(
+        select(Rule.id, func.sum(Generated.count))
+        .join(Rule)
+        .group_by(Rule)
+        .filter(Rule.id.in_([r.id for r in rules]))
+        .filter(Generated.when >= last_week)
+    )
+    counts = dict(db_result.all())
+    for rule in rules:
+        rule.generated_last_week = counts.get(rule.id, 0)
+    return rules
 
 
 @router.get("/{username}/rules/{id}", response_model=api_models.Rule, tags=["users/rules"])

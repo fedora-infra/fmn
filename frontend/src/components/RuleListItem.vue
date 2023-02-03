@@ -74,5 +74,6 @@ const tracking_rule = TRACKING_RULES.find(
         />
       </template>
     </div>
+    <div>Notifications in the past 7 days: {{ rule.generated_last_week }}</div>
   </CListGroupItem>
 </template>
