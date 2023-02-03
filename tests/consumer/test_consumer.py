@@ -1,3 +1,4 @@
+import asyncio
 from unittest.mock import AsyncMock, Mock
 
 import pytest
@@ -207,3 +208,21 @@ async def test_consumer_send_error(
 
     with pytest.raises(Nack):
         await c._send(Notification(protocol="email", content={}), message)
+
+
+async def test_consumer_in_threadpool(
+    mocker,
+    mocked_cache,
+    mocked_requester_class,
+    mocked_send_queue_class,
+    make_mocked_message,
+):
+    # Fedora Messaging >= 3.3.0 runs with the asyncio reactor, but will still run the consumer in a
+    # threadpool because it's __call__() method is not async. Once we do that, this test can be
+    # removed.
+    loop = asyncio.get_event_loop()
+    c = Consumer()
+    handle = mocker.patch.object(c, "handle")
+    message = make_mocked_message(topic="dummy.topic", body={"foo": "bar"})
+    await loop.run_in_executor(None, c, message)
+    handle.assert_called_once_with(message)

@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from concurrent.futures import wait
 
 from aio_pika.exceptions import AMQPConnectionError
 from fedora_messaging import message
@@ -43,7 +44,12 @@ class Consumer:
     def __call__(self, message: message.Message):
         log.debug(f"Consuming message {message.id}")
         coro = self.handle_or_rollback(message)
-        self.loop.run_until_complete(coro)
+        if self.loop.is_running():
+            # We're running with Fedora Messaging >= 3.3.0, that uses asyncio
+            # for its reactor.
+            wait([asyncio.run_coroutine_threadsafe(coro, self.loop)])
+        else:
+            self.loop.run_until_complete(coro)
 
     async def handle_or_rollback(self, message: message.Message):
         await self._ready
