@@ -125,3 +125,9 @@ class TestIdentityFactory:
         factory = IdentityFactory(optional=True)
         result = await factory(None)
         assert result is None
+
+    async def test___call__anon_mandatory(self):
+        factory = IdentityFactory(optional=False)
+        with pytest.raises(HTTPException) as excinfo:
+            await factory(None)
+        assert excinfo.value.status_code == status.HTTP_401_UNAUTHORIZED

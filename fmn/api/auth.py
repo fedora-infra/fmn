@@ -99,11 +99,14 @@ class IdentityFactory:
         self, bearer: HTTPAuthorizationCredentials | None = Depends(HTTPBearer(auto_error=False))
     ) -> Identity | None:
         try:
-            return await self.process_oidc_auth(bearer)
+            identity = await self.process_oidc_auth(bearer)
         except TokenExpired as exc:
             if self.optional:
                 return None
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Token expired") from exc
+        if identity is None and not self.optional:
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+        return identity
 
 
 get_identity = IdentityFactory(optional=False)
