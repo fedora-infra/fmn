@@ -11,7 +11,7 @@ from sqlalchemy.sql import text
 from fmn.api import api_models, auth
 from fmn.api.handlers.utils import get_last_messages
 from fmn.core.config import get_settings
-from fmn.database.model import Rule
+from fmn.database.model import Generated, Rule
 from fmn.messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
 
 
@@ -154,6 +154,25 @@ class TestUserHandler(BaseTestAPIV1Handler):
         elif testcase == "wrong-user":
             assert response.status_code == status.HTTP_403_FORBIDDEN
             assert isinstance(response.json()["detail"], str)
+
+    @pytest.mark.parametrize("count", (0, 3))
+    async def test_get_user_rules_generated(
+        self, client, api_identity, db_rule, db_async_session, count
+    ):
+        """Verify the data about generated notifications in get_user_rules()."""
+
+        for _i in range(count):
+            db_async_session.add(Generated(rule=db_rule, count=1))
+        await db_async_session.flush()
+
+        response = client.get(f"{self.path}/{api_identity.name}/rules")
+
+        assert response.status_code == status.HTTP_200_OK
+        results = response.json()
+        assert len(results) == 1
+        result = results[0]
+        assert "generated_last_week" in result
+        assert result["generated_last_week"] == count
 
     @pytest.mark.parametrize("testcase", ("happy-path", "wrong-user"))
     def test_get_user_rule(self, testcase, client, api_identity, db_rule):

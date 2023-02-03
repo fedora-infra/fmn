@@ -2,7 +2,7 @@ import { useUserStore } from "@/stores/user";
 import type { QueryFunction } from "react-query/types/core";
 import { useMutation, useQuery, useQueryClient } from "vue-query";
 import { apiDelete, apiGet, apiPost, apiPut } from "./index";
-import type { Notification, Rule } from "./types";
+import type { Notification, Rule, RuleCreation } from "./types";
 
 // Get all rules
 export const useRulesQuery = () => {
@@ -59,7 +59,7 @@ export const useDeleteRuleMutation = () => {
 };
 
 // Preview a rule
-export const usePreviewRuleQuery = (data: Omit<Rule, "id">) => {
+export const usePreviewRuleQuery = (data: RuleCreation) => {
   const doApiPost: QueryFunction<Notification[]> = () => apiPost(url, data);
   const url = "/api/v1/rule-preview";
   console.log("Previewing rule:", data);

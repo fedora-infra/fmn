@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { usePreviewRuleQuery } from "@/api/rules";
-import type { Rule } from "@/api/types";
+import type { RuleCreation } from "@/api/types";
 import { CListGroup, CListGroupItem, CSpinner } from "@coreui/bootstrap-vue";
 import { formatRelative } from "date-fns";
 import { enUS } from "date-fns/locale";
 
 const props = defineProps<{
-  data: Omit<Rule, "id">;
+  data: RuleCreation;
 }>();
 
 const { isLoading, isError, data, error } = usePreviewRuleQuery(props.data);

@@ -76,6 +76,7 @@ class Rule(BaseModel):
     disabled: bool = False
     tracking_rule: TrackingRule
     generation_rules: list[GenerationRule]
+    generated_last_week: int = 0
 
 
 class GenerationRulePreview(GenerationRule):

@@ -80,9 +80,12 @@ export interface Rule {
   id: number;
   name: string;
   disabled: boolean;
+  generated_last_week: number;
   tracking_rule: TrackingRuleEditing;
   generation_rules: GenerationRule[];
 }
+
+export type RuleCreation = Omit<Rule, "id" | "generated_last_week">;
 
 interface PostErrorDetail {
   loc: string[];
