@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship, selectinload
 from sqlalchemy.sql import Select, expression
 
 from ..main import Base
+from .generated import Generated
 from .generation_rule import GenerationRule
 from .tracking_rule import TrackingRule
 from .user import User
@@ -38,6 +39,7 @@ class Rule(Base):
     generation_rules = relationship(
         GenerationRule, back_populates="rule", cascade="all, delete-orphan"
     )
+    generated = relationship(Generated, back_populates="rule", cascade="all, delete-orphan")
 
     @classmethod
     @cache
