@@ -2,7 +2,6 @@ import logging
 from functools import cached_property as ft_cached_property
 from typing import Any, AsyncIterator
 
-from ..core.util import make_synchronous
 from .base import APIClient, NextPageParams
 
 log = logging.getLogger(__name__)
@@ -31,6 +30,3 @@ class DatagrepperAsyncProxy(APIClient):
     async def search(self, **params: dict[str, Any]) -> AsyncIterator[dict]:
         async for msg in self.get_paginated("/search", params=params):
             yield msg
-
-
-DatagrepperSyncProxy = make_synchronous(DatagrepperAsyncProxy, name="DatagrepperSyncProxy")
