@@ -11,7 +11,6 @@ from cashews import cache
 from httpx import URL, QueryParams
 
 from ..cache.util import cache_ttl, get_pattern_for_cached_calls
-from ..core.util import make_synchronous
 from .base import APIClient, NextPageParams
 
 if TYPE_CHECKING:
@@ -256,6 +255,3 @@ class PagureAsyncProxy(APIClient):
             )
             for exc in exceptions_in_results:
                 log.warning("\t%r", exc)
-
-
-PagureSyncProxy = make_synchronous(PagureAsyncProxy, name="PagureSyncProxy")

@@ -4,7 +4,6 @@ from typing import Any, AsyncIterator
 
 from httpx_gssapi import HTTPSPNEGOAuth
 
-from ..core.util import make_synchronous
 from .base import APIClient, NextPageParams
 
 log = logging.getLogger(__name__)
@@ -42,6 +41,3 @@ class FASJSONAsyncProxy(APIClient):
 
     async def get_user_groups(self, *, username: str) -> dict:
         return await self.get_payload(f"/users/{username}/groups/")
-
-
-FASJSONSyncProxy = make_synchronous(FASJSONAsyncProxy, name="FASJSONSyncProxy")
