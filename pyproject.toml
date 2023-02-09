@@ -84,7 +84,6 @@ pytest = "^7.1.2"
 pytest-asyncio = "^0.18.3 || ^0.19.0 || ^0.20.0"
 pytest-black = "^0.3.12"
 pytest-cov = "^3.0.0 || ^4.0.0"
-pytest-flake8 = "^1.1.1"
 pytest-isort = "^3.0.0"
 tox = "^3.25.1 || ^4.0.0"
 greenlet = "^1.1.2 || ^2.0.0"
@@ -161,8 +160,7 @@ schemas = [
 
 
 [tool.pytest.ini_options]
-addopts = "--black --cov-config .coveragerc --cov=fmn --cov-report term --cov-report xml --cov-report html --flake8 --isort --ignore fmn/consumer --ignore fmn/sender"
-flake8-max-line-length = 100
+addopts = "--black --cov-config .coveragerc --cov=fmn --cov-report term --cov-report xml --cov-report html --isort --ignore fmn/consumer --ignore fmn/sender"
 asyncio_mode = "auto"
 
 [tool.isort]
