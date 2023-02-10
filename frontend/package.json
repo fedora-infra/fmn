@@ -40,7 +40,7 @@
     "@rushstack/eslint-patch": "^1.1.0",
     "@testing-library/vue": "^6.6.1",
     "@types/crypto-js": "^4.1.1",
-    "@types/jsdom": "^20.0.0",
+    "@types/jsdom": "^20.0.0 || ^21.0.0",
     "@types/node": "^16.11.43 || ^18.0.0",
     "@types/qs": "^6.9.7",
     "@vitejs/plugin-vue": "^3.0.0 || ^4.0.0",
