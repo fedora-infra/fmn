@@ -30,7 +30,7 @@ async def get_users(
             return [identity.name]
         else:
             return []
-    return [u["username"] async for u in fasjson_proxy.search_users(username=search)]
+    return [u["username"] for u in await fasjson_proxy.search_users(username=search)]
 
 
 @router.get("/{username}", response_model=api_models.User, tags=["users"])
