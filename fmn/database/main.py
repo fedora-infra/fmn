@@ -29,7 +29,6 @@ class CustomBase:
         `_was_created` which allows finding out if it existed previously or
         not.
         """
-        obj = (await db_session.execute(select(cls).filter_by(**attrs))).scalar_one_or_none()
         try:
             obj = await cls.async_get(db_session, **attrs)
         except NoResultFound:
