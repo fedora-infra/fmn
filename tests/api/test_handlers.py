@@ -469,8 +469,7 @@ class TestPreviewRule(BaseTestAPIV1Handler):
         ],
     }
 
-    def test_preview_basic(self, mocker, respx_mocker, client, api_identity, make_mocked_message):
-        mocker.patch("fmn.rules.services.fasjson.FASJSONAsyncProxy")
+    def test_preview_basic(self, respx_mocker, client, api_identity, make_mocked_message):
         respx_mocker.get(
             "https://apps.fedoraproject.org/datagrepper/v2/search?rows_per_page=100&delta=3600"
         ).mock(
@@ -510,9 +509,8 @@ class TestPreviewRule(BaseTestAPIV1Handler):
             "author": None,
         }
 
-    def test_preview_anonymous(self, mocker, client, api_identity):
+    def test_preview_anonymous(self, client, api_identity):
         api_identity.name = None
-        mocker.patch("fmn.rules.services.fasjson.FASJSONAsyncProxy")
         response = client.post(f"{self.path}/rule-preview", json=self._dummy_rule_dict)
 
         assert response.status_code == status.HTTP_403_FORBIDDEN
