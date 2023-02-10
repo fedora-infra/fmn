@@ -255,7 +255,7 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
             ),
         ),
     )
-    async def test_invalidate_cache_on_message(self, mocker, testcase, proxy, caplog):
+    async def test_invalidate_on_message(self, mocker, testcase, proxy, caplog):
         cache = mocker.patch("fmn.backends.pagure.cache")
         cache.delete = mock.AsyncMock()
 
@@ -337,7 +337,7 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
         cache.get_match.side_effect = mocked_cache_get_match
 
         with caplog.at_level(logging.DEBUG):
-            await proxy.invalidate_cache_on_message(message)
+            await proxy.invalidate_on_message(message)
 
         if "success" not in testcase:
             asyncio_create_task.assert_not_called()

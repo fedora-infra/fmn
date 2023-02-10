@@ -136,7 +136,7 @@ class PagureAsyncProxy(APIClient):
                 bisect.insort(sorted_projects, project, key=lambda p: p["fullname"])
         return sorted_projects
 
-    async def invalidate_cache_on_message(self, message: "Message") -> None:
+    async def invalidate_on_message(self, message: "Message") -> None:
         topic = message.topic
         topic_match = self.PROJECT_TOPIC_RE.search(topic)
         if not topic_match:
