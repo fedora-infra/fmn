@@ -41,6 +41,7 @@ async def test_get_tracked(mocker, requester):
     assert result2 == "tracked_value"
 
 
+@pytest.mark.cashews_cache(enabled=True)
 async def test_invalidate_tracked(mocker, requester):
     mocker.patch.object(cache, "delete")
     tracked_cache = TrackedCache()

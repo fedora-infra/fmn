@@ -1,4 +1,5 @@
 import pathlib
+from contextlib import nullcontext
 from unittest import mock
 
 import alembic.command
@@ -44,11 +45,37 @@ def ensure_fresh_settings():
     get_settings.cache_clear()
 
 
+def pytest_configure(config):
+    config.addinivalue_line("markers", "cashews_cache")
+
+
 @pytest.fixture(autouse=True)
-def ensure_in_memory_cache(monkeypatch):
-    # Use in-memory instead of shared Redis cache for testing.
-    monkeypatch.setenv("CACHE__URL", "mem://")
-    cache.setup("mem://")
+def cashews_cache(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest):
+    # Use in-memory instead of shared Redis cache for testing and disable it by default.
+    url = "mem://"
+    enabled = False
+
+    # request.node.iter_markers() lists markers of parent objects later, we need them early to make
+    # e.g. markers on the method override those on the class.
+    for node in request.node.listchain():
+        for marker in node.own_markers:
+            if marker.name == "cashews_cache":
+                url = marker.kwargs.get("url", url)
+                enabled = marker.kwargs.get("enabled", enabled)
+
+    monkeypatch.setenv("CACHE__URL", url)
+    cache.setup(url)
+
+    if enabled:
+        ctxmgr = nullcontext()
+    else:
+        ctxmgr = cache.disabling()
+
+    with ctxmgr:
+        yield
+
+    cache.clear()
+    cache.close()
 
 
 @pytest.fixture
