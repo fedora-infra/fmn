@@ -1,4 +1,4 @@
-from typing import Any, Sequence
+from typing import Any, AsyncIterable, Sequence, get_origin, get_type_hints
 from unittest import mock
 
 
@@ -19,9 +19,24 @@ class BaseTestAsyncProxy:
     def test_api_url(self, proxy):
         assert proxy.api_url == self.expected_api_url
 
-    async def _test_wrapper_method(self, method, kwargs, params, expected_path, is_iterator, proxy):
+    async def _test_wrapper_method(self, *, method, kwargs, params, expected_path, proxy):
+        instance_method = getattr(proxy, method)
+        if hasattr(instance_method, "__wrapped__"):
+            # Bypass cache decorators
+            instance_method = instance_method.__wrapped__
+
+        hints = get_type_hints(instance_method)
+        ret = hints["return"]
+        ret_origin = get_origin(ret)
+        if ret_origin:  # annotation of the sort type[othertype]
+            to_inspect = ret_origin
+        else:
+            to_inspect = ret
+        is_iterable = issubclass(to_inspect, AsyncIterable)
+        is_list = issubclass(to_inspect, list)
+
         sentinel = object()
-        if is_iterator:
+        if is_iterable or is_list:
             proxy.get_paginated = mock.MagicMock()
             proxy.get_paginated.return_value.__aiter__.return_value = [sentinel]
         else:
@@ -31,14 +46,18 @@ class BaseTestAsyncProxy:
         passed_through_kwargs = {"params": params} if params else {}
 
         coro = getattr(proxy, method)(**(kwargs | params))
-        if is_iterator:
+        if is_iterable:
             retval = [x async for x in coro]
             assert retval == [sentinel]
             proxy.get_paginated.assert_called_once_with(expected_path, **passed_through_kwargs)
         else:
             retval = await coro
-            assert retval is sentinel
-            proxy.get_payload.assert_called_once_with(expected_path, **passed_through_kwargs)
+            if is_list:
+                assert retval == [sentinel]
+                proxy.get_paginated.assert_called_once_with(expected_path, **passed_through_kwargs)
+            else:
+                assert retval is sentinel
+                proxy.get_payload.assert_called_once_with(expected_path, **passed_through_kwargs)
 
     async def test_wrapper_methods(self, proxy):
         for spec in self.WRAPPER_METHODS:

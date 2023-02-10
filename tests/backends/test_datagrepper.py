@@ -15,7 +15,6 @@ class TestDatagrepperAsyncProxy(BaseTestAsyncProxy):
             "kwargs": {},
             "params": {"delta": 3600},
             "expected_path": "/search",
-            "is_iterator": True,
         },
     )
 
