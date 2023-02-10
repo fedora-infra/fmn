@@ -17,7 +17,7 @@ class CacheArgsModel(BaseModel):
 
 
 class CacheModel(BaseModel):
-    url: stricturl(tld_required=False, host_required=False) = None
+    url: stricturl(tld_required=False, host_required=False) = "mem://"
     setup_args: dict[str, Any] | None = None
 
     default_args: CacheArgsModel = CacheArgsModel(ttl="1h")
