@@ -2,6 +2,7 @@ from unittest.mock import AsyncMock, Mock
 
 import pytest
 
+from fmn.backends import PagureRole
 from fmn.cache.tracked import Tracked
 from fmn.core.constants import ArtifactType
 
@@ -21,7 +22,18 @@ class MockPagureAsyncProxy:
     get_project_users = get_project_groups = _get_project_users_groups
 
     async def get_group_projects(self, *, name, acl):
-        return [{"name": f"{acl}-{num}"} for num in range(1, 3)]
+        assert isinstance(name, str)
+        assert isinstance(acl, PagureRole)
+        return [
+            {
+                "name": f"{artifact_type.value}-{num}",
+                "namespace": artifact_type.value,
+                "fullname": f"{artifact_type.value}/{artifact_type.value}-{num}",
+                "access_groups": {role.name.lower(): [name] for role in PagureRole.GROUP_ROLES_SET},
+            }
+            for artifact_type in ArtifactType
+            for num in range(1, 3)
+        ]
 
 
 @pytest.fixture
