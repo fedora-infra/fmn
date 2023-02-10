@@ -354,14 +354,14 @@ files = [
 
 [[package]]
 name = "cashews"
-version = "5.0.0"
+version = "5.2.0"
 description = "cache tools with async power"
 category = "main"
 optional = true
 python-versions = ">=3.7"
 files = [
-    {file = "cashews-5.0.0-py3-none-any.whl", hash = "sha256:acc873bf116c6a0d4e76c42b4ce1f35d62721e720e66b6deb29e5efae4dccaa2"},
-    {file = "cashews-5.0.0.tar.gz", hash = "sha256:524d6445fc5e235e83a5e5c831b069e57fe3f4bc1107f5e21d502b287303360f"},
+    {file = "cashews-5.2.0-py3-none-any.whl", hash = "sha256:e8ef00f09ab444a58400782f9dff5f49ef3fa9e717f769844bb043b04d32751d"},
+    {file = "cashews-5.2.0.tar.gz", hash = "sha256:8852bc7fbd80073dfc3ba0764998e5dcfe0ea4ccb9b18e1b66c2802bb98393f0"},
 ]
 
 [package.dependencies]
@@ -371,7 +371,7 @@ redis = {version = ">=4.3.1", optional = true, markers = "extra == \"redis\""}
 dill = ["dill"]
 diskcache = ["diskcache (>=5.0.0)"]
 redis = ["redis (>=4.3.1)"]
-speedup = ["bitarray (<3.0.0)", "hiredis", "xxhash (<3.0.0)"]
+speedup = ["bitarray (<3.0.0)", "hiredis", "xxhash (<4.0.0)"]
 tests = ["hypothesis", "pytest", "pytest-asyncio"]
 
 [[package]]
@@ -3546,4 +3546,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "a17e733ed2f55e6eb99064b8a771c7236fedae2ae067a6329ce5e66feed81948"
+content-hash = "9dfa47693ec89beef80b75dc76023b18470fb562e874f1a77fe99f0732f7daaf"
