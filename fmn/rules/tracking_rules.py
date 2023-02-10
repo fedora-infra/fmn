@@ -1,6 +1,7 @@
 import logging
 from typing import TYPE_CHECKING
 
+from ..backends import PagureRole
 from ..core.constants import ArtifactType
 from .requester import Requester
 
@@ -72,11 +73,17 @@ class ArtifactsGroupOwned(TrackingRule):
 
     async def prime_cache(self, cache):
         for group in self.groups:
-            for artifact_type in ArtifactType:
-                owned = await self._requester.distgit.get_group_projects(
-                    name=group, acl=artifact_type.value
-                )
-                getattr(cache, artifact_type.name).update(p["name"] for p in owned)
+            owned = await self._requester.distgit.get_group_projects(
+                name=group, acl=PagureRole.GROUP_ROLES_MAINTAINER
+            )
+            for role in PagureRole.GROUP_ROLES_MAINTAINER_SET:
+                for artifact_type in ArtifactType:
+                    getattr(cache, artifact_type.name).update(
+                        p["fullname"]
+                        for p in owned
+                        if p["namespace"] == artifact_type.value
+                        and group in p["access_groups"].get(role.name.lower(), ())
+                    )
 
 
 class ArtifactsFollowed(TrackingRule):

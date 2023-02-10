@@ -25,8 +25,8 @@ async def test_artifacts_group_owned_cache(requester, cache):
     tr = ArtifactsGroupOwned(requester, ["group1"], owner="testuser")
     await tr.prime_cache(cache)
     assert cache == Tracked(
-        packages=set(["rpms-1", "rpms-2"]),
-        containers=set(["containers-1", "containers-2"]),
-        modules=set(["modules-1", "modules-2"]),
-        flatpaks=set(["flatpaks-1", "flatpaks-2"]),
+        packages=set(["rpms/rpms-1", "rpms/rpms-2"]),
+        containers=set(["containers/containers-1", "containers/containers-2"]),
+        modules=set(["modules/modules-1", "modules/modules-2"]),
+        flatpaks=set(["flatpaks/flatpaks-1", "flatpaks/flatpaks-2"]),
     )

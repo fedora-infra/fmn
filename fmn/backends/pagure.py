@@ -27,7 +27,27 @@ class PagureRole(IntFlag):
     COLLABORATOR = auto()
     TICKET = auto()
 
-    ALL_MAINTAINERS = OWNER | ADMIN | COMMIT | COLLABORATOR
+    USER_ROLES_MAINTAINER = OWNER | ADMIN | COMMIT | COLLABORATOR
+    USER_ROLES = USER_ROLES_MAINTAINER | TICKET
+    GROUP_ROLES_MAINTAINER = ADMIN | COMMIT | COLLABORATOR
+    GROUP_ROLES = GROUP_ROLES_MAINTAINER | TICKET
+
+
+# Python < 3.11 doesn’t allow iterating over combined flag values
+PagureRole.USER_ROLES_MAINTAINER_SET = {
+    role for role in PagureRole if role.bit_count() == 1 and role & PagureRole.USER_ROLES_MAINTAINER
+}
+PagureRole.USER_ROLES_SET = {
+    role for role in PagureRole if role.bit_count() == 1 and role & PagureRole.USER_ROLES
+}
+PagureRole.GROUP_ROLES_MAINTAINER_SET = {
+    role
+    for role in PagureRole
+    if role.bit_count() == 1 and role & PagureRole.GROUP_ROLES_MAINTAINER
+}
+PagureRole.GROUP_ROLES_SET = {
+    role for role in PagureRole if role.bit_count() == 1 and role & PagureRole.GROUP_ROLES
+}
 
 
 class PagureAsyncProxy(APIClient):
@@ -85,7 +105,7 @@ class PagureAsyncProxy(APIClient):
 
     @cache(ttl=cache_ttl("pagure"), prefix="v1")
     async def get_project_users(
-        self, *, project_path: str, roles: PagureRole = PagureRole.ALL_MAINTAINERS
+        self, *, project_path: str, roles: PagureRole = PagureRole.USER_ROLES_MAINTAINER
     ) -> list[str]:
         project = await self.get(project_path)
         access_users = project.get("access_users", {})
@@ -99,7 +119,7 @@ class PagureAsyncProxy(APIClient):
 
     @cache(ttl=cache_ttl("pagure"), prefix="v1")
     async def get_project_groups(
-        self, *, project_path: str, roles: PagureRole = PagureRole.ALL_MAINTAINERS
+        self, *, project_path: str, roles: PagureRole = PagureRole.GROUP_ROLES_MAINTAINER
     ) -> list[str]:
         project = await self.get(project_path)
         access_groups = project.get("access_groups", {})
@@ -120,8 +140,8 @@ class PagureAsyncProxy(APIClient):
         else:
             params_seq = [
                 {"projects": True, "acl": role.name.lower()}
-                for role in PagureRole
-                if role & acl and role.bit_count() == 1
+                for role in PagureRole.GROUP_ROLES_SET
+                if role & acl
             ]
 
         seen_fullnames = set()
