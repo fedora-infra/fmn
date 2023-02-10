@@ -16,21 +16,18 @@ class TestFASJSONAsyncProxy(BaseTestAsyncProxy):
             "kwargs": {},
             "params": {"username": "foo"},
             "expected_path": "/search/users/",
-            "is_iterator": True,
         },
         {
             "method": "get_user",
             "kwargs": {"username": "boop"},
             "params": {},
             "expected_path": "/users/boop/",
-            "is_iterator": False,
         },
         {
             "method": "get_user_groups",
             "kwargs": {"username": "boop"},
             "params": {},
             "expected_path": "/users/boop/groups/",
-            "is_iterator": False,
         },
     )
 
