@@ -355,6 +355,7 @@ class TestMisc(BaseTestAPIV1Handler):
             "fedocal",
             "FMN",
             "hotness",
+            "Koji",
             "mdapi",
             "noggin",
             "nuancier",
