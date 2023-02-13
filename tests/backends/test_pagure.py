@@ -316,19 +316,19 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
 
             if ".get_project_users:" in pattern:
                 func = proxy.get_project_users
-                kwargs |= {"project_path": "rpms/bash", "roles": None}
+                kwargs["project_path"] = "rpms/bash"
+                kwargs["roles"] = None
             elif ".get_projects:" in pattern:
                 func = proxy.get_projects
-                kwargs |= {
-                    "username": None if ":username::" in pattern else "the-user",
-                    "owner": None if ":owner::" in pattern else "the-user",
-                }
+                kwargs["username"] = None if ":username::" in pattern else "the-user"
+                kwargs["owner"] = None if ":owner::" in pattern else "the-user"
             elif ".get_project_groups:" in pattern:
                 func = proxy.get_project_groups
-                kwargs |= {"project_path": "rpms/bash", "roles": None}
+                kwargs["project_path"] = "rpms/bash"
+                kwargs["roles"] = None
             elif ".get_group_projects:" in pattern:
                 func = proxy.get_group_projects
-                kwargs |= {"name": "the-group"}
+                kwargs["name"] = "the-group"
 
             key = get_pattern_for_cached_calls(func, **kwargs)[0]
 
