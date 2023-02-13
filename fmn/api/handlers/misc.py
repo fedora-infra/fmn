@@ -86,6 +86,7 @@ async def get_artifacts(
         },
     ]
     namespaces = [at.value for at in ArtifactType]
+    # TODO: handle error 500 in distgit_proxy.get_projects()
     for project in await distgit_proxy.get_projects(pattern=f"*{name}*"):
         for index, namespace in enumerate(namespaces):
             if project["namespace"] == namespace:

@@ -179,3 +179,23 @@ class TestAPIClient:
             assert isinstance(result, list)
             assert len(result) == self.PAGINATE_TOTAL_PAGES * self.PAGINATE_PER_PAGE
             assert all(i == item["boop"] for i, item in enumerate(result))
+
+
+@pytest.mark.parametrize("testcase", ("success", "raises-exception"))
+async def test_handle_http_error(testcase, mocker):
+    async def fn_to_be_decorated():
+        if "raises-exception" in testcase:
+            raise httpx.HTTPStatusError(
+                "Boo.", request=None, response=httpx.Response(status_code=404)
+            )
+        else:
+            return ["item"]
+
+    decorated_fn = base.handle_http_error(list)(fn_to_be_decorated)
+
+    result = await decorated_fn()
+
+    if "success" in testcase:
+        assert result == ["item"]
+    else:
+        assert result == []

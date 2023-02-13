@@ -3,13 +3,29 @@ from abc import ABC, abstractmethod
 from copy import deepcopy
 from functools import cache as ft_cache
 from functools import cached_property as ft_cached_property
+from functools import wraps
 from typing import Any, AsyncIterator
 
-from httpx import AsyncClient
+from httpx import AsyncClient, HTTPStatusError
 
 log = logging.getLogger(__name__)
 
 NextPageParams = tuple[str, dict] | tuple[None, None]
+
+
+def handle_http_error(default_factory):
+    def exception_handler(f):
+        @wraps(f)
+        async def wrapper(*args, **kw):
+            try:
+                return await f(*args, **kw)
+            except HTTPStatusError as e:
+                log.warning(f"Request failed: {e}")
+                return default_factory()
+
+        return wrapper
+
+    return exception_handler
 
 
 class PaginationRecursionError(RuntimeError):
