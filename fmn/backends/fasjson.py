@@ -9,7 +9,7 @@ from cashews import cache
 from httpx_gssapi import HTTPSPNEGOAuth
 
 from ..cache.util import cache_ttl, get_pattern_for_cached_calls
-from .base import APIClient, NextPageParams
+from .base import APIClient, NextPageParams, handle_http_error
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
@@ -61,6 +61,7 @@ class FASJSONAsyncProxy(APIClient):
     async def get_user(self, *, username: str) -> dict:
         return await self.get_payload(f"/users/{username}/")
 
+    @handle_http_error(list)
     @cache(ttl=cache_ttl("fasjson"), prefix="v1")
     async def get_user_groups(self, *, username: str) -> dict:
         return await self.get_payload(f"/users/{username}/groups/")

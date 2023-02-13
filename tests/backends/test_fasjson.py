@@ -4,6 +4,7 @@ import re
 from itertools import chain
 from unittest import mock
 
+import httpx
 import pytest
 
 from fmn.backends import fasjson
@@ -64,6 +65,15 @@ class TestFASJSONAsyncProxy(BaseTestAsyncProxy):
             assert params["page"] == 2
         else:
             assert next_url is None
+
+    async def test_get_user_groups_failure(self, respx_mocker, proxy_unmocked_client):
+        route = respx_mocker.get(f"{self.expected_api_url}/users/boop/groups/").mock(
+            side_effect=httpx.Response(status_code=500)
+        )
+
+        response = await proxy_unmocked_client.get_user_groups(username="boop")
+        assert route.called
+        assert response == []
 
     @pytest.mark.parametrize(
         "testcase",

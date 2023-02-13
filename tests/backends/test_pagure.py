@@ -169,6 +169,15 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
         if "filter-by-owner" in testcase:
             assert all("dudemcpants" in p["access_users"]["owner"] for p in mocked_projects)
 
+    async def test_get_projects_failure(self, respx_mocker, proxy_unmocked_client):
+        route = respx_mocker.get(
+            f"{self.expected_api_url}/projects", params={"fork": False, "short": True}
+        ).mock(side_effect=[httpx.Response(fastapi.status.HTTP_500_INTERNAL_SERVER_ERROR)])
+
+        response = await proxy_unmocked_client.get_projects()
+        assert route.called
+        assert response == []
+
     @pytest.mark.parametrize("access_role", ("owner", "commit"))
     async def test_get_project_users(self, access_role, respx_mocker, proxy_unmocked_client):
         mocked_project = [p for p in self.MOCKED_PROJECTS if p["fullname"] == "rpms/gimp"][0]
@@ -184,6 +193,15 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
         assert route.called
         assert users == mocked_project["access_users"].get(access_role, [])
 
+    async def test_get_project_users_failure(self, respx_mocker, proxy_unmocked_client):
+        route = respx_mocker.get(f"{self.expected_api_url}/rpms/gimp").mock(
+            side_effect=[httpx.Response(fastapi.status.HTTP_404_NOT_FOUND)]
+        )
+
+        response = await proxy_unmocked_client.get_project_users(project_path="/rpms/gimp")
+        assert response == []
+        assert route.called
+
     @pytest.mark.parametrize("access_role", ("owner", "commit"))
     async def test_get_project_groups(self, access_role, respx_mocker, proxy_unmocked_client):
         mocked_project = [p for p in self.MOCKED_PROJECTS if p["fullname"] == "rpms/gimp"][0]
@@ -198,6 +216,15 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
 
         assert route.called
         assert groups == mocked_project["access_groups"].get(access_role, [])
+
+    async def test_get_project_groups_failure(self, respx_mocker, proxy_unmocked_client):
+        route = respx_mocker.get(f"{self.expected_api_url}/rpms/gimp").mock(
+            side_effect=[httpx.Response(fastapi.status.HTTP_404_NOT_FOUND)]
+        )
+
+        response = await proxy_unmocked_client.get_project_groups(project_path="/rpms/gimp")
+        assert response == []
+        assert route.called
 
     @pytest.mark.parametrize("access_role", (None, "commit", "ticket"))
     async def test_get_group_projects(self, access_role, respx_mocker, proxy_unmocked_client):
@@ -235,6 +262,15 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
 
         assert route.called
         assert projects == non_duplicate_projects
+
+    async def test_get_group_projects_failure(self, respx_mocker, proxy_unmocked_client):
+        route = respx_mocker.get(f"{self.expected_api_url}/group/provenpackager").mock(
+            side_effect=[httpx.Response(fastapi.status.HTTP_404_NOT_FOUND)]
+        )
+
+        response = await proxy_unmocked_client.get_group_projects(name="provenpackager")
+        assert response == []
+        assert route.called
 
     @pytest.mark.parametrize(
         "testcase",

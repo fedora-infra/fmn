@@ -11,7 +11,7 @@ from cashews import cache
 from httpx import URL, QueryParams
 
 from ..cache.util import cache_ttl, get_pattern_for_cached_calls
-from .base import APIClient, NextPageParams
+from .base import APIClient, NextPageParams, handle_http_error
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
@@ -74,6 +74,7 @@ class PagureAsyncProxy(APIClient):
 
         return None, None
 
+    @handle_http_error(list)
     @cache(ttl=cache_ttl("pagure"), prefix="v1")
     async def get_projects(
         self,
@@ -102,6 +103,7 @@ class PagureAsyncProxy(APIClient):
             )
         ]
 
+    @handle_http_error(list)
     @cache(ttl=cache_ttl("pagure"), prefix="v1")
     async def get_project_users(
         self, *, project_path: str, roles: PagureRole = PagureRole.USER_ROLES_MAINTAINER
@@ -116,6 +118,7 @@ class PagureAsyncProxy(APIClient):
         }
         return sorted(usernames)
 
+    @handle_http_error(list)
     @cache(ttl=cache_ttl("pagure"), prefix="v1")
     async def get_project_groups(
         self, *, project_path: str, roles: PagureRole = PagureRole.GROUP_ROLES_MAINTAINER
@@ -130,6 +133,7 @@ class PagureAsyncProxy(APIClient):
         }
         return sorted(groupnames)
 
+    @handle_http_error(list)
     @cache(ttl=cache_ttl("pagure"), prefix="v1")
     async def get_group_projects(
         self, *, name: str, acl: PagureRole | None = None
