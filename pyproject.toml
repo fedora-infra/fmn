@@ -67,6 +67,7 @@ fedorainfra-ansible-messages = {version = "*", optional = true}
 fedora-elections-messages = {version = "*", optional = true}
 fedora-messaging-the-new-hotness-schema = {version = "*", optional = true}
 fedora-planet-messages = {version = "*", optional = true}
+koji-fedoramessaging-messages = {version = "*", optional = true}
 mdapi-messages = {version = "*", optional = true}
 noggin-messages = {version = "*", optional = true}
 nuancier-messages = {version = "*", optional = true}
@@ -134,6 +135,7 @@ schemas = [
   "fedora-elections-messages",
   "fedora-messaging-the-new-hotness-schema",
   "fedora-planet-messages",
+  "koji-fedoramessaging-messages",
   "mdapi-messages",
   "noggin-messages",
   "nuancier-messages",
