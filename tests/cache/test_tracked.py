@@ -32,21 +32,20 @@ async def test_build_tracked(mocker, requester, db_async_session, rules_cache):
     rule = Rule(id=1, name="dummy", user=User(name="dummy"), tracking_rule=tr, generation_rules=[])
     db_async_session.add_all([rule, tr])
     prime_cache = mocker.patch.object(tr, "prime_cache")
-    tracked_cache = TrackedCache(rules_cache)
-    tracked = await tracked_cache.build(requester)
+    tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
+    tracked = await tracked_cache.build()
     prime_cache.assert_called_once_with(tracked, requester)
 
 
 @pytest.mark.cashews_cache(enabled=True)
-async def test_get_tracked(mocker, requester, rules_cache):
+async def test_get_tracked(mocker, requester):
     rules_cache = mocker.AsyncMock()
     rules_cache.get_rules.return_value = []
     tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
-    # configure_cache()
     mocker.patch.object(tracked_cache, "build", return_value="tracked_value")
-    result1 = await tracked_cache.get_tracked(requester)
-    result2 = await tracked_cache.get_tracked(requester)
-    tracked_cache.build.assert_called_once_with(requester=requester)
+    result1 = await tracked_cache.get_tracked()
+    result2 = await tracked_cache.get_tracked()
+    tracked_cache.build.assert_called_once_with()
     assert result1 == "tracked_value"
     assert result2 == "tracked_value"
 
@@ -54,7 +53,7 @@ async def test_get_tracked(mocker, requester, rules_cache):
 @pytest.mark.cashews_cache(enabled=True)
 async def test_invalidate_tracked(mocker, requester, rules_cache):
     mocker.patch.object(cache, "delete")
-    tracked_cache = TrackedCache(rules_cache)
+    tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
     await tracked_cache.invalidate()
     cache_key = list(get_templates_for_func(tracked_cache.get_tracked))[0]
     cache.delete.assert_called_with(cache_key)
@@ -69,9 +68,11 @@ async def test_invalidate_tracked(mocker, requester, rules_cache):
         ("fmn.rule.delete.v1", True),
     ],
 )
-async def test_invalidate_on_message(mocker, rules_cache, topic, expected, make_mocked_message):
+async def test_invalidate_on_message(
+    mocker, requester, rules_cache, topic, expected, make_mocked_message
+):
     message = make_mocked_message(topic=topic, body={})
-    tracked_cache = TrackedCache(rules_cache)
+    tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
     mocker.patch.object(tracked_cache, "invalidate")
     # # Set an existing value that will be invalidated
     # existing_value = Tracked(packages={"existing"}, usernames={"existing"})
