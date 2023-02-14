@@ -25,7 +25,7 @@ def get_tracked():
         await init_async_model()
         requester = Requester(get_settings().services)
         rules_cache = RulesCache()
-        tracked_cache = TrackedCache(rules_cache=rules_cache)
+        tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
         async with async_session_maker() as db:
             rules_cache.db = db
             return await tracked_cache.get_tracked(requester)
@@ -38,7 +38,8 @@ def get_tracked():
 def delete_tracked():
     """Invalidate the current tracked value."""
     configure_cache()
+    requester = Requester(get_settings().services)
     rules_cache = RulesCache()
-    tracked_cache = TrackedCache(rules_cache=rules_cache)
+    tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
     asyncio.run(tracked_cache.invalidate())
     print("Tracked cache invalidated.")

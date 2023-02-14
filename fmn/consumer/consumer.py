@@ -26,7 +26,7 @@ class Consumer:
             config.set_settings_file(fm_config["consumer_config"]["settings_file"])
         self._rules_cache = RulesCache()
         self._requester = Requester(config.get_settings().services)
-        self._tracked_cache = TrackedCache(rules_cache=self._rules_cache)
+        self._tracked_cache = TrackedCache(requester=self._requester, rules_cache=self._rules_cache)
         self.send_queue = SendQueue(fm_config["consumer_config"]["send_queue"])
         self.loop = asyncio.get_event_loop()
         self._ready = self.loop.create_task(self.setup())
@@ -94,7 +94,7 @@ class Consumer:
         # tracked messages will still run though all the rules though, so this could be improved I
         # suppose, maybe by changing the cache datastructure to point each entry in the cache to the
         # rules that produced it.
-        tracked = await self._tracked_cache.get_tracked(self._requester)
+        tracked = await self._tracked_cache.get_tracked()
         for msg_attr in ("packages", "containers", "modules", "flatpaks", "usernames"):
             if not set(getattr(message, msg_attr)).isdisjoint(getattr(tracked, msg_attr)):
                 log.debug(f"Message {message.id} is tracked by {msg_attr}")

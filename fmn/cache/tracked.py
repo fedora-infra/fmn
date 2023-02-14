@@ -41,24 +41,25 @@ class TrackedCache:
     users that their changes will take X minutes to be active.
     """
 
-    def __init__(self, rules_cache: "RulesCache"):
+    def __init__(self, requester: "Requester", rules_cache: "RulesCache"):
+        self._requester = requester
         self._rules_cache = rules_cache
 
     @cache.locked(key="tracked", prefix="v1", ttl="1h")
-    async def build(self, requester: "Requester"):
+    async def build(self):
         log.debug("Building the tracked cache")
         before = monotonic()
         tracked = Tracked()
         for rule in await self._rules_cache.get_rules():
-            await rule.tracking_rule.prime_cache(tracked, requester)
+            await rule.tracking_rule.prime_cache(tracked, self._requester)
         after = monotonic()
         duration = after - before
         log.debug(f"Built the tracked cache in {duration:.2f} seconds")
         return tracked
 
     @cache.early(key="tracked", prefix="v1", ttl="1d", early_ttl="22h")
-    async def get_tracked(self, requester: "Requester"):
-        return await self.build(requester=requester)
+    async def get_tracked(self):
+        return await self.build()
 
     async def invalidate(self):
         log.debug("Invalidating the tracked cache")
