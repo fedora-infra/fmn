@@ -43,6 +43,7 @@ TrackingRule = Annotated[
 
 # DB models
 
+EMAIL_ADDRESS_RE = re.compile(r"[\w_.-]+@[\w.-]+")
 MATRIX_ADDRESS_RE = re.compile(r"@[\w_-]+:[\w.-]+")
 
 
@@ -52,7 +53,9 @@ class Destination(BaseModel):
 
     @validator("address")
     def address_format(cls, v, values):
-        if values["protocol"] == "matrix" and not MATRIX_ADDRESS_RE.match(v):
+        if values["protocol"] == "email" and not EMAIL_ADDRESS_RE.match(v):
+            raise ValueError("The email address does not look right")
+        elif values["protocol"] == "matrix" and not MATRIX_ADDRESS_RE.match(v):
             raise ValueError("The Matrix address should be in the form @username:server.tld")
         return v
 
