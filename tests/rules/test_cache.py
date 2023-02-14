@@ -4,6 +4,7 @@ import pytest
 from cashews import cache
 from cashews.formatter import get_templates_for_func
 
+from fmn.cache.rules import RulesCache
 from fmn.cache.tracked import TrackedCache
 from fmn.database.model import Rule, TrackingRule, User
 
@@ -19,32 +20,41 @@ def rule():
     return Rule(id=1, user=User(name="dummy"), tracking_rule=tr, generation_rules=[])
 
 
-async def test_build_tracked(mocker, requester, db_async_session):
+@pytest.fixture
+def rules_cache(db_async_session):
+    rules_cache = RulesCache()
+    rules_cache.db = db_async_session
+    return rules_cache
+
+
+async def test_build_tracked(mocker, requester, db_async_session, rules_cache):
     tr = TrackingRule(id=1, name="artifacts-owned", params={"username": "dummy"})
     rule = Rule(id=1, name="dummy", user=User(name="dummy"), tracking_rule=tr, generation_rules=[])
     db_async_session.add_all([rule, tr])
     prime_cache = mocker.patch.object(tr, "prime_cache")
-    tracked_cache = TrackedCache()
-    tracked = await tracked_cache.build(db_async_session, requester)
+    tracked_cache = TrackedCache(rules_cache)
+    tracked = await tracked_cache.build(requester)
     prime_cache.assert_called_once_with(tracked, requester)
 
 
-async def test_get_tracked(mocker, requester):
-    db = Mock()
-    tracked_cache = TrackedCache()
+@pytest.mark.cashews_cache(enabled=True)
+async def test_get_tracked(mocker, requester, rules_cache):
+    rules_cache = mocker.AsyncMock()
+    rules_cache.get_rules.return_value = []
+    tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
     # configure_cache()
     mocker.patch.object(tracked_cache, "build", return_value="tracked_value")
-    result1 = await tracked_cache.get_tracked(db, requester)
-    result2 = await tracked_cache.get_tracked(db, requester)
-    tracked_cache.build.assert_called_once_with(db=db, requester=requester)
+    result1 = await tracked_cache.get_tracked(requester)
+    result2 = await tracked_cache.get_tracked(requester)
+    tracked_cache.build.assert_called_once_with(requester=requester)
     assert result1 == "tracked_value"
     assert result2 == "tracked_value"
 
 
 @pytest.mark.cashews_cache(enabled=True)
-async def test_invalidate_tracked(mocker, requester):
+async def test_invalidate_tracked(mocker, requester, rules_cache):
     mocker.patch.object(cache, "delete")
-    tracked_cache = TrackedCache()
+    tracked_cache = TrackedCache(rules_cache)
     await tracked_cache.invalidate()
     cache_key = list(get_templates_for_func(tracked_cache.get_tracked))[0]
     cache.delete.assert_called_with(cache_key)
@@ -59,9 +69,9 @@ async def test_invalidate_tracked(mocker, requester):
         ("fmn.rule.delete.v1", True),
     ],
 )
-async def test_invalidate_on_message(mocker, topic, expected, make_mocked_message):
+async def test_invalidate_on_message(mocker, rules_cache, topic, expected, make_mocked_message):
     message = make_mocked_message(topic=topic, body={})
-    tracked_cache = TrackedCache()
+    tracked_cache = TrackedCache(rules_cache)
     mocker.patch.object(tracked_cache, "invalidate")
     # # Set an existing value that will be invalidated
     # existing_value = Tracked(packages={"existing"}, usernames={"existing"})

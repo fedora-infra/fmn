@@ -126,21 +126,6 @@ async def test_consumer_call_tracked(
     await c.db.close()
 
 
-async def test_consumer_rule_disabled(
-    mocked_cache, mocked_requester_class, mocked_send_queue_class
-):
-    c = Consumer()
-    await c._ready
-    await c.db.run_sync(setup_db_schema)
-    user = model.User(name="dummy")
-    rule = model.Rule(user=user, name="the name", disabled=True)
-    c.db.add_all([user, rule])
-    await c.db.commit()
-    rules = await c._get_rules()
-    assert list(rules) == []
-    await c.db.close()
-
-
 async def test_consumer_init_settings_file(
     mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class
 ):
@@ -191,19 +176,19 @@ async def test_consumer_call_tracked_agent_name(
     assert (await c.is_tracked(message)) is True
 
 
-def test_consumer_deprecated_schema(
+async def test_consumer_deprecated_schema(
     mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class, make_mocked_message
 ):
     c = Consumer()
     mocked_cache.get_tracked.return_value = Tracked(packages={"pkg1"})
-    mocker.patch.object(c, "_get_rules", return_value=[])
+    c._rules_cache = mocker.AsyncMock()
     message = make_mocked_message(
         topic="dummy.topic",
         body={"packages": ["pkg1"]},
     )
     message.__class__.deprecated = True
-    c(message)
-    c._get_rules.assert_not_called()
+    await c.handle(message)
+    c._rules_cache.get_rules.assert_not_called()
 
 
 async def test_consumer_send_error(

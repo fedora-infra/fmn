@@ -6,13 +6,11 @@ from typing import TYPE_CHECKING
 from cashews import cache
 from cashews.formatter import get_templates_for_func
 
-from ..database.model import Rule
-
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
-    from sqlalchemy.ext.asyncio import AsyncSession
 
     from ..rules.requester import Requester
+    from .rules import RulesCache
 
 log = logging.getLogger(__name__)
 
@@ -43,13 +41,15 @@ class TrackedCache:
     users that their changes will take X minutes to be active.
     """
 
+    def __init__(self, rules_cache: "RulesCache"):
+        self._rules_cache = rules_cache
+
     @cache.locked(key="tracked", prefix="v1", ttl="1h")
-    async def build(self, db: "AsyncSession", requester: "Requester"):
+    async def build(self, requester: "Requester"):
         log.debug("Building the tracked cache")
         before = monotonic()
         tracked = Tracked()
-        db_result = await db.execute(Rule.select_related().filter_by(disabled=False))
-        for rule in db_result.scalars():
+        for rule in await self._rules_cache.get_rules():
             await rule.tracking_rule.prime_cache(tracked, requester)
         after = monotonic()
         duration = after - before
@@ -57,8 +57,8 @@ class TrackedCache:
         return tracked
 
     @cache.early(key="tracked", prefix="v1", ttl="1d", early_ttl="22h")
-    async def get_tracked(self, db: "AsyncSession", requester: "Requester"):
-        return await self.build(db=db, requester=requester)
+    async def get_tracked(self, requester: "Requester"):
+        return await self.build(requester=requester)
 
     async def invalidate(self):
         log.debug("Invalidating the tracked cache")
