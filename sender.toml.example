@@ -8,11 +8,16 @@ queue = "email"
 # keyfile = "/etc/fedora-messaging/sender-key.pem"
 # certfile = "/etc/fedora-messaging/sender-cert.pem"
 
+# For Email:
 [handler]
 class = "fmn.sender.email:EmailHandler"
 from = "FMN <fmn@fedoraproject.org>"
 smtp_host = "localhost"
 smtp_port = 25
+
+# For IRC:
+[handler]
+class = "fmn.sender.irc:IRCHandler"
 irc_url = "ircs://fedora-notif:fmnpassword@irc.libera.chat:6697"
 
 # For Matrix:
