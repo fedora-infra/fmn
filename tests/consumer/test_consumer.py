@@ -61,11 +61,13 @@ def test_consumer_call_not_tracked(
     make_mocked_message,
 ):
     c = Consumer()
+    commit_spy = mocker.spy(c.db, "commit")
     message = make_mocked_message(topic="dummy.topic", body={"foo": "bar"})
     c(message)
     mocked_cache.invalidate_on_message.assert_called_with(message)
     c._requester.invalidate_on_message.assert_called_with(message)
     c.send_queue.send.assert_not_called()
+    commit_spy.assert_called_once()
 
 
 async def test_consumer_call_tracked(
