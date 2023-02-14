@@ -43,19 +43,17 @@ async def global_execution_handler(
     )
 
 
-@app.on_event("startup")
-def add_middlewares():
-    app.add_middleware(
-        ServerErrorMiddleware,
-        handler=global_execution_handler,
-    )
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=get_settings().cors_origins.split(" "),
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+app.add_middleware(
+    ServerErrorMiddleware,
+    handler=global_execution_handler,
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=get_settings().cors_origins.split(" "),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.on_event("startup")

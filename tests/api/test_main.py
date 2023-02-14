@@ -3,23 +3,18 @@ from unittest import mock
 from fmn.api import main
 
 
-@mock.patch("fmn.api.main.get_settings")
-@mock.patch("fmn.api.main.app")
-def test_add_middlewares(app, get_settings):
-    get_settings.return_value = mock.Mock(cors_origins="https://foo")
-    main.add_middlewares()
-
-    calls = [
-        mock.call(
-            main.CORSMiddleware,
-            allow_origins=["https://foo"],
-            allow_credentials=True,
-            allow_methods=["*"],
-            allow_headers=["*"],
-        )
-    ]
-    app.add_middleware.assert_has_calls(calls)
-    assert app.add_middleware.call_count == 2
+def test_add_middlewares():
+    mw = main.app.user_middleware
+    assert len(mw) == 2
+    assert mw[0].cls == main.CORSMiddleware
+    assert mw[0].options == dict(
+        allow_origins=["https://notifications.fedoraproject.org"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    assert mw[1].cls == main.ServerErrorMiddleware
+    assert mw[1].options == dict(handler=main.global_execution_handler)
 
 
 @mock.patch("fmn.api.main.init_async_model")
