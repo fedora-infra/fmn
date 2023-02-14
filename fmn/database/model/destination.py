@@ -37,6 +37,11 @@ class Destination(Base):
                 "to": self.address,
                 "message": message.summary,
             }
+        elif self.protocol == "matrix":
+            return {
+                "to": self.address,
+                "message": message.summary,
+            }
         elif self.protocol == "preview":
             return {
                 "date": message._headers.get("sent-at"),

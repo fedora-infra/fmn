@@ -15,6 +15,14 @@ smtp_host = "localhost"
 smtp_port = 25
 irc_url = "ircs://fedora-notif:fmnpassword@irc.libera.chat:6697"
 
+# For Matrix:
+[handler]
+class = "fmn.sender.matrix:MatrixHandler"
+host = "https://fedora.ems.host"
+user_id = "@notifs-bot:fedora.im"
+token = "syt_foo_bar_baz"
+
+
 [log_config]
 version = 1
 disable_existing_loggers = true

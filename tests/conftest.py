@@ -285,7 +285,7 @@ def fasjson_user_data():
         "givenname": "Test",
         "human_name": "Test User",
         "emails": ["testuser@example.test"],
-        "ircnicks": ["irc://testuser", "matrix://testuser"],
+        "ircnicks": ["irc://testuser", "matrix:///testuser"],
         "locale": "en-US",
         "uri": "http://fasjson.example.test/v1/users/testuser/",
     }
@@ -338,7 +338,7 @@ async def db_rule(db_async_session, db_user):
     tracking_rule = TrackingRule(name="artifacts-owned", params=["foo", "bar"])
 
     generation_rules = []
-    for destination_proto_addrs in ({"email": "foo@bar"}, {"irc": "...", "matrix": "..."}):
+    for destination_proto_addrs in ({"email": "foo@bar"}, {"irc": "foobar", "matrix": "@foo:bar"}):
         destinations = [
             Destination(protocol=proto, address=addr)
             for proto, addr in destination_proto_addrs.items()

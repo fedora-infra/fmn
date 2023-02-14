@@ -7,3 +7,6 @@ class ArtifactType(Enum):
     containers = "containers"
     modules = "modules"
     flatpaks = "flatpaks"
+
+
+DEFAULT_MATRIX_DOMAIN = "fedora.im"

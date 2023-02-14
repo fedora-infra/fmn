@@ -1,3 +1,4 @@
+import json
 import re
 from unittest import mock
 
@@ -11,6 +12,7 @@ from sqlalchemy.sql import text
 from fmn.api import api_models, auth
 from fmn.api.handlers.utils import get_last_messages
 from fmn.core.config import get_settings
+from fmn.core.constants import DEFAULT_MATRIX_DOMAIN
 from fmn.database.model import Generated, Rule
 from fmn.messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
 
@@ -117,8 +119,8 @@ class TestUserHandler(BaseTestAPIV1Handler):
             {"protocol": "irc", "address": "testuser"},
             {"protocol": "irc", "address": "testuser"},
             {"protocol": "irc", "address": "testuser"},
-            {"protocol": "matrix", "address": "testuser"},
-            {"protocol": "matrix", "address": "testuser"},
+            {"protocol": "matrix", "address": f"@testuser:{DEFAULT_MATRIX_DOMAIN}"},
+            {"protocol": "matrix", "address": "@testuser:example.com"},
             {"protocol": "irc", "address": "testuser"},
         ]
         respx_mocker.get(f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/").mock(
@@ -305,7 +307,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
                 "tracking_rule": {"name": "users-followed", "params": ["dummy"]},
                 "generation_rules": [
                     {
-                        "destinations": [{"protocol": "irc", "address": "..."}],
+                        "destinations": [{"protocol": "irc", "address": "dummynick"}],
                         "filters": {},
                     },
                 ],
@@ -335,7 +337,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
             assert result["tracking_rule"]["name"] == "users-followed"
             assert result["generation_rules"] == [
                 {
-                    "destinations": [{"protocol": "irc", "address": "..."}],
+                    "destinations": [{"protocol": "irc", "address": "dummynick"}],
                     "filters": {
                         "applications": [],
                         "severities": [],
@@ -349,6 +351,30 @@ class TestUserHandler(BaseTestAPIV1Handler):
             if testcase == "wrong-user":
                 assert response.status_code == status.HTTP_403_FORBIDDEN
                 assert isinstance(response.json()["detail"], str)
+
+    async def test_create_user_rule_bad_matrix_dest(self, client, api_identity, db_rule):
+        created_rule = json.dumps(
+            {
+                "name": "wrongrule",
+                "tracking_rule": {"name": "users-followed", "params": ["dummy"]},
+                "generation_rules": [
+                    {
+                        "destinations": [{"protocol": "matrix", "address": "dummynick"}],
+                        "filters": {},
+                    },
+                ],
+            }
+        )
+
+        response = client.post(f"{self.path}/{api_identity.name}/rules", content=created_rule)
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.json()["detail"] == [
+            {
+                "loc": ["body", "generation_rules", 0, "destinations", 0, "address"],
+                "msg": "The Matrix address should be in the form @username:server.tld",
+                "type": "value_error",
+            }
+        ]
 
 
 class TestMisc(BaseTestAPIV1Handler):

@@ -1,8 +1,9 @@
 import logging
+import re
 from typing import Annotated, Any, Generic, Literal, TypeVar
 
 from pydantic import BaseModel as PydanticBaseModel
-from pydantic import Field
+from pydantic import Field, validator
 from pydantic.generics import GenericModel
 from pydantic.utils import GetterDict
 
@@ -42,10 +43,18 @@ TrackingRule = Annotated[
 
 # DB models
 
+MATRIX_ADDRESS_RE = re.compile(r"@[\w_-]+:[\w.-]+")
+
 
 class Destination(BaseModel):
     protocol: str
     address: str
+
+    @validator("address")
+    def address_format(cls, v, values):
+        if values["protocol"] == "matrix" and not MATRIX_ADDRESS_RE.match(v):
+            raise ValueError("The Matrix address should be in the form @username:server.tld")
+        return v
 
 
 class Filters(BaseModel):
