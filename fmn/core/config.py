@@ -11,9 +11,17 @@ CashewsTTLTypes = int | float | str | timedelta
 
 class CacheArgsModel(BaseModel):
     ttl: CashewsTTLTypes | None = None
+    early_ttl: CashewsTTLTypes | None = None
 
     class Config:
         extra = "allow"
+
+
+class CacheScopedArgsModel(BaseModel):
+    tracked: CacheArgsModel = CacheArgsModel(ttl="1d", early_ttl="22h")
+    rules: CacheArgsModel = CacheArgsModel(ttl="1d", early_ttl="22h")
+    pagure: CacheArgsModel | None = None
+    fasjson: CacheArgsModel | None = None
 
 
 class CacheModel(BaseModel):
@@ -21,7 +29,7 @@ class CacheModel(BaseModel):
     setup_args: dict[str, Any] | None = None
 
     default_args: CacheArgsModel = CacheArgsModel(ttl="1h")
-    scoped_args: dict[str, CacheArgsModel] = {}
+    scoped_args: CacheScopedArgsModel = CacheScopedArgsModel()
 
 
 class SQLAlchemyModel(BaseModel):

@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING
 from cashews import cache
 from cashews.formatter import get_templates_for_func
 
+from .util import cache_early_ttl, cache_ttl
+
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
 
@@ -57,7 +59,9 @@ class TrackedCache:
         log.debug(f"Built the tracked cache in {duration:.2f} seconds")
         return tracked
 
-    @cache.early(key="tracked", prefix="v1", ttl="1d", early_ttl="22h")
+    @cache.early(
+        key="tracked", prefix="v1", ttl=cache_ttl("tracked"), early_ttl=cache_early_ttl("tracked")
+    )
     async def get_tracked(self):
         return await self.build()
 
