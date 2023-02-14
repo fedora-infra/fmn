@@ -57,6 +57,8 @@ class Consumer:
         except Exception:
             await self.db.rollback()
             raise
+        else:
+            await self.db.commit()
 
     async def handle(self, message: message.Message):
         await self.refresh_cache_if_needed(message)
