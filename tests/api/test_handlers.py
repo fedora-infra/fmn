@@ -376,6 +376,30 @@ class TestUserHandler(BaseTestAPIV1Handler):
             }
         ]
 
+    async def test_create_user_rule_bad_email_dest(self, client, api_identity, db_rule):
+        created_rule = json.dumps(
+            {
+                "name": "wrongrule",
+                "tracking_rule": {"name": "users-followed", "params": ["dummy"]},
+                "generation_rules": [
+                    {
+                        "destinations": [{"protocol": "email", "address": "wrongvalue"}],
+                        "filters": {},
+                    },
+                ],
+            }
+        )
+
+        response = client.post(f"{self.path}/{api_identity.name}/rules", content=created_rule)
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert response.json()["detail"] == [
+            {
+                "loc": ["body", "generation_rules", 0, "destinations", 0, "address"],
+                "msg": "The email address does not look right",
+                "type": "value_error",
+            }
+        ]
+
 
 class TestMisc(BaseTestAPIV1Handler):
     def test_get_applications(self, client):
