@@ -8,10 +8,11 @@ from fedora_messaging.config import conf as fm_config
 from fedora_messaging.exceptions import Nack
 
 from ..cache import configure_cache
+from ..cache.rules import RulesCache
 from ..cache.tracked import TrackedCache
 from ..core import config
 from ..database import async_session_maker, init_async_model
-from ..database.model import Generated, Rule
+from ..database.model import Generated
 from ..rules.requester import Requester
 from .send_queue import SendQueue
 
@@ -23,8 +24,9 @@ class Consumer:
         # Load the general config
         if fm_config["consumer_config"].get("settings_file"):
             config.set_settings_file(fm_config["consumer_config"]["settings_file"])
+        self._rules_cache = RulesCache()
         self._requester = Requester(config.get_settings().services)
-        self._tracked_cache = TrackedCache()
+        self._tracked_cache = TrackedCache(rules_cache=self._rules_cache)
         self.send_queue = SendQueue(fm_config["consumer_config"]["send_queue"])
         self.loop = asyncio.get_event_loop()
         self._ready = self.loop.create_task(self.setup())
@@ -35,6 +37,7 @@ class Consumer:
         # Connect to the database
         await init_async_model()
         self.db = async_session_maker()
+        self._rules_cache.db = self.db
         # Start the connection to RabbitMQ's FMN vhost
         await self.send_queue.connect()
         # Caching and requesting
@@ -69,7 +72,7 @@ class Consumer:
             # The sender will also send the message with the new schema, don't duplicate
             # notifications.
             return
-        for rule in await self._get_rules():
+        for rule in await self._rules_cache.get_rules():
             async for notification in rule.handle(message, self._requester):
                 await self._send(notification, message)
                 # Record that the rule generated a notification
@@ -86,17 +89,12 @@ class Consumer:
             )
             raise Nack()
 
-    async def _get_rules(self):
-        # TODO: Cache this!
-        result = await self.db.execute(Rule.select_related().filter_by(disabled=False))
-        return result.scalars()
-
     async def is_tracked(self, message: message.Message):
         # This is cache-based and should save us running all the messages through all the rules. The
         # tracked messages will still run though all the rules though, so this could be improved I
         # suppose, maybe by changing the cache datastructure to point each entry in the cache to the
         # rules that produced it.
-        tracked = await self._tracked_cache.get_tracked(self.db, self._requester)
+        tracked = await self._tracked_cache.get_tracked(self._requester)
         for msg_attr in ("packages", "containers", "modules", "flatpaks", "usernames"):
             if not set(getattr(message, msg_attr)).isdisjoint(getattr(tracked, msg_attr)):
                 log.debug(f"Message {message.id} is tracked by {msg_attr}")
@@ -107,5 +105,6 @@ class Consumer:
         return False
 
     async def refresh_cache_if_needed(self, message: message.Message):
+        await self._rules_cache.invalidate_on_message(message)
         await self._tracked_cache.invalidate_on_message(message)
         await self._requester.invalidate_on_message(message)

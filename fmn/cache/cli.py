@@ -7,6 +7,7 @@ from ..core.config import get_settings
 from ..database import async_session_maker, init_async_model
 from ..rules.requester import Requester
 from . import configure_cache
+from .rules import RulesCache
 from .tracked import TrackedCache
 
 
@@ -23,9 +24,11 @@ def get_tracked():
         configure_cache()
         await init_async_model()
         requester = Requester(get_settings().services)
-        tracked_cache = TrackedCache()
+        rules_cache = RulesCache()
+        tracked_cache = TrackedCache(rules_cache=rules_cache)
         async with async_session_maker() as db:
-            return await tracked_cache.get_tracked(db, requester)
+            rules_cache.db = db
+            return await tracked_cache.get_tracked(requester)
 
     result = asyncio.run(_get_tracked())
     pprint(result)
@@ -35,6 +38,7 @@ def get_tracked():
 def delete_tracked():
     """Invalidate the current tracked value."""
     configure_cache()
-    tracked_cache = TrackedCache()
+    rules_cache = RulesCache()
+    tracked_cache = TrackedCache(rules_cache=rules_cache)
     asyncio.run(tracked_cache.invalidate())
     print("Tracked cache invalidated.")
