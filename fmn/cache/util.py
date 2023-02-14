@@ -30,7 +30,7 @@ def cache_arg(arg: str, scope: str | None = None) -> Callable[[str, str | None],
 
         if scope:
             try:
-                return getattr(settings.cache.scoped_args[scope], arg)
+                return getattr(getattr(settings.cache.scoped_args, scope), arg)
             except (AttributeError, KeyError):
                 pass
 
@@ -40,6 +40,7 @@ def cache_arg(arg: str, scope: str | None = None) -> Callable[[str, str | None],
 
 
 cache_ttl = partial(cache_arg, "ttl")
+cache_early_ttl = partial(cache_arg, "early_ttl")
 
 
 def _get_pattern_for_cached_calls_iter(func: Callable, **kwargs: dict[str, Any]) -> Iterator[str]:
