@@ -7,6 +7,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...backends import FASJSONAsyncProxy
+from ...core.constants import DEFAULT_MATRIX_DOMAIN
 from ...database.model import Destination, Filter, Generated, GenerationRule, Rule, User
 from ...messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
 from .. import api_models
@@ -63,6 +64,9 @@ async def get_user_destinations(
         protocol = url.scheme
         if not protocol:
             protocol = "irc"
+        if protocol == "matrix":
+            domain = url.hostname or DEFAULT_MATRIX_DOMAIN
+            address = f"@{address}:{domain}"
         result.append({"protocol": protocol, "address": address})
     return result
 

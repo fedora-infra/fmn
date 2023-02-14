@@ -25,6 +25,16 @@ def test_irc(make_mocked_message):
     }
 
 
+def test_matrix(make_mocked_message):
+    d = Destination(id=1, protocol="matrix", address="@dummy:example.com")
+    message = make_mocked_message(topic="dummy", body={"summary": "dummy summary"})
+    result = d.generate(message)
+    assert result == {
+        "to": "@dummy:example.com",
+        "message": "dummy summary",
+    }
+
+
 def test_unknown_protocol(make_mocked_message):
     d = Destination(id=1, protocol="unknown", address="dummy")
     message = make_mocked_message(topic="dummy", body={"summary": "dummy summary"})
