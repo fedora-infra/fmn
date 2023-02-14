@@ -166,6 +166,7 @@ async def edit_user_rule(
                 f_db.name = f_name
                 f_db.params = f_params
         await db_session.flush()
+    await db_session.commit()
 
     # Refresh using the full query to get relationships
     db_session.expire(rule_db)
@@ -211,7 +212,7 @@ async def delete_user_rule(
     )
 
     await db_session.delete(rule)
-    await db_session.flush()
+    await db_session.commit()
     await publish(message)
 
 
@@ -228,7 +229,7 @@ async def create_user_rule(
     user = await User.async_get_or_create(db_session, name=username)
     rule_db = db_rule_from_api_rule(rule, user)
     db_session.add(rule_db)
-    await db_session.flush()
+    await db_session.commit()
 
     # Refresh using the full query to get relationships
     rule_db = (
