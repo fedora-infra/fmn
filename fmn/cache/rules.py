@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from typing import TYPE_CHECKING
 
@@ -34,8 +35,8 @@ class RulesCache:
 
     async def invalidate(self):
         log.debug("Invalidating the rules cache")
-        cache_key = list(get_templates_for_func(self.get_rules))[0]
-        await cache.delete(cache_key)
+        cache_keys = get_templates_for_func(self.get_rules)
+        await asyncio.gather(*(cache.delete(key) for key in cache_keys))
 
     async def invalidate_on_message(self, message: "Message"):
         if (
