@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from dataclasses import dataclass, field
 from time import monotonic
@@ -64,8 +65,8 @@ class TrackedCache:
 
     async def invalidate(self):
         log.debug("Invalidating the tracked cache")
-        cache_key = list(get_templates_for_func(self.get_tracked))[0]
-        await cache.delete(cache_key)
+        cache_keys = get_templates_for_func(self.get_tracked)
+        await asyncio.gather(*(cache.delete(key) for key in cache_keys))
 
     async def invalidate_on_message(self, message: "Message"):
         if (
