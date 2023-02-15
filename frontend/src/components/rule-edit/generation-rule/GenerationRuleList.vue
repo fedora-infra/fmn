@@ -3,6 +3,7 @@ import type { GenerationRule } from "@/api/types";
 import { CButton, CListGroup, CListGroupItem } from "@coreui/bootstrap-vue";
 import { cilPlus } from "@coreui/icons";
 import { CIcon } from "@coreui/icons-vue";
+import type { FormKitNode } from "@formkit/core";
 import { computed, ref } from "vue";
 import GenerationRuleListItem from "./GenerationRuleListItem.vue";
 import GenerationRuleModal from "./GenerationRuleModal.vue";
@@ -15,6 +16,7 @@ const emit = defineEmits<{
   (e: "change", rules: GenerationRule[]): void;
 }>();
 
+const generationRulesInput = ref<{ node: FormKitNode } | null>(null);
 const generation_rules = ref<GenerationRule[]>([...(props.rules || [])]);
 const editing = ref<number | null>(null);
 const handleButtonClicked = (index: number) => {
@@ -32,6 +34,8 @@ const handleRuleSubmitted = (rule: GenerationRule) => {
   }
   // Close the dialog
   editing.value = null;
+  // Update the main FormKit object
+  generationRulesInput.value?.node.input(generation_rules.value);
   emit("change", generation_rules.value);
 };
 const handleRuleDeleted = (index: number) => {
@@ -60,6 +64,7 @@ const editedRule = computed(() =>
       type="list"
       name="generation_rules"
       v-model="generation_rules"
+      ref="generationRulesInput"
     >
       <template v-for="(gr, index) in generation_rules" :key="gr.id">
         <GenerationRuleListItem
