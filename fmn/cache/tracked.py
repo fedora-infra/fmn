@@ -47,8 +47,11 @@ class TrackedCache:
         self._requester = requester
         self._rules_cache = rules_cache
 
+    @cache.early(
+        key="tracked", prefix="v1", ttl=cache_ttl("tracked"), early_ttl=cache_early_ttl("tracked")
+    )
     @cache.locked(key="tracked", prefix="v1", ttl="1h")
-    async def build(self):
+    async def get_tracked(self):
         log.debug("Building the tracked cache")
         before = monotonic()
         tracked = Tracked()
@@ -58,12 +61,6 @@ class TrackedCache:
         duration = after - before
         log.debug(f"Built the tracked cache in {duration:.2f} seconds")
         return tracked
-
-    @cache.early(
-        key="tracked", prefix="v1", ttl=cache_ttl("tracked"), early_ttl=cache_early_ttl("tracked")
-    )
-    async def get_tracked(self):
-        return await self.build()
 
     async def invalidate(self):
         log.debug("Invalidating the tracked cache")
