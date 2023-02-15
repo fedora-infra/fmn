@@ -53,7 +53,7 @@ async def test_consumer_init(mocker, mocked_cache, mocked_requester_class, mocke
     mocked_send_queue_class.assert_called_once_with("SEND_QUEUE_CONFIG")
 
 
-def test_consumer_call_not_tracked(
+def test_consumer_loop_not_running(
     mocker,
     mocked_cache,
     mocked_requester_class,
@@ -61,9 +61,24 @@ def test_consumer_call_not_tracked(
     make_mocked_message,
 ):
     c = Consumer()
+    message = make_mocked_message(topic="dummy.topic", body={"foo": "bar"})
+    handle = mocker.patch.object(c, "handle")
+    c(message)
+    handle.assert_called_once_with(message)
+
+
+async def test_consumer_call_not_tracked(
+    mocker,
+    mocked_cache,
+    mocked_requester_class,
+    mocked_send_queue_class,
+    make_mocked_message,
+):
+    c = Consumer()
+    await c._ready
     commit_spy = mocker.spy(c.db, "commit")
     message = make_mocked_message(topic="dummy.topic", body={"foo": "bar"})
-    c(message)
+    await c.handle_or_rollback(message)
     mocked_cache.invalidate_on_message.assert_called_with(message)
     c._requester.invalidate_on_message.assert_called_with(message)
     c.send_queue.send.assert_not_called()
