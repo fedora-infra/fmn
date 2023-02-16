@@ -47,7 +47,7 @@ class ArtifactsOwned(TrackingRule):
 
     async def prime_cache(self, cache):
         for username in self.usernames:
-            owned = await self._requester.distgit.get_projects(username=username)
+            owned = await self._requester.distgit.get_user_projects(username=username)
             for artifact_type in ArtifactType:
                 getattr(cache, artifact_type.name).update(
                     p["name"] for p in owned if p["namespace"] == artifact_type.value

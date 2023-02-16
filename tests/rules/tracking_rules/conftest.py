@@ -15,6 +15,13 @@ class MockPagureAsyncProxy:
             for atype in ArtifactType
         ]
 
+    async def get_user_projects(self, *, username):
+        return [
+            {"namespace": atype.value, "name": f"{atype.value}-{num}"}
+            for num in range(1, 3)
+            for atype in ArtifactType
+        ]
+
     async def _get_project_users_groups(self, *, project_path):
         # The mock artifact names are of the form "art-<expected_user_group_name>".
         return [project_path.split("/", 1)[1][4:]]

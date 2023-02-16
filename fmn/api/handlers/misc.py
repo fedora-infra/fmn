@@ -53,7 +53,7 @@ async def get_owned_artifacts(
     artifacts = {}
 
     for user in users:
-        for project in await distgit_proxy.get_projects(username=user):
+        for project in await distgit_proxy.get_user_projects(username=user):
             artifacts[project["fullname"]] = {"type": project["namespace"], "name": project["name"]}
 
     for group in groups:

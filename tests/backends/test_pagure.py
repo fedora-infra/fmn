@@ -169,6 +169,29 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
         if "filter-by-owner" in testcase:
             assert all("dudemcpants" in p["access_users"]["owner"] for p in mocked_projects)
 
+    async def test_get_user_projects(self, respx_mocker, proxy_unmocked_client):
+        expected_projects = [
+            p
+            for p in self.MOCKED_PROJECTS
+            if any(
+                "dudemcpants" in p["access_users"][acl]
+                for acl in ("admin", "collaborator", "commit", "owner")
+            )
+        ]
+
+        params = {"fork": False, "short": True, "username": "dudemcpants"}
+
+        route = respx_mocker.get(f"{self.expected_api_url}/projects", params=params).mock(
+            side_effect=[
+                httpx.Response(fastapi.status.HTTP_200_OK, json={"projects": self.MOCKED_PROJECTS})
+            ]
+        )
+
+        artifacts = await proxy_unmocked_client.get_user_projects(username="dudemcpants")
+
+        assert route.called
+        assert artifacts == expected_projects
+
     async def test_get_projects_failure(self, respx_mocker, proxy_unmocked_client):
         route = respx_mocker.get(
             f"{self.expected_api_url}/projects", params={"fork": False, "short": True}
