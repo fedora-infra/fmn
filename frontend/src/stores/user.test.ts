@@ -151,7 +151,7 @@ describe("User Store", () => {
     await store.logoutAndLogin();
     expect(store.loggedIn).toBeFalsy();
     expect(store.$auth.makeAuthorizationRequest).toHaveBeenCalledWith(
-      "openid profile email"
+      "openid profile email https://id.fedoraproject.org/scope/groups"
     );
   });
 });

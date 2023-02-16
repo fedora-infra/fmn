@@ -82,10 +82,17 @@ class GenerationRule(BaseModel):
         getter_dict = GRGetterDict
 
 
+class User(BaseModel):
+    id: int | None
+    name: str
+    is_admin: bool = False
+
+
 class Rule(BaseModel):
     id: int | None
     name: str
     disabled: bool = False
+    user: User | None
     tracking_rule: TrackingRule
     generation_rules: list[GenerationRule]
     generated_last_week: int = 0
@@ -100,9 +107,8 @@ class RulePreview(Rule):
     generation_rules: list[GenerationRulePreview]
 
 
-class User(BaseModel):
-    id: int | None
-    name: str
+class RulePatch(BaseModel):
+    disabled: bool | None = None
 
 
 # Dropdown options

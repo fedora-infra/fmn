@@ -22,6 +22,12 @@ const router = createRouter({
       component: () => import("../views/RuleEditView.vue"),
       meta: { auth: true },
     },
+    {
+      path: "/admin/",
+      name: "admin",
+      component: () => import("../views/AdminView.vue"),
+      meta: { auth: true },
+    },
   ],
   scrollBehavior: (to, from, savedPosition) => {
     if (savedPosition) {

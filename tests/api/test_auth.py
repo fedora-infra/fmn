@@ -34,23 +34,29 @@ class TestIdentity:
         client.return_value = mock_client = mock.AsyncMock()
         mock_client.post.return_value.raise_for_status = mock.Mock()
         mock_client.post.return_value.json = mock.Mock()
-        mock_client.post.return_value.json.return_value = token_info_result = {
-            "username": "karlheinzschinkenwurst",
-            "exp": str(then),
+        token_info_result = {"username": "karlheinzschinkenwurst", "exp": str(then)}
+        user_info_result = {
+            "email": "karlheinz@schinkenwurst.org",
+            "groups": ["users", "admins"],
+            "name": "Karl-Heinz Schinkenwurst",
+            "nickname": "karlheinzschinkenwurst",
+            "preferred_username": "karlheinzschinkenwurst",
         }
+        mock_client.post.return_value.json.side_effect = [token_info_result, user_info_result]
 
         # cold cache
 
         with expectation:
             identity = await Identity.from_oidc_token("abcd-1234")
 
-        mock_client.post.assert_awaited_once()
+        assert mock_client.post.await_count == 2
 
         if expired:
             return
 
         assert identity.name == token_info_result["username"]
         assert str(identity.expires_at) == token_info_result["exp"]
+        assert identity.user_info == user_info_result
 
         # hot cache
 

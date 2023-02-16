@@ -15,6 +15,7 @@ export const useUserStore = defineStore({
     username: null as string | null,
     fullName: null as string | null,
     email: null as string | null,
+    isAdmin: false,
   }),
   getters: {
     user: (state) => ({ username: state.username, fullName: state.fullName }),
@@ -41,6 +42,9 @@ export const useUserStore = defineStore({
       this.username = response.nickname || response.sub;
       this.fullName = response.name || this.username;
       this.email = response.email || "";
+    },
+    setAdmin(value: boolean) {
+      this.isAdmin = value;
     },
     async getToken() {
       if (!this.accessToken) {

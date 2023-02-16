@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { useEditRuleMutation, useDeleteRuleMutation } from "@/api/rules";
+import { validationErrorToFormErrors } from "@/api";
+import { useDeleteRuleMutation, useEditRuleMutation } from "@/api/rules";
 import type { GenerationRule, PostError, Rule } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
 import {
   CAlert,
-  CCol,
-  CRow,
   CButton,
   CButtonGroup,
+  CCol,
+  CRow,
 } from "@coreui/bootstrap-vue";
 import { cilTrash } from "@coreui/icons";
 import { CIcon } from "@coreui/icons-vue";
@@ -49,11 +50,7 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
     if (!error.response) {
       return;
     }
-    form.setErrors(
-      error.response.data.detail.map(
-        (e) => `Server error: ${e.loc[-1]}: ${e.msg}`
-      )
-    );
+    form.setErrors(validationErrorToFormErrors(error.response.data));
   }
 };
 
@@ -76,13 +73,13 @@ const handleDelete = async (rule: Rule) => {
     if (!error.response) {
       return;
     }
-    const errors = error.response.data.detail
-      .map((e) => `${e.loc[-1]}: ${e.msg}`)
-      .join("\n");
+    const errors = validationErrorToFormErrors(error.response.data);
     toastStore.addToast({
       color: "danger",
       title: "Deletion failed!",
-      content: `Rule "${props.rule.name}" could not be deleted!\n${errors}`,
+      content: `Rule "${props.rule.name}" could not be deleted!\n${errors.join(
+        "\n"
+      )}`,
     });
   }
 };

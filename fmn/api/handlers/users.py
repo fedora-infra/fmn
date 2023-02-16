@@ -22,6 +22,16 @@ log = logging.getLogger(__name__)
 router = APIRouter(prefix="/users")
 
 
+@router.get("/me", response_model=api_models.User, tags=["users"])
+async def get_me(
+    identity: Identity = Depends(get_identity),
+    db_session: AsyncSession = Depends(gen_db_session),
+):
+    user = await User.async_get_or_create(db_session, name=identity.name)
+    user.is_admin = identity.admin
+    return user
+
+
 @router.get("", response_model=list[str], tags=["users"])
 async def get_users(
     search: str = None,
@@ -34,12 +44,6 @@ async def get_users(
         else:
             return []
     return [u["username"] for u in await fasjson_proxy.search_users(username=search)]
-
-
-@router.get("/{username}", response_model=api_models.User, tags=["users"])
-async def get_user(username, db_session: AsyncSession = Depends(gen_db_session)):
-    user = await User.async_get_or_create(db_session, name=username)
-    return user
 
 
 @router.get("/{username}/info", tags=["users"])
@@ -182,8 +186,8 @@ async def edit_user_rule(
 
     message = RuleUpdateV1(
         body={
-            "rule": api_models.Rule.from_orm(rule_db).dict(),
-            "user": api_models.User.from_orm(rule_db.user).dict(),
+            "rule": api_models.Rule.from_orm(rule_db),
+            "user": api_models.User.from_orm(rule_db.user),
         }
     )
     await publish(message)
@@ -230,7 +234,7 @@ async def create_user_rule(
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to edit someone else's rules")
     log.info("Creating rule: %s", rule)
-    user = await User.async_get_or_create(db_session, name=username)
+    user = await User.async_get(db_session, name=username)
     rule_db = db_rule_from_api_rule(rule, user)
     db_session.add(rule_db)
     await db_session.commit()
@@ -244,8 +248,8 @@ async def create_user_rule(
 
     message = RuleCreateV1(
         body={
-            "rule": api_models.Rule.from_orm(rule_db).dict(),
-            "user": api_models.User.from_orm(rule_db.user).dict(),
+            "rule": api_models.Rule.from_orm(rule_db),
+            "user": api_models.User.from_orm(rule_db.user),
         }
     )
     await publish(message)

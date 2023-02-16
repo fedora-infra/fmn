@@ -79,13 +79,16 @@ export type TrackingRuleEditing =
 export interface Rule {
   id: number;
   name: string;
+  user: User;
   disabled: boolean;
   generated_last_week: number;
   tracking_rule: TrackingRuleEditing;
   generation_rules: GenerationRule[];
 }
 
-export type RuleCreation = Omit<Rule, "id" | "generated_last_week">;
+export type RuleCreation = Omit<Rule, "id" | "generated_last_week" | "user">;
+
+export type RulePatch = Partial<Rule>;
 
 interface PostErrorDetail {
   loc: string[];
@@ -93,7 +96,7 @@ interface PostErrorDetail {
   type: string;
 }
 export interface PostError {
-  detail: PostErrorDetail[];
+  detail: PostErrorDetail[] | string;
 }
 
 export interface NotificationContent {

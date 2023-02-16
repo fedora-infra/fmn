@@ -29,7 +29,7 @@ PREFIX = "/api/v1"
 
 app.include_router(handlers.users.router, prefix=PREFIX)
 app.include_router(handlers.misc.router, prefix=PREFIX)
-
+app.include_router(handlers.admin.router, prefix=PREFIX)
 
 # Setup of middleware and database access
 

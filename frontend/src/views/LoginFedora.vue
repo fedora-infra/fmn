@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+import { getApiClient } from "@/api";
 import { useToastStore } from "@/stores/toast";
 import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
@@ -30,9 +31,24 @@ onMounted(async () => {
   try {
     await auth.handleAuthorizationRedirect((result) => {
       userStore.importTokenResponse(result);
-      auth.makeUserInfoRequest(result.accessToken).then((userinfo) => {
-        userStore.importUserInfoResponse(userinfo);
-      });
+      auth
+        .makeUserInfoRequest(result.accessToken)
+        .then((userinfo) => {
+          userStore.importUserInfoResponse(userinfo);
+        })
+        .then(() => {
+          console.log(
+            "Querying the API to create the user and get their permissions"
+          );
+          return getApiClient();
+        })
+        .then((apiClient) => {
+          const url = "/api/v1/users/me";
+          return apiClient.get(url);
+        })
+        .then((response) => {
+          userStore.setAdmin(response.data.is_admin);
+        });
       return result;
     });
   } catch (err) {
