@@ -1,5 +1,6 @@
 import logging
 import time
+from typing import Any
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -21,7 +22,9 @@ class Identity(BaseModel):
     _cache_next_gc_after = None
 
     name: str
+    admin: bool
     expires_at: float
+    user_info: dict[str, Any]
 
     class Config:
         extra = "ignore"
@@ -60,7 +63,7 @@ class Identity(BaseModel):
         identity = cls._token_to_identities_cache.get(token)
         if not identity:
             settings = get_settings()
-            response = await cls.client().post(
+            token_info_response = await cls.client().post(
                 settings.oidc_token_info_url,
                 data={
                     "token": token,
@@ -68,10 +71,21 @@ class Identity(BaseModel):
                     "client_secret": settings.oidc_client_secret,
                 },
             )
-            response.raise_for_status()
-            result = response.json()
+            token_info_response.raise_for_status()
+            token_info_result = token_info_response.json()
 
-            identity = cls(name=result["username"], expires_at=float(result["exp"]))
+            user_info_response = await cls.client().post(
+                settings.oidc_user_info_url, data={"access_token": token}
+            )
+            user_info_response.raise_for_status()
+            user_info_result = user_info_response.json()
+
+            identity = cls(
+                name=token_info_result["username"],
+                admin=any(g in get_settings().admin_groups for g in user_info_result["groups"]),
+                expires_at=float(token_info_result["exp"]),
+                user_info=user_info_result,
+            )
 
         if identity.expires_at < time.time():
             cls._cache_collect_garbage(force=True)
@@ -111,3 +125,9 @@ class IdentityFactory:
 
 get_identity = IdentityFactory(optional=False)
 get_identity_optional = IdentityFactory(optional=True)
+
+
+async def get_identity_admin(identity: Identity = Depends(get_identity)):
+    if not identity.admin:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Not an admin")
+    return identity

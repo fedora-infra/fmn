@@ -56,7 +56,7 @@ describe("auth", () => {
 
     expect(authMock.makeAuthorizationRequest).toHaveBeenCalledOnce();
     expect(authMock.makeAuthorizationRequest).toHaveBeenCalledWith(
-      "openid profile email"
+      "openid profile email https://id.fedoraproject.org/scope/groups"
     );
     expect(sessionStorage.getItem("redirect_to")).toBe("/");
   });

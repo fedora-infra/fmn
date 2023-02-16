@@ -1,14 +1,16 @@
 import { useUserStore } from "@/stores/user";
 import type { QueryFunction } from "react-query/types/core";
 import { useMutation, useQuery, useQueryClient } from "vue-query";
-import { apiDelete, apiGet, apiPost, apiPut } from "./index";
-import type { Notification, Rule, RuleCreation } from "./types";
+import { apiDelete, apiGet, apiPatch, apiPost, apiPut } from "./index";
+import type { Notification, Rule, RuleCreation, RulePatch } from "./types";
 
 // Get all rules
 export const useRulesQuery = () => {
   const userStore = useUserStore();
   const url = `/api/v1/users/${userStore.username}/rules`;
-  return useQuery(url, apiGet as QueryFunction<Rule[]>);
+  return useQuery(url, apiGet as QueryFunction<Rule[]>, {
+    enabled: userStore.loggedIn,
+  });
 };
 
 // Add a new rule
@@ -64,4 +66,31 @@ export const usePreviewRuleQuery = (data: RuleCreation) => {
   const url = "/api/v1/rule-preview";
   console.log("Previewing rule:", data);
   return useQuery([url, data], doApiPost, { retry: false });
+};
+
+// Get disabled rules
+export const useDisabledRulesQuery = () => {
+  const url = "/api/v1/admin/rules";
+  return useQuery([url, { disabled: true }], apiGet as QueryFunction<Rule[]>);
+};
+
+// Patch an existing rule
+export const usePatchRuleMutation = () => {
+  const client = useQueryClient();
+  return useMutation<Rule, unknown, RulePatch>(
+    (data) => {
+      const { id, ...rule } = data;
+      return apiPatch(`/api/v1/admin/rules/${id}`, rule);
+    },
+    {
+      onSuccess: async () => {
+        await client.invalidateQueries([
+          "/api/v1/admin/rules",
+          {
+            disabled: true,
+          },
+        ]);
+      },
+    }
+  );
 };

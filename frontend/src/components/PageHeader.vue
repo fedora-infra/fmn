@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { CContainer, CNavbar, CNavbarNav } from "@coreui/bootstrap-vue";
 import LoginButton from "./LoginButton.vue";
+import AdminLink from "./AdminLink.vue";
 </script>
 
 <template>
@@ -14,6 +15,7 @@ import LoginButton from "./LoginButton.vue";
         <img src="@/assets/logo.png" alt="FMN logo" height="40" />
       </router-link>
       <CNavbarNav class="align-items-center">
+        <AdminLink />
         <LoginButton />
       </CNavbarNav>
     </CContainer>

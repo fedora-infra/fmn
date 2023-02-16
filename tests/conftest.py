@@ -361,6 +361,25 @@ async def db_rule(db_async_session, db_user):
     yield rule
 
 
+@pytest.fixture
+async def db_rule_disabled(db_async_session, db_user):
+    tracking_rule = TrackingRule(name="users-followed", params=["user1", "user2"])
+
+    destination = Destination(protocol="email", address="dude@mcpants")
+    generation_rule = GenerationRule(destinations=[destination], filters=[])
+    rule = Rule(
+        name="disabledrule",
+        user=db_user,
+        tracking_rule=tracking_rule,
+        generation_rules=[generation_rule],
+        disabled=True,
+    )
+    db_async_session.add(rule)
+    await db_async_session.flush()
+
+    yield rule
+
+
 @pytest.fixture(scope="session")
 def make_mocked_message():
     message._schema_name_to_class["testmessage"] = Message

@@ -55,8 +55,11 @@ class Settings(BaseSettings):
     oidc_provider_url: str = "https://id.fedoraproject.org/openidc"
     oidc_conf_endpoint: str = "/.well-known/openid-configuration"
     oidc_token_info_endpoint: str = "/TokenInfo"
+    oidc_user_info_endpoint: str = "/UserInfo"
     oidc_client_id: str = "0123456789abcdef0123456789abcdef"
     oidc_client_secret: str = "0123456789abcdef0123456789abcdef"
+
+    admin_groups: list[str] = ["sysadmin-main"]
 
     # these fields are computed from the above
     oidc_conf_url: str | None
@@ -81,6 +84,11 @@ class Settings(BaseSettings):
             values["oidc_provider_url"].rstrip("/")
             + "/"
             + values["oidc_token_info_endpoint"].lstrip("/")
+        )
+        values["oidc_user_info_url"] = (
+            values["oidc_provider_url"].rstrip("/")
+            + "/"
+            + values["oidc_user_info_endpoint"].lstrip("/")
         )
         return values
 

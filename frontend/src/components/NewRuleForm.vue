@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { validationErrorToFormErrors } from "@/api";
 import { useAddRuleMutation } from "@/api/rules";
 import type { GenerationRule, PostError, Rule } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
@@ -44,11 +45,7 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
     if (!error.response) {
       return;
     }
-    form.setErrors(
-      error.response.data.detail.map(
-        (e) => `Server error: ${e.loc[-1]}: ${e.msg}`
-      )
-    );
+    form.setErrors(validationErrorToFormErrors(error.response.data));
   }
 };
 
