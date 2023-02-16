@@ -457,12 +457,14 @@ class TestMisc(BaseTestAPIV1Handler):
                     "fullname": "containers/pants",
                     "name": "pants",
                     "namespace": "containers",
+                    "access_users": {"admin": ["dudemcpants"]},
                 },
                 {
                     "description": "trousers rpms",
                     "fullname": "rpms/trousers",
                     "name": "trousers",
                     "namespace": "rpms",
+                    "access_users": {"admin": ["dudemcpants"]},
                 },
             ],
         }

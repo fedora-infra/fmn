@@ -105,6 +105,18 @@ class PagureAsyncProxy(APIClient):
 
     @handle_http_error(list)
     @cache(ttl=cache_ttl("pagure"), prefix="v1")
+    async def get_user_projects(self, *, username: str) -> list[dict[str, Any]]:
+        return [
+            p
+            for p in await self.get_projects(username=username)
+            if any(
+                username in p.get("access_users", {}).get(role.name.lower(), [])
+                for role in PagureRole.USER_ROLES_MAINTAINER_SET
+            )
+        ]
+
+    @handle_http_error(list)
+    @cache(ttl=cache_ttl("pagure"), prefix="v1")
     async def get_project_users(
         self, *, project_path: str, roles: PagureRole = PagureRole.USER_ROLES_MAINTAINER
     ) -> list[str]:
