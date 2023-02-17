@@ -256,6 +256,10 @@ class TestUserHandler(BaseTestAPIV1Handler):
                 "user": api_models.User.from_orm(db_rule.user).dict(),
             }
         )
+        if testcase == "success":
+            success_message.body["rule"]["generation_rules"][-1]["id"] = len(
+                success_message.body["rule"]["generation_rules"]
+            )
         if "delete-filter" in testcase:
             success_message.body["rule"]["generation_rules"][-1]["filters"]["applications"] = []
 
@@ -320,7 +324,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
             username = f"not-really-{username}"
 
         user = api_models.User.from_orm(db_rule.user)
-        created_rule = api_models.Rule(
+        created_rule = api_models.NewRule(
             **{
                 "name": "daotherrule",
                 "tracking_rule": {"name": "users-followed", "params": ["dummy"]},
@@ -330,7 +334,6 @@ class TestUserHandler(BaseTestAPIV1Handler):
                         "filters": {},
                     },
                 ],
-                "user": user,
             }
         )
 
@@ -339,6 +342,8 @@ class TestUserHandler(BaseTestAPIV1Handler):
         message.body["rule"]["id"] = 2
         # In the message the rule will have the user dict in it
         message.body["rule"]["user"] = user
+        message.body["rule"]["generated_last_week"] = 0
+        message.body["rule"]["generation_rules"][0]["id"] = 3
 
         response = client.post(
             f"{self.path}/{username}/rules", json=created_rule.dict(exclude_unset=True)
@@ -354,6 +359,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
             assert result["tracking_rule"]["name"] == "users-followed"
             assert result["generation_rules"] == [
                 {
+                    "id": 3,
                     "destinations": [{"protocol": "irc", "address": "dummynick"}],
                     "filters": {
                         "applications": [],

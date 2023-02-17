@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import type {
-  GenerationRule,
-  RuleCreation,
-  TrackingRuleEditing,
-} from "@/api/types";
+import type { GenerationRule, NewRule } from "@/api/types";
 import {
   CModal,
   CModalBody,
@@ -36,10 +32,11 @@ const previzData = computed(() => {
   if (!root || !root.context) {
     return null;
   }
-  const result: RuleCreation = {
+  const result: NewRule = {
     name: root.context._value.name as string,
     disabled: false,
-    tracking_rule: root.context._value.tracking_rule as TrackingRuleEditing,
+    tracking_rule: root.context._value
+      .tracking_rule as NewRule["tracking_rule"],
     generation_rules: [node.value.node.value as GenerationRule],
   };
   return result;

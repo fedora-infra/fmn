@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { apiGet } from "@/api";
-import type { Group } from "@/api/types";
 import { useUserStore } from "@/stores/user";
 import type { QueryFunction } from "react-query/types/core";
 import { ref } from "vue";
@@ -8,7 +7,7 @@ import ArtifactsOwnedSummary from "./ArtifactsOwnedSummary.vue";
 
 const userStore = useUserStore();
 const value = ref<string[]>([]);
-const apiGetUserGroups = apiGet as QueryFunction<Group[]>;
+const apiGetUserGroups = apiGet as QueryFunction<string[]>;
 const url = `/api/v1/users/${userStore.username}/groups`;
 
 const getUserGroups = async () => {

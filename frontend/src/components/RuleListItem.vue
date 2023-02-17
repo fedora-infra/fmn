@@ -3,7 +3,7 @@ import { CListGroupItem } from "@coreui/bootstrap-vue";
 
 import { TRACKING_RULES } from "../api/constants";
 
-import type { Rule, TrackingRule } from "../api/types";
+import type { Rule } from "../api/types";
 import DestinationTag from "./DestinationTag.vue";
 const props = defineProps<{
   rule: Rule;
@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const tracking_rule = TRACKING_RULES.find(
   (o) => o.name === props.rule.tracking_rule.name
-) as TrackingRule;
+);
 </script>
 
 <template>
@@ -19,6 +19,7 @@ const tracking_rule = TRACKING_RULES.find(
     class="d-flex justify-content-between align-items-center list-group-item-action"
     :class="{ 'text-muted bg-light': props.rule.disabled }"
     style="--bs-bg-opacity: 0.4"
+    v-if="tracking_rule"
   >
     <div>
       <div class="fw-bold fs-4">

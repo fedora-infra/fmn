@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { validationErrorToFormErrors } from "@/api";
 import { usePatchRuleMutation } from "@/api/rules";
-import type { PostError, RulePatch } from "@/api/types";
+import type { PostError, Rule, RulePatch } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
 import { CInputGroup } from "@coreui/bootstrap-vue";
 import type { FormKitNode } from "@formkit/core";
@@ -12,13 +12,18 @@ const toastStore = useToastStore();
 
 const { mutateAsync: editMutation } = usePatchRuleMutation();
 
-const handleSubmit = async (data: RulePatch, form: FormKitNode | undefined) => {
+interface FormData extends RulePatch {
+  id: Rule["id"];
+}
+
+const handleSubmit = async (data: FormData, form: FormKitNode | undefined) => {
   console.log(`Will disable rule ${data.id}`);
   if (!form) {
     throw Error("No form node?");
   }
   try {
-    const response = await editMutation(data);
+    const { id, ...rule } = data;
+    const response = await editMutation({ id, rule });
     form.reset();
     // Success!
     toastStore.addToast({

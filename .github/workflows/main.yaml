@@ -47,12 +47,22 @@ jobs:
     strategy:
       fail-fast: false
     runs-on: ubuntu-latest
-    container: fedora:latest
+    container: fedorapython/fedora-python-tox:latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: install npm
+      - name: Install the API
+        run: |
+          dnf install -y krb5-devel libpq-devel
+          python3 -m pip install --upgrade poetry
+          poetry install --extras api
+
+      - name: Install npm & npx
         run: dnf install -y npm
+
+      - name: Regenerate the typescript types
+        run: |
+          poetry run ./generate-typescript-types.py
 
       - name: install frontend
         run: |

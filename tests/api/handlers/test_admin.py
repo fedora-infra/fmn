@@ -42,6 +42,7 @@ class TestAdmin(BaseTestAPIV1Handler):
             "tracking_rule": {"name": "users-followed", "params": ["user1", "user2"]},
             "generation_rules": [
                 {
+                    "id": 3,
                     "destinations": [{"protocol": "email", "address": "dude@mcpants"}],
                     "filters": {
                         "applications": [],

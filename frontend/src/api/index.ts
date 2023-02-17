@@ -75,7 +75,7 @@ export const apiPatch = async (url: string, data: unknown) => {
 };
 
 export const validationErrorToFormErrors = (data: PostError) => {
-  const detail = data.detail;
+  const detail = data.detail || [];
   if (Array.isArray(detail)) {
     return detail.map((e) => `Server error: ${e.loc[-1]}: ${e.msg}`);
   } else {
