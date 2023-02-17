@@ -19,6 +19,16 @@ def connection(mocker):
     return connection
 
 
+@pytest.fixture
+def notif():
+    return Notification.parse_obj(
+        {
+            "protocol": "email",
+            "content": {"headers": {"To": "dummy", "Subject": "dummy"}, "body": "dummy"},
+        }
+    )
+
+
 async def test_send_queue_connect(connection):
     sq = SendQueue({"amqp_url": "amqp://"})
     await sq.connect()
@@ -28,14 +38,14 @@ async def test_send_queue_connect(connection):
     assert sq._exchange is connection._exchange
 
 
-async def test_send_queue_send(connection):
+async def test_send_queue_send(connection, notif):
     sq = SendQueue({"amqp_url": "amqp://"})
     await sq.connect()
-    await sq.send(Notification(protocol="email", content={"dummy": "content"}))
+    await sq.send(notif)
     sq._exchange.publish.assert_called_once()
     assert sq._exchange.publish.call_args.kwargs.get("routing_key") == "send.email"
     sent_msg = sq._exchange.publish.call_args.args[0]
-    assert sent_msg.body == b'{"dummy": "content"}'
+    assert sent_msg.body == b'{"headers": {"To": "dummy", "Subject": "dummy"}, "body": "dummy"}'
 
 
 async def test_send_queue_close(connection):
@@ -73,14 +83,14 @@ async def test_send_queue_connect_ssl(mocker):
     assert url.query.get("keyfile") == "key.pem"
 
 
-async def test_send_queue_reconnect_give_up(connection, caplog):
+async def test_send_queue_reconnect_give_up(connection, notif, caplog):
     sq = SendQueue({"amqp_url": "amqp://"})
     await sq.connect()
     error = AMQPConnectionError("dummy error")
     connection._exchange.publish.side_effect = error
 
     with pytest.raises(AMQPConnectionError):
-        await sq.send(Notification(protocol="email", content={"dummy": "content"}))
+        await sq.send(notif)
 
     assert connection._exchange.publish.call_count == 3
 
@@ -93,13 +103,13 @@ async def test_send_queue_reconnect_give_up(connection, caplog):
     assert logs[2].msg.startswith("Publishing message failed. Giving up.")
 
 
-async def test_send_queue_reconnect_success(connection, caplog):
+async def test_send_queue_reconnect_success(connection, notif, caplog):
     sq = SendQueue({"amqp_url": "amqp://"})
     await sq.connect()
     error = AMQPConnectionError("dummy error")
     connection._exchange.publish.side_effect = [error, error, None]
 
-    await sq.send(Notification(protocol="email", content={"dummy": "content"}))
+    await sq.send(notif)
 
     assert connection._exchange.publish.call_count == 3
 

@@ -20,20 +20,8 @@ export type GenerationRule = components["schemas"]["GenerationRule"];
 export type Rule = components["schemas"]["Rule"];
 export type NewRule = components["schemas"]["NewRule"];
 export type RulePatch = components["schemas"]["RulePatch"];
+export type PreviewNotification = components["schemas"]["PreviewNotification"];
 export type HTTPValidationError = components["schemas"]["HTTPValidationError"];
 export interface PostError {
   detail?: HTTPValidationError["detail"] | string;
-}
-
-export interface NotificationContent {
-  date: string;
-  topic: string;
-  summary: string;
-  priority?: string;
-  application?: string;
-  author?: string;
-}
-export interface Notification {
-  protocol: string;
-  content: NotificationContent;
 }
