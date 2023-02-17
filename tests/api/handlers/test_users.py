@@ -219,6 +219,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
             "success-delete-generation-rule",
             "success-delete-destination",
             "success-delete-filter",
+            "success-modify-filter",
             "success-disable",
             "wrong-user",
         ),

@@ -9,6 +9,8 @@ from .generation_rule import GenerationRule
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
 
+    from ...rules.notification import Notification
+
 
 class Destination(Base):
     __tablename__ = "destinations"
@@ -23,7 +25,7 @@ class Destination(Base):
     protocol = Column(String(length=255), nullable=False)
     address = Column(UnicodeText, nullable=False)
 
-    def generate(self, message: "Message"):
+    def generate(self, message: "Message") -> "Notification.content":
         if self.protocol == "email":
             return {
                 "headers": {

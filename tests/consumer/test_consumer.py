@@ -216,7 +216,12 @@ async def test_consumer_send_error(
     message = make_mocked_message(topic="dummy.topic", body={})
 
     with pytest.raises(Nack):
-        await c._send(Notification(protocol="email", content={}), message)
+        await c._send(
+            Notification.parse_obj(
+                {"protocol": "irc", "content": {"to": "dummy", "message": "foobar"}}
+            ),
+            message,
+        )
 
 
 async def test_consumer_in_threadpool(

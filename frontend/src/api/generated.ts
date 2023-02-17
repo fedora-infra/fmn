@@ -3,6 +3,7 @@
  * Do not make direct changes to the file.
  */
 
+
 export interface paths {
   "/api/v1/users/me": {
     /** Get Me */
@@ -87,25 +88,25 @@ export interface components {
       /** Label */
       label: string;
       /** Options */
-      options: components["schemas"]["Option_Artifact_"][];
+      options: (components["schemas"]["Option_Artifact_"])[];
     };
     /**
-     * ArtifactType
-     * @description An enumeration.
+     * ArtifactType 
+     * @description An enumeration. 
      * @enum {unknown}
      */
     ArtifactType: "rpms" | "containers" | "modules" | "flatpaks";
     /** ArtifactsFollowedTrackingRule */
     ArtifactsFollowedTrackingRule: {
       /**
-       * Name
+       * Name 
        * @enum {string}
        */
       name: "artifacts-followed";
       /** Params */
-      params: {
-        [key: string]: string | undefined;
-      }[];
+      params: ({
+          [key: string]: string | undefined;
+        })[];
     };
     /** Destination */
     Destination: {
@@ -114,22 +115,44 @@ export interface components {
       /** Address */
       address: string;
     };
+    /** EmailNotification */
+    EmailNotification: {
+      /**
+       * Protocol 
+       * @enum {string}
+       */
+      protocol: "email";
+      content: components["schemas"]["EmailNotificationContent"];
+    };
+    /** EmailNotificationContent */
+    EmailNotificationContent: {
+      headers: components["schemas"]["EmailNotificationHeaders"];
+      /** Body */
+      body: string;
+    };
+    /** EmailNotificationHeaders */
+    EmailNotificationHeaders: {
+      /** To */
+      To: string;
+      /** Subject */
+      Subject: string;
+    };
     /** Filters */
     Filters: {
       /**
-       * Applications
+       * Applications 
        * @default []
        */
-      applications?: string[];
+      applications?: (string)[];
       /**
-       * Severities
+       * Severities 
        * @default []
        */
-      severities?: string[];
+      severities?: (string)[];
       /** Topic */
       topic?: string;
       /**
-       * My Actions
+       * My Actions 
        * @default false
        */
       my_actions?: boolean;
@@ -139,7 +162,7 @@ export interface components {
       /** Id */
       id?: number;
       /** Destinations */
-      destinations: components["schemas"]["Destination"][];
+      destinations: (components["schemas"]["Destination"])[];
       filters: components["schemas"]["Filters"];
     };
     /** GenerationRulePreview */
@@ -147,48 +170,77 @@ export interface components {
       /** Id */
       id?: number;
       /**
-       * Destinations
+       * Destinations 
        * @default []
        */
-      destinations?: components["schemas"]["Destination"][];
+      destinations?: (components["schemas"]["Destination"])[];
       filters: components["schemas"]["Filters"];
     };
     /** HTTPValidationError */
     HTTPValidationError: {
       /** Detail */
-      detail?: components["schemas"]["ValidationError"][];
+      detail?: (components["schemas"]["ValidationError"])[];
+    };
+    /** IRCNotification */
+    IRCNotification: {
+      /**
+       * Protocol 
+       * @enum {string}
+       */
+      protocol: "irc";
+      content: components["schemas"]["IRCNotificationContent"];
+    };
+    /** IRCNotificationContent */
+    IRCNotificationContent: {
+      /** To */
+      to: string;
+      /** Message */
+      message: string;
     };
     /** ListParamTrackingRule */
     ListParamTrackingRule: {
       /**
-       * Name
+       * Name 
        * @enum {string}
        */
       name: "artifacts-owned" | "artifacts-group-owned" | "users-followed";
       /** Params */
-      params: string[];
+      params: (string)[];
+    };
+    /** MatrixNotification */
+    MatrixNotification: {
+      /**
+       * Protocol 
+       * @enum {string}
+       */
+      protocol: "matrix";
+      content: components["schemas"]["MatrixNotificationContent"];
+    };
+    /** MatrixNotificationContent */
+    MatrixNotificationContent: {
+      /** To */
+      to: string;
+      /** Message */
+      message: string;
     };
     /** NewRule */
     NewRule: {
       /** Name */
       name: string;
       /**
-       * Disabled
+       * Disabled 
        * @default false
        */
       disabled?: boolean;
       /** Tracking Rule */
-      tracking_rule:
-        | components["schemas"]["ListParamTrackingRule"]
-        | components["schemas"]["NoParamTrackingRule"]
-        | components["schemas"]["ArtifactsFollowedTrackingRule"];
+      tracking_rule: components["schemas"]["ListParamTrackingRule"] | components["schemas"]["NoParamTrackingRule"] | components["schemas"]["ArtifactsFollowedTrackingRule"];
       /** Generation Rules */
-      generation_rules: components["schemas"]["GenerationRule"][];
+      generation_rules: (components["schemas"]["GenerationRule"])[];
     };
     /** NoParamTrackingRule */
     NoParamTrackingRule: {
       /**
-       * Name
+       * Name 
        * @enum {string}
        */
       name: "related-events";
@@ -196,39 +248,55 @@ export interface components {
       params?: string;
     };
     /** Notification */
-    Notification: {
-      /** Protocol */
-      protocol: string;
-      /** Content */
-      content: Record<string, never>;
-    };
+    Notification: components["schemas"]["EmailNotification"] | components["schemas"]["IRCNotification"] | components["schemas"]["MatrixNotification"] | components["schemas"]["PreviewNotification"];
     /** Option[Artifact] */
     Option_Artifact_: {
       /** Label */
       label: string;
       value: components["schemas"]["Artifact"];
     };
+    /** PreviewNotification */
+    PreviewNotification: {
+      /**
+       * Protocol 
+       * @enum {string}
+       */
+      protocol: "preview";
+      content: components["schemas"]["PreviewNotificationContent"];
+    };
+    /** PreviewNotificationContent */
+    PreviewNotificationContent: {
+      /** Date */
+      date: string;
+      /** Topic */
+      topic: string;
+      /** Summary */
+      summary: string;
+      /** Priority */
+      priority: number;
+      /** Application */
+      application: string;
+      /** Author */
+      author?: string;
+    };
     /** Rule */
     Rule: {
       /** Name */
       name: string;
       /**
-       * Disabled
+       * Disabled 
        * @default false
        */
       disabled?: boolean;
       /** Tracking Rule */
-      tracking_rule:
-        | components["schemas"]["ListParamTrackingRule"]
-        | components["schemas"]["NoParamTrackingRule"]
-        | components["schemas"]["ArtifactsFollowedTrackingRule"];
+      tracking_rule: components["schemas"]["ListParamTrackingRule"] | components["schemas"]["NoParamTrackingRule"] | components["schemas"]["ArtifactsFollowedTrackingRule"];
       /** Generation Rules */
-      generation_rules: components["schemas"]["GenerationRule"][];
+      generation_rules: (components["schemas"]["GenerationRule"])[];
       /** Id */
       id: number;
       user: components["schemas"]["User"];
       /**
-       * Generated Last Week
+       * Generated Last Week 
        * @default 0
        */
       generated_last_week?: number;
@@ -241,23 +309,20 @@ export interface components {
     /** RulePreview */
     RulePreview: {
       /**
-       * Name
-       * @default preview
+       * Name 
+       * @default preview 
        * @enum {string}
        */
       name?: "preview";
       /**
-       * Disabled
+       * Disabled 
        * @default false
        */
       disabled?: boolean;
       /** Tracking Rule */
-      tracking_rule:
-        | components["schemas"]["ListParamTrackingRule"]
-        | components["schemas"]["NoParamTrackingRule"]
-        | components["schemas"]["ArtifactsFollowedTrackingRule"];
+      tracking_rule: components["schemas"]["ListParamTrackingRule"] | components["schemas"]["NoParamTrackingRule"] | components["schemas"]["ArtifactsFollowedTrackingRule"];
       /** Generation Rules */
-      generation_rules: components["schemas"]["GenerationRulePreview"][];
+      generation_rules: (components["schemas"]["GenerationRulePreview"])[];
     };
     /** User */
     User: {
@@ -266,7 +331,7 @@ export interface components {
       /** Name */
       name: string;
       /**
-       * Is Admin
+       * Is Admin 
        * @default false
        */
       is_admin?: boolean;
@@ -291,6 +356,7 @@ export interface components {
 export type external = Record<string, never>;
 
 export interface operations {
+
   get_me_api_v1_users_me_get: {
     /** Get Me */
     responses: {
@@ -313,7 +379,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": string[];
+          "application/json": (string)[];
         };
       };
       /** @description Validation Error */
@@ -357,7 +423,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": string[];
+          "application/json": (string)[];
         };
       };
       /** @description Validation Error */
@@ -379,7 +445,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Destination"][];
+          "application/json": (components["schemas"]["Destination"])[];
         };
       };
       /** @description Validation Error */
@@ -401,7 +467,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Rule"][];
+          "application/json": (components["schemas"]["Rule"])[];
         };
       };
       /** @description Validation Error */
@@ -519,7 +585,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": string[];
+          "application/json": (string)[];
         };
       };
     };
@@ -528,17 +594,17 @@ export interface operations {
     /** Get Owned Artifacts */
     parameters?: {
       query?: {
-        users?: string[];
-        groups?: string[];
+        users?: (string)[];
+        groups?: (string)[];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": {
-            [key: string]: string | undefined;
-          }[];
+          "application/json": ({
+              [key: string]: string | undefined;
+            })[];
         };
       };
       /** @description Validation Error */
@@ -560,7 +626,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["ArtifactOptionsGroup"][];
+          "application/json": (components["schemas"]["ArtifactOptionsGroup"])[];
         };
       };
       /** @description Validation Error */
@@ -582,7 +648,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Notification"][];
+          "application/json": (components["schemas"]["Notification"])[];
         };
       };
       /** @description Validation Error */
@@ -626,7 +692,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Rule"][];
+          "application/json": (components["schemas"]["Rule"])[];
         };
       };
       /** @description Validation Error */
