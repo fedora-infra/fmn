@@ -8,3 +8,8 @@ export function generateLibravatarURL(
   const hash = md5(email || "nobody@fedoraproject.org");
   return `https://www.libravatar.org/avatar/${hash}?s=${size.toString()}&d=${defaulticon}`;
 }
+
+// https://stackoverflow.com/a/46700791
+export function isDefined<T>(item: T | undefined): item is T {
+  return typeof item !== "undefined";
+}

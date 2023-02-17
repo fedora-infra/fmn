@@ -75,6 +75,7 @@ class GRGetterDict(GetterDict):
 
 
 class GenerationRule(BaseModel):
+    id: int | None
     destinations: list[Destination]
     filters: Filters
 
@@ -88,13 +89,16 @@ class User(BaseModel):
     is_admin: bool = False
 
 
-class Rule(BaseModel):
-    id: int | None
+class NewRule(BaseModel):
     name: str
     disabled: bool = False
-    user: User | None
     tracking_rule: TrackingRule
     generation_rules: list[GenerationRule]
+
+
+class Rule(NewRule):
+    id: int
+    user: User
     generated_last_week: int = 0
 
 
@@ -102,8 +106,8 @@ class GenerationRulePreview(GenerationRule):
     destinations: list[Destination] = []
 
 
-class RulePreview(Rule):
-    name: str = "preview"
+class RulePreview(NewRule):
+    name: Literal["preview"] = "preview"
     generation_rules: list[GenerationRulePreview]
 
 

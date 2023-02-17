@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { TRACKING_RULES } from "@/api/constants";
-import type { Rule, TrackingRule } from "@/api/types";
+import type { Rule } from "@/api/types";
+import { isDefined } from "@/util";
 import {
   CCard,
   CCardBody,
@@ -20,7 +21,7 @@ const filteringOptions = computed(() => [
     (props.rules || [])
       .map((rule) => rule.tracking_rule.name)
       .map((name) => TRACKING_RULES.find((tr) => tr.name === name))
-      .filter((o) => typeof o !== "undefined") as TrackingRule[]
+      .filter(isDefined)
   ),
 ]);
 const rules = computed(() => {

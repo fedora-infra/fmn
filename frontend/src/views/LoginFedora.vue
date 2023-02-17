@@ -10,6 +10,7 @@
 
 <script setup lang="ts">
 import { getApiClient } from "@/api";
+import type { User } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
 import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
@@ -44,10 +45,10 @@ onMounted(async () => {
         })
         .then((apiClient) => {
           const url = "/api/v1/users/me";
-          return apiClient.get(url);
+          return apiClient.get<User>(url);
         })
         .then((response) => {
-          userStore.setAdmin(response.data.is_admin);
+          userStore.setAdmin(response.data.is_admin || false);
         });
       return result;
     });

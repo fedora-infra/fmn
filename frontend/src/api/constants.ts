@@ -1,5 +1,3 @@
-import type { TrackingRule } from "./types";
-
 // Severities in Fedora Messaging
 export const DEBUG = { label: "debug", level: 10 };
 export const INFO = { label: "info", level: 20 };
@@ -8,7 +6,7 @@ export const ERROR = { label: "error", level: 40 };
 export const SEVERITIES = [DEBUG, INFO, WARNING, ERROR];
 
 // Tracking rules
-export const TRACKING_RULES: TrackingRule[] = [
+export const TRACKING_RULES = [
   {
     name: "artifacts-owned",
     label: "Artifacts owned by specific users",

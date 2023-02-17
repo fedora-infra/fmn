@@ -15,13 +15,18 @@ const toastStore = useToastStore();
 
 const { mutateAsync: editMutation } = usePatchRuleMutation();
 
-const handleSubmit = async (data: RulePatch, form: FormKitNode | undefined) => {
+interface FormData extends RulePatch {
+  id: Rule["id"];
+}
+
+const handleSubmit = async (data: FormData, form: FormKitNode | undefined) => {
   console.log(`Will enable rule ${data.id}`);
   if (!form) {
     throw Error("No form node?");
   }
   try {
-    const response = await editMutation(data);
+    const { id, ...rule } = data;
+    const response = await editMutation({ id, rule });
     // Success!
     toastStore.addToast({
       color: "success",
