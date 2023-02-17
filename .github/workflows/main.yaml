@@ -11,18 +11,18 @@ jobs:
 
       - name: Install absolufy
         run: |
-             python3 -m pip install absolufy-imports
+          python3 -m pip install absolufy-imports
 
       # Alembic imports its env.py file in a way that it can’t do relative imports from outside the
       # fmn/database/migrations directory, therefore it has to use absolute imports.
       - name: Enforce relative imports in package (except Alembic migrations)
         run: >
-             find fmn -name \*.py -a \! -path fmn/database/migrations/env.py -print0
-             | xargs -0 absolufy-imports --never
+          find fmn -name \*.py -a \! -path fmn/database/migrations/env.py -print0
+          | xargs -0 absolufy-imports --never
 
       - name: Preserve absolute import in Alembic env.py file
         run: >
-             absolufy-imports fmn/database/migrations/env.py
+          absolufy-imports fmn/database/migrations/env.py
 
   backend-ci:
     strategy:
@@ -34,11 +34,11 @@ jobs:
 
       - name: Install RPM dependencies
         run: |
-             dnf install -y krb5-devel libpq-devel
+          dnf install -y krb5-devel libpq-devel
 
       - name: Install base Python dependencies
         run: |
-             python3 -m pip install --upgrade tox
+          python3 -m pip install --upgrade tox
 
       - name: execute tox
         run: tox
@@ -66,24 +66,24 @@ jobs:
 
       - name: install frontend
         run: |
-             pushd frontend/
-             npm install
-             popd
+          pushd frontend/
+          npm install
+          popd
 
       - name: run eslint
         run: |
-             pushd frontend/
-             npm run lint-check
-             popd
+          pushd frontend/
+          npm run lint-check
+          popd
 
       - name: run type-check
         run: |
-             pushd frontend/
-             npm run type-check
-             popd
+          pushd frontend/
+          npm run type-check
+          popd
 
       - name: run type-check
         run: |
-             pushd frontend/
-             npm run test:unit -- run
-             popd
+          pushd frontend/
+          npm run test:unit -- run
+          popd
