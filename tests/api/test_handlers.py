@@ -441,7 +441,7 @@ class TestMisc(BaseTestAPIV1Handler):
 
         if ownertype == "user":
             distgit_endpoint = f"{settings.services.distgit_url}/api/0/projects"
-            params = {"fork": False, "short": True, "username": "dudemcpants"}
+            params = {"fork": False, "short": False, "username": "dudemcpants"}
         elif ownertype == "group":
             name = "dudegroup"
             distgit_endpoint = f"{settings.services.distgit_url}/api/0/group/{name}"
