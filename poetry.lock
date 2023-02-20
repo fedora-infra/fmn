@@ -2,22 +2,19 @@
 
 [[package]]
 name = "aio-pika"
-version = "8.3.0"
-description = "Wrapper for the aiormq for asyncio and humans."
+version = "9.0.4"
+description = "Wrapper around the aiormq for asyncio and humans"
 category = "main"
 optional = true
-python-versions = ">3.6, <4"
+python-versions = ">=3.7,<4.0"
 files = [
-    {file = "aio-pika-8.3.0.tar.gz", hash = "sha256:c0e2601eda6a1097fe1d33c5f9965a86a27b328ac48914d20c23f675b3ab1797"},
-    {file = "aio_pika-8.3.0-py3-none-any.whl", hash = "sha256:36c4742449f1cbcb83165b3733b090cf88f3d2f7f027225eedb8c7f300b05dde"},
+    {file = "aio_pika-9.0.4-py3-none-any.whl", hash = "sha256:002645768feaf5e27255824b7814f8b657f67bbcf24b381bc93cd88faaabf913"},
+    {file = "aio_pika-9.0.4.tar.gz", hash = "sha256:a7cf270de3f23dd550beca6e287e2a4707c99bd092a606619ff3b0df44deb6fa"},
 ]
 
 [package.dependencies]
-aiormq = ">=6.6.3,<6.7.0"
+aiormq = ">=6.7.1,<6.8.0"
 yarl = "*"
-
-[package.extras]
-develop = ["aiomisc (>=16.0,<17.0)", "coverage (!=4.3)", "coveralls", "nox", "pylava", "pytest", "pytest-cov", "shortuuid", "sphinx", "sphinx-autobuild", "timeout-decorator", "tox (>=2.4)"]
 
 [[package]]
 name = "aiofiles"
@@ -159,14 +156,14 @@ python-socks = {version = ">=2.0.0,<3.0.0", extras = ["asyncio"]}
 
 [[package]]
 name = "aiormq"
-version = "6.6.4"
+version = "6.7.2"
 description = "Pure python AMQP asynchronous client library"
 category = "main"
 optional = true
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "aiormq-6.6.4-py3-none-any.whl", hash = "sha256:9fb93dc871eb9c45a410e29669624790c01b70d27f20d512a22b146c411440ea"},
-    {file = "aiormq-6.6.4.tar.gz", hash = "sha256:95835a4db6117263305d450f838ccdc3eabd427c0deb32fd617769ad4c989e98"},
+    {file = "aiormq-6.7.2-py3-none-any.whl", hash = "sha256:beda152846d823465e245a8b01c67381ab602f4d7ac6035eb84b7541ec8933de"},
+    {file = "aiormq-6.7.2.tar.gz", hash = "sha256:e7b469c61873278d21c8305716d90f3711cd3a0536254edb1c9f6759b1e56b39"},
 ]
 
 [package.dependencies]
@@ -3965,4 +3962,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "890e97c9092852048a9314cf447bd27860a04e57143c159878e99a3ac13ab073"
+content-hash = "872b2e367a626f42c98c53adb4f51e38cf97d1093fe70e977d02d54364ce9ee4"
