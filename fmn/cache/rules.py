@@ -38,7 +38,7 @@ class RulesCache:
 
     async def invalidate(self):
         log.debug("Invalidating the rules cache")
-        cache_keys = get_templates_for_func(self.get_rules)
+        cache_keys = get_templates_for_func(self._get_rules)
         await asyncio.gather(*(cache.delete(key) for key in cache_keys))
 
     async def invalidate_on_message(self, message: "Message"):
