@@ -108,7 +108,7 @@ class PagureAsyncProxy(APIClient):
     async def get_user_projects(self, *, username: str) -> list[dict[str, Any]]:
         return [
             p
-            for p in await self.get_projects(username=username)
+            for p in await self.get_projects(username=username, short=False)
             if any(
                 username in p.get("access_users", {}).get(role.name.lower(), [])
                 for role in PagureRole.USER_ROLES_MAINTAINER_SET

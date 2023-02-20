@@ -179,7 +179,7 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
             )
         ]
 
-        params = {"fork": False, "short": True, "username": "dudemcpants"}
+        params = {"fork": False, "short": False, "username": "dudemcpants"}
 
         route = respx_mocker.get(f"{self.expected_api_url}/projects", params=params).mock(
             side_effect=[
