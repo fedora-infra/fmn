@@ -5,7 +5,7 @@ from aio_pika import connect_robust
 
 from ..core.amqp import get_url_from_config
 
-_log = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 CLOSING = object()
@@ -32,7 +32,7 @@ class Consumer:
         await self._queue.bind("amq.direct", f"send.{self._destination}")
 
     async def start(self):
-        _log.info("Starting consuming messages")
+        log.info("Starting consuming messages")
         async with self._queue.iterator() as self._queue_iter:
             async for message in self._queue_iter:
                 if message == CLOSING:
@@ -41,7 +41,7 @@ class Consumer:
                     await self._handler.handle(json.loads(message.body))
 
     async def stop(self):
-        _log.info("Stopping messages consumption")
+        log.info("Stopping messages consumption")
         if self._queue_iter:
             await self._queue_iter.on_message(CLOSING)
             await self._queue_iter.close()

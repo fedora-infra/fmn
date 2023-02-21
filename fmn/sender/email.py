@@ -5,7 +5,7 @@ from aiosmtplib import SMTP
 
 from .handler import Handler
 
-_log = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 class EmailHandler(Handler):
@@ -25,5 +25,5 @@ class EmailHandler(Handler):
         for name, value in message["headers"].items():
             notif[name] = value
         notif.set_content(message["body"])
-        _log.info("Sending email to %s with subject %s", notif["To"], notif["Subject"])
+        log.info("Sending email to %s with subject %s", notif["To"], notif["Subject"])
         await self._smtp.send_message(notif)
