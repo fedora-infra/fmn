@@ -7,7 +7,7 @@ from irc.connection import AioFactory
 
 from .handler import Handler
 
-_log = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 class IRCHandler(Handler):
@@ -21,14 +21,14 @@ class IRCHandler(Handler):
             password=irc_url.password,
             connect_factory=AioFactory(ssl=(irc_url.scheme == "ircs")),
         )
-        _log.debug("IRC connection established")
+        log.debug("IRC connection established")
 
     async def stop(self):
-        _log.debug("Stopping IRC handler...")
+        log.debug("Stopping IRC handler...")
         await self._client.disconnect()
 
     async def handle(self, message):
-        _log.info("Sending messsage to %s: %s", message["to"], message["message"])
+        log.info("Sending messsage to %s: %s", message["to"], message["message"])
         await self._client.privmsg(message["to"], message["message"])
 
 

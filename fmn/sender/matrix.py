@@ -6,7 +6,7 @@ from nio import AsyncClient
 
 from .handler import Handler
 
-_log = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 class MatrixHandler(Handler):
@@ -17,25 +17,25 @@ class MatrixHandler(Handler):
         self._client.user_id = self._user_id
         self._client.access_token = self._config["token"]
         self._client.device_id = "FMN"
-        _log.debug("Establishing connection to Matrix")
+        log.debug("Establishing connection to Matrix")
         await self._client.sync(timeout=30000, full_state=True, set_presence="online")
-        _log.debug("Synchronized")
+        log.debug("Synchronized")
         self._dm_rooms_cache = {}
         await self.update_dm_rooms_cache()
-        _log.debug("Room list updated")
+        log.debug("Room list updated")
         self.loop = asyncio.get_event_loop()
         # Periodically refresh the DM rooms cache
         self._dm_rooms_cache_refresh_task = self.loop.create_task(self.refresh_dm_rooms_cache())
 
     async def stop(self):
-        _log.debug("Stopping Matrix handler...")
+        log.debug("Stopping Matrix handler...")
         self._dm_rooms_cache_refresh_task.cancel()
         with suppress(asyncio.TimeoutError, asyncio.CancelledError):
             await asyncio.wait_for(self._dm_rooms_cache_refresh_task, 1)
         await self._client.disconnect()
 
     async def handle(self, message):
-        _log.info("Sending message to %s: %s", message["to"], message["message"])
+        log.info("Sending message to %s: %s", message["to"], message["message"])
         room_id = await self.get_dm_room(message["to"])
         await self.send_dm(room_id, message["message"])
         await self._client.sync(timeout=30000)
