@@ -23,6 +23,7 @@ import {
   CDropdownToggle,
   CNavItem,
 } from "@coreui/bootstrap-vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { login, logout, useAuth } from "../auth";
@@ -35,7 +36,9 @@ const userStore = useUserStore();
 const router = useRouter();
 const { t } = useI18n();
 
-const avatarURL = generateLibravatarURL(userStore.email, 30, "retro");
+const avatarURL = computed(() =>
+  generateLibravatarURL(userStore.email, 30, "retro")
+);
 
 const doLogin = () => login(auth, route.fullPath);
 
