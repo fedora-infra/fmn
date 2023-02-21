@@ -113,7 +113,7 @@ async def preview_rule(
     for gr in rule.generation_rules:
         gr.destinations = [api_models.Destination(protocol="preview", address="preview")]
 
-    log.debug("Previewing rule:", rule)
+    log.debug("Previewing rule: %s", rule)
     user = User(name=identity.name)
     rule_db = db_rule_from_api_rule(rule, user)
     rule_db.id = 0
@@ -121,7 +121,7 @@ async def preview_rule(
     # TODO make the delta a setting
     # TODO: this takes ridiculously long.
     async for message in get_last_messages(1):
-        log.debug(f"Processing message: {message.body}")
+        log.debug("Processing message: %s", message.body)
         async for notif in rule_db.handle(message, requester):
             notifs.append(notif)
     return notifs

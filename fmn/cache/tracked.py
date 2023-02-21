@@ -60,7 +60,7 @@ class TrackedCache:
             await rule.tracking_rule.prime_cache(tracked, self._requester)
         after = monotonic()
         duration = after - before
-        log.debug(f"Built the tracked cache in {duration:.2f} seconds")
+        log.debug("Built the tracked cache in %.2f seconds", duration)
         return tracked
 
     async def invalidate(self):

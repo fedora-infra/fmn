@@ -59,7 +59,7 @@ class Rule(Base):
         )
 
     async def handle(self, message: "Message", requester: "Requester"):
-        log.debug(f"Rule {self.id} handling message {message.id}")
+        log.debug("Rule %s handling message %s", self.id, message.id)
         if not await self.tracking_rule.matches(message, requester):
             return
         for generation_rule in self.generation_rules:

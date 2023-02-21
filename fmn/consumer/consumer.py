@@ -44,7 +44,7 @@ class Consumer:
         configure_cache()
 
     def __call__(self, message: message.Message):
-        log.debug(f"Consuming message {message.id}")
+        log.debug("Consuming message %s", message.id)
         coro = self.handle_or_rollback(message)
         if self.loop.is_running():
             # We're running with Fedora Messaging >= 3.3.0, that uses asyncio
@@ -66,7 +66,7 @@ class Consumer:
     async def handle(self, message: message.Message):
         await self.refresh_cache_if_needed(message)
         if not await self.is_tracked(message):
-            log.debug(f"Message {message.id} is not tracked")
+            log.debug("Message %s is not tracked", message.id)
             return
         if message.deprecated:
             # The sender will also send the message with the new schema, don't duplicate
@@ -80,12 +80,17 @@ class Consumer:
                 await self.db.commit()
 
     async def _send(self, notification, from_msg):
-        log.debug(f"Generating notification for message {from_msg.id} via {notification.protocol}")
+        log.debug(
+            "Generating notification for message %s via %s", from_msg.id, notification.protocol
+        )
         try:
             await self.send_queue.send(notification)
         except AMQPConnectionError as e:
             log.error(
-                f"Could not send notification for {from_msg.id} via {notification.protocol}: {e}"
+                "Could not send notification for %s via %s: %s",
+                from_msg.id,
+                notification.protocol,
+                e,
             )
             raise Nack()
 
@@ -97,10 +102,10 @@ class Consumer:
         tracked = await self._tracked_cache.get_tracked()
         for msg_attr in ("packages", "containers", "modules", "flatpaks", "usernames"):
             if not set(getattr(message, msg_attr)).isdisjoint(getattr(tracked, msg_attr)):
-                log.debug(f"Message {message.id} is tracked by {msg_attr}")
+                log.debug("Message %s is tracked by %s", message.id, msg_attr)
                 return True
         if message.agent_name in tracked.agent_name:
-            log.debug(f"Message {message.id} is tracked by agent_name")
+            log.debug("Message %s is tracked by agent_name", message.id)
             return True
         return False
 
