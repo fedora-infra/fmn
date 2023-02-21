@@ -229,7 +229,7 @@ async def create_user_rule(
 ):
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to edit someone else's rules")
-    log.info("Creating rule:", rule)
+    log.info("Creating rule: %s", rule)
     user = await User.async_get_or_create(db_session, name=username)
     rule_db = db_rule_from_api_rule(rule, user)
     db_session.add(rule_db)

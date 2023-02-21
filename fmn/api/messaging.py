@@ -12,11 +12,11 @@ log = logging.getLogger(__name__)
 
 
 def backoff_hdlr(details):
-    log.warning(f"Publishing message failed. Retrying. {traceback.format_tb(sys.exc_info()[2])}")
+    log.warning("Publishing message failed. Retrying. %s", traceback.format_tb(sys.exc_info()[2]))
 
 
 def giveup_hdlr(details):
-    log.error(f"Publishing message failed. Giving up. {traceback.format_tb(sys.exc_info()[2])}")
+    log.error("Publishing message failed. Giving up. %s", traceback.format_tb(sys.exc_info()[2]))
 
 
 @backoff.on_exception(

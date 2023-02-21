@@ -20,7 +20,7 @@ def handle_http_error(default_factory):
             try:
                 return await f(*args, **kw)
             except HTTPStatusError as e:
-                log.warning(f"Request failed: {e}")
+                log.warning("Request failed: %s", e)
                 return default_factory()
 
         return wrapper

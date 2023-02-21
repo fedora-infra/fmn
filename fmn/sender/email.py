@@ -25,5 +25,5 @@ class EmailHandler(Handler):
         for name, value in message["headers"].items():
             notif[name] = value
         notif.set_content(message["body"])
-        _log.info(f"Sending email to {notif['To']} with subject {notif['Subject']}")
+        _log.info("Sending email to %s with subject %s", notif["To"], notif["Subject"])
         await self._smtp.send_message(notif)

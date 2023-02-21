@@ -35,7 +35,7 @@ class MatrixHandler(Handler):
         await self._client.disconnect()
 
     async def handle(self, message):
-        _log.info(f"Sending messsage to {message['to']}: {message['message']}")
+        _log.info("Sending message to %s: %s", message["to"], message["message"])
         room_id = await self.get_dm_room(message["to"])
         await self.send_dm(room_id, message["message"])
         await self._client.sync(timeout=30000)
