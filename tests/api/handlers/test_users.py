@@ -1,4 +1,3 @@
-import json
 from unittest import mock
 
 import httpx
@@ -245,7 +244,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
 
         response = client.put(
             f"{self.path}/{username}/rules/{db_rule.id}",
-            content=edited_rule.json(exclude_unset=True),
+            json=edited_rule.dict(exclude_unset=True),
         )
 
         if "success" in testcase:
@@ -325,7 +324,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
         message.body["rule"]["user"] = user
 
         response = client.post(
-            f"{self.path}/{username}/rules", content=created_rule.json(exclude_unset=True)
+            f"{self.path}/{username}/rules", json=created_rule.dict(exclude_unset=True)
         )
 
         if "success" in testcase:
@@ -354,20 +353,18 @@ class TestUserHandler(BaseTestAPIV1Handler):
                 assert isinstance(response.json()["detail"], str)
 
     async def test_create_user_rule_bad_matrix_dest(self, client, api_identity, db_rule):
-        created_rule = json.dumps(
-            {
-                "name": "wrongrule",
-                "tracking_rule": {"name": "users-followed", "params": ["dummy"]},
-                "generation_rules": [
-                    {
-                        "destinations": [{"protocol": "matrix", "address": "dummynick"}],
-                        "filters": {},
-                    },
-                ],
-            }
-        )
+        created_rule = {
+            "name": "wrongrule",
+            "tracking_rule": {"name": "users-followed", "params": ["dummy"]},
+            "generation_rules": [
+                {
+                    "destinations": [{"protocol": "matrix", "address": "dummynick"}],
+                    "filters": {},
+                },
+            ],
+        }
 
-        response = client.post(f"{self.path}/{api_identity.name}/rules", content=created_rule)
+        response = client.post(f"{self.path}/{api_identity.name}/rules", json=created_rule)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert response.json()["detail"] == [
             {
@@ -378,20 +375,18 @@ class TestUserHandler(BaseTestAPIV1Handler):
         ]
 
     async def test_create_user_rule_bad_email_dest(self, client, api_identity, db_rule):
-        created_rule = json.dumps(
-            {
-                "name": "wrongrule",
-                "tracking_rule": {"name": "users-followed", "params": ["dummy"]},
-                "generation_rules": [
-                    {
-                        "destinations": [{"protocol": "email", "address": "wrongvalue"}],
-                        "filters": {},
-                    },
-                ],
-            }
-        )
+        created_rule = {
+            "name": "wrongrule",
+            "tracking_rule": {"name": "users-followed", "params": ["dummy"]},
+            "generation_rules": [
+                {
+                    "destinations": [{"protocol": "email", "address": "wrongvalue"}],
+                    "filters": {},
+                },
+            ],
+        }
 
-        response = client.post(f"{self.path}/{api_identity.name}/rules", content=created_rule)
+        response = client.post(f"{self.path}/{api_identity.name}/rules", json=created_rule)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert response.json()["detail"] == [
             {

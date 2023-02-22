@@ -1,4 +1,3 @@
-import json
 from unittest import mock
 
 import pytest
@@ -65,7 +64,7 @@ class TestAdmin(BaseTestAPIV1Handler):
         assert len(response.json()) == 1
 
         # Next re-enable the rule
-        response = client.patch(f"{self.path}/rules/2", content=json.dumps({"disabled": False}))
+        response = client.patch(f"{self.path}/rules/2", json={"disabled": False})
         assert response.status_code == status.HTTP_200_OK
         result = response.json()
         assert result["name"] == "disabledrule"
@@ -96,7 +95,7 @@ class TestAdmin(BaseTestAPIV1Handler):
         assert len(response.json()) == 0
 
         # Next re-enable the rule
-        response = client.patch(f"{self.path}/rules/1", content=json.dumps({"disabled": True}))
+        response = client.patch(f"{self.path}/rules/1", json={"disabled": True})
         assert response.status_code == status.HTTP_200_OK
         result = response.json()
         assert result["name"] == "darule"
@@ -120,7 +119,7 @@ class TestAdmin(BaseTestAPIV1Handler):
     def test_rule_not_found(self, client, api_identity, db_rule):
         api_identity.admin = True
 
-        response = client.patch(f"{self.path}/rules/233", content=json.dumps({"disabled": True}))
+        response = client.patch(f"{self.path}/rules/233", json={"disabled": True})
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
     def test_rule_patch_nothing(self, client, api_identity, db_rule):
