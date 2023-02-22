@@ -2,7 +2,13 @@ import { useUserStore } from "@/stores/user";
 import type { QueryFunction } from "react-query/types/core";
 import { useMutation, useQuery, useQueryClient } from "vue-query";
 import { apiDelete, apiGet, apiPatch, apiPost, apiPut } from "./index";
-import type { NewRule, PreviewNotification, Rule, RulePatch } from "./types";
+import type {
+  NewRule,
+  PostError,
+  PreviewNotification,
+  Rule,
+  RulePatch,
+} from "./types";
 
 // Get all rules
 export const useRulesQuery = () => {
@@ -18,7 +24,7 @@ export const useAddRuleMutation = () => {
   const userStore = useUserStore();
   const client = useQueryClient();
 
-  return useMutation<Rule, unknown, Rule>(
+  return useMutation<Rule, PostError, NewRule>(
     (data) => apiPost(`/api/v1/users/${userStore.username}/rules`, data),
     {
       onSuccess: async () => {
@@ -35,7 +41,7 @@ export const useEditRuleMutation = (id: number) => {
   const userStore = useUserStore();
   const client = useQueryClient();
   const url = `/api/v1/users/${userStore.username}/rules/${id}`;
-  return useMutation<Rule, unknown, Rule>((data) => apiPut(url, data), {
+  return useMutation<Rule, PostError, Rule>((data) => apiPut(url, data), {
     onSuccess: async () => {
       await client.invalidateQueries([url]);
       await client.invalidateQueries([
@@ -49,7 +55,7 @@ export const useEditRuleMutation = (id: number) => {
 export const useDeleteRuleMutation = () => {
   const userStore = useUserStore();
   const client = useQueryClient();
-  return useMutation<void, unknown, number>(
+  return useMutation<void, PostError, number>(
     (id) => apiDelete(`/api/v1/users/${userStore.username}/rules/${id}`),
     {
       onSuccess: async () => {
@@ -78,7 +84,7 @@ export const useDisabledRulesQuery = () => {
 // Patch an existing rule
 export const usePatchRuleMutation = () => {
   const client = useQueryClient();
-  return useMutation<Rule, unknown, { id: Rule["id"]; rule: RulePatch }>(
+  return useMutation<Rule, PostError, { id: Rule["id"]; rule: RulePatch }>(
     ({ id, rule }) => {
       return apiPatch(`/api/v1/admin/rules/${id}`, rule);
     },
