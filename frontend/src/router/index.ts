@@ -24,8 +24,18 @@ const router = createRouter({
     },
     {
       path: "/admin/",
-      name: "admin",
-      component: () => import("../views/AdminView.vue"),
+      redirect: "/admin/disabled-rules",
+    },
+    {
+      path: "/admin/disabled-rules",
+      name: "admin-disabled-rules",
+      component: () => import("../views/AdminDisabledRulesView.vue"),
+      meta: { auth: true },
+    },
+    {
+      path: "/admin/user-rules",
+      name: "admin-user-rules",
+      component: () => import("../views/AdminUserRulesView.vue"),
       meta: { auth: true },
     },
   ],

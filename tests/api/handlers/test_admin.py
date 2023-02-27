@@ -43,7 +43,7 @@ class TestAdmin(BaseTestAPIV1Handler):
             "id": 2,
             "name": "disabledrule",
             "disabled": True,
-            "user": {"id": 1, "name": "testuser", "is_admin": False},
+            "user": {"id": 2, "name": "dudemcpants", "is_admin": False},
             "tracking_rule": {"name": "users-followed", "params": ["user1", "user2"]},
             "generation_rules": [
                 {
@@ -59,6 +59,57 @@ class TestAdmin(BaseTestAPIV1Handler):
             ],
             "generated_last_week": 0,
         }
+
+    def test_list_rules_username(self, client, api_identity, db_rule, db_rule_disabled):
+        api_identity.admin = True
+
+        params = {"username": "dudemcpants"}
+
+        response = client.get(f"{self.path}/rules", params=params)
+        assert response.status_code == status.HTTP_200_OK
+        result = response.json()
+        assert len(result) == 1
+
+        assert result[-1] == {
+            "id": 2,
+            "name": "disabledrule",
+            "disabled": True,
+            "user": {"id": 2, "name": "dudemcpants", "is_admin": False},
+            "tracking_rule": {"name": "users-followed", "params": ["user1", "user2"]},
+            "generation_rules": [
+                {
+                    "id": 3,
+                    "destinations": [{"protocol": "email", "address": "dude@mcpants"}],
+                    "filters": {
+                        "applications": [],
+                        "severities": [],
+                        "topic": None,
+                        "my_actions": False,
+                    },
+                }
+            ],
+            "generated_last_week": 0,
+        }
+
+    @pytest.mark.parametrize("searchterm", ("u", "dudemc", None))
+    def test_get_users(self, searchterm, client, api_identity, db_rule, db_rule_disabled):
+        api_identity.admin = True
+
+        if searchterm:
+            params = {"search": searchterm}
+        else:
+            params = {}
+
+        response = client.get(f"{self.path}/users", params=params)
+        assert response.status_code == status.HTTP_200_OK
+        result = response.json()
+
+        if searchterm == "u":
+            assert len(result) == 2
+        if searchterm == "dudemc":
+            assert len(result) == 1
+        if searchterm is None:
+            assert len(result) == 2
 
     def test_reenable_rule(self, publish, client, api_identity, db_rule, db_rule_disabled):
         api_identity.admin = True

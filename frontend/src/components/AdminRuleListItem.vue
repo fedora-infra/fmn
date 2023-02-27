@@ -20,6 +20,12 @@ const props = defineProps<{
         <div>
           <div>
             <strong>Rule ID: {{ props.rule.id }}</strong>
+            <span class="badge bg-primary me-1">{{
+              props.rule.tracking_rule.name
+            }}</span>
+            <span class="badge bg-secondary"
+              >Generation Rules: {{ props.rule.generation_rules.length }}</span
+            >
           </div>
           <div>
             <small
@@ -29,22 +35,16 @@ const props = defineProps<{
           </div>
         </div>
         <div>
-          <span class="badge bg-primary me-1">{{
-            rule.tracking_rule.name
-          }}</span>
-          <span class="badge bg-secondary"
-            >Generation Rules: {{ rule.generation_rules.length }}</span
-          >
+          <AdminRuleEnableForm :rule="props.rule" />
         </div>
       </div>
     </CAccordionHeader>
     <CAccordionBody>
       <div class="d-flex justify-content-between align-items-center w-100 pb-2">
         <div>Rule Details:</div>
-        <AdminRuleEnableForm :rule="props.rule" />
       </div>
       <pre class="bg-secondary ma-2 rounded text-white">{{
-        JSON.stringify(rule, null, 2)
+        JSON.stringify(props.rule, null, 2)
       }}</pre>
     </CAccordionBody>
   </CAccordionItem>

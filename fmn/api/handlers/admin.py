@@ -1,9 +1,10 @@
 import logging
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ...database.model import Rule
+from ...database.model import Rule, User
 from ...messages.rule import RuleUpdateV1
 from .. import api_models
 from ..auth import Identity, get_identity_admin
@@ -18,12 +19,32 @@ router = APIRouter(prefix="/admin")
 @router.get("/rules", response_model=list[api_models.Rule], tags=["users/rules"])
 async def get_rules(
     disabled: bool | None = None,
+    username: str | None = None,
     identity: Identity = Depends(get_identity_admin),
     db_session: AsyncSession = Depends(gen_db_session),
 ):
     query = Rule.select_related()
     if disabled is not None:
         query = query.filter_by(disabled=disabled)
+
+    if username is not None:
+        query = query.filter(Rule.user.has(name=username))
+
+    query = query.order_by(Rule.id)
+    db_result = await db_session.execute(query)
+    return db_result.scalars().all()
+
+
+@router.get("/users", response_model=list[api_models.User], tags=["users/rules"])
+async def get_users(
+    search: str = None,
+    identity: Identity = Depends(get_identity_admin),
+    db_session: AsyncSession = Depends(gen_db_session),
+):
+    query = select(User)
+
+    if search is not None:
+        query = query.where(User.name.contains(search))
 
     db_result = await db_session.execute(query)
     return db_result.scalars().all()
