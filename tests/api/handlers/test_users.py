@@ -131,6 +131,23 @@ class TestUserHandler(BaseTestAPIV1Handler):
         destinations = response.json()
         assert destinations[1:] == expected
 
+    @pytest.mark.parametrize("value", (None, []))
+    def test_get_user_destinations_no_ircnicks(
+        self, fasjson_url, fasjson_user_data, respx_mocker, client, value
+    ):
+        fasjson_user_data["ircnicks"] = value
+        respx_mocker.get(f"{fasjson_url}/v1/users/{fasjson_user_data['username']}/").mock(
+            return_value=httpx.Response(status.HTTP_200_OK, json={"result": fasjson_user_data})
+        )
+        response = client.get(f"{self.path}/{fasjson_user_data['username']}/destinations")
+
+        assert response.status_code == status.HTTP_200_OK
+
+        destinations = response.json()
+        assert isinstance(destinations, list)
+        irc_destinations = [d for d in destinations if d["protocol"] == "irc"]
+        assert len(irc_destinations) == 0
+
     @pytest.mark.parametrize("testcase", ("happy-path", "wrong-user"))
     def test_get_user_rules(self, testcase, client, api_identity, db_rule):
         """Verify the results of get_user_rules()."""

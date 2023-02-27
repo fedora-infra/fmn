@@ -62,7 +62,8 @@ async def get_user_destinations(
 ):
     user = await fasjson_proxy.get_user(username=username)
     result = [{"protocol": "email", "address": email} for email in user["emails"]]
-    for nick in user.get("ircnicks", []):
+    nicks = user.get("ircnicks") or []
+    for nick in nicks:
         url = urlparse(nick)
         address = url.path.lstrip("/")
         protocol = url.scheme
