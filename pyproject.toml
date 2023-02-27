@@ -168,7 +168,7 @@ schemas = [
 
 
 [tool.pytest.ini_options]
-addopts = "--black --cov-config .coveragerc --cov=fmn --cov-report term --cov-report xml --cov-report html --isort --ignore fmn/consumer --ignore fmn/sender"
+addopts = "--black --cov-config .coveragerc --cov=fmn --cov-report term --cov-report xml --cov-report html --isort"
 asyncio_mode = "auto"
 
 [tool.isort]
