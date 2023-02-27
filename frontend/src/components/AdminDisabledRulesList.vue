@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { Rule } from "@/api/types";
 import { CAccordion, CCard, CCardBody } from "@coreui/bootstrap-vue";
-import AdminRuleListItem from "../components/AdminRuleListItem.vue";
-import AdminRuleDisableForm from "../components/AdminRuleDisableForm.vue";
+import AdminRuleListItem from "./AdminRuleListItem.vue";
+import AdminRuleDisableForm from "./AdminRuleDisableForm.vue";
 
 const props = defineProps<{
   rules: Rule[];

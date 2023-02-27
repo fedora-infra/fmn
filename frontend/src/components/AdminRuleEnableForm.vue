@@ -6,13 +6,14 @@ import { useToastStore } from "@/stores/toast";
 import type { FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";
+import { useQueryClient } from "vue-query";
 
 const props = defineProps<{
   rule: Rule;
 }>();
 
 const toastStore = useToastStore();
-
+const queryClient = useQueryClient();
 const { mutateAsync: editMutation } = usePatchRuleMutation();
 
 interface FormData extends RulePatch {
@@ -20,7 +21,9 @@ interface FormData extends RulePatch {
 }
 
 const handleSubmit = async (data: FormData, form: FormKitNode | undefined) => {
-  console.log(`Will enable rule ${data.id}`);
+  console.log(
+    `Will set rule ${data.id}'s' disabled status to ${data.disabled}`
+  );
   if (!form) {
     throw Error("No form node?");
   }
@@ -28,10 +31,18 @@ const handleSubmit = async (data: FormData, form: FormKitNode | undefined) => {
     const { id, ...rule } = data;
     const response = await editMutation({ id, rule });
     // Success!
+    await queryClient.invalidateQueries([
+      "/api/v1/admin/rules",
+      {
+        username: props.rule.user.name,
+      },
+    ]);
     toastStore.addToast({
       color: "success",
       title: "Rule enabled",
-      content: `Rule "${response.name}" has been successfully enabled.`,
+      content: rule.disabled
+        ? `Rule "${response.name}" has been successfully disabled.`
+        : `Rule "${response.name}" has been successfully enabled.`,
     });
   } catch (err) {
     const error = err as AxiosError<PostError>;
@@ -45,9 +56,34 @@ const handleSubmit = async (data: FormData, form: FormKitNode | undefined) => {
 </script>
 
 <template>
-  <FormKit type="form" id="rule" @submit="handleSubmit" :actions="false">
+  <FormKit
+    type="form"
+    id="rule"
+    @submit="handleSubmit"
+    :actions="false"
+    #default="{ disabled: formDisabled }"
+  >
     <FormKit type="hidden" name="id" :value="props.rule.id" />
-    <FormKit type="hidden" name="disabled" :value="false" />
-    <FormKit type="submit"> Enable Rule {{ props.rule.id }} </FormKit>
+    <FormKit type="hidden" name="disabled" :value="!props.rule.disabled" />
+    <template v-if="props.rule.disabled">
+      <FormKit
+        @click.stop=""
+        type="submit"
+        :classes="{ input: 'btn btn-success' }"
+        :disabled="formDisabled"
+      >
+        Enable Rule {{ props.rule.id }}
+      </FormKit>
+    </template>
+    <template v-else>
+      <FormKit
+        @click.stop=""
+        type="submit"
+        :classes="{ input: 'btn btn-danger' }"
+        :disabled="formDisabled"
+      >
+        Disable Rule {{ props.rule.id }}
+      </FormKit>
+    </template>
   </FormKit>
 </template>

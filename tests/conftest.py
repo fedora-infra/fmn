@@ -362,14 +362,18 @@ async def db_rule(db_async_session, db_user):
 
 
 @pytest.fixture
-async def db_rule_disabled(db_async_session, db_user):
+async def db_rule_disabled(db_async_session):
     tracking_rule = TrackingRule(name="users-followed", params=["user1", "user2"])
+
+    user = User(name="dudemcpants")
+    db_async_session.add(user)
+    await db_async_session.flush()
 
     destination = Destination(protocol="email", address="dude@mcpants")
     generation_rule = GenerationRule(destinations=[destination], filters=[])
     rule = Rule(
         name="disabledrule",
-        user=db_user,
+        user=user,
         tracking_rule=tracking_rule,
         generation_rules=[generation_rule],
         disabled=True,
