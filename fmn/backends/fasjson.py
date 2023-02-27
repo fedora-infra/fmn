@@ -39,7 +39,7 @@ class FASJSONAsyncProxy(APIClient):
         if "page" in result and "page_number" in result["page"] and "total_pages" in result["page"]:
             page_number = result["page"]["page_number"]
             if page_number < result["page"]["total_pages"]:
-                params["page"] = page_number + 1
+                params["page_number"] = page_number + 1
                 return url, params
 
         return None, None

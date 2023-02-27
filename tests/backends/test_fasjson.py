@@ -62,7 +62,7 @@ class TestFASJSONAsyncProxy(BaseTestAsyncProxy):
 
         if "normal" in testcase:
             assert next_url == "/boo"
-            assert params["page"] == 2
+            assert params["page_number"] == 2
         else:
             assert next_url is None
 
