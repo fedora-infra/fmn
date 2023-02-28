@@ -30,6 +30,14 @@ def _publish(message):
     api.publish(message)
 
 
+_background_tasks = set()
+
+
 async def publish(message):
     # Fire and forget
-    asyncio.ensure_future(run_in_threadpool(_publish, message=message))
+    # https://docs.python.org/3/library/asyncio-task.html#asyncio.create_task
+    task = asyncio.create_task(run_in_threadpool(_publish, message=message))
+    _background_tasks.add(task)
+    # To prevent keeping references to finished tasks forever, make each task
+    # remove its own reference from the set after completion:
+    task.add_done_callback(_background_tasks.discard)

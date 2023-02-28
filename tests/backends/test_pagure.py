@@ -262,7 +262,7 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
         ]
         if non_duplicate_projects:
             # Ensure there is a duplicate result (due to pagination) to skip over.
-            mocked_projects = non_duplicate_projects + [non_duplicate_projects[-1]]
+            mocked_projects = [*non_duplicate_projects, non_duplicate_projects[-1]]
         else:
             mocked_projects = []
 
