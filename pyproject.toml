@@ -91,8 +91,8 @@ tox = "^3.25.1 || ^4.0.0"
 greenlet = "^1.1.2 || ^2.0.0"
 toml = "^0.10.2"
 pytest-mock = "^3.8.2"
-flake8 = ">=4,<7"
 respx = "^0.20.0"
+ruff = "^0.0.253"
 
 [tool.poetry.extras]
 api = [
@@ -176,6 +176,10 @@ line_length = 100
 profile = "black"
 
 [tool.black]
+line-length = 100
+
+[tool.ruff]
+select = ["E", "F", "W"]
 line-length = 100
 
 [build-system]
