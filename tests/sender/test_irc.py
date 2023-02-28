@@ -17,7 +17,9 @@ async def test_irc_connect(mocker):
         await asyncio.sleep(0.5)
         handler._client._dispatcher(transport, Event("welcome", "server", "user"))
 
-    asyncio.create_task(_send_welcome())
+    # RUF006 is not an issue here, in tests.
+    # https://beta.ruff.rs/docs/rules/asyncio-dangling-task/
+    asyncio.create_task(_send_welcome())  # noqa: RUF006
     await handler.setup()
 
     aio_factory_class.assert_called_once_with(ssl=True)

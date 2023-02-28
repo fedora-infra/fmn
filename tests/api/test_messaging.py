@@ -24,11 +24,11 @@ def test__publish_with_errors(mocker):
 async def test_publish(mocker):
     run_in_threadpool = mocker.patch("fmn.api.messaging.run_in_threadpool", new=mock.MagicMock())
     run_in_threadpool.return_value = awaitable_sentinel = object()
-    ensure_future = mocker.patch("asyncio.ensure_future")
+    create_task = mocker.patch("asyncio.create_task")
 
     message = RuleCreateV1({"rule": {}, "user": {}})
 
     await messaging.publish(message)
 
     run_in_threadpool.assert_called_with(messaging._publish, message=message)
-    ensure_future.assert_called_with(awaitable_sentinel)
+    create_task.assert_called_with(awaitable_sentinel)

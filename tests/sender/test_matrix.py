@@ -17,6 +17,7 @@ async def test_matrix_connect(mocker):
     await handler.setup()
 
     assert client.user_id == "fmnuser"
+    # S105: Bandit detected a potential password leak. It's not.
     assert client.access_token == "dummytoken"  # noqa: S105
     assert client.device_id == "FMN"
     client.sync.assert_awaited_once_with(timeout=30000, full_state=True, set_presence="online")
