@@ -9,6 +9,17 @@ from httpx import AsyncClient
 from fmn.api.auth import Identity, IdentityFactory, TokenExpired
 
 
+@pytest.fixture
+def mock_client(mocker):
+    mocker.patch.object(Identity, "_cache_next_gc_after", new=None)
+    mocker.patch.object(Identity, "_token_to_identities_cache", new_callable=dict)
+    client_factory = mocker.patch.object(Identity, "client")
+    client = client_factory.return_value = mock.AsyncMock()
+    client.post.return_value.raise_for_status = mock.Mock()
+    client.post.return_value.json = mock.Mock()
+    return client
+
+
 class TestIdentity:
     def test_client(self):
         client = Identity.client()
@@ -19,10 +30,7 @@ class TestIdentity:
 
     @pytest.mark.parametrize("expired", (False, True))
     @pytest.mark.parametrize("perform_gc", (False, True))
-    @mock.patch.object(Identity, "_cache_next_gc_after", new=None)
-    @mock.patch.object(Identity, "_token_to_identities_cache", new_callable=dict)
-    @mock.patch.object(Identity, "client")
-    async def test_from_oidc_token(self, client, _token_to_identities_cache, expired, perform_gc):
+    async def test_from_oidc_token(self, mock_client, expired, perform_gc):
         now = time.time()
         if expired:
             expectation = pytest.raises(TokenExpired)
@@ -31,9 +39,6 @@ class TestIdentity:
             expectation = nullcontext()
             then = now + 3600
 
-        client.return_value = mock_client = mock.AsyncMock()
-        mock_client.post.return_value.raise_for_status = mock.Mock()
-        mock_client.post.return_value.json = mock.Mock()
         token_info_result = {"username": "karlheinzschinkenwurst", "exp": str(then)}
         user_info_result = {
             "email": "karlheinz@schinkenwurst.org",
@@ -42,7 +47,10 @@ class TestIdentity:
             "nickname": "karlheinzschinkenwurst",
             "preferred_username": "karlheinzschinkenwurst",
         }
-        mock_client.post.return_value.json.side_effect = [token_info_result, user_info_result]
+        mock_client.post.return_value.json.side_effect = [
+            token_info_result,
+            user_info_result if not expired else {},
+        ]
 
         # cold cache
 

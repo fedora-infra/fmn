@@ -82,7 +82,9 @@ class Identity(BaseModel):
 
             identity = cls(
                 name=token_info_result["username"],
-                admin=any(g in get_settings().admin_groups for g in user_info_result["groups"]),
+                admin=any(
+                    g in get_settings().admin_groups for g in user_info_result.get("groups", [])
+                ),
                 expires_at=float(token_info_result["exp"]),
                 user_info=user_info_result,
             )
