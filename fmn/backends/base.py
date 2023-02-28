@@ -2,7 +2,6 @@ import logging
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator
 from copy import deepcopy
-from functools import cache as ft_cache
 from functools import cached_property as ft_cached_property
 from functools import wraps
 from typing import Any
@@ -54,10 +53,14 @@ class APIClient(ABC):
     def api_url(self) -> str | None:
         return self.base_url
 
-    @ft_cache
     def __str__(self) -> str:
-        clsname = type(self).__name__
-        return f"{clsname}({self.base_url!r})"
+        # Keep the try/except, don't use hasattr(), it's much slower.
+        try:
+            return self._str
+        except AttributeError:
+            clsname = type(self).__name__
+            self._str = f"{clsname}({self.base_url!r})"
+            return self._str
 
     def extract_payload(self, result: dict, payload_field: str = None) -> Any:
         if payload_field is None:

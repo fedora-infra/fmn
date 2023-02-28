@@ -26,7 +26,6 @@ def cache_arg(arg: str, scope: str | None = None) -> Callable[[str, str | None],
 
     @ft_cache
     def get_cache_arg(*cached_fn_args, **cached_fn_kwargs) -> Any:
-        f"""Get the cache arg {arg} for scope {scope}."""
         settings = config.get_settings()
 
         if scope:

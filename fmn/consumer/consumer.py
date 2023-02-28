@@ -92,7 +92,7 @@ class Consumer:
                 notification.protocol,
                 e,
             )
-            raise Nack()
+            raise Nack() from e
 
     async def is_tracked(self, message: message.Message):
         # This is cache-based and should save us running all the messages through all the rules. The

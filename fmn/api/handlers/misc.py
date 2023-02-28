@@ -137,7 +137,7 @@ async def readiness_check(db_session: AsyncSession = Depends(gen_db_session)):
     try:
         needs_upgrade = await alembic_migration.needs_upgrade(db_session)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
     if needs_upgrade:
         raise HTTPException(status_code=500, detail="Database schema needs to be upgraded")
     else:
