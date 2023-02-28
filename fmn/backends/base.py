@@ -1,10 +1,11 @@
 import logging
 from abc import ABC, abstractmethod
+from collections.abc import AsyncIterator
 from copy import deepcopy
 from functools import cache as ft_cache
 from functools import cached_property as ft_cached_property
 from functools import wraps
-from typing import Any, AsyncIterator
+from typing import Any
 
 from httpx import AsyncClient, HTTPStatusError
 

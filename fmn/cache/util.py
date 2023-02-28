@@ -1,6 +1,7 @@
+from collections.abc import Callable, Iterator
 from functools import cache as ft_cache
 from functools import partial
-from typing import Any, Callable, Iterator
+from typing import Any
 
 from cashews import cache
 from cashews.formatter import get_templates_for_func, template_to_pattern

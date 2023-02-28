@@ -1,4 +1,4 @@
-from typing import Iterator
+from collections.abc import Iterator
 
 from sqlalchemy.ext.asyncio import AsyncSession
 

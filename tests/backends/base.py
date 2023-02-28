@@ -1,4 +1,5 @@
-from typing import Any, AsyncIterable, Sequence, get_origin, get_type_hints
+from collections.abc import AsyncIterable, Sequence
+from typing import Any, get_origin, get_type_hints
 from unittest import mock
 
 

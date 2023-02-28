@@ -1,6 +1,7 @@
 import logging
+from collections.abc import AsyncIterator
 from functools import cached_property as ft_cached_property
-from typing import Any, AsyncIterator
+from typing import Any
 
 from .base import APIClient, NextPageParams
 
