@@ -27,7 +27,7 @@ const { isLoading, isError, data, error } = useRulesQuery();
         <h1 class="fw-bold display-5">Notifications</h1>
         <p class="col-md-8 fs-4">
           Centrally managed preferences for Fedora Infrastructure notifications
-          to your inbox, irc client, and mobile device.
+          to your inbox, chat client, and mobile device.
         </p>
       </div>
     </div>
