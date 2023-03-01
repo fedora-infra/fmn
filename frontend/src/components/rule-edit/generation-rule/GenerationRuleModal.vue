@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { GenerationRule, NewRule } from "@/api/types";
+import type { GenerationRule } from "@/api/types";
+// import type { GenerationRule, RulePreview } from "@/api/types";
 import {
   CModal,
   CModalBody,
@@ -25,6 +26,9 @@ const emit = defineEmits<{
 
 const node = ref<{ node: FormKitNode } | null>(null);
 const previzData = computed(() => {
+  // Disable this feature for now (TODO)
+  return null;
+  /*
   if (!node.value) {
     return null;
   }
@@ -32,14 +36,15 @@ const previzData = computed(() => {
   if (!root || !root.context) {
     return null;
   }
-  const result: NewRule = {
-    name: root.context._value.name as string,
+  const result: RulePreview = {
+    name: "preview",
     disabled: false,
     tracking_rule: root.context._value
-      .tracking_rule as NewRule["tracking_rule"],
+      .tracking_rule as RulePreview["tracking_rule"],
     generation_rules: [node.value.node.value as GenerationRule],
   };
   return result;
+  */
 });
 
 const handleSubmit = async (data: GenerationRule) => {
