@@ -9,6 +9,13 @@ from fmn.messages.rule import RuleUpdateV1
 from .base import BaseTestAPIV1Handler
 
 
+@pytest.fixture
+def publish(mocker):
+    return mocker.patch(
+        "fmn.api.handlers.admin.publish", side_effect=lambda message: message.validate()
+    )
+
+
 class TestAdmin(BaseTestAPIV1Handler):
     handler_prefix = "/admin"
 
@@ -55,7 +62,6 @@ class TestAdmin(BaseTestAPIV1Handler):
             "generated_last_week": 0,
         }
 
-    @mock.patch("fmn.api.handlers.admin.publish")
     def test_reenable_rule(self, publish, client, api_identity, db_rule, db_rule_disabled):
         api_identity.admin = True
 
@@ -86,7 +92,6 @@ class TestAdmin(BaseTestAPIV1Handler):
         )
         publish.assert_awaited_once_with(success_message)
 
-    @mock.patch("fmn.api.handlers.admin.publish")
     async def test_disable_rule(self, publish, client, api_identity, db_rule):
         api_identity.admin = True
 

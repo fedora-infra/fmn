@@ -48,8 +48,8 @@ async def patch_rule(
 
     message = RuleUpdateV1(
         body={
-            "rule": api_models.Rule.from_orm(rule_db),
-            "user": api_models.User.from_orm(rule_db.user),
+            "rule": api_models.Rule.from_orm(rule_db).dict(),
+            "user": api_models.User.from_orm(rule_db.user).dict(),
         }
     )
     await publish(message)

@@ -15,6 +15,13 @@ from fmn.messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
 from .base import BaseTestAPIV1Handler
 
 
+@pytest.fixture
+def publish(mocker):
+    return mocker.patch(
+        "fmn.api.handlers.users.publish", side_effect=lambda message: message.validate()
+    )
+
+
 class TestUserHandler(BaseTestAPIV1Handler):
     handler_prefix = "/users"
 
@@ -224,7 +231,6 @@ class TestUserHandler(BaseTestAPIV1Handler):
             "wrong-user",
         ),
     )
-    @mock.patch("fmn.api.handlers.users.publish")
     async def test_edit_user_rule(self, publish, testcase, client, api_identity, db_rule):
         username = api_identity.name
         if testcase == "wrong-user":
@@ -288,7 +294,6 @@ class TestUserHandler(BaseTestAPIV1Handler):
                 assert isinstance(response.json()["detail"], str)
 
     @pytest.mark.parametrize("testcase", ("happy-path", "wrong-user"))
-    @mock.patch("fmn.api.handlers.users.publish")
     async def test_delete_user_rule(
         self, publish, testcase, client, api_identity, db_rule, db_async_session
     ):
@@ -316,7 +321,6 @@ class TestUserHandler(BaseTestAPIV1Handler):
             assert isinstance(response.json()["detail"], str)
 
     @pytest.mark.parametrize("testcase", ("success", "wrong-user"))
-    @mock.patch("fmn.api.handlers.users.publish")
     async def test_create_user_rule(
         self, publish, testcase, client, api_identity, db_user, db_rule
     ):
