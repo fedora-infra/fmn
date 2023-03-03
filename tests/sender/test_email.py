@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
 
-from aiosmtplib import SMTP
+from aiosmtplib import SMTP, SMTPServerDisconnected
 
 from fmn.sender.email import EmailHandler
 
@@ -36,3 +36,17 @@ async def test_email_handle():
     assert sent["Subject"] == "Testing"
     assert sent.get_body().get_content() == "This is a test\n"
     assert sent.get_content_type() == "text/plain"
+
+
+async def test_email_disconnected():
+    smtp = MagicMock(spec=SMTP)
+    handler = EmailHandler({"from": "FMN <fmn@example.com>"})
+    handler._smtp = smtp
+    smtp.send_message.side_effect = [SMTPServerDisconnected("Nope!"), lambda m: None]
+
+    await handler.handle(
+        {"headers": {"To": "dest@example.com", "Subject": "Testing"}, "body": "This is a test"}
+    )
+
+    assert smtp.send_message.call_count == 2
+    smtp.connect.assert_called_once_with()

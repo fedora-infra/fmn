@@ -1,7 +1,7 @@
 import logging
 from email.message import EmailMessage
 
-from aiosmtplib import SMTP
+from aiosmtplib import SMTP, SMTPServerDisconnected
 
 from .handler import Handler
 
@@ -26,4 +26,9 @@ class EmailHandler(Handler):
             notif[name] = value
         notif.set_content(message["body"])
         log.info("Sending email to %s with subject %s", notif["To"], notif["Subject"])
-        await self._smtp.send_message(notif)
+        try:
+            await self._smtp.send_message(notif)
+        except SMTPServerDisconnected:
+            # Reconnect
+            await self._smtp.connect()
+            await self._smtp.send_message(notif)
