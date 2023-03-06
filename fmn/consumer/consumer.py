@@ -6,6 +6,7 @@ from aio_pika.exceptions import AMQPConnectionError
 from fedora_messaging import message
 from fedora_messaging.config import conf as fm_config
 from fedora_messaging.exceptions import Nack
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..cache import configure_cache
 from ..cache.rules import RulesCache
@@ -36,8 +37,6 @@ class Consumer:
     async def setup(self):
         # Connect to the database
         await init_async_model()
-        self.db = async_session_maker()
-        self._rules_cache.db = self.db
         # Start the connection to RabbitMQ's FMN vhost
         await self.send_queue.connect()
         # Caching and requesting
@@ -55,15 +54,19 @@ class Consumer:
 
     async def handle_or_rollback(self, message: message.Message):
         await self._ready
-        try:
-            await self.handle(message)
-        except Exception:
-            await self.db.rollback()
-            raise
-        else:
-            await self.db.commit()
+        # Get a database session
+        async with async_session_maker() as db:
+            self._rules_cache.db = db
+            # Process message
+            try:
+                await self._handle(message, db)
+            except Exception:
+                await db.rollback()
+                raise
+            else:
+                await db.commit()
 
-    async def handle(self, message: message.Message):
+    async def _handle(self, message: message.Message, db: AsyncSession):
         await self.refresh_cache_if_needed(message)
         if not await self.is_tracked(message):
             log.debug("Message %s is not tracked", message.id)
@@ -76,8 +79,8 @@ class Consumer:
             async for notification in rule.handle(message, self._requester):
                 await self._send(notification, message)
                 # Record that the rule generated a notification
-                self.db.add(Generated(rule=rule, count=1))
-                await self.db.commit()
+                db.add(Generated(rule=rule, count=1))
+                await db.commit()
 
     async def _send(self, notification, from_msg):
         log.debug(

@@ -27,7 +27,7 @@ class RulesCache:
     @cache.locked(key="rules", prefix="v1", ttl="1h")
     async def _get_rules(self):
         if self.db is None:
-            raise RuntimeError("You must use set the db attribute first.")
+            raise RuntimeError("You must set the db attribute first.")
         log.debug("Building the rules cache")
         result = await self.db.execute(Rule.select_related().filter_by(disabled=False))
         log.debug("Built the rules cache")
