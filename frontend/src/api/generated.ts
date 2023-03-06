@@ -51,10 +51,6 @@ export interface paths {
     /** Get Artifacts */
     get: operations["get_artifacts_api_v1_artifacts_get"];
   };
-  "/api/v1/rule-preview": {
-    /** Preview Rule */
-    post: operations["preview_rule_api_v1_rule_preview_post"];
-  };
   "/api/v1/healthz/live": {
     /** Liveness Check */
     get: operations["liveness_check_api_v1_healthz_live_get"];
@@ -165,17 +161,6 @@ export interface components {
       destinations: (components["schemas"]["Destination"])[];
       filters: components["schemas"]["Filters"];
     };
-    /** GenerationRulePreview */
-    GenerationRulePreview: {
-      /** Id */
-      id?: number;
-      /**
-       * Destinations 
-       * @default []
-       */
-      destinations?: (components["schemas"]["Destination"])[];
-      filters: components["schemas"]["Filters"];
-    };
     /** HTTPValidationError */
     HTTPValidationError: {
       /** Detail */
@@ -248,36 +233,12 @@ export interface components {
       params?: string;
     };
     /** Notification */
-    Notification: components["schemas"]["EmailNotification"] | components["schemas"]["IRCNotification"] | components["schemas"]["MatrixNotification"] | components["schemas"]["PreviewNotification"];
+    Notification: components["schemas"]["EmailNotification"] | components["schemas"]["IRCNotification"] | components["schemas"]["MatrixNotification"];
     /** Option[Artifact] */
     Option_Artifact_: {
       /** Label */
       label: string;
       value: components["schemas"]["Artifact"];
-    };
-    /** PreviewNotification */
-    PreviewNotification: {
-      /**
-       * Protocol 
-       * @enum {string}
-       */
-      protocol: "preview";
-      content: components["schemas"]["PreviewNotificationContent"];
-    };
-    /** PreviewNotificationContent */
-    PreviewNotificationContent: {
-      /** Date */
-      date: string;
-      /** Topic */
-      topic: string;
-      /** Summary */
-      summary: string;
-      /** Priority */
-      priority: number;
-      /** Application */
-      application: string;
-      /** Author */
-      author?: string;
     };
     /** Rule */
     Rule: {
@@ -305,24 +266,6 @@ export interface components {
     RulePatch: {
       /** Disabled */
       disabled?: boolean;
-    };
-    /** RulePreview */
-    RulePreview: {
-      /**
-       * Name 
-       * @default preview 
-       * @enum {string}
-       */
-      name?: "preview";
-      /**
-       * Disabled 
-       * @default false
-       */
-      disabled?: boolean;
-      /** Tracking Rule */
-      tracking_rule: components["schemas"]["ListParamTrackingRule"] | components["schemas"]["NoParamTrackingRule"] | components["schemas"]["ArtifactsFollowedTrackingRule"];
-      /** Generation Rules */
-      generation_rules: (components["schemas"]["GenerationRulePreview"])[];
     };
     /** User */
     User: {
@@ -627,28 +570,6 @@ export interface operations {
       200: {
         content: {
           "application/json": (components["schemas"]["ArtifactOptionsGroup"])[];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  preview_rule_api_v1_rule_preview_post: {
-    /** Preview Rule */
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["RulePreview"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        content: {
-          "application/json": (components["schemas"]["Notification"])[];
         };
       };
       /** @description Validation Error */

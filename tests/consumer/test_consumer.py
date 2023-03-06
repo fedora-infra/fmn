@@ -46,7 +46,6 @@ async def test_consumer_init(mocker, mocked_cache, mocked_requester_class, mocke
         {
             "fasjson_url": "https://fasjson.fedoraproject.org",
             "distgit_url": "https://src.fedoraproject.org",
-            "datagrepper_url": "https://apps.fedoraproject.org/datagrepper/",
         }
     )
     mocked_send_queue_class.assert_called_once_with("SEND_QUEUE_CONFIG")

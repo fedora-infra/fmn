@@ -38,24 +38,9 @@ class MatrixNotification(BaseModel):
     content: MatrixNotificationContent
 
 
-class PreviewNotificationContent(BaseModel):
-    date: str
-    topic: str
-    summary: str
-    priority: int
-    application: str
-    author: str | None
-
-
-class PreviewNotification(BaseModel):
-    protocol: Literal["preview"]
-    content: PreviewNotificationContent
-
-
 class Notification(BaseModel):
     __root__: Annotated[
-        EmailNotification | IRCNotification | MatrixNotification | PreviewNotification,
-        Field(discriminator="protocol"),
+        EmailNotification | IRCNotification | MatrixNotification, Field(discriminator="protocol")
     ]
 
     def __getattr__(self, attr):
