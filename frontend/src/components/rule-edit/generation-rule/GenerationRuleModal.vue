@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { GenerationRule } from "@/api/types";
-// import type { GenerationRule, RulePreview } from "@/api/types";
 import {
   CModal,
   CModalBody,
@@ -8,10 +7,9 @@ import {
   CModalTitle,
 } from "@coreui/bootstrap-vue";
 import type { FormKitNode } from "@formkit/core";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import DestinationList from "./DestinationList.vue";
 import FilterList from "./FilterList.vue";
-import NotificationPreview from "./NotificationPreview.vue";
 
 const props = defineProps<{
   visible: boolean;
@@ -25,27 +23,6 @@ const emit = defineEmits<{
 }>();
 
 const node = ref<{ node: FormKitNode } | null>(null);
-const previzData = computed(() => {
-  // Disable this feature for now (TODO)
-  return null;
-  /*
-  if (!node.value) {
-    return null;
-  }
-  const root = node.value.node.at("$root");
-  if (!root || !root.context) {
-    return null;
-  }
-  const result: RulePreview = {
-    name: "preview",
-    disabled: false,
-    tracking_rule: root.context._value
-      .tracking_rule as RulePreview["tracking_rule"],
-    generation_rules: [node.value.node.value as GenerationRule],
-  };
-  return result;
-  */
-});
 
 const handleSubmit = async (data: GenerationRule) => {
   emit("submit", data);
@@ -83,7 +60,6 @@ const handleClose = async () => {
           }}</FormKit>
         </div>
       </FormKit>
-      <NotificationPreview v-if="previzData" :data="previzData" />
     </CModalBody>
   </CModal>
 </template>

@@ -102,15 +102,6 @@ class Rule(NewRule):
     generated_last_week: int = 0
 
 
-class GenerationRulePreview(GenerationRule):
-    destinations: list[Destination] = []
-
-
-class RulePreview(NewRule):
-    name: Literal["preview"] = "preview"
-    generation_rules: list[GenerationRulePreview]
-
-
 class RulePatch(BaseModel):
     disabled: bool | None = None
 

@@ -44,14 +44,5 @@ class Destination(Base):
                 "to": self.address,
                 "message": message.summary,
             }
-        elif self.protocol == "preview":
-            return {
-                "date": message._headers.get("sent-at"),
-                "topic": message.topic,
-                "summary": message.summary,
-                "priority": message.priority,
-                "application": message.app_name,
-                "author": message.agent_name,
-            }
         else:
             raise ValueError(f"Unknown destination protocol: {self.protocol}")
