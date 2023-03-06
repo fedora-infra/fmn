@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { useUserStore } from "@/stores/user";
+
 const api_docs_url = import.meta.env.VITE_API_URL + "/docs";
+
+const userStore = useUserStore();
 </script>
 
 <template>
@@ -7,10 +11,22 @@ const api_docs_url = import.meta.env.VITE_API_URL + "/docs";
     <div class="container">
       <div class="row justify-content-center">
         <div class="col text-center">
-          <a :href="api_docs_url">FMN API Documentation</a>
+          Powered by Fedora Message Notifications (FMN)
         </div>
       </div>
       <div class="row justify-content-center">
+        <div class="col text-center">
+          <a href="https://github.com/fedora-infra/fmn/issues/new"
+            >Report Issue</a
+          >
+          <template v-if="userStore.isAdmin">
+            | <a :href="api_docs_url">FMN API Documentation</a>
+          </template>
+        </div>
+      </div>
+      <div
+        class="row justify-content-center border-top border-secondary mt-4 pt-3 text-center"
+      >
         <div class="col-sm-3 col-4 mt-3">
           <div>
             <dl>
@@ -73,7 +89,7 @@ const api_docs_url = import.meta.env.VITE_API_URL + "/docs";
         </div>
       </div>
       <div class="row">
-        <div class="col-12 text-center">
+        <div class="col-12 text-center mt-3">
           <p>
             Fedora is sponsored by Red Hat.
             <a
@@ -82,14 +98,14 @@ const api_docs_url = import.meta.env.VITE_API_URL + "/docs";
             >
           </p>
           <div class="py-3">
-            <a href="https://www.redhat.com/"
+            <a class="border-0" href="https://www.redhat.com/"
               ><img
                 class="rh-logo"
                 src="@/assets/redhat-logo.png"
                 alt="Red Hat Logo"
             /></a>
           </div>
-          <p>© 2022 Red Hat, Inc. and others.</p>
+          <p>© 2023 Red Hat, Inc. and others.</p>
         </div>
       </div>
     </div>
@@ -106,10 +122,10 @@ body {
   bottom: 0;
   position: absolute;
   width: 100%;
-  height: 22rem;
+  height: 29rem;
 }
 
 .container.main {
-  padding-bottom: 25rem;
+  padding-bottom: 32rem;
 }
 </style>
