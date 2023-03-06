@@ -2,9 +2,11 @@ from contextlib import nullcontext
 from unittest import mock
 
 import pytest
+from sqlalchemy import inspect
 
 from fmn.core.config import get_settings
 from fmn.database import setup
+from fmn.database.main import metadata
 
 
 @pytest.mark.parametrize("db_empty", (True, False))
@@ -45,3 +47,20 @@ def test_setup_db_schema(get_sync_engine, inspect, metadata, Config, stamp, db_e
         engine.begin.assert_not_called()
         metadata.create_all.assert_not_called()
         Config.assert_not_called()
+
+
+def test_setup_db_schema_with_session(db_sync_session, db_sync_engine):
+    metadata.drop_all(bind=db_sync_engine)
+
+    setup.setup_db_schema(db_sync_session)
+
+    inspection_result = inspect(db_sync_engine)
+    assert list(sorted(inspection_result.get_table_names())) == [
+        "destinations",
+        "filters",
+        "generated",
+        "generation_rules",
+        "rules",
+        "tracking_rules",
+        "users",
+    ]

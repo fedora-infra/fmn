@@ -11,7 +11,6 @@ from fmn.cache.tracked import Tracked, TrackedCache
 from fmn.consumer.consumer import Consumer
 from fmn.core import config
 from fmn.database import model
-from fmn.database.setup import setup_db_schema
 from fmn.rules.notification import Notification
 
 
@@ -62,9 +61,9 @@ def test_consumer_loop_not_running(
 ):
     c = Consumer()
     message = make_mocked_message(topic="dummy.topic", body={"foo": "bar"})
-    handle = mocker.patch.object(c, "handle")
+    handle = mocker.patch.object(c, "_handle")
     c(message)
-    handle.assert_called_once_with(message)
+    handle.assert_called_once()
 
 
 async def test_consumer_call_not_tracked(
@@ -74,19 +73,30 @@ async def test_consumer_call_not_tracked(
     mocked_send_queue_class,
     make_mocked_message,
 ):
+    sessionmaker = AsyncMock()
+    db = AsyncMock()
+    mocker.patch("fmn.consumer.consumer.async_session_maker", return_value=sessionmaker)
+    sessionmaker.__aenter__ = AsyncMock(name="sessionmakercontextmanager", return_value=db)
+
     c = Consumer()
     await c._ready
-    commit_spy = mocker.spy(c.db, "commit")
     message = make_mocked_message(topic="dummy.topic", body={"foo": "bar"})
     await c.handle_or_rollback(message)
+
     mocked_cache.invalidate_on_message.assert_called_with(message)
     c._requester.invalidate_on_message.assert_called_with(message)
     c.send_queue.send.assert_not_called()
-    commit_spy.assert_called_once()
+    db.commit.assert_called_once()
 
 
 async def test_consumer_call_tracked(
-    mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class, make_mocked_message
+    mocker,
+    mocked_cache,
+    mocked_requester_class,
+    mocked_send_queue_class,
+    make_mocked_message,
+    db_async_schema,
+    db_async_session,
 ):
     c = Consumer()
     mocked_cache.get_tracked.return_value = Tracked(
@@ -99,15 +109,15 @@ async def test_consumer_call_tracked(
     )
     await c._ready
 
-    await c.db.run_sync(setup_db_schema)
     user = model.User(name="dummy")
     record = model.Rule(user=user, name="the name")
     tr = model.TrackingRule(rule=record, name="artifacts-owned", params=["dummy"])
     gr = model.GenerationRule(rule=record)
     f = model.Filter(generation_rule=gr, name="my_actions", params=False)
     d = model.Destination(generation_rule=gr, protocol="email", address="dummy@example.com")
-    c.db.add_all([user, record, tr, gr, f, d])
-    await c.db.commit()
+    db_async_session.add_all([user, record, tr, gr, f, d])
+    await db_async_session.commit()
+    c._rules_cache.db = db_async_session
 
     c._requester.distgit.get_project_users = AsyncMock(return_value=["dummy"])
 
@@ -115,7 +125,7 @@ async def test_consumer_call_tracked(
     message = make_mocked_message(
         topic="dummy.topic", body={"packages": ["pkg1"], "agent_name": "dummy"}
     )
-    await c.handle(message)
+    await c._handle(message, db_async_session)
     c.send_queue.send.assert_not_called()
 
     # Should generate a notification
@@ -123,7 +133,7 @@ async def test_consumer_call_tracked(
         topic="dummy.topic",
         body={"packages": ["pkg1"], "agent_name": "someone"},
     )
-    await c.handle(message)
+    await c._handle(message, db_async_session)
 
     c.send_queue.send.assert_called_once()
     n = c.send_queue.send.call_args[0][0]
@@ -133,12 +143,12 @@ async def test_consumer_call_tracked(
         "headers": {"Subject": "Message on dummy.topic", "To": "dummy@example.com"},
     }
 
-    result = await c.db.execute(select(model.Generated))
+    result = await db_async_session.execute(select(model.Generated))
     generated = list(result.scalars())
     assert len(generated) == 1
     assert generated[0].count == 1
 
-    await c.db.close()
+    await db_async_session.close()
 
 
 async def test_consumer_init_settings_file(
@@ -148,7 +158,6 @@ async def test_consumer_init_settings_file(
     c = Consumer()
     assert config._settings_file == "/some/where/fmn.cfg"
     await c._ready
-    await c.db.close()
 
 
 async def test_consumer_call_failure(
@@ -158,16 +167,20 @@ async def test_consumer_call_failure(
     mocked_send_queue_class,
     make_mocked_message,
 ):
+    sessionmaker = AsyncMock()
+    db = AsyncMock()
+    mocker.patch("fmn.consumer.consumer.async_session_maker", return_value=sessionmaker)
+    sessionmaker.__aenter__ = AsyncMock(name="sessionmakercontextmanager", return_value=db)
+
     c = Consumer()
     await c._ready
-    await c.db.close()
-    c.db = Mock(name="db")
-    c.db.rollback = AsyncMock()
     mocked_cache.get_tracked.side_effect = ValueError
     message = make_mocked_message(topic="dummy.topic", body={})
+
     with pytest.raises(ValueError):
         await c.handle_or_rollback(message)
-    c.db.rollback.assert_called_once()
+
+    db.rollback.assert_called_once()
     c.send_queue.send.assert_not_called()
 
 
@@ -202,7 +215,7 @@ async def test_consumer_deprecated_schema(
         body={"packages": ["pkg1"]},
     )
     message.__class__.deprecated = True
-    await c.handle(message)
+    await c._handle(message, Mock())
     c._rules_cache.get_rules.assert_not_called()
 
 
@@ -236,7 +249,7 @@ async def test_consumer_in_threadpool(
     # removed.
     loop = asyncio.get_event_loop()
     c = Consumer()
-    handle = mocker.patch.object(c, "handle")
+    handle = mocker.patch.object(c, "_handle")
     message = make_mocked_message(topic="dummy.topic", body={"foo": "bar"})
     await loop.run_in_executor(None, c, message)
-    handle.assert_called_once_with(message)
+    handle.assert_called_once()
