@@ -87,3 +87,9 @@ jobs:
           pushd frontend/
           npm run test:unit -- run
           popd
+
+      - name: run check-unused
+        run: |
+          pushd frontend/
+          npm run check-unused
+          popd
