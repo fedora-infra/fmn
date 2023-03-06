@@ -10,6 +10,7 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "lint-check": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --max-warnings=0 --ignore-path .gitignore",
+    "check-unused": "check-unused-comp .",
     "build:staging": "vite build --mode staging"
   },
   "dependencies": {
@@ -33,7 +34,8 @@
     "vue": "^3.2.37",
     "vue-i18n": "^9.2.2",
     "vue-query": "^1.25.2",
-    "vue-router": "^4.1.2"
+    "vue-router": "^4.1.2",
+    "vue-unused-components-checker": "^1.1.2"
   },
   "devDependencies": {
     "@pinia/testing": "^0.0.13 || ^0.0.14 || ^0.0.15",
