@@ -26,23 +26,19 @@ class Destination(Base):
     address = Column(UnicodeText, nullable=False)
 
     def generate(self, message: "Message") -> "Notification.content":
+        app_name = f"[{message.app_name}] " if message.app_name else ""
+        url = message.url if message.url else ""
         if self.protocol == "email":
             return {
                 "headers": {
                     "To": self.address,
-                    "Subject": message.summary,
+                    "Subject": f"{app_name}{message.summary}",
                 },
-                "body": str(message),
+                "body": f"{str(message)}\n{url}",
             }
         elif self.protocol == "irc":
-            return {
-                "to": self.address,
-                "message": message.summary,
-            }
+            return {"to": self.address, "message": f"{app_name}{message.summary} {url}"}
         elif self.protocol == "matrix":
-            return {
-                "to": self.address,
-                "message": message.summary,
-            }
+            return {"to": self.address, "message": f"{app_name}{message.summary} {url}"}
         else:
             raise ValueError(f"Unknown destination protocol: {self.protocol}")

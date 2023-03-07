@@ -11,7 +11,11 @@ class Message(message.Message):
 
     @property
     def app_name(self):
-        return self.body["app"]
+        return self.body.get("app")
+
+    @property
+    def url(self):
+        return self.body.get("url")
 
     @property
     def usernames(self):

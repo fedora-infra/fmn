@@ -122,7 +122,13 @@ async def test_consumer_call_tracked(
 
     # Filtered out because of my_actions
     message = make_mocked_message(
-        topic="dummy.topic", body={"packages": ["pkg1"], "agent_name": "dummy"}
+        topic="dummy.topic",
+        body={
+            "packages": ["pkg1"],
+            "agent_name": "dummy",
+            "app": "dummy",
+            "url": "https://dummy.org/dummylink",
+        },
     )
     await c._handle(message, db_async_session)
     c.send_queue.send.assert_not_called()
@@ -138,7 +144,7 @@ async def test_consumer_call_tracked(
     n = c.send_queue.send.call_args[0][0]
     assert n.protocol == "email"
     assert n.content == {
-        "body": "Body of message on dummy.topic",
+        "body": "Body of message on dummy.topic\n",
         "headers": {"Subject": "Message on dummy.topic", "To": "dummy@example.com"},
     }
 
