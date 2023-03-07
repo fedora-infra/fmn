@@ -175,3 +175,18 @@ class TestFASJSONAsyncProxy(BaseTestAsyncProxy):
 
             if "with-exceptions" in testcase:
                 assert "Deleting 4 cache entries yielded 1 exception(s):" in caplog.text
+
+
+@mock.patch("fmn.backends.fasjson.get_settings")
+def test_get_fasjson_proxy(get_settings):
+    settings = mock.Mock()
+    settings.services.fasjson_url = "http://foo"
+    get_settings.return_value = settings
+
+    proxy = fasjson.get_fasjson_proxy()
+    assert str(proxy.client.base_url).rstrip("/") == "http://foo/v1"
+
+    cached_proxy = fasjson.get_fasjson_proxy()
+    assert cached_proxy is proxy
+
+    get_settings.assert_called_once_with()

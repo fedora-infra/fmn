@@ -7,7 +7,7 @@ import fastapi
 import httpx
 import pytest
 
-from fmn.backends import PagureAsyncProxy, PagureRole
+from fmn.backends import PagureAsyncProxy, PagureRole, get_distgit_proxy
 from fmn.cache.util import get_pattern_for_cached_calls
 
 from .base import BaseTestAsyncProxy
@@ -456,3 +456,18 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
 
             if "with-exceptions" in testcase:
                 assert "Deleting 4 cache entries yielded 1 exception(s):" in caplog.text
+
+
+@mock.patch("fmn.backends.pagure.get_settings")
+def test_get_distgit_proxy(get_settings):
+    settings = mock.Mock()
+    settings.services.distgit_url = "http://foo"
+    get_settings.return_value = settings
+
+    proxy = get_distgit_proxy()
+    assert str(proxy.client.base_url).rstrip("/") == "http://foo/api/0"
+
+    cached_proxy = get_distgit_proxy()
+    assert cached_proxy is proxy
+
+    get_settings.assert_called_once_with()

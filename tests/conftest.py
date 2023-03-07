@@ -12,8 +12,8 @@ from fastapi import status
 from fastapi.testclient import TestClient
 from fedora_messaging import message
 
-from fmn.api import distgit, main
-from fmn.backends import FASJSONAsyncProxy
+from fmn.api import main
+from fmn.backends import FASJSONAsyncProxy, get_distgit_proxy, get_fasjson_proxy
 from fmn.cache.util import cache_arg
 from fmn.core.config import get_settings
 from fmn.database.main import (
@@ -41,8 +41,10 @@ JSONSCHEMA_HYPERSCHEMA_JSON = TESTDATA / "jsonschema_hyperschema.json"
 
 
 @pytest.fixture(autouse=True)
-def ensure_fresh_settings():
+def clear_caches():
     get_settings.cache_clear()
+    get_distgit_proxy.cache_clear()
+    get_fasjson_proxy.cache_clear()
 
 
 def pytest_configure(config):
@@ -98,8 +100,7 @@ def distgit_url() -> str:
 
 @pytest.fixture
 def distgit_proxy():
-    settings = get_settings()
-    return distgit.get_distgit_proxy(settings)
+    return get_distgit_proxy()
 
 
 @pytest.fixture

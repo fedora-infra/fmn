@@ -3,6 +3,7 @@ import bisect
 import logging
 import re
 from enum import IntFlag, auto
+from functools import cache as ft_cache
 from functools import cached_property as ft_cached_property
 from itertools import chain
 from typing import TYPE_CHECKING, Any
@@ -11,6 +12,7 @@ from cashews import cache
 from httpx import URL, QueryParams
 
 from ..cache.util import cache_ttl, get_pattern_for_cached_calls
+from ..core.config import get_settings
 from .base import APIClient, NextPageParams, handle_http_error
 
 if TYPE_CHECKING:
@@ -271,3 +273,8 @@ class PagureAsyncProxy(APIClient):
             )
             for exc in exceptions_in_results:
                 log.warning("\t%r", exc)
+
+
+@ft_cache
+def get_distgit_proxy() -> PagureAsyncProxy:
+    return PagureAsyncProxy(get_settings().services.distgit_url)
