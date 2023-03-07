@@ -90,7 +90,7 @@ greenlet = "^1.1.2 || ^2.0.0"
 toml = "^0.10.2"
 pytest-mock = "^3.8.2"
 respx = "^0.20.0"
-ruff = "^0.0.253"
+ruff = "^0.0.253 || ^0.0.254"
 
 [tool.poetry.extras]
 api = [
