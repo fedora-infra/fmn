@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import re
+from functools import cache as ft_cache
 from functools import cached_property as ft_cached_property
 from itertools import chain
 from typing import TYPE_CHECKING, Any
@@ -9,6 +10,7 @@ from cashews import cache
 from httpx_gssapi import HTTPSPNEGOAuth
 
 from ..cache.util import cache_ttl, get_pattern_for_cached_calls
+from ..core.config import get_settings
 from .base import APIClient, NextPageParams, handle_http_error
 
 if TYPE_CHECKING:
@@ -105,3 +107,8 @@ class FASJSONAsyncProxy(APIClient):
             )
             for exc in exceptions_in_results:
                 log.warning("\t%r", exc)
+
+
+@ft_cache
+def get_fasjson_proxy() -> FASJSONAsyncProxy:
+    return FASJSONAsyncProxy(get_settings().services.fasjson_url)

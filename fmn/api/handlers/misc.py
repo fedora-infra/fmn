@@ -4,12 +4,11 @@ from importlib import metadata
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ...backends import PagureAsyncProxy
+from ...backends import PagureAsyncProxy, get_distgit_proxy
 from ...core.constants import ArtifactType
 from ...database.migrations.main import alembic_migration
 from .. import api_models
 from ..database import gen_db_session
-from ..distgit import get_distgit_proxy
 
 log = logging.getLogger(__name__)
 

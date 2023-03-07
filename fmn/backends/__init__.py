@@ -1,2 +1,2 @@
-from .fasjson import FASJSONAsyncProxy
-from .pagure import PagureAsyncProxy, PagureRole
+from .fasjson import FASJSONAsyncProxy, get_fasjson_proxy
+from .pagure import PagureAsyncProxy, PagureRole, get_distgit_proxy

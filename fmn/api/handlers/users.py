@@ -6,14 +6,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ...backends import FASJSONAsyncProxy
+from ...backends import FASJSONAsyncProxy, get_fasjson_proxy
 from ...core.constants import DEFAULT_MATRIX_DOMAIN
 from ...database.model import Destination, Filter, Generated, GenerationRule, Rule, User
 from ...messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
 from .. import api_models
 from ..auth import Identity, get_identity, get_identity_optional
 from ..database import gen_db_session
-from ..fasjson import get_fasjson_proxy
 from ..messaging import publish
 from .utils import db_rule_from_api_rule
 
