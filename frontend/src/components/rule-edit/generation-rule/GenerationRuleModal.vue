@@ -33,13 +33,7 @@ const handleClose = async () => {
 </script>
 
 <template>
-  <CModal
-    :visible="props.visible"
-    size="lg"
-    scrollable
-    backdrop="static"
-    @close="handleClose"
-  >
+  <CModal size="lg" scrollable :visible="props.visible" @close="handleClose">
     <!-- Catch and prevent the click event on the close button so that it does not submit the form -->
     <CModalHeader @click.prevent="">
       <CModalTitle>{{ props.title }}</CModalTitle>
