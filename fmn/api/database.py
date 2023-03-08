@@ -9,7 +9,7 @@ async def gen_db_session() -> Iterator[AsyncSession]:
     """Generate database sessions for FastAPI request handlers.
 
     This lets users declare the session as a dependency in request handler
-    functions, e.g.:
+    functions, e.g.::
 
         @app.get("/path")
         def process_path(db_session: AsyncSession = Depends(gen_db_session)):

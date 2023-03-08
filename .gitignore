@@ -17,3 +17,7 @@ __pycache__/
 /fmn.cfg
 /consumer.toml
 /sender.toml
+
+# Sphinx documentation
+docs/_build/
+docs/_source/
