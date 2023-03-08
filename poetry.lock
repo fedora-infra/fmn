@@ -1951,14 +1951,14 @@ testing = ["flake8 (<5)", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-chec
 
 [[package]]
 name = "koji-fedoramessaging-messages"
-version = "1.0.4"
+version = "1.0.5"
 description = "A schema package for messages sent by the koji-fedoramessaging plugin"
 category = "main"
 optional = true
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "koji-fedoramessaging-messages-1.0.4.tar.gz", hash = "sha256:5af7975522e48a6930061b11991c11a2d43d016be7b4243e2bc9743c8bd12bbe"},
-    {file = "koji_fedoramessaging_messages-1.0.4-py3-none-any.whl", hash = "sha256:aad48f4c3bb77633f966ac2f8b0c7a1cba8773f876379aaae2d033f8d832bd6a"},
+    {file = "koji-fedoramessaging-messages-1.0.5.tar.gz", hash = "sha256:7d804751a48725facbbf6afb2142ab144b0e0ed0d143ea13f31e93074cc23626"},
+    {file = "koji_fedoramessaging_messages-1.0.5-py3-none-any.whl", hash = "sha256:a1ee9403f7085aeb219acd54157bf7a9d175b21fe12c25c64a2e5536d06c1ef1"},
 ]
 
 [package.dependencies]
