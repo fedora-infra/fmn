@@ -64,7 +64,6 @@ html_theme_options = {
     "page_width": "1040px",
     "show_related": True,
     "sidebar_collapse": True,
-    "caption_font_size": "150%",
 }
 
 
@@ -75,6 +74,11 @@ source_suffix = {
     ".rst": "restructuredtext",
     ".md": "markdown",
 }
+
+myst_enable_extensions = [
+    "colon_fence",
+]
+myst_heading_anchors = 3
 
 
 # -- Options for intersphinx extension ---------------------------------------

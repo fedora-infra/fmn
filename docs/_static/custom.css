@@ -1,0 +1,7 @@
+div.sphinxsidebar ul li.toctree-l1 > a {
+    font-size: 130%;
+}
+div.toctree-wrapper ul li.toctree-l1 > a {
+    font-size: 110%;
+}
+
