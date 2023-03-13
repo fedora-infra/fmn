@@ -91,6 +91,7 @@ toml = "^0.10.2"
 pytest-mock = "^3.8.2"
 respx = "^0.20.0"
 ruff = "^0.0.253 || ^0.0.254"
+towncrier = "^22.12.0"
 
 [tool.poetry.extras]
 api = [
@@ -198,3 +199,43 @@ fmn-sender = "fmn.sender.cli:main"
 api = "fmn.api.cli:api"
 database = "fmn.database.cli:database"
 cache = "fmn.cache.cli:cache_cmd"
+
+
+[tool.towncrier]
+directory = "changelog.d"
+filename = "docs/changelog.md"
+start_string = "<!-- towncrier release notes start -->\n"
+underlines = ["", "", ""]
+template = "changelog.d/changelog_template.jinja"
+title_format = "## [{version}](https://github.com/fedora-infra/fmn/tree/{version}) - {project_date}"
+issue_format = "[#{issue}](https://github.com/fedora-infra/fmn/issues/{issue})"
+
+[[tool.towncrier.type]]
+directory = "security"
+name = "Security"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "removed"
+name = "Removed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "deprecated"
+name = "Deprecated"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "added"
+name = "Added"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "changed"
+name = "Changed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "fixed"
+name = "Fixed"
+showcontent = true

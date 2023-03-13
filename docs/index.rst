@@ -21,13 +21,13 @@
    contributing
 
 
-.. Release Notes
+.. Changelog
 
 .. toctree::
    :maxdepth: 2
-   :caption: Release Notes
+   :caption: Changelog
 
-   release_notes
+   changelog.md
 
 
 .. API docs
