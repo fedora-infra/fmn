@@ -206,7 +206,7 @@ async def test_consumer_call_tracked_agent_name(
         topic="dummy.topic", body={"packages": ["pkg1"], "agent_name": "dummy"}
     )
     await c._ready
-    assert (await c.is_tracked(message)) is True
+    assert (await c.is_tracked(message, None)) is True
 
 
 async def test_consumer_deprecated_schema(

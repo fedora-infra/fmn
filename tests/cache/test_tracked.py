@@ -33,18 +33,18 @@ async def test_build_tracked(mocker, requester, db_async_session, rules_cache):
     db_async_session.add_all([rule, tr])
     prime_cache = mocker.patch.object(tr, "prime_cache")
     tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
-    tracked = await tracked_cache.get_tracked()
+    tracked = await tracked_cache.get_tracked(db=db_async_session)
     prime_cache.assert_called_once_with(tracked, requester)
 
 
 @pytest.mark.cashews_cache(enabled=True)
-async def test_get_tracked(mocker, requester):
+async def test_get_tracked(mocker, requester, db_async_session):
     rules_cache = mocker.AsyncMock()
     rules_cache.get_rules.return_value = []
     tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
-    result1 = await tracked_cache.get_tracked()
-    result2 = await tracked_cache.get_tracked()
-    rules_cache.get_rules.assert_called_once_with()
+    result1 = await tracked_cache.get_tracked(db=db_async_session)
+    result2 = await tracked_cache.get_tracked(db=db_async_session)
+    rules_cache.get_rules.assert_called_once_with(db=db_async_session)
     assert result1 == result2
 
 
