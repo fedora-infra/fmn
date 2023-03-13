@@ -1,4 +1,4 @@
-# Contributing to FMN
+# Contributor Guide
 
 You need to be legally allowed to submit any contribution to this project. What this means in detail
 is laid out in the file `DCO.txt` next to this file. The mechanism by which you certify this is
