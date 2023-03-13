@@ -6,12 +6,6 @@ from fmn.cache.rules import RulesCache
 from fmn.database import model
 
 
-async def test_no_db():
-    rc = RulesCache()
-    with pytest.raises(RuntimeError):
-        await rc.get_rules()
-
-
 @pytest.mark.cashews_cache(enabled=True)
 async def test_rules_cache(mocker, db_async_session):
     rc = RulesCache()
@@ -23,14 +17,14 @@ async def test_rules_cache(mocker, db_async_session):
     await db_async_session.commit()
 
     # First call
-    rules = await rc.get_rules()
+    rules = await rc.get_rules(db=db_async_session)
     assert len(rules) == 1
     assert rules[0] in db_async_session
     await db_async_session.commit()
     # Clear the session cache to pretend we've restarted (or we're another instance)
     db_async_session.expunge_all()
     # Call a second time
-    rules = await rc.get_rules()
+    rules = await rc.get_rules(db=db_async_session)
     assert len(rules) == 1
     execute.assert_called_once()
     assert rules[0] in db_async_session
@@ -43,7 +37,7 @@ async def test_rule_disabled(db_async_session):
     rule = model.Rule(user=user, name="the name", disabled=True)
     db_async_session.add_all([user, rule])
     await db_async_session.commit()
-    rules = await rc.get_rules()
+    rules = await rc.get_rules(db=db_async_session)
     assert rules == []
 
 

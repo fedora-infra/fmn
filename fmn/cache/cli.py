@@ -27,8 +27,7 @@ def get_tracked():
         rules_cache = RulesCache()
         tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
         async with async_session_maker() as db:
-            rules_cache.db = db
-            return await tracked_cache.get_tracked(requester)
+            return await tracked_cache.get_tracked(db=db)
 
     result = asyncio.run(_get_tracked())
     pprint(result)

@@ -18,23 +18,18 @@ log = logging.getLogger(__name__)
 class RulesCache:
     """Cache the rules currently in the database."""
 
-    def __init__(self):
-        self.db: "AsyncSession" | None = None
-
     @cache.early(
         key="rules", prefix="v1", ttl=cache_ttl("rules"), early_ttl=cache_early_ttl("rules")
     )
     @cache.locked(key="rules", prefix="v1", ttl="1h")
-    async def _get_rules(self):
-        if self.db is None:
-            raise RuntimeError("You must set the db attribute first.")
+    async def _get_rules(self, db: "AsyncSession"):
         log.debug("Building the rules cache")
-        result = await self.db.execute(Rule.select_related().filter_by(disabled=False))
+        result = await db.execute(Rule.select_related().filter_by(disabled=False))
         log.debug("Built the rules cache")
         return list(result.scalars())
 
-    async def get_rules(self):
-        return [await self.db.merge(r) for r in await self._get_rules()]
+    async def get_rules(self, db: "AsyncSession"):
+        return [await db.merge(r) for r in await self._get_rules(db=db)]
 
     async def invalidate(self):
         log.debug("Invalidating the rules cache")

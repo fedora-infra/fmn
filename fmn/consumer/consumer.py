@@ -56,7 +56,6 @@ class Consumer:
         await self._ready
         # Get a database session
         async with async_session_maker() as db:
-            self._rules_cache.db = db
             # Process message
             try:
                 await self._handle(message, db)
@@ -68,14 +67,14 @@ class Consumer:
 
     async def _handle(self, message: message.Message, db: AsyncSession):
         await self.refresh_cache_if_needed(message)
-        if not await self.is_tracked(message):
+        if not await self.is_tracked(message, db):
             log.debug("Message %s is not tracked", message.id)
             return
         if message.deprecated:
             # The sender will also send the message with the new schema, don't duplicate
             # notifications.
             return
-        for rule in await self._rules_cache.get_rules():
+        for rule in await self._rules_cache.get_rules(db=db):
             async for notification in rule.handle(message, self._requester):
                 await self._send(notification, message)
                 # Record that the rule generated a notification
@@ -97,12 +96,12 @@ class Consumer:
             )
             raise Nack() from e
 
-    async def is_tracked(self, message: message.Message):
+    async def is_tracked(self, message: message.Message, db: "AsyncSession"):
         # This is cache-based and should save us running all the messages through all the rules. The
         # tracked messages will still run though all the rules though, so this could be improved I
         # suppose, maybe by changing the cache datastructure to point each entry in the cache to the
         # rules that produced it.
-        tracked = await self._tracked_cache.get_tracked()
+        tracked = await self._tracked_cache.get_tracked(db=db)
         for msg_attr in ("packages", "containers", "modules", "flatpaks", "usernames"):
             if not set(getattr(message, msg_attr)).isdisjoint(getattr(tracked, msg_attr)):
                 log.debug("Message %s is tracked by %s", message.id, msg_attr)

@@ -11,6 +11,7 @@ from .util import cache_early_ttl, cache_ttl
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
+    from sqlalchemy.ext.asyncio import AsyncSession
 
     from ..rules.requester import Requester
     from .rules import RulesCache
@@ -52,11 +53,11 @@ class TrackedCache:
         key="tracked", prefix="v1", ttl=cache_ttl("tracked"), early_ttl=cache_early_ttl("tracked")
     )
     @cache.locked(key="tracked", prefix="v1", ttl="1h")
-    async def get_tracked(self):
+    async def get_tracked(self, db: "AsyncSession"):
         log.debug("Building the tracked cache")
         before = monotonic()
         tracked = Tracked()
-        for rule in await self._rules_cache.get_rules():
+        for rule in await self._rules_cache.get_rules(db=db):
             await rule.tracking_rule.prime_cache(tracked, self._requester)
         after = monotonic()
         duration = after - before
