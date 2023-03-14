@@ -41,7 +41,7 @@ class TestRule(ModelTestBase):
         result = [n async for n in db_async_obj.handle(message, requester)]
         tr_matches.assert_called_once_with(message, requester)
         assert len(result) == 3
-        assert [n.content.headers["To"] for n in result] == ["n1", "n2", "n3"]
+        assert [n.content.headers.dict()["To"] for n in result] == ["n1", "n2", "n3"]
 
     async def test_handle_no_match(db_async_session, db_async_obj, mocker, make_mocked_message):
         message = make_mocked_message(topic="dummy", body={"foo": "bar"})
