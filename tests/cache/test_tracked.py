@@ -20,19 +20,12 @@ def rule():
     return Rule(id=1, user=User(name="dummy"), tracking_rule=tr, generation_rules=[])
 
 
-@pytest.fixture
-def rules_cache(db_async_session):
-    rules_cache = RulesCache()
-    rules_cache.db = db_async_session
-    return rules_cache
-
-
-async def test_build_tracked(mocker, requester, db_async_session, rules_cache):
+async def test_build_tracked(mocker, requester, db_async_session):
     tr = TrackingRule(id=1, name="artifacts-owned", params={"username": "dummy"})
     rule = Rule(id=1, name="dummy", user=User(name="dummy"), tracking_rule=tr, generation_rules=[])
     db_async_session.add_all([rule, tr])
     prime_cache = mocker.patch.object(tr, "prime_cache")
-    tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
+    tracked_cache = TrackedCache(requester=requester, rules_cache=RulesCache())
     tracked = await tracked_cache.get_tracked(db=db_async_session)
     prime_cache.assert_called_once_with(tracked, requester)
 
@@ -49,9 +42,9 @@ async def test_get_tracked(mocker, requester, db_async_session):
 
 
 @pytest.mark.cashews_cache(enabled=True)
-async def test_invalidate_tracked(mocker, requester, rules_cache):
+async def test_invalidate_tracked(mocker, requester):
     mocker.patch.object(cache, "delete")
-    tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
+    tracked_cache = TrackedCache(requester=requester, rules_cache=RulesCache())
     await tracked_cache.invalidate()
     cache_key = list(get_templates_for_func(tracked_cache.get_tracked))[0]
     cache.delete.assert_called_with(cache_key)
@@ -66,11 +59,9 @@ async def test_invalidate_tracked(mocker, requester, rules_cache):
         ("fmn.rule.delete.v1", True),
     ],
 )
-async def test_invalidate_on_message(
-    mocker, requester, rules_cache, topic, expected, make_mocked_message
-):
+async def test_invalidate_on_message(mocker, requester, topic, expected, make_mocked_message):
     message = make_mocked_message(topic=topic, body={})
-    tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
+    tracked_cache = TrackedCache(requester=requester, rules_cache=RulesCache())
     mocker.patch.object(tracked_cache, "invalidate")
     # # Set an existing value that will be invalidated
     # existing_value = Tracked(packages={"existing"}, usernames={"existing"})

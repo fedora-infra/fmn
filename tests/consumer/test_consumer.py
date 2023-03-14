@@ -116,7 +116,6 @@ async def test_consumer_call_tracked(
     d = model.Destination(generation_rule=gr, protocol="email", address="dummy@example.com")
     db_async_session.add_all([user, record, tr, gr, f, d])
     await db_async_session.commit()
-    c._rules_cache.db = db_async_session
 
     c._requester.distgit.get_project_users = AsyncMock(return_value=["dummy"])
 
