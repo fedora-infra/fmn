@@ -74,12 +74,17 @@ class Consumer:
             # The sender will also send the message with the new schema, don't duplicate
             # notifications.
             return
+
+        notifications = set()
         for rule in await self._rules_cache.get_rules(db=db):
             async for notification in rule.handle(message, self._requester):
-                await self._send(notification, message)
+                notifications.add(notification)
                 # Record that the rule generated a notification
                 db.add(Generated(rule=rule, count=1))
                 await db.commit()
+        # Send the deduplicated notifications
+        for notification in notifications:
+            await self._send(notification, message)
 
     async def _send(self, notification, from_msg):
         log.debug(

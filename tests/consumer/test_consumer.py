@@ -152,8 +152,6 @@ async def test_consumer_call_tracked(
     assert len(generated) == 1
     assert generated[0].count == 1
 
-    await db_async_session.close()
-
 
 async def test_consumer_init_settings_file(
     mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class
@@ -218,7 +216,7 @@ async def test_consumer_deprecated_schema(
         topic="dummy.topic",
         body={"packages": ["pkg1"]},
     )
-    message.__class__.deprecated = True
+    mocker.patch.object(message.__class__, "deprecated", True)
     await c._handle(message, Mock())
     c._rules_cache.get_rules.assert_not_called()
 
@@ -257,3 +255,55 @@ async def test_consumer_in_threadpool(
     message = make_mocked_message(topic="dummy.topic", body={"foo": "bar"})
     await loop.run_in_executor(None, c, message)
     handle.assert_called_once()
+
+
+async def test_consumer_duplicate(
+    mocker,
+    mocked_cache,
+    mocked_requester_class,
+    mocked_send_queue_class,
+    make_mocked_message,
+    db_async_schema,
+    db_async_session,
+):
+    c = Consumer()
+    mocked_cache.get_tracked.return_value = Tracked(
+        packages={"pkg1"},
+        containers=set(),
+        modules=set(),
+        flatpaks=set(),
+        usernames=set(),
+        agent_name=set(),
+    )
+    await c._ready
+
+    # Create two identical rules
+    user = model.User(name="dummy")
+    db_async_session.add(user)
+    for i in range(2):
+        rule = model.Rule(user=user, name=f"Rule {i}")
+        db_async_session.add(rule)
+        rule.tracking_rule = model.TrackingRule(
+            name="artifacts-followed", params=[{"name": "pkg1", "type": "rpms"}]
+        )
+        gr1 = model.GenerationRule()
+        gr1.destinations.append(model.Destination(protocol="email", address="dummy@example.com"))
+        rule.generation_rules.append(gr1)
+
+    await db_async_session.commit()
+
+    # This should generate a single notification
+    message = make_mocked_message(
+        topic="dummy.topic",
+        body={"packages": ["pkg1"], "agent_name": "someone"},
+    )
+    await c._handle(message, db_async_session)
+
+    # Only one notification should have been sent
+    c.send_queue.send.assert_called_once()
+
+    # We still consider that each rule generated a notification, even if only one was sent
+    result = await db_async_session.execute(select(model.Generated))
+    generated = list(result.scalars())
+    assert len(generated) == 2
+    assert sum(g.count for g in generated) == 2

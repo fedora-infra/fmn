@@ -1,44 +1,49 @@
-from typing import Annotated, Literal, TypedDict
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, Field
 
 
-class EmailNotificationHeaders(TypedDict):
+class FrozenModel(BaseModel):
+    class Config:
+        frozen = True
+
+
+class EmailNotificationHeaders(FrozenModel):
     To: str
     Subject: str
 
 
-class EmailNotificationContent(BaseModel):
+class EmailNotificationContent(FrozenModel):
     headers: EmailNotificationHeaders
     body: str
 
 
-class EmailNotification(BaseModel):
+class EmailNotification(FrozenModel):
     protocol: Literal["email"]
     content: EmailNotificationContent
 
 
-class IRCNotificationContent(BaseModel):
+class IRCNotificationContent(FrozenModel):
     to: str
     message: str
 
 
-class IRCNotification(BaseModel):
+class IRCNotification(FrozenModel):
     protocol: Literal["irc"]
     content: IRCNotificationContent
 
 
-class MatrixNotificationContent(BaseModel):
+class MatrixNotificationContent(FrozenModel):
     to: str
     message: str
 
 
-class MatrixNotification(BaseModel):
+class MatrixNotification(FrozenModel):
     protocol: Literal["matrix"]
     content: MatrixNotificationContent
 
 
-class Notification(BaseModel):
+class Notification(FrozenModel):
     __root__: Annotated[
         EmailNotification | IRCNotification | MatrixNotification, Field(discriminator="protocol")
     ]
