@@ -18,7 +18,7 @@ const router = useRouter();
 const { mutateAsync } = useAddRuleMutation();
 
 const trackingRuleName = ref("");
-const value = ref("New Rule 1");
+const value = ref("");
 
 const generationRulesCount = ref(0);
 const formReady = computed(
@@ -61,14 +61,7 @@ const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
   <FormKit type="form" id="new-rule" @submit="handleSubmit" :actions="false">
     <CRow class="mb-2">
       <CCol xs="auto" class="flex-fill">
-        <h4>
-          <FormKit
-            type="text"
-            name="name"
-            v-model="value"
-            input-class="form-control-lg"
-          />
-        </h4>
+        <h4>Create a new Rule</h4>
       </CCol>
       <CCol xs="auto">
         <FormKit
@@ -83,6 +76,15 @@ const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
 
     <CRow>
       <CCol sm="4" class="border-end">
+        <FormKit
+          type="text"
+          name="name"
+          label="Rule Title:"
+          label-class="fw-bold mb-0"
+          v-model="value"
+          placeholder="Optional Rule Title"
+          input-class="form-control"
+        />
         <TrackingRule @selected="handleTrackingRuleSelected" />
       </CCol>
       <CCol>

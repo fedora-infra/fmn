@@ -16,14 +16,20 @@ const props = defineProps<{
 }>();
 
 const tracking_rule_filter = ref("");
-const filteringOptions = computed(() => [
-  ...new Set(
-    (props.rules || [])
-      .map((rule) => rule.tracking_rule.name)
-      .map((name) => TRACKING_RULES.find((tr) => tr.name === name))
-      .filter(isDefined)
-  ),
-]);
+const filteringOptions = computed(() => {
+  const options = [
+    ...new Set(
+      (props.rules || [])
+        .map((rule) => rule.tracking_rule.name)
+        .map((name) => TRACKING_RULES.find((tr) => tr.name === name))
+        .filter(isDefined)
+    ),
+  ];
+  return options.map((rule) => {
+    return { value: rule.name, label: rule.label };
+  });
+});
+
 const rules = computed(() => {
   return [...props.rules].sort(
     (a, b) =>
@@ -34,6 +40,17 @@ const rules = computed(() => {
 </script>
 
 <template>
+  <div class="d-flex justify-content-between mb-3">
+    <h1 class="mb-0">
+      My Rules
+      <span class="badge bg-primary" v-if="rules.length > 0">{{
+        rules.length
+      }}</span>
+    </h1>
+    <router-link to="/rules/new" class="btn btn-primary"
+      >Add a new rule</router-link
+    >
+  </div>
   <CCard v-if="rules.length === 0" class="border bg-light py-5">
     <CCardBody>
       <h2 class="text-center text-muted">No Rules.</h2>
@@ -45,25 +62,20 @@ const rules = computed(() => {
     </CCardBody>
   </CCard>
   <template v-else>
-    <p class="fw-bold">{{ rules.length }} rule(s)</p>
-
     <CListGroup>
-      <CListGroupItem
-        class="d-flex justify-content-between align-items-center bg-light"
-      >
-        <select name="filter_tracking_rules" v-model="tracking_rule_filter">
-          <option value="">All</option>
-          <option
-            v-for="option in filteringOptions"
-            :value="option.name"
-            :key="option.name"
-          >
-            {{ option.label }}
-          </option>
-        </select>
-        <router-link to="/rules/new" class="btn btn-primary">
-          Add a new rule
-        </router-link>
+      <CListGroupItem class="bg-light d-flex align-items-center">
+        <div class="fw-bold text-secondary ms-auto me-2">Filter by:</div>
+        <div style="min-width: 220px">
+          <FormKit
+            type="multiselect"
+            name="filter_tracking_rules"
+            placeholder="Tracking Rule"
+            :msOptions="filteringOptions"
+            :close-on-select="true"
+            :multiple="false"
+            v-model="tracking_rule_filter"
+          />
+        </div>
       </CListGroupItem>
       <RuleListItem
         v-for="rule in rules.filter(
@@ -77,3 +89,5 @@ const rules = computed(() => {
     </CListGroup>
   </template>
 </template>
+
+<style src="@vueform/multiselect/themes/default.css"></style>

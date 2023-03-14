@@ -17,7 +17,6 @@ import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
-import EditableName from "./EditableName.vue";
 import GenerationRuleList from "./rule-edit/generation-rule/GenerationRuleList.vue";
 import TrackingRule from "./rule-edit/tracking-rule/TrackingRule.vue";
 
@@ -99,30 +98,18 @@ const formReady = computed(() => generationRulesCount.value > 0);
     :actions="false"
     :value="props.rule"
   >
-    <CRow class="mb-2 d-flex">
-      <CCol xs="auto" class="flex-grow-1 d-flex align-items-center h3">
-        <FormKit
-          type="checkbox"
-          name="disabled"
-          :on-value="false"
-          :off-value="true"
-        />
-        <h4 class="mb-0 flex-grow-1">
-          <EditableName
-            name="name"
-            button-class="fs-3"
-            input-class="form-control-lg"
-            :value="props.rule.name"
-          />
-        </h4>
+    <CRow class="mb-4 align-items-center">
+      <CCol xs="auto" class="flex-fill">
+        <h3 class="m-0">Editing rule {{ props.rule.id }}</h3>
       </CCol>
-      <CCol xs="auto" class="d-flex align-items-center">
+      <CCol xs="auto">
         <CButtonGroup>
           <CButton
             @click.prevent="handleDelete"
             color="danger"
             variant="outline"
             class="ms-1"
+            type="button"
           >
             <CIcon :icon="cilTrash" /> Delete Rule
           </CButton>
@@ -139,6 +126,22 @@ const formReady = computed(() => generationRulesCount.value > 0);
 
     <CRow>
       <CCol sm="4" class="border-end">
+        <FormKit
+          type="checkbox"
+          name="disabled"
+          label="Rule Enabled?"
+          label-class="fw-bold mt-5"
+          :on-value="false"
+          :off-value="true"
+        />
+        <FormKit
+          type="text"
+          name="name"
+          label="Rule Title:"
+          label-class="fw-bold mb-0"
+          placeholder="Optional Rule Title"
+          input-class="form-control"
+        />
         <TrackingRule />
       </CCol>
       <CCol>
