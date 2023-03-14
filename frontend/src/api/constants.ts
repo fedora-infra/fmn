@@ -9,35 +9,35 @@ export const SEVERITIES = [DEBUG, INFO, WARNING, ERROR];
 export const TRACKING_RULES = [
   {
     name: "artifacts-owned",
-    label: "Artifacts owned by specific users",
-    prefixlabel: "Tracking artifacts owned by the user",
+    label: "Artifacts by users",
+    prefixlabel: "Events related to the artifacts owned by the user",
     description:
       "Messages about artifacts (packages, modules, containers) that are owned by specific users",
   },
   {
     name: "artifacts-group-owned",
-    label: "Artifacts owned by specific groups",
-    prefixlabel: "Tracking artifacts owned by the group",
+    label: "Artifacts by groups",
+    prefixlabel: "Events related to the artifacts owned by the group",
     description:
       "Messages about artifacts (packages, modules, containers) that are owned by specific groups",
   },
   {
     name: "artifacts-followed",
-    label: "Specific Artifacts",
-    prefixlabel: "Tracking artifact",
+    label: "Artifacts",
+    prefixlabel: "Events related to the artifact",
     description:
       "Messages about specific artifacts (packages, modules, containers)",
   },
   {
     name: "related-events",
-    label: "Events referring to me",
+    label: "My Events",
     prefixlabel: "Events referring to me",
     description: "Events referring to me or affecting me",
   },
   {
     name: "users-followed",
-    label: "Users I follow",
+    label: "Started by users",
     prefixlabel: "Events started by the user",
-    description: "Users whose actions I follow",
+    description: "Events started by specific users",
   },
 ];

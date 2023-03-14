@@ -39,8 +39,8 @@ export const config = defaultConfig({
       },
       checkbox: {
         outer: "form-check form-switch",
-        input: "form-check-input",
         label: "form-check-label",
+        input: "form-check-input",
         help: "text-muted",
       },
     }),

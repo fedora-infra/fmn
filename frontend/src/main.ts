@@ -8,6 +8,7 @@ import { config as formkitConfig } from "./forms";
 import i18n from "./i18n";
 import router from "./router";
 import pinia from "./stores";
+import { vctooltip } from "@coreui/bootstrap-vue";
 
 import "@coreui/coreui/dist/css/coreui.min.css";
 import "fedora-bootstrap/dist/fedora-bootstrap.min.css";
@@ -23,5 +24,7 @@ app.use(FormKitPlugin, formkitConfig);
 app.use(i18n);
 // Avoid a warning about the icons object not being provided.
 app.provide("icons", {});
+
+app.directive("c-tooltip", vctooltip);
 
 app.mount("#app");

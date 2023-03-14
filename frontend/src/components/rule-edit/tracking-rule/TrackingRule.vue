@@ -48,7 +48,7 @@ const onTrackingRuleChange = (value: string, node: FormKitNode) => {
       type="multiselect"
       name="name"
       label="Tracking Rule:"
-      label-class="fw-bold"
+      label-class="fw-bold mt-2"
       placeholder="Choose a Tracking Rule"
       ref="node"
       v-model="ruleName"
