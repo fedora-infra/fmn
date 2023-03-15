@@ -31,22 +31,23 @@ const filteringOptions = computed(() => {
 });
 
 const rules = computed(() => {
-  return [...props.rules].sort(
-    (a, b) =>
-      Number(a.disabled) - Number(b.disabled) ||
-      b.tracking_rule.name.localeCompare(a.tracking_rule.name)
-  );
+  return [...props.rules]
+    .filter(
+      (r) =>
+        !tracking_rule_filter.value ||
+        r.tracking_rule.name.includes(tracking_rule_filter.value)
+    )
+    .sort(
+      (a, b) =>
+        Number(a.disabled) - Number(b.disabled) ||
+        b.tracking_rule.name.localeCompare(a.tracking_rule.name)
+    );
 });
 </script>
 
 <template>
   <div class="d-flex justify-content-between mb-3">
-    <h1 class="mb-0">
-      My Rules
-      <span class="badge bg-primary" v-if="rules.length > 0">{{
-        rules.length
-      }}</span>
-    </h1>
+    <h1 class="mb-0">My Rules</h1>
     <router-link to="/rules/new" class="btn btn-primary"
       >Add a new rule</router-link
     >
@@ -64,6 +65,13 @@ const rules = computed(() => {
   <template v-else>
     <CListGroup>
       <CListGroupItem class="bg-light d-flex align-items-center">
+        <div class="fw-bold">
+          {{ props.rules.length }} rule<template v-if="props.rules.length > 1"
+            >s</template
+          ><template v-if="props.rules.length !== rules.length"
+            >, {{ rules.length }} shown</template
+          >
+        </div>
         <div class="fw-bold text-secondary ms-auto me-2">Filter by:</div>
         <div style="min-width: 220px">
           <FormKit
@@ -77,15 +85,7 @@ const rules = computed(() => {
           />
         </div>
       </CListGroupItem>
-      <RuleListItem
-        v-for="rule in rules.filter(
-          (r) =>
-            !tracking_rule_filter ||
-            r.tracking_rule.name.includes(tracking_rule_filter)
-        )"
-        :key="rule.id"
-        :rule="rule"
-      />
+      <RuleListItem v-for="rule in rules" :key="rule.id" :rule="rule" />
     </CListGroup>
   </template>
 </template>
