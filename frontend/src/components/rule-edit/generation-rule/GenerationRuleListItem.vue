@@ -39,9 +39,7 @@ const handleDeleteClicked = () => {
           <span
             class="badge bg-light border border-info text-secondary fw-normal me-1"
             v-if="
-              f_params !== null &&
-              f_params !== false &&
-              !(Array.isArray(f_params) && f_params.length === 0)
+              !!f_params && !(Array.isArray(f_params) && f_params.length === 0)
             "
             ><strong>{{ f_name }}</strong>
             <template v-if="typeof f_params !== 'boolean'"> : </template>
