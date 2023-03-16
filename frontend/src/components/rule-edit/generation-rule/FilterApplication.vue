@@ -21,7 +21,7 @@ const getApplications = async () => {
   <FormKit
     type="multiselect"
     name="applications"
-    placeholder="Choose one or more applications"
+    placeholder="Choose applications"
     mode="tags"
     :msOptions="getApplications"
     searchable

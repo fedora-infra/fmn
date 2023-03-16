@@ -8,7 +8,7 @@ import { SEVERITIES } from "@/api/constants";
   <FormKit
     type="multiselect"
     name="severities"
-    placeholder="Choose one or more priorities"
+    placeholder="Choose priorities"
     mode="tags"
     :msOptions="SEVERITIES.map((s) => s.label)"
     :close-on-select="false"
