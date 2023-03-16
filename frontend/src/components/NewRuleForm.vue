@@ -59,7 +59,7 @@ const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
 
 <template>
   <FormKit type="form" id="new-rule" @submit="handleSubmit" :actions="false">
-    <CRow class="mb-2">
+    <CRow class="mb-2 align-items-center">
       <CCol xs="auto" class="flex-fill">
         <h4>Create a new Rule</h4>
       </CCol>
@@ -75,7 +75,7 @@ const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
     </CRow>
 
     <CRow>
-      <CCol sm="4" class="border-end">
+      <CCol sm="12" md="4">
         <FormKit
           type="text"
           name="name"
@@ -88,6 +88,7 @@ const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
         <TrackingRule @selected="handleTrackingRuleSelected" />
       </CCol>
       <CCol>
+        <h5 class="d-md-none mt-3">Destinations:</h5>
         <GenerationRuleList
           v-if="!!trackingRuleName"
           @change="handleGenerationRulesChanged"
