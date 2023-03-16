@@ -125,7 +125,7 @@ const formReady = computed(() => generationRulesCount.value > 0);
     </CRow>
 
     <CRow>
-      <CCol sm="4" class="border-end">
+      <CCol sm="12" md="4">
         <FormKit
           type="checkbox"
           name="disabled"
@@ -145,6 +145,7 @@ const formReady = computed(() => generationRulesCount.value > 0);
         <TrackingRule />
       </CCol>
       <CCol>
+        <h5 class="d-md-none mt-3">Destinations:</h5>
         <GenerationRuleList
           @change="handleGenerationRulesChanged"
           :rules="props.rule.generation_rules"
