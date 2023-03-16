@@ -6,19 +6,23 @@ import {
   CAccordionHeader,
   CAccordionItem,
   CBadge,
+  CListGroup,
+  CListGroupItem,
 } from "@coreui/bootstrap-vue";
 
 const props = defineProps<{
   tracked: Artifact[];
 }>();
 const additional_filters_accordion_vars = {
-  "--bs-accordion-btn-padding-x": 0,
-  "--bs-accordion-btn-padding-y": 0,
+  "--bs-accordion-btn-padding-x": "0.5rem",
+  "--bs-accordion-btn-padding-y": "0.5rem",
   "--bs-accordion-bg": "transparent",
   "--bs-accordion-active-color": "var(--bs-body-color)",
   "--bs-accordion-active-bg": "transparent",
   "--bs-accordion-btn-focus-box-shadow": "none",
   "--bs-accordion-btn-focus-border-color": "none",
+  "--bs-accordion-body-padding-x": 0,
+  "--bs-accordion-body-padding-y": 0,
 };
 </script>
 
@@ -29,18 +33,25 @@ const additional_filters_accordion_vars = {
       flush
       :style="additional_filters_accordion_vars"
       @click.prevent=""
+      class="bg-light border rounded"
     >
       <CAccordionItem :item-key="1">
         <CAccordionHeader>
           This Rule will track {{ props.tracked.length }} artifacts:
         </CAccordionHeader>
         <CAccordionBody>
-          <ul class="list-unstyled">
-            <li v-for="artifact in props.tracked" :key="artifact.name">
-              <CBadge color="info">{{ artifact.type }}</CBadge>
+          <CListGroup flush>
+            <CListGroupItem
+              v-for="artifact in props.tracked"
+              :key="artifact.name"
+              class="d-flex align-items-center justify-content-between"
+            >
               {{ artifact.name }}
-            </li>
-          </ul>
+              <CBadge color="light" class="text-secondary border">{{
+                artifact.type
+              }}</CBadge>
+            </CListGroupItem>
+          </CListGroup>
         </CAccordionBody>
       </CAccordionItem>
     </CAccordion>
