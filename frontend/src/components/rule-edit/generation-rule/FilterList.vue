@@ -27,16 +27,16 @@ const props = defineProps<{
   <h4>Optional Filters</h4>
   <FormKit type="group" :name="props.name || 'filters'">
     <CRow :xs="{ gutter: 3 }">
-      <CCol xs="6">
+      <CCol xs="12" sm="6">
         <FilterSeverity />
       </CCol>
-      <CCol xs="6">
+      <CCol xs="12" sm="6">
         <FilterApplication />
       </CCol>
-      <CCol xs="6">
+      <CCol xs="12" sm="6">
         <FilterMyActions />
       </CCol>
-      <CCol xs="6">
+      <CCol xs="12" sm="6">
         <FilterTopic />
       </CCol>
     </CRow>
