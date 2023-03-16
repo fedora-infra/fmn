@@ -12,5 +12,6 @@ install
 using
 API <_source/fmn>
 contributing
+components
 changelog
 ```
