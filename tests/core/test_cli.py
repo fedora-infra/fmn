@@ -2,6 +2,7 @@ import asyncio
 from datetime import datetime
 from unittest import mock
 
+import pytest
 from sqlalchemy import select
 
 from fmn.core import cli, config
@@ -12,6 +13,15 @@ from fmn.database.model import Generated, Rule, TrackingRule, User
 @cli.cli.command("test")
 def _fmn_test():
     pass
+
+
+@pytest.fixture
+def mocked_session_maker(mocker, db_async_session):
+    transaction_manager = mock.AsyncMock()
+    sessionmaker = mocker.patch("fmn.core.cli.async_session_maker")
+    sessionmaker.begin.return_value = transaction_manager
+    transaction_manager.__aenter__.return_value = db_async_session
+    return transaction_manager
 
 
 def test_cli_version(cli_runner):
@@ -44,14 +54,13 @@ def test_settings_defaults(cli_runner):
     assert config._settings_file == config.DEFAULT_CONFIG_FILE
 
 
-async def test_cleanup_generated_count(mocker, cli_runner, db_async_session):
+async def test_cleanup_generated_count(mocker, cli_runner, db_async_session, mocked_session_maker):
     # Delete old entries
     tr = TrackingRule(id=1, name="artifacts-owned", params={"username": "dummy"})
     rule = Rule(id=1, name="dummy", user=User(name="dummy"), tracking_rule=tr, generation_rules=[])
     db_async_session.add(Generated(rule=rule, count=1, when=datetime(2020, 1, 1, 0, 0, 0)))
     await db_async_session.commit()
 
-    mocker.patch("fmn.core.cli.async_session_maker", return_value=db_async_session)
     loop = asyncio.get_event_loop()
 
     result = await loop.run_in_executor(
@@ -64,14 +73,15 @@ async def test_cleanup_generated_count(mocker, cli_runner, db_async_session):
     assert len(list(db_result.all())) == 0
 
 
-async def test_cleanup_generated_count_no_old(mocker, cli_runner, db_async_session):
+async def test_cleanup_generated_count_no_old(
+    mocker, cli_runner, db_async_session, mocked_session_maker
+):
     # Don't delete recent entries
     tr = TrackingRule(id=1, name="artifacts-owned", params={"username": "dummy"})
     rule = Rule(id=1, name="dummy", user=User(name="dummy"), tracking_rule=tr, generation_rules=[])
     db_async_session.add(Generated(rule=rule, count=1))
     await db_async_session.commit()
 
-    mocker.patch("fmn.core.cli.async_session_maker", return_value=db_async_session)
     loop = asyncio.get_event_loop()
 
     result = await loop.run_in_executor(

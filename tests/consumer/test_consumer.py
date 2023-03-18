@@ -37,6 +37,16 @@ def mocked_send_queue_class(mocker):
     return mocker.patch("fmn.consumer.consumer.SendQueue", return_value=send_queue)
 
 
+@pytest.fixture
+def mocked_session_maker(mocker):
+    db = AsyncMock()
+    transaction_manager = AsyncMock()
+    sessionmaker = mocker.patch("fmn.consumer.consumer.async_session_maker")
+    sessionmaker.begin.return_value = transaction_manager
+    transaction_manager.__aenter__ = AsyncMock(name="sessionmakercontextmanager", return_value=db)
+    return transaction_manager
+
+
 async def test_consumer_init(mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class):
     configure_cache = mocker.patch("fmn.consumer.consumer.configure_cache")
     c = Consumer()
@@ -71,12 +81,8 @@ async def test_consumer_call_not_tracked(
     mocked_requester_class,
     mocked_send_queue_class,
     make_mocked_message,
+    mocked_session_maker,
 ):
-    sessionmaker = AsyncMock()
-    db = AsyncMock()
-    mocker.patch("fmn.consumer.consumer.async_session_maker", return_value=sessionmaker)
-    sessionmaker.__aenter__ = AsyncMock(name="sessionmakercontextmanager", return_value=db)
-
     c = Consumer()
     await c._ready
     message = make_mocked_message(topic="dummy.topic", body={"foo": "bar"})
@@ -85,7 +91,8 @@ async def test_consumer_call_not_tracked(
     mocked_cache.invalidate_on_message.assert_called_with(message)
     c._requester.invalidate_on_message.assert_called_with(message)
     c.send_queue.send.assert_not_called()
-    db.commit.assert_called_once()
+    mocked_session_maker.__aenter__.assert_called_once()
+    mocked_session_maker.__aexit__.assert_called_once()
 
 
 async def test_consumer_call_tracked(
@@ -168,12 +175,8 @@ async def test_consumer_call_failure(
     mocked_requester_class,
     mocked_send_queue_class,
     make_mocked_message,
+    mocked_session_maker,
 ):
-    sessionmaker = AsyncMock()
-    db = AsyncMock()
-    mocker.patch("fmn.consumer.consumer.async_session_maker", return_value=sessionmaker)
-    sessionmaker.__aenter__ = AsyncMock(name="sessionmakercontextmanager", return_value=db)
-
     c = Consumer()
     await c._ready
     mocked_cache.get_tracked.side_effect = ValueError
@@ -182,8 +185,10 @@ async def test_consumer_call_failure(
     with pytest.raises(ValueError):
         await c.handle_or_rollback(message)
 
-    db.rollback.assert_called_once()
     c.send_queue.send.assert_not_called()
+
+    mocked_session_maker.__aenter__.assert_called_once()
+    mocked_session_maker.__aexit__.assert_called_once()
 
 
 async def test_consumer_call_tracked_agent_name(
