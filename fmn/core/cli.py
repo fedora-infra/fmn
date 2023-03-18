@@ -41,7 +41,7 @@ def generated_count(days):
     async def _doit():
         limit = datetime.now() - timedelta(days=days)
         await init_async_model()
-        async with async_session_maker() as db:
+        async with async_session_maker.begin() as db:
             result = await db.execute(
                 select(func.count(Generated.id)).filter(Generated.when < limit)
             )
@@ -49,7 +49,6 @@ def generated_count(days):
             if count > 0:
                 click.echo(f"Expiring {count} entries older than {limit}")
                 await db.execute(delete(Generated).filter(Generated.when < limit))
-                await db.commit()
             else:
                 click.echo("Nothing to clean up.")
 

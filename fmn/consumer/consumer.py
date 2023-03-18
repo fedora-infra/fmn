@@ -55,15 +55,9 @@ class Consumer:
     async def handle_or_rollback(self, message: message.Message):
         await self._ready
         # Get a database session
-        async with async_session_maker() as db:
+        async with async_session_maker.begin() as db:
             # Process message
-            try:
-                await self._handle(message, db)
-            except Exception:
-                await db.rollback()
-                raise
-            else:
-                await db.commit()
+            await self._handle(message, db)
 
     async def _handle(self, message: message.Message, db: AsyncSession):
         await self.refresh_cache_if_needed(message)
