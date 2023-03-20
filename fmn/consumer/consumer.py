@@ -75,7 +75,6 @@ class Consumer:
                 notifications.add(notification)
                 # Record that the rule generated a notification
                 db.add(Generated(rule=rule, count=1))
-                await db.commit()
         # Send the deduplicated notifications
         for notification in notifications:
             await self._send(notification, message)
