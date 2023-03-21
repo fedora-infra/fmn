@@ -54,6 +54,7 @@ class Consumer:
 
     async def handle_or_rollback(self, message: message.Message):
         await self._ready
+        log.debug("SQLAlchemy pool status: %s", async_session_maker.kw["bind"].pool.status())
         # Get a database session
         async with async_session_maker.begin() as db:
             # Process message
