@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from cashews import cache
 from cashews.formatter import get_templates_for_func
 
-from .util import cache_early_ttl, cache_ttl
+from .util import cache_ttl
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
