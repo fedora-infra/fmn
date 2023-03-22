@@ -49,10 +49,12 @@ class TrackedCache:
         self._requester = requester
         self._rules_cache = rules_cache
 
-    @cache.early(
-        key="tracked", prefix="v1", ttl=cache_ttl("tracked"), early_ttl=cache_early_ttl("tracked")
+    @cache(
+        key="tracked",
+        prefix="v1",
+        ttl=cache_ttl("tracked"),
+        lock=True,
     )
-    @cache.locked(key="tracked", prefix="v1", ttl="1h")
     async def get_tracked(self, db: "AsyncSession"):
         log.debug("Building the tracked cache")
         before = monotonic()

@@ -6,7 +6,7 @@ from cashews import cache
 from cashews.formatter import get_templates_for_func
 
 from ..database.model import Rule
-from .util import cache_early_ttl, cache_ttl
+from .util import cache_ttl
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
@@ -18,10 +18,7 @@ log = logging.getLogger(__name__)
 class RulesCache:
     """Cache the rules currently in the database."""
 
-    @cache.early(
-        key="rules", prefix="v1", ttl=cache_ttl("rules"), early_ttl=cache_early_ttl("rules")
-    )
-    @cache.locked(key="rules", prefix="v1", ttl="1h")
+    @cache(key="rules", prefix="v1", ttl=cache_ttl("rules"), lock=True)
     async def _get_rules(self, db: "AsyncSession"):
         log.debug("Building the rules cache")
         result = await db.execute(Rule.select_related().filter_by(disabled=False))
