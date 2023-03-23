@@ -49,7 +49,7 @@ class TrackedCache:
         self._requester = requester
         self._rules_cache = rules_cache
 
-    @cache.lock(key="tracked", ttl="1h")
+    @cache.locked(key="tracked", ttl="1h")
     # Don't use the lock=True option of the decorator because it does not allow to set the ttl for
     # the lock itself.
     @cache(key="tracked", prefix="v1", ttl=cache_ttl("tracked"))
