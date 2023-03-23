@@ -49,18 +49,10 @@ class TrackedCache:
         self._requester = requester
         self._rules_cache = rules_cache
 
-    @cache.lock(
-        key="tracked",
-        prefix="v1",
-        ttl="1h",
-    )
+    @cache.lock(key="tracked", ttl="1h")
     # Don't use the lock=True option of the decorator because it does not allow to set the ttl for
     # the lock itself.
-    @cache(
-        key="tracked",
-        prefix="v1",
-        ttl=cache_ttl("tracked"),
-    )
+    @cache(key="tracked", prefix="v1", ttl=cache_ttl("tracked"))
     async def get_tracked(self, db: "AsyncSession"):
         log.debug("Building the tracked cache")
         before = monotonic()
