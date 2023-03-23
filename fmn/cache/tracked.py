@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from cashews import cache
 from cashews.formatter import get_templates_for_func
 
-from .util import cache_ttl
+from .util import cache_ttl, lock_ttl
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
@@ -49,7 +49,7 @@ class TrackedCache:
         self._requester = requester
         self._rules_cache = rules_cache
 
-    @cache.locked(key="tracked", ttl="1h")
+    @cache.locked(key="tracked", ttl=lock_ttl("tracked"))
     # Don't use the lock=True option of the decorator because it does not allow to set the ttl for
     # the lock itself.
     @cache(key="tracked", prefix="v1", ttl=cache_ttl("tracked"))

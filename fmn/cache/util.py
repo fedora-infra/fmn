@@ -40,6 +40,7 @@ def cache_arg(arg: str, scope: str | None = None) -> Callable[[str, str | None],
 
 
 cache_ttl = partial(cache_arg, "ttl")
+lock_ttl = partial(cache_arg, "lock_ttl")
 
 
 def _get_pattern_for_cached_calls_iter(func: Callable, **kwargs: dict[str, Any]) -> Iterator[str]:
