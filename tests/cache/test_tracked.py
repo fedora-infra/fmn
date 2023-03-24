@@ -26,17 +26,17 @@ async def test_build_tracked(mocker, requester, db_async_session):
     db_async_session.add_all([rule, tr])
     prime_cache = mocker.patch.object(tr, "prime_cache")
     tracked_cache = TrackedCache(requester=requester, rules_cache=RulesCache())
-    tracked = await tracked_cache.get_tracked(db=db_async_session)
+    tracked = await tracked_cache.get_value(db=db_async_session)
     prime_cache.assert_called_once_with(tracked, requester)
 
 
 @pytest.mark.cashews_cache(enabled=True)
-async def test_get_tracked(mocker, requester, db_async_session):
+async def test_get_value(mocker, requester, db_async_session):
     rules_cache = mocker.AsyncMock()
     rules_cache.get_rules.return_value = []
     tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
-    result1 = await tracked_cache.get_tracked(db=db_async_session)
-    result2 = await tracked_cache.get_tracked(db=db_async_session)
+    result1 = await tracked_cache.get_value(db=db_async_session)
+    result2 = await tracked_cache.get_value(db=db_async_session)
     rules_cache.get_rules.assert_called_once_with(db=db_async_session)
     assert result1 == result2
 
@@ -46,7 +46,7 @@ async def test_invalidate_tracked(mocker, requester):
     mocker.patch.object(cache, "delete")
     tracked_cache = TrackedCache(requester=requester, rules_cache=RulesCache())
     await tracked_cache.invalidate()
-    cache_key = list(get_templates_for_func(tracked_cache.get_tracked))[0]
+    cache_key = list(get_templates_for_func(tracked_cache.get_value))[0]
     cache.delete.assert_called_with(cache_key)
 
 
@@ -65,7 +65,7 @@ async def test_invalidate_on_message(mocker, requester, topic, expected, make_mo
     mocker.patch.object(tracked_cache, "invalidate")
     # # Set an existing value that will be invalidated
     # existing_value = Tracked(packages={"existing"}, usernames={"existing"})
-    # cache_key = list(get_templates_for_func(tracked_cache.get_tracked))[0]
+    # cache_key = list(get_templates_for_func(tracked_cache.get_value))[0]
     # # It's an "early" strategy so we need to store according to the interface
     # early_expire_at = datetime.utcnow() + timedelta(seconds=3600)
     # await cache.set(cache_key, [early_expire_at, existing_value], expire=86400)

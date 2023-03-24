@@ -16,7 +16,7 @@ from fmn.rules.notification import Notification
 
 @pytest.fixture
 def mocked_cache(mocker):
-    mocker.patch.object(TrackedCache, "get_tracked", return_value=Tracked())
+    mocker.patch.object(TrackedCache, "get_value", return_value=Tracked())
     mocker.patch.object(TrackedCache, "invalidate_on_message")
     return TrackedCache
 
@@ -105,7 +105,7 @@ async def test_consumer_call_tracked(
     db_async_session,
 ):
     c = Consumer()
-    mocked_cache.get_tracked.return_value = Tracked(
+    mocked_cache.get_value.return_value = Tracked(
         packages={"pkg1"},
         containers=set(),
         modules=set(),
@@ -179,7 +179,7 @@ async def test_consumer_call_failure(
 ):
     c = Consumer()
     await c._ready
-    mocked_cache.get_tracked.side_effect = ValueError
+    mocked_cache.get_value.side_effect = ValueError
     message = make_mocked_message(topic="dummy.topic", body={})
 
     with pytest.raises(ValueError):
@@ -195,7 +195,7 @@ async def test_consumer_call_tracked_agent_name(
     mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class, make_mocked_message
 ):
     c = Consumer()
-    mocked_cache.get_tracked.return_value = Tracked(
+    mocked_cache.get_value.return_value = Tracked(
         packages=set(),
         containers=set(),
         modules=set(),
@@ -215,7 +215,7 @@ async def test_consumer_deprecated_schema(
     mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class, make_mocked_message
 ):
     c = Consumer()
-    mocked_cache.get_tracked.return_value = Tracked(packages={"pkg1"})
+    mocked_cache.get_value.return_value = Tracked(packages={"pkg1"})
     c._rules_cache = mocker.AsyncMock()
     message = make_mocked_message(
         topic="dummy.topic",
@@ -272,7 +272,7 @@ async def test_consumer_duplicate(
     db_async_session,
 ):
     c = Consumer()
-    mocked_cache.get_tracked.return_value = Tracked(
+    mocked_cache.get_value.return_value = Tracked(
         packages={"pkg1"},
         containers=set(),
         modules=set(),

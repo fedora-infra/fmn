@@ -100,7 +100,7 @@ class Consumer:
         # tracked messages will still run though all the rules though, so this could be improved I
         # suppose, maybe by changing the cache datastructure to point each entry in the cache to the
         # rules that produced it.
-        tracked = await self._tracked_cache.get_tracked(db=db)
+        tracked = await self._tracked_cache.get_value(db=db)
         for msg_attr in ("packages", "containers", "modules", "flatpaks", "usernames"):
             if not set(getattr(message, msg_attr)).isdisjoint(getattr(tracked, msg_attr)):
                 log.debug("Message %s is tracked by %s", message.id, msg_attr)
