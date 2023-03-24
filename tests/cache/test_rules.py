@@ -46,7 +46,7 @@ async def test_invalidate(mocker):
     mocker.patch.object(cache, "delete")
     rc = RulesCache()
     await rc.invalidate()
-    cache_key = list(get_templates_for_func(rc._get_rules))[0]
+    cache_key = list(get_templates_for_func(rc.get_value))[0]
     cache.delete.assert_called_with(cache_key)
 
 

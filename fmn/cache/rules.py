@@ -1,11 +1,10 @@
-import asyncio
 import logging
 from typing import TYPE_CHECKING
 
 from cashews import cache
-from cashews.formatter import get_templates_for_func
 
 from ..database.model import Rule
+from .base import CachedValue
 from .util import cache_ttl, lock_ttl
 
 if TYPE_CHECKING:
@@ -15,26 +14,25 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 
-class RulesCache:
+class RulesCache(CachedValue):
     """Cache the rules currently in the database."""
 
-    @cache.locked(key="rules", ttl=lock_ttl("rules"))
-    # Don't use the lock=True option of the decorator because it does not allow to set the ttl for
-    # the lock itself.
-    @cache(key="rules", prefix="v1", ttl=cache_ttl("rules"))
-    async def _get_rules(self, db: "AsyncSession"):
-        log.debug("Building the rules cache")
-        result = await db.execute(Rule.select_related().filter_by(disabled=False))
-        log.debug("Built the rules cache")
-        return list(result.scalars())
+    name = "rules"
+    cached_method = "_get_value"
 
     async def get_rules(self, db: "AsyncSession"):
-        return [await db.merge(r) for r in await self._get_rules(db=db)]
+        return [await db.merge(r) for r in await self.get_value(db=db)]
 
-    async def invalidate(self):
-        log.debug("Invalidating the rules cache")
-        cache_keys = get_templates_for_func(self._get_rules)
-        await asyncio.gather(*(cache.delete(key) for key in cache_keys))
+    @cache.locked(key=name, ttl=lock_ttl(name))
+    # Don't use the lock=True option of the decorator because it does not allow to set the ttl for
+    # the lock itself.
+    @cache(key=name, prefix="v1", ttl=cache_ttl(name))
+    async def get_value(self, db: "AsyncSession"):
+        return await self.compute_value(db=db)
+
+    async def _compute_value(self, db: "AsyncSession"):
+        result = await db.execute(Rule.select_related().filter_by(disabled=False))
+        return list(result.scalars())
 
     async def invalidate_on_message(self, message: "Message"):
         if (

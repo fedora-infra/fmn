@@ -1,12 +1,10 @@
-import asyncio
 import logging
 from dataclasses import dataclass, field
-from time import monotonic
 from typing import TYPE_CHECKING
 
 from cashews import cache
-from cashews.formatter import get_templates_for_func
 
+from .base import CachedValue
 from .util import cache_ttl, lock_ttl
 
 if TYPE_CHECKING:
@@ -29,7 +27,7 @@ class Tracked:
     agent_name: set = field(default_factory=set)
 
 
-class TrackedCache:
+class TrackedCache(CachedValue):
     """Used to quickly know whether we want to process an incoming message.
 
     It can be called outside of the message-processing loop to refresh the cache.
@@ -45,29 +43,24 @@ class TrackedCache:
     users that their changes will take X minutes to be active.
     """
 
+    name = "tracked"
+
     def __init__(self, requester: "Requester", rules_cache: "RulesCache"):
         self._requester = requester
         self._rules_cache = rules_cache
 
-    @cache.locked(key="tracked", ttl=lock_ttl("tracked"))
+    @cache.locked(key=name, ttl=lock_ttl(name))
     # Don't use the lock=True option of the decorator because it does not allow to set the ttl for
     # the lock itself.
-    @cache(key="tracked", prefix="v1", ttl=cache_ttl("tracked"))
-    async def get_tracked(self, db: "AsyncSession"):
-        log.debug("Building the tracked cache")
-        before = monotonic()
+    @cache(key=name, prefix="v1", ttl=cache_ttl(name))
+    async def get_value(self, db: "AsyncSession"):
+        return await self.compute_value(db=db)
+
+    async def _compute_value(self, db: "AsyncSession"):
         tracked = Tracked()
         for rule in await self._rules_cache.get_rules(db=db):
             await rule.tracking_rule.prime_cache(tracked, self._requester)
-        after = monotonic()
-        duration = after - before
-        log.debug("Built the tracked cache in %.2f seconds", duration)
         return tracked
-
-    async def invalidate(self):
-        log.debug("Invalidating the tracked cache")
-        cache_keys = get_templates_for_func(self.get_tracked)
-        await asyncio.gather(*(cache.delete(key) for key in cache_keys))
 
     async def invalidate_on_message(self, message: "Message"):
         if (
