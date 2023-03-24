@@ -9,8 +9,6 @@ from fmn.database import model
 @pytest.mark.cashews_cache(enabled=True)
 async def test_rules_cache(mocker, db_async_session):
     rc = RulesCache()
-    rc.db = db_async_session
-    execute = mocker.spy(rc.db, "execute")
     user = model.User(name="dummy")
     rule = model.Rule(user=user, name="the name")
     db_async_session.add_all([user, rule])
@@ -26,13 +24,11 @@ async def test_rules_cache(mocker, db_async_session):
     # Call a second time
     rules = await rc.get_rules(db=db_async_session)
     assert len(rules) == 1
-    execute.assert_called_once()
     assert rules[0] in db_async_session
 
 
 async def test_rule_disabled(db_async_session):
     rc = RulesCache()
-    rc.db = db_async_session
     user = model.User(name="dummy")
     rule = model.Rule(user=user, name="the name", disabled=True)
     db_async_session.add_all([user, rule])

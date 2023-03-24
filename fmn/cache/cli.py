@@ -1,5 +1,5 @@
 import asyncio
-from pprint import pprint
+from pprint import pformat
 
 import click
 
@@ -30,7 +30,7 @@ def get_tracked():
             return await tracked_cache.get_value(db=db)
 
     result = asyncio.run(_get_tracked())
-    pprint(result)
+    click.echo(pformat(result))
 
 
 @cache_cmd.command("delete-tracked")
@@ -41,4 +41,27 @@ def delete_tracked():
     rules_cache = RulesCache()
     tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
     asyncio.run(tracked_cache.invalidate())
-    print("Tracked cache invalidated.")
+    click.echo("Tracked cache invalidated.")
+
+
+@cache_cmd.command("refresh")
+def refresh():
+    """Refresh the cached values if they have reached their early_ttl."""
+
+    async def _doit():
+        configure_cache()
+        await init_async_model()
+        requester = Requester(get_settings().services)
+        rules_cache = RulesCache()
+        tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
+        async with async_session_maker.begin() as db:
+            for cache_value in (rules_cache, tracked_cache):
+                refreshed = await cache_value.refresh(db=db)
+                if refreshed is None:
+                    click.echo(f"The {cache_value.name} cache has no early refresh configured.")
+                elif refreshed:
+                    click.echo(f"Refreshed the {cache_value.name} cache.")
+                else:
+                    click.echo(f"The {cache_value.name} cache is recent enough.")
+
+    asyncio.run(_doit())
