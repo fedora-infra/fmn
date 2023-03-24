@@ -5,6 +5,9 @@ from typing import TYPE_CHECKING
 
 from cashews import cache
 from cashews.formatter import get_templates_for_func
+from cashews.ttl import ttl_to_seconds
+
+from .util import cache_arg
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
@@ -18,8 +21,9 @@ class CachedValue:
     name = None
 
     async def get_value(self, *args, **kwargs):
-        # This method must be decorated with the cache decorator.
-        return await self.compute_value(*args, **kwargs)
+        # This method must be decorated with the cache decorator and be:
+        # return await self.compute_value(*args, **kwargs)
+        raise NotImplementedError
 
     async def compute_value(self, *args, **kwargs):
         log.debug(f"Building the {self.name} cache")
@@ -32,6 +36,22 @@ class CachedValue:
 
     async def _compute_value(self, *args, **kwargs):
         raise NotImplementedError
+
+    async def refresh(self, *args, **kwargs):
+        cache_keys = get_templates_for_func(self.get_value)
+        ttl_early = cache_arg("early_ttl", self.name)()
+        if not ttl_early:
+            return
+        ttl_early = ttl_to_seconds(ttl_early)
+        refreshed = False
+        for cache_key in cache_keys:
+            expire = await cache.get_expire(cache_key)
+            if expire <= ttl_to_seconds(ttl_early):
+                ttl = ttl_to_seconds(cache_arg("ttl", self.name)())
+                value = await self.compute_value(*args, **kwargs)
+                await cache.set(cache_key, value=value, expire=ttl)
+                refreshed = True
+        return refreshed
 
     async def invalidate(self):
         log.debug(f"Invalidating the {self.name} cache")

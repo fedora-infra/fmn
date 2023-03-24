@@ -12,14 +12,12 @@ CashewsTTLTypes = int | float | str | timedelta
 class CacheArgsModel(BaseModel):
     ttl: CashewsTTLTypes | None = None
     lock_ttl: CashewsTTLTypes | None = None
-
-    class Config:
-        extra = "allow"
+    early_ttl: CashewsTTLTypes | None = None
 
 
 class CacheScopedArgsModel(BaseModel):
-    tracked: CacheArgsModel = CacheArgsModel(ttl="1d", lock_ttl="1h")
-    rules: CacheArgsModel = CacheArgsModel(ttl="1d", lock_ttl="5m")
+    tracked: CacheArgsModel = CacheArgsModel(ttl="1d", lock_ttl="1h", early_ttl="20h")
+    rules: CacheArgsModel = CacheArgsModel(ttl="1d", lock_ttl="5m", early_ttl="20h")
     pagure: CacheArgsModel | None = None
     fasjson: CacheArgsModel | None = None
 
