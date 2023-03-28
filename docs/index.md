@@ -13,5 +13,6 @@ using
 API <_source/fmn>
 contributing
 components
+rules
 changelog
 ```
