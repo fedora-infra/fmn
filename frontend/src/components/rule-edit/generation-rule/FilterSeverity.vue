@@ -4,11 +4,11 @@ import { SEVERITIES } from "@/api/constants";
 </script>
 
 <template>
-  <p class="mb-0 fw-bold">Priorities:</p>
+  <p class="mb-0 fw-bold">Severities:</p>
   <FormKit
     type="multiselect"
     name="severities"
-    placeholder="Choose priorities"
+    placeholder="Choose severities"
     mode="tags"
     :msOptions="SEVERITIES.map((s) => s.label)"
     :close-on-select="false"
