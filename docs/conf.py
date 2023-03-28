@@ -110,6 +110,8 @@ def run_apidoc(_):
             "-e",
             "-M",
             os.path.join(topdir, "fmn"),
+            # exclude patterns:
+            os.path.join(topdir, "fmn", "database", "migrations"),
         ]
     )
 
