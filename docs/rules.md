@@ -36,9 +36,12 @@ higher severities should let FMN ping the user via IRC or Matrix.
 sent. Users can configure filters for these criteria:
 
 * The name of the application sending a message.
-* The severity of the message.
+* The severity(\*) of the message.
 * If a message was the cause by an action of the user.
 * If the message topic matches a certain glob pattern.
+
+(\*): At this point, we don’t know that any app in Fedora infrastructure tags its messages with a
+severity, which makes them default to `INFO`.
 
 ## Destinations
 
