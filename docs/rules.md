@@ -37,7 +37,7 @@ sent. Users can configure filters for these criteria:
 
 * The name of the application sending a message.
 * The severity(\*) of the message.
-* If a message was the cause by an action of the user.
+* If a message was caused by an action of the user.
 * If the message topic matches a certain glob pattern.
 
 (\*): At this point, we don’t know that any app in Fedora infrastructure tags its messages with a
