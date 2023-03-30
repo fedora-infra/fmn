@@ -14,7 +14,7 @@ class Filter:
         self.username = username
 
     def matches(self, message: message.Message):
-        raise NotImplementedError  # pragma: no cover
+        raise NotImplementedError
 
 
 class Applications(Filter):

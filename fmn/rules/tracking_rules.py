@@ -22,10 +22,10 @@ class TrackingRule:
         self._owner = owner
 
     async def matches(self, message: "Message"):
-        raise NotImplementedError  # pragma: no cover
+        raise NotImplementedError
 
     async def prime_cache(self, cache):
-        raise NotImplementedError  # pragma: no cover
+        raise NotImplementedError
 
 
 class ArtifactsOwned(TrackingRule):
