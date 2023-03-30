@@ -36,6 +36,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Mark the directory as safe for git
+        run: git config --global --add safe.directory $PWD
+
       - name: Install RPM dependencies
         run: |
           dnf install -y krb5-devel libpq-devel gettext
