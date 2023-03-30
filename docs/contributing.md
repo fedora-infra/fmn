@@ -7,13 +7,15 @@ SPDX-License-Identifier: MIT
 # Contributor Guide
 
 You need to be legally allowed to submit any contribution to this project. What this means in detail
-is laid out in the file `DCO.txt` next to this file. The mechanism by which you certify this is
-adding a `Signed-off-by` trailer to git commit log messages, you can do this by using the
-`--signoff/-s` option to `git commit`.
+is laid out at the [Developer Certificate of Origin](https://developercertificate.org) website.
+The mechanism by which you certify this is adding a `Signed-off-by` trailer to git commit log
+messages, you can do this by using the `--signoff/-s` option to `git commit`.
 
 ## Changelog
 
-Significant changes should appear in the [ChangeLog](changelog). To that end, contributors must create a changelog entry using [Towncrier](https://towncrier.readthedocs.io/) and the appropriate category.
+Significant changes should appear in the [ChangeLog](changelog). To that end, contributors must
+create a changelog entry using [Towncrier](https://towncrier.readthedocs.io/) and the appropriate
+category.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
