@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Contributors to the Fedora Project
+//
+// SPDX-License-Identifier: MIT
+
 import type { DEBUG, ERROR, INFO, WARNING } from "./constants";
 import type { components } from "./generated";
 

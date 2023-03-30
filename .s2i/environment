@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 UPGRADE_PIP_TO_LATEST=true
 # APP_SCRIPT=.s2i/run-api.sh
 # APP_SCRIPT=.s2i/run-consumer.sh

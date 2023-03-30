@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Contributors to the Fedora Project
+//
+// SPDX-License-Identifier: MIT
+
 import { useUserStore } from "@/stores/user";
 import type { AppAuthError } from "@openid/appauth";
 import type { App } from "vue";

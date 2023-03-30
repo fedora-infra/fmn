@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 from datetime import datetime
 
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, func

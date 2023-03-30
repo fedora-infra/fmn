@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Contributors to the Fedora Project
+
+SPDX-License-Identifier: MIT
+-->
+
 <script setup lang="ts">
 import { CCol, CRow } from "@coreui/bootstrap-vue";
 import FilterApplication from "./FilterApplication.vue";

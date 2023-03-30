@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 # .bashrc
 
 export PATH=$PATH:/home/vagrant/.local/bin

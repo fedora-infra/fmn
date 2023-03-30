@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 # A sample configuration for the FMN sender. This file is in the TOML format.
 
 amqp_url = "amqp://localhost/%2Ffmn"

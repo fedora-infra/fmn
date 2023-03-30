@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Contributors to the Fedora Project
+//
+// SPDX-License-Identifier: MIT
+
 // Severities in Fedora Messaging
 export const DEBUG = { label: "debug", level: 10 };
 export const INFO = { label: "info", level: 20 };

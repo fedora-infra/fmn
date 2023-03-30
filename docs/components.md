@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Contributors to the Fedora Project
+
+SPDX-License-Identifier: MIT
+-->
+
 # Components
 
 FMN consists of several components, most of which run in Fedora Infrastructure.

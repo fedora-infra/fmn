@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Contributors to the Fedora Project
+//
+// SPDX-License-Identifier: MIT
+
 import { createTestingPinia } from "@pinia/testing";
 import { cleanup, fireEvent, render as baseRender } from "@testing-library/vue";
 import { getActivePinia, setActivePinia, type Pinia } from "pinia";

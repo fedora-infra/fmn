@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Contributors to the Fedora Project
+//
+// SPDX-License-Identifier: MIT
+
 import { useUserStore } from "@/stores/user";
 import type { QueryFunction } from "react-query/types/core";
 import { useMutation, useQuery, useQueryClient } from "vue-query";

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 import pytest
 from cashews import cache
 from cashews.formatter import get_templates_for_func

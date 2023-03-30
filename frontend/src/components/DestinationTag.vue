@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Contributors to the Fedora Project
+
+SPDX-License-Identifier: MIT
+-->
+
 <script setup lang="ts">
 import type { Destination } from "@/api/types";
 import { cilChatBubble, cilEnvelopeClosed } from "@coreui/icons";

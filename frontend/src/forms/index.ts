@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Contributors to the Fedora Project
+//
+// SPDX-License-Identifier: MIT
+
 import { generateClasses } from "@formkit/themes";
 import { createInput, defaultConfig } from "@formkit/vue";
 import MultiSelectAsyncDefaultInput from "./MultiSelectAsyncDefaultInput.vue";

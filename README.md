@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Contributors to the Fedora Project
+
+SPDX-License-Identifier: MIT
+-->
+
 # Fedora Messaging Notifications
 
 `fmn` is a family of systems to manage end-user notifications triggered by

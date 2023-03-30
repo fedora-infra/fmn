@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 from ...database.model import Destination, Filter, GenerationRule, Rule, TrackingRule
 
 

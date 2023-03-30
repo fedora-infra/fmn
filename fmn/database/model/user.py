@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 from sqlalchemy import Column, Integer, UnicodeText
 from sqlalchemy.orm import relationship
 

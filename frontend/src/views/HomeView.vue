@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Contributors to the Fedora Project
+
+SPDX-License-Identifier: MIT
+-->
+
 <script setup lang="ts">
 import { useRulesQuery } from "@/api/rules";
 import { CAlert, CSpinner } from "@coreui/bootstrap-vue";

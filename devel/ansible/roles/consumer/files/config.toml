@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 amqp_url = "amqp://fedoramessages:fedoramessages@tinystage.tinystage.test"
 callback = "fmn.consumer:Consumer"
 

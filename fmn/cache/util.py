@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 from collections.abc import Callable, Iterator
 from functools import cache as ft_cache
 from functools import partial

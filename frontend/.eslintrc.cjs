@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Contributors to the Fedora Project
+//
+// SPDX-License-Identifier: MIT
+
 /* eslint-env node */
 require("@rushstack/eslint-patch/modern-module-resolution");
 

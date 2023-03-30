@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 from collections.abc import AsyncIterable, Sequence
 from typing import Any, get_origin, get_type_hints
 from unittest import mock

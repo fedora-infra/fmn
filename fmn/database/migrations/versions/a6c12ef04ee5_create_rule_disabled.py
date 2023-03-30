@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 """Create Rule.disabled
 
 Revision ID: a6c12ef04ee5
