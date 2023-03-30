@@ -41,8 +41,8 @@ const handleSubmit = async (data: FormData, form: FormKitNode | undefined) => {
       color: "success",
       title: "Rule enabled",
       content: rule.disabled
-        ? `Rule "${response.name}" has been successfully disabled.`
-        : `Rule "${response.name}" has been successfully enabled.`,
+        ? `Rule "${response.id}" has been successfully disabled.`
+        : `Rule "${response.id}" has been successfully enabled.`,
     });
   } catch (err) {
     const error = err as AxiosError<PostError>;

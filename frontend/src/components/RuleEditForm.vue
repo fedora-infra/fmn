@@ -40,7 +40,7 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
     toastStore.addToast({
       color: "success",
       title: "Rule edited",
-      content: `Rule "${response.name}" has been successfully edited.`,
+      content: `Rule has been successfully edited.`,
     });
     router.push("/");
   } catch (err) {
@@ -63,7 +63,7 @@ const handleDelete = async (rule: Rule) => {
     toastStore.addToast({
       color: "success",
       title: "Rule deleted",
-      content: `Rule "${props.rule.name}" has been successfully deleted.`,
+      content: `Rule has been successfully deleted.`,
     });
     router.push("/");
   } catch (err) {
@@ -76,9 +76,7 @@ const handleDelete = async (rule: Rule) => {
     toastStore.addToast({
       color: "danger",
       title: "Deletion failed!",
-      content: `Rule "${props.rule.name}" could not be deleted!\n${errors.join(
-        "\n"
-      )}`,
+      content: `Rule could not be deleted!\n${errors.join("\n")}`,
     });
   }
 };

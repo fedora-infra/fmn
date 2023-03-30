@@ -29,7 +29,7 @@ const handleSubmit = async (data: FormData, form: FormKitNode | undefined) => {
     toastStore.addToast({
       color: "success",
       title: "Rule disabled",
-      content: `Rule "${response.name}" has been successfully disabled.`,
+      content: `Rule "${response.id}" has been successfully disabled.`,
     });
   } catch (err) {
     const error = err as AxiosError<PostError>;

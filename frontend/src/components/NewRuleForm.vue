@@ -36,7 +36,7 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
     toastStore.addToast({
       color: "success",
       title: "Rule created",
-      content: `Rule "${response.name}" has been successfully created.`,
+      content: `Rule has been successfully created.`,
     });
     router.push("/");
   } catch (err) {
