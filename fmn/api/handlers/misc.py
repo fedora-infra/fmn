@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...backends import PagureAsyncProxy, get_distgit_proxy
+from ...core.constants import ArtifactType
 from ...database.migrations.main import alembic_migration
 from .. import api_models
 from ..database import gen_db_session
@@ -46,28 +47,31 @@ async def get_owned_artifacts(
     artifacts = {}
 
     for user in users:
-        for project in await distgit_proxy.get_user_projects(username=user):
-            artifacts[project["fullname"]] = {"type": project["namespace"], "name": project["name"]}
+        artifacts.update(
+            (project["fullname"], {"type": project["namespace"], "name": project["name"]})
+            for project in await distgit_proxy.get_user_projects(username=user)
+            if ArtifactType.has_value(project["namespace"])
+        )
 
     for group in groups:
-        for project in await distgit_proxy.get_group_projects(name=group):
-            artifacts[project["fullname"]] = {"type": project["namespace"], "name": project["name"]}
+        artifacts.update(
+            (project["fullname"], {"type": project["namespace"], "name": project["name"]})
+            for project in await distgit_proxy.get_group_projects(name=group)
+            if ArtifactType.has_value(project["namespace"])
+        )
 
     return sorted(artifacts.values(), key=lambda a: (a["name"], a["type"]))
 
 
 @router.get("/artifacts", response_model=list[api_models.Artifact], tags=["misc"])
 async def get_artifacts(name: str, distgit_proxy: PagureAsyncProxy = Depends(get_distgit_proxy)):
-    result = []
     # TODO: handle error 500 in distgit_proxy.get_projects()
-    for project in await distgit_proxy.get_projects(pattern=f"*{name}*"):
-        result.append(
-            {
-                "type": project["namespace"],
-                "name": project["name"],
-            }
-        )
-    return result
+    projects = [
+        {"type": project["namespace"], "name": project["name"]}
+        for project in await distgit_proxy.get_projects(pattern=f"*{name}*")
+        if ArtifactType.has_value(project["namespace"])
+    ]
+    return projects
 
 
 @router.get("/healthz/live", tags=["healthz"])
