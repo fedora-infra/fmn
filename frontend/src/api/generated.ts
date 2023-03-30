@@ -49,16 +49,16 @@ export interface paths {
   };
   "/api/v1/artifacts": {
     /**
-     * Get Artifacts 
+     * Get Artifacts
      * @description This handler queries artifacts from Pagure
-     * 
+     *
      * Proxying Pagure queries lets the API cache results to reduce load on the
      * backend service.
-     * 
+     *
      * :param names: Name patterns of artifacts which should be returned
-     * 
+     *
      * :param users: Names of users whose artifacts should be returned
-     * 
+     *
      * :param groups: Names of groups whose artifacts should be returned
      */
     get: operations["get_artifacts_api_v1_artifacts_get"];
@@ -96,15 +96,15 @@ export interface components {
       name: string;
     };
     /**
-     * ArtifactType 
-     * @description An enumeration. 
+     * ArtifactType
+     * @description An enumeration.
      * @enum {unknown}
      */
     ArtifactType: "rpms" | "containers" | "modules" | "flatpaks";
     /** ArtifactsFollowedTrackingRule */
     ArtifactsFollowedTrackingRule: {
       /**
-       * Name 
+       * Name
        * @enum {string}
        */
       name: "artifacts-followed";
@@ -123,19 +123,19 @@ export interface components {
     /** Filters */
     Filters: {
       /**
-       * Applications 
+       * Applications
        * @default []
        */
       applications?: (string)[];
       /**
-       * Severities 
+       * Severities
        * @default []
        */
       severities?: (string)[];
       /** Topic */
       topic?: string;
       /**
-       * My Actions 
+       * My Actions
        * @default false
        */
       my_actions?: boolean;
@@ -156,7 +156,7 @@ export interface components {
     /** ListParamTrackingRule */
     ListParamTrackingRule: {
       /**
-       * Name 
+       * Name
        * @enum {string}
        */
       name: "artifacts-owned" | "artifacts-group-owned" | "users-followed";
@@ -168,7 +168,7 @@ export interface components {
       /** Name */
       name: string;
       /**
-       * Disabled 
+       * Disabled
        * @default false
        */
       disabled?: boolean;
@@ -180,7 +180,7 @@ export interface components {
     /** NoParamTrackingRule */
     NoParamTrackingRule: {
       /**
-       * Name 
+       * Name
        * @enum {string}
        */
       name: "related-events";
@@ -192,7 +192,7 @@ export interface components {
       /** Name */
       name: string;
       /**
-       * Disabled 
+       * Disabled
        * @default false
        */
       disabled?: boolean;
@@ -204,7 +204,7 @@ export interface components {
       id: number;
       user: components["schemas"]["User"];
       /**
-       * Generated Last Week 
+       * Generated Last Week
        * @default 0
        */
       generated_last_week?: number;
@@ -221,7 +221,7 @@ export interface components {
       /** Name */
       name: string;
       /**
-       * Is Admin 
+       * Is Admin
        * @default false
        */
       is_admin?: boolean;
@@ -481,16 +481,16 @@ export interface operations {
     };
   };
   /**
-   * Get Artifacts 
+   * Get Artifacts
    * @description This handler queries artifacts from Pagure
-   * 
+   *
    * Proxying Pagure queries lets the API cache results to reduce load on the
    * backend service.
-   * 
+   *
    * :param names: Name patterns of artifacts which should be returned
-   * 
+   *
    * :param users: Names of users whose artifacts should be returned
-   * 
+   *
    * :param groups: Names of groups whose artifacts should be returned
    */
   get_artifacts_api_v1_artifacts_get: {
