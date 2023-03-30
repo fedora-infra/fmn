@@ -71,6 +71,14 @@ class TestMisc(BaseTestAPIV1Handler):
                     "namespace": "rpms",
                     "access_users": {"admin": ["dudemcpants"]},
                 },
+                # Some garbage for the handler to cope with:
+                {
+                    "description": "Hahahhaha!!!",
+                    "fullname": "i-don’t-exist/hahaha",
+                    "name": "hahaha",
+                    "namespace": "i-don’t-exist",
+                    "access_users": {"admin": ["dudemcpants"]},
+                },
             ],
         }
 
@@ -154,6 +162,13 @@ class TestMisc(BaseTestAPIV1Handler):
                     "fullname": "rpms/foobar",
                     "name": "foobar",
                     "namespace": "rpms",
+                },
+                # Some garbage for the handler to cope with:
+                {
+                    "description": "Hahahhaha!!!",
+                    "fullname": "i-don’t-exist/hahaha",
+                    "name": "hahaha",
+                    "namespace": "i-don’t-exist",
                 },
             ],
         }
