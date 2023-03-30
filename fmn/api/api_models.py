@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 import logging
 import re
 from typing import Annotated, Any, Generic, Literal, TypeVar

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Contributors to the Fedora Project
+//
+// SPDX-License-Identifier: MIT
+
 import type { FormKitFrameworkContext, FormKitProps } from "@formkit/core";
 
 export const msProps = [

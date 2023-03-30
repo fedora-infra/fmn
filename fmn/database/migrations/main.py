@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 import logging
 from functools import cached_property
 from pathlib import Path

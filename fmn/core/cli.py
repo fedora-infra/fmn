@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 import asyncio
 from datetime import datetime, timedelta
 from importlib.metadata import entry_points

@@ -1,3 +1,7 @@
 #!/bin/bash
 
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 sudo systemctl start fmn-frontend.service && echo 'fmn-frontend is running on http://fmn.tinystage.test:5173/'

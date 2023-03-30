@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Contributors to the Fedora Project
+
+SPDX-License-Identifier: MIT
+-->
+
 <script setup lang="ts">
 import { validationErrorToFormErrors } from "@/api";
 import { useDeleteRuleMutation, useEditRuleMutation } from "@/api/rules";

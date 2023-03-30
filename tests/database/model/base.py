@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 

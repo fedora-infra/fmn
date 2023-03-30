@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 from contextlib import nullcontext
 from unittest import mock
 

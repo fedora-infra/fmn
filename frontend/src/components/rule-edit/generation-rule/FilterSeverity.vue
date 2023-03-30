@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Contributors to the Fedora Project
+
+SPDX-License-Identifier: MIT
+-->
+
 <!-- eslint-disable prettier/prettier -->
 <script setup lang="ts">
 import { SEVERITIES } from "@/api/constants";

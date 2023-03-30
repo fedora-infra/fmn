@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Contributors to the Fedora Project
+
+SPDX-License-Identifier: MIT
+-->
+
 <template>
   <CDropdown v-if="userStore.loggedIn" variant="nav-item" alignment="end">
     <CDropdownToggle component="a">

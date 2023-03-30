@@ -1,6 +1,10 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 Vagrant.configure(2) do |config|
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true

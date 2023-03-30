@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Contributors to the Fedora Project
+
+SPDX-License-Identifier: MIT
+-->
+
 <script setup lang="ts">
 import type { GenerationRule } from "@/api/types";
 import { CButton, CButtonGroup, CListGroupItem } from "@coreui/bootstrap-vue";

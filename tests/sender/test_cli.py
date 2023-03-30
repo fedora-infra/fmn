@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 from textwrap import dedent
 from unittest.mock import AsyncMock, MagicMock
 

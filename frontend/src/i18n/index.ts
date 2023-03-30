@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Contributors to the Fedora Project
+//
+// SPDX-License-Identifier: MIT
+
 import { createI18n, type Composer } from "vue-i18n";
 
 // import enUS from './locales/en-US.json'

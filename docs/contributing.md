@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Contributors to the Fedora Project
+
+SPDX-License-Identifier: MIT
+-->
+
 # Contributor Guide
 
 You need to be legally allowed to submit any contribution to this project. What this means in detail

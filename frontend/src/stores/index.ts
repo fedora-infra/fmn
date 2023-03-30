@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Contributors to the Fedora Project
+//
+// SPDX-License-Identifier: MIT
+
 import { useAuth } from "@/auth";
 import type Authenticator from "@/auth/authenticator";
 import { createPinia } from "pinia";

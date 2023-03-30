@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 amqp_url = "amqp://tinystage.tinystage.test/%2Ffmn"
 
 [client_properties]

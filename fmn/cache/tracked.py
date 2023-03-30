@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 import logging
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING

@@ -1,3 +1,7 @@
 #!/bin/bash
 
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 sudo systemctl start fmn-api.service && echo 'fmn-api is running on http://fmn.tinystage.test:8000/'

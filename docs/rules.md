@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Contributors to the Fedora Project
+
+SPDX-License-Identifier: MIT
+-->
+
 # Rules
 
 *Rules* in FMN consist of several components: One [*Tracking Rule*](#tracking-rules), and

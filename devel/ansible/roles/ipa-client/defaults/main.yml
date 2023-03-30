@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 ipa_admin_user: admin
 ipa_admin_password: password
 krb_master_password: password

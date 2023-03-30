@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Contributors to the Fedora Project
+//
+// SPDX-License-Identifier: MIT
+
 import { plugin as FormKitPlugin } from "@formkit/vue";
 import { createApp } from "vue";
 import { VueQueryPlugin } from "vue-query";

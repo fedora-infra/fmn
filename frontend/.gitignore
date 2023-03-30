@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 # Logs
 logs
 *.log
@@ -20,6 +24,7 @@ coverage
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+!.vscode/extensions.json.license
 .idea
 *.suo
 *.ntvs*

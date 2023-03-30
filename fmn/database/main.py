@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 from sqlalchemy import MetaData, create_engine, select
 from sqlalchemy.engine import URL, Engine, make_url
 from sqlalchemy.exc import NoResultFound

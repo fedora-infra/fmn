@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Contributors to the Fedora Project
+//
+// SPDX-License-Identifier: MIT
+
 import md5 from "crypto-js/md5";
 
 export function generateLibravatarURL(

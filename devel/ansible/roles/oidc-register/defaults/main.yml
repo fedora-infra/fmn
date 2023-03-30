@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 redirect_path: ""
 redirect_url: https://{{ ansible_fqdn }}/{{ redirect_path }}
 dest: /home/vagrant/client_secrets.json

@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
+
 class Handler:
     def __init__(self, config):
         self._config = config

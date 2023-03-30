@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Contributors to the Fedora Project
+
+SPDX-License-Identifier: MIT
+-->
+
 # Frontend for FMN
 
 This template should help get you started developing with Vue 3 in Vite.

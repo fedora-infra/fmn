@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
 from importlib.metadata import entry_points
 from typing import TYPE_CHECKING
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Contributors to the Fedora Project
+//
+// SPDX-License-Identifier: MIT
+
 import type { TokenResponse } from "@openid/appauth";
 import { defineStore } from "pinia";
 import { isRef } from "vue";
