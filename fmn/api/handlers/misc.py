@@ -5,7 +5,6 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...backends import PagureAsyncProxy, get_distgit_proxy
-from ...core.constants import ArtifactType
 from ...database.migrations.main import alembic_migration
 from .. import api_models
 from ..database import gen_db_session
@@ -57,40 +56,18 @@ async def get_owned_artifacts(
     return sorted(artifacts.values(), key=lambda a: (a["name"], a["type"]))
 
 
-@router.get("/artifacts", response_model=list[api_models.ArtifactOptionsGroup], tags=["misc"])
-async def get_artifacts(
-    name: str, distgit_proxy: PagureAsyncProxy = Depends(get_distgit_proxy)
-):  # pragma: no cover todo
-    artifacts = [
-        {
-            "label": "RPMs",
-            "options": [],
-        },
-        {
-            "label": "Containers",
-            "options": [],
-        },
-        {
-            "label": "Modules",
-            "options": [],
-        },
-        {
-            "label": "Flatpaks",
-            "options": [],
-        },
-    ]
-    namespaces = [at.value for at in ArtifactType]
+@router.get("/artifacts", response_model=list[api_models.Artifact], tags=["misc"])
+async def get_artifacts(name: str, distgit_proxy: PagureAsyncProxy = Depends(get_distgit_proxy)):
+    result = []
     # TODO: handle error 500 in distgit_proxy.get_projects()
     for project in await distgit_proxy.get_projects(pattern=f"*{name}*"):
-        for index, namespace in enumerate(namespaces):
-            if project["namespace"] == namespace:
-                artifacts[index]["options"].append(
-                    {
-                        "label": project["name"],
-                        "value": {"type": namespace, "name": project["name"]},
-                    }
-                )
-    return artifacts
+        result.append(
+            {
+                "type": project["namespace"],
+                "name": project["name"],
+            }
+        )
+    return result
 
 
 @router.get("/healthz/live", tags=["healthz"])

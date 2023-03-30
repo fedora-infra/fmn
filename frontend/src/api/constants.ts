@@ -41,3 +41,16 @@ export const TRACKING_RULES = [
     description: "Events started by specific users",
   },
 ];
+
+// Artifact categories
+
+export const ARTIFACT_CATEGORIES = [
+  { name: "rpms", label: "RPMs" },
+  { name: "containers", label: "Containers" },
+  { name: "modules", label: "Modules" },
+  { name: "flatpaks", label: "Flatpaks" },
+];
+
+// A "view" to return {rpms: "RPMs", containers: "Containers", ... }
+export const ARTIFACT_CATEGORY_LABELS: Record<string, string> =
+  ARTIFACT_CATEGORIES.reduce((a, v) => ({ ...a, [v.name]: v.label }), {});

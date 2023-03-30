@@ -131,3 +131,47 @@ class TestMisc(BaseTestAPIV1Handler):
         response = client.get(f"{self.path}/healthz/ready")
         assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert response.json()["detail"] == "Database schema needs to be upgraded"
+
+    async def test_get_artifacts(self, client, respx_mocker):
+        settings = get_settings()
+        settings.services.distgit_url = "http://distgit.test"
+
+        distgit_endpoint = f"{settings.services.distgit_url}/api/0/projects"
+        params = {"pattern": "*foobar*"}
+        distgit_json_response = {
+            "pagination": {
+                "pages": 1,
+            },
+            "projects": [
+                {
+                    "description": "foobar containers",
+                    "fullname": "containers/foobar",
+                    "name": "foobar",
+                    "namespace": "containers",
+                },
+                {
+                    "description": "foobar rpms",
+                    "fullname": "rpms/foobar",
+                    "name": "foobar",
+                    "namespace": "rpms",
+                },
+            ],
+        }
+
+        route = respx_mocker.get(distgit_endpoint, params=params).mock(
+            side_effect=[
+                Response(
+                    status.HTTP_200_OK,
+                    json=distgit_json_response,
+                )
+            ]
+        )
+
+        response = client.get(f"{self.path}/artifacts", params={"name": ["foobar"]})
+
+        assert route.called
+
+        assert response.json() == [
+            {"name": "foobar", "type": "containers"},
+            {"name": "foobar", "type": "rpms"},
+        ]
