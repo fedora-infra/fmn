@@ -1,9 +1,35 @@
 <script setup lang="ts">
 import { apiGet } from "@/api";
+import { ARTIFACT_CATEGORIES, ARTIFACT_CATEGORY_LABELS } from "@/api/constants";
 import type { Artifact } from "@/api/types";
 import type { QueryFunction } from "react-query/types/core";
 
-const apiGetArtifacts = apiGet as QueryFunction<{ artifacts: Artifact[] }>;
+type Option = { label: string; value: Artifact };
+type OptionGroup = { label: string; options: Option[] };
+
+const valueToOption = (artifact: Artifact) => ({
+  label: `${artifact.type}/${artifact.name}`,
+  value: artifact,
+});
+
+const resultsToOptions = (results: Artifact[]) => {
+  const options: OptionGroup[] = ARTIFACT_CATEGORIES.map((category) => ({
+    label: category.label,
+    options: [],
+  }));
+  results.forEach((artifact) => {
+    const category = options.filter(
+      (o) => o.label === ARTIFACT_CATEGORY_LABELS[artifact.type]
+    )[0];
+    category.options.push({
+      label: artifact.name,
+      value: artifact,
+    });
+  });
+  return options;
+};
+
+const apiGetArtifacts = apiGet as QueryFunction<Artifact[]>;
 const route = "/api/v1/artifacts";
 const getArtifacts = async (query: string) => {
   const results = await apiGetArtifacts({
@@ -16,7 +42,7 @@ const getArtifacts = async (query: string) => {
 
 <template>
   <FormKit
-    type="multiselect"
+    type="multiselectasyncdefault"
     name="params"
     label="Artifact names:"
     label-class="fw-bold"
@@ -32,6 +58,8 @@ const getArtifacts = async (query: string) => {
     :min-chars="1"
     placeholder="Search by artifact name"
     noOptionsText="No matches on that artifact found"
+    :msResultsToOptions="resultsToOptions"
+    :msValueToOption="valueToOption"
   />
 </template>
 

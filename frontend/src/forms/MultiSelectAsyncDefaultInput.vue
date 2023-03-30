@@ -13,29 +13,30 @@ const props = defineProps<{ context: FormKitFrameworkContext }>();
 
 type Option = { [key in "label" | "value"]: string };
 
-const asOptions = (values: string[] | undefined) => {
-  if (!values) {
-    return values;
-  }
-  return values.map(
-    (value): Option => ({
-      label: value,
-      value: value,
-    })
-  );
-};
+const simpleValueToOption = (value: string): Option => ({
+  label: value,
+  value: value,
+});
+const valueToOption =
+  props.context.node.props.msValueToOption || simpleValueToOption;
+
+const simpleResultsToOptions = (values: string[]): Option[] =>
+  values.map(valueToOption);
+
+const resultsToOptions =
+  props.context.node.props.msResultsToOptions || simpleResultsToOptions;
 
 const getAsOptions = async (query: string, select$: Multiselect) => {
   // According to Multiselect's API, we must return a list of objects when using an async function for options.
   const result = await props.context.node.props.msOptions(query, select$);
-  return asOptions(result);
+  return resultsToOptions(result || []);
 };
 
 const bindableProps = computed(() => {
   const values = getBindableProps(props.context);
   values.object = true;
   values.options = getAsOptions;
-  values.value = asOptions(props.context._value);
+  values.value = (props.context._value || []).map(valueToOption);
   return values;
 });
 

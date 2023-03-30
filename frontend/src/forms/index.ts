@@ -9,7 +9,13 @@ const multiselect = createInput(MultiSelectInput, {
   props: [...msProps, "msOptions", "msLabel"],
 });
 const multiSelectAsyncDefault = createInput(MultiSelectAsyncDefaultInput, {
-  props: [...msProps, "msOptions", "msLabel"],
+  props: [
+    ...msProps,
+    "msOptions",
+    "msLabel",
+    "msResultsToOptions",
+    "msValueToOption",
+  ],
 });
 
 // Create the FormKit config, including the multiselect input
