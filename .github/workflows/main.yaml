@@ -38,7 +38,7 @@ jobs:
 
       - name: Install RPM dependencies
         run: |
-          dnf install -y krb5-devel libpq-devel
+          dnf install -y krb5-devel libpq-devel gettext
 
       - name: Install base Python dependencies
         run: |
@@ -57,7 +57,7 @@ jobs:
 
       - name: Install the API
         run: |
-          dnf install -y krb5-devel libpq-devel
+          dnf install -y krb5-devel libpq-devel gettext
           python3 -m pip install --upgrade poetry
           poetry install --extras api
 
