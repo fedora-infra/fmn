@@ -35,7 +35,7 @@ const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
     throw Error("No form node?");
   }
   try {
-    const response = await editMutation(data);
+    await editMutation(data);
     // Success!
     toastStore.addToast({
       color: "success",
