@@ -28,3 +28,6 @@ docs/_source/
 
 # Visual Studio Code
 .vscode/settings.json
+
+# Tox
+.tox
