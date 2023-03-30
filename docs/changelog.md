@@ -13,5 +13,3 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 This project uses [*towncrier*](https://towncrier.readthedocs.io/) and the changes for the upcoming release can be found in <https://github.com/fedora-infra/fmn/tree/main/changelog.d/>.
 
 <!-- towncrier release notes start -->
-
-

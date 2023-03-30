@@ -8,7 +8,7 @@
       name:
         - redis
       state: present
-      
+
 - name: Start the service using systemd
   systemd:
     state: started
