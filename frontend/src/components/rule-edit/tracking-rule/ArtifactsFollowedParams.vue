@@ -33,7 +33,7 @@ const apiGetArtifacts = apiGet as QueryFunction<Artifact[]>;
 const route = "/api/v1/artifacts";
 const getArtifacts = async (query: string) => {
   const results = await apiGetArtifacts({
-    queryKey: [route, { name: query }],
+    queryKey: [route, { names: `*${query}*` }],
     meta: undefined,
   });
   return results;

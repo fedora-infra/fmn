@@ -43,12 +43,20 @@ export interface paths {
     /** Get Applications */
     get: operations["get_applications_api_v1_applications_get"];
   };
-  "/api/v1/artifacts/owned": {
-    /** Get Owned Artifacts */
-    get: operations["get_owned_artifacts_api_v1_artifacts_owned_get"];
-  };
   "/api/v1/artifacts": {
-    /** Get Artifacts */
+    /**
+     * Get Artifacts 
+     * @description This handler queries artifacts from Pagure
+     * 
+     * Proxying Pagure queries lets the API cache results to reduce load on the
+     * backend service.
+     * 
+     * :param names: Name patterns of artifacts which should be returned
+     * 
+     * :param users: Names of users whose artifacts should be returned
+     * 
+     * :param groups: Names of groups whose artifacts should be returned
+     */
     get: operations["get_artifacts_api_v1_artifacts_get"];
   };
   "/api/v1/healthz/live": {
@@ -62,6 +70,10 @@ export interface paths {
   "/api/v1/admin/rules": {
     /** Get Rules */
     get: operations["get_rules_api_v1_admin_rules_get"];
+  };
+  "/api/v1/admin/users": {
+    /** Get Users */
+    get: operations["get_users_api_v1_admin_users_get"];
   };
   "/api/v1/admin/rules/{id}": {
     /** Patch Rule */
@@ -78,13 +90,6 @@ export interface components {
       type: components["schemas"]["ArtifactType"];
       /** Name */
       name: string;
-    };
-    /** ArtifactOptionsGroup */
-    ArtifactOptionsGroup: {
-      /** Label */
-      label: string;
-      /** Options */
-      options: (components["schemas"]["Option_Artifact_"])[];
     };
     /**
      * ArtifactType 
@@ -110,28 +115,6 @@ export interface components {
       protocol: string;
       /** Address */
       address: string;
-    };
-    /** EmailNotification */
-    EmailNotification: {
-      /**
-       * Protocol 
-       * @enum {string}
-       */
-      protocol: "email";
-      content: components["schemas"]["EmailNotificationContent"];
-    };
-    /** EmailNotificationContent */
-    EmailNotificationContent: {
-      headers: components["schemas"]["EmailNotificationHeaders"];
-      /** Body */
-      body: string;
-    };
-    /** EmailNotificationHeaders */
-    EmailNotificationHeaders: {
-      /** To */
-      To: string;
-      /** Subject */
-      Subject: string;
     };
     /** Filters */
     Filters: {
@@ -166,22 +149,6 @@ export interface components {
       /** Detail */
       detail?: (components["schemas"]["ValidationError"])[];
     };
-    /** IRCNotification */
-    IRCNotification: {
-      /**
-       * Protocol 
-       * @enum {string}
-       */
-      protocol: "irc";
-      content: components["schemas"]["IRCNotificationContent"];
-    };
-    /** IRCNotificationContent */
-    IRCNotificationContent: {
-      /** To */
-      to: string;
-      /** Message */
-      message: string;
-    };
     /** ListParamTrackingRule */
     ListParamTrackingRule: {
       /**
@@ -191,22 +158,6 @@ export interface components {
       name: "artifacts-owned" | "artifacts-group-owned" | "users-followed";
       /** Params */
       params: (string)[];
-    };
-    /** MatrixNotification */
-    MatrixNotification: {
-      /**
-       * Protocol 
-       * @enum {string}
-       */
-      protocol: "matrix";
-      content: components["schemas"]["MatrixNotificationContent"];
-    };
-    /** MatrixNotificationContent */
-    MatrixNotificationContent: {
-      /** To */
-      to: string;
-      /** Message */
-      message: string;
     };
     /** NewRule */
     NewRule: {
@@ -231,14 +182,6 @@ export interface components {
       name: "related-events";
       /** Params */
       params?: string;
-    };
-    /** Notification */
-    Notification: components["schemas"]["EmailNotification"] | components["schemas"]["IRCNotification"] | components["schemas"]["MatrixNotification"];
-    /** Option[Artifact] */
-    Option_Artifact_: {
-      /** Label */
-      label: string;
-      value: components["schemas"]["Artifact"];
     };
     /** Rule */
     Rule: {
@@ -300,8 +243,8 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /** Get Me */
   get_me_api_v1_users_me_get: {
-    /** Get Me */
     responses: {
       /** @description Successful Response */
       200: {
@@ -311,10 +254,10 @@ export interface operations {
       };
     };
   };
+  /** Get Users */
   get_users_api_v1_users_get: {
-    /** Get Users */
-    parameters?: {
-      query?: {
+    parameters: {
+      query: {
         search?: string;
       };
     };
@@ -333,8 +276,8 @@ export interface operations {
       };
     };
   };
+  /** Get User Info */
   get_user_info_api_v1_users__username__info_get: {
-    /** Get User Info */
     parameters: {
       path: {
         username: Record<string, never>;
@@ -355,8 +298,8 @@ export interface operations {
       };
     };
   };
+  /** Get User Groups */
   get_user_groups_api_v1_users__username__groups_get: {
-    /** Get User Groups */
     parameters: {
       path: {
         username: Record<string, never>;
@@ -377,8 +320,8 @@ export interface operations {
       };
     };
   };
+  /** Get User Destinations */
   get_user_destinations_api_v1_users__username__destinations_get: {
-    /** Get User Destinations */
     parameters: {
       path: {
         username: Record<string, never>;
@@ -399,8 +342,8 @@ export interface operations {
       };
     };
   };
+  /** Get User Rules */
   get_user_rules_api_v1_users__username__rules_get: {
-    /** Get User Rules */
     parameters: {
       path: {
         username: Record<string, never>;
@@ -421,8 +364,8 @@ export interface operations {
       };
     };
   };
+  /** Create User Rule */
   create_user_rule_api_v1_users__username__rules_post: {
-    /** Create User Rule */
     parameters: {
       path: {
         username: Record<string, never>;
@@ -448,8 +391,8 @@ export interface operations {
       };
     };
   };
+  /** Get User Rule */
   get_user_rule_api_v1_users__username__rules__id__get: {
-    /** Get User Rule */
     parameters: {
       path: {
         username: string;
@@ -471,8 +414,8 @@ export interface operations {
       };
     };
   };
+  /** Edit User Rule */
   edit_user_rule_api_v1_users__username__rules__id__put: {
-    /** Edit User Rule */
     parameters: {
       path: {
         username: string;
@@ -499,8 +442,8 @@ export interface operations {
       };
     };
   };
+  /** Delete User Rule */
   delete_user_rule_api_v1_users__username__rules__id__delete: {
-    /** Delete User Rule */
     parameters: {
       path: {
         username: string;
@@ -522,8 +465,8 @@ export interface operations {
       };
     };
   };
+  /** Get Applications */
   get_applications_api_v1_applications_get: {
-    /** Get Applications */
     responses: {
       /** @description Successful Response */
       200: {
@@ -533,10 +476,23 @@ export interface operations {
       };
     };
   };
-  get_owned_artifacts_api_v1_artifacts_owned_get: {
-    /** Get Owned Artifacts */
-    parameters?: {
-      query?: {
+  /**
+   * Get Artifacts 
+   * @description This handler queries artifacts from Pagure
+   * 
+   * Proxying Pagure queries lets the API cache results to reduce load on the
+   * backend service.
+   * 
+   * :param names: Name patterns of artifacts which should be returned
+   * 
+   * :param users: Names of users whose artifacts should be returned
+   * 
+   * :param groups: Names of groups whose artifacts should be returned
+   */
+  get_artifacts_api_v1_artifacts_get: {
+    parameters: {
+      query: {
+        names?: (string)[];
         users?: (string)[];
         groups?: (string)[];
       };
@@ -545,9 +501,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": ({
-              [key: string]: string | undefined;
-            })[];
+          "application/json": (components["schemas"]["Artifact"])[];
         };
       };
       /** @description Validation Error */
@@ -558,55 +512,34 @@ export interface operations {
       };
     };
   };
-  get_artifacts_api_v1_artifacts_get: {
-    /** Get Artifacts */
+  /** Liveness Check */
+  liveness_check_api_v1_healthz_live_get: {
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+    };
+  };
+  /** Readiness Check */
+  readiness_check_api_v1_healthz_ready_get: {
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+    };
+  };
+  /** Get Rules */
+  get_rules_api_v1_admin_rules_get: {
     parameters: {
       query: {
-        name: string;
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        content: {
-          "application/json": (components["schemas"]["ArtifactOptionsGroup"])[];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  liveness_check_api_v1_healthz_live_get: {
-    /** Liveness Check */
-    responses: {
-      /** @description Successful Response */
-      200: {
-        content: {
-          "application/json": Record<string, never>;
-        };
-      };
-    };
-  };
-  readiness_check_api_v1_healthz_ready_get: {
-    /** Readiness Check */
-    responses: {
-      /** @description Successful Response */
-      200: {
-        content: {
-          "application/json": Record<string, never>;
-        };
-      };
-    };
-  };
-  get_rules_api_v1_admin_rules_get: {
-    /** Get Rules */
-    parameters?: {
-      query?: {
         disabled?: boolean;
+        username?: string;
       };
     };
     responses: {
@@ -624,8 +557,30 @@ export interface operations {
       };
     };
   };
+  /** Get Users */
+  get_users_api_v1_admin_users_get: {
+    parameters: {
+      query: {
+        search?: string;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": (components["schemas"]["User"])[];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  /** Patch Rule */
   patch_rule_api_v1_admin_rules__id__patch: {
-    /** Patch Rule */
     parameters: {
       path: {
         id: number;

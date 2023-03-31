@@ -1,5 +1,6 @@
 import logging
 from importlib import metadata
+from itertools import chain
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -38,40 +39,41 @@ def get_applications():
     return applications
 
 
-@router.get("/artifacts/owned", response_model=list[dict[str, str]], tags=["misc"])
-async def get_owned_artifacts(
+@router.get("/artifacts", response_model=list[api_models.Artifact], tags=["misc"])
+async def get_artifacts(
+    names: list[str] = Query(default=[]),
     users: list[str] = Query(default=[]),
     groups: list[str] = Query(default=[]),
     distgit_proxy: PagureAsyncProxy = Depends(get_distgit_proxy),
 ):
-    artifacts = {}
+    """This handler queries artifacts from Pagure
 
-    for user in users:
-        artifacts.update(
-            (project["fullname"], {"type": project["namespace"], "name": project["name"]})
-            for project in await distgit_proxy.get_user_projects(username=user)
+    Proxying Pagure queries lets the API cache results to reduce load on the
+    backend service.
+
+    :param names: Name patterns of artifacts which should be returned
+
+    :param users: Names of users whose artifacts should be returned
+
+    :param groups: Names of groups whose artifacts should be returned
+    """
+    backend_coroutines = chain(
+        (distgit_proxy.get_projects(pattern=name_pattern) for name_pattern in names),
+        (distgit_proxy.get_user_projects(username=user) for user in users),
+        (distgit_proxy.get_group_projects(name=group) for group in groups),
+    )
+
+    backend_results = chain.from_iterable([await coroutine for coroutine in backend_coroutines])
+
+    artifacts = sorted(
+        {
+            (project["name"], project["namespace"])
+            for project in backend_results
             if ArtifactType.has_value(project["namespace"])
-        )
+        }
+    )
 
-    for group in groups:
-        artifacts.update(
-            (project["fullname"], {"type": project["namespace"], "name": project["name"]})
-            for project in await distgit_proxy.get_group_projects(name=group)
-            if ArtifactType.has_value(project["namespace"])
-        )
-
-    return sorted(artifacts.values(), key=lambda a: (a["name"], a["type"]))
-
-
-@router.get("/artifacts", response_model=list[api_models.Artifact], tags=["misc"])
-async def get_artifacts(name: str, distgit_proxy: PagureAsyncProxy = Depends(get_distgit_proxy)):
-    # TODO: handle error 500 in distgit_proxy.get_projects()
-    projects = [
-        {"type": project["namespace"], "name": project["name"]}
-        for project in await distgit_proxy.get_projects(pattern=f"*{name}*")
-        if ArtifactType.has_value(project["namespace"])
-    ]
-    return projects
+    return [{"type": artifact[1], "name": artifact[0]} for artifact in artifacts]
 
 
 @router.get("/healthz/live", tags=["healthz"])
