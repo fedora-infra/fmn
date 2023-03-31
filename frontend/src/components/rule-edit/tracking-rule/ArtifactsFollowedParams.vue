@@ -22,7 +22,7 @@ const resultsToOptions = (results: Artifact[]) => {
       (o) => o.label === ARTIFACT_CATEGORY_LABELS[artifact.type]
     )[0];
     category.options.push({
-      label: artifact.name,
+      label: `${artifact.type}/${artifact.name}`,
       value: artifact,
     });
   });
