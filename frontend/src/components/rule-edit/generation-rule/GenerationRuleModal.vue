@@ -12,7 +12,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/bootstrap-vue";
-import type { FormKitNode } from "@formkit/core";
+import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
 import { ref } from "vue";
 import DestinationList from "./DestinationList.vue";
 import FilterList from "./FilterList.vue";
@@ -30,8 +30,8 @@ const emit = defineEmits<{
 
 const node = ref<{ node: FormKitNode } | null>(null);
 
-const handleSubmit = async (data: GenerationRule) => {
-  emit("submit", data);
+const handleSubmit = async (data: FormKitGroupValue) => {
+  emit("submit", data as GenerationRule);
 };
 const handleClose = async () => {
   emit("close");

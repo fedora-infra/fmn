@@ -10,7 +10,7 @@ import { useAddRuleMutation } from "@/api/rules";
 import type { GenerationRule, PostError, Rule } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
 import { CCol, CRow } from "@coreui/bootstrap-vue";
-import type { FormKitNode } from "@formkit/core";
+import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";
 import { computed, ref } from "vue";
@@ -31,13 +31,16 @@ const formReady = computed(
   () => trackingRuleName.value !== "" && generationRulesCount.value > 0
 );
 
-const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
+const handleSubmit = async (
+  data: FormKitGroupValue,
+  form: FormKitNode | undefined
+) => {
   console.log("Will submit the new rule:", data);
   if (!form) {
     throw Error("No form node?");
   }
   try {
-    await mutateAsync(data);
+    await mutateAsync(data as Rule);
     // Success!
     toastStore.addToast({
       color: "success",

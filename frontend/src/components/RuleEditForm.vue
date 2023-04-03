@@ -18,7 +18,7 @@ import {
 } from "@coreui/bootstrap-vue";
 import { cilTrash } from "@coreui/icons";
 import { CIcon } from "@coreui/icons-vue";
-import type { FormKitNode } from "@formkit/core";
+import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";
 import { computed, ref } from "vue";
@@ -35,13 +35,16 @@ const router = useRouter();
 
 const { mutateAsync: editMutation } = useEditRuleMutation(props.rule.id);
 
-const handleSubmit = async (data: Rule, form: FormKitNode | undefined) => {
+const handleSubmit = async (
+  data: FormKitGroupValue,
+  form: FormKitNode | undefined
+) => {
   console.log("Will edit the rule:", data);
   if (!form) {
     throw Error("No form node?");
   }
   try {
-    await editMutation(data);
+    await editMutation(data as Rule);
     // Success!
     toastStore.addToast({
       color: "success",

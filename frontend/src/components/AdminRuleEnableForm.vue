@@ -7,9 +7,10 @@ SPDX-License-Identifier: MIT
 <script setup lang="ts">
 import { validationErrorToFormErrors } from "@/api";
 import { usePatchRuleMutation } from "@/api/rules";
-import type { PostError, Rule, RulePatch } from "@/api/types";
+import type { PostError, Rule } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
-import type { FormKitNode } from "@formkit/core";
+import { formDataToRuleMutation } from "@/util/forms";
+import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";
 import { useQueryClient } from "vue-query";
@@ -22,11 +23,10 @@ const toastStore = useToastStore();
 const queryClient = useQueryClient();
 const { mutateAsync: editMutation } = usePatchRuleMutation();
 
-interface FormData extends RulePatch {
-  id: Rule["id"];
-}
-
-const handleSubmit = async (data: FormData, form: FormKitNode | undefined) => {
+const handleSubmit = async (
+  data: FormKitGroupValue,
+  form: FormKitNode | undefined
+) => {
   console.log(
     `Will set rule ${data.id}'s' disabled status to ${data.disabled}`
   );
@@ -34,8 +34,7 @@ const handleSubmit = async (data: FormData, form: FormKitNode | undefined) => {
     throw Error("No form node?");
   }
   try {
-    const { id, ...rule } = data;
-    const response = await editMutation({ id, rule });
+    const response = await editMutation(formDataToRuleMutation(data));
     // Success!
     await queryClient.invalidateQueries([
       "/api/v1/admin/rules",
@@ -46,7 +45,7 @@ const handleSubmit = async (data: FormData, form: FormKitNode | undefined) => {
     toastStore.addToast({
       color: "success",
       title: "Rule enabled",
-      content: rule.disabled
+      content: response.disabled
         ? `Rule "${response.id}" has been successfully disabled.`
         : `Rule "${response.id}" has been successfully enabled.`,
     });
