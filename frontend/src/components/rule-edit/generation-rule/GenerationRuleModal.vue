@@ -5,6 +5,7 @@ SPDX-License-Identifier: MIT
 -->
 
 <script setup lang="ts">
+import { SEVERITIES } from "@/api/constants";
 import type { GenerationRule } from "@/api/types";
 import {
   CModal,
@@ -13,7 +14,7 @@ import {
   CModalTitle,
 } from "@coreui/bootstrap-vue";
 import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import DestinationList from "./DestinationList.vue";
 import FilterList from "./FilterList.vue";
 
@@ -36,6 +37,13 @@ const handleSubmit = async (data: FormKitGroupValue) => {
 const handleClose = async () => {
   emit("close");
 };
+
+const defaultValue = computed(
+  () =>
+    props.rule || {
+      filters: { severities: SEVERITIES.slice(1).map((s) => s.label) },
+    }
+);
 </script>
 
 <template>
@@ -56,7 +64,7 @@ const handleClose = async () => {
         ref="node"
         @submit="handleSubmit"
         :actions="false"
-        :value="props.rule"
+        :value="defaultValue"
       >
         <DestinationList />
         <FilterList />

@@ -24,7 +24,6 @@ const router = useRouter();
 const { mutateAsync } = useAddRuleMutation();
 
 const trackingRuleName = ref("");
-const value = ref("");
 
 const generationRulesCount = ref(0);
 const formReady = computed(
@@ -90,7 +89,6 @@ const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
           name="name"
           label="Rule Title:"
           label-class="fw-bold mb-0"
-          v-model="value"
           placeholder="Optional Rule Title"
           input-class="form-control"
         />
