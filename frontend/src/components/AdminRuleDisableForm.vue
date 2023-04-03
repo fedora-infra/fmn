@@ -7,10 +7,11 @@ SPDX-License-Identifier: MIT
 <script setup lang="ts">
 import { validationErrorToFormErrors } from "@/api";
 import { usePatchRuleMutation } from "@/api/rules";
-import type { PostError, Rule, RulePatch } from "@/api/types";
+import type { PostError } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
+import { formDataToRuleMutation } from "@/util/forms";
 import { CInputGroup } from "@coreui/bootstrap-vue";
-import type { FormKitNode } from "@formkit/core";
+import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";
 
@@ -18,18 +19,16 @@ const toastStore = useToastStore();
 
 const { mutateAsync: editMutation } = usePatchRuleMutation();
 
-interface FormData extends RulePatch {
-  id: Rule["id"];
-}
-
-const handleSubmit = async (data: FormData, form: FormKitNode | undefined) => {
+const handleSubmit = async (
+  data: FormKitGroupValue,
+  form: FormKitNode | undefined
+) => {
   console.log(`Will disable rule ${data.id}`);
   if (!form) {
     throw Error("No form node?");
   }
   try {
-    const { id, ...rule } = data;
-    const response = await editMutation({ id, rule });
+    const response = await editMutation(formDataToRuleMutation(data));
     form.reset();
     // Success!
     toastStore.addToast({
