@@ -32,14 +32,15 @@ class Applications(Filter):
 
 class Severities(Filter):
     name = "severities"
+    default = (message.INFO, message.WARNING, message.ERROR)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._severities = [getattr(message, level.upper()) for level in (self.params or [])]
+        if not self._severities:
+            self._severities = self.default
 
     def matches(self, message):
-        if not self._severities:
-            return True
         return message.severity in self._severities
 
 

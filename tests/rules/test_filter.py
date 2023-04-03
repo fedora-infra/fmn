@@ -30,7 +30,8 @@ def test_applications(requester, make_mocked_message, received, filtered, expect
     [
         (message.ERROR, ["warning", "error"], True),
         (message.INFO, ["warning", "error"], False),
-        (message.DEBUG, None, True),
+        (message.INFO, None, True),
+        (message.DEBUG, None, False),
     ],
 )
 def test_severities(requester, make_mocked_message, received, filtered, expected):
