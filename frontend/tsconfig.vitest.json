@@ -4,6 +4,11 @@
   "compilerOptions": {
     "composite": true,
     "lib": [],
-    "types": ["node", "jsdom", "@intlify/unplugin-vue-i18n/messages"]
+    "types": [
+      "node",
+      "jsdom",
+      "@intlify/unplugin-vue-i18n/messages",
+      "@testing-library/jest-dom"
+    ]
   }
 }

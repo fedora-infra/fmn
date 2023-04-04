@@ -30,6 +30,7 @@ export const config: UserConfig = {
   test: {
     environment: "jsdom",
     testTimeout: 20000,
+    setupFiles: ["./src/tests.ts"],
     coverage: {
       reporter: ["text", "json", "html"],
       all: true,
