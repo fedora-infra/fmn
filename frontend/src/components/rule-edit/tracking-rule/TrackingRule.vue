@@ -35,7 +35,10 @@ const onTrackingRuleChange = (value: string, node: FormKitNode) => {
   if (!paramsNode) {
     return;
   }
-  const previousParamsValue: string[] = paramsNode.props._init;
+
+  const previousParamsValue: string[] = paramsNode._value
+    ? (paramsNode._value as string[])
+    : [];
   let initialValue: string[] = isInit ? previousParamsValue : [];
   if (
     value === "artifacts-owned" &&
@@ -44,6 +47,7 @@ const onTrackingRuleChange = (value: string, node: FormKitNode) => {
   ) {
     initialValue = [username];
   }
+  console.log("Setting initial params value to", initialValue);
   paramsNode.input(initialValue);
 };
 </script>
