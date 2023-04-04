@@ -27,7 +27,7 @@ const getUserGroups = async () => {
 
 <template>
   <FormKit
-    type="multiselect"
+    type="multiselectasyncdefault"
     name="params"
     label="Artifacts owned by groups:"
     label-class="fw-bold"
@@ -38,6 +38,7 @@ const getUserGroups = async () => {
     searchable
     :filter-results="false"
     :resolve-on-load="true"
+    validation="required"
   />
   <ArtifactsOwnedSummary :groups="value" />
 </template>
