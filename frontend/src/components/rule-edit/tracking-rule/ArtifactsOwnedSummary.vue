@@ -23,14 +23,20 @@ const queryParams = computed(() => ({
   users: props.users,
   groups: props.groups,
 }));
+const visible = computed(
+  () =>
+    (props.groups && props.groups.length > 0) ||
+    (props.users && props.users.length > 0)
+);
 const { isLoading, isError, data, error } = useQuery(
   [route, queryParams],
-  apiGet as QueryFunction<Artifact[]>
+  apiGet as QueryFunction<Artifact[]>,
+  { enabled: visible.value }
 );
 </script>
 
 <template>
-  <div class="mt-3">
+  <div class="mt-3" v-if="visible">
     <p v-if="isLoading">
       Checking how many artifacts will be tracked…
       <CSpinner size="sm" />
