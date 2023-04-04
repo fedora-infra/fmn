@@ -88,7 +88,9 @@ async def get_user_rules(
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to see someone else's rules")
 
-    db_result = await db_session.execute(Rule.select_related().filter(Rule.user.has(name=username)))
+    db_result = await db_session.execute(
+        Rule.select_related().filter(Rule.user.has(name=username)).order_by(Rule.id)
+    )
     rules = db_result.scalars().all()
 
     # Collect the number of notifications sent
