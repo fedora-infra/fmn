@@ -58,7 +58,7 @@ const getUsers = async (query: string) => {
 
   <ArtifactsOwnedSummary
     v-if="props.showArtifactsOwnedSummary"
-    :users="value || []"
+    :users="value"
   />
 </template>
 
