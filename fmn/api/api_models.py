@@ -94,7 +94,7 @@ class User(BaseModel):
 
 
 class NewRule(BaseModel):
-    name: str
+    name: str | None = None
     disabled: bool = False
     tracking_rule: TrackingRule
     generation_rules: list[GenerationRule]

@@ -29,7 +29,7 @@ class Rule(Base):
     __tablename__ = "rules"
 
     id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(UnicodeText, nullable=False)
+    name = Column(UnicodeText, nullable=True)
     disabled = Column(
         Boolean, default=False, nullable=False, index=True, server_default=expression.text("FALSE")
     )
