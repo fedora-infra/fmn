@@ -8,6 +8,7 @@ SPDX-License-Identifier: MIT
 import { useUserStore } from "@/stores/user";
 
 const api_docs_url = import.meta.env.VITE_API_URL + "/docs";
+const version = import.meta.env.VITE_VERSION;
 
 const userStore = useUserStore();
 </script>
@@ -29,6 +30,9 @@ const userStore = useUserStore();
             | <a :href="api_docs_url">FMN API Documentation</a>
           </template>
         </div>
+      </div>
+      <div v-if="version" class="row justify-content-center">
+        <div class="col text-center text-white-50">Version {{ version }}</div>
       </div>
       <div
         class="row justify-content-center border-top border-secondary mt-4 pt-3 text-center"
