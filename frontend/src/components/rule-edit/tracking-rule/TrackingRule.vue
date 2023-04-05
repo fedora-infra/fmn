@@ -10,7 +10,6 @@ import { useUserStore } from "@/stores/user";
 import type { FormKitNode } from "@formkit/core";
 import { ref } from "vue";
 import TrackingRuleParams from "./TrackingRuleParams.vue";
-
 const emit = defineEmits<{
   (e: "selected", name: string): void;
 }>();
@@ -20,35 +19,37 @@ const username = userStore.username;
 
 const ruleName = ref("");
 const oldRuleName = ref<string | null>("");
-const node = ref<{ node: FormKitNode } | null>(null);
 
-const onTrackingRuleChange = (value: string, node: FormKitNode) => {
-  // console.log("old tr name was", oldRuleName.value, ", new tr name is", value);
-  if (value === oldRuleName.value) {
-    return;
+const setParamsValue = (trValue: string, trNode: FormKitNode) => {
+  // console.log("tr name was", oldRuleName.value, ", changed to", trValue);
+  if (trValue === oldRuleName.value) {
+    return; // no change
   }
-  const isInit = oldRuleName.value === "";
-  oldRuleName.value = value;
-  emit("selected", value);
+  oldRuleName.value = trValue;
+  emit("selected", trValue);
   // Pre-fill the parameters with sensible defaults
-  const paramsNode = node.at("params");
+  const paramsNode = trNode.at("params");
   if (!paramsNode) {
     return;
   }
 
-  const previousParamsValue: string[] = paramsNode._value
-    ? (paramsNode._value as string[])
-    : [];
-  let initialValue: string[] = isInit ? previousParamsValue : [];
-  if (
-    value === "artifacts-owned" &&
-    previousParamsValue.length === 0 &&
-    username
-  ) {
+  let initialValue: string[] = [];
+  if (trValue === "artifacts-owned" && username) {
     initialValue = [username];
   }
-  console.log("Setting initial params value to", initialValue);
+  // console.log("Setting initial params value to", initialValue);
   paramsNode.input(initialValue);
+};
+
+const onNode = (node: FormKitNode) => {
+  // Init the oldRuleName value to detect changes
+  const value = (node.value || "") as string;
+  oldRuleName.value = value;
+  // This seems necessary for unit tests, not sure why v-model is not sufficient
+  ruleName.value = value;
+};
+const onInput = (value: string, node: FormKitNode) => {
+  return setParamsValue(value, node);
 };
 </script>
 
@@ -60,7 +61,6 @@ const onTrackingRuleChange = (value: string, node: FormKitNode) => {
       label="Tracking Rule:"
       label-class="fw-bold mt-2"
       placeholder="Choose a Tracking Rule"
-      ref="node"
       v-model="ruleName"
       :msOptions="
         TRACKING_RULES.map((tr) => ({
@@ -70,7 +70,8 @@ const onTrackingRuleChange = (value: string, node: FormKitNode) => {
         }))
       "
       validation="required"
-      @input="onTrackingRuleChange"
+      @node="onNode"
+      @input="onInput"
     >
       <template v-slot:option="{ option }">
         <div>
