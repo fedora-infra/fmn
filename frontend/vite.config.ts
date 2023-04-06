@@ -40,6 +40,7 @@ export const config: UserConfig = {
         ".eslintrc.cjs",
         "env.d.ts",
         "src/main.ts",
+        "src/api/generated.ts",
         "dist/**",
       ],
       // Uncomment to check thresholds:
