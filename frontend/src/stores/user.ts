@@ -7,6 +7,7 @@ import { defineStore } from "pinia";
 import { isRef } from "vue";
 import { login } from "../auth";
 import type { UserInfoResponseJson } from "../auth/userinfo_request";
+import { useToastStore } from "./toast";
 
 export const useUserStore = defineStore({
   id: "user",
@@ -67,7 +68,13 @@ export const useUserStore = defineStore({
           const result = await auth.makeAccessTokenRequest(this.refreshToken);
           this.importTokenResponse(result);
         } catch (err) {
+          const toastStore = useToastStore();
           console.log("Could not refresh the access token:", err);
+          toastStore.addToast({
+            title: "Session expired",
+            content: "Your session has expired, please log in again",
+            color: "warning",
+          });
           await this.logoutAndLogin();
         }
       }
