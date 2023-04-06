@@ -37,10 +37,19 @@ export class NoHashQueryStringUtils extends BasicQueryStringUtils {
 
 const requestor = new FetchRequestor();
 
+abstract class MessagesManager {
+  abstract show(
+    content: string,
+    title: string | undefined,
+    category: string | undefined
+  ): void;
+}
+
 export default class Authenticator {
   private openIdConnectUrl: string;
   private clientId: string;
   private redirectUri: string;
+  private messages: MessagesManager;
   private notifier: AuthorizationNotifier;
   private authorizationHandler: AuthorizationRequestHandler;
   private tokenHandler: TokenRequestHandler;
@@ -49,10 +58,16 @@ export default class Authenticator {
   // state
   private configuration: AuthorizationServiceConfiguration | undefined;
 
-  constructor(openIdConnectUrl: string, clientId: string, redirectUri: string) {
+  constructor(
+    openIdConnectUrl: string,
+    clientId: string,
+    redirectUri: string,
+    messages: MessagesManager
+  ) {
     this.openIdConnectUrl = openIdConnectUrl;
     this.clientId = clientId;
     this.redirectUri = redirectUri;
+    this.messages = messages;
     this.storage = new LocalStorageBackend();
     this.notifier = new AuthorizationNotifier();
     this.authorizationHandler = new RedirectRequestHandler(
@@ -126,7 +141,9 @@ export default class Authenticator {
       .performTokenRequest(this.configuration, tokenRequest)
       .then((response) => {
         if (!response.refreshToken) {
-          return Promise.reject("No refreshToken in response.");
+          const errmsg = "No refresh_token in response";
+          this.messages.show(errmsg, "Authentication server error", "error");
+          return Promise.reject(errmsg);
         }
         return response;
       });
@@ -150,7 +167,7 @@ export default class Authenticator {
       .performTokenRequest(this.configuration, request)
       .then((response) => {
         if (!response.accessToken) {
-          return Promise.reject("No accessToken in response.");
+          return Promise.reject("No access_token in response");
         }
         return response;
       });
@@ -163,12 +180,10 @@ export default class Authenticator {
 
     const request = new RevokeTokenRequest({ token: refreshToken });
 
-    return this.tokenHandler
-      .performRevokeTokenRequest(this.configuration, request)
-      .then((response) => {
-        console.log("revoked refreshToken");
-        return response;
-      });
+    return this.tokenHandler.performRevokeTokenRequest(
+      this.configuration,
+      request
+    );
   }
 
   handleAuthorizationRedirect(
@@ -177,13 +192,22 @@ export default class Authenticator {
     this.notifier.setAuthorizationListener((request, response, error) => {
       console.log("Authorization request complete ", request, response, error);
       if (response) {
-        this.makeRefreshTokenRequest(request, response)
-          .then(listener)
-          .then(() => {
-            console.log("Authentication done.");
-          });
+        this.makeRefreshTokenRequest(request, response).then(
+          listener,
+          (error) => {
+            this.messages.show(error, "Authentication failed", "error");
+          }
+        );
       } else {
-        throw error;
+        // Either response is defined or error is defined, no other possibility
+        // See @openid/appauth/src/redirect_based_handler.ts
+        let title = "Authentication failed";
+        let content = error ? error.error : "Error";
+        if (error?.errorDescription) {
+          title = error.error;
+          content = error.errorDescription;
+        }
+        this.messages.show(content, title, "error");
       }
     });
     return this.authorizationHandler.completeAuthorizationRequestIfPossible();

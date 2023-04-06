@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: MIT
 
+import { useToastStore } from "@/stores/toast";
 import { useUserStore } from "@/stores/user";
 import type { AppAuthError } from "@openid/appauth";
 import type { App } from "vue";
@@ -15,6 +16,7 @@ export const login = async (
   redirectTo: string,
   scopes: string[] = FedoraAuth.defaultScopes
 ) => {
+  const toastStore = useToastStore();
   if (!auth) {
     throw new Error("The authentication is not ready, please try again later.");
   }
@@ -27,8 +29,14 @@ export const login = async (
     await auth.fetchServiceConfiguration();
   } catch (err) {
     console.log(err);
-    // TODO: Ewww. Use flash messages or snackbar
-    alert("Could not connect to Ipsilon: " + (err as AppAuthError).message);
+    const errmsg =
+      "Could not connect to Ipsilon: " + (err as AppAuthError).message;
+    toastStore.addToast({
+      title: "Authentication is impossible",
+      content: errmsg,
+      color: "danger",
+    });
+    return;
   }
   // Start the authentication dance
   await auth.makeAuthorizationRequest(scopes.join(" "));
@@ -39,9 +47,28 @@ export const logout = async () => {
   userStore.logout();
 };
 
-type Args = { router: Router };
+class ToastMessages {
+  getColor(category: string | undefined) {
+    if (category === "error") {
+      return "danger";
+    }
+    return category;
+  }
+  show(
+    content: string,
+    title: string | undefined,
+    category: string | undefined
+  ) {
+    const toastStore = useToastStore();
+    toastStore.addToast({
+      title,
+      content,
+      color: this.getColor(category),
+    });
+  }
+}
 
-export default (app: App, { router }: Args) => {
+export default (app: App, { router }: { router: Router }) => {
   // Create the authenticator
   const redirectUri = new URL(
     `${import.meta.env.BASE_URL}login/${FedoraAuth.name}`,
@@ -50,7 +77,8 @@ export default (app: App, { router }: Args) => {
   const auth = new Authenticator(
     FedoraAuth.openIdConnectUrl,
     FedoraAuth.clientId,
-    redirectUri
+    redirectUri,
+    new ToastMessages()
   );
   // Make the authenticator available troughout the app
   app.config.globalProperties.$auth = auth;
