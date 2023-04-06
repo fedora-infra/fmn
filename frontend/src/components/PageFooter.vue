@@ -132,10 +132,10 @@ body {
   bottom: 0;
   position: absolute;
   width: 100%;
-  height: 29rem;
+  height: 30rem;
 }
 
 .container.main {
-  padding-bottom: 32rem;
+  padding-bottom: 33rem;
 }
 </style>
