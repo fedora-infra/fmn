@@ -6,15 +6,13 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import { apiGet } from "@/api";
-import type { QueryFunction } from "react-query/types/core";
 
 // const props = defineProps<{ value: string | null }>();
 
-const apiGetApplications = apiGet as QueryFunction<string[]>;
 const url = "/api/v1/applications";
 
 const getApplications = async () => {
-  const results = await apiGetApplications({
+  const results = await apiGet<string[]>({
     queryKey: [url],
     meta: undefined,
   });

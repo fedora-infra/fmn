@@ -4,10 +4,10 @@
 
 import { useUserStore } from "@/stores/user";
 import axios, { type AxiosRequestConfig } from "axios";
-import type { QueryFunction } from "react-query/types/core";
+import type { QueryFunctionContext } from "react-query/types/core";
 import type { VueQueryPluginOptions } from "vue-query";
 import pinia from "../stores";
-import type { PostError } from "./types";
+import type { APIError, PostError } from "./types";
 
 export const vueQueryPluginOptions: VueQueryPluginOptions = {
   queryClientConfig: {
@@ -46,35 +46,35 @@ export async function getApiClient() {
   });
 }
 
-export const apiGet: QueryFunction = async ({ queryKey }) => {
+export const apiGet = async <Data>({ queryKey }: QueryFunctionContext) => {
   const axiosConfig = await getAxiosConfig();
   const url = queryKey[0] as string;
   axiosConfig["params"] = queryKey[1];
-  const response = await http.get(url, axiosConfig);
+  const response = await http.get<Data>(url, axiosConfig);
   return response.data;
 };
 
-export const apiPost = async (url: string, data: unknown) => {
+export const apiPost = async <Data>(url: string, data: Partial<Data>) => {
   const axiosConfig = await getAxiosConfig();
-  const response = await http.post(url, data, axiosConfig);
+  const response = await http.post<Data>(url, data, axiosConfig);
   return response.data;
 };
 
-export const apiPut = async (url: string, data: unknown) => {
+export const apiPut = async <Data>(url: string, data: Data) => {
   const axiosConfig = await getAxiosConfig();
-  const response = await http.put(url, data, axiosConfig);
+  const response = await http.put<Data>(url, data, axiosConfig);
   return response.data;
 };
 
-export const apiDelete = async (url: string) => {
+export const apiDelete = async <Data>(url: string) => {
   const axiosConfig = await getAxiosConfig();
-  const response = await http.delete(url, axiosConfig);
+  const response = await http.delete<Data>(url, axiosConfig);
   return response.data;
 };
 
-export const apiPatch = async (url: string, data: unknown) => {
+export const apiPatch = async <Data>(url: string, data: Partial<Data>) => {
   const axiosConfig = await getAxiosConfig();
-  const response = await http.patch(url, data, axiosConfig);
+  const response = await http.patch<Data>(url, data, axiosConfig);
   return response.data;
 };
 

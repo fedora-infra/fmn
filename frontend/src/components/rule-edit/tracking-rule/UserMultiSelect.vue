@@ -7,7 +7,6 @@ SPDX-License-Identifier: MIT
 <script setup lang="ts">
 import { apiGet } from "@/api";
 import type { User } from "@/api/types";
-import type { QueryFunction } from "react-query/types/core";
 import { ref } from "vue";
 import ArtifactsOwnedSummary from "./ArtifactsOwnedSummary.vue";
 
@@ -20,14 +19,13 @@ const props = defineProps<{
 
 const value = ref<string[]>([]);
 
-const apiGetUsers = apiGet as QueryFunction<User[]>;
 const url = "/api/v1/users";
 
 const getUsers = async (query: string) => {
   if (!query) {
     return [];
   }
-  const results = await apiGetUsers({
+  const results = await apiGet<User[]>({
     queryKey: [url, { search: query }],
     meta: undefined,
   });

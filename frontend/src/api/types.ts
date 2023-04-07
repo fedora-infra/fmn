@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: MIT
 
+import type { AxiosError } from "axios";
 import type { DEBUG, ERROR, INFO, WARNING } from "./constants";
 import type { components } from "./generated";
 
@@ -28,3 +29,4 @@ export type HTTPValidationError = components["schemas"]["HTTPValidationError"];
 export interface PostError {
   detail?: HTTPValidationError["detail"] | string;
 }
+export type APIError = AxiosError<{ detail: string }>;

@@ -6,17 +6,16 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import { apiGet } from "@/api";
-import type { Rule } from "@/api/types";
+import type { APIError, Rule } from "@/api/types";
 import { CAlert, CSpinner } from "@coreui/bootstrap-vue";
-import type { QueryFunction } from "react-query/types/core";
 import { useQuery } from "vue-query";
 import AdminDisabledRulesList from "../components/AdminDisabledRulesList.vue";
 import AdminSubHeader from "../components/AdminSubHeader.vue";
 
 const url = `/api/v1/admin/rules`;
-const { isLoading, isError, data, error } = useQuery(
+const { isLoading, isError, data, error } = useQuery<Rule[], APIError>(
   [url, { disabled: true }],
-  apiGet as QueryFunction<Rule[]>,
+  apiGet,
   { retry: false }
 );
 </script>

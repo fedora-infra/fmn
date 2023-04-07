@@ -8,7 +8,6 @@ SPDX-License-Identifier: MIT
 import { apiGet } from "@/api";
 import { ARTIFACT_CATEGORIES, ARTIFACT_CATEGORY_LABELS } from "@/api/constants";
 import type { Artifact } from "@/api/types";
-import type { QueryFunction } from "react-query/types/core";
 
 type Option = { label: string; value: Artifact };
 type OptionGroup = { label: string; options: Option[] };
@@ -35,10 +34,9 @@ const resultsToOptions = (results: Artifact[]) => {
   return options;
 };
 
-const apiGetArtifacts = apiGet as QueryFunction<Artifact[]>;
 const route = "/api/v1/artifacts";
 const getArtifacts = async (query: string) => {
-  const results = await apiGetArtifacts({
+  const results = await apiGet<Artifact[]>({
     queryKey: [route, { names: `*${query}*` }],
     meta: undefined,
   });

@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: MIT
 
 import { useUserStore } from "@/stores/user";
-import type { QueryFunction } from "react-query/types/core";
 import { useMutation, useQuery, useQueryClient } from "vue-query";
 import { apiDelete, apiGet, apiPatch, apiPost, apiPut } from "./index";
 import type { NewRule, PostError, Rule, RulePatch } from "./types";
@@ -12,7 +11,7 @@ import type { NewRule, PostError, Rule, RulePatch } from "./types";
 export const useRulesQuery = () => {
   const userStore = useUserStore();
   const url = `/api/v1/users/${userStore.username}/rules`;
-  return useQuery(url, apiGet as QueryFunction<Rule[]>, {
+  return useQuery(url, apiGet<Rule[]>, {
     enabled: userStore.loggedIn,
   });
 };
@@ -23,7 +22,7 @@ export const useAddRuleMutation = () => {
   const client = useQueryClient();
 
   return useMutation<Rule, PostError, NewRule>(
-    (data) => apiPost(`/api/v1/users/${userStore.username}/rules`, data),
+    (data) => apiPost<Rule>(`/api/v1/users/${userStore.username}/rules`, data),
     {
       onSuccess: async () => {
         await client.invalidateQueries([
@@ -67,7 +66,7 @@ export const useDeleteRuleMutation = () => {
 // Get disabled rules
 export const useDisabledRulesQuery = () => {
   const url = "/api/v1/admin/rules";
-  return useQuery([url, { disabled: true }], apiGet as QueryFunction<Rule[]>);
+  return useQuery<Rule[]>([url, { disabled: true }], apiGet);
 };
 
 // Patch an existing rule
@@ -75,7 +74,7 @@ export const usePatchRuleMutation = () => {
   const client = useQueryClient();
   return useMutation<Rule, PostError, { id: Rule["id"]; rule: RulePatch }>(
     ({ id, rule }) => {
-      return apiPatch(`/api/v1/admin/rules/${id}`, rule);
+      return apiPatch<Rule>(`/api/v1/admin/rules/${id}`, rule);
     },
     {
       onSuccess: async () => {

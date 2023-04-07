@@ -8,19 +8,17 @@ SPDX-License-Identifier: MIT
 import { apiGet } from "@/api";
 import type { Destination } from "@/api/types";
 import { useUserStore } from "@/stores/user";
-import type { QueryFunction } from "react-query/types/core";
 
 const props = defineProps<{
   name?: string;
 }>();
 
 const userStore = useUserStore();
-const apiGetDestinations = apiGet as QueryFunction<Destination[]>;
 const url = `/api/v1/users/${userStore.username}/destinations`;
 
 const getDestinations = async () => {
   type Option = { name: string; label: string; options: Destination[] };
-  const data = await apiGetDestinations({
+  const data = await apiGet<Destination[]>({
     queryKey: [url],
     meta: undefined,
   });

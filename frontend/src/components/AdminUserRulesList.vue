@@ -6,9 +6,8 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import { apiGet } from "@/api";
-import type { Rule } from "@/api/types";
+import type { APIError, Rule } from "@/api/types";
 import { CAccordion, CCard, CCardBody } from "@coreui/bootstrap-vue";
-import type { QueryFunction } from "react-query/types/core";
 import { useQuery } from "vue-query";
 import AdminRuleListItem from "./AdminRuleListItem.vue";
 
@@ -22,10 +21,7 @@ const {
   isError,
   data: rules,
   error,
-} = useQuery(
-  [url, { username: props.username }],
-  apiGet as QueryFunction<Rule[]>
-);
+} = useQuery<Rule[], APIError>([url, { username: props.username }], apiGet);
 </script>
 
 <template>

@@ -6,10 +6,9 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import { apiGet } from "@/api";
-import type { Rule } from "@/api/types";
+import type { APIError, Rule } from "@/api/types";
 import { useUserStore } from "@/stores/user";
 import { CAlert, CSpinner } from "@coreui/bootstrap-vue";
-import type { QueryFunction } from "react-query/types/core";
 import { useQuery } from "vue-query";
 import { useRoute } from "vue-router";
 import RuleEditForm from "../components/RuleEditForm.vue";
@@ -18,9 +17,9 @@ const route = useRoute();
 const userStore = useUserStore();
 
 const url = `/api/v1/users/${userStore.username}/rules/${route.params.id}`;
-const { isLoading, isError, data, error } = useQuery(
+const { isLoading, isError, data, error } = useQuery<Rule, APIError>(
   url,
-  apiGet as QueryFunction<Rule>
+  apiGet
 );
 </script>
 

@@ -6,9 +6,8 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import { apiGet } from "@/api";
-import type { Artifact } from "@/api/types";
+import type { APIError, Artifact } from "@/api/types";
 import { CSpinner } from "@coreui/bootstrap-vue";
-import type { QueryFunction } from "react-query/types/core";
 import { computed } from "vue";
 import { useQuery } from "vue-query";
 import TrackingRuleSummary from "./TrackingRuleSummary.vue";
@@ -28,9 +27,9 @@ const visible = computed(
     (props.groups && props.groups.length > 0) ||
     (props.users && props.users.length > 0)
 );
-const { isLoading, isError, data, error } = useQuery(
+const { isLoading, isError, data, error } = useQuery<Artifact[], APIError>(
   [route, queryParams],
-  apiGet as QueryFunction<Artifact[]>,
+  apiGet,
   { enabled: visible.value }
 );
 </script>
