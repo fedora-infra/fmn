@@ -5,7 +5,7 @@ SPDX-License-Identifier: MIT
 -->
 
 <script setup lang="ts">
-import { apiGet } from "@/api";
+import { apiGet, showError } from "@/api";
 import type { APIError, Rule } from "@/api/types";
 import { CAlert, CSpinner } from "@coreui/bootstrap-vue";
 import { useQuery } from "vue-query";
@@ -24,7 +24,9 @@ const { isLoading, isError, data, error } = useQuery<Rule[], APIError>(
   <div v-if="isLoading" class="text-center">
     <CSpinner />
   </div>
-  <CAlert v-else-if="isError" color="danger">{{ error }}</CAlert>
+  <CAlert v-else-if="isError" color="danger">
+    {{ showError(error) }}
+  </CAlert>
   <template v-else-if="data">
     <AdminSubHeader />
     <AdminDisabledRulesList :rules="data" />

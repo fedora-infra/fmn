@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...backends import FASJSONAsyncProxy, get_fasjson_proxy
@@ -118,11 +119,14 @@ async def get_user_rule(
     if username != identity.name:
         raise HTTPException(status_code=403, detail="Not allowed to see someone else's rules")
 
-    return (
-        await db_session.execute(
-            Rule.select_related().filter(Rule.id == id, Rule.user.has(name=username))
-        )
-    ).scalar_one()
+    try:
+        return (
+            await db_session.execute(
+                Rule.select_related().filter(Rule.id == id, Rule.user.has(name=username))
+            )
+        ).scalar_one()
+    except NoResultFound as e:
+        raise HTTPException(status_code=404, detail=f"No rule with ID {id}.") from e
 
 
 @router.put("/{username}/rules/{id}", response_model=api_models.Rule, tags=["users/rules"])
@@ -260,4 +264,5 @@ async def create_user_rule(
     )
     await publish(message)
 
+    return rule_db
     return rule_db

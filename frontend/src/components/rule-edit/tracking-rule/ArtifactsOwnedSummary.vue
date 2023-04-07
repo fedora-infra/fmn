@@ -5,7 +5,7 @@ SPDX-License-Identifier: MIT
 -->
 
 <script setup lang="ts">
-import { apiGet } from "@/api";
+import { apiGet, showError } from "@/api";
 import type { APIError, Artifact } from "@/api/types";
 import { CSpinner } from "@coreui/bootstrap-vue";
 import { computed } from "vue";
@@ -41,7 +41,7 @@ const { isLoading, isError, data, error } = useQuery<Artifact[], APIError>(
       <CSpinner size="sm" />
     </p>
     <p v-else-if="isError">
-      Could not check how many artifacts will be tracked: {{ error }}
+      Could not check how many artifacts will be tracked: {{ showError(error) }}
     </p>
     <TrackingRuleSummary v-else-if="data" :tracked="data" />
   </div>

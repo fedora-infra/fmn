@@ -5,7 +5,7 @@ SPDX-License-Identifier: MIT
 -->
 
 <script setup lang="ts">
-import { apiGet } from "@/api";
+import { apiGet, showError } from "@/api";
 import type { APIError, Rule } from "@/api/types";
 import { CAccordion, CCard, CCardBody } from "@coreui/bootstrap-vue";
 import { useQuery } from "vue-query";
@@ -27,7 +27,7 @@ const {
 <template>
   <CCard v-if="isLoading" class="border bg-light py-5">Loading...</CCard>
   <CCard v-else-if="isError" class="border bg-light py-5"
-    >Error: {{ error }}</CCard
+    >Error: {{ showError(error) }}</CCard
   >
   <CCard v-else-if="(rules || []).length === 0" class="border bg-light py-5">
     <CCardBody>

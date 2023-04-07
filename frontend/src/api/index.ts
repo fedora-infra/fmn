@@ -14,6 +14,13 @@ export const vueQueryPluginOptions: VueQueryPluginOptions = {
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,
+        retry: (failureCount, error) => {
+          const errorResponse = (error as APIError).response;
+          if (errorResponse && errorResponse.status < 500) {
+            return false; // Don't retry for client-side errors, it won't help.
+          }
+          return failureCount <= 3;
+        },
       },
     },
   },
@@ -86,3 +93,6 @@ export const validationErrorToFormErrors = (data: PostError) => {
     return [detail];
   }
 };
+
+export const showError = (error: APIError | null) =>
+  error && error.response ? error.response.data.detail : error;
