@@ -42,6 +42,12 @@ const router = createRouter({
       component: () => import("../views/AdminUserRulesView.vue"),
       meta: { auth: true },
     },
+    // will match everything and put it under `$route.params.pathMatch`
+    {
+      path: "/:pathMatch(.*)*",
+      name: "not-found",
+      component: () => import("../views/NotFoundView.vue"),
+    },
   ],
   scrollBehavior: (to, from, savedPosition) => {
     if (savedPosition) {
