@@ -28,7 +28,7 @@ export const useUserStore = defineStore({
   },
   actions: {
     importTokenResponse(response: TokenResponse) {
-      console.log("Got response:", response);
+      console.log("Got OIDC token response:", response);
       if (response.accessToken) {
         this.accessToken = response.accessToken;
       }
@@ -43,7 +43,7 @@ export const useUserStore = defineStore({
       }
     },
     importUserInfoResponse(response: UserInfoResponseJson) {
-      console.log("User Info:", response);
+      console.log("Got user info response:", response);
       this.username = response.nickname || response.sub;
       this.fullName = response.name || this.username;
       this.email = response.email || "";
@@ -88,7 +88,6 @@ export const useUserStore = defineStore({
       const currentRoute = isRef(this.$router.currentRoute)
         ? this.$router.currentRoute.value
         : this.$router.currentRoute;
-      console.log("current route:", currentRoute);
       if (currentRoute.meta.auth) {
         console.log(
           "Logging in again, will redirect back to",
