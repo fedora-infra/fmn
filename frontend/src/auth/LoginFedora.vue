@@ -20,7 +20,7 @@ import type { User } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
 import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import { useAuth } from "../auth";
+import { useAuth } from ".";
 import { useUserStore } from "../stores/user";
 
 const auth = useAuth();
@@ -30,9 +30,23 @@ const toastStore = useToastStore();
 const loading = ref(true);
 const error = ref<string | null>(null);
 
+const getRedirect = () => {
+  let redirectTo = sessionStorage.getItem("redirect_to");
+  if (!redirectTo || redirectTo.match(/^\/login.*/)) {
+    redirectTo = "/";
+  }
+  sessionStorage.removeItem("redirect_to");
+  return redirectTo;
+};
+
 onMounted(async () => {
   if (!auth) {
     return;
+  }
+  if (userStore.loggedIn) {
+    const redirectTo = getRedirect();
+    console.log("User already logged in, redirecting to", redirectTo);
+    router.push(redirectTo);
   }
   await auth.fetchServiceConfiguration();
   try {
@@ -71,11 +85,7 @@ watch(
     }
     loading.value = false;
     // TODO: handle errors
-    let redirectTo = sessionStorage.getItem("redirect_to");
-    if (!redirectTo || redirectTo.match(/^\/login.*/)) {
-      redirectTo = "/";
-    }
-    sessionStorage.removeItem("redirect_to");
+    const redirectTo = getRedirect();
     toastStore.addToast({
       color: "success",
       title: "Login successful!",

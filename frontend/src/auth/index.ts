@@ -88,7 +88,7 @@ export default (app: App, { router }: { router: Router }) => {
   router.addRoute({
     path: "/login/fedora",
     name: "auth-login-fedora",
-    component: () => import("../views/LoginFedora.vue"),
+    component: () => import("./LoginFedora.vue"),
   });
   router.isReady().then(() => {
     // Initial routing has already happened, do it again with the new route added.
