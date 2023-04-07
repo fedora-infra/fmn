@@ -72,7 +72,7 @@ describe("auth", () => {
     );
   });
 
-  it("shows an error if provider is unavailable", async () => {
+  it("throws and shows an error if provider is unavailable", async () => {
     const authMock = {
       fetchServiceConfiguration: vi
         .fn()
@@ -80,7 +80,7 @@ describe("auth", () => {
     } as unknown as Authenticator;
     const toastStore = useToastStore();
 
-    await login(authMock, "/");
+    await expect(login(authMock, "/")).rejects.toThrowError("dummy error");
 
     expect(toastStore.$state.toasts).toHaveLength(1);
     const toast = toastStore.$state.toasts[0];
