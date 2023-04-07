@@ -203,13 +203,17 @@ class TestUserHandler(BaseTestAPIV1Handler):
         assert "generated_last_week" in result
         assert result["generated_last_week"] == count
 
-    @pytest.mark.parametrize("testcase", ("happy-path", "wrong-user"))
+    @pytest.mark.parametrize("testcase", ("happy-path", "wrong-user", "no-rule"))
     def test_get_user_rule(self, testcase, client, api_identity, db_rule):
         username = api_identity.name
         if testcase == "wrong-user":
             username = f"not-really-{username}"
+        if testcase == "no-rule":
+            rule_id = 4242
+        else:
+            rule_id = db_rule.id
 
-        response = client.get(f"{self.path}/{username}/rules/{db_rule.id}")
+        response = client.get(f"{self.path}/{username}/rules/{rule_id}")
 
         if testcase == "happy-path":
             assert response.status_code == status.HTTP_200_OK
@@ -221,6 +225,9 @@ class TestUserHandler(BaseTestAPIV1Handler):
             assert result["tracking_rule"]["params"] == db_rule.tracking_rule.params
         elif testcase == "wrong-user":
             assert response.status_code == status.HTTP_403_FORBIDDEN
+            assert isinstance(response.json()["detail"], str)
+        elif testcase == "no-rule":
+            assert response.status_code == status.HTTP_404_NOT_FOUND
             assert isinstance(response.json()["detail"], str)
 
     @pytest.mark.parametrize(
