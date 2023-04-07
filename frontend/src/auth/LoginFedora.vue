@@ -74,6 +74,7 @@ onMounted(async () => {
     });
   } catch (err) {
     error.value = err as string;
+    loading.value = false;
   }
 });
 

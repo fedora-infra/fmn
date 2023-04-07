@@ -29,6 +29,10 @@ import {
   type UserInfoResponseJson,
 } from "./userinfo_request";
 
+export type AuthorizationRedirectListener = (
+  result: TokenResponse
+) => TokenResponse | Promise<TokenResponse>;
+
 export class NoHashQueryStringUtils extends BasicQueryStringUtils {
   parse(input: LocationLike) {
     return super.parse(input, false /* never use hash */);
@@ -186,9 +190,7 @@ export default class Authenticator {
     );
   }
 
-  handleAuthorizationRedirect(
-    listener: (result: TokenResponse) => TokenResponse | Promise<TokenResponse>
-  ) {
+  handleAuthorizationRedirect(listener: AuthorizationRedirectListener) {
     this.notifier.setAuthorizationListener((request, response, error) => {
       console.log("Authorization request complete ", request, response, error);
       if (response) {
