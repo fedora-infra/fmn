@@ -38,7 +38,7 @@ import {
   CNavItem,
   CSpinner,
 } from "@coreui/bootstrap-vue";
-import { computed, onUnmounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { login, logout, useAuth } from "../auth";
@@ -55,14 +55,14 @@ const avatarURL = computed(() =>
 );
 
 const loading = ref(false);
-const loadingTimer = ref<number | null>(null);
 
 const doLogin = async () => {
   loading.value = true;
-  await login(auth, router.currentRoute.value.fullPath);
-  loadingTimer.value = window.setTimeout(() => {
+  try {
+    await login(auth, router.currentRoute.value.fullPath);
+  } catch (err) {
     loading.value = false;
-  }, 3000);
+  }
 };
 
 const doLogout = () => {
@@ -72,14 +72,14 @@ const doLogout = () => {
   }
 };
 
-onUnmounted(() => {
-  loadingTimer.value && window.clearTimeout(loadingTimer.value);
+const showButton = computed(() => {
+  return (
+    // Wait for the initial routing to have happened
+    router.currentRoute.value.matched.length > 0 &&
+    // Don't show the button on the login callbacks (only Fedora OIDC for now)
+    router.currentRoute.value.path.slice(0, 7) !== "/login/"
+  );
 });
-
-const showButton = computed(
-  // Don't show the button on the OIDC callback
-  () => router.currentRoute.value.path !== "/login/fedora"
-);
 </script>
 
 <i18n lang="yaml">

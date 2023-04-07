@@ -36,7 +36,7 @@ export const login = async (
       content: errmsg,
       color: "danger",
     });
-    return;
+    throw err;
   }
   // Start the authentication dance
   await auth.makeAuthorizationRequest(scopes.join(" "));
