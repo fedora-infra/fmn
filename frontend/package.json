@@ -39,7 +39,7 @@
     "vue-unused-components-checker": "^1.1.2"
   },
   "devDependencies": {
-    "@pinia/testing": "^0.0.13 || ^0.0.14 || ^0.0.15",
+    "@pinia/testing": "^0.0.13 || ^0.0.14 || ^0.0.15 || ^0.0.16",
     "@rushstack/eslint-patch": "^1.1.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/vue": "^6.6.1 || ^7.0.0",
