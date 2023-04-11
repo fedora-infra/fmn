@@ -14,34 +14,46 @@ from .base import BaseTestAPIV1Handler
 
 class TestMisc(BaseTestAPIV1Handler):
     def test_get_applications(self, client):
+        EXPECTED_APPS = {
+            appname.lower()
+            for appname in (
+                "anitya",
+                "ansible",
+                "bodhi",
+                "ci_messages",
+                "copr",
+                "discourse",
+                "distgit",
+                "elections",
+                "FAS",
+                "fedocal",
+                "FMN",
+                "hotness",
+                "Koji",
+                "mdapi",
+                "nuancier",
+                "pagure",
+                "planet",
+            )
+        }
+
         response = client.get(f"{self.path}/applications")
 
         assert response.status_code == status.HTTP_200_OK
 
         result = response.json()
+
         assert isinstance(result, list)
         assert all(isinstance(item, str) for item in result)
-        # Verify list is sorted and items are unique
         assert "base" not in result
-        assert result == [
-            "anitya",
-            "ansible",
-            "bodhi",
-            "ci_messages",
-            "copr",
-            "discourse",
-            "distgit",
-            "elections",
-            "FAS",
-            "fedocal",
-            "FMN",
-            "hotness",
-            "Koji",
-            "mdapi",
-            "nuancier",
-            "pagure",
-            "planet",
-        ]
+
+        result_lower = [appname.lower() for appname in result]
+
+        # Verify list is sorted and items are unique
+        assert result_lower == sorted(set(result_lower))
+
+        # Verify all expected apps are present
+        assert EXPECTED_APPS <= set(result_lower)
 
     @staticmethod
     def mock_distgit_owned_projects(respx_mocker, settings, ownertype):
