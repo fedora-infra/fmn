@@ -50,8 +50,10 @@ class IRCClient(AioSimpleIRCClient):
         # This is not async yet.
         return self.connection.privmsg(*args, **kwargs)
 
-    def on_welcome(self, connection, event):
-        self._connection_future.set_result(connection)
-
     async def disconnect(self):
         return self.connection.disconnect()
+
+    def on_900(self, connection, event):
+        # When logged in.
+        # See IRCv3: https://ircv3.net/specs/extensions/sasl-3.1.html#numerics-used-by-this-extension
+        self._connection_future.set_result(connection)

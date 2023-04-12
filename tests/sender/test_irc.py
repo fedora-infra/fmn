@@ -5,25 +5,35 @@
 import asyncio
 from unittest.mock import AsyncMock, Mock, call
 
+import pytest
 from irc.client import Event
 
 from fmn.sender.irc import IRCClient, IRCHandler
 
 
-async def test_irc_connect(mocker):
-    transport = Mock()
+def _send_event(handler, transport, *event_args):
+    async def _send_nickname_in_use():
+        await asyncio.sleep(0.5)
+        handler._client._dispatcher(transport, Event(*event_args))
+
+    # RUF006 is not an issue here, in tests.
+    # https://beta.ruff.rs/docs/rules/asyncio-dangling-task/
+    asyncio.create_task(_send_nickname_in_use())  # noqa: RUF006
+
+
+@pytest.fixture
+def transport():
+    return Mock(name="transport")
+
+
+async def test_irc_connect(mocker, transport):
     aio_factory = AsyncMock(return_value=(transport, Mock()))
     aio_factory_class = mocker.patch("fmn.sender.irc.AioFactory", return_value=aio_factory)
 
     handler = IRCHandler({"irc_url": "ircs://username:password@irc.example.com:6697"})
 
-    async def _send_welcome():
-        await asyncio.sleep(0.5)
-        handler._client._dispatcher(transport, Event("welcome", "server", "user"))
-
-    # RUF006 is not an issue here, in tests.
-    # https://beta.ruff.rs/docs/rules/asyncio-dangling-task/
-    asyncio.create_task(_send_welcome())  # noqa: RUF006
+    # Send the logged in event
+    _send_event(handler, transport, "900", "server", "user")
     await handler.setup()
 
     aio_factory_class.assert_called_once_with(ssl=True)
