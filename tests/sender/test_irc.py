@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, Mock, call
 import pytest
 from irc.client import Event
 
-from fmn.sender.irc import IRCClient, IRCHandler
+from fmn.sender.irc import IRCHandler
 
 
 def _send_event(handler, transport, *event_args):
@@ -24,6 +24,15 @@ def _send_event(handler, transport, *event_args):
 @pytest.fixture
 def transport():
     return Mock(name="transport")
+
+
+@pytest.fixture
+def handler(mocker, transport):
+    aio_factory = AsyncMock(return_value=(transport, Mock()))
+    mocker.patch("fmn.sender.irc.AioFactory", return_value=aio_factory)
+    handler = IRCHandler({"irc_url": "ircs://username:password@irc.example.com:6697"})
+    handler._client.connection.transport = transport
+    return handler
 
 
 async def test_irc_connect(mocker, transport):
@@ -48,11 +57,14 @@ async def test_irc_connect(mocker, transport):
     transport.close.assert_called_with()
 
 
-async def test_irc_handle():
-    handler = IRCHandler({"irc_url": "ircs://username:password@irc.example.com:6697"})
-    handler._client = IRCClient()
-    transport = handler._client.connection.transport = Mock()
-
+async def test_irc_handle(transport, handler):
     await handler.handle({"to": "target", "message": "This is a test"})
-
     transport.write.assert_called_once_with(b"PRIVMSG target :This is a test\r\n")
+
+
+@pytest.mark.parametrize("error_type", ["error", "disconnect"])
+async def test_irc_error_while_connected(handler, error_type):
+    _send_event(handler, transport, "900", "server", "user")
+    await handler.setup()
+    _send_event(handler, transport, error_type, "server", "user", ["dummy error"])
+    await handler.closed
