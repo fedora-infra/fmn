@@ -53,7 +53,7 @@ async def test_irc_connect(mocker, transport):
 
     await handler.stop()
 
-    transport.write.assert_called_with(b"QUIT\r\n")
+    transport.write.assert_called_with(b"QUIT :FMN is shutting down\r\n")
     transport.close.assert_called_with()
 
 
@@ -68,3 +68,18 @@ async def test_irc_error_while_connected(handler, error_type):
     await handler.setup()
     _send_event(handler, transport, error_type, "server", "user", ["dummy error"])
     await handler.closed
+
+
+async def test_irc_disconnect_expected(handler):
+    _send_event(handler, transport, "900", "server", "user")
+    await handler.setup()
+    await handler.stop()
+    # We didn't call the shutdown handler
+    assert handler.closed.done() is False
+
+
+async def test_irc_disconnect_not_connected(handler):
+    handler._client.connected = False
+    await handler.stop()
+    # We didn't call the shutdown handler
+    assert handler.closed.done() is False

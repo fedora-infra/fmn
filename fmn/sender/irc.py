@@ -41,6 +41,8 @@ class IRCHandler(Handler):
 
 
 class IRCClient(AioSimpleIRCClient):
+    _shutdown_message = "FMN is shutting down"
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._connection_future = None
@@ -56,7 +58,8 @@ class IRCClient(AioSimpleIRCClient):
         return self.connection.privmsg(*args, **kwargs)
 
     async def disconnect(self):
-        return self.connection.disconnect()
+        if self.connection.connected:
+            return self.connection.disconnect(self._shutdown_message)
 
     def _cancel_or_close(self, message):
         """Cancel or close the futures on shutdown.
@@ -75,7 +78,8 @@ class IRCClient(AioSimpleIRCClient):
 
     def on_disconnect(self, connection, event):
         message = event.arguments[0]
-        self._cancel_or_close(message)
+        if message != self._shutdown_message:
+            self._cancel_or_close(message)
 
     def on_900(self, connection, event):
         # When logged in.
