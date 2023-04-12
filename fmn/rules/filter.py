@@ -24,10 +24,15 @@ class Filter:
 class Applications(Filter):
     name = "applications"
 
+    def __init__(self, requester: Requester, params, username):
+        if params:
+            params = [app_name.lower() for app_name in params]
+        super().__init__(requester=requester, params=params, username=username)
+
     def matches(self, message):
         if not self.params:
             return True
-        return message.app_name in self.params
+        return message.app_name.lower() in self.params
 
 
 class Severities(Filter):

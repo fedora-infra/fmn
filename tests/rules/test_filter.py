@@ -17,7 +17,12 @@ def requester():
 
 @pytest.mark.parametrize(
     "received,filtered,expected",
-    [("app1", ["app1", "app2"], True), ("app3", ["app1", "app2"], False), ("app1", None, True)],
+    [
+        ("app1", ["app1", "app2"], True),
+        ("app3", ["app1", "app2"], False),
+        ("app1", None, True),
+        ("App1", ["aPP1"], True),
+    ],
 )
 def test_applications(requester, make_mocked_message, received, filtered, expected):
     msg = make_mocked_message(topic="dummy", body={"app": received})
