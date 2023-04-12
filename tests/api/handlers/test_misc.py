@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: MIT
 
+from unittest import mock
+
 import pytest
 from fastapi import status
 from httpx import Response
@@ -54,6 +56,32 @@ class TestMisc(BaseTestAPIV1Handler):
 
         # Verify all expected apps are present
         assert EXPECTED_APPS <= set(result_lower)
+
+    def test_get_applications_normalize_case(self, mocker, client):
+        metadata = mocker.patch("fmn.api.handlers.misc.metadata")
+        metadata.entry_points.return_value = entry_points = mock.Mock()
+
+        eps = []
+        for msg_topic, msg_cls_app_name in (
+            ("blub.unused.what", None),
+            ("blub.build.started", "Blub"),
+            ("abc.something", "abc"),
+        ):
+            ep = mock.Mock()
+            ep.name = msg_topic
+            ep.load.return_value = msg_cls = mock.Mock()
+            msg_cls.app_name.fget.return_value = msg_cls_app_name
+            eps.append(ep)
+
+        entry_points.select.return_value = eps
+
+        response = client.get(f"{self.path}/applications")
+
+        assert response.status_code == status.HTTP_200_OK
+
+        result = response.json()
+
+        assert result == ["abc", "Blub"]
 
     @staticmethod
     def mock_distgit_owned_projects(respx_mocker, settings, ownertype):

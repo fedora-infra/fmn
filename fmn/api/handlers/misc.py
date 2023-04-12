@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 import logging
+from functools import cache
 from importlib import metadata
 from itertools import chain
 
@@ -21,9 +22,13 @@ router = APIRouter()
 
 
 @router.get("/applications", response_model=list[str], tags=["misc"])
+@cache
 def get_applications():
     entrypoints = metadata.entry_points().select(group="fedora.messages")
-    applications = set()
+
+    # dictionary of normalized, lower case application name to pristine name
+    applications = {}
+
     for ep in entrypoints:
         msg_cls = ep.load()
         try:
@@ -33,14 +38,18 @@ def get_applications():
         except Exception:
             # Sometimes the schema hasn't set the app_name. Fallback on the entry point name.
             app_name = ep.name.partition(".")[0]
-        applications.add(app_name)
 
-    # we will always have the base message in there, so lets discard that
-    applications.discard("base")
-    applications = list(applications)
-    applications.sort(key=lambda name: name.lower())
+        app_name_lower = app_name.lower()
+        if (
+            # we will always have the base message in there, so lets discard that
+            app_name_lower != "base"
+            # and prefer variations of names with more leading capital characters
+            and (app_name_lower not in applications or app_name < applications[app_name_lower])
+        ):
+            applications[app_name_lower] = app_name
 
-    return applications
+    # return list sorted by lowercase name, but with case left intact
+    return [item[1] for item in sorted(applications.items(), key=lambda item: item[0])]
 
 
 @router.get("/artifacts", response_model=list[api_models.Artifact], tags=["misc"])
