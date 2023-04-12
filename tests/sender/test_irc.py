@@ -8,6 +8,7 @@ from unittest.mock import AsyncMock, Mock, call
 import pytest
 from irc.client import Event
 
+from fmn.sender.handler import HandlerError
 from fmn.sender.irc import IRCHandler
 
 
@@ -60,6 +61,21 @@ async def test_irc_connect(mocker, transport):
 async def test_irc_handle(transport, handler):
     await handler.handle({"to": "target", "message": "This is a test"})
     transport.write.assert_called_once_with(b"PRIVMSG target :This is a test\r\n")
+
+
+async def test_irc_nickname_in_use(handler):
+    _send_event(
+        handler, transport, "nicknameinuse", "server", "user", ["username", "nickname in use"]
+    )
+    with pytest.raises(HandlerError):
+        await handler.setup()
+
+
+@pytest.mark.parametrize("error_type", ["error", "disconnect"])
+async def test_irc_error_not_connected(handler, error_type):
+    _send_event(handler, transport, error_type, "server", "user", ["dummy error"])
+    with pytest.raises(asyncio.exceptions.CancelledError):
+        await handler.setup()
 
 
 @pytest.mark.parametrize("error_type", ["error", "disconnect"])

@@ -6,10 +6,11 @@ import asyncio
 import logging
 from urllib.parse import urlparse
 
+from irc.client import ServerConnectionError
 from irc.client_aio import AioSimpleIRCClient
 from irc.connection import AioFactory
 
-from .handler import Handler
+from .handler import Handler, HandlerError
 
 log = logging.getLogger(__name__)
 
@@ -51,7 +52,12 @@ class IRCClient(AioSimpleIRCClient):
     async def connect(self, *args, **kwargs):
         self._connection_future = asyncio.Future()
         await self.connection.connect(*args, **kwargs)
-        await self._connection_future
+        try:
+            await self._connection_future
+        except ServerConnectionError as e:
+            message = e.args[0]
+            self.closed.set_result(message)
+            raise HandlerError(message) from e
 
     async def privmsg(self, *args, **kwargs):
         # This is not async yet.
@@ -80,6 +86,13 @@ class IRCClient(AioSimpleIRCClient):
         message = event.arguments[0]
         if message != self._shutdown_message:
             self._cancel_or_close(message)
+
+    def on_error(self, connection, event):
+        self._cancel_or_close(event.arguments[0])
+
+    def on_nicknameinuse(self, connection, event):
+        message = f"{event.arguments[0]}: {event.arguments[1]}"
+        self._connection_future.set_exception(ServerConnectionError(message))
 
     def on_900(self, connection, event):
         # When logged in.
