@@ -2,8 +2,9 @@
 #
 # SPDX-License-Identifier: MIT
 
+import asyncio
 import pathlib
-from contextlib import nullcontext
+from contextlib import nullcontext, suppress
 from unittest import mock
 
 import alembic.command
@@ -58,7 +59,7 @@ def pytest_configure(config):
 
 
 @pytest.fixture(autouse=True)
-def cashews_cache(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest):
+async def cashews_cache(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest):
     # Use in-memory instead of shared Redis cache for testing and disable it by default.
     url = "mem://"
     enabled = False
@@ -82,8 +83,9 @@ def cashews_cache(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureReques
     with ctxmgr:
         yield
 
-    cache.clear()
-    cache.close()
+    with suppress(asyncio.exceptions.CancelledError):
+        await cache.clear()
+        await cache.close()
 
 
 @pytest.fixture
