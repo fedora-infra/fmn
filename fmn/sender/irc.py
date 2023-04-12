@@ -54,6 +54,9 @@ class IRCClient(AioSimpleIRCClient):
         await self.connection.connect(*args, **kwargs)
         try:
             await self._connection_future
+        except asyncio.exceptions.CancelledError:
+            self.connection.disconnect("Connection cancelled")
+            raise
         except ServerConnectionError as e:
             message = e.args[0]
             self.closed.set_result(message)

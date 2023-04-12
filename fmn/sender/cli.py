@@ -11,6 +11,8 @@ from .config import get_config, get_handler, setup_logging
 from .consumer import Consumer
 from .handler import HandlerError
 
+HANDLER_CONNECT_TIMEOUT = 60
+
 
 def shutdown(result, consumer):
     if asyncio.isfuture(result):
@@ -25,7 +27,9 @@ def shutdown(result, consumer):
 
 async def _main(handler, consumer):
     try:
-        await handler.setup()
+        await asyncio.wait_for(handler.setup(), timeout=HANDLER_CONNECT_TIMEOUT)
+    except asyncio.exceptions.TimeoutError as e:
+        raise HandlerError(f"the handler could not connect in {HANDLER_CONNECT_TIMEOUT}s") from e
     except HandlerError as e:
         raise HandlerError(f"the handler could not connect: {e}") from e
     # Shutdown in case of unexpected disconnections

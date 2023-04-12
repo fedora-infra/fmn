@@ -96,6 +96,22 @@ def test_cli_handler_setup_error(config_file, mocked_handler, mocked_consumer):
     mocked_consumer.stop.assert_awaited_once_with()
 
 
+def test_cli_handler_setup_timeout(config_file, mocker, mocked_handler, mocked_consumer):
+    async def _wait():
+        await asyncio.sleep(10)
+
+    mocker.patch("fmn.sender.cli.HANDLER_CONNECT_TIMEOUT", 0.5)
+    mocked_handler.setup = AsyncMock(side_effect=_wait)
+
+    runner = CliRunner()
+    result = runner.invoke(cli.main, ["-c", config_file])
+
+    assert result.exit_code == 1
+    expected = "Shutting down: exception caught\nError: the handler could not connect in 0.5s\n"
+    assert result.output == expected
+    mocked_consumer.stop.assert_awaited_once_with()
+
+
 def test_cli_handler_closed(config_file, mocker, mocked_handler, mocked_consumer):
     async def _close():
         mocked_handler.closed.set_result("dummy close")
