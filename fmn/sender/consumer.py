@@ -43,11 +43,14 @@ class Consumer:
                     break
                 async with message.process():
                     await self._handler.handle(json.loads(message.body))
+        await self._queue_iter.close()
 
     async def stop(self):
         log.info("Stopping messages consumption")
         if self._queue_iter:
             await self._queue_iter.on_message(CLOSING)
+            # Close the queue now or closing the connection just below will cancel the iterator
+            # and raise an exception in start()
             await self._queue_iter.close()
         if self._connection:
             await self._connection.close()
