@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: MIT
 
 import { createTestingPinia } from "@pinia/testing";
-import { cleanup, fireEvent, render as baseRender } from "@testing-library/vue";
-import { getActivePinia, setActivePinia, type Pinia } from "pinia";
+import { cleanup, fireEvent } from "@testing-library/vue";
+import { setActivePinia } from "pinia";
 import {
   afterEach,
   beforeEach,
@@ -14,41 +14,13 @@ import {
   vi,
   type Mock,
 } from "vitest";
-import type { Component } from "vue";
-import { createI18n } from "vue-i18n";
 import * as auth from "../auth";
 import router from "../router";
 import { useUserStore } from "../stores/user";
 import LoginButton from "./LoginButton.vue";
+import { loginUser, render } from "./test-utils";
 
 vi.mock("../auth");
-
-const loginUser = (userStore: ReturnType<typeof useUserStore>) => {
-  userStore.$patch({
-    accessToken: "testing",
-    username: "dummy-user",
-    fullName: "Dummy User",
-    email: "dummy@example.com",
-  });
-};
-
-const render = (component: Component) => {
-  const pinia = getActivePinia() as Pinia;
-  const i18n = createI18n({
-    legacy: false,
-    locale: navigator.language,
-    fallbackLocale: "en-US",
-    messages: {},
-  });
-  return baseRender(component, {
-    global: {
-      plugins: [router, pinia, i18n],
-      provide: {
-        auth: vi.fn(),
-      },
-    },
-  });
-};
 
 describe("LoginButton", () => {
   beforeEach(async () => {
