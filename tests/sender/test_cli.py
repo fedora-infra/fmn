@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
+import asyncio
 from textwrap import dedent
 from unittest.mock import AsyncMock, MagicMock
 
@@ -34,27 +35,33 @@ def config_file(tmp_path):
     return config_path
 
 
-def test_cli(config_file, mocker):
-    mocked_handler = MagicMock(spec=Handler)
-    mocker.patch("fmn.sender.cli.get_handler", return_value=mocked_handler)
-    mocked_consumer = MagicMock(spec=Consumer)
-    mocker.patch("fmn.sender.cli.Consumer", return_value=mocked_consumer)
+@pytest.fixture
+def mocked_handler(mocker):
+    handler = MagicMock(spec=Handler)
+    handler.closed = asyncio.get_event_loop().create_future()
+    mocker.patch("fmn.sender.cli.get_handler", return_value=handler)
+    return handler
 
+
+@pytest.fixture
+def mocked_consumer(mocker):
+    consumer = MagicMock(spec=Consumer)
+    mocker.patch("fmn.sender.cli.Consumer", return_value=consumer)
+    return consumer
+
+
+def test_cli(config_file, mocked_handler, mocked_consumer):
     runner = CliRunner()
     result = runner.invoke(cli.main, ["-c", config_file])
 
-    mocked_handler.setup.assert_called_once_with()
-    mocked_consumer.connect.assert_called_once_with()
-    mocked_consumer.start.assert_called_once_with()
+    mocked_handler.setup.assert_awaited_once_with()
+    mocked_consumer.connect.assert_awaited_once_with()
+    mocked_consumer.start.assert_awaited_once_with()
     assert result.exit_code == 0
     assert result.output == ""
 
 
-def test_cli_keyboardinterrupt(config_file, mocker):
-    mocked_handler = MagicMock(spec=Handler)
-    mocker.patch("fmn.sender.cli.get_handler", return_value=mocked_handler)
-    mocked_consumer = MagicMock(spec=Consumer)
-    mocker.patch("fmn.sender.cli.Consumer", return_value=mocked_consumer)
+def test_cli_keyboardinterrupt(config_file, mocked_handler, mocked_consumer):
     mocked_consumer.start = AsyncMock(side_effect=KeyboardInterrupt)
 
     runner = CliRunner()
@@ -62,3 +69,29 @@ def test_cli_keyboardinterrupt(config_file, mocker):
 
     assert result.exit_code == 1
     assert result.output == "\nAborted!\n"
+
+
+def test_cli_generic_error(config_file, mocked_handler, mocked_consumer):
+    mocked_consumer.start = AsyncMock(side_effect=RuntimeError("dummy error"))
+
+    runner = CliRunner()
+    result = runner.invoke(cli.main, ["-c", config_file])
+
+    assert result.exit_code == 1
+    assert result.output == "Shutting down: exception caught\nError: dummy error\n"
+    mocked_consumer.stop.assert_awaited_once_with()
+
+
+def test_cli_handler_closed(config_file, mocker, mocked_handler, mocked_consumer):
+    async def _close():
+        mocked_handler.closed.set_result("dummy close")
+        # give it time to call consumer.stop()
+        await asyncio.sleep(1)
+
+    mocked_consumer.start = AsyncMock(side_effect=_close)
+
+    runner = CliRunner()
+    result = runner.invoke(cli.main, ["-c", config_file])
+
+    mocked_consumer.stop.assert_awaited_once_with()
+    assert result.output == "Shutting down: dummy close\n"

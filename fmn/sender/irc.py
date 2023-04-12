@@ -15,8 +15,12 @@ log = logging.getLogger(__name__)
 
 
 class IRCHandler(Handler):
-    async def setup(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self._client = IRCClient()
+        self.closed = self._client.closed
+
+    async def setup(self):
         irc_url = urlparse(self._config["irc_url"])
         await self._client.connect(
             irc_url.hostname,
@@ -40,6 +44,7 @@ class IRCClient(AioSimpleIRCClient):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._connection_future = None
+        self.closed = asyncio.get_event_loop().create_future()
 
     async def connect(self, *args, **kwargs):
         self._connection_future = asyncio.Future()
@@ -52,6 +57,25 @@ class IRCClient(AioSimpleIRCClient):
 
     async def disconnect(self):
         return self.connection.disconnect()
+
+    def _cancel_or_close(self, message):
+        """Cancel or close the futures on shutdown.
+
+        Cancel the ``_connection_future`` if it's not done yet, otherwise set the ``closed``
+        future to signal shutdown.
+
+        Args:
+            message (str): The message for the cancellation or the closed future result.
+        """
+        if self._connection_future.done():
+            self.closed.set_result(message)
+        else:
+            # This will disconnect and set the closed future
+            self._connection_future.cancel(message)
+
+    def on_disconnect(self, connection, event):
+        message = event.arguments[0]
+        self._cancel_or_close(message)
 
     def on_900(self, connection, event):
         # When logged in.
