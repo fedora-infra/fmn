@@ -22,6 +22,10 @@ class Handler:
         raise NotImplementedError
 
 
+class HandlerError(Exception):
+    pass
+
+
 class PrintHandler(Handler):
     async def handle(self, message):
         print("Received:", message)

@@ -9,6 +9,7 @@ import click
 
 from .config import get_config, get_handler, setup_logging
 from .consumer import Consumer
+from .handler import HandlerError
 
 
 def shutdown(result, consumer):
@@ -23,7 +24,10 @@ def shutdown(result, consumer):
 
 
 async def _main(handler, consumer):
-    await handler.setup()
+    try:
+        await handler.setup()
+    except HandlerError as e:
+        raise HandlerError(f"the handler could not connect: {e}") from e
     # Shutdown in case of unexpected disconnections
     handler.closed.add_done_callback(partial(shutdown, consumer=consumer))
     await consumer.connect()

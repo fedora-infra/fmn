@@ -11,7 +11,7 @@ from click.testing import CliRunner
 
 from fmn.sender import cli
 from fmn.sender.consumer import Consumer
-from fmn.sender.handler import Handler
+from fmn.sender.handler import Handler, HandlerError
 
 
 @pytest.fixture
@@ -79,6 +79,20 @@ def test_cli_generic_error(config_file, mocked_handler, mocked_consumer):
 
     assert result.exit_code == 1
     assert result.output == "Shutting down: exception caught\nError: dummy error\n"
+    mocked_consumer.stop.assert_awaited_once_with()
+
+
+def test_cli_handler_setup_error(config_file, mocked_handler, mocked_consumer):
+    mocked_handler.setup = AsyncMock(side_effect=HandlerError("dummy error"))
+
+    runner = CliRunner()
+    result = runner.invoke(cli.main, ["-c", config_file])
+
+    assert result.exit_code == 1
+    expected = (
+        "Shutting down: exception caught\nError: the handler could not connect: dummy error\n"
+    )
+    assert result.output == expected
     mocked_consumer.stop.assert_awaited_once_with()
 
 
