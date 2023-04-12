@@ -16,6 +16,7 @@ from fastapi import status
 from fastapi.testclient import TestClient
 from fedora_messaging import message
 
+import fmn.api.handlers.misc
 from fmn.api import main
 from fmn.backends import FASJSONAsyncProxy, get_distgit_proxy, get_fasjson_proxy
 from fmn.cache.util import cache_arg
@@ -49,6 +50,7 @@ def clear_caches():
     get_settings.cache_clear()
     get_distgit_proxy.cache_clear()
     get_fasjson_proxy.cache_clear()
+    fmn.api.handlers.misc.get_applications.cache_clear()
 
 
 def pytest_configure(config):
