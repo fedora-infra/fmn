@@ -9,6 +9,7 @@ import type { Component } from "vue";
 import { createI18n } from "vue-i18n";
 import router from "../router";
 import { vi } from "vitest";
+import type { Destination } from "@/api/types";
 
 export const loginUser = (userStore: ReturnType<typeof useUserStore>) => {
   userStore.$patch({
@@ -29,7 +30,10 @@ export const loginAdmin = (userStore: ReturnType<typeof useUserStore>) => {
   });
 };
 
-export const render = (component: Component) => {
+export const render = (
+  component: Component,
+  props?: Record<string, boolean | Destination>
+) => {
   const pinia = getActivePinia() as Pinia;
   const i18n = createI18n({
     legacy: false,
@@ -38,6 +42,7 @@ export const render = (component: Component) => {
     messages: {},
   });
   return baseRender(component, {
+    props: props,
     global: {
       plugins: [router, pinia, i18n],
       provide: {
