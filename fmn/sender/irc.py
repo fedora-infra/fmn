@@ -19,7 +19,6 @@ class IRCHandler(Handler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._client = IRCClient()
-        self.closed = self._client.closed
 
     async def setup(self):
         irc_url = urlparse(self._config["irc_url"])
@@ -35,6 +34,10 @@ class IRCHandler(Handler):
     async def stop(self):
         log.debug("Stopping IRC handler...")
         await self._client.disconnect()
+
+    @property
+    def closed(self):
+        return self._client.closed
 
     async def handle(self, message):
         log.info("Sending messsage to %s: %s", message["to"], message["message"])
