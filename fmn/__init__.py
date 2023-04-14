@@ -2,4 +2,4 @@
 #
 # SPDX-License-Identifier: MIT
 
-from fmn.core.version import __version__  # noqa: F401
+from .core.version import __version__  # noqa: F401
