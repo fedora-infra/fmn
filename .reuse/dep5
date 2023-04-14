@@ -1,0 +1,8 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: fmn
+Upstream-Contact: Fedora Infrastructure <admin@fedoraproject.org>
+Source: https://github.com/fedora-infra/fmn
+
+Files: changelog.d/*.md
+Copyright: Contributors to the Fedora Project
+License: MIT
