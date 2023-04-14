@@ -123,5 +123,5 @@ def test_cli_handler_closed(config_file, mocker, mocked_handler, mocked_consumer
     runner = CliRunner()
     result = runner.invoke(cli.main, ["-c", config_file])
 
-    mocked_consumer.stop.assert_awaited_once_with()
     assert result.output == "Shutting down: dummy close\n"
+    mocked_consumer.stop.assert_awaited_once_with()
