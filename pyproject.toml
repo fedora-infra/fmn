@@ -211,6 +211,7 @@ cache = "fmn.cache.cli:cache_cmd"
 
 
 [tool.towncrier]
+package = "fmn"
 directory = "changelog.d"
 filename = "docs/changelog.md"
 start_string = "<!-- towncrier release notes start -->\n"
