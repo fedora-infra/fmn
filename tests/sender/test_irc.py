@@ -91,11 +91,11 @@ async def test_irc_disconnect_expected(handler):
     await handler.setup()
     await handler.stop()
     # We didn't call the shutdown handler
-    assert handler.closed.done() is False
+    assert not handler.closed.done()
 
 
 async def test_irc_disconnect_not_connected(handler):
     handler._client.connected = False
     await handler.stop()
     # We didn't call the shutdown handler
-    assert handler.closed.done() is False
+    assert not handler.closed.done()
