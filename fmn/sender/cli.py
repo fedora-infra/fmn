@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: MIT
 
 import asyncio
-from functools import partial
 
 import click
 
@@ -14,15 +13,14 @@ from .handler import HandlerError
 HANDLER_CONNECT_TIMEOUT = 60
 
 
-def shutdown(result, consumer):
+async def _shutdown(result, consumer):
     if asyncio.isfuture(result):
-        result = result.result()
+        result = await result
     click.echo(f"Shutting down: {result}")
-    loop = asyncio.get_event_loop()
-    if loop.is_running():
-        loop.create_task(consumer.stop())
-    else:
-        loop.run_until_complete(consumer.stop())
+    await consumer.stop()
+
+
+background_tasks = set()
 
 
 async def _main(handler, consumer):
@@ -32,8 +30,14 @@ async def _main(handler, consumer):
         raise HandlerError(f"the handler could not connect in {HANDLER_CONNECT_TIMEOUT}s") from e
     except HandlerError as e:
         raise HandlerError(f"the handler could not connect: {e}") from e
+
     # Shutdown in case of unexpected disconnections
-    handler.closed.add_done_callback(partial(shutdown, consumer=consumer))
+    shutdown_on_closed = asyncio.create_task(_shutdown(handler.closed, consumer))
+    # Trick Python into creating a strong reference
+    # https://docs.python.org/3/library/asyncio-task.html#asyncio.create_task
+    background_tasks.add(shutdown_on_closed)
+    shutdown_on_closed.add_done_callback(background_tasks.discard)
+
     await consumer.connect()
     await consumer.start()
 
@@ -55,5 +59,5 @@ def main(config_path):
     try:
         loop.run_until_complete(_main(handler, consumer))
     except Exception as e:
-        shutdown("exception caught", consumer)
+        loop.run_until_complete(_shutdown("exception caught", consumer))
         raise click.ClickException(e) from e
