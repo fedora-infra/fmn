@@ -89,9 +89,7 @@ def test_cli_handler_setup_error(config_file, mocked_handler, mocked_consumer):
     result = runner.invoke(cli.main, ["-c", config_file])
 
     assert result.exit_code == 1
-    expected = (
-        "Shutting down: exception caught\nError: the handler could not connect: dummy error\n"
-    )
+    expected = "Shutting down: exception caught\nError: dummy error\n"
     assert result.output == expected
     mocked_consumer.stop.assert_awaited_once_with()
 
