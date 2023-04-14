@@ -4,7 +4,7 @@
 
 [tool.poetry]
 name = "fmn"
-version = "3.0a0"
+version = "3.0.0"
 description = "Fedora Messaging Notifications"
 authors = [
     "Aurélien Bompard <aurelien@bompard.org>",
@@ -25,10 +25,11 @@ repository = "https://github.com/fedora-infra/fmn"
 # documentation = "https://github.com/fedora-infra/fmn/wiki"
 keywords = ["fedora", "messaging", "notifications"]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
     "Framework :: AsyncIO",
     "Framework :: FastAPI",
+    "Framework :: Pydantic",
     "Intended Audience :: System Administrators",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
