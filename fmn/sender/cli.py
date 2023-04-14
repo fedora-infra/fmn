@@ -28,8 +28,6 @@ async def _main(handler, consumer):
         await asyncio.wait_for(handler.setup(), timeout=HANDLER_CONNECT_TIMEOUT)
     except asyncio.exceptions.TimeoutError as e:
         raise HandlerError(f"the handler could not connect in {HANDLER_CONNECT_TIMEOUT}s") from e
-    except HandlerError as e:
-        raise HandlerError(f"the handler could not connect: {e}") from e
 
     # Shutdown in case of unexpected disconnections
     shutdown_on_closed = asyncio.create_task(_shutdown(handler.closed, consumer))

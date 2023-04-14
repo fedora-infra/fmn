@@ -63,7 +63,7 @@ class IRCClient(AioSimpleIRCClient):
         except ServerConnectionError as e:
             message = e.args[0]
             self.closed.set_result(message)
-            raise HandlerError(message) from e
+            raise HandlerError(f"the handler could not connect: {message}") from e
 
     async def privmsg(self, *args, **kwargs):
         # This is not async yet.
