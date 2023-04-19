@@ -20,5 +20,6 @@ API <_source/fmn>
 contributing
 components
 rules
+release
 changelog
 ```
