@@ -3067,22 +3067,6 @@ docs = ["sphinx (>=5.3)", "sphinx-rtd-theme (>=1.0)"]
 testing = ["coverage (>=6.2)", "flaky (>=3.5.0)", "hypothesis (>=5.7.1)", "mypy (>=0.931)", "pytest-trio (>=0.7.0)"]
 
 [[package]]
-name = "pytest-black"
-version = "0.3.12"
-description = "A pytest plugin to enable format checking with black"
-category = "dev"
-optional = false
-python-versions = ">=2.7"
-files = [
-    {file = "pytest-black-0.3.12.tar.gz", hash = "sha256:1d339b004f764d6cd0f06e690f6dd748df3d62e6fe1a692d6a5500ac2c5b75a5"},
-]
-
-[package.dependencies]
-black = {version = "*", markers = "python_version >= \"3.6\""}
-pytest = ">=3.5.0"
-toml = "*"
-
-[[package]]
 name = "pytest-cov"
 version = "4.0.0"
 description = "Pytest plugin for measuring coverage."
@@ -4445,4 +4429,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "8bc08b3db3648ab24e3e733c896f85fb03b25405166301cfdddc28bb0c3543ac"
+content-hash = "3c19cce321c9546826af415446f4ee39f409c50552fb3aff1d29f034219eded9"
