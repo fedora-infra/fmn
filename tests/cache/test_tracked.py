@@ -2,11 +2,10 @@
 #
 # SPDX-License-Identifier: MIT
 
+import asyncio
 from unittest.mock import Mock
 
 import pytest
-from cashews import cache
-from cashews.formatter import get_templates_for_func
 
 from fmn.cache.rules import RulesCache
 from fmn.cache.tracked import TrackedCache
@@ -47,11 +46,12 @@ async def test_get_value(mocker, requester, db_async_session):
 
 @pytest.mark.cashews_cache(enabled=True)
 async def test_invalidate_tracked(mocker, requester):
-    mocker.patch.object(cache, "delete")
     tracked_cache = TrackedCache(requester=requester, rules_cache=RulesCache())
-    await tracked_cache.invalidate()
-    cache_key = list(get_templates_for_func(tracked_cache.get_value))[0]
-    cache.delete.assert_called_with(cache_key)
+    mocker.patch.object(tracked_cache, "refresh")
+    db = object()
+    await tracked_cache.invalidate(db)
+    await asyncio.gather(*tracked_cache._background_tasks)
+    tracked_cache.refresh.assert_called_once_with(db)
 
 
 @pytest.mark.parametrize(
@@ -67,14 +67,15 @@ async def test_invalidate_on_message(mocker, requester, topic, expected, make_mo
     message = make_mocked_message(topic=topic, body={})
     tracked_cache = TrackedCache(requester=requester, rules_cache=RulesCache())
     mocker.patch.object(tracked_cache, "invalidate")
+    db = object()
     # # Set an existing value that will be invalidated
     # existing_value = Tracked(packages={"existing"}, usernames={"existing"})
     # cache_key = list(get_templates_for_func(tracked_cache.get_value))[0]
     # # It's an "early" strategy so we need to store according to the interface
     # early_expire_at = datetime.utcnow() + timedelta(seconds=3600)
     # await cache.set(cache_key, [early_expire_at, existing_value], expire=86400)
-    await tracked_cache.invalidate_on_message(message)
+    await tracked_cache.invalidate_on_message(message, db)
     if expected:
-        tracked_cache.invalidate.assert_called_once_with()
+        tracked_cache.invalidate.assert_called_once_with(db)
     else:
         tracked_cache.invalidate.assert_not_called()

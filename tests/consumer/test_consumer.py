@@ -11,18 +11,11 @@ from fedora_messaging.config import conf as fm_config
 from fedora_messaging.exceptions import Nack
 from sqlalchemy import select
 
-from fmn.cache.tracked import Tracked, TrackedCache
+from fmn.cache.tracked import Tracked
 from fmn.consumer.consumer import Consumer
 from fmn.core import config
 from fmn.database import model
 from fmn.rules.notification import Notification
-
-
-@pytest.fixture
-def mocked_cache(mocker):
-    mocker.patch.object(TrackedCache, "get_value", return_value=Tracked())
-    mocker.patch.object(TrackedCache, "invalidate_on_message")
-    return TrackedCache
 
 
 @pytest.fixture
@@ -45,13 +38,16 @@ def mocked_send_queue_class(mocker):
 def mocked_session_maker(mocker):
     db = AsyncMock()
     transaction_manager = AsyncMock()
+    transaction_manager.db = db
     sessionmaker = mocker.patch("fmn.consumer.consumer.async_session_maker")
     sessionmaker.begin.return_value = transaction_manager
     transaction_manager.__aenter__ = AsyncMock(name="sessionmakercontextmanager", return_value=db)
     return transaction_manager
 
 
-async def test_consumer_init(mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class):
+async def test_consumer_init(
+    mocker, mocked_tracked_cache, mocked_requester_class, mocked_send_queue_class
+):
     configure_cache = mocker.patch("fmn.consumer.consumer.configure_cache")
     c = Consumer()
     await c._ready
@@ -67,7 +63,7 @@ async def test_consumer_init(mocker, mocked_cache, mocked_requester_class, mocke
 
 def test_consumer_loop_not_running(
     mocker,
-    mocked_cache,
+    mocked_tracked_cache,
     mocked_requester_class,
     mocked_send_queue_class,
     make_mocked_message,
@@ -81,7 +77,7 @@ def test_consumer_loop_not_running(
 
 async def test_consumer_call_not_tracked(
     mocker,
-    mocked_cache,
+    mocked_tracked_cache,
     mocked_requester_class,
     mocked_send_queue_class,
     make_mocked_message,
@@ -92,8 +88,8 @@ async def test_consumer_call_not_tracked(
     message = make_mocked_message(topic="dummy.topic", body={"foo": "bar"})
     await c.handle_or_rollback(message)
 
-    mocked_cache.invalidate_on_message.assert_called_with(message)
-    c._requester.invalidate_on_message.assert_called_with(message)
+    mocked_tracked_cache.invalidate_on_message.assert_called_with(message, mocked_session_maker.db)
+    c._requester.invalidate_on_message.assert_called_with(message, mocked_session_maker.db)
     c.send_queue.send.assert_not_called()
     mocked_session_maker.__aenter__.assert_called_once()
     mocked_session_maker.__aexit__.assert_called_once()
@@ -101,7 +97,7 @@ async def test_consumer_call_not_tracked(
 
 async def test_consumer_call_tracked(
     mocker,
-    mocked_cache,
+    mocked_tracked_cache,
     mocked_requester_class,
     mocked_send_queue_class,
     make_mocked_message,
@@ -109,7 +105,7 @@ async def test_consumer_call_tracked(
     db_async_session,
 ):
     c = Consumer()
-    mocked_cache.get_value.return_value = Tracked(
+    mocked_tracked_cache.get_value.return_value = Tracked(
         packages={"pkg1"},
         containers=set(),
         modules=set(),
@@ -165,7 +161,7 @@ async def test_consumer_call_tracked(
 
 
 async def test_consumer_init_settings_file(
-    mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class
+    mocker, mocked_tracked_cache, mocked_requester_class, mocked_send_queue_class
 ):
     mocker.patch.dict(fm_config["consumer_config"], {"settings_file": "/some/where/fmn.cfg"})
     c = Consumer()
@@ -175,7 +171,7 @@ async def test_consumer_init_settings_file(
 
 async def test_consumer_call_failure(
     mocker,
-    mocked_cache,
+    mocked_tracked_cache,
     mocked_requester_class,
     mocked_send_queue_class,
     make_mocked_message,
@@ -183,7 +179,7 @@ async def test_consumer_call_failure(
 ):
     c = Consumer()
     await c._ready
-    mocked_cache.get_value.side_effect = ValueError
+    mocked_tracked_cache.get_value.side_effect = ValueError
     message = make_mocked_message(topic="dummy.topic", body={})
 
     with pytest.raises(ValueError):
@@ -196,10 +192,14 @@ async def test_consumer_call_failure(
 
 
 async def test_consumer_call_tracked_agent_name(
-    mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class, make_mocked_message
+    mocker,
+    mocked_tracked_cache,
+    mocked_requester_class,
+    mocked_send_queue_class,
+    make_mocked_message,
 ):
     c = Consumer()
-    mocked_cache.get_value.return_value = Tracked(
+    mocked_tracked_cache.get_value.return_value = Tracked(
         packages=set(),
         containers=set(),
         modules=set(),
@@ -216,10 +216,14 @@ async def test_consumer_call_tracked_agent_name(
 
 
 async def test_consumer_deprecated_schema(
-    mocker, mocked_cache, mocked_requester_class, mocked_send_queue_class, make_mocked_message
+    mocker,
+    mocked_tracked_cache,
+    mocked_requester_class,
+    mocked_send_queue_class,
+    make_mocked_message,
 ):
     c = Consumer()
-    mocked_cache.get_value.return_value = Tracked(packages={"pkg1"})
+    mocked_tracked_cache.get_value.return_value = Tracked(packages={"pkg1"})
     c._rules_cache = mocker.AsyncMock()
     message = make_mocked_message(
         topic="dummy.topic",
@@ -250,7 +254,7 @@ async def test_consumer_send_error(
 
 async def test_consumer_in_threadpool(
     mocker,
-    mocked_cache,
+    mocked_tracked_cache,
     mocked_requester_class,
     mocked_send_queue_class,
     make_mocked_message,
@@ -268,7 +272,7 @@ async def test_consumer_in_threadpool(
 
 async def test_consumer_duplicate(
     mocker,
-    mocked_cache,
+    mocked_tracked_cache,
     mocked_requester_class,
     mocked_send_queue_class,
     make_mocked_message,
@@ -276,7 +280,7 @@ async def test_consumer_duplicate(
     db_async_session,
 ):
     c = Consumer()
-    mocked_cache.get_value.return_value = Tracked(
+    mocked_tracked_cache.get_value.return_value = Tracked(
         packages={"pkg1"},
         containers=set(),
         modules=set(),

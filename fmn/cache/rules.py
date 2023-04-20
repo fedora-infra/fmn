@@ -5,11 +5,8 @@
 import logging
 from typing import TYPE_CHECKING
 
-from cashews import cache
-
 from ..database.model import Rule
 from .base import CachedValue
-from .util import cache_ttl, lock_ttl
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
@@ -22,26 +19,18 @@ class RulesCache(CachedValue):
     """Cache the rules currently in the database."""
 
     name = "rules"
-    cached_method = "_get_value"
 
     async def get_rules(self, db: "AsyncSession"):
         return [await db.merge(r) for r in await self.get_value(db=db)]
-
-    @cache.locked(key=name, ttl=lock_ttl(name))
-    # Don't use the lock=True option of the decorator because it does not allow to set the ttl for
-    # the lock itself.
-    @cache(key=name, prefix="v1", ttl=cache_ttl(name))
-    async def get_value(self, db: "AsyncSession"):
-        return await self.compute_value(db=db)
 
     async def _compute_value(self, db: "AsyncSession"):
         result = await db.execute(Rule.select_related().filter_by(disabled=False))
         return list(result.scalars())
 
-    async def invalidate_on_message(self, message: "Message"):
+    async def invalidate_on_message(self, message: "Message", db: "AsyncSession"):
         if (
             message.topic.endswith("fmn.rule.create.v1")
             or message.topic.endswith("fmn.rule.update.v1")
             or message.topic.endswith("fmn.rule.delete.v1")
         ):
-            await self.invalidate()
+            await self.invalidate(db)
