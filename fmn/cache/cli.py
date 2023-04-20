@@ -45,8 +45,8 @@ def delete_tracked():
     requester = Requester(get_settings().services)
     rules_cache = RulesCache()
     tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
-    asyncio.run(tracked_cache.invalidate())
-    click.echo("Tracked cache invalidated.")
+    asyncio.run(tracked_cache.delete())
+    click.echo("Tracked cache deleted.")
 
 
 @cache_cmd.command("refresh")

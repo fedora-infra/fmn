@@ -21,6 +21,7 @@ from .base import APIClient, NextPageParams, handle_http_error
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 log = logging.getLogger(__name__)
 
@@ -177,7 +178,7 @@ class PagureAsyncProxy(APIClient):
                 bisect.insort(sorted_projects, project, key=lambda p: p["fullname"])
         return sorted_projects
 
-    async def invalidate_on_message(self, message: "Message") -> None:
+    async def invalidate_on_message(self, message: "Message", db: "AsyncSession") -> None:
         topic = message.topic
         topic_match = self.PROJECT_TOPIC_RE.search(topic)
         if not topic_match:

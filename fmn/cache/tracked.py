@@ -6,10 +6,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from cashews import cache
-
 from .base import CachedValue
-from .util import cache_ttl, lock_ttl
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
@@ -50,15 +47,9 @@ class TrackedCache(CachedValue):
     name = "tracked"
 
     def __init__(self, requester: "Requester", rules_cache: "RulesCache"):
+        super().__init__()
         self._requester = requester
         self._rules_cache = rules_cache
-
-    @cache.locked(key=name, ttl=lock_ttl(name))
-    # Don't use the lock=True option of the decorator because it does not allow to set the ttl for
-    # the lock itself.
-    @cache(key=name, prefix="v1", ttl=cache_ttl(name))
-    async def get_value(self, db: "AsyncSession"):
-        return await self.compute_value(db=db)
 
     async def _compute_value(self, db: "AsyncSession"):
         tracked = Tracked()
@@ -66,10 +57,10 @@ class TrackedCache(CachedValue):
             await rule.tracking_rule.prime_cache(tracked, self._requester)
         return tracked
 
-    async def invalidate_on_message(self, message: "Message"):
+    async def invalidate_on_message(self, message: "Message", db: "AsyncSession"):
         if (
             message.topic.endswith("fmn.rule.create.v1")
             or message.topic.endswith("fmn.rule.update.v1")
             or message.topic.endswith("fmn.rule.delete.v1")
         ):
-            await self.invalidate()
+            await self.invalidate(db)

@@ -19,6 +19,7 @@ from .base import APIClient, NextPageParams, handle_http_error
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 log = logging.getLogger(__name__)
 
@@ -72,7 +73,7 @@ class FASJSONAsyncProxy(APIClient):
     async def get_user_groups(self, *, username: str) -> dict:
         return await self.get_payload(f"/users/{username}/groups/")
 
-    async def invalidate_on_message(self, message: "Message") -> None:
+    async def invalidate_on_message(self, message: "Message", db: "AsyncSession") -> None:
         if not self.FAS_TOPIC_RE.search(message.topic):
             # Bail out early
             log.debug("Skipping message with topic %s", message.topic)
