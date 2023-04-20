@@ -4,6 +4,7 @@
 
 import asyncio
 import logging
+from datetime import datetime
 from time import monotonic
 from typing import TYPE_CHECKING
 
@@ -45,10 +46,12 @@ class CachedValue:
     async def compute_value(self, *args, **kwargs):
         log.debug(f"Building the {self.name} cache")
         before = monotonic()
+        now = datetime.utcnow().isoformat()
         value = await self._compute_value(*args, **kwargs)
         after = monotonic()
         duration = after - before
         log.debug(f"Built the {self.name} cache in %.2f seconds", duration)
+        await cache.set(key=f"duration:{self.name}:{now}", value=duration, expire="31d")
         return value
 
     async def _compute_value(self, *args, **kwargs):
