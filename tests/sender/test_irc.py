@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 import asyncio
+import sys
 from unittest.mock import AsyncMock, Mock, call
 
 import pytest
@@ -13,13 +14,11 @@ from fmn.sender.irc import IRCHandler
 
 
 def _send_event(handler, transport, *event_args):
-    async def _send_nickname_in_use():
+    async def _do_send_event():
         await asyncio.sleep(0.5)
         handler._client._dispatcher(transport, Event(*event_args))
 
-    # RUF006 is not an issue here, in tests.
-    # https://beta.ruff.rs/docs/rules/asyncio-dangling-task/
-    asyncio.create_task(_send_nickname_in_use())  # noqa: RUF006
+    return asyncio.create_task(_do_send_event())
 
 
 @pytest.fixture
@@ -99,3 +98,17 @@ async def test_irc_disconnect_not_connected(handler):
     await handler.stop()
     # We didn't call the shutdown handler
     assert not handler.closed.done()
+
+
+async def test_irc_error_no_arg(handler, transport):
+    setup_future = asyncio.create_task(handler.setup())
+    await asyncio.sleep(0.5)
+    handler._client._dispatcher(transport, Event("error", "server", "dummy target", []))
+    with pytest.raises(asyncio.exceptions.CancelledError) as error_handler:
+        await setup_future
+    if sys.version_info >= (3, 11):
+        # Before 3.11, a new CancelledError is raised by the task
+        # https://bugs.python.org/issue45390
+        assert str(error_handler.value) == "dummy target"
+    transport.write.assert_called_with(b"QUIT :Connection cancelled\r\n")
+    transport.close.assert_called_with()
