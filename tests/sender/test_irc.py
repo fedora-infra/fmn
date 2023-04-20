@@ -62,7 +62,7 @@ async def test_irc_handle(transport, handler):
     transport.write.assert_called_once_with(b"PRIVMSG target :This is a test\r\n")
 
 
-async def test_irc_nickname_in_use(handler):
+async def test_irc_nickname_in_use(handler, transport):
     _send_event(
         handler, transport, "nicknameinuse", "server", "user", ["username", "nickname in use"]
     )
@@ -71,21 +71,22 @@ async def test_irc_nickname_in_use(handler):
 
 
 @pytest.mark.parametrize("error_type", ["error", "disconnect"])
-async def test_irc_error_not_connected(handler, error_type):
+async def test_irc_error_not_connected(handler, transport, error_type):
     _send_event(handler, transport, error_type, "server", "user", ["dummy error"])
-    with pytest.raises(asyncio.exceptions.CancelledError):
+    with pytest.raises(asyncio.exceptions.CancelledError) as error_handler:
         await handler.setup()
+    assert str(error_handler.value) == "dummy error"
 
 
 @pytest.mark.parametrize("error_type", ["error", "disconnect"])
-async def test_irc_error_while_connected(handler, error_type):
+async def test_irc_error_while_connected(handler, transport, error_type):
     _send_event(handler, transport, "900", "server", "user")
     await handler.setup()
     _send_event(handler, transport, error_type, "server", "user", ["dummy error"])
     await handler.closed
 
 
-async def test_irc_disconnect_expected(handler):
+async def test_irc_disconnect_expected(handler, transport):
     _send_event(handler, transport, "900", "server", "user")
     await handler.setup()
     await handler.stop()
