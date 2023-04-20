@@ -94,7 +94,8 @@ class IRCClient(AioSimpleIRCClient):
             self._cancel_or_close(message)
 
     def on_error(self, connection, event):
-        self._cancel_or_close(event.arguments[0])
+        message = event.arguments[0] if event.arguments else event.target
+        self._cancel_or_close(message)
 
     def on_nicknameinuse(self, connection, event):
         message = f"{event.arguments[0]}: {event.arguments[1]}"
