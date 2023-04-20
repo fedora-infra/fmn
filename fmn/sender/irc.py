@@ -101,7 +101,11 @@ class IRCClient(AioSimpleIRCClient):
         message = f"{event.arguments[0]}: {event.arguments[1]}"
         self._connection_future.set_exception(ServerConnectionError(message))
 
+    def on_loggedin(self, connection, event):
+        # Not supported by the IRC library yet, so we get ``self.on_900()``.
+        self._connection_future.set_result(connection)
+
     def on_900(self, connection, event):
         # When logged in.
         # See IRCv3: https://ircv3.net/specs/extensions/sasl-3.1.html#numerics-used-by-this-extension
-        self._connection_future.set_result(connection)
+        return self.on_loggedin(connection, event)
