@@ -63,7 +63,7 @@ class APIClient(ABC):
             return self._str
         except AttributeError:
             clsname = type(self).__name__
-            self._str = f"{clsname}({self.base_url!r})"
+            self._str = f"{clsname}({self.base_url})"
             return self._str
 
     def extract_payload(self, result: dict, payload_field: str = None) -> Any:
