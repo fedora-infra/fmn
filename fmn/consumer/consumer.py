@@ -65,7 +65,7 @@ class Consumer:
             await self._handle(message, db)
 
     async def _handle(self, message: message.Message, db: AsyncSession):
-        await self.refresh_cache_if_needed(message)
+        await self.refresh_cache_if_needed(message, db)
         if not await self.is_tracked(message, db):
             log.debug("Message %s is not tracked", message.id)
             return
@@ -114,7 +114,7 @@ class Consumer:
             return True
         return False
 
-    async def refresh_cache_if_needed(self, message: message.Message):
-        await self._rules_cache.invalidate_on_message(message)
-        await self._tracked_cache.invalidate_on_message(message)
-        await self._requester.invalidate_on_message(message)
+    async def refresh_cache_if_needed(self, message: message.Message, db: AsyncSession):
+        await self._rules_cache.invalidate_on_message(message, db)
+        await self._tracked_cache.invalidate_on_message(message, db)
+        await self._requester.invalidate_on_message(message, db)

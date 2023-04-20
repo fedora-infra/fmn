@@ -400,7 +400,7 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
         cache.get_match.side_effect = mocked_cache_get_match
 
         with caplog.at_level(logging.DEBUG):
-            await proxy.invalidate_on_message(message)
+            await proxy.invalidate_on_message(message, None)
 
         if "success" not in testcase:
             asyncio_create_task.assert_not_called()

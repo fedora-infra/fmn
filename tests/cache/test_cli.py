@@ -9,7 +9,6 @@ import pytest
 from cashews import cache
 
 from fmn.cache import configure_cache
-from fmn.cache.tracked import TrackedCache
 from fmn.core.cli import cli
 from fmn.core.config import get_settings
 
@@ -31,31 +30,29 @@ def persistent_cache(mocker, tmpdir, cli_runner):
     cli_runner.env = {"CACHE__URL": get_settings().cache.url}
 
 
-def test_get_tracked(mocker, cli_runner, mocked_fasjson_proxy):
+def test_get_tracked(mocker, cli_runner, mocked_fasjson_proxy, mocked_tracked_cache):
     configure_cache = mocker.patch("fmn.cache.cli.configure_cache")
-    get_value = mocker.patch.object(TrackedCache, "get_value")
-    get_value.return_value = {"foo": "bar"}
     mocker.patch("fmn.cache.cli.init_async_model")
+    mocked_tracked_cache.get_value.return_value = {"foo": "bar"}
 
     result = cli_runner.invoke(cli, ["cache", "get-tracked"])
 
     assert result.exit_code == 0, result.output
     configure_cache.assert_called_once_with()
-    get_value.assert_called_once()
+    mocked_tracked_cache.get_value.assert_called_once()
     assert result.output == "{'foo': 'bar'}\n"
 
 
 def test_delete_tracked(mocker, cli_runner):
     configure_cache = mocker.patch("fmn.cache.cli.configure_cache")
-    get_value = mocker.patch.object(TrackedCache, "get_value")
-    get_value.return_value = {"foo": "bar"}
-    invalidate_tracked = mocker.patch.object(TrackedCache, "invalidate")
+    cache = mocker.patch("fmn.cache.base.cache")
+    cache.delete = mock.AsyncMock()
 
     result = cli_runner.invoke(cli, ["cache", "delete-tracked"])
 
     assert result.exit_code == 0, result.output
     configure_cache.assert_called_once_with()
-    invalidate_tracked.assert_called_once_with()
+    cache.delete.assert_called_once_with("v1:tracked")
 
 
 @pytest.mark.cashews_cache(enabled=True)

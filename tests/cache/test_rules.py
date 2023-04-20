@@ -2,9 +2,9 @@
 #
 # SPDX-License-Identifier: MIT
 
+import asyncio
+
 import pytest
-from cashews import cache
-from cashews.formatter import get_templates_for_func
 
 from fmn.cache.rules import RulesCache
 from fmn.database import model
@@ -43,11 +43,12 @@ async def test_rule_disabled(db_async_session):
 
 @pytest.mark.cashews_cache(enabled=True)
 async def test_invalidate(mocker):
-    mocker.patch.object(cache, "delete")
     rc = RulesCache()
-    await rc.invalidate()
-    cache_key = list(get_templates_for_func(rc.get_value))[0]
-    cache.delete.assert_called_with(cache_key)
+    mocker.patch.object(rc, "refresh")
+    db = object()
+    await rc.invalidate(db)
+    await asyncio.gather(*rc._background_tasks)
+    rc.refresh.assert_called_with(db)
 
 
 @pytest.mark.parametrize(
@@ -63,8 +64,9 @@ async def test_invalidate_on_message(mocker, topic, expected, make_mocked_messag
     message = make_mocked_message(topic=topic, body={})
     rc = RulesCache()
     mocker.patch.object(rc, "invalidate")
-    await rc.invalidate_on_message(message)
+    db = object()
+    await rc.invalidate_on_message(message, db)
     if expected:
-        rc.invalidate.assert_called_once_with()
+        rc.invalidate.assert_called_once_with(db)
     else:
         rc.invalidate.assert_not_called()

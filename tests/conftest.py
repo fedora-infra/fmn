@@ -20,6 +20,7 @@ from fedora_messaging import message
 import fmn.api.handlers.misc
 from fmn.api import main
 from fmn.backends import FASJSONAsyncProxy, get_distgit_proxy, get_fasjson_proxy
+from fmn.cache.tracked import Tracked, TrackedCache
 from fmn.cache.util import cache_arg
 from fmn.core.config import get_settings
 from fmn.database.main import (
@@ -415,3 +416,24 @@ def reset_cache_arg_caches(register_cache_arg_fns):
 
     for cached_fn in register_cache_arg_fns:
         cached_fn.cache_clear()
+
+
+@pytest.fixture
+def mocked_tracked_cache(mocker):
+    mocked = mock.Mock()
+    mocked.get_value = mock.AsyncMock(return_value=Tracked())
+    mocked.invalidate_on_message = mock.AsyncMock()
+    mocked.invalidate = mock.AsyncMock()
+    mocked.delete = mock.AsyncMock()
+
+    def _make_tracked_cache(*args, **kwargs):
+        obj = TrackedCache(*args, **kwargs)
+        obj.get_value = mocked.get_value
+        obj.invalidate = mocked.invalidate
+        obj.invalidate_on_message = mocked.invalidate_on_message
+        obj.delete = mocked.delete
+        return obj
+
+    mocker.patch("fmn.cache.cli.TrackedCache", side_effect=_make_tracked_cache)
+    mocker.patch("fmn.consumer.consumer.TrackedCache", side_effect=_make_tracked_cache)
+    return mocked
