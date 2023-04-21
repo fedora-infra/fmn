@@ -6,12 +6,14 @@ SPDX-License-Identifier: MIT
 
 # Rolling a Release
 
+## Releasing on PyPI
+
 This documents how a release is made.
 
 Unless otherwise noted, files are referenced relative to and commands should be executed from the
 top-level directory of the repository.
 
-## Generate Changelog
+### Generate Changelog
 
 We want to document what changes between releases. To do that, we use `towncrier` which collates
 changelog snippets and adds them to `docs/changelog.md`:
@@ -35,7 +37,7 @@ Review the changes to `docs/changelog.md`, e.g. using `git diff`.
 Afterwards, commit the changes to git. The commit should contain the extended `docs/changelog.md`
 file as well as the snippet files which were removed in the previous step.
 
-## Bump the Version
+### Bump the Version
 
 Use `poetry version (patch|minor|major|…)` to bump the version in `pyproject.toml`, e.g.:
 
@@ -48,7 +50,7 @@ version --help` for details).
 
 Commit the changes to git.
 
-## Tag the Release
+### Tag the Release
 
 Tag this commit with a GPG-signed tag using the plain version number, e.g.:
 
@@ -62,7 +64,7 @@ Push both the `develop` branch and the tag you just created to the GitHub reposi
 $ git push origin develop 3.0.0
 ```
 
-## Build the Artifacts
+### Build the Artifacts
 
 Build the source tarball and installable Python wheel archive:
 
@@ -72,7 +74,7 @@ $ poetry build
 
 Th resulting archives will be placed into the `dist/` directory.
 
-## Create a Release on GitHub
+### Create a Release on GitHub
 
 Open [`https://github.com/fedora-infra/fmn/tags`](https://github.com/fedora-infra/fmn/tags) in a web
 browser, navigate to the just created tag (it should be at the top) and select `Create release` from
@@ -80,13 +82,13 @@ the “meatballs” menu to its right.
 
 In the page that opens add a title like `Release 3.0.0` and fill in (high-level) details about the
 release in the text area below. Beneath it, there is an area labelled `Attach binaries by dropping
-them here or selecting them.` Add the previously built source tarball (e.g.  `fmn-3.0.0.tar.gz`) to
+them here or selecting them.` Add the previously built source tarball (e.g. `fmn-3.0.0.tar.gz`) to
 the release, either by clicking in that area, navigating to the `dist/` directory and selecting the
 tarball, or by dragging and dropping it from a file manager into the same area.
 
 Click the button labelled `Publish release`.
 
-## Publish Python Package to PyPI
+### Publish Python Package to PyPI
 
 To publish the Python package to the [Python Package Index](https://pypi.org), you need to be a
 maintainer of the [`fmn` package](https://pypi.org/project/fmn/) there and have a PyPI API token
@@ -99,6 +101,38 @@ Then you can publish the source tarball and wheel of the release using Poetry li
 $ poetry publish
 ```
 
-## Congratulations!
+### Congratulations!
 
 You’re done! 🥳
+
+## Deploying to Fedora Infrastructure
+
+FMN is deployed through Openshift, which tracks the `staging` and `stable` branches for the staging
+and production environments respectively.
+
+### Staging
+
+When the code in the `develop` branch is suitable for testing in the staging environment, merge it
+in the staging branch and push it to the repository:
+
+```
+$ git co staging
+$ git merge --ff-only develop
+$ git push
+```
+
+This will trigger a build in OpenShift in the staging environment. Make sure the new version is
+actually deployed by looking at the footer of the FMN page.
+
+### Production
+
+When the code in the `staging` branch has been sufficiently tested and that a window is open for a
+production deployment, create a pull-request to merge the `staging` branch into the `stable` branch
+by visiting [this GitHub URL](https://github.com/fedora-infra/fmn/pull/new/stable...staging).
+
+Once all tests pass and a review is done, merge the pull request. This will trigger a build in
+OpenShift in the production environment. Make sure the new version is actually deployed by looking
+at the footer of the FMN page.
+
+It is advised to roll a release on PyPI with the content of the `stable` branch (and therefore the
+code that is deployed in production).
