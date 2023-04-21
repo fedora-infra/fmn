@@ -59,17 +59,16 @@ def refresh():
         requester = Requester(get_settings().services)
         rules_cache = RulesCache()
         tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
-        async with async_session_maker.begin() as db:
-            for cache_value in (rules_cache, tracked_cache):
-                before = monotonic()
-                refreshed = await cache_value.refresh(db=db)
-                after = monotonic()
-                duration = after - before
-                if refreshed is None:
-                    click.echo(f"The {cache_value.name} cache has no early refresh configured.")
-                elif refreshed:
-                    click.echo(f"Refreshed the {cache_value.name} cache in {duration:.0f}s.")
-                else:
-                    click.echo(f"The {cache_value.name} cache is recent enough.")
+        for cache_value in (rules_cache, tracked_cache):
+            before = monotonic()
+            refreshed = await cache_value.refresh()
+            after = monotonic()
+            duration = after - before
+            if refreshed is None:
+                click.echo(f"The {cache_value.name} cache has no early refresh configured.")
+            elif refreshed:
+                click.echo(f"Refreshed the {cache_value.name} cache in {duration:.0f}s.")
+            else:
+                click.echo(f"The {cache_value.name} cache is recent enough.")
 
     asyncio.run(_doit())
