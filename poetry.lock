@@ -4429,4 +4429,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "3c19cce321c9546826af415446f4ee39f409c50552fb3aff1d29f034219eded9"
+content-hash = "3bf27ab88eb51f7e9fb63cb2abdce840f7b6c82eca9e8bbf35ba5c94dbc52f7f"
