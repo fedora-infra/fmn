@@ -52,12 +52,12 @@ class CachedValue:
     async def compute_value(self, db: "AsyncSession"):
         log.debug(f"Building the {self.name} cache")
         before = monotonic()
-        now = datetime.utcnow().isoformat()
+        now = datetime.utcnow().replace(microsecond=0).isoformat()
         value = await self._compute_value(db=db)
         after = monotonic()
         duration = after - before
         log.debug(f"Built the {self.name} cache in %.2f seconds", duration)
-        await cache.set(key=f"duration:{self.name}:{now}", value=duration, expire="31d")
+        await cache.set(key=f"duration:{self.name}:{now}", value=int(duration), expire="31d")
         return value
 
     async def _compute_value(self, db: "AsyncSession"):
