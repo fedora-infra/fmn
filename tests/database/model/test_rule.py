@@ -23,7 +23,7 @@ class TestRule(ModelTestBase):
             "generation_rules": [model.GenerationRule()],
         }
 
-    async def test_select_related(self, db_async_session, db_async_obj):
+    async def test_select_related(self, db_async_session, db_obj):
         rule = (await db_async_session.execute(model.Rule.select_related())).scalar_one()
 
         assert rule.user.name == "allkneelbeforezod"
@@ -31,33 +31,33 @@ class TestRule(ModelTestBase):
         assert len(rule.generation_rules) == 1
         assert all(isinstance(gr, model.GenerationRule) for gr in rule.generation_rules)
 
-    async def test_handle_match(db_async_session, db_async_obj, mocker, make_mocked_message):
+    async def test_handle_match(db_async_session, db_obj, mocker, make_mocked_message):
         message = make_mocked_message(topic="dummy", body={"foo": "bar"})
         tr = model.TrackingRule(name="dummy")
         tr_matches = mocker.patch.object(tr, "matches", return_value=True)
         gr = model.GenerationRule()
-        db_async_obj.user = model.User(name="dummy")
-        db_async_obj.tracking_rule = tr
-        db_async_obj.generation_rules = [gr]
+        db_obj.user = model.User(name="dummy")
+        db_obj.tracking_rule = tr
+        db_obj.generation_rules = [gr]
         for i in range(1, 4):
             gr.destinations.append(model.Destination(protocol="email", address=f"n{i}"))
         requester = Mock()
-        result = [n async for n in db_async_obj.handle(message, requester)]
+        result = [n async for n in db_obj.handle(message, requester)]
         tr_matches.assert_called_once_with(message, requester)
         assert len(result) == 3
         assert [n.content.headers.dict()["To"] for n in result] == ["n1", "n2", "n3"]
 
-    async def test_handle_no_match(db_async_session, db_async_obj, mocker, make_mocked_message):
+    async def test_handle_no_match(db_async_session, db_obj, mocker, make_mocked_message):
         message = make_mocked_message(topic="dummy", body={"foo": "bar"})
         tr = model.TrackingRule(name="dummy")
         tr_matches = mocker.patch.object(tr, "matches", return_value=False)
         gr = model.GenerationRule()
         gr_handle = mocker.patch.object(gr, "handle")
-        db_async_obj.user = model.User(name="dummy")
-        db_async_obj.tracking_rule = tr
-        db_async_obj.generation_rules = [gr]
+        db_obj.user = model.User(name="dummy")
+        db_obj.tracking_rule = tr
+        db_obj.generation_rules = [gr]
         requester = Mock()
-        result = [n async for n in db_async_obj.handle(message, requester)]
+        result = [n async for n in db_obj.handle(message, requester)]
         tr_matches.assert_called_once_with(message, requester)
         gr_handle.assert_not_called()
         assert len(result) == 0

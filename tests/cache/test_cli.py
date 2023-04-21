@@ -32,7 +32,7 @@ def persistent_cache(mocker, tmpdir, cli_runner):
 
 def test_get_tracked(mocker, cli_runner, mocked_fasjson_proxy, mocked_tracked_cache):
     configure_cache = mocker.patch("fmn.cache.cli.configure_cache")
-    mocker.patch("fmn.cache.cli.init_async_model")
+    mocker.patch("fmn.cache.cli.init_model")
     mocked_tracked_cache.get_value.return_value = {"foo": "bar"}
 
     result = cli_runner.invoke(cli, ["cache", "get-tracked"])

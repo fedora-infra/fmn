@@ -10,7 +10,7 @@ import click
 from cashews import cache
 
 from ..core.config import get_settings
-from ..database import async_session_maker, init_async_model
+from ..database import async_session_maker, init_model
 from ..rules.requester import Requester
 from . import configure_cache
 from .rules import RulesCache
@@ -28,7 +28,7 @@ def get_tracked():
 
     async def _get_tracked():
         configure_cache()
-        await init_async_model()
+        await init_model()
         requester = Requester(get_settings().services)
         rules_cache = RulesCache()
         tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
@@ -74,7 +74,7 @@ def refresh():
 
     async def _doit():
         configure_cache()
-        await init_async_model()
+        await init_model()
         requester = Requester(get_settings().services)
         rules_cache = RulesCache()
         tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)

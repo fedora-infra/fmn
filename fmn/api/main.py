@@ -13,7 +13,7 @@ from starlette.types import ASGIApp
 
 from ..cache import configure_cache
 from ..core.config import get_settings
-from ..database import init_async_model
+from ..database import init_model as init_db_model
 from . import handlers
 
 log = logging.getLogger(__name__)
@@ -62,7 +62,7 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def init_model():
-    await init_async_model()
+    await init_db_model()
 
 
 @app.on_event("startup")

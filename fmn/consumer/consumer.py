@@ -16,7 +16,7 @@ from ..cache import configure_cache
 from ..cache.rules import RulesCache
 from ..cache.tracked import TrackedCache
 from ..core import config
-from ..database import async_session_maker, init_async_model
+from ..database import async_session_maker, init_model
 from ..database.model import Generated
 from ..rules.requester import Requester
 from .send_queue import SendQueue
@@ -40,7 +40,7 @@ class Consumer:
 
     async def setup(self):
         # Connect to the database
-        await init_async_model()
+        await init_model()
         # Start the connection to RabbitMQ's FMN vhost
         await self.send_queue.connect()
         # Caching and requesting
