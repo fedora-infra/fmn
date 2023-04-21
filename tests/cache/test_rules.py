@@ -44,11 +44,11 @@ async def test_rule_disabled(db_async_session):
 @pytest.mark.cashews_cache(enabled=True)
 async def test_invalidate(mocker):
     rc = RulesCache()
-    mocker.patch.object(rc, "refresh")
+    mocker.patch.object(rc, "rebuild")
     db = object()
     await rc.invalidate(db)
     await asyncio.gather(*rc._background_tasks)
-    rc.refresh.assert_called_with(db)
+    rc.rebuild.assert_called_once_with()
 
 
 @pytest.mark.parametrize(

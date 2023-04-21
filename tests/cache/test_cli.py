@@ -102,3 +102,17 @@ def test_refresh_no_early_ttl(mocker, cli_runner, mocked_session_maker):
     )
     assert result.exit_code == 0
     assert all("has no early refresh configured." in line for line in result.output.splitlines())
+
+
+@pytest.mark.cashews_cache(enabled=True)
+def test_delete_locks(mocker, cli_runner):
+    async def _set_cache():
+        await cache.set("locked:foo", value="dummy")
+        await cache.set("locked:bar", value="dummy")
+
+    mocker.patch("fmn.cache.cli.configure_cache")
+    asyncio.run(_set_cache())
+    result = cli_runner.invoke(cli, ["cache", "delete-locks"])
+
+    assert result.exit_code == 0, result.output
+    assert result.output == "Deleted lock for foo\nDeleted lock for bar\nCache locks deleted.\n"
