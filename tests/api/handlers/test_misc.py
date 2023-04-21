@@ -226,8 +226,8 @@ class TestMisc(BaseTestAPIV1Handler):
         assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert "no such table" in response.json()["detail"]
 
-    async def test_readiness(self, client, db_async_schema, mocker):
-        mocker.patch("fmn.api.database.async_session_maker", return_value=db_async_schema)
+    async def test_readiness(self, client, db_async_session, mocker):
+        mocker.patch("fmn.api.database.async_session_maker", return_value=db_async_session)
         response = client.get(f"{self.path}/healthz/ready")
         assert response.status_code == status.HTTP_200_OK
         assert response.json() == {"detail": "OK"}

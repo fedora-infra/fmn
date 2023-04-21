@@ -3,10 +3,10 @@
 # SPDX-License-Identifier: MIT
 
 from sqlalchemy import MetaData, create_engine, select
-from sqlalchemy.engine import URL, Engine, make_url
+from sqlalchemy.engine import URL, make_url
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
-from sqlalchemy.orm import Session, declarative_base, sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 from ..core.config import get_settings
 
@@ -58,30 +58,17 @@ metadata = MetaData(naming_convention=naming_convention)
 Base = declarative_base(cls=CustomBase, metadata=metadata)
 
 
-def make_session_maker(class_=AsyncSession):
-    return sessionmaker(class_=class_, expire_on_commit=False, future=True)
+def make_session_maker():
+    return sessionmaker(class_=AsyncSession, expire_on_commit=False, future=True)
 
 
 async_session_maker = make_session_maker()
-sync_session_maker = make_session_maker(class_=Session)
 
 
-def init_sync_model(sync_engine: Engine = None):
-    if not sync_engine:
-        sync_engine = get_sync_engine()
-    sync_session_maker.configure(bind=sync_engine)
-
-
-async def init_async_model(async_engine: AsyncEngine = None):
+async def init_model(async_engine: AsyncEngine = None):
     if not async_engine:
-        async_engine = get_async_engine()
+        async_engine = get_engine()
     async_session_maker.configure(bind=async_engine)
-
-
-def get_sync_engine():
-    db_config = get_settings().dict()["database"]["sqlalchemy"]
-    db_config.setdefault("isolation_level", "SERIALIZABLE")
-    return create_engine(**db_config)
 
 
 def _async_from_sync_url(url: URL | str) -> URL:
@@ -104,8 +91,11 @@ def _async_from_sync_url(url: URL | str) -> URL:
     return sync_url.set(drivername=f"{dialect}+{driver}")
 
 
-def get_async_engine():
+def get_engine(sync=False):
     db_config = get_settings().dict()["database"]["sqlalchemy"]
     db_config.setdefault("isolation_level", "SERIALIZABLE")
-    db_config["url"] = _async_from_sync_url(db_config["url"])
-    return create_async_engine(**db_config)
+    if sync:
+        return create_engine(**db_config)
+    else:
+        db_config["url"] = _async_from_sync_url(db_config["url"])
+        return create_async_engine(**db_config)

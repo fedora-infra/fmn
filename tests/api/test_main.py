@@ -21,13 +21,13 @@ def test_add_middlewares():
     assert mw[1].options == dict(handler=main.global_execution_handler)
 
 
-@mock.patch("fmn.api.main.init_async_model")
-async def test_init_model(init_async_model):
+@mock.patch("fmn.api.main.init_db_model")
+async def test_init_model(init_model):
     assert main.init_model in main.app.router.on_startup
 
     await main.init_model()
 
-    init_async_model.assert_awaited_once_with()
+    init_model.assert_awaited_once_with()
 
 
 def test_configure_cache(mocker):

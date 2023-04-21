@@ -14,7 +14,7 @@ from cashews.key import get_cache_key_template
 from cashews.ttl import ttl_to_seconds
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..database import get_async_engine, make_session_maker
+from ..database import get_engine, make_session_maker
 from .util import cache_arg, cache_ttl, lock_ttl
 
 if TYPE_CHECKING:
@@ -47,7 +47,7 @@ class CachedValue:
         self._cache_key = get_cache_key_template(
             self.get_value, key=self.name, prefix=self.cache_version
         )
-        cache_db_session_maker.configure(bind=get_async_engine())
+        cache_db_session_maker.configure(bind=get_engine())
 
     async def compute_value(self, db: "AsyncSession"):
         log.debug(f"Building the {self.name} cache")

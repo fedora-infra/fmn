@@ -101,7 +101,7 @@ async def test_consumer_call_tracked(
     mocked_requester_class,
     mocked_send_queue_class,
     make_mocked_message,
-    db_async_schema,
+    db_schema,
     db_async_session,
 ):
     c = Consumer()
@@ -276,7 +276,7 @@ async def test_consumer_duplicate(
     mocked_requester_class,
     mocked_send_queue_class,
     make_mocked_message,
-    db_async_schema,
+    db_schema,
     db_async_session,
 ):
     c = Consumer()
