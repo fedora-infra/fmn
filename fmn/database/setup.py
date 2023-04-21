@@ -8,26 +8,19 @@ from pathlib import Path
 import alembic.command
 import alembic.config
 from sqlalchemy import inspect
-from sqlalchemy.engine import Engine
-from sqlalchemy.orm import Session
 
 from ..core.config import get_settings
 
 # Import the DB model here so its classes are considered by metadata.create_all() below.
 from . import model  # noqa: F401
-from .main import get_sync_engine, metadata
+from .main import get_engine, metadata
 
 HERE = Path(__file__).parent
 
 
-def setup_db_schema(engine_or_session: Engine | Session | None = None) -> None:
-    if isinstance(engine_or_session, Session):
-        engine = engine_or_session.get_bind()
-    else:
-        engine = engine_or_session or get_sync_engine()
-
+def setup_db_schema() -> None:
+    engine = get_engine(sync=True)
     inspection_result = inspect(engine)
-
     present_tables = sorted(n for n in metadata.tables if inspection_result.has_table(n))
 
     if present_tables:

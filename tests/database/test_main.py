@@ -45,50 +45,30 @@ class TestCustomBase:
 
 
 @pytest.mark.parametrize("default_engine", (True, False))
-@mock.patch("fmn.database.main.sync_session_maker")
-@mock.patch("fmn.database.main.get_sync_engine")
-def test_init_sync_model(get_sync_engine, sync_session_maker, default_engine):
-    sentinel = object()
-    if default_engine:
-        get_sync_engine.return_value = sentinel
-        engine = None
-    else:
-        engine = sentinel
-
-    main.init_sync_model(engine)
-
-    if default_engine:
-        get_sync_engine.assert_called_once_with()
-    else:
-        get_sync_engine.assert_not_called()
-    sync_session_maker.configure.assert_called_once_with(bind=sentinel)
-
-
-@pytest.mark.parametrize("default_engine", (True, False))
 @mock.patch("fmn.database.main.async_session_maker", new_callable=mock.AsyncMock)
-@mock.patch("fmn.database.main.get_async_engine")
-async def test_init_async_model(get_async_engine, async_session_maker, default_engine):
+@mock.patch("fmn.database.main.get_engine")
+async def test_init_model(get_engine, async_session_maker, default_engine):
     sentinel = object()
     if default_engine:
-        get_async_engine.return_value = sentinel
+        get_engine.return_value = sentinel
         engine = None
     else:
         engine = sentinel
     # configure() is not an async coroutine, avoid warning
     async_session_maker.configure = mock.MagicMock()
 
-    await main.init_async_model(engine)
+    await main.init_model(engine)
 
     if default_engine:
-        get_async_engine.assert_called_once_with()
+        get_engine.assert_called_once_with()
     else:
-        get_async_engine.assert_not_called()
+        get_engine.assert_not_called()
     async_session_maker.configure.assert_called_once_with(bind=sentinel)
 
 
 @mock.patch("fmn.database.main.create_engine")
 def test_get_sync_engine(create_engine):
-    main.get_sync_engine()
+    main.get_engine(sync=True)
     create_engine.assert_called_once_with(
         url=get_settings().database.sqlalchemy.url,
         isolation_level="SERIALIZABLE",
@@ -115,8 +95,8 @@ def test__async_from_sync_url(in_url, out_url_or_exc):
 
 
 @mock.patch("fmn.database.main.create_async_engine")
-def test_get_async_engine(create_async_engine):
-    main.get_async_engine()
+def test_get_engine(create_async_engine):
+    main.get_engine()
     sync_url = get_settings().database.sqlalchemy.url
     async_url = main._async_from_sync_url(sync_url)
     create_async_engine.assert_called_once_with(

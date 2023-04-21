@@ -10,7 +10,7 @@ import click
 import click_plugins
 from sqlalchemy import delete, func, select
 
-from ..database.main import async_session_maker, init_async_model
+from ..database.main import async_session_maker, init_model
 from ..database.model import Generated
 from . import config
 from .version import __version__
@@ -44,7 +44,7 @@ def generated_count(days):
 
     async def _doit():
         limit = datetime.now() - timedelta(days=days)
-        await init_async_model()
+        await init_model()
         async with async_session_maker.begin() as db:
             result = await db.execute(
                 select(func.count(Generated.id)).filter(Generated.when < limit)
