@@ -1,0 +1,1 @@
+Rebuild the cache instead of deleting it when a cache-invalidating message arrives
