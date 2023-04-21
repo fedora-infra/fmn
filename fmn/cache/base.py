@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 import asyncio
+import io
 import logging
 from datetime import datetime
 from time import monotonic
@@ -92,11 +93,20 @@ class CachedValue:
 
     async def invalidate(self, db: "AsyncSession"):
         # This does not really invalidate the cache, instead it rebuilds it in the background
-        # because it's very expensive.
+        # because rebuilding is very expensive.
         log.debug(f"Rebuilding the {self.name} cache in the background")
         task = asyncio.create_task(self.rebuild())
         self._background_tasks.add(task)
-        task.add_done_callback(self._background_tasks.discard)
+
+        def _on_task_done(task):
+            self._background_tasks.discard(task)
+            exc = task.exception()
+            if exc is not None:
+                tb = io.StringIO()
+                task.print_stack(file=tb)
+                log.error(tb.getvalue())
+
+        task.add_done_callback(_on_task_done)
 
     async def invalidate_on_message(self, message: "Message", db: "AsyncSession"):
         raise NotImplementedError
