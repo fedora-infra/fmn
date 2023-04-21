@@ -11,15 +11,19 @@ from typing import TYPE_CHECKING
 from cashews import cache
 from cashews.key import get_cache_key_template
 from cashews.ttl import ttl_to_seconds
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from ..database import get_async_engine, make_session_maker
 from .util import cache_arg, cache_ttl, lock_ttl
 
 if TYPE_CHECKING:
     from fedora_messaging.message import Message
-    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 log = logging.getLogger(__name__)
+
+# Use its own DB connection pool so that async rebuilds don't starve off the consumer's DB pool.
+cache_db_session_maker = make_session_maker()
 
 
 class CachedValue:
@@ -42,6 +46,7 @@ class CachedValue:
         self._cache_key = get_cache_key_template(
             self.get_value, key=self.name, prefix=self.cache_version
         )
+        cache_db_session_maker.configure(bind=get_async_engine())
 
     async def compute_value(self, *args, **kwargs):
         log.debug(f"Building the {self.name} cache")
@@ -71,14 +76,28 @@ class CachedValue:
                 await cache.set(self._cache_key, value=value, expire=ttl)
                 refreshed = True
             return refreshed
-
         return await cache.locked(key=self.name, ttl=lock_ttl(self.name))(_refresh)()
+
+    async def rebuild(self, *args, **kwargs):
+        """Rebuild the cache.
+
+        We don't pass the database session here because it is run in the background and we want to
+        use our own connection pool.
+        """
+
+        async def _rebuild():
+            async with cache_db_session_maker.begin() as db:
+                ttl = ttl_to_seconds(cache_arg("ttl", self.name)())
+                value = await self.compute_value(*args, db=db, **kwargs)
+                await cache.set(self._cache_key, value=value, expire=ttl)
+
+        return await cache.locked(key=self.name, ttl=lock_ttl(self.name))(_rebuild)()
 
     async def invalidate(self, *args, **kwargs):
         # This does not really invalidate the cache, instead it rebuilds it in the background
         # because it's very expensive.
         log.debug(f"Rebuilding the {self.name} cache in the background")
-        task = asyncio.create_task(self.refresh(*args, **kwargs))
+        task = asyncio.create_task(self.rebuild())
         self._background_tasks.add(task)
         task.add_done_callback(self._background_tasks.discard)
 

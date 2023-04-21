@@ -9,5 +9,6 @@ from .main import (
     get_sync_engine,
     init_async_model,
     init_sync_model,
+    make_session_maker,
     sync_session_maker,
 )
