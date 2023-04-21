@@ -7,6 +7,7 @@ from pprint import pformat
 from time import monotonic
 
 import click
+from cashews import cache
 
 from ..core.config import get_settings
 from ..database import async_session_maker, init_async_model
@@ -47,6 +48,24 @@ def delete_tracked():
     tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
     asyncio.run(tracked_cache.delete())
     click.echo("Tracked cache deleted.")
+
+
+@cache_cmd.command("delete-locks")
+def delete_locks():
+    """Delete the cache locks before they expire.
+
+    This can happen if the consumer is shut down when there are cache refreshing tasks in progress
+    in the background.
+    """
+
+    async def _do_it():
+        configure_cache()
+        async for key in cache.scan("locked:*"):
+            await cache.delete(key)
+            click.echo(f"Deleted lock for {key[7:]}")
+
+    asyncio.run(_do_it())
+    click.echo("Cache locks deleted.")
 
 
 @cache_cmd.command("refresh")
