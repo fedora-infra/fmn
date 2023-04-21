@@ -3,6 +3,6 @@ Upstream-Name: fmn
 Upstream-Contact: Fedora Infrastructure <admin@fedoraproject.org>
 Source: https://github.com/fedora-infra/fmn
 
-Files: changelog.d/*.md
+Files: changelog.d/*.*
 Copyright: Contributors to the Fedora Project
 License: MIT
