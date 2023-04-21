@@ -45,13 +45,13 @@ async def test_get_value(mocker, requester, db_async_session):
 
 
 @pytest.mark.cashews_cache(enabled=True)
-async def test_invalidate_tracked(mocker, requester):
+async def test_invalidate(mocker, requester):
     tracked_cache = TrackedCache(requester=requester, rules_cache=RulesCache())
-    mocker.patch.object(tracked_cache, "refresh")
+    mocker.patch.object(tracked_cache, "rebuild")
     db = object()
     await tracked_cache.invalidate(db)
     await asyncio.gather(*tracked_cache._background_tasks)
-    tracked_cache.refresh.assert_called_once_with(db)
+    tracked_cache.rebuild.assert_called_once_with()
 
 
 @pytest.mark.parametrize(

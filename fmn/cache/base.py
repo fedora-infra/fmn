@@ -63,20 +63,17 @@ class CachedValue:
         raise NotImplementedError
 
     async def refresh(self, *args, **kwargs):
-        async def _refresh():
-            ttl_early = cache_arg("early_ttl", self.name)()
-            if not ttl_early:
-                return
-            ttl_early = ttl_to_seconds(ttl_early)
-            refreshed = False
-            expire = await cache.get_expire(self._cache_key)
-            if expire <= ttl_to_seconds(ttl_early):
-                ttl = ttl_to_seconds(cache_arg("ttl", self.name)())
-                value = await self.compute_value(*args, **kwargs)
-                await cache.set(self._cache_key, value=value, expire=ttl)
-                refreshed = True
-            return refreshed
-        return await cache.locked(key=self.name, ttl=lock_ttl(self.name))(_refresh)()
+        """Rebuild the cache if it is not recent enough."""
+        ttl_early = cache_arg("early_ttl", self.name)()
+        if not ttl_early:
+            return
+        ttl_early = ttl_to_seconds(ttl_early)
+        refreshed = False
+        expire = await cache.get_expire(self._cache_key)
+        if expire <= ttl_to_seconds(ttl_early):
+            await self.rebuild()
+            refreshed = True
+        return refreshed
 
     async def rebuild(self, *args, **kwargs):
         """Rebuild the cache.
@@ -91,7 +88,7 @@ class CachedValue:
                 value = await self.compute_value(*args, db=db, **kwargs)
                 await cache.set(self._cache_key, value=value, expire=ttl)
 
-        return await cache.locked(key=self.name, ttl=lock_ttl(self.name))(_rebuild)()
+        return await cache.locked(key=f"{self.name}:rebuild", ttl=lock_ttl(self.name))(_rebuild)()
 
     async def invalidate(self, *args, **kwargs):
         # This does not really invalidate the cache, instead it rebuilds it in the background
