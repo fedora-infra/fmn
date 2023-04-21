@@ -48,21 +48,21 @@ class CachedValue:
         )
         cache_db_session_maker.configure(bind=get_async_engine())
 
-    async def compute_value(self, *args, **kwargs):
+    async def compute_value(self, db: "AsyncSession"):
         log.debug(f"Building the {self.name} cache")
         before = monotonic()
         now = datetime.utcnow().isoformat()
-        value = await self._compute_value(*args, **kwargs)
+        value = await self._compute_value(db=db)
         after = monotonic()
         duration = after - before
         log.debug(f"Built the {self.name} cache in %.2f seconds", duration)
         await cache.set(key=f"duration:{self.name}:{now}", value=duration, expire="31d")
         return value
 
-    async def _compute_value(self, *args, **kwargs):
+    async def _compute_value(self, db: "AsyncSession"):
         raise NotImplementedError
 
-    async def refresh(self, *args, **kwargs):
+    async def refresh(self):
         """Rebuild the cache if it is not recent enough."""
         ttl_early = cache_arg("early_ttl", self.name)()
         if not ttl_early:
@@ -75,7 +75,7 @@ class CachedValue:
             refreshed = True
         return refreshed
 
-    async def rebuild(self, *args, **kwargs):
+    async def rebuild(self):
         """Rebuild the cache.
 
         We don't pass the database session here because it is run in the background and we want to
@@ -85,12 +85,12 @@ class CachedValue:
         async def _rebuild():
             async with cache_db_session_maker.begin() as db:
                 ttl = ttl_to_seconds(cache_arg("ttl", self.name)())
-                value = await self.compute_value(*args, db=db, **kwargs)
+                value = await self.compute_value(db=db)
                 await cache.set(self._cache_key, value=value, expire=ttl)
 
         return await cache.locked(key=f"{self.name}:rebuild", ttl=lock_ttl(self.name))(_rebuild)()
 
-    async def invalidate(self, *args, **kwargs):
+    async def invalidate(self, db: "AsyncSession"):
         # This does not really invalidate the cache, instead it rebuilds it in the background
         # because it's very expensive.
         log.debug(f"Rebuilding the {self.name} cache in the background")
