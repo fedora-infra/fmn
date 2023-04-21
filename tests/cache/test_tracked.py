@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 import asyncio
+import logging
 from unittest.mock import Mock
 
 import pytest
@@ -79,3 +80,17 @@ async def test_invalidate_on_message(mocker, requester, topic, expected, make_mo
         tracked_cache.invalidate.assert_called_once_with(db)
     else:
         tracked_cache.invalidate.assert_not_called()
+
+
+@pytest.mark.cashews_cache(enabled=True)
+async def test_invalidate_error(mocker, requester, caplog):
+    tracked_cache = TrackedCache(requester=requester, rules_cache=RulesCache())
+    error = RuntimeError("dummy")
+    mocker.patch.object(tracked_cache, "rebuild", side_effect=error)
+    db = object()
+    await tracked_cache.invalidate(db)
+    result = await asyncio.gather(*tracked_cache._background_tasks, return_exceptions=True)
+    assert result == [error]
+    assert len(caplog.record_tuples) == 1
+    assert caplog.record_tuples[0][1] == logging.ERROR
+    assert caplog.record_tuples[0][2].startswith("Traceback")
