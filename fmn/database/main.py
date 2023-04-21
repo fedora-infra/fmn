@@ -6,7 +6,7 @@ from sqlalchemy import MetaData, create_engine, select
 from sqlalchemy.engine import URL, Engine, make_url
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
 from ..core.config import get_settings
 
@@ -57,8 +57,13 @@ naming_convention = {
 metadata = MetaData(naming_convention=naming_convention)
 Base = declarative_base(cls=CustomBase, metadata=metadata)
 
-async_session_maker = sessionmaker(class_=AsyncSession, expire_on_commit=False, future=True)
-sync_session_maker = sessionmaker(future=True, expire_on_commit=False)
+
+def make_session_maker(class_=AsyncSession):
+    return sessionmaker(class_=class_, expire_on_commit=False, future=True)
+
+
+async_session_maker = make_session_maker()
+sync_session_maker = make_session_maker(class_=Session)
 
 
 def init_sync_model(sync_engine: Engine = None):
