@@ -91,3 +91,15 @@ def refresh():
                 click.echo(f"The {cache_value.name} cache is recent enough.")
 
     asyncio.run(_doit())
+
+
+@cache_cmd.command("get-build-durations")
+def get_build_durations():
+    async def _do_it():
+        configure_cache()
+        async for key in cache.scan("duration:*"):
+            duration = await cache.get(key)
+            _, name, when = key.split(":", 2)
+            click.echo(f"Built {name} on {when} in {duration:.02f}s")
+
+    asyncio.run(_do_it())

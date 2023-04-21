@@ -116,3 +116,21 @@ def test_delete_locks(mocker, cli_runner):
 
     assert result.exit_code == 0, result.output
     assert result.output == "Deleted lock for foo\nDeleted lock for bar\nCache locks deleted.\n"
+
+
+@pytest.mark.cashews_cache(enabled=True)
+def test_get_build_durations(mocker, cli_runner):
+    async def _set_cache():
+        await cache.set("duration:foo:2022-01-01T01:01:01", value=42.42424242)
+        await cache.set("duration:bar:2023-02-01T01:01:01", value=12.345678)
+
+    mocker.patch("fmn.cache.cli.configure_cache")
+    asyncio.run(_set_cache())
+    result = cli_runner.invoke(cli, ["cache", "get-build-durations"])
+
+    assert result.exit_code == 0, result.output
+    expected_msg = (
+        "Built foo on 2022-01-01T01:01:01 in 42.42s\n"
+        "Built bar on 2023-02-01T01:01:01 in 12.35s\n"
+    )
+    assert result.output == expected_msg
