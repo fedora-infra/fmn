@@ -130,7 +130,7 @@ def test_get_build_durations(mocker, cli_runner):
 
     assert result.exit_code == 0, result.output
     expected_msg = (
-        "Built foo on 2022-01-01T01:01:01 in 42.42s\n"
         "Built bar on 2023-02-01T01:01:01 in 12.35s\n"
+        "Built foo on 2022-01-01T01:01:01 in 42.42s\n"
     )
     assert result.output == expected_msg
