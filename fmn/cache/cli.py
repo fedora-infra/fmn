@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 import asyncio
+from collections import defaultdict
 from pprint import pformat
 from time import monotonic
 
@@ -95,11 +96,20 @@ def refresh():
 
 @cache_cmd.command("get-build-durations")
 def get_build_durations():
+    """Display how long it took to rebuild the cache."""
+
     async def _do_it():
         configure_cache()
+        values = defaultdict(dict)
         async for key in cache.scan("duration:*"):
             duration = await cache.get(key)
             _, name, when = key.split(":", 2)
-            click.echo(f"Built {name} on {when} in {duration:.02f}s")
+            values[name][when] = duration
+        # Sort by name and timestamp
+        for name in sorted(values):
+            builds = values[name]
+            for when in sorted(builds):
+                duration = builds[when]
+                click.echo(f"Built {name} on {when} in {duration:.02f}s")
 
     asyncio.run(_do_it())
