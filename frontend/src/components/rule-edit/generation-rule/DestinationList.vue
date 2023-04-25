@@ -8,20 +8,35 @@ SPDX-License-Identifier: MIT
 import { apiGet } from "@/api";
 import type { Destination } from "@/api/types";
 import { useUserStore } from "@/stores/user";
+import type { AxiosError } from "axios";
+import { ref } from "vue";
 
 const props = defineProps<{
   name?: string;
 }>();
 
+type Option = { name: string; label: string; options: Destination[] };
+
 const userStore = useUserStore();
+const errors = ref<string[]>([]);
 const url = `/api/v1/users/${userStore.username}/destinations`;
 
 const getDestinations = async () => {
-  type Option = { name: string; label: string; options: Destination[] };
-  const data = await apiGet<Destination[]>({
-    queryKey: [url],
-    meta: undefined,
-  });
+  errors.value = [];
+  let data: Destination[];
+  try {
+    data = await apiGet<Destination[]>({
+      queryKey: [url],
+      meta: undefined,
+    });
+  } catch (e) {
+    const error = e as AxiosError;
+    console.error(error.message);
+    errors.value = [
+      "Unable to get the available destinations, please try again later.",
+    ];
+    return [];
+  }
   const result: Option[] = [
     { name: "email", label: "Email", options: [] },
     { name: "irc", label: "IRC", options: [] },
@@ -53,6 +68,8 @@ const getDestinations = async () => {
       object
       placeholder="Select where you want the messages to go"
       validation="required"
+      :errors="errors"
+      :disabled="errors.length > 0"
     />
   </div>
 </template>
