@@ -16,6 +16,7 @@ RULE_SCHEMA = {
             "description": "The name of the rule",
         },
     },
+    "required": ["id"],
 }
 USER_SCHEMA = {
     "type": "object",
@@ -25,6 +26,7 @@ USER_SCHEMA = {
             "description": "The FAS username",
         }
     },
+    "required": ["name"],
 }
 
 
