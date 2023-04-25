@@ -12,7 +12,7 @@ RULE_SCHEMA = {
             "description": "The ID of the rule",
         },
         "name": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The name of the rule",
         },
     },
