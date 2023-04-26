@@ -34,5 +34,8 @@ class EmailHandler(Handler):
             await self._smtp.send_message(notif)
         except SMTPServerDisconnected:
             # Reconnect
+            log.debug("Reconnecting to the SMTP server")
+            self._smtp.close()
             await self._smtp.connect()
             await self._smtp.send_message(notif)
+        log.debug("The email was sent")

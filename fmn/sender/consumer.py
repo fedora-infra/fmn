@@ -40,10 +40,13 @@ class Consumer:
         async with self._queue.iterator() as self._queue_iter:
             async for message in self._queue_iter:
                 if message == CLOSING:
+                    log.debug("Got close message, breaking out of the loop")
                     break
                 async with message.process():
                     await self._handler.handle(json.loads(message.body))
+
         await self._queue_iter.close()
+        log.debug("Finished consuming messages")
 
     async def stop(self):
         log.info("Stopping messages consumption")
