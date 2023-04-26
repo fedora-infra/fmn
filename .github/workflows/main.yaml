@@ -48,7 +48,7 @@ jobs:
           python3 -m pip install --upgrade tox
 
       - name: execute tox
-        run: tox
+        run: tox -- -v
 
   frontend-ci:
     strategy:
