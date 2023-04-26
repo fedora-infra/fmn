@@ -121,18 +121,28 @@ $ git merge --ff-only develop
 $ git push
 ```
 
+Do not create a pull request and merge it, as [Github does not support fast-forward
+merges](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/about-merge-methods-on-github#rebasing-and-merging-your-commits),
+it will create a new commit SHA and the commit will appear different from the `develop` branch.
+
 This will trigger a build in OpenShift in the staging environment. Make sure the new version is
 actually deployed by looking at the footer of the FMN page.
 
 ### Production
 
 When the code in the `staging` branch has been sufficiently tested and that a window is open for a
-production deployment, create a pull-request to merge the `staging` branch into the `stable` branch
-by visiting [this GitHub URL](https://github.com/fedora-infra/fmn/pull/new/stable...staging).
+production deployment, merge it into the stable branch and push it to the repository:
 
-Once all tests pass and a review is done, merge the pull request. This will trigger a build in
-OpenShift in the production environment. Make sure the new version is actually deployed by looking
-at the footer of the FMN page.
+```
+$ git co stable
+$ git merge --ff-only staging
+$ git push
+```
+
+Again, do not create a PR, you need to use the command line and the `--ff-only` option.
+
+This will trigger a build in OpenShift in the production environment. Make sure the new version is
+actually deployed by looking at the footer of the FMN page.
 
 It is advised to roll a release on PyPI with the content of the `stable` branch (and therefore the
 code that is deployed in production).
