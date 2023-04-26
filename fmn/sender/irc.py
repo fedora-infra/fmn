@@ -50,7 +50,9 @@ class IRCClient(AioSimpleIRCClient):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._connection_future = None
-        self.closed = asyncio.get_event_loop().create_future()
+        self._loop = asyncio.get_event_loop()
+        self.closed = self._loop.create_future()
+        self._set_logged_in = None
 
     async def connect(self, *args, **kwargs):
         self._connection_future = asyncio.Future()
@@ -103,9 +105,33 @@ class IRCClient(AioSimpleIRCClient):
 
     def on_loggedin(self, connection, event):
         # Not supported by the IRC library yet, so we get ``self.on_900()``.
+        if self._set_logged_in is not None:
+            self._set_logged_in.cancel()
         self._connection_future.set_result(connection)
 
     def on_900(self, connection, event):
         # When logged in.
         # See IRCv3: https://ircv3.net/specs/extensions/sasl-3.1.html#numerics-used-by-this-extension
         return self.on_loggedin(connection, event)
+
+    def on_privnotice(self, connection, event):
+        """Set the connection as ready in a few seconds.
+
+        This is necessary because libera.chat does not always send us the ``900 LOGGED_IN``
+        response.
+
+        We must thus setup a delayed call to flag the connection as ready, and cancel it if the
+        proper response arrives.
+
+        See https://github.com/fedora-infra/fmn/issues/884
+        """
+        if event.source != "NickServ!NickServ@services.libera.chat":
+            return
+        try:
+            message = event.arguments[0]
+        except IndexError:
+            return
+        if not message.startswith("You are now identified for"):
+            return
+
+        self._set_logged_in = self._loop.call_later(5, self.on_loggedin, connection, event)

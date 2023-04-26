@@ -113,3 +113,66 @@ async def test_irc_error_no_arg(handler, transport):
         assert str(error_handler.value) == "dummy target"
     transport.write.assert_called_with(b"QUIT :Connection cancelled\r\n")
     transport.close.assert_called_with()
+
+
+@pytest.mark.timeout(10)
+async def test_irc_no_loggedin(handler, transport):
+    setup_future = asyncio.create_task(handler.setup())
+    await asyncio.sleep(0.5)
+    handler._client._dispatcher(
+        transport,
+        Event(
+            "privnotice",
+            "NickServ!NickServ@services.libera.chat",
+            "dummy-username",
+            ["You are now identified for dummy-username"],
+        ),
+    )
+    await setup_future
+
+
+async def test_irc_privnotice_and_loggedin(handler, transport):
+    setup_future = asyncio.create_task(handler.setup())
+    await asyncio.sleep(0.5)
+    handler._client._dispatcher(
+        transport,
+        Event(
+            "privnotice",
+            "NickServ!NickServ@services.libera.chat",
+            "dummy-username",
+            ["You are now identified for dummy-username"],
+        ),
+    )
+    await asyncio.sleep(0.5)
+    handler._client._dispatcher(
+        transport,
+        Event(
+            "loggedin",
+            "server",
+            "dummy-username",
+        ),
+    )
+    await setup_future
+
+
+@pytest.mark.parametrize(
+    "source,args",
+    [
+        ("wrong-source", ["You are now identified for dummy-username"]),
+        ("NickServ!NickServ@services.libera.chat", ["wrong-message"]),
+        ("NickServ!NickServ@services.libera.chat", []),
+        ("wrong-source", ["wrong-message"]),
+    ],
+)
+def test_irc_unrelated_privnotice(handler, transport, source, args):
+    handler._client._loop = Mock()
+    handler._client._dispatcher(
+        transport,
+        Event(
+            "privnotice",
+            source,
+            "dummy-username",
+            args,
+        ),
+    )
+    handler._client._loop.call_later.assert_not_called()
