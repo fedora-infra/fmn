@@ -8,7 +8,7 @@ from typing import Any
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from httpx import AsyncClient
+from httpx import AsyncClient, HTTPError
 from pydantic import BaseModel
 
 from ..core.config import get_settings
@@ -124,6 +124,12 @@ class IdentityFactory:
             if self.optional:
                 return None
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Token expired") from exc
+        except HTTPError as exc:
+            if self.optional:
+                return None
+            raise HTTPException(
+                status.HTTP_401_UNAUTHORIZED, detail=f"Could not get user information: {exc}"
+            ) from exc
         if identity is None and not self.optional:
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
         return identity

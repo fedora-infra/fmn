@@ -16,7 +16,7 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import { getApiClient } from "@/api";
-import type { User } from "@/api/types";
+import type { APIError, User } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
 import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
@@ -52,24 +52,29 @@ onMounted(async () => {
   try {
     await auth.handleAuthorizationRedirect((result) => {
       userStore.importTokenResponse(result);
-      auth
-        .makeUserInfoRequest(result.accessToken)
-        .then((userinfo) => {
-          userStore.importUserInfoResponse(userinfo);
-        })
-        .then(() => {
-          console.log(
-            "Querying the API to create the user and get their permissions"
-          );
-          return getApiClient();
-        })
-        .then((apiClient) => {
-          const url = "/api/v1/users/me";
-          return apiClient.get<User>(url);
-        })
-        .then((response) => {
+      auth.makeUserInfoRequest(result.accessToken).then(async (userinfo) => {
+        const apiClient = await getApiClient();
+        const url = "/api/v1/users/me";
+        try {
+          const response = await apiClient.get<User>(url);
           userStore.setAdmin(response.data.is_admin || false);
-        });
+          // Only import the userinfo response if the API answered.
+          userStore.importUserInfoResponse(userinfo);
+        } catch (e) {
+          console.error(e);
+          const error = e as APIError;
+          toastStore.addToast({
+            color: "danger",
+            title: "Login failed!",
+            content: `Could not retrieve user information from the API: ${
+              error.response?.data?.detail || error.message
+            }.`,
+          });
+          userStore.logout();
+          const redirectTo = getRedirect();
+          router.push(redirectTo);
+        }
+      });
       return result;
     });
   } catch (err) {
