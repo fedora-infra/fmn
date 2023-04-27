@@ -8,7 +8,7 @@ from unittest import mock
 
 import pytest
 from fastapi import HTTPException, status
-from httpx import AsyncClient
+from httpx import AsyncClient, HTTPError
 
 from fmn.api.auth import Identity, IdentityFactory, TokenExpired
 
@@ -149,3 +149,17 @@ class TestIdentityFactory:
         with pytest.raises(HTTPException) as excinfo:
             await factory(None)
         assert excinfo.value.status_code == status.HTTP_401_UNAUTHORIZED
+
+    async def test___call__request_failure(self):
+        factory = IdentityFactory(optional=False)
+        factory.process_oidc_auth = mock.Mock(side_effect=HTTPError("dummy error"))
+        with pytest.raises(HTTPException) as excinfo:
+            await factory(None)
+        assert excinfo.value.status_code == status.HTTP_401_UNAUTHORIZED
+        assert excinfo.value.detail == "Could not get user information: dummy error"
+
+    async def test___call__request_failure_optional(self):
+        factory = IdentityFactory(optional=True)
+        factory.process_oidc_auth = mock.Mock(side_effect=HTTPError("dummy error"))
+        result = await factory(None)
+        assert result is None

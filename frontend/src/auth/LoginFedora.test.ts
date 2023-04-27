@@ -13,6 +13,7 @@ import {
   waitFor,
   type RenderOptions,
 } from "@testing-library/vue";
+import { AxiosError, AxiosHeaders, type AxiosResponse } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import {
   afterEach,
@@ -148,6 +149,67 @@ describe("LoginFedora", () => {
     await waitFor(() => {
       expect(getByText("Dummy Error")).toBeInTheDocument();
     });
+  });
+
+  it("handles API errors when getting user info", async () => {
+    tokenResponse = new TokenResponse({
+      access_token: "dummy-access-token",
+    });
+    auth.makeUserInfoRequest.mockResolvedValue({
+      sub: "dummy-sub",
+      nickname: "dummy-username",
+    });
+
+    const mockedErrorResponse: AxiosResponse = {
+      status: 500,
+      statusText: "Server Error",
+      headers: AxiosHeaders.from(""),
+      config: { headers: AxiosHeaders.from("") },
+      data: { detail: "dummy API error" },
+    };
+    vi.mocked(apiClient.get).mockRejectedValue(
+      new AxiosError<{ detail: string }>(
+        "dummy error",
+        "500",
+        undefined,
+        undefined,
+        mockedErrorResponse
+      )
+    );
+
+    render(LoginFedora, renderOptions);
+
+    const store = useUserStore();
+
+    await waitFor(() => {
+      // The call to the API is async
+      expect(vi.mocked(apiClient.get)).toHaveBeenCalled();
+    });
+
+    // We must be logged out
+    expect(store.$state).toStrictEqual({
+      accessToken: null,
+      refreshToken: null,
+      idToken: null,
+      tokenExpiresAt: null,
+      scopes: [],
+      username: null,
+      fullName: null,
+      email: null,
+      isAdmin: false,
+    });
+    // We must have been redirected
+    await waitFor(() => {
+      expect(router.currentRoute.value.path).toBe("/");
+    });
+    // There should be a "login failed" toast.
+    const toastStore = useToastStore();
+    expect(toastStore.toasts).toHaveLength(1);
+    expect(toastStore.toasts[0].title).toBe("Login failed!");
+    expect(toastStore.toasts[0].content).toBe(
+      "Could not retrieve user information from the API: dummy API error."
+    );
+    expect(toastStore.toasts[0].color).toBe("danger");
   });
 
   it("redirects to the right place on login", async () => {
