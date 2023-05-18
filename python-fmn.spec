@@ -5,7 +5,7 @@
 %global with_docs 0
 
 Name:           python-%{srcname}
-Version:        2.4.2
+Version:        2.4.3
 Release:        1%{?dist}
 Summary:        A system for generic fedmsg-driven notifications for end users
 
@@ -159,6 +159,9 @@ rm -rf %{buildroot}%{_datadir}/%{srcname}/static/bootstrap
 
 
 %changelog
+* Thu May 18 2023 Michal Konecny <mkonecny@redhat.com> - 2.4.3-1
+- Update to 2.4.3
+
 * Fri Oct 21 2022 Michal Konecny <mkonecny@redhat.com> - 2.4.2-1
 - Update to 2.4.2
 
