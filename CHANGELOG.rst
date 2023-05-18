@@ -2,6 +2,14 @@
 Changelog
 =========
 
+v2.4.3
+======
+
+Bug fixes
+---------
+
+* Fixes for python 3.11
+
 v2.4.2
 ======
 
