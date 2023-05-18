@@ -25,7 +25,7 @@ python-openid-cla
 python-openid-teams
 redis
 requests-gssapi
-urllib3
+urllib3 < 2.0.0
 requests
 service_identity
 six

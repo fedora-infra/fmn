@@ -220,7 +220,7 @@ def load_rules(root='fmn.rules'):
             'title': title.strip(),
             'doc': doc.strip(),
             'doc-no-links': doc_no_links.strip(),
-            'args': inspect.getargspec(obj)[0],
+            'args': inspect.getfullargspec(obj)[0],
             'datanommer-hints': getattr(obj, 'hints', {}),
             'hints-invertible': getattr(obj, 'hinting_invertible', True),
             'hints-callable': getattr(obj, 'hinting_callable', None),
