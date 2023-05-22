@@ -187,7 +187,7 @@ line-length = 100
 select = ["E", "F", "W", "I", "UP", "S", "B", "RUF"]
 line-length = 100
 target-version = "py310"
-ignore = ["UP038"]
+ignore = ["RUF010", "UP038"]
 allowed-confusables = ["’"]
 
 [tool.ruff.per-file-ignores]
