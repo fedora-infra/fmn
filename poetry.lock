@@ -2560,17 +2560,18 @@ files = [
 
 [[package]]
 name = "pagure-messages"
-version = "0.0.6"
+version = "1.0.0"
 description = "A schema package for messages sent by pagure"
 category = "main"
 optional = true
 python-versions = "*"
 files = [
-    {file = "pagure-messages-0.0.6.tar.gz", hash = "sha256:8f111d5ed0330c9f478bcf1726f44a4fc6c4f127abfa00dabbb2de9420cd537a"},
+    {file = "pagure-messages-1.0.0.tar.gz", hash = "sha256:342afd57c034b09bfa48da1909993f1890365d7ba5f837f7c1c6fead37738114"},
+    {file = "pagure_messages-1.0.0-py2.py3-none-any.whl", hash = "sha256:a400bffa8d20e672906410e0e5427d090da87a3af1406607552a4524c7275914"},
 ]
 
 [package.dependencies]
-fedora_messaging = "*"
+fedora-messaging = "*"
 
 [[package]]
 name = "pamqp"

@@ -28,9 +28,9 @@ fi
 export VITE_VERSION
 
 # Add patches
-# https://pagure.io/pagure-messages/pull-request/7
 pushd /opt/app-root/lib/python3.10/site-packages
-curl https://pagure.io/pagure-messages/pull-request/7.patch | patch -p1
+  # https://github.com/fedora-infra/bodhi/pull/5311
+  curl https://patch-diff.githubusercontent.com/raw/fedora-infra/bodhi/pull/5311.patch | patch -p1
 popd
 
 # Install deployment-specific dependencies
