@@ -62,14 +62,14 @@ jobs:
         run: |
           dnf install -y krb5-devel libpq-devel gettext
           python3 -m pip install --upgrade poetry
-          poetry install --extras api
+          poetry install --extras api --extras database --extras sqlite
 
       - name: Install npm & npx
         run: dnf install -y npm
 
       - name: Regenerate the typescript types
         run: |
-          poetry run ./generate-typescript-types.py
+          poetry run python generate-typescript-types.py
 
       - name: install frontend
         run: |
