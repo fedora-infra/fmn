@@ -9,7 +9,7 @@ import shutil
 import socket
 import time
 from contextlib import closing, contextmanager
-from subprocess import Popen, run
+from subprocess import CalledProcessError, Popen, run
 
 DEST = os.path.join(os.path.dirname(__file__), "frontend/src/api/generated.ts")
 
@@ -30,12 +30,14 @@ def find_cmd(cmd):
 
 @contextmanager
 def running(cmd):
-    proc = Popen(cmd)
+    proc = Popen(cmd)  # noqa: S603
     try:
         yield proc
     finally:
         proc.terminate()
         proc.wait(timeout=10)
+    if proc.returncode != 0:
+        raise CalledProcessError(proc.returncode, proc.args, proc.stdout, proc.stderr)
 
 
 def main():
@@ -56,7 +58,7 @@ def main():
             DEST,
         ]
         print(" ".join(cmd))
-        run(cmd)
+        run(cmd, check=True)  # noqa: S603
         print("Shutting down API")
 
 
