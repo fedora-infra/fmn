@@ -36,8 +36,8 @@ const filteringOptions = computed(() => {
   });
 });
 
-const rules = computed(() => {
-  return [...props.rules]
+const rules = computed(() =>
+  [...props.rules]
     .filter(
       (r) =>
         !tracking_rule_filter.value ||
@@ -47,8 +47,8 @@ const rules = computed(() => {
       (a, b) =>
         Number(a.disabled) - Number(b.disabled) ||
         b.tracking_rule.name.localeCompare(a.tracking_rule.name)
-    );
-});
+    )
+);
 </script>
 
 <template>
