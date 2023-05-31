@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
+TypesDB "/usr/share/collectd/fmn-types.db"
+
+<LoadPlugin python>
+  Globals true
+</LoadPlugin>
+
+<Plugin python>
+  LogTraces true
+  Interactive false
+  # ModulePath "/opt/app-root/src"
+  Import "fmn.core.collectd"
+
+  <Module "fmn.core.collectd">
+    ## Interval between two collections. The collectd default of 10 seconds is
+    ## way too short, this plugin sets the default to 1h (3600s). Adjust
+    ## depending on how frequently the cache is rebuilt. Remember that if you
+    ## change the interval, you'll have to recreate your RRD files.
+    # Interval 3600
+  </Module>
+</Plugin>

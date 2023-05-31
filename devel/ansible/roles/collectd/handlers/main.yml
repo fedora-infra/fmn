@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
+- name: restart collectd
+  service:
+    name: collectd
+    state: restarted
