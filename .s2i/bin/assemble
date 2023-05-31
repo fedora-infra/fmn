@@ -35,8 +35,10 @@ export VITE_VERSION
 
 # Add patches
 pushd /opt/app-root/lib/python3.10/site-packages
-  # https://github.com/fedora-infra/bodhi/pull/5311
-  curl https://patch-diff.githubusercontent.com/raw/fedora-infra/bodhi/pull/5311.patch | patch -p1
+    # https://github.com/fedora-infra/bodhi/pull/5311
+    for commit in 74113b9 858fb08 7e47f23; do
+        curl https://github.com/fedora-infra/bodhi/commit/${commit}.patch | devel/filterdiff.py -p1 -i "bodhi-messages/bodhi/messages/*" | patch -p2
+    done
 popd
 
 # Install deployment-specific dependencies
