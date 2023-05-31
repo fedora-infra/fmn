@@ -1,0 +1,48 @@
+# SPDX-FileCopyrightText: 2023 Fedora Infrastructure <admin@fedoraproject.org>
+#
+# SPDX-License-Identifier: MIT
+
+# This is a configuration file for Uvicorn's logging. You can activate it by
+# setting the container environment variable:
+# UVICORN_ARGS="--log-config /path/to/this/file.yaml"
+
+formatters:
+    simple:
+        format: '%(asctime)s %(levelname)-8s %(name)-15s %(message)s'
+        datefmt: '%Y-%m-%d %H:%M:%S'
+handlers:
+    console:
+        class : logging.StreamHandler
+        formatter: simple
+        level   : INFO
+        stream  : ext://sys.stdout
+loggers:
+    uvicorn:
+        level: INFO
+        propagate: false
+        handlers:
+        - console
+    fmn:
+        level: INFO
+        propagate: false
+        handlers:
+        - console
+    fedora_messaging:
+        level: INFO
+        propagate: false
+        handlers:
+        - console
+    twisted:
+        level: INFO
+        propagate: false
+        handlers:
+        - console
+    aio_pika:
+        level: INFO
+        propagate: false
+        handlers:
+        - console
+root:
+    level: INFO
+    handlers:
+    - console
