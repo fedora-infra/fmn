@@ -1,0 +1,5 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
+fmn_cache        value:GAUGE:0:U

@@ -21,12 +21,12 @@ jobs:
       # fmn/database/migrations directory, therefore it has to use absolute imports.
       - name: Enforce relative imports in package (except Alembic migrations)
         run: >
-          find fmn -name \*.py -a \! -path fmn/database/migrations/env.py -print0
+          find fmn -name \*.py -a \! -path fmn/database/migrations/env.py -a \! -path fmn/core/collectd.py -print0
           | xargs -0 absolufy-imports --never
 
-      - name: Preserve absolute import in Alembic env.py file
+      - name: Preserve absolute import in files that are called externally
         run: >
-          absolufy-imports fmn/database/migrations/env.py
+          absolufy-imports fmn/database/migrations/env.py fmn/core/collectd.py
 
   backend-ci:
     strategy:

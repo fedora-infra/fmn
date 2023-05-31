@@ -48,8 +48,6 @@ pip install redis
 cd frontend
 npm install
 
-env
-
 if [ "$FEDORA_ENV" == "staging" ]; then
     npm run build:staging
 else

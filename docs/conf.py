@@ -115,6 +115,7 @@ def run_apidoc(_):
             os.path.join(topdir, "fmn"),
             # exclude patterns:
             os.path.join(topdir, "fmn", "database", "migrations"),
+            os.path.join(topdir, "fmn", "core", "collectd.py"),
         ]
     )
 

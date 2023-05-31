@@ -1,0 +1,52 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
+- name: install packages
+  dnf:
+    name:
+      - collectd
+      - collectd-python
+      - collectd-rrdtool
+      - collectd-write_syslog
+
+- name: allow collectd to do network connections
+  seboolean:
+    name: collectd_tcp_network_connect
+    persistent: true
+    state: true
+
+- name: get FMN's virtualenv
+  shell:
+    cmd: "poetry run python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())'"
+    chdir: /home/vagrant/fmn/
+  register: fmn_venv_lib
+  changed_when: false
+
+- name: get FMN's virtualenv
+  shell:
+    cmd: "poetry run python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib(True))'"
+    chdir: /home/vagrant/fmn/
+  register: fmn_venv_arch
+  changed_when: false
+
+- name: copy the collectd config file over
+  template:
+    src: collectd.conf
+    dest: /etc/collectd.conf
+  notify:
+    - restart collectd
+
+- name: copy the collectd types DB
+  copy:
+    remote_src: true
+    src: /home/vagrant/fmn/config/collectd-types.db
+    dest: /usr/share/collectd/fmn-types.db
+  notify:
+    - restart collectd
+
+- name: set the collectd service to start
+  service:
+    name: collectd
+    enabled: true
+    state: started
