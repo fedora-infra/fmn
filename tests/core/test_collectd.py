@@ -9,6 +9,8 @@ from unittest.mock import AsyncMock, Mock
 
 import pytest
 
+from fmn.database.model import Rule, User
+
 
 @pytest.fixture
 def collectd(monkeypatch):
@@ -94,9 +96,12 @@ def test_configure_invalid(collectd, monkeypatch):
 def test_collector_setup_shutdown(collectd, monkeypatch):
     configure_cache = Mock()
     monkeypatch.setattr(collectd, "configure_cache", configure_cache)
+    init_model = AsyncMock()
+    monkeypatch.setattr(collectd, "init_model", init_model)
     collector = collectd.Collector({})
     collector.setup()
     configure_cache.assert_called_once()
+    init_model.assert_awaited_once()
     loop = asyncio.get_event_loop()
     assert loop.is_closed() is False
 
@@ -113,7 +118,16 @@ def test_collector_setup_shutdown(collectd, monkeypatch):
     assert task.cancelled
 
 
-def test_collect(collectd, monkeypatch, created_values, scan_result):
+def test_collect_sync(collectd):
+    collector = collectd.Collector({})
+    collector._collect = AsyncMock()
+    collector.setup()
+    collector.collect()
+    collector._collect.assert_awaited_once_with()
+
+
+async def test_collect(collectd, monkeypatch, created_values, db_async_session, scan_result):
+    # Setup dummy cache data
     dt1 = datetime(2023, 1, 1, 1, 0, 0, tzinfo=timezone.utc)
     dt2 = datetime(2023, 1, 1, 1, 30, 0, tzinfo=timezone.utc)
     dt3 = datetime(2022, 12, 31, 0, 0, 0, tzinfo=timezone.utc)
@@ -125,26 +139,40 @@ def test_collect(collectd, monkeypatch, created_values, scan_result):
         ]
     )
     collectd.cache.get = AsyncMock(side_effect=lambda key: 42)
+    # Setup dummy DB data
+    rule = Rule(id=1, name="dummy", user=User(name="dummy"), generation_rules=[])
+    db_async_session.add(rule)
+    await db_async_session.commit()
+    # Mock now()
     mocked_dt = Mock()
     mocked_dt.now = Mock(return_value=datetime(2023, 1, 1, 1, 0, 0, tzinfo=timezone.utc))
     mocked_dt.fromisoformat = datetime.fromisoformat
     monkeypatch.setattr(collectd, "datetime", mocked_dt)
 
     collector = collectd.Collector({"Interval": 3600})
-    collector.setup()
-    collector.collect()
+    collector._loop = asyncio.get_event_loop()
 
-    assert len(created_values) == 2
-    assert all(v.type == "fmn_cache" for v in created_values)
-    assert all(v.plugin == "cache" for v in created_values)
+    await collector._collect()
+
+    # 2 cache rebuild values, 1 active_users value
+    assert len(created_values) == 3
+    for index, created_value in enumerate(created_values):
+        if index < 2:
+            assert created_value.type == "fmn_cache"
+            assert created_value.plugin == "cache"
+            assert created_value.type_instance == "statname"
+        else:
+            assert created_value.type == "fmn_users"
+            assert created_value.plugin == "users"
+            assert created_value.type_instance == "active_users"
     assert all(v.interval == 3600 for v in created_values)
-    assert all(v.type_instance == "statname" for v in created_values)
     for index, dt in enumerate((dt1, dt2)):
         assert created_values[index].time == dt.timestamp()
         created_values[index].dispatch.assert_called_once_with(values=[42])
+    created_values[2].dispatch.assert_called_once_with(values=[1])
 
 
-def test_collect_none(collectd, created_values, scan_result):
+async def test_collect_none(collectd, created_values, scan_result, db_model_initialized):
     scan_result.extend(
         [
             f"duration:statname:{datetime.now().isoformat()}",
@@ -152,14 +180,14 @@ def test_collect_none(collectd, created_values, scan_result):
     )
     collectd.cache.get = AsyncMock(side_effect=lambda key: None)
 
-    collector = collectd.Collector({})
-    collector.setup()
-    collector.collect()
+    collector = collectd.Collector({"Interval": 3600})
+    collector._loop = asyncio.get_event_loop()
+    await collector._collect()
+    assert len(created_values) == 1
+    assert created_values[0].plugin == "users"
 
-    assert len(created_values) == 0
 
-
-def test_collect_with_hostname(collectd, created_values, scan_result):
+async def test_collect_with_hostname(collectd, created_values, scan_result, db_model_initialized):
     scan_result.extend(
         [
             f"duration:statname:{datetime.now().isoformat()}",
@@ -168,22 +196,29 @@ def test_collect_with_hostname(collectd, created_values, scan_result):
     collectd.cache.get = AsyncMock(side_effect=lambda key: 42)
 
     collector = collectd.Collector({"Interval": 3600, "Hostname": "dummyhost.example.com"})
-    collector.setup()
-    collector.collect()
+    collector._loop = asyncio.get_event_loop()
+    await collector._collect()
 
-    assert len(created_values) == 1
-    assert created_values[0].host == "dummyhost.example.com"
+    assert len(created_values) == 2
+    assert all(v.host == "dummyhost.example.com" for v in created_values)
 
 
 def test_dispatch_with_subname(collectd, created_values):
     collector = collectd.Collector({"Interval": 3600})
-    collector._dispatch(42, "statname", datetime.now().timestamp(), "statsubname", "category")
+    collector._dispatch(
+        42,
+        "statname",
+        data_type="stattype",
+        timestamp=datetime.now().timestamp(),
+        subname="statsubname",
+        category="category",
+    )
     assert len(created_values) == 1
     assert created_values[0].type_instance == "statname-statsubname"
 
 
 def test_dispatch_with_multiple_values(collectd, created_values):
     collector = collectd.Collector({"Interval": 3600})
-    collector._dispatch([42, 43], "statname")
+    collector._dispatch([42, 43], "statname", data_type="stattype")
     assert len(created_values) == 1
     created_values[0].dispatch.assert_called_once_with(values=[42, 43])

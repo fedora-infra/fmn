@@ -3,3 +3,4 @@
 # SPDX-License-Identifier: MIT
 
 fmn_cache        value:GAUGE:0:U
+fmn_users        value:GAUGE:0:U

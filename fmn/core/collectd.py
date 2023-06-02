@@ -9,8 +9,11 @@ from functools import partial
 
 import collectd
 from cashews import cache
+from sqlalchemy import func, select
 
 from fmn.cache import configure_cache
+from fmn.database import async_session_maker, init_model
+from fmn.database.model import Rule, User
 
 CONFIG = {
     "Interval": "3600",
@@ -27,6 +30,7 @@ class Collector:
         self._loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self._loop)
         configure_cache()
+        self._loop.run_until_complete(init_model())
 
     def shutdown(self):
         self._loop.run_until_complete(cache.close())
@@ -44,6 +48,10 @@ class Collector:
         self._loop.run_until_complete(self._collect())
 
     async def _collect(self):
+        await self._collect_cache()
+        await self._collect_users()
+
+    async def _collect_cache(self):
         now = datetime.now().timestamp()
         async for key in cache.scan("duration:*"):
             _, name, when = key.split(":", 2)
@@ -62,16 +70,39 @@ class Collector:
                     self._dispatch,
                     duration,
                     name,
+                    data_type="fmn_cache",
                     timestamp=when,
                     category="cache",
                 ),
             )
 
-    def _dispatch(self, value, name, timestamp=None, subname=None, category=None):
+    async def _collect_users(self):
+        async with async_session_maker.begin() as db:
+            result = await db.execute(
+                select(func.count(User.id)).where(
+                    # Disable E712 until this is fixed: https://github.com/charliermarsh/ruff/issues/4560
+                    User.rules.any(Rule.disabled == False)  # noqa: E712
+                )
+            )
+            count = result.scalar()
+            collectd.debug(f"Dispatching users count: {count}")
+            await self._loop.run_in_executor(
+                None,
+                partial(
+                    self._dispatch,
+                    count,
+                    "active_users",
+                    data_type="fmn_users",
+                    category="users",
+                ),
+            )
+
+    def _dispatch(self, value, name, data_type, timestamp=None, subname=None, category=None):
         vl = collectd.Values()
-        vl.type = "fmn_cache"
+        vl.type = data_type
         vl.plugin = category or name
-        vl.time = timestamp
+        if timestamp is not None:
+            vl.time = timestamp
         hostname = self.config.get("Hostname")
         if hostname is not None:
             vl.host = hostname
