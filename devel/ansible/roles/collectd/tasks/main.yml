@@ -37,14 +37,6 @@
   notify:
     - restart collectd
 
-- name: copy the collectd types DB
-  copy:
-    remote_src: true
-    src: /home/vagrant/fmn/config/collectd-types.db
-    dest: /usr/share/collectd/fmn-types.db
-  notify:
-    - restart collectd
-
 - name: set the collectd service to start
   service:
     name: collectd

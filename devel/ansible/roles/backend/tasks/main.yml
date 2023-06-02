@@ -100,6 +100,19 @@
           changed_when: not createdb_out.failed
           failed_when: createdb_out.failed and "already exists" not in createdb_out.stderr
 
+        # Used by collectd for stats gathering (collectd runs as root)
+        - name: Create the `root` PostgreSQL user
+          command: createuser root
+          register: createuser_out
+          changed_when: not createuser_out.failed
+          failed_when: createuser_out.failed and "already exists" not in createuser_out.stderr
+        - name: Grant root access to the fmn db
+          community.postgresql.postgresql_privs:
+            db: fmn
+            privs: SELECT
+            objs: ALL_IN_SCHEMA
+            roles: root
+
     - name: Set up FMN database schema
       command: poetry run fmn database setup
       register: database_setup_out
