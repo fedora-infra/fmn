@@ -10,4 +10,4 @@ set -e
 export PATH=/opt/app-root/src/.local/venvs/fmn/bin:$PATH
 
 # Run collectd
-collectd -f -C /etc/fmn/collectd.conf
+exec collectd -f -C /etc/fmn/collectd.conf
