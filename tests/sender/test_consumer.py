@@ -57,6 +57,7 @@ def mocked_channel(mocked_connection):
 
     channel.basic_consume = AsyncMock()
     channel.basic_ack = AsyncMock()
+    channel.is_closed = False
     return channel
 
 
