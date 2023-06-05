@@ -19,6 +19,6 @@ TypesDB "/usr/share/collectd/fmn-types.db"
     ## way too short, this plugin sets the default to 1h (3600s). Adjust
     ## depending on how frequently the cache is rebuilt. Remember that if you
     ## change the interval, you'll have to recreate your RRD files.
-    # Interval 3600
+    # Interval 60
   </Module>
 </Plugin>

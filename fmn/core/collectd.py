@@ -4,6 +4,7 @@
 
 import asyncio
 import os
+from collections import defaultdict
 from datetime import datetime
 from functools import partial
 
@@ -16,7 +17,7 @@ from fmn.database import async_session_maker, init_model
 from fmn.database.model import Rule, User
 
 CONFIG = {
-    "Interval": "3600",
+    "Interval": "60",
     "Hostname": None,
 }
 
@@ -52,26 +53,30 @@ class Collector:
         await self._collect_users()
 
     async def _collect_cache(self):
-        now = datetime.now().timestamp()
+        values_by_name = defaultdict(list)
         async for key in cache.scan("duration:*"):
             _, name, when = key.split(":", 2)
             duration = await cache.get(key)
             if duration is None:
-                collectd.debug(f"Not dispatching {name} at {when}: value is None")
+                collectd.info(f"Not dispatching {name} at {when}: value is None")
                 continue
             when = datetime.fromisoformat(when).timestamp()
-            if now - when > int(self.config["Interval"]) * 24:
-                collectd.debug(f"Not dispatching {name} at {when}: too old")
+            values_by_name[name].append((when, duration))
+        for values in values_by_name.values():
+            values.sort(key=lambda v: v[0])
+        for name, values in values_by_name.items():
+            if not values:
                 continue
-            collectd.debug(f"Dispatching {name} at {when}: {duration!r}")
+            # Only keep the latest
+            timestamp, value = values[-1]
+            collectd.debug(f"Dispatching {name} at {timestamp}: {value!r}")
             await self._loop.run_in_executor(
                 None,
                 partial(
                     self._dispatch,
-                    duration,
+                    value,
                     name,
                     data_type="fmn_cache",
-                    timestamp=when,
                     category="cache",
                 ),
             )
