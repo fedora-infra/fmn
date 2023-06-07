@@ -65,8 +65,6 @@ class Collector:
         for values in values_by_name.values():
             values.sort(key=lambda v: v[0])
         for name, values in values_by_name.items():
-            if not values:
-                continue
             # Only keep the latest
             timestamp, value = values[-1]
             collectd.debug(f"Dispatching {name} at {timestamp}: {value!r}")
