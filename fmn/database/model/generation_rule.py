@@ -44,5 +44,5 @@ class GenerationRule(Base):
             return
         for destination in self.destinations:
             yield Notification.parse_obj(
-                {"protocol": destination.protocol, "content": destination.generate(message)}
+                {"protocol": destination.protocol, "content": await destination.generate(message)}
             )
