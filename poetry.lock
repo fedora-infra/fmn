@@ -3899,14 +3899,14 @@ files = [
 
 [[package]]
 name = "towncrier"
-version = "22.12.0"
+version = "23.6.0"
 description = "Building newsfiles for your project."
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "towncrier-22.12.0-py3-none-any.whl", hash = "sha256:9767a899a4d6856950f3598acd9e8f08da2663c49fdcda5ea0f9e6ba2afc8eea"},
-    {file = "towncrier-22.12.0.tar.gz", hash = "sha256:9c49d7e75f646a9aea02ae904c0bc1639c8fd14a01292d2b123b8d307564034d"},
+    {file = "towncrier-23.6.0-py3-none-any.whl", hash = "sha256:da552f29192b3c2b04d630133f194c98e9f14f0558669d427708e203fea4d0a5"},
+    {file = "towncrier-23.6.0.tar.gz", hash = "sha256:fc29bd5ab4727c8dacfbe636f7fb5dc53b99805b62da1c96b214836159ff70c1"},
 ]
 
 [package.dependencies]
@@ -3914,7 +3914,6 @@ click = "*"
 click-default-group = "*"
 incremental = "*"
 jinja2 = "*"
-setuptools = "*"
 tomli = {version = "*", markers = "python_version < \"3.11\""}
 
 [package.extras]
@@ -4454,4 +4453,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "74a8c866f7e9a9b2643ba6e2b56a426a2b6026c114b91d5b089f2cf005398cbf"
+content-hash = "affc47e8320fd4fb22aef908032f8183d46ba48f0939a1af37312ecd20f80b6f"
