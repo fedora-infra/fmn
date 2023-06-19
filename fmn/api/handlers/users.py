@@ -265,4 +265,3 @@ async def create_user_rule(
     await publish(message)
 
     return rule_db
-    return rule_db
