@@ -13,7 +13,7 @@ from cashews import cache
 from sqlalchemy import func, select
 
 from fmn.cache import configure_cache
-from fmn.database import async_session_maker, init_model
+from fmn.database import get_manager
 from fmn.database.model import Rule, User
 
 CONFIG = {
@@ -30,8 +30,8 @@ class Collector:
     def setup(self):
         self._loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self._loop)
-        configure_cache()
-        self._loop.run_until_complete(init_model())
+        self.db_manager = get_manager()
+        configure_cache(db_manager=self.db_manager)
 
     def shutdown(self):
         self._loop.run_until_complete(cache.close())
@@ -80,7 +80,7 @@ class Collector:
             )
 
     async def _collect_users(self):
-        async with async_session_maker.begin() as db:
+        async with self.db_manager.Session.begin() as db:
             result = await db.execute(
                 select(func.count(User.id)).where(
                     # Disable E712 until this is fixed: https://github.com/charliermarsh/ruff/issues/4560

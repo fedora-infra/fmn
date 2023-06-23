@@ -13,8 +13,10 @@ from cashews import cache
 from cashews.key import get_cache_key_template
 from cashews.ttl import ttl_to_seconds
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import sessionmaker
 
-from ..database import get_engine, make_session_maker
+from ..core import config
+from ..database import get_manager
 from .util import cache_arg, cache_ttl, lock_ttl
 
 if TYPE_CHECKING:
@@ -24,7 +26,16 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 # Use its own DB connection pool so that async rebuilds don't starve off the consumer's DB pool.
-cache_db_session_maker = make_session_maker()
+cache_db_session_maker = sessionmaker(class_=AsyncSession, expire_on_commit=False, future=True)
+
+
+def configure_cache(db_manager=None, **kwargs):
+    settings = config.get_settings()
+    args = (settings.cache.setup_args or {}) | kwargs
+    cache.setup(settings.cache.url, **args)
+    # Bind the engine for the cached value
+    db_manager = db_manager or get_manager()
+    cache_db_session_maker.configure(bind=db_manager.engine)
 
 
 class CachedValue:
@@ -47,7 +58,6 @@ class CachedValue:
         self._cache_key = get_cache_key_template(
             self.get_value, key=self.name, prefix=self.cache_version
         )
-        cache_db_session_maker.configure(bind=get_engine())
 
     async def compute_value(self, db: "AsyncSession"):
         log.debug(f"Building the {self.name} cache")

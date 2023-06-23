@@ -15,9 +15,10 @@ from fmn.core.config import get_settings
 
 @pytest.fixture
 def mocked_session_maker(mocker, db_async_session):
+    db_manager = mock.Mock()
     transaction_manager = mock.AsyncMock()
-    sessionmaker = mocker.patch("fmn.cache.cli.async_session_maker")
-    sessionmaker.begin.return_value = transaction_manager
+    mocker.patch("fmn.cache.cli.get_manager", return_value=db_manager)
+    db_manager.Session.begin.return_value = transaction_manager
     transaction_manager.__aenter__.return_value = db_async_session
     return transaction_manager
 
@@ -30,15 +31,15 @@ def persistent_cache(mocker, tmpdir, cli_runner):
     cli_runner.env = {"CACHE__URL": get_settings().cache.url}
 
 
-def test_get_tracked(mocker, cli_runner, mocked_fasjson_proxy, mocked_tracked_cache):
+def test_get_tracked(mocker, cli_runner, mocked_fasjson_proxy, mocked_tracked_cache, db_manager):
     configure_cache = mocker.patch("fmn.cache.cli.configure_cache")
-    mocker.patch("fmn.cache.cli.init_model")
+    mocker.patch("fmn.cache.cli.get_manager", return_value=db_manager)
     mocked_tracked_cache.get_value.return_value = {"foo": "bar"}
 
     result = cli_runner.invoke(cli, ["cache", "get-tracked"])
 
     assert result.exit_code == 0, result.output
-    configure_cache.assert_called_once_with()
+    configure_cache.assert_called_once_with(db_manager=db_manager)
     mocked_tracked_cache.get_value.assert_called_once()
     assert result.output == "{'foo': 'bar'}\n"
 

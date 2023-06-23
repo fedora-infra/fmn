@@ -11,7 +11,7 @@ import click
 from cashews import cache
 
 from ..core.config import get_settings
-from ..database import async_session_maker, init_model
+from ..database import get_manager
 from ..rules.requester import Requester
 from . import configure_cache
 from .rules import RulesCache
@@ -28,12 +28,12 @@ def get_tracked():
     """Show the current tracked value."""
 
     async def _get_tracked():
-        configure_cache()
-        await init_model()
+        db_manager = get_manager()
+        configure_cache(db_manager=db_manager)
         requester = Requester(get_settings().services)
         rules_cache = RulesCache()
         tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
-        async with async_session_maker.begin() as db:
+        async with db_manager.Session.begin() as db:
             return await tracked_cache.get_value(db=db)
 
     result = asyncio.run(_get_tracked())
@@ -75,7 +75,6 @@ def refresh():
 
     async def _doit():
         configure_cache()
-        await init_model()
         requester = Requester(get_settings().services)
         rules_cache = RulesCache()
         tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)

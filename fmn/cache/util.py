@@ -7,17 +7,10 @@ from functools import cache as ft_cache
 from functools import partial
 from typing import Any
 
-from cashews import cache
 from cashews.formatter import get_templates_for_func, template_to_pattern
 from cashews.key import get_func_params
 
 from ..core import config
-
-
-def configure_cache(**kwargs):
-    settings = config.get_settings()
-    args = (settings.cache.setup_args or {}) | kwargs
-    cache.setup(settings.cache.url, **args)
 
 
 @ft_cache

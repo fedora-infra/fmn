@@ -2,4 +2,4 @@
 #
 # SPDX-License-Identifier: MIT
 
-from .util import configure_cache  # noqa: F401
+from .base import configure_cache  # noqa: F401

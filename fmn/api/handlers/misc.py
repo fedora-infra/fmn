@@ -8,13 +8,12 @@ from importlib import metadata
 from itertools import chain
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy_helpers import DatabaseStatus
 
 from ...backends import PagureAsyncProxy, get_distgit_proxy
 from ...core.constants import ArtifactType
-from ...database.migrations.main import alembic_migration
 from .. import api_models
-from ..database import gen_db_session
+from ..database import gen_db_manager
 
 log = logging.getLogger(__name__)
 
@@ -95,12 +94,13 @@ async def liveness_check():
 
 
 @router.get("/healthz/ready", tags=["healthz"])
-async def readiness_check(db_session: AsyncSession = Depends(gen_db_session)):
+async def readiness_check(db_manager=Depends(gen_db_manager)):
     try:
-        needs_upgrade = await alembic_migration.needs_upgrade(db_session)
+        status = await db_manager.get_status()
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
-    if needs_upgrade:
+        raise HTTPException(status_code=500, detail=f"Can't get the database status: {e}") from e
+    if status is DatabaseStatus.NO_INFO:
+        raise HTTPException(status_code=500, detail="Can't connect to the database")
+    if status is DatabaseStatus.UPGRADE_AVAILABLE:
         raise HTTPException(status_code=500, detail="Database schema needs to be upgraded")
-    else:
-        return {"detail": "OK"}
+    return {"detail": "OK"}

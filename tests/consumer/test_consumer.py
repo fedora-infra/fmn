@@ -39,8 +39,9 @@ def mocked_session_maker(mocker):
     db = AsyncMock()
     transaction_manager = AsyncMock()
     transaction_manager.db = db
-    sessionmaker = mocker.patch("fmn.consumer.consumer.async_session_maker")
-    sessionmaker.begin.return_value = transaction_manager
+    db_manager = Mock()
+    mocker.patch("fmn.consumer.consumer.get_manager", return_value=db_manager)
+    db_manager.Session.begin.return_value = transaction_manager
     transaction_manager.__aenter__ = AsyncMock(name="sessionmakercontextmanager", return_value=db)
     return transaction_manager
 
@@ -51,7 +52,7 @@ async def test_consumer_init(
     configure_cache = mocker.patch("fmn.consumer.consumer.configure_cache")
     c = Consumer()
     await c._ready
-    configure_cache.assert_called_once_with()
+    configure_cache.assert_called_once_with(db_manager=c.db_manager)
     mocked_requester_class.assert_called_once_with(
         {
             "fasjson_url": "https://fasjson.fedoraproject.org",
@@ -101,7 +102,7 @@ async def test_consumer_call_tracked(
     mocked_requester_class,
     mocked_send_queue_class,
     make_mocked_message,
-    db_schema,
+    db_model_initialized,
     db_async_session,
 ):
     c = Consumer()
@@ -276,7 +277,7 @@ async def test_consumer_duplicate(
     mocked_requester_class,
     mocked_send_queue_class,
     make_mocked_message,
-    db_schema,
+    db_model_initialized,
     db_async_session,
 ):
     c = Consumer()

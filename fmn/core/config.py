@@ -4,11 +4,13 @@
 
 from datetime import timedelta
 from functools import cache
+from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel, BaseSettings, root_validator, stricturl
+from pydantic import BaseModel, BaseSettings, DirectoryPath, root_validator, stricturl
 
 DEFAULT_CONFIG_FILE = _settings_file = "/etc/fmn/fmn.cfg"
+TOP_DIR = Path(__file__).parent.parent
 
 CashewsTTLTypes = int | float | str | timedelta
 
@@ -37,13 +39,19 @@ class CacheModel(BaseModel):
 class SQLAlchemyModel(BaseModel):
     url: stricturl(tld_required=False, host_required=False) = "sqlite:///:memory:"
     echo: bool = False
+    isolation_level: str = "SERIALIZABLE"
 
     class Config:
         extra = "allow"
 
 
+class AlembicModel(BaseModel):
+    migrations_path: DirectoryPath = TOP_DIR.joinpath("database").joinpath("migrations").absolute()
+
+
 class DBModel(BaseModel):
     sqlalchemy: SQLAlchemyModel = SQLAlchemyModel()
+    alembic: AlembicModel = AlembicModel()
 
 
 class ServicesModel(BaseModel):

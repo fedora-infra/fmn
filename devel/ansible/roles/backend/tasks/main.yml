@@ -120,16 +120,6 @@
             roles: root
 
     - name: Set up FMN database schema
-      command: poetry run fmn database setup
+      command: poetry run fmn database sync
       register: database_setup_out
-      changed_when: not database_setup_out.failed
-      failed_when: >-
-        database_setup_out.failed
-        and "Refusing to change database schema" not in database_setup_out.stderr
-
-    - name: Apply database schema migrations
-      command: poetry run fmn database migration upgrade
-      register: database_migration_upgrade_out
-      changed_when: >-
-        not database_migration_upgrade_out.failed
-        and "Upgraded to" in database_migration_upgrade_out.stdout
+      changed_when: '"Database already up-to-date." not in database_setup_out.stdout'

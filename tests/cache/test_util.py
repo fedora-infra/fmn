@@ -11,15 +11,6 @@ from fmn.cache import util
 from fmn.core.config import get_settings
 
 
-async def test_cache_configure(mocker):
-    mocker.patch.object(cache, "setup")
-    cache_settings = get_settings().cache
-
-    util.configure_cache()
-
-    cache.setup.assert_called_with(cache_settings.url, **cache_settings.setup_args or {})
-
-
 @pytest.mark.parametrize("scope", (None, "pagure", "unconfigured scope"))
 def test_cashews_cache_arg(scope):
     settings = get_settings()
