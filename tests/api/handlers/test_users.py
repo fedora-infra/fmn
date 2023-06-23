@@ -325,7 +325,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
             publish.assert_awaited_once_with(message)
             assert response.status_code == status.HTTP_200_OK
             with pytest.raises(NoResultFound):
-                await Rule.async_get(db_async_session, id=db_rule.id)
+                await Rule.get_one(session=db_async_session, id=db_rule.id)
         else:
             publish.assert_not_called()
             assert response.status_code == status.HTTP_403_FORBIDDEN

@@ -3,13 +3,25 @@
 # SPDX-License-Identifier: MIT
 
 from collections.abc import Iterator
+from typing import Annotated
 
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy_helpers.fastapi import AsyncDatabaseManager, make_db_session
 
-from ..database import async_session_maker
+from ..database.main import get_manager
 
 
-async def gen_db_session() -> Iterator[AsyncSession]:
+async def gen_db_manager() -> AsyncDatabaseManager:
+    return get_manager()
+
+
+DBManager = Annotated[AsyncDatabaseManager, Depends(gen_db_manager)]
+
+
+async def gen_db_session(
+    db_manager: AsyncDatabaseManager = Depends(gen_db_manager),
+) -> Iterator[AsyncSession]:
     """Generate database sessions for FastAPI request handlers.
 
     This lets users declare the session as a dependency in request handler
@@ -24,12 +36,8 @@ async def gen_db_session() -> Iterator[AsyncSession]:
     :return: A :class:`sqlalchemy.ext.asyncio.AsyncSession` object for the
         current request
     """
-    db_session = async_session_maker()
-    try:
-        yield db_session
-        await db_session.commit()
-    except Exception:
-        await db_session.rollback()
-        raise
-    finally:
-        await db_session.close()
+    async for session in make_db_session(db_manager):
+        yield session
+
+
+DBSession = Annotated[AsyncSession, Depends(gen_db_session)]

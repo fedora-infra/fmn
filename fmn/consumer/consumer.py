@@ -16,7 +16,7 @@ from ..cache import configure_cache
 from ..cache.rules import RulesCache
 from ..cache.tracked import TrackedCache
 from ..core import config
-from ..database import async_session_maker, init_model
+from ..database import get_manager
 from ..database.model import Generated
 from ..rules.requester import Requester
 from .send_queue import SendQueue
@@ -40,11 +40,11 @@ class Consumer:
 
     async def setup(self):
         # Connect to the database
-        await init_model()
+        self.db_manager = get_manager()
         # Start the connection to RabbitMQ's FMN vhost
         await self.send_queue.connect()
         # Caching and requesting
-        configure_cache()
+        configure_cache(db_manager=self.db_manager)
 
     def __call__(self, message: message.Message):
         log.debug("Consuming message %s", message.id)
@@ -58,9 +58,8 @@ class Consumer:
 
     async def handle_or_rollback(self, message: message.Message):
         await self._ready
-        log.debug("SQLAlchemy pool status: %s", async_session_maker.kw["bind"].pool.status())
         # Get a database session
-        async with async_session_maker.begin() as db:
+        async with self.db_manager.Session.begin() as db:
             # Process message
             await self._handle(message, db)
 

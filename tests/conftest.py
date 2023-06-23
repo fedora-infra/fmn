@@ -5,9 +5,9 @@
 import asyncio
 import pathlib
 from contextlib import nullcontext, suppress
+from itertools import repeat
 from unittest import mock
 
-import alembic.command
 import httpx
 import pytest
 import respx
@@ -16,6 +16,7 @@ from click.testing import CliRunner
 from fastapi import status
 from fastapi.testclient import TestClient
 from fedora_messaging import message
+from sqlalchemy_helpers.fastapi import make_db_session
 
 import fmn.api.handlers.misc
 from fmn.api import main
@@ -23,8 +24,7 @@ from fmn.backends import FASJSONAsyncProxy, get_distgit_proxy, get_fasjson_proxy
 from fmn.cache.tracked import Tracked, TrackedCache
 from fmn.cache.util import cache_arg
 from fmn.core.config import get_settings
-from fmn.database.main import Base, async_session_maker, get_engine, init_model
-from fmn.database.migrations.main import alembic_migration
+from fmn.database.main import get_manager
 from fmn.database.model import Destination, Filter, GenerationRule, Rule, TrackingRule, User
 
 from .message import Message
@@ -156,49 +156,48 @@ def clear_settings(tmp_path):
 
 
 @pytest.fixture
-def client():
+async def db_manager(monkeypatch):
+    """A fixture which creates an asynchronous database engine."""
+    manager = get_manager()
+    monkeypatch.setattr(
+        "sqlalchemy_helpers.fastapi.manager_from_config", mock.Mock(return_value=manager)
+    )
+    monkeypatch.setattr("fmn.api.database.get_manager", mock.Mock(return_value=manager))
+    monkeypatch.setattr("fmn.database.main.manager_from_config", mock.Mock(return_value=manager))
+    yield manager
+    await manager.engine.dispose()
+
+
+@pytest.fixture
+def client(db_manager):
     return TestClient(main.app)
 
 
 @pytest.fixture
-def db_engine():
-    """A fixture which creates an asynchronous database engine."""
-    return get_engine()
-
-
-@pytest.fixture
-async def db_schema(db_engine):
-    """Fixture to install the database schema using the asynchronous engine."""
-    async with db_engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-        script_dir = alembic.script.ScriptDirectory.from_config(alembic_migration.config)
-        latest = script_dir.get_current_head()
-        context = alembic.migration.MigrationContext.configure(
-            # Not "conn" because it's async
-            url=alembic_migration.config.get_main_option("sqlalchemy.url")
-        )
-        await conn.run_sync(context._version.create)
-        await conn.execute(context._version.insert().values(version_num=latest))
-        yield conn
-
-
-@pytest.fixture
-async def db_model_initialized(db_engine, db_schema):
+async def db_model_initialized(db_manager):
     """Fixture to initialize the asynchronous DB model.
 
     This is used so db_async_session is usable in tests.
     """
-    await init_model(async_engine=db_engine)
+    await db_manager.create()
+
+
+def make_async_iter_factory(retval, count=None):
+    def _make_iter(*args, **kwargs):
+        mocked_iterator = mock.MagicMock()
+        mocked_iterator.__aiter__.return_value = repeat(retval, count)
+        return mocked_iterator
+
+    return _make_iter
 
 
 @pytest.fixture
-async def db_async_session(db_model_initialized):
+async def db_async_session(db_manager, db_model_initialized, monkeypatch):
     """Fixture setting up an asynchronous DB session."""
-    db_session = async_session_maker()
-    try:
-        yield db_session
-    finally:
-        await db_session.close()
+    async for session in make_db_session(db_manager):
+        # Ensure path operations get the same session so that they don't rollback and close twice.
+        monkeypatch.setattr("fmn.api.database.make_db_session", make_async_iter_factory(session, 1))
+        yield session
 
 
 @pytest.fixture
@@ -206,17 +205,16 @@ async def db_obj(request, db_async_session):
     """Fixture to create an object of a tested model type.
 
     This is for asynchronous test functions/methods."""
-    async with db_async_session.begin():
-        db_obj_dependencies = request.instance._db_obj_get_dependencies()
-        attrs = {**request.instance.attrs, **db_obj_dependencies}
-        obj = request.instance.cls(**attrs)
-        obj._db_obj_dependencies = db_obj_dependencies
-        db_async_session.add(obj)
-        await db_async_session.flush()
+    db_obj_dependencies = request.instance._db_obj_get_dependencies()
+    attrs = {**request.instance.attrs, **db_obj_dependencies}
+    obj = request.instance.cls(**attrs)
+    obj._db_obj_dependencies = db_obj_dependencies
+    db_async_session.add(obj)
+    await db_async_session.flush()
 
-        yield obj
+    yield obj
 
-        await db_async_session.rollback()
+    await db_async_session.rollback()
 
 
 # FASJSON

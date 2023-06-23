@@ -2,8 +2,6 @@
 #
 # SPDX-License-Identifier: MIT
 
-from unittest import mock
-
 from fmn.api import main
 
 
@@ -21,17 +19,8 @@ def test_add_middlewares():
     assert mw[1].options == dict(handler=main.global_execution_handler)
 
 
-@mock.patch("fmn.api.main.init_db_model")
-async def test_init_model(init_model):
-    assert main.init_model in main.app.router.on_startup
-
-    await main.init_model()
-
-    init_model.assert_awaited_once_with()
-
-
 def test_configure_cache(mocker):
     configure_cache = mocker.patch("fmn.api.main.configure_cache")
     assert main.configure_cache_on_startup in main.app.router.on_startup
     main.configure_cache_on_startup()
-    configure_cache.assert_called_once_with()
+    configure_cache.assert_called_once()

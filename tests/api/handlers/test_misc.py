@@ -219,29 +219,34 @@ class TestMisc(BaseTestAPIV1Handler):
         assert response.status_code == status.HTTP_200_OK
         assert response.json() == {"detail": "OK"}
 
-    async def test_readiness_not_setup(self, client, db_async_session, mocker):
+    async def test_readiness_not_setup(self, client, db_async_session):
         await db_async_session.execute(text("DROP TABLE IF EXISTS alembic_version"))
-        mocker.patch("fmn.api.database.async_session_maker", return_value=db_async_session)
+        await db_async_session.flush()
         response = client.get(f"{self.path}/healthz/ready")
         assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
-        assert "no such table" in response.json()["detail"]
+        assert "Can't connect to the database" in response.json()["detail"]
 
-    async def test_readiness(self, client, db_async_session, mocker):
-        mocker.patch("fmn.api.database.async_session_maker", return_value=db_async_session)
+    async def test_readiness(self, client, db_manager, db_model_initialized):
         response = client.get(f"{self.path}/healthz/ready")
         assert response.status_code == status.HTTP_200_OK
         assert response.json() == {"detail": "OK"}
 
-    async def test_readiness_needs_upgrade(self, client, db_async_session, mocker):
+    async def test_readiness_needs_upgrade(self, client, db_async_session):
         await db_async_session.execute(text("UPDATE alembic_version SET version_num='foobar'"))
-        mocker.patch("fmn.api.database.async_session_maker", return_value=db_async_session)
+        await db_async_session.flush()
         response = client.get(f"{self.path}/healthz/ready")
         assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert response.json()["detail"] == "Database schema needs to be upgraded"
 
-    async def test_readiness_not_stamped(self, client, db_async_session, mocker):
+    async def test_readiness_not_stamped(self, client, db_async_session):
         await db_async_session.execute(text("DELETE FROM alembic_version"))
-        mocker.patch("fmn.api.database.async_session_maker", return_value=db_async_session)
+        await db_async_session.flush()
         response = client.get(f"{self.path}/healthz/ready")
         assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
-        assert response.json()["detail"] == "Database schema needs to be upgraded"
+        assert response.json()["detail"] == "Can't connect to the database"
+
+    async def test_readiness_exception(self, client, db_manager):
+        db_manager.get_status = mock.AsyncMock(side_effect=ValueError("dummy"))
+        response = client.get(f"{self.path}/healthz/ready")
+        assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+        assert response.json()["detail"] == "Can't get the database status: dummy"

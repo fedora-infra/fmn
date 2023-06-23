@@ -20,10 +20,11 @@ def _fmn_test():
 
 
 @pytest.fixture
-def mocked_session_maker(mocker, db_async_session):
+def mocked_db_manager(mocker, db_async_session):
+    db_manager = mock.Mock()
     transaction_manager = mock.AsyncMock()
-    sessionmaker = mocker.patch("fmn.core.cli.async_session_maker")
-    sessionmaker.begin.return_value = transaction_manager
+    mocker.patch("fmn.core.cli.get_manager", return_value=db_manager)
+    db_manager.Session.begin.return_value = transaction_manager
     transaction_manager.__aenter__.return_value = db_async_session
     return transaction_manager
 
@@ -58,7 +59,7 @@ def test_settings_defaults(cli_runner):
     assert config._settings_file == config.DEFAULT_CONFIG_FILE
 
 
-async def test_cleanup_generated_count(mocker, cli_runner, db_async_session, mocked_session_maker):
+async def test_cleanup_generated_count(mocker, cli_runner, db_async_session, mocked_db_manager):
     # Delete old entries
     tr = TrackingRule(id=1, name="artifacts-owned", params={"username": "dummy"})
     rule = Rule(id=1, name="dummy", user=User(name="dummy"), tracking_rule=tr, generation_rules=[])
@@ -78,7 +79,7 @@ async def test_cleanup_generated_count(mocker, cli_runner, db_async_session, moc
 
 
 async def test_cleanup_generated_count_no_old(
-    mocker, cli_runner, db_async_session, mocked_session_maker
+    mocker, cli_runner, db_async_session, mocked_db_manager
 ):
     # Don't delete recent entries
     tr = TrackingRule(id=1, name="artifacts-owned", params={"username": "dummy"})

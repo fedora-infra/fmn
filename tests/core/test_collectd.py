@@ -102,15 +102,14 @@ def test_configure_invalid(collectd, monkeypatch):
 def test_collector_setup_shutdown(collectd, monkeypatch):
     configure_cache = Mock()
     monkeypatch.setattr(collectd, "configure_cache", configure_cache)
-    init_model = AsyncMock()
-    monkeypatch.setattr(collectd, "init_model", init_model)
+    db_manager = Mock()
+    monkeypatch.setattr(collectd, "get_manager", Mock(return_value=db_manager))
     set_event_loop = Mock()
     monkeypatch.setattr(collectd.asyncio, "set_event_loop", set_event_loop)
 
     collector = collectd.Collector({})
     collector.setup()
-    configure_cache.assert_called_once()
-    init_model.assert_awaited_once()
+    configure_cache.assert_called_once_with(db_manager=db_manager)
     set_event_loop.assert_called_once_with(collector._loop)
     set_event_loop.reset_mock()
 
@@ -140,7 +139,7 @@ def test_collect_sync(collectd, monkeypatch):
 
 
 async def test_collect(
-    collectd, monkeypatch, collector, created_values, db_async_session, scan_result
+    collectd, monkeypatch, collector, created_values, db_manager, db_model_initialized, scan_result
 ):
     # Setup dummy cache data
     dt1 = datetime(2023, 1, 1, 1, 0, 0, tzinfo=timezone.utc)
@@ -156,14 +155,15 @@ async def test_collect(
     collectd.cache.get = AsyncMock(side_effect=lambda key: 42)
     # Setup dummy DB data
     rule = Rule(id=1, name="dummy", user=User(name="dummy"), generation_rules=[])
-    db_async_session.add(rule)
-    await db_async_session.commit()
+    async with db_manager.Session.begin() as session:
+        session.add(rule)
     # Mock now()
     mocked_dt = Mock()
     mocked_dt.now = Mock(return_value=datetime(2023, 1, 1, 1, 0, 0, tzinfo=timezone.utc))
     mocked_dt.fromisoformat = datetime.fromisoformat
     monkeypatch.setattr(collectd, "datetime", mocked_dt)
 
+    collector.db_manager = db_manager
     await collector._collect()
 
     # 1 cache rebuild value, 1 active_users value
@@ -196,7 +196,9 @@ async def test_collect_no_data(collector, created_values, scan_result, db_model_
     assert len(created_values) == 0
 
 
-async def test_collect_with_hostname(collectd, created_values, scan_result, db_model_initialized):
+async def test_collect_with_hostname(
+    collectd, created_values, scan_result, db_manager, db_model_initialized
+):
     scan_result.extend(
         [
             f"duration:statname:{datetime.now().isoformat()}",
@@ -206,6 +208,7 @@ async def test_collect_with_hostname(collectd, created_values, scan_result, db_m
 
     collector = collectd.Collector({"Interval": 60, "Hostname": "dummyhost.example.com"})
     collector._loop = asyncio.get_event_loop()
+    collector.db_manager = db_manager
     await collector._collect()
 
     assert len(created_values) == 2
