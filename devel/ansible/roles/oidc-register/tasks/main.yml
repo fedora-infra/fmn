@@ -26,7 +26,7 @@
 
 - name: register the application with oidc-register
   shell:
-    cmd: oidc-register --debug --public-client --output-file {{ dest }} https://ipsilon.tinystage.test/idp/openidc/ {{ redirect_url }}
+    cmd: oidc-register --debug --public-client --output-file {{ dest }} https://{{ ipsilon_hostname }}/idp/openidc/ {{ redirect_url }}
     creates: "{{ dest }}"
   become: yes
   become_user: vagrant
