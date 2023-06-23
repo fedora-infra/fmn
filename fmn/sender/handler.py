@@ -12,10 +12,10 @@ class Handler:
 
     async def setup(self):
         # Here we connect to the destination server if relevant.
-        pass
+        ...
 
     async def stop(self):
-        pass
+        ...
 
     @cached_property
     def closed(self):
@@ -23,7 +23,7 @@ class Handler:
 
         It should be triggered when there is an error and the app should stop.
         """
-        return asyncio.get_event_loop().create_future()
+        return asyncio.get_event_loop().create_future()  # pragma: no cover
 
     async def handle(self, message):
         raise NotImplementedError
@@ -35,4 +35,4 @@ class HandlerError(Exception):
 
 class PrintHandler(Handler):
     async def handle(self, message):
-        print("Received:", message)
+        print("Received:", message)  # pragma: no cover

@@ -6,7 +6,7 @@
 branch = True
 source = fmn
 omit =
-    fmn/sender/handler.py
+    fmn/database/migrations/env.py
     fmn/database/migrations/versions/*.py
 concurrency =
     greenlet
@@ -20,4 +20,5 @@ exclude_lines =
     def __repr__
     if TYPE_CHECKING:
     raise NotImplementedError
+    \.\.\.
 show_missing = True
