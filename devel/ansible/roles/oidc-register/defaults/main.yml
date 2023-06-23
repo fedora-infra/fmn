@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
+ipsilon_hostname: ipsilon.tinystage.test
 redirect_path: ""
 redirect_url: https://{{ ansible_fqdn }}/{{ redirect_path }}
 dest: /home/vagrant/client_secrets.json

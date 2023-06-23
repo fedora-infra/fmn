@@ -10,6 +10,6 @@
     state: present
 
 - name: Enroll system as IPA client
-  shell: ipa-client-install --hostname {{ ansible_fqdn }} --domain tinystage.test --realm {{ krb_realm }} --server ipa.tinystage.test -p {{ ipa_admin_user }} -w {{ ipa_admin_password }} -U -N --force-join
+  shell: ipa-client-install --hostname {{ ansible_fqdn }} --domain tinystage.test --realm {{ krb_realm }} --server {{ ipa_hostname }} -p {{ ipa_admin_user }} -w {{ ipa_admin_password }} -U -N --force-join
   args:
     creates: /etc/ipa/default.conf
