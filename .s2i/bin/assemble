@@ -34,6 +34,7 @@ fi
 export VITE_VERSION
 
 # Add patches
+pip install unidiff
 pushd /opt/app-root/lib/python3.10/site-packages
     # https://github.com/fedora-infra/bodhi/pull/5311
     for commit in 74113b9 858fb08 7e47f23; do
