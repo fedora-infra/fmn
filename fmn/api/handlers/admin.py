@@ -41,7 +41,7 @@ async def get_rules(
 
 @router.get("/users", response_model=list[api_models.User], tags=["users/rules"])
 async def get_users(
-    search: str = None,
+    search: str | None = None,
     identity: Identity = Depends(get_identity_admin),
     db_session: AsyncSession = Depends(gen_db_session),
 ):

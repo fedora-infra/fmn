@@ -7,7 +7,7 @@ import io
 import logging
 from datetime import datetime
 from time import monotonic
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar
 
 from cashews import cache
 from cashews.key import get_cache_key_template
@@ -50,7 +50,7 @@ class CachedValue:
 
     name = None
     cache_version = "v1"
-    _background_tasks = set()
+    _background_tasks: ClassVar[set] = set()
 
     def __init__(self):
         # Define the function here instead of wrapping it in a regular async function because the
