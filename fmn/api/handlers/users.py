@@ -38,7 +38,7 @@ async def get_me(
 
 @router.get("", response_model=list[str], tags=["users"])
 async def get_users(
-    search: str = None,
+    search: str | None = None,
     identity: Identity = Depends(get_identity_optional),
     fasjson_proxy: FASJSONAsyncProxy = Depends(get_fasjson_proxy),
 ):

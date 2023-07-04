@@ -66,7 +66,7 @@ class APIClient(ABC):
             self._str = f"{clsname}({self.base_url})"
             return self._str
 
-    def extract_payload(self, result: dict, payload_field: str = None) -> Any:
+    def extract_payload(self, result: dict, payload_field: str | None = None) -> Any:
         if payload_field is None:
             payload_field = getattr(self, "payload_field", None)
 
@@ -95,11 +95,11 @@ class APIClient(ABC):
         response.raise_for_status()
         return response.json()
 
-    async def get_payload(self, url: str, *, payload_field: str = None, **kwargs) -> Any:
+    async def get_payload(self, url: str, *, payload_field: str | None = None, **kwargs) -> Any:
         return self.extract_payload(await self.get(url, **kwargs), payload_field=payload_field)
 
     async def get_paginated(
-        self, url: str, *, params: dict = None, payload_field: str = None, **kwargs
+        self, url: str, *, params: dict | None = None, payload_field: str | None = None, **kwargs
     ) -> AsyncIterator:
         """Query the API and iterate over paginated results if applicable."""
         if params is None:

@@ -38,7 +38,7 @@ class Destination(Base):
         app_name = f"[{message.app_name}] " if message.app_name else ""
         url = message.url if message.url else ""
         if self.protocol == "email":
-            body = f"{str(message)}\n{url}"
+            body = f"{message!s}\n{url}"
             extra = await get_extra(message)
             if extra:
                 body = f"{body}\n{extra}"
