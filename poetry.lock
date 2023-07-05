@@ -2213,6 +2213,21 @@ files = [
 ]
 
 [[package]]
+name = "mediawiki-messages"
+version = "1.0.0"
+description = "A schema package for messages sent by Mediawiki"
+optional = true
+python-versions = ">=3.8,<4.0"
+files = [
+    {file = "mediawiki_messages-1.0.0-py3-none-any.whl", hash = "sha256:21a67460c1bb5431575739d7d35cc460e42ddcc401c66f637278fbe61baabd83"},
+    {file = "mediawiki_messages-1.0.0.tar.gz", hash = "sha256:61af929b33ec154051c751783c70b15f913a7266895ed5411faa01228b2b016d"},
+]
+
+[package.dependencies]
+coverage = {version = ">=7.0.0", extras = ["toml"]}
+fedora-messaging = ">=3.3.0,<4.0.0"
+
+[[package]]
 name = "more-itertools"
 version = "9.1.0"
 description = "More routines for operating on iterables, beyond itertools"
@@ -4270,7 +4285,7 @@ api = ["SQLAlchemy", "backoff", "cashews", "fastapi", "fedora-messaging", "httpx
 consumer = ["SQLAlchemy", "aio-pika", "backoff", "cashews", "fedora-messaging"]
 database = ["SQLAlchemy", "alembic"]
 postgresql = ["asyncpg", "psycopg2"]
-schemas = ["anitya-schema", "bodhi-messages", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedora-elections-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "fedorainfra-ansible-messages", "koji-fedoramessaging-messages", "mdapi-messages", "noggin-messages", "nuancier-messages", "pagure-messages"]
+schemas = ["anitya-schema", "bodhi-messages", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedora-elections-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "fedorainfra-ansible-messages", "koji-fedoramessaging-messages", "mdapi-messages", "mediawiki-messages", "noggin-messages", "nuancier-messages", "pagure-messages"]
 sender-email = ["aio-pika", "aiosmtplib", "tomli"]
 sender-irc = ["aio-pika", "irc", "tomli"]
 sender-matrix = ["aio-pika", "matrix-nio", "tomli"]
@@ -4279,4 +4294,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "b3c10d24b84504380a5921b61282a1a7b8c9d799723ceb48dc9e14f73fb27c16"
+content-hash = "4d572180458023585447f38b1221f15b1fd8b58d7135b713b88fa6cc400c385b"
