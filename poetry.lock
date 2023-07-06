@@ -2214,13 +2214,13 @@ files = [
 
 [[package]]
 name = "mediawiki-messages"
-version = "1.0.0"
+version = "1.0.1"
 description = "A schema package for messages sent by Mediawiki"
 optional = true
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "mediawiki_messages-1.0.0-py3-none-any.whl", hash = "sha256:21a67460c1bb5431575739d7d35cc460e42ddcc401c66f637278fbe61baabd83"},
-    {file = "mediawiki_messages-1.0.0.tar.gz", hash = "sha256:61af929b33ec154051c751783c70b15f913a7266895ed5411faa01228b2b016d"},
+    {file = "mediawiki_messages-1.0.1-py3-none-any.whl", hash = "sha256:de423baddd435def9cf2b7b693be598e1699b97bb01e6f1f72e8941fadf9f3af"},
+    {file = "mediawiki_messages-1.0.1.tar.gz", hash = "sha256:3b31a2ac632e58aa232e9a31adcb4b859b565d63ce99737e85f28302e1821bf4"},
 ]
 
 [package.dependencies]
