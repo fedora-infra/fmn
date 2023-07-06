@@ -35,7 +35,14 @@ def configure_cache(db_manager=None, **kwargs):
     cache.setup(settings.cache.url, **args)
     # Bind the engine for the cached value
     db_manager = db_manager or get_manager()
-    cache_db_session_maker.configure(bind=db_manager.engine)
+    cache_db_session_maker.configure(
+        bind=db_manager.engine.execution_options(
+            # Don't cause transaction serialization failures in the cache:
+            # https://www.postgresql.org/docs/current/sql-set-transaction.html
+            postgresql_readonly=True,
+            postgresql_deferrable=True,
+        )
+    )
 
 
 class CachedValue:
