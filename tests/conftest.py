@@ -16,6 +16,7 @@ from click.testing import CliRunner
 from fastapi import status
 from fastapi.testclient import TestClient
 from fedora_messaging import message
+from sqlalchemy.exc import OperationalError
 from sqlalchemy_helpers.fastapi import make_db_session
 
 import fmn.api.handlers.misc
@@ -174,12 +175,19 @@ def client(db_manager):
 
 
 @pytest.fixture
-async def db_model_initialized(db_manager):
+async def db_model_initialized(request, db_manager):
     """Fixture to initialize the asynchronous DB model.
 
     This is used so db_async_session is usable in tests.
     """
     await db_manager.create()
+    yield
+    try:
+        await db_manager.drop()
+    except OperationalError as e:
+        alembic_marker = request.node.get_closest_marker("alembic_table_deleted")
+        if alembic_marker is None or str(e.orig) != "no such table: alembic_version":
+            raise
 
 
 def make_async_iter_factory(retval, count=None):

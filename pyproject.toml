@@ -182,6 +182,7 @@ schemas = [
 addopts = "--cov-config .coveragerc --cov=fmn --cov-report term --cov-report xml --cov-report html"
 asyncio_mode = "auto"
 timeout = 60
+markers = "alembic_table_deleted: When the alembic version table has been deleted in the test"
 
 [tool.black]
 line-length = 100
