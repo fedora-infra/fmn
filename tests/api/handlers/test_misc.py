@@ -219,6 +219,7 @@ class TestMisc(BaseTestAPIV1Handler):
         assert response.status_code == status.HTTP_200_OK
         assert response.json() == {"detail": "OK"}
 
+    @pytest.mark.alembic_table_deleted
     async def test_readiness_not_setup(self, client, db_async_session):
         await db_async_session.execute(text("DROP TABLE IF EXISTS alembic_version"))
         await db_async_session.flush()
