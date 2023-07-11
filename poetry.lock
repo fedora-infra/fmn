@@ -1987,6 +1987,21 @@ files = [
 fedora-messaging = ">=3.0.1"
 
 [[package]]
+name = "koschei-messages"
+version = "1.0.1"
+description = "A schema package for messages sent by Koschei"
+optional = true
+python-versions = ">=3.8,<4.0"
+files = [
+    {file = "koschei-messages-1.0.1.tar.gz", hash = "sha256:2aa22ea3e4906c978d9ddb4b0b80e3f4d70d97e7dcb334ff936af5610cb63216"},
+    {file = "koschei_messages-1.0.1-py3-none-any.whl", hash = "sha256:7661a52c8c3bb4653fb0e770529289ca8b7e38cb098549f90ef9f2151f72c7c4"},
+]
+
+[package.dependencies]
+coverage = {version = ">=7.2.7,<8.0.0", extras = ["toml"]}
+fedora-messaging = ">=3.3.0,<4.0.0"
+
+[[package]]
 name = "license-expression"
 version = "30.1.1"
 description = "license-expression is a comprehensive utility library to parse, compare, simplify and normalize license expressions (such as SPDX license expressions) using boolean logic."
@@ -4289,7 +4304,7 @@ api = ["SQLAlchemy", "backoff", "cashews", "fastapi", "fedora-messaging", "httpx
 consumer = ["SQLAlchemy", "aio-pika", "backoff", "cashews", "fedora-messaging"]
 database = ["SQLAlchemy", "alembic"]
 postgresql = ["asyncpg", "psycopg2"]
-schemas = ["anitya-schema", "bodhi-messages", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedora-elections-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "fedorainfra-ansible-messages", "koji-fedoramessaging-messages", "mdapi-messages", "mediawiki-messages", "noggin-messages", "nuancier-messages", "pagure-messages"]
+schemas = ["anitya-schema", "bodhi-messages", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedora-elections-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "fedorainfra-ansible-messages", "koji-fedoramessaging-messages", "koschei-messages", "mdapi-messages", "mediawiki-messages", "noggin-messages", "nuancier-messages", "pagure-messages"]
 sender-email = ["aio-pika", "aiosmtplib", "tomli"]
 sender-irc = ["aio-pika", "irc", "tomli"]
 sender-matrix = ["aio-pika", "matrix-nio", "tomli"]
@@ -4298,4 +4313,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "cc5dde2eeeefa3cc140172adbf822d226f1698dbb416c8c866c49652e4d014f4"
+content-hash = "d5024a98462ed8686c04699688cdc849cf47e280238d7cbd3e1b1521f2debf99"
