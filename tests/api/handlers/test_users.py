@@ -247,7 +247,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
         if testcase == "wrong-user":
             username = f"not-really-{username}"
 
-        edited_rule = api_models.Rule.from_orm(db_rule)
+        edited_rule = api_models.Rule.model_validate(db_rule)
         edited_rule.tracking_rule.name = "artifacts-group-owned"
         if "delete-generation-rule" in testcase:
             del edited_rule.generation_rules[-1]
@@ -271,7 +271,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
         success_message = RuleUpdateV1(
             body={
                 "rule": edited_rule.model_dump(),
-                "user": api_models.User.from_orm(db_rule.user).dict(),
+                "user": api_models.User.model_validate(db_rule.user).model_dump(),
             }
         )
         if testcase == "success":
@@ -314,8 +314,8 @@ class TestUserHandler(BaseTestAPIV1Handler):
 
         message = RuleDeleteV1(
             body={
-                "rule": api_models.Rule.from_orm(db_rule).model_dump(),
-                "user": api_models.User.from_orm(db_rule.user).model_dump(),
+                "rule": api_models.Rule.model_validate(db_rule).model_dump(),
+                "user": api_models.User.model_validate(db_rule.user).model_dump(),
             }
         )
 
@@ -339,7 +339,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
         if testcase == "wrong-user":
             username = f"not-really-{username}"
 
-        user = api_models.User.from_orm(db_rule.user)
+        user = api_models.User.model_validate(db_rule.user)
         created_rule = api_models.NewRule(
             **{
                 "name": "daotherrule",

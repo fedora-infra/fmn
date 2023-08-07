@@ -135,12 +135,12 @@ class TestAdmin(BaseTestAPIV1Handler):
         assert response.status_code == status.HTTP_200_OK
         assert len(response.json()) == 0
 
-        edited_rule = api_models.Rule.from_orm(db_rule_disabled)
+        edited_rule = api_models.Rule.model_validate(db_rule_disabled)
         edited_rule.disabled = False
         success_message = RuleUpdateV1(
             body={
                 "rule": edited_rule.model_dump(),
-                "user": api_models.User.from_orm(db_rule_disabled.user).dict(),
+                "user": api_models.User.model_validate(db_rule_disabled.user).model_dump(),
             }
         )
         publish.assert_awaited_once_with(success_message)
@@ -165,12 +165,12 @@ class TestAdmin(BaseTestAPIV1Handler):
         assert response.status_code == status.HTTP_200_OK
         assert len(response.json()) == 1
 
-        edited_rule = api_models.Rule.from_orm(db_rule)
+        edited_rule = api_models.Rule.model_validate(db_rule)
         edited_rule.disabled = True
         success_message = RuleUpdateV1(
             body={
                 "rule": edited_rule.model_dump(),
-                "user": api_models.User.from_orm(db_rule.user).dict(),
+                "user": api_models.User.model_validate(db_rule.user).model_dump(),
             }
         )
         publish.assert_awaited_once_with(success_message)
