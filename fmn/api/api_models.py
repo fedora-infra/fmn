@@ -7,9 +7,10 @@ import re
 from typing import Annotated, Any, Generic, Literal, TypeVar
 
 from pydantic import BaseModel as PydanticBaseModel
-from pydantic import ConfigDict, Field, validator
+from pydantic import ConfigDict, Field, field_validator
 from pydantic.generics import GenericModel
 from pydantic.utils import GetterDict
+from pydantic_core.core_schema import FieldValidationInfo
 
 from ..core.constants import ArtifactType
 
@@ -54,11 +55,11 @@ class Destination(BaseModel):
     protocol: str
     address: str
 
-    @validator("address")
-    def address_format(cls, v, values):
-        if values["protocol"] == "email" and not EMAIL_ADDRESS_RE.match(v):
+    @field_validator("address")
+    def address_format(cls, v, info: FieldValidationInfo):
+        if info.data["protocol"] == "email" and not EMAIL_ADDRESS_RE.match(v):
             raise ValueError("The email address does not look right")
-        elif values["protocol"] == "matrix" and not MATRIX_ADDRESS_RE.match(v):
+        elif info.data["protocol"] == "matrix" and not MATRIX_ADDRESS_RE.match(v):
             raise ValueError("The Matrix address should be in the form @username:server.tld")
         return v
 
