@@ -16,6 +16,6 @@ def db_rule_from_api_rule(rule, user):
             gr.destinations.append(
                 Destination(protocol=destination.protocol, address=destination.address)
             )
-        for name, params in generation_rule.filters.dict().items():
+        for name, params in generation_rule.filters.model_dump().items():
             gr.filters.append(Filter(name=name, params=params))
     return rule_db

@@ -70,7 +70,7 @@ def run_sync_migrations() -> None:
 
     """
     connectable = engine_from_config(
-        get_settings().database.sqlalchemy.dict(),
+        get_settings().database.sqlalchemy.model_dump(),
         prefix="",
         poolclass=pool.NullPool,
     )

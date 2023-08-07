@@ -170,11 +170,13 @@ async def edit_user_rule(
             else:
                 dst_db.protocol = dst.protocol
                 dst_db.address = dst.address
-        to_delete = [f for f in gr_db.filters if f.name not in gr.filters.dict(exclude_unset=True)]
+        to_delete = [
+            f for f in gr_db.filters if f.name not in gr.filters.model_dump(exclude_unset=True)
+        ]
         for f in to_delete:
             await db_session.delete(f)
         existing_filters = {f.name: f for f in gr_db.filters}
-        for f_name, f_params in gr.filters.dict(exclude_unset=True).items():
+        for f_name, f_params in gr.filters.model_dump(exclude_unset=True).items():
             try:
                 f_db = existing_filters[f_name]
             except KeyError:
@@ -196,8 +198,8 @@ async def edit_user_rule(
 
     message = RuleUpdateV1(
         body={
-            "rule": api_models.Rule.from_orm(rule_db).dict(),
-            "user": api_models.User.from_orm(rule_db.user).dict(),
+            "rule": api_models.Rule.model_validate(rule_db).model_dump(),
+            "user": api_models.User.model_validate(rule_db.user).model_dump(),
         }
     )
     await publish(message)
@@ -224,8 +226,8 @@ async def delete_user_rule(
 
     message = RuleDeleteV1(
         body={
-            "rule": api_models.Rule.from_orm(rule).dict(),
-            "user": api_models.User.from_orm(rule.user).dict(),
+            "rule": api_models.Rule.model_validate(rule).model_dump(),
+            "user": api_models.User.model_validate(rule.user).model_dump(),
         }
     )
 
@@ -258,8 +260,8 @@ async def create_user_rule(
 
     message = RuleCreateV1(
         body={
-            "rule": api_models.Rule.from_orm(rule_db).dict(),
-            "user": api_models.User.from_orm(rule_db.user).dict(),
+            "rule": api_models.Rule.model_validate(rule_db).model_dump(),
+            "user": api_models.User.model_validate(rule_db.user).model_dump(),
         }
     )
     await publish(message)

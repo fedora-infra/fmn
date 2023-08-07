@@ -50,7 +50,7 @@ class SendQueue:
         on_giveup=giveup_hdlr,
     )
     async def send(self, notification: Notification):
-        body = json.dumps(notification.content.dict())
+        body = json.dumps(notification.content.model_dump())
         await self._exchange.publish(
             Message(body=body.encode("utf-8")),
             routing_key=f"send.{notification.protocol}",

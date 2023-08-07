@@ -139,7 +139,7 @@ class TestAdmin(BaseTestAPIV1Handler):
         edited_rule.disabled = False
         success_message = RuleUpdateV1(
             body={
-                "rule": edited_rule.dict(),
+                "rule": edited_rule.model_dump(),
                 "user": api_models.User.from_orm(db_rule_disabled.user).dict(),
             }
         )
@@ -169,7 +169,7 @@ class TestAdmin(BaseTestAPIV1Handler):
         edited_rule.disabled = True
         success_message = RuleUpdateV1(
             body={
-                "rule": edited_rule.dict(),
+                "rule": edited_rule.model_dump(),
                 "user": api_models.User.from_orm(db_rule.user).dict(),
             }
         )

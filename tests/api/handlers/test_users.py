@@ -270,7 +270,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
 
         success_message = RuleUpdateV1(
             body={
-                "rule": edited_rule.dict(),
+                "rule": edited_rule.model_dump(),
                 "user": api_models.User.from_orm(db_rule.user).dict(),
             }
         )
@@ -283,7 +283,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
 
         response = client.put(
             f"{self.path}/{username}/rules/{db_rule.id}",
-            json=edited_rule.dict(exclude_unset=True),
+            json=edited_rule.model_dump(exclude_unset=True),
         )
 
         if "success" in testcase:
@@ -314,8 +314,8 @@ class TestUserHandler(BaseTestAPIV1Handler):
 
         message = RuleDeleteV1(
             body={
-                "rule": api_models.Rule.from_orm(db_rule).dict(),
-                "user": api_models.User.from_orm(db_rule.user).dict(),
+                "rule": api_models.Rule.from_orm(db_rule).model_dump(),
+                "user": api_models.User.from_orm(db_rule.user).model_dump(),
             }
         )
 
@@ -353,16 +353,16 @@ class TestUserHandler(BaseTestAPIV1Handler):
             }
         )
 
-        message = RuleCreateV1(body={"rule": created_rule.dict(), "user": user.dict()})
+        message = RuleCreateV1(body={"rule": created_rule.model_dump(), "user": user.model_dump()})
         # Assume the rule will be created with id = 2 (because db_rule already exists)
         message.body["rule"]["id"] = 2
         # In the message the rule will have the user dict in it
-        message.body["rule"]["user"] = user
+        message.body["rule"]["user"] = user.model_dump()
         message.body["rule"]["generated_last_week"] = 0
         message.body["rule"]["generation_rules"][0]["id"] = 3
 
         response = client.post(
-            f"{self.path}/{username}/rules", json=created_rule.dict(exclude_unset=True)
+            f"{self.path}/{username}/rules", json=created_rule.model_dump(exclude_unset=True)
         )
 
         if "success" in testcase:
