@@ -4,12 +4,11 @@
 
 import logging
 import re
-from typing import Annotated, Any, Generic, Literal, TypeVar
+from typing import Annotated, Generic, Literal, TypeVar
 
 from pydantic import BaseModel as PydanticBaseModel
-from pydantic import ConfigDict, Field, field_validator
+from pydantic import ConfigDict, Field, field_validator, model_validator
 from pydantic.generics import GenericModel
-from pydantic.utils import GetterDict
 from pydantic_core.core_schema import FieldValidationInfo
 
 from ..core.constants import ArtifactType
@@ -70,20 +69,17 @@ class Filters(BaseModel):
     topic: str | None = None
     my_actions: bool = False
 
-
-class GRGetterDict(GetterDict):
-    def get(self, key: str, default: Any) -> Any:
-        if key == "filters":
-            return {f.name: f.params for f in self._obj.filters}
-        return super().get(key, default)
+    @model_validator(mode="before")
+    def convert_from_orm(cls, data):
+        if isinstance(data, list):
+            return {f.name: f.params for f in data}
+        return data
 
 
 class GenerationRule(BaseModel):
     id: int | None
     destinations: list[Destination]
     filters: Filters
-
-    model_config = ConfigDict(getter_dict=GRGetterDict)
 
 
 class User(BaseModel):
