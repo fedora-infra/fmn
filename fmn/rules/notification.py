@@ -4,12 +4,11 @@
 
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field, RootModel
+from pydantic import BaseModel, ConfigDict, Field, RootModel
 
 
 class FrozenModel(BaseModel):
-    class Config:
-        frozen = True
+    model_config = ConfigDict(frozen=True)
 
 
 class EmailNotificationHeaders(FrozenModel):
@@ -48,6 +47,7 @@ class MatrixNotification(FrozenModel):
 
 
 class Notification(RootModel):
+    model_config = ConfigDict(frozen=True)
     root: Annotated[
         EmailNotification | IRCNotification | MatrixNotification, Field(discriminator="protocol")
     ]

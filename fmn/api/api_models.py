@@ -7,7 +7,7 @@ import re
 from typing import Annotated, Any, Generic, Literal, TypeVar
 
 from pydantic import BaseModel as PydanticBaseModel
-from pydantic import Field, validator
+from pydantic import ConfigDict, Field, validator
 from pydantic.generics import GenericModel
 from pydantic.utils import GetterDict
 
@@ -17,8 +17,7 @@ log = logging.getLogger(__name__)
 
 
 class BaseModel(PydanticBaseModel):
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Tracking rules with specific types for params
@@ -83,8 +82,7 @@ class GenerationRule(BaseModel):
     destinations: list[Destination]
     filters: Filters
 
-    class Config:
-        getter_dict = GRGetterDict
+    model_config = ConfigDict(getter_dict=GRGetterDict)
 
 
 class User(BaseModel):

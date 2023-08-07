@@ -7,7 +7,7 @@ from functools import cache
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel, DirectoryPath, root_validator
+from pydantic import BaseModel, ConfigDict, DirectoryPath, root_validator
 from pydantic_settings import BaseSettings
 
 DEFAULT_CONFIG_FILE = _settings_file = "/etc/fmn/fmn.cfg"
@@ -38,12 +38,11 @@ class CacheModel(BaseModel):
 
 
 class SQLAlchemyModel(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     url: str = "sqlite:///:memory:"
     echo: bool = False
     isolation_level: str = "SERIALIZABLE"
-
-    class Config:
-        extra = "allow"
 
 
 class AlembicModel(BaseModel):
@@ -81,9 +80,7 @@ class Settings(BaseSettings):
     cache: CacheModel = CacheModel()
     services: ServicesModel = ServicesModel()
 
-    class Config:
-        env_file = "fmn.cfg"
-        env_nested_delimiter = "__"
+    model_config = ConfigDict(env_file="fmn.cfg", env_nested_delimiter="__")
 
     @root_validator
     def compute_compound_fields(cls, values) -> dict:

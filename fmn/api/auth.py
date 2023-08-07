@@ -9,7 +9,7 @@ from typing import Any
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from httpx import AsyncClient, HTTPError
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from ..core.config import get_settings
 
@@ -21,6 +21,8 @@ class TokenExpired(ValueError):
 
 
 class Identity(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
     _client = None
     _token_to_identities_cache = {}
     _cache_next_gc_after = None
@@ -29,9 +31,6 @@ class Identity(BaseModel):
     admin: bool
     expires_at: float
     user_info: dict[str, Any]
-
-    class Config:
-        extra = "ignore"
 
     @classmethod
     def client(cls) -> AsyncClient:
