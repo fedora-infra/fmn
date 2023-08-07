@@ -7,7 +7,7 @@ import axios, { type AxiosRequestConfig } from "axios";
 import type { QueryFunctionContext } from "react-query/types/core";
 import type { VueQueryPluginOptions } from "vue-query";
 import pinia from "../stores";
-import type { APIError, PostError } from "./types";
+import type { APIError, Nullable, PostError } from "./types";
 
 export const vueQueryPluginOptions: VueQueryPluginOptions = {
   queryClientConfig: {
@@ -79,7 +79,10 @@ export const apiDelete = async <Data>(url: string) => {
   return response.data;
 };
 
-export const apiPatch = async <Data>(url: string, data: Partial<Data>) => {
+export const apiPatch = async <Data>(
+  url: string,
+  data: Nullable<Partial<Data>>
+) => {
   const axiosConfig = await getAxiosConfig();
   const response = await http.patch<Data>(url, data, axiosConfig);
   return response.data;

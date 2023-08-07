@@ -30,3 +30,5 @@ export interface PostError {
   detail?: HTTPValidationError["detail"] | string;
 }
 export type APIError = AxiosError<{ detail: string }>;
+
+export type Nullable<T> = { [P in keyof T]: T[P] | null };

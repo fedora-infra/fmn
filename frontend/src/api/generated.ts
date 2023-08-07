@@ -3,7 +3,6 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
   "/api/v1/users/me": {
     /** Get Me */
@@ -93,21 +92,20 @@ export interface components {
     };
     /**
      * ArtifactType
-     * @description An enumeration.
-     * @enum {unknown}
+     * @enum {string}
      */
     ArtifactType: "rpms" | "containers" | "modules" | "flatpaks";
     /** ArtifactsFollowedTrackingRule */
     ArtifactsFollowedTrackingRule: {
       /**
        * Name
-       * @enum {string}
+       * @constant
        */
       name: "artifacts-followed";
       /** Params */
-      params: ({
-          [key: string]: string | undefined;
-        })[];
+      params: {
+        [key: string]: string | undefined;
+      }[];
     };
     /** Destination */
     Destination: {
@@ -122,14 +120,14 @@ export interface components {
        * Applications
        * @default []
        */
-      applications?: (string)[];
+      applications?: string[];
       /**
        * Severities
        * @default []
        */
-      severities?: (string)[];
+      severities?: string[];
       /** Topic */
-      topic?: string;
+      topic?: string | null;
       /**
        * My Actions
        * @default false
@@ -139,15 +137,15 @@ export interface components {
     /** GenerationRule */
     GenerationRule: {
       /** Id */
-      id?: number;
+      id?: number | null;
       /** Destinations */
-      destinations: (components["schemas"]["Destination"])[];
+      destinations: components["schemas"]["Destination"][];
       filters: components["schemas"]["Filters"];
     };
     /** HTTPValidationError */
     HTTPValidationError: {
       /** Detail */
-      detail?: (components["schemas"]["ValidationError"])[];
+      detail?: components["schemas"]["ValidationError"][];
     };
     /** ListParamTrackingRule */
     ListParamTrackingRule: {
@@ -157,45 +155,51 @@ export interface components {
        */
       name: "artifacts-owned" | "artifacts-group-owned" | "users-followed";
       /** Params */
-      params: (string)[];
+      params: string[];
     };
     /** NewRule */
     NewRule: {
       /** Name */
-      name?: string;
+      name?: string | null;
       /**
        * Disabled
        * @default false
        */
       disabled?: boolean;
       /** Tracking Rule */
-      tracking_rule: components["schemas"]["ListParamTrackingRule"] | components["schemas"]["NoParamTrackingRule"] | components["schemas"]["ArtifactsFollowedTrackingRule"];
+      tracking_rule:
+        | components["schemas"]["ListParamTrackingRule"]
+        | components["schemas"]["NoParamTrackingRule"]
+        | components["schemas"]["ArtifactsFollowedTrackingRule"];
       /** Generation Rules */
-      generation_rules: (components["schemas"]["GenerationRule"])[];
+      generation_rules: components["schemas"]["GenerationRule"][];
     };
     /** NoParamTrackingRule */
     NoParamTrackingRule: {
       /**
        * Name
-       * @enum {string}
+       * @constant
        */
       name: "related-events";
       /** Params */
-      params?: string;
+      params: string | null;
     };
     /** Rule */
     Rule: {
       /** Name */
-      name?: string;
+      name?: string | null;
       /**
        * Disabled
        * @default false
        */
       disabled?: boolean;
       /** Tracking Rule */
-      tracking_rule: components["schemas"]["ListParamTrackingRule"] | components["schemas"]["NoParamTrackingRule"] | components["schemas"]["ArtifactsFollowedTrackingRule"];
+      tracking_rule:
+        | components["schemas"]["ListParamTrackingRule"]
+        | components["schemas"]["NoParamTrackingRule"]
+        | components["schemas"]["ArtifactsFollowedTrackingRule"];
       /** Generation Rules */
-      generation_rules: (components["schemas"]["GenerationRule"])[];
+      generation_rules: components["schemas"]["GenerationRule"][];
       /** Id */
       id: number;
       user: components["schemas"]["User"];
@@ -208,12 +212,12 @@ export interface components {
     /** RulePatch */
     RulePatch: {
       /** Disabled */
-      disabled?: boolean;
+      disabled?: boolean | null;
     };
     /** User */
     User: {
       /** Id */
-      id?: number;
+      id?: number | null;
       /** Name */
       name: string;
       /**
@@ -242,7 +246,6 @@ export interface components {
 export type external = Record<string, never>;
 
 export interface operations {
-
   get_me_api_v1_users_me_get: {
     /** Get Me */
     responses: {
@@ -258,14 +261,14 @@ export interface operations {
     /** Get Users */
     parameters?: {
       query?: {
-        search?: string;
+        search?: string | null;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": (string)[];
+          "application/json": string[];
         };
       };
       /** @description Validation Error */
@@ -309,7 +312,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": (string)[];
+          "application/json": string[];
         };
       };
       /** @description Validation Error */
@@ -331,7 +334,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": (components["schemas"]["Destination"])[];
+          "application/json": components["schemas"]["Destination"][];
         };
       };
       /** @description Validation Error */
@@ -353,7 +356,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": (components["schemas"]["Rule"])[];
+          "application/json": components["schemas"]["Rule"][];
         };
       };
       /** @description Validation Error */
@@ -471,7 +474,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": (string)[];
+          "application/json": string[];
         };
       };
     };
@@ -492,16 +495,16 @@ export interface operations {
      */
     parameters?: {
       query?: {
-        names?: (string)[];
-        users?: (string)[];
-        groups?: (string)[];
+        names?: string[];
+        users?: string[];
+        groups?: string[];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": (components["schemas"]["Artifact"])[];
+          "application/json": components["schemas"]["Artifact"][];
         };
       };
       /** @description Validation Error */
@@ -538,15 +541,15 @@ export interface operations {
     /** Get Rules */
     parameters?: {
       query?: {
-        disabled?: boolean;
-        username?: string;
+        disabled?: boolean | null;
+        username?: string | null;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": (components["schemas"]["Rule"])[];
+          "application/json": components["schemas"]["Rule"][];
         };
       };
       /** @description Validation Error */
@@ -561,14 +564,14 @@ export interface operations {
     /** Get Users */
     parameters?: {
       query?: {
-        search?: string;
+        search?: string | null;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": (components["schemas"]["User"])[];
+          "application/json": components["schemas"]["User"][];
         };
       };
       /** @description Validation Error */
