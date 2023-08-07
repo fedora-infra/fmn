@@ -7,7 +7,8 @@ from functools import cache
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel, BaseSettings, DirectoryPath, root_validator, stricturl
+from pydantic import BaseModel, DirectoryPath, root_validator, stricturl
+from pydantic_settings import BaseSettings
 
 DEFAULT_CONFIG_FILE = _settings_file = "/etc/fmn/fmn.cfg"
 TOP_DIR = Path(__file__).parent.parent

@@ -85,6 +85,7 @@ cashews = {extras = ["redis"], version = "^5.1.0 || ^6.0.0", optional = true}
 matrix-nio = {version = "^0.20.1 || ^0.21.0", optional = true}
 sqlalchemy-helpers = ">=0.11"
 koschei-messages = {version = "*", optional = true}
+pydantic-settings = "^2.0.2"
 
 [tool.poetry.group.dev.dependencies]
 poetry = "^1.2.0b2"
