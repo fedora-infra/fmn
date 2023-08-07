@@ -15,7 +15,7 @@ from fmn.cache.tracked import Tracked
 from fmn.consumer.consumer import Consumer
 from fmn.core import config
 from fmn.database import model
-from fmn.rules.notification import Notification
+from fmn.rules.notification import EmailNotificationContent, Notification
 
 
 @pytest.fixture
@@ -53,12 +53,7 @@ async def test_consumer_init(
     c = Consumer()
     await c._ready
     configure_cache.assert_called_once_with(db_manager=c.db_manager)
-    mocked_requester_class.assert_called_once_with(
-        {
-            "fasjson_url": "https://fasjson.fedoraproject.org",
-            "distgit_url": "https://src.fedoraproject.org",
-        }
-    )
+    mocked_requester_class.assert_called_once_with(config.get_settings().services)
     mocked_send_queue_class.assert_called_once_with("SEND_QUEUE_CONFIG")
 
 
@@ -150,10 +145,10 @@ async def test_consumer_call_tracked(
     c.send_queue.send.assert_called_once()
     n = c.send_queue.send.call_args[0][0]
     assert n.protocol == "email"
-    assert n.content == {
-        "body": "Body of message on dummy.topic\n",
-        "headers": {"Subject": "Message on dummy.topic", "To": "dummy@example.com"},
-    }
+    assert n.content == EmailNotificationContent(
+        body="Body of message on dummy.topic\n",
+        headers={"Subject": "Message on dummy.topic", "To": "dummy@example.com"},
+    )
 
     result = await db_async_session.execute(select(model.Generated))
     generated = list(result.scalars())
