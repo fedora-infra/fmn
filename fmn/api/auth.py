@@ -10,6 +10,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from httpx import AsyncClient, HTTPError
 from pydantic import BaseModel, ConfigDict
+from pydantic.fields import ModelPrivateAttr
 
 from ..core.config import get_settings
 
@@ -23,9 +24,9 @@ class TokenExpired(ValueError):
 class Identity(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
-    _client = None
-    _token_to_identities_cache = {}
-    _cache_next_gc_after = None
+    _client: AsyncClient | None = None
+    _token_to_identities_cache: dict[str, "Identity"] = ModelPrivateAttr(default_factory=dict)
+    _cache_next_gc_after: int | None = None
 
     name: str
     admin: bool
@@ -35,7 +36,7 @@ class Identity(BaseModel):
     @classmethod
     def client(cls) -> AsyncClient:
         settings = get_settings()
-        if not cls._client:
+        if isinstance(cls._client, ModelPrivateAttr):
             cls._client = AsyncClient(
                 base_url=settings.oidc_provider_url,
                 timeout=None,
