@@ -7,7 +7,7 @@ from functools import cache
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, DirectoryPath, root_validator
+from pydantic import BaseModel, ConfigDict, DirectoryPath, model_validator
 from pydantic_settings import BaseSettings
 
 DEFAULT_CONFIG_FILE = _settings_file = "/etc/fmn/fmn.cfg"
@@ -71,8 +71,9 @@ class Settings(BaseSettings):
     admin_groups: list[str] = ["sysadmin-main"]
 
     # these fields are computed from the above
-    oidc_conf_url: str | None
-    oidc_token_info_url: str | None
+    oidc_conf_url: str | None = None
+    oidc_token_info_url: str | None = None
+    oidc_user_info_url: str | None = None
 
     id_cache_gc_interval: int = 300
 
@@ -82,22 +83,18 @@ class Settings(BaseSettings):
 
     model_config = ConfigDict(env_file="fmn.cfg", env_nested_delimiter="__")
 
-    @root_validator
-    def compute_compound_fields(cls, values) -> dict:
-        values["oidc_conf_url"] = (
-            values["oidc_provider_url"].rstrip("/") + "/" + values["oidc_conf_endpoint"].lstrip("/")
+    @model_validator(mode="after")
+    def compute_compound_fields(self) -> dict:
+        self.oidc_conf_url = (
+            self.oidc_provider_url.rstrip("/") + "/" + self.oidc_conf_endpoint.lstrip("/")
         )
-        values["oidc_token_info_url"] = (
-            values["oidc_provider_url"].rstrip("/")
-            + "/"
-            + values["oidc_token_info_endpoint"].lstrip("/")
+        self.oidc_token_info_url = (
+            self.oidc_provider_url.rstrip("/") + "/" + self.oidc_token_info_endpoint.lstrip("/")
         )
-        values["oidc_user_info_url"] = (
-            values["oidc_provider_url"].rstrip("/")
-            + "/"
-            + values["oidc_user_info_endpoint"].lstrip("/")
+        self.oidc_user_info_url = (
+            self.oidc_provider_url.rstrip("/") + "/" + self.oidc_user_info_endpoint.lstrip("/")
         )
-        return values
+        return self
 
 
 @cache
