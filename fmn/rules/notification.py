@@ -4,7 +4,7 @@
 
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, RootModel
 
 
 class FrozenModel(BaseModel):
@@ -47,10 +47,10 @@ class MatrixNotification(FrozenModel):
     content: MatrixNotificationContent
 
 
-class Notification(FrozenModel):
-    __root__: Annotated[
+class Notification(RootModel):
+    root: Annotated[
         EmailNotification | IRCNotification | MatrixNotification, Field(discriminator="protocol")
     ]
 
     def __getattr__(self, attr):
-        return getattr(self.__root__, attr)
+        return getattr(self.root, attr)
