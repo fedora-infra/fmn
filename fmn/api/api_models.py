@@ -77,13 +77,13 @@ class Filters(BaseModel):
 
 
 class GenerationRule(BaseModel):
-    id: int | None
+    id: int | None = None
     destinations: list[Destination]
     filters: Filters
 
 
 class User(BaseModel):
-    id: int | None
+    id: int | None = None
     name: str
     is_admin: bool = False
 
