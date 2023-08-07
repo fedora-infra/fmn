@@ -408,8 +408,11 @@ class TestUserHandler(BaseTestAPIV1Handler):
         assert response.json()["detail"] == [
             {
                 "loc": ["body", "generation_rules", 0, "destinations", 0, "address"],
-                "msg": "The Matrix address should be in the form @username:server.tld",
+                "msg": "Value error, The Matrix address should be in the form @username:server.tld",
                 "type": "value_error",
+                "input": "dummynick",
+                "ctx": {"error": {}},
+                "url": "https://errors.pydantic.dev/2.1/v/value_error",
             }
         ]
 
@@ -430,7 +433,10 @@ class TestUserHandler(BaseTestAPIV1Handler):
         assert response.json()["detail"] == [
             {
                 "loc": ["body", "generation_rules", 0, "destinations", 0, "address"],
-                "msg": "The email address does not look right",
+                "msg": "Value error, The email address does not look right",
                 "type": "value_error",
+                "ctx": {"error": {}},
+                "input": "wrongvalue",
+                "url": "https://errors.pydantic.dev/2.1/v/value_error",
             }
         ]
