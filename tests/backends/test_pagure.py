@@ -207,7 +207,7 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
 
     @pytest.mark.parametrize("access_role", ("owner", "commit"))
     async def test_get_project_users(self, access_role, respx_mocker, proxy_unmocked_client):
-        mocked_project = [p for p in self.MOCKED_PROJECTS if p["fullname"] == "rpms/gimp"][0]
+        mocked_project = next(p for p in self.MOCKED_PROJECTS if p["fullname"] == "rpms/gimp")
 
         route = respx_mocker.get(f"{self.expected_api_url}/rpms/gimp").mock(
             side_effect=[httpx.Response(fastapi.status.HTTP_200_OK, json=mocked_project)]
@@ -231,7 +231,7 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
 
     @pytest.mark.parametrize("access_role", ("owner", "commit"))
     async def test_get_project_groups(self, access_role, respx_mocker, proxy_unmocked_client):
-        mocked_project = [p for p in self.MOCKED_PROJECTS if p["fullname"] == "rpms/gimp"][0]
+        mocked_project = next(p for p in self.MOCKED_PROJECTS if p["fullname"] == "rpms/gimp")
 
         route = respx_mocker.get(f"{self.expected_api_url}/rpms/gimp").mock(
             side_effect=[httpx.Response(fastapi.status.HTTP_200_OK, json=mocked_project)]
