@@ -7,7 +7,7 @@ from functools import cache
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel, DirectoryPath, root_validator, stricturl
+from pydantic import BaseModel, DirectoryPath, root_validator
 from pydantic_settings import BaseSettings
 
 DEFAULT_CONFIG_FILE = _settings_file = "/etc/fmn/fmn.cfg"
@@ -30,7 +30,7 @@ class CacheScopedArgsModel(BaseModel):
 
 
 class CacheModel(BaseModel):
-    url: stricturl(tld_required=False, host_required=False) = "mem://"
+    url: str = "mem://"
     setup_args: dict[str, Any] | None = None
 
     default_args: CacheArgsModel = CacheArgsModel(ttl="1h")
@@ -38,7 +38,7 @@ class CacheModel(BaseModel):
 
 
 class SQLAlchemyModel(BaseModel):
-    url: stricturl(tld_required=False, host_required=False) = "sqlite:///:memory:"
+    url: str = "sqlite:///:memory:"
     echo: bool = False
     isolation_level: str = "SERIALIZABLE"
 
@@ -56,8 +56,8 @@ class DBModel(BaseModel):
 
 
 class ServicesModel(BaseModel):
-    fasjson_url: stricturl() = "https://fasjson.fedoraproject.org"
-    distgit_url: stricturl() = "https://src.fedoraproject.org"
+    fasjson_url: str = "https://fasjson.fedoraproject.org"
+    distgit_url: str = "https://src.fedoraproject.org"
 
 
 class Settings(BaseSettings):
