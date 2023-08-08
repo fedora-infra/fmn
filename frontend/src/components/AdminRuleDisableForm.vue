@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 <script setup lang="ts">
 import { validationErrorToFormErrors } from "@/api";
 import { usePatchRuleMutation } from "@/api/rules";
-import type { PostError } from "@/api/types";
+import type { HTTPValidationError } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
 import { formDataToRuleMutation } from "@/util/forms";
 import { CInputGroup } from "@coreui/bootstrap-vue";
@@ -37,7 +37,7 @@ const handleSubmit = async (
       content: `Rule "${response.id}" has been successfully disabled.`,
     });
   } catch (err) {
-    const error = err as AxiosError<PostError>;
+    const error = err as AxiosError<HTTPValidationError>;
     console.log("Got error response from server:", error);
     if (!error.response) {
       return;

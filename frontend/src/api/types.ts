@@ -18,17 +18,16 @@ export type Severity =
   | typeof ERROR;
 
 export type Destination = components["schemas"]["Destination"];
-export type Filters = components["schemas"]["Filters"];
-export type User = components["schemas"]["User"];
+export type Filters = components["schemas"]["FiltersOutput"];
+export type User = components["schemas"]["UserOutput"];
 export type Artifact = components["schemas"]["Artifact"];
-export type GenerationRule = components["schemas"]["GenerationRule"];
-export type Rule = components["schemas"]["Rule"];
+export type GenerationRule = components["schemas"]["GenerationRuleOutput"];
+export type Rule = components["schemas"]["RuleOutput"];
 export type NewRule = components["schemas"]["NewRule"];
 export type RulePatch = components["schemas"]["RulePatch"];
 export type HTTPValidationError = components["schemas"]["HTTPValidationError"];
-export interface PostError {
-  detail?: HTTPValidationError["detail"] | string;
-}
-export type APIError = AxiosError<{ detail: string }>;
+export type HTTPGenericError = { detail?: string };
+export type PostError = HTTPValidationError["detail"] | HTTPGenericError;
+export type APIError = AxiosError<HTTPGenericError>;
 
 export type Nullable<T> = { [P in keyof T]: T[P] | null };

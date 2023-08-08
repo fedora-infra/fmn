@@ -5,28 +5,21 @@ SPDX-License-Identifier: MIT
 -->
 
 <script setup lang="ts">
-import { apiGet, showError } from "@/api";
-import type { APIError, Rule } from "@/api/types";
-import { useUserStore } from "@/stores/user";
+import { useRuleQuery } from "@/api/rules";
 import { CAlert, CSpinner } from "@coreui/bootstrap-vue";
-import { useQuery } from "@tanstack/vue-query";
 import { useRoute } from "vue-router";
 import RuleEditForm from "../components/RuleEditForm.vue";
 
 const route = useRoute();
-const userStore = useUserStore();
-
-const url = `/api/v1/users/${userStore.username}/rules/${route.params.id}`;
-const { isLoading, isError, data, error } = useQuery<Rule, APIError>(
-  [url],
-  apiGet,
+const { isLoading, isError, data, error } = useRuleQuery(
+  parseInt(route.params.id as string),
 );
 </script>
 
 <template>
   <div v-if="isLoading" class="text-center"><CSpinner /></div>
   <CAlert v-else-if="isError" color="danger">
-    Could not load the rule: {{ showError(error) }}
+    Could not load the rule: {{ error?.detail }}
   </CAlert>
   <RuleEditForm v-else-if="data" :rule="data" />
 </template>
