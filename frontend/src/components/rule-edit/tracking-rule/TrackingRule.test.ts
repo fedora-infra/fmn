@@ -36,7 +36,7 @@ const chooseOption = async (comboboxNumber: number, label: string) => {
   combobox.focus();
   await fireEvent.mouseDown(combobox);
   await waitFor(() =>
-    expect(combobox).toHaveAttribute("aria-expanded", "true")
+    expect(combobox).toHaveAttribute("aria-expanded", "true"),
   );
   // Choose an option
   await fireEvent.click(screen.getByText(label));
@@ -97,7 +97,7 @@ describe("TrackingRule", () => {
     expect(options[2]).toHaveAttribute("data-selected", "true");
     expect(options[2]).toHaveAttribute(
       "class",
-      "multiselect-option is-selected"
+      "multiselect-option is-selected",
     );
     await waitFor(() => {
       const results = getAllByText("dummy/artifact");

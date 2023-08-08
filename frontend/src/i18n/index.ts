@@ -9,7 +9,7 @@ import { createI18n, type Composer } from "vue-i18n";
 
 export const getLocale = (i18n: Composer) => {
   const selectedLocales = navigator.languages.filter((name) =>
-    i18n.availableLocales.includes(name)
+    i18n.availableLocales.includes(name),
   );
   return selectedLocales ? selectedLocales[0] : navigator.language;
 };

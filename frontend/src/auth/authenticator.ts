@@ -30,7 +30,7 @@ import {
 } from "./userinfo_request";
 
 export type AuthorizationRedirectListener = (
-  result: TokenResponse
+  result: TokenResponse,
 ) => TokenResponse | Promise<TokenResponse>;
 
 export class NoHashQueryStringUtils extends BasicQueryStringUtils {
@@ -45,7 +45,7 @@ abstract class MessagesManager {
   abstract show(
     content: string,
     title: string | undefined,
-    category: string | undefined
+    category: string | undefined,
   ): void;
 }
 
@@ -66,7 +66,7 @@ export default class Authenticator {
     openIdConnectUrl: string,
     clientId: string,
     redirectUri: string,
-    messages: MessagesManager
+    messages: MessagesManager,
   ) {
     this.openIdConnectUrl = openIdConnectUrl;
     this.clientId = clientId;
@@ -76,7 +76,7 @@ export default class Authenticator {
     this.notifier = new AuthorizationNotifier();
     this.authorizationHandler = new RedirectRequestHandler(
       this.storage,
-      new NoHashQueryStringUtils()
+      new NoHashQueryStringUtils(),
     );
     this.tokenHandler = new BaseTokenRequestHandler(requestor);
     // set notifier to deliver responses
@@ -84,14 +84,14 @@ export default class Authenticator {
   }
 
   fetchServiceConfiguration(
-    force = false
+    force = false,
   ): Promise<AuthorizationServiceConfiguration> {
     if (this.configuration && !force) {
       return Promise.resolve(this.configuration);
     }
     return AuthorizationServiceConfiguration.fetchFromIssuer(
       this.openIdConnectUrl,
-      requestor
+      requestor,
     ).then((response) => {
       console.log("Fetched service configuration", response);
       this.configuration = response;
@@ -115,13 +115,13 @@ export default class Authenticator {
     console.log("Making authorization request ", this.configuration, request);
     this.authorizationHandler.performAuthorizationRequest(
       this.configuration,
-      request
+      request,
     );
   }
 
   makeRefreshTokenRequest(
     request: AuthorizationRequest,
-    response: AuthorizationResponse
+    response: AuthorizationResponse,
   ) {
     if (!this.configuration) {
       throw new AppAuthError("Configuration is not initialized");
@@ -186,7 +186,7 @@ export default class Authenticator {
 
     return this.tokenHandler.performRevokeTokenRequest(
       this.configuration,
-      request
+      request,
     );
   }
 
@@ -198,7 +198,7 @@ export default class Authenticator {
           listener,
           (error) => {
             this.messages.show(error, "Authentication failed", "error");
-          }
+          },
         );
       } else {
         // Either response is defined or error is defined, no other possibility

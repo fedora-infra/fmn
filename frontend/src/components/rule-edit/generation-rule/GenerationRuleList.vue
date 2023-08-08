@@ -10,7 +10,7 @@ import { CButton, CListGroup, CListGroupItem } from "@coreui/bootstrap-vue";
 import { cilPlus } from "@coreui/icons";
 import { CIcon } from "@coreui/icons-vue";
 import type { FormKitNode } from "@formkit/core";
-import { computed, ref } from "vue";
+import { computed, ref, toRefs } from "vue";
 import GenerationRuleListItem from "./GenerationRuleListItem.vue";
 import GenerationRuleModal from "./GenerationRuleModal.vue";
 
@@ -22,8 +22,9 @@ const emit = defineEmits<{
   (e: "change", rules: GenerationRule[]): void;
 }>();
 
+const { rules } = toRefs(props);
 const generationRulesInput = ref<{ node: FormKitNode } | null>(null);
-const generation_rules = ref<GenerationRule[]>([...(props.rules || [])]);
+const generation_rules = ref<GenerationRule[]>([...(rules?.value || [])]);
 const editing = ref<number | null>(null);
 const handleButtonClicked = (index: number) => {
   editing.value = index;
@@ -53,13 +54,13 @@ const handleModalClosed = () => {
 };
 const modalVisible = computed(() => editing.value !== null);
 const modalTitle = computed(() =>
-  editing.value === -1 ? "Add Destination" : "Edit Destination"
+  editing.value === -1 ? "Add Destination" : "Edit Destination",
 );
 const modalButtonLabel = computed(() =>
-  editing.value === -1 ? "Add Destination" : "Save Destination"
+  editing.value === -1 ? "Add Destination" : "Save Destination",
 );
 const editedRule = computed(() =>
-  editing.value !== null ? generation_rules.value[editing.value] : undefined
+  editing.value !== null ? generation_rules.value[editing.value] : undefined,
 );
 </script>
 

@@ -25,12 +25,12 @@ const queryParams = computed(() => ({
 const visible = computed(
   () =>
     (props.groups && props.groups.length > 0) ||
-    (props.users && props.users.length > 0)
+    (props.users && props.users.length > 0),
 );
 const { isLoading, isError, data, error } = useQuery<Artifact[], APIError>(
   [route, queryParams],
   apiGet,
-  { enabled: visible.value }
+  { enabled: visible.value },
 );
 </script>
 

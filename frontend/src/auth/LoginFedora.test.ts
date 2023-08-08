@@ -45,7 +45,7 @@ describe("LoginFedora", () => {
     auth.handleAuthorizationRedirect.mockImplementation(
       async (listener: AuthorizationRedirectListener) => {
         listener(tokenResponse);
-      }
+      },
     );
   });
   afterEach(() => {
@@ -173,8 +173,8 @@ describe("LoginFedora", () => {
         "500",
         undefined,
         undefined,
-        mockedErrorResponse
-      )
+        mockedErrorResponse,
+      ),
     );
 
     render(LoginFedora, renderOptions);
@@ -207,7 +207,7 @@ describe("LoginFedora", () => {
     expect(toastStore.toasts).toHaveLength(1);
     expect(toastStore.toasts[0].title).toBe("Login failed!");
     expect(toastStore.toasts[0].content).toBe(
-      "Could not retrieve user information from the API: dummy API error."
+      "Could not retrieve user information from the API: dummy API error.",
     );
     expect(toastStore.toasts[0].color).toBe("danger");
   });

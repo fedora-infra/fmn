@@ -125,13 +125,13 @@ describe("authenticator", () => {
     const state = await getStateFromStorage();
     // Now check the redirect
     expect(window.location.assign).toHaveBeenCalledWith(
-      `https://id.example.test/auth?redirect_uri=%2Foidc-callback&client_id=dummy-client-id&response_type=code&state=${state}&scope=dummy-scope`
+      `https://id.example.test/auth?redirect_uri=%2Foidc-callback&client_id=dummy-client-id&response_type=code&state=${state}&scope=dummy-scope`,
     );
   });
 
   it("throws on authorization requests without config", async () => {
     expect(() => auth.makeAuthorizationRequest("dummy-scope")).toThrowError(
-      "Configuration is not initialized"
+      "Configuration is not initialized",
     );
   });
 
@@ -164,7 +164,7 @@ describe("authenticator", () => {
     expect(messages.show).toHaveBeenCalledWith(
       "dummy-error-desc",
       "dummy-error",
-      "error"
+      "error",
     );
     expect(callback).not.toHaveBeenCalled();
   });
@@ -184,7 +184,7 @@ describe("authenticator", () => {
     expect(messages.show).toHaveBeenCalledWith(
       "No refresh_token in response",
       "Authentication failed",
-      "error"
+      "error",
     );
     expect(callback).not.toHaveBeenCalled();
   });
@@ -210,7 +210,7 @@ describe("authenticator", () => {
 
   it("throws on access token requests without config", async () => {
     expect(() =>
-      auth.makeAccessTokenRequest("dummy-refresh-token")
+      auth.makeAccessTokenRequest("dummy-refresh-token"),
     ).toThrowError("Configuration is not initialized");
   });
 
@@ -223,8 +223,8 @@ describe("authenticator", () => {
           redirect_uri: "",
           scope: "",
         }),
-        new AuthorizationResponse({ code: "", state: "" })
-      )
+        new AuthorizationResponse({ code: "", state: "" }),
+      ),
     ).toThrowError("Configuration is not initialized");
   });
 
@@ -233,7 +233,7 @@ describe("authenticator", () => {
     requestor.xhr.mockImplementation(async () => ({ foo: "bar" }));
 
     await expect(
-      auth.makeAccessTokenRequest("dummy-refresh-token")
+      auth.makeAccessTokenRequest("dummy-refresh-token"),
     ).rejects.toThrowError("No access_token in response");
   });
 
@@ -256,7 +256,7 @@ describe("authenticator", () => {
 
   it("makes userinfo requests without config", async () => {
     expect(() => auth.makeUserInfoRequest("dummy-access-token")).toThrowError(
-      "Configuration is not initialized"
+      "Configuration is not initialized",
     );
   });
 
@@ -278,7 +278,7 @@ describe("authenticator", () => {
 
   it("throws on revocation requests without config", async () => {
     expect(() => auth.makeRevokeTokenRequest("dummy-token")).toThrowError(
-      "Configuration is not initialized"
+      "Configuration is not initialized",
     );
   });
 });

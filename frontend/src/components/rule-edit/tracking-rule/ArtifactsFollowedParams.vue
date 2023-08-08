@@ -24,7 +24,7 @@ const resultsToOptions = (results: Artifact[]) => {
   }));
   results.forEach((artifact) => {
     const category = options.filter(
-      (o) => o.label === ARTIFACT_CATEGORY_LABELS[artifact.type]
+      (o) => o.label === ARTIFACT_CATEGORY_LABELS[artifact.type],
     )[0];
     category.options.push({
       label: `${artifact.type}/${artifact.name}`,

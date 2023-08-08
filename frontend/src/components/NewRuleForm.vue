@@ -27,12 +27,12 @@ const trackingRuleName = ref("");
 
 const generationRulesCount = ref(0);
 const formReady = computed(
-  () => trackingRuleName.value !== "" && generationRulesCount.value > 0
+  () => trackingRuleName.value !== "" && generationRulesCount.value > 0,
 );
 
 const handleSubmit = async (
   data: FormKitGroupValue,
-  form: FormKitNode | undefined
+  form: FormKitNode | undefined,
 ) => {
   console.log("Will submit the new rule:", data);
   if (!form) {

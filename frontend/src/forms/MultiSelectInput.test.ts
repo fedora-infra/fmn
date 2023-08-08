@@ -128,7 +128,7 @@ describe("MultiSelectInput", () => {
     selectInput.focus();
     await fireEvent.mouseDown(selectInput);
     await waitFor(() =>
-      expect(selectInput).toHaveAttribute("aria-expanded", "true")
+      expect(selectInput).toHaveAttribute("aria-expanded", "true"),
     );
     // Choose an option
     await fireEvent.click(getByText("b"));

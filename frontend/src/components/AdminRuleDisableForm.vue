@@ -21,7 +21,7 @@ const { mutateAsync: editMutation } = usePatchRuleMutation();
 
 const handleSubmit = async (
   data: FormKitGroupValue,
-  form: FormKitNode | undefined
+  form: FormKitNode | undefined,
 ) => {
   console.log(`Will disable rule ${data.id}`);
   if (!form) {

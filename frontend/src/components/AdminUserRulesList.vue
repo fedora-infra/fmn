@@ -9,11 +9,13 @@ import { apiGet, showError } from "@/api";
 import type { APIError, Rule } from "@/api/types";
 import { CAccordion, CCard, CCardBody } from "@coreui/bootstrap-vue";
 import { useQuery } from "vue-query";
+import { toRefs } from "vue";
 import AdminRuleListItem from "./AdminRuleListItem.vue";
 
 const props = defineProps<{
   username: string;
 }>();
+const { username } = toRefs(props);
 
 const url = `/api/v1/admin/rules`;
 const {
@@ -21,7 +23,7 @@ const {
   isError,
   data: rules,
   error,
-} = useQuery<Rule[], APIError>([url, { username: props.username }], apiGet);
+} = useQuery<Rule[], APIError>([url, { username: username.value }], apiGet);
 </script>
 
 <template>

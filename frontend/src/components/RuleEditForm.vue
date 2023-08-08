@@ -21,7 +21,7 @@ import { CIcon } from "@coreui/icons-vue";
 import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";
-import { computed, ref } from "vue";
+import { computed, ref, toRefs } from "vue";
 import { useRouter } from "vue-router";
 import GenerationRuleList from "./rule-edit/generation-rule/GenerationRuleList.vue";
 import TrackingRule from "./rule-edit/tracking-rule/TrackingRule.vue";
@@ -30,14 +30,15 @@ const props = defineProps<{
   rule: Rule;
 }>();
 
+const { rule } = toRefs(props);
 const toastStore = useToastStore();
 const router = useRouter();
 
-const { mutateAsync: editMutation } = useEditRuleMutation(props.rule.id);
+const { mutateAsync: editMutation } = useEditRuleMutation(rule.value.id);
 
 const handleSubmit = async (
   data: FormKitGroupValue,
-  form: FormKitNode | undefined
+  form: FormKitNode | undefined,
 ) => {
   console.log("Will edit the rule:", data);
   if (!form) {
@@ -90,7 +91,7 @@ const handleDelete = async (rule: Rule) => {
   }
 };
 
-const generationRulesCount = ref(props.rule.generation_rules.length);
+const generationRulesCount = ref(rule.value.generation_rules.length);
 const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
   generationRulesCount.value = rules.length;
 };

@@ -32,7 +32,7 @@ export const loginAdmin = (userStore: ReturnType<typeof useUserStore>) => {
 
 export const render = (
   component: Component,
-  props?: Record<string, boolean | Destination>
+  props?: Record<string, boolean | Destination>,
 ) => {
   const pinia = getActivePinia() as Pinia;
   const i18n = createI18n({

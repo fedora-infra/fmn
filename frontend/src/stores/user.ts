@@ -92,7 +92,7 @@ export const useUserStore = defineStore({
         console.log(
           "Logging in again, will redirect back to",
           currentRoute.fullPath,
-          currentRoute
+          currentRoute,
         );
         await login(this.$auth, currentRoute.fullPath);
       }

@@ -32,7 +32,7 @@ describe("LoginButton", () => {
       createTestingPinia({
         createSpy: vi.fn,
         stubActions: false,
-      })
+      }),
     );
   });
   // Unmount components after tests
@@ -56,7 +56,7 @@ describe("LoginButton", () => {
     getByText("Logout");
     const elem = getByAltText<HTMLImageElement>("dummy-user");
     expect(elem.src).toBe(
-      "https://www.libravatar.org/avatar/6e8e0bf6135471802a63a17c5e74ddc5?s=30&d=retro"
+      "https://www.libravatar.org/avatar/6e8e0bf6135471802a63a17c5e74ddc5?s=30&d=retro",
     );
   });
 

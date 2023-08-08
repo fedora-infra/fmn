@@ -56,7 +56,7 @@ function handleChange(value: Option[]) {
 <template>
   <Multiselect v-bind="bindableProps" @change="handleChange">
     <template
-      v-for="(slot, slotName) of (props.context.slots as Multiselect['$slots'])"
+      v-for="(slot, slotName) of props.context.slots as Multiselect['$slots']"
       :key="slotName"
       v-slot:[slotName]="slotParams"
     >

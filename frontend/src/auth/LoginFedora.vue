@@ -100,6 +100,6 @@ watch(
 
     console.log("Will redirect to", redirectTo);
     router.push(redirectTo);
-  }
+  },
 );
 </script>

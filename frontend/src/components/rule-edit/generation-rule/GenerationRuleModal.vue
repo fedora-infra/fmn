@@ -42,7 +42,7 @@ const defaultValue = computed(
   () =>
     props.rule || {
       filters: { severities: SEVERITIES.slice(1).map((s) => s.label) },
-    }
+    },
 );
 </script>
 

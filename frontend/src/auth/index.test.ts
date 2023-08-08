@@ -30,7 +30,7 @@ describe("auth", () => {
       createTestingPinia({
         createSpy: vi.fn,
         stubActions: false,
-      })
+      }),
     );
   });
   // Unmount components after tests
@@ -61,14 +61,14 @@ describe("auth", () => {
 
     expect(authMock.makeAuthorizationRequest).toHaveBeenCalledOnce();
     expect(authMock.makeAuthorizationRequest).toHaveBeenCalledWith(
-      "openid profile email https://id.fedoraproject.org/scope/groups"
+      "openid profile email https://id.fedoraproject.org/scope/groups",
     );
     expect(sessionStorage.getItem("redirect_to")).toBe("/");
   });
 
   it("throws if authentication is not ready when login is called", async () => {
     await expect(login(undefined, "/")).rejects.toThrowError(
-      "The authentication is not ready, please try again later."
+      "The authentication is not ready, please try again later.",
     );
   });
 

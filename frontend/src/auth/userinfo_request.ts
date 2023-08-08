@@ -77,18 +77,18 @@ export class UserInfoRequest {
 export class UserInfoRequestHandler {
   constructor(
     public readonly requestor: Requestor = new FetchRequestor(),
-    public readonly utils: QueryStringUtils = new BasicQueryStringUtils()
+    public readonly utils: QueryStringUtils = new BasicQueryStringUtils(),
   ) {}
 
   private isValid(
-    response: UserInfoResponseJson | UserInfoErrorJson
+    response: UserInfoResponseJson | UserInfoErrorJson,
   ): response is UserInfoResponseJson {
     return (response as UserInfoErrorJson).error === undefined;
   }
 
   performUserInfoRequest(
     configuration: AuthorizationServiceConfiguration,
-    request: UserInfoRequest
+    request: UserInfoRequest,
   ): Promise<UserInfoResponseJson> {
     const response = this.requestor.xhr<
       UserInfoResponseJson | UserInfoErrorJson
@@ -105,7 +105,7 @@ export class UserInfoRequestHandler {
         return response;
       } else {
         return Promise.reject<UserInfoResponseJson>(
-          new AppAuthError(response.error, response)
+          new AppAuthError(response.error, response),
         );
       }
     });

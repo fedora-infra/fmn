@@ -19,7 +19,7 @@ const userStore = useUserStore();
 const url = `/api/v1/users/${userStore.username}/rules/${route.params.id}`;
 const { isLoading, isError, data, error } = useQuery<Rule, APIError>(
   url,
-  apiGet
+  apiGet,
 );
 </script>
 
