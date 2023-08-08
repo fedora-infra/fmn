@@ -8,7 +8,6 @@ from typing import Annotated, Generic, Literal, TypeVar
 
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import ConfigDict, Field, field_validator, model_validator
-from pydantic.generics import GenericModel
 from pydantic_core.core_schema import FieldValidationInfo
 
 from ..core.constants import ArtifactType
@@ -110,7 +109,7 @@ class RulePatch(BaseModel):
 T = TypeVar("T")
 
 
-class Option(GenericModel, Generic[T]):
+class Option(BaseModel, Generic[T]):
     label: str
     value: T
 
