@@ -7,9 +7,9 @@
   become: true
   become_method: sudo
   vars:
-    ipa_hostname: auth.tinystage.test
-    ipsilon_hostname: auth.tinystage.test
-    fasjson_hostname: auth.tinystage.test
+    ipa_hostname: ipa.tinystage.test
+    ipsilon_hostname: ipsilon.tinystage.test
+    fasjson_hostname: fasjson.tinystage.test
 
   roles:
     - ipa-client
@@ -22,7 +22,7 @@
     - backend
     - api
     - name: oidc-register
-      redirect_url: https://{{ ansible_fqdn }}:5173/login/fedora http://localhost:5173/login/fedora
+      redirect_url: https://{{ ansible_fqdn }}:5173/login/fedora
       dest: /home/vagrant/frontend_oidc.json
     - frontend
     - consumer
