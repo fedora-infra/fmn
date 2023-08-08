@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 <script setup lang="ts">
 import { validationErrorToFormErrors } from "@/api";
 import { usePatchRuleMutation } from "@/api/rules";
-import type { PostError, Rule } from "@/api/types";
+import type { HTTPValidationError, Rule } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
 import { formDataToRuleMutation } from "@/util/forms";
 import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
@@ -50,7 +50,7 @@ const handleSubmit = async (
         : `Rule "${response.id}" has been successfully enabled.`,
     });
   } catch (err) {
-    const error = err as AxiosError<PostError>;
+    const error = err as AxiosError<HTTPValidationError>;
     console.log("Got error response from server:", error);
     if (!error.response) {
       return;

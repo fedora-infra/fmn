@@ -7,7 +7,7 @@ import type { QueryFunctionContext } from "@tanstack/query-core";
 import type { VueQueryPluginOptions } from "@tanstack/vue-query";
 import axios, { type AxiosRequestConfig } from "axios";
 import pinia from "../stores";
-import type { APIError, Nullable, PostError } from "./types";
+import type { APIError, HTTPValidationError, Nullable } from "./types";
 
 export const vueQueryPluginOptions: VueQueryPluginOptions = {
   queryClientConfig: {
@@ -61,7 +61,10 @@ export const apiGet = async <Data>({ queryKey }: QueryFunctionContext) => {
   return response.data;
 };
 
-export const apiPost = async <Data>(url: string, data: Partial<Data>) => {
+export const apiPost = async <Data, InputData = Partial<Data>>(
+  url: string,
+  data: InputData,
+) => {
   const axiosConfig = await getAxiosConfig();
   const response = await http.post<Data>(url, data, axiosConfig);
   return response.data;
@@ -79,16 +82,16 @@ export const apiDelete = async <Data>(url: string) => {
   return response.data;
 };
 
-export const apiPatch = async <Data>(
+export const apiPatch = async <Data, InputData = Nullable<Partial<Data>>>(
   url: string,
-  data: Nullable<Partial<Data>>,
+  data: InputData,
 ) => {
   const axiosConfig = await getAxiosConfig();
   const response = await http.patch<Data>(url, data, axiosConfig);
   return response.data;
 };
 
-export const validationErrorToFormErrors = (data: PostError) => {
+export const validationErrorToFormErrors = (data: HTTPValidationError) => {
   const detail = data.detail || [];
   if (Array.isArray(detail)) {
     return detail.map((e) => `Server error: ${e.loc[-1]}: ${e.msg}`);
@@ -96,6 +99,3 @@ export const validationErrorToFormErrors = (data: PostError) => {
     return [detail];
   }
 };
-
-export const showError = (error: APIError | null) =>
-  error && error.response ? error.response.data.detail : error;

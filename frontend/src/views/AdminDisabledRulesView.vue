@@ -5,19 +5,12 @@ SPDX-License-Identifier: MIT
 -->
 
 <script setup lang="ts">
-import { apiGet, showError } from "@/api";
-import type { APIError, Rule } from "@/api/types";
+import { useDisabledRulesQuery } from "@/api/rules";
 import { CAlert, CSpinner } from "@coreui/bootstrap-vue";
-import { useQuery } from "@tanstack/vue-query";
 import AdminDisabledRulesList from "../components/AdminDisabledRulesList.vue";
 import AdminSubHeader from "../components/AdminSubHeader.vue";
 
-const url = `/api/v1/admin/rules`;
-const { isLoading, isError, data, error } = useQuery<Rule[], APIError>(
-  [url, { disabled: true }],
-  apiGet,
-  { retry: false },
-);
+const { isLoading, isError, data, error } = useDisabledRulesQuery();
 </script>
 
 <template>
@@ -25,7 +18,7 @@ const { isLoading, isError, data, error } = useQuery<Rule[], APIError>(
     <CSpinner />
   </div>
   <CAlert v-else-if="isError" color="danger">
-    {{ showError(error) }}
+    {{ error?.detail }}
   </CAlert>
   <template v-else-if="data">
     <AdminSubHeader />

@@ -115,7 +115,7 @@ export interface components {
       address: string;
     };
     /** Filters */
-    Filters: {
+    FiltersInput: {
       /**
        * Applications
        * @default []
@@ -134,13 +134,41 @@ export interface components {
        */
       my_actions?: boolean;
     };
+    /** Filters */
+    FiltersOutput: {
+      /**
+       * Applications
+       * @default []
+       */
+      applications: string[];
+      /**
+       * Severities
+       * @default []
+       */
+      severities: string[];
+      /** Topic */
+      topic: string | null;
+      /**
+       * My Actions
+       * @default false
+       */
+      my_actions: boolean;
+    };
     /** GenerationRule */
-    GenerationRule: {
+    GenerationRuleInput: {
       /** Id */
       id?: number | null;
       /** Destinations */
       destinations: components["schemas"]["Destination"][];
-      filters: components["schemas"]["Filters"];
+      filters: components["schemas"]["FiltersInput"];
+    };
+    /** GenerationRule */
+    GenerationRuleOutput: {
+      /** Id */
+      id: number | null;
+      /** Destinations */
+      destinations: components["schemas"]["Destination"][];
+      filters: components["schemas"]["FiltersOutput"];
     };
     /** HTTPValidationError */
     HTTPValidationError: {
@@ -172,7 +200,7 @@ export interface components {
         | components["schemas"]["NoParamTrackingRule"]
         | components["schemas"]["ArtifactsFollowedTrackingRule"];
       /** Generation Rules */
-      generation_rules: components["schemas"]["GenerationRule"][];
+      generation_rules: components["schemas"]["GenerationRuleInput"][];
     };
     /** NoParamTrackingRule */
     NoParamTrackingRule: {
@@ -185,7 +213,7 @@ export interface components {
       params: string | null;
     };
     /** Rule */
-    Rule: {
+    RuleInput: {
       /** Name */
       name?: string | null;
       /**
@@ -199,15 +227,40 @@ export interface components {
         | components["schemas"]["NoParamTrackingRule"]
         | components["schemas"]["ArtifactsFollowedTrackingRule"];
       /** Generation Rules */
-      generation_rules: components["schemas"]["GenerationRule"][];
+      generation_rules: components["schemas"]["GenerationRuleInput"][];
       /** Id */
       id: number;
-      user: components["schemas"]["User"];
+      user: components["schemas"]["UserInput"];
       /**
        * Generated Last Week
        * @default 0
        */
       generated_last_week?: number;
+    };
+    /** Rule */
+    RuleOutput: {
+      /** Name */
+      name: string | null;
+      /**
+       * Disabled
+       * @default false
+       */
+      disabled: boolean;
+      /** Tracking Rule */
+      tracking_rule:
+        | components["schemas"]["ListParamTrackingRule"]
+        | components["schemas"]["NoParamTrackingRule"]
+        | components["schemas"]["ArtifactsFollowedTrackingRule"];
+      /** Generation Rules */
+      generation_rules: components["schemas"]["GenerationRuleOutput"][];
+      /** Id */
+      id: number;
+      user: components["schemas"]["UserOutput"];
+      /**
+       * Generated Last Week
+       * @default 0
+       */
+      generated_last_week: number;
     };
     /** RulePatch */
     RulePatch: {
@@ -215,7 +268,7 @@ export interface components {
       disabled?: boolean | null;
     };
     /** User */
-    User: {
+    UserInput: {
       /** Id */
       id?: number | null;
       /** Name */
@@ -225,6 +278,18 @@ export interface components {
        * @default false
        */
       is_admin?: boolean;
+    };
+    /** User */
+    UserOutput: {
+      /** Id */
+      id: number | null;
+      /** Name */
+      name: string;
+      /**
+       * Is Admin
+       * @default false
+       */
+      is_admin: boolean;
     };
     /** ValidationError */
     ValidationError: {
@@ -252,7 +317,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["User"];
+          "application/json": components["schemas"]["UserOutput"];
         };
       };
     };
@@ -356,7 +421,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Rule"][];
+          "application/json": components["schemas"]["RuleOutput"][];
         };
       };
       /** @description Validation Error */
@@ -383,7 +448,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Rule"];
+          "application/json": components["schemas"]["RuleOutput"];
         };
       };
       /** @description Validation Error */
@@ -406,7 +471,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Rule"];
+          "application/json": components["schemas"]["RuleOutput"];
         };
       };
       /** @description Validation Error */
@@ -427,14 +492,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Rule"];
+        "application/json": components["schemas"]["RuleInput"];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Rule"];
+          "application/json": components["schemas"]["RuleOutput"];
         };
       };
       /** @description Validation Error */
@@ -549,7 +614,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Rule"][];
+          "application/json": components["schemas"]["RuleOutput"][];
         };
       };
       /** @description Validation Error */
@@ -571,7 +636,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["User"][];
+          "application/json": components["schemas"]["UserOutput"][];
         };
       };
       /** @description Validation Error */
@@ -598,7 +663,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Rule"];
+          "application/json": components["schemas"]["RuleOutput"];
         };
       };
       /** @description Validation Error */

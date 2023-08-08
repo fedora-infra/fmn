@@ -5,31 +5,24 @@ SPDX-License-Identifier: MIT
 -->
 
 <script setup lang="ts">
-import { apiGet, showError } from "@/api";
-import type { APIError, Rule } from "@/api/types";
+import { useAdminRulesQuery } from "@/api/rules";
 import { CAccordion, CCard, CCardBody } from "@coreui/bootstrap-vue";
-import { useQuery } from "@tanstack/vue-query";
 import { toRefs } from "vue";
 import AdminRuleListItem from "./AdminRuleListItem.vue";
 
 const props = defineProps<{
   username: string;
 }>();
+
 const { username } = toRefs(props);
 
-const url = `/api/v1/admin/rules`;
-const {
-  isLoading,
-  isError,
-  data: rules,
-  error,
-} = useQuery<Rule[], APIError>([url, { username }], apiGet);
+const { isLoading, isError, data: rules, error } = useAdminRulesQuery(username);
 </script>
 
 <template>
   <CCard v-if="isLoading" class="border bg-light py-5">Loading...</CCard>
   <CCard v-else-if="isError" class="border bg-light py-5"
-    >Error: {{ showError(error) }}</CCard
+    >Error: {{ error?.detail }}</CCard
   >
   <CCard v-else-if="(rules || []).length === 0" class="border bg-light py-5">
     <CCardBody>

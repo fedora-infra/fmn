@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 <script setup lang="ts">
 import { validationErrorToFormErrors } from "@/api";
 import { useAddRuleMutation } from "@/api/rules";
-import type { GenerationRule, PostError, Rule } from "@/api/types";
+import type { GenerationRule, HTTPValidationError, Rule } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
 import { CCol, CRow } from "@coreui/bootstrap-vue";
 import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
@@ -48,7 +48,7 @@ const handleSubmit = async (
     });
     router.push("/");
   } catch (err) {
-    const error = err as AxiosError<PostError>;
+    const error = err as AxiosError<HTTPValidationError>;
     console.log("Got error response from server:", error);
     if (!error.response) {
       return;
