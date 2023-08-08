@@ -99,7 +99,7 @@ describe("User Store", () => {
     store.$auth.fetchServiceConfiguration = vi.fn().mockResolvedValue({});
     expect(await store.getToken()).toBe("new-access-token");
     expect(store.$auth.makeAccessTokenRequest).toHaveBeenCalledWith(
-      "refresh-token"
+      "refresh-token",
     );
   });
 
@@ -155,7 +155,7 @@ describe("User Store", () => {
     await store.logoutAndLogin();
     expect(store.loggedIn).toBeFalsy();
     expect(store.$auth.makeAuthorizationRequest).toHaveBeenCalledWith(
-      "openid profile email https://id.fedoraproject.org/scope/groups"
+      "openid profile email https://id.fedoraproject.org/scope/groups",
     );
   });
 });

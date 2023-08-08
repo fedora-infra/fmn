@@ -14,7 +14,7 @@ import FedoraAuth from "./fedora";
 export const login = async (
   auth: Authenticator | undefined,
   redirectTo: string,
-  scopes: string[] = FedoraAuth.defaultScopes
+  scopes: string[] = FedoraAuth.defaultScopes,
 ) => {
   const toastStore = useToastStore();
   if (!auth) {
@@ -57,7 +57,7 @@ class ToastMessages {
   show(
     content: string,
     title: string | undefined,
-    category: string | undefined
+    category: string | undefined,
   ) {
     const toastStore = useToastStore();
     toastStore.addToast({
@@ -72,13 +72,13 @@ export default (app: App, { router }: { router: Router }) => {
   // Create the authenticator
   const redirectUri = new URL(
     `${import.meta.env.BASE_URL}login/${FedoraAuth.name}`,
-    window.location.href
+    window.location.href,
   ).href;
   const auth = new Authenticator(
     FedoraAuth.openIdConnectUrl,
     FedoraAuth.clientId,
     redirectUri,
-    new ToastMessages()
+    new ToastMessages(),
   );
   // Make the authenticator available troughout the app
   app.config.globalProperties.$auth = auth;

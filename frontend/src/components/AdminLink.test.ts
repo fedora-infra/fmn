@@ -23,7 +23,7 @@ describe("AdminLink", () => {
       createTestingPinia({
         createSpy: vi.fn,
         stubActions: false,
-      })
+      }),
     );
   });
   // Unmount components after tests

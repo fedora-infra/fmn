@@ -18,7 +18,7 @@ const route = useRoute();
 const routerIsReady = computed(
   () =>
     // Authentication callback routes are added after the initial routing has happened, ignore them.
-    route.path.slice(0, 7) !== "/login/"
+    route.path.slice(0, 7) !== "/login/",
 );
 </script>
 

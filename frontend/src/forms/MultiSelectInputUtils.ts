@@ -29,7 +29,7 @@ export const getBindableProps = (context: FormKitFrameworkContext) => {
     .filter((key) => msProps.includes(key))
     .reduce(
       (obj, key) => Object.assign(obj, { [key]: context.node.props[key] }),
-      {}
+      {},
     );
   val.id = context.id;
   val.name = context.name;

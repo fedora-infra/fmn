@@ -25,10 +25,10 @@ const { mutateAsync: editMutation } = usePatchRuleMutation();
 
 const handleSubmit = async (
   data: FormKitGroupValue,
-  form: FormKitNode | undefined
+  form: FormKitNode | undefined,
 ) => {
   console.log(
-    `Will set rule ${data.id}'s' disabled status to ${data.disabled}`
+    `Will set rule ${data.id}'s' disabled status to ${data.disabled}`,
   );
   if (!form) {
     throw Error("No form node?");

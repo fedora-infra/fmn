@@ -28,7 +28,7 @@ const filteringOptions = computed(() => {
       (props.rules || [])
         .map((rule) => rule.tracking_rule.name)
         .map((name) => TRACKING_RULES.find((tr) => tr.name === name))
-        .filter(isDefined)
+        .filter(isDefined),
     ),
   ];
   return options.map((rule) => {
@@ -41,13 +41,13 @@ const rules = computed(() =>
     .filter(
       (r) =>
         !tracking_rule_filter.value ||
-        r.tracking_rule.name.includes(tracking_rule_filter.value)
+        r.tracking_rule.name.includes(tracking_rule_filter.value),
     )
     .sort(
       (a, b) =>
         Number(a.disabled) - Number(b.disabled) ||
-        b.tracking_rule.name.localeCompare(a.tracking_rule.name)
-    )
+        b.tracking_rule.name.localeCompare(a.tracking_rule.name),
+    ),
 );
 </script>
 

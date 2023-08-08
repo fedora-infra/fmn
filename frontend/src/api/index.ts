@@ -81,7 +81,7 @@ export const apiDelete = async <Data>(url: string) => {
 
 export const apiPatch = async <Data>(
   url: string,
-  data: Nullable<Partial<Data>>
+  data: Nullable<Partial<Data>>,
 ) => {
   const axiosConfig = await getAxiosConfig();
   const response = await http.patch<Data>(url, data, axiosConfig);

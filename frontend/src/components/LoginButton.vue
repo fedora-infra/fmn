@@ -51,7 +51,7 @@ const router = useRouter();
 const { t } = useI18n();
 
 const avatarURL = computed(() =>
-  generateLibravatarURL(userStore.email, 30, "retro")
+  generateLibravatarURL(userStore.email, 30, "retro"),
 );
 
 const loading = ref(false);

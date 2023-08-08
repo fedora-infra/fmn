@@ -16,7 +16,7 @@ const url = `/api/v1/admin/rules`;
 const { isLoading, isError, data, error } = useQuery<Rule[], APIError>(
   [url, { disabled: true }],
   apiGet,
-  { retry: false }
+  { retry: false },
 );
 </script>
 

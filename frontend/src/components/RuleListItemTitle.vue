@@ -13,7 +13,7 @@ const props = defineProps<{
 }>();
 
 const tracking_rule = TRACKING_RULES.find(
-  (o) => o.name === props.rule.tracking_rule.name
+  (o) => o.name === props.rule.tracking_rule.name,
 );
 </script>
 

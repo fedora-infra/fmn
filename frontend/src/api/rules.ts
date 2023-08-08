@@ -29,7 +29,7 @@ export const useAddRuleMutation = () => {
           `/api/v1/users/${userStore.username}/rules`,
         ]);
       },
-    }
+    },
   );
 };
 
@@ -59,7 +59,7 @@ export const useDeleteRuleMutation = () => {
         const url = `/api/v1/users/${userStore.username}/rules`;
         await client.invalidateQueries(url, { refetchActive: true });
       },
-    }
+    },
   );
 };
 
@@ -85,6 +85,6 @@ export const usePatchRuleMutation = () => {
           },
         ]);
       },
-    }
+    },
   );
 };
