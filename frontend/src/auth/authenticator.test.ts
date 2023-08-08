@@ -15,7 +15,6 @@ import {
   expect,
   it,
   vi,
-  type Mock,
   type MockedObject,
 } from "vitest";
 import Authenticator from "./authenticator";
@@ -72,11 +71,9 @@ const getStateFromStorage = async (): Promise<string> => {
 describe("authenticator", () => {
   let requestor: MockedObject<FetchRequestor>;
   let auth: Authenticator;
-  let messages: { show: Mock };
 
   beforeEach(async () => {
-    messages = { show: vi.fn() };
-    auth = new Authenticator(PROVIDER_URL, CLIENT_ID, REDIRECT_URL, messages);
+    auth = new Authenticator(PROVIDER_URL, CLIENT_ID, REDIRECT_URL);
     // Mock HTTP requests
     requestor = vi.mocked(new FetchRequestor());
     requestor.xhr.mockImplementation(async ({ url }) => {
@@ -137,56 +134,38 @@ describe("authenticator", () => {
 
   it("handles authorization redirects", async () => {
     await auth.fetchServiceConfiguration();
-    const callback = vi.fn();
     auth.makeAuthorizationRequest("dummy-scope");
     const state = await getStateFromStorage();
     window.location.search = `state=${state}&code=dummy-code`;
 
-    await auth.handleAuthorizationRedirect(callback);
+    const result = await auth.handleAuthorizationRedirect();
 
-    await waitFor(() => {
-      expect(callback).toHaveBeenCalledOnce();
-    });
-    const callbackCallArg = callback.mock.calls[0][0];
-    expect(callbackCallArg.accessToken).toBe(REFRESH_TOKEN.access_token);
-    expect(callbackCallArg.refreshToken).toBe(REFRESH_TOKEN.refresh_token);
-    expect(callbackCallArg.scope).toBe(REFRESH_TOKEN.scope);
+    expect(result.accessToken).toBe(REFRESH_TOKEN.access_token);
+    expect(result.refreshToken).toBe(REFRESH_TOKEN.refresh_token);
+    expect(result.scope).toBe(REFRESH_TOKEN.scope);
   });
 
   it("show error when authorization response is a failure", async () => {
     await auth.fetchServiceConfiguration();
-    const callback = vi.fn();
     auth.makeAuthorizationRequest("dummy-scope");
     const state = await getStateFromStorage();
     window.location.search = `state=${state}&error=dummy-error&error_description=dummy-error-desc`;
 
-    await auth.handleAuthorizationRedirect(callback);
-    expect(messages.show).toHaveBeenCalledWith(
+    expect(auth.handleAuthorizationRedirect()).rejects.toThrow(
       "dummy-error-desc",
-      "dummy-error",
-      "error",
     );
-    expect(callback).not.toHaveBeenCalled();
   });
 
   it("show error when authorization response is incomplete", async () => {
     await auth.fetchServiceConfiguration();
-    const callback = vi.fn();
     auth.makeAuthorizationRequest("dummy-scope");
     const state = await getStateFromStorage();
     window.location.search = `state=${state}&code=dummy-code`;
     requestor.xhr.mockImplementation(async () => ({ foo: "bar" }));
 
-    await auth.handleAuthorizationRedirect(callback);
-    await waitFor(() => {
-      expect(messages.show).toHaveBeenCalled();
-    });
-    expect(messages.show).toHaveBeenCalledWith(
+    expect(auth.handleAuthorizationRedirect()).rejects.toThrow(
       "No refresh_token in response",
-      "Authentication failed",
-      "error",
     );
-    expect(callback).not.toHaveBeenCalled();
   });
 
   it("makes access token requests", async () => {

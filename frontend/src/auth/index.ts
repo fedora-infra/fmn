@@ -47,27 +47,6 @@ export const logout = async () => {
   userStore.logout();
 };
 
-class ToastMessages {
-  getColor(category: string | undefined) {
-    if (category === "error") {
-      return "danger";
-    }
-    return category;
-  }
-  show(
-    content: string,
-    title: string | undefined,
-    category: string | undefined,
-  ) {
-    const toastStore = useToastStore();
-    toastStore.addToast({
-      title,
-      content,
-      color: this.getColor(category),
-    });
-  }
-}
-
 export default (app: App, { router }: { router: Router }) => {
   // Create the authenticator
   const redirectUri = new URL(
@@ -78,7 +57,6 @@ export default (app: App, { router }: { router: Router }) => {
     FedoraAuth.openIdConnectUrl,
     FedoraAuth.clientId,
     redirectUri,
-    new ToastMessages(),
   );
   // Make the authenticator available troughout the app
   app.config.globalProperties.$auth = auth;

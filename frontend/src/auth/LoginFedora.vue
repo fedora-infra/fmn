@@ -8,9 +8,16 @@ SPDX-License-Identifier: MIT
   <p v-if="userStore.username">
     Authenticated as {{ userStore.fullName }} ({{ userStore.username }}),
     redirecting...
+    <CSpinner size="sm" />
   </p>
-  <p v-else-if="loading">Loading user information...</p>
-  <p v-else-if="error">{{ error }}</p>
+  <CAlert v-else-if="error" color="danger">
+    <CAlertHeading>Login failed!</CAlertHeading>
+    {{ error }}
+  </CAlert>
+  <p v-else-if="loading">
+    Loading user information...
+    <CSpinner size="sm" />
+  </p>
   <p v-else>Authentication successful, redirecting you back...</p>
 </template>
 
@@ -18,6 +25,7 @@ SPDX-License-Identifier: MIT
 import { getApiClient } from "@/api";
 import type { APIError, User } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
+import { CAlert, CAlertHeading, CSpinner } from "@coreui/bootstrap-vue";
 import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from ".";
@@ -50,34 +58,25 @@ onMounted(async () => {
   }
   await auth.fetchServiceConfiguration();
   try {
-    await auth.handleAuthorizationRedirect((result) => {
-      userStore.importTokenResponse(result);
-      auth.makeUserInfoRequest(result.accessToken).then(async (userinfo) => {
-        const apiClient = await getApiClient();
-        const url = "/api/v1/users/me";
-        try {
-          const response = await apiClient.get<User>(url);
-          userStore.setAdmin(response.data.is_admin || false);
-          // Only import the userinfo response if the API answered.
-          userStore.importUserInfoResponse(userinfo);
-        } catch (e) {
-          console.error(e);
-          const error = e as APIError;
-          toastStore.addToast({
-            color: "danger",
-            title: "Login failed!",
-            content: `Could not retrieve user information from the API: ${
-              error.response?.data?.detail || error.message
-            }.`,
-          });
-          userStore.logout();
-          const redirectTo = getRedirect();
-          router.push(redirectTo);
-        }
-      });
-      return result;
-    });
+    const result = await auth.handleAuthorizationRedirect();
+    userStore.importTokenResponse(result);
+    const userInfo = await auth.makeUserInfoRequest(result.accessToken);
+    const apiClient = await getApiClient();
+    const url = "/api/v1/users/me";
+    try {
+      const response = await apiClient.get<User>(url);
+      userStore.setAdmin(response.data.is_admin || false);
+      // Only import the userinfo response if the API answered.
+      userStore.importUserInfoResponse(userInfo);
+    } catch (e) {
+      const error = e as APIError;
+      throw `Could not retrieve user information from the API: ${
+        error.response?.data?.detail || error.message
+      }.`;
+    }
   } catch (err) {
+    console.error(err);
+    userStore.logout();
     error.value = err as string;
     loading.value = false;
   }

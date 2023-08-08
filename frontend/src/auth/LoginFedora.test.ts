@@ -10,6 +10,7 @@ import { TokenResponse } from "@openid/appauth";
 import {
   cleanup,
   render,
+  screen,
   waitFor,
   type RenderOptions,
 } from "@testing-library/vue";
@@ -27,7 +28,6 @@ import {
 import router from "../router";
 import LoginFedora from "./LoginFedora.vue";
 import type Authenticator from "./authenticator";
-import type { AuthorizationRedirectListener } from "./authenticator";
 
 vi.mock("@/api");
 
@@ -43,9 +43,7 @@ describe("LoginFedora", () => {
     renderOptions = getRenderOptions();
     auth = renderOptions.global?.provide?.auth;
     auth.handleAuthorizationRedirect.mockImplementation(
-      async (listener: AuthorizationRedirectListener) => {
-        listener(tokenResponse);
-      },
+      async () => tokenResponse,
     );
   });
   afterEach(() => {
@@ -198,18 +196,13 @@ describe("LoginFedora", () => {
       email: null,
       isAdmin: false,
     });
-    // We must have been redirected
-    await waitFor(() => {
-      expect(router.currentRoute.value.path).toBe("/");
-    });
-    // There should be a "login failed" toast.
-    const toastStore = useToastStore();
-    expect(toastStore.toasts).toHaveLength(1);
-    expect(toastStore.toasts[0].title).toBe("Login failed!");
-    expect(toastStore.toasts[0].content).toBe(
+    // We must not have been redirected
+    expect(router.currentRoute.value.path).toBe("/login/fedora");
+    // There should be a "login failed" alert.
+    screen.getByText("Login failed!");
+    screen.getByText(
       "Could not retrieve user information from the API: dummy API error.",
     );
-    expect(toastStore.toasts[0].color).toBe("danger");
   });
 
   it("redirects to the right place on login", async () => {
