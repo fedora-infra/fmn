@@ -21,12 +21,14 @@ class TokenExpired(ValueError):
     pass
 
 
+_token_to_identities_cache: dict[str, "Identity"] = dict()
+_cache_next_gc_after: int | None = None
+
+
 class Identity(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
     _client: AsyncClient | None = None
-    _token_to_identities_cache: dict[str, "Identity"] = ModelPrivateAttr(default_factory=dict)
-    _cache_next_gc_after: int | None = None
 
     name: str
     admin: bool
@@ -45,26 +47,27 @@ class Identity(BaseModel):
 
     @classmethod
     def _cache_collect_garbage(cls, force: bool = False) -> None:
+        global _token_to_identities_cache, _cache_next_gc_after
         id_cache_gc_interval = get_settings().id_cache_gc_interval
         now = time.time()
         then = now + id_cache_gc_interval
 
         if not force:
-            if not cls._cache_next_gc_after:
-                cls._cache_next_gc_after = then
+            if not _cache_next_gc_after:
+                _cache_next_gc_after = then
                 return
 
-            if now < cls._cache_next_gc_after:
+            if now < _cache_next_gc_after:
                 return
 
-        cls._token_to_identities_cache = {
-            k: v for k, v in cls._token_to_identities_cache.items() if v.expires_at > now
+        _token_to_identities_cache = {
+            k: v for k, v in _token_to_identities_cache.items() if v.expires_at > now
         }
-        cls._cache_next_gc_after = then
+        _cache_next_gc_after = then
 
     @classmethod
     async def from_oidc_token(cls, token: str) -> "Identity":
-        identity = cls._token_to_identities_cache.get(token)
+        identity = _token_to_identities_cache.get(token)
         if not identity:
             settings = get_settings()
             token_info_response = await cls.client().post(
@@ -99,7 +102,7 @@ class Identity(BaseModel):
         else:
             cls._cache_collect_garbage()
 
-        cls._token_to_identities_cache[token] = identity
+        _token_to_identities_cache[token] = identity
 
         return identity
 

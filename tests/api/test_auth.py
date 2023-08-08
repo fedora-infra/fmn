@@ -10,14 +10,14 @@ import pytest
 from fastapi import HTTPException, status
 from httpx import AsyncClient, HTTPError
 
-from fmn.api.auth import Identity, IdentityFactory, TokenExpired
+from fmn.api import auth
 
 
 @pytest.fixture
 def mock_client(mocker):
-    mocker.patch.object(Identity, "_cache_next_gc_after", new=None)
-    mocker.patch.object(Identity, "_token_to_identities_cache", new_callable=dict)
-    client_factory = mocker.patch.object(Identity, "client")
+    mocker.patch.object(auth, "_cache_next_gc_after", new=None)
+    mocker.patch.object(auth, "_token_to_identities_cache", new_callable=dict)
+    client_factory = mocker.patch.object(auth.Identity, "client")
     client = client_factory.return_value = mock.AsyncMock()
     client.post.return_value.raise_for_status = mock.Mock()
     client.post.return_value.json = mock.Mock()
@@ -26,10 +26,10 @@ def mock_client(mocker):
 
 class TestIdentity:
     def test_client(self):
-        client = Identity.client()
+        client = auth.Identity.client()
         assert isinstance(client, AsyncClient)
 
-        new_client = Identity.client()
+        new_client = auth.Identity.client()
         assert new_client is client
 
     @pytest.mark.parametrize("expired", (False, True))
@@ -37,7 +37,7 @@ class TestIdentity:
     async def test_from_oidc_token(self, mock_client, expired, perform_gc):
         now = time.time()
         if expired:
-            expectation = pytest.raises(TokenExpired)
+            expectation = pytest.raises(auth.TokenExpired)
             then = now - 1
         else:
             expectation = nullcontext()
@@ -59,7 +59,7 @@ class TestIdentity:
         # cold cache
 
         with expectation:
-            identity = await Identity.from_oidc_token("abcd-1234")
+            identity = await auth.Identity.from_oidc_token("abcd-1234")
 
         assert mock_client.post.await_count == 2
 
@@ -74,30 +74,28 @@ class TestIdentity:
 
         mock_client.post.reset_mock()
 
-        Identity._token_to_identities_cache["efgh-5678"] = gc_sentinel = mock.Mock(
-            expires_at=now - 1
-        )
+        auth._token_to_identities_cache["efgh-5678"] = gc_sentinel = mock.Mock(expires_at=now - 1)
 
         if perform_gc:
-            Identity._cache_next_gc_after = now - 1
+            auth._cache_next_gc_after = now - 1
 
-        identity2 = await Identity.from_oidc_token("abcd-1234")
+        identity2 = await auth.Identity.from_oidc_token("abcd-1234")
 
         mock_client.post.assert_not_awaited()
         assert identity2 is identity
 
         if perform_gc:
-            assert gc_sentinel not in Identity._token_to_identities_cache.values()
+            assert gc_sentinel not in auth._token_to_identities_cache.values()
         else:
-            assert gc_sentinel in Identity._token_to_identities_cache.values()
+            assert gc_sentinel in auth._token_to_identities_cache.values()
 
 
 class TestIdentityFactory:
-    @mock.patch.object(Identity, "from_oidc_token")
+    @mock.patch.object(auth.Identity, "from_oidc_token")
     async def test_process_oidc_auth(self, from_oidc_token):
         from_oidc_token.return_value = sentinel = object()
         creds = mock.Mock(credentials="dead-beef")
-        identity = await IdentityFactory().process_oidc_auth(creds=creds)
+        identity = await auth.IdentityFactory().process_oidc_auth(creds=creds)
 
         assert identity is sentinel
         from_oidc_token.assert_awaited_once_with("dead-beef")
@@ -107,14 +105,14 @@ class TestIdentityFactory:
         optional = "optional" in testcase
         success = "success" in testcase
 
-        factory = IdentityFactory(optional=optional)
+        factory = auth.IdentityFactory(optional=optional)
 
         with mock.patch.object(factory, "process_oidc_auth") as process_oidc_auth:
             expectation = nullcontext()
             if success:
                 process_oidc_auth.return_value = result_sentinel = object()
             else:
-                process_oidc_auth.side_effect = TokenExpired("abcd-1234")
+                process_oidc_auth.side_effect = auth.TokenExpired("abcd-1234")
                 if not optional:
                     expectation = pytest.raises(HTTPException)
 
@@ -140,18 +138,18 @@ class TestIdentityFactory:
                 assert result is None
 
     async def test___call__anon(self):
-        factory = IdentityFactory(optional=True)
+        factory = auth.IdentityFactory(optional=True)
         result = await factory(None)
         assert result is None
 
     async def test___call__anon_mandatory(self):
-        factory = IdentityFactory(optional=False)
+        factory = auth.IdentityFactory(optional=False)
         with pytest.raises(HTTPException) as excinfo:
             await factory(None)
         assert excinfo.value.status_code == status.HTTP_401_UNAUTHORIZED
 
     async def test___call__request_failure(self):
-        factory = IdentityFactory(optional=False)
+        factory = auth.IdentityFactory(optional=False)
         factory.process_oidc_auth = mock.Mock(side_effect=HTTPError("dummy error"))
         with pytest.raises(HTTPException) as excinfo:
             await factory(None)
@@ -159,7 +157,7 @@ class TestIdentityFactory:
         assert excinfo.value.detail == "Could not get user information: dummy error"
 
     async def test___call__request_failure_optional(self):
-        factory = IdentityFactory(optional=True)
+        factory = auth.IdentityFactory(optional=True)
         factory.process_oidc_auth = mock.Mock(side_effect=HTTPError("dummy error"))
         result = await factory(None)
         assert result is None
