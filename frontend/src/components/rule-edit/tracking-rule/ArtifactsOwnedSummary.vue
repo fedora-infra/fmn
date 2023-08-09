@@ -30,7 +30,7 @@ const visible = computed(
 const { isLoading, isError, data, error } = useQuery<Artifact[], APIError>(
   [route, queryParams],
   apiGet,
-  { enabled: visible.value },
+  { enabled: visible },
 );
 </script>
 

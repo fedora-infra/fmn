@@ -23,7 +23,7 @@ const {
   isError,
   data: rules,
   error,
-} = useQuery<Rule[], APIError>([url, { username: username.value }], apiGet);
+} = useQuery<Rule[], APIError>([url, { username }], apiGet);
 </script>
 
 <template>
