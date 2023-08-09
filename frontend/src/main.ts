@@ -2,17 +2,17 @@
 //
 // SPDX-License-Identifier: MIT
 
+import { vctooltip } from "@coreui/bootstrap-vue";
 import { plugin as FormKitPlugin } from "@formkit/vue";
+import { VueQueryPlugin } from "@tanstack/vue-query";
 import { createApp } from "vue";
-import { VueQueryPlugin } from "vue-query";
-import { vueQueryPluginOptions } from "./api";
 import App from "./App.vue";
+import { vueQueryPluginOptions } from "./api";
 import auth from "./auth";
 import { config as formkitConfig } from "./forms";
 import i18n from "./i18n";
 import router from "./router";
 import pinia from "./stores";
-import { vctooltip } from "@coreui/bootstrap-vue";
 
 import "@coreui/coreui/dist/css/coreui.min.css";
 import "fedora-bootstrap/dist/fedora-bootstrap.min.css";

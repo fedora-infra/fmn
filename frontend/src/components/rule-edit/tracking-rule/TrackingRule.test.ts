@@ -7,6 +7,7 @@ import { TRACKING_RULES } from "@/api/constants";
 import { config as formkitConfig } from "@/forms/index";
 import { useUserStore } from "@/stores/user";
 import { plugin as FormKitPlugin } from "@formkit/vue";
+import { VueQueryPlugin } from "@tanstack/vue-query";
 import {
   cleanup,
   fireEvent,
@@ -18,7 +19,6 @@ import {
 import { createPinia, setActivePinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { defineComponent } from "vue";
-import { VueQueryPlugin } from "vue-query";
 import TrackingRule from "./TrackingRule.vue";
 
 const renderOptions: RenderOptions = {

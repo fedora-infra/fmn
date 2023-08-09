@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 import { apiGet, showError } from "@/api";
 import type { APIError, Rule } from "@/api/types";
 import { CAccordion, CCard, CCardBody } from "@coreui/bootstrap-vue";
-import { useQuery } from "vue-query";
+import { useQuery } from "@tanstack/vue-query";
 import { toRefs } from "vue";
 import AdminRuleListItem from "./AdminRuleListItem.vue";
 

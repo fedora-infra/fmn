@@ -34,7 +34,7 @@
     "qs": "^6.11.0",
     "vue": "^3.2.37",
     "vue-i18n": "^9.2.2",
-    "vue-query": "^1.25.2",
+    "@tanstack/vue-query": "^4.32.6",
     "vue-router": "^4.1.2",
     "vue-unused-components-checker": "^1.1.2"
   },

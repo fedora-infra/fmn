@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import { useUserStore } from "@/stores/user";
-import { useMutation, useQuery, useQueryClient } from "vue-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { apiDelete, apiGet, apiPatch, apiPost, apiPut } from "./index";
 import type { NewRule, PostError, Rule, RulePatch } from "./types";
 
@@ -11,7 +11,7 @@ import type { NewRule, PostError, Rule, RulePatch } from "./types";
 export const useRulesQuery = () => {
   const userStore = useUserStore();
   const url = `/api/v1/users/${userStore.username}/rules`;
-  return useQuery(url, apiGet<Rule[]>, {
+  return useQuery([url], apiGet<Rule[]>, {
     enabled: userStore.loggedIn,
   });
 };
@@ -57,7 +57,7 @@ export const useDeleteRuleMutation = () => {
     {
       onSuccess: async () => {
         const url = `/api/v1/users/${userStore.username}/rules`;
-        await client.invalidateQueries(url, { refetchActive: true });
+        await client.invalidateQueries([url], { refetchType: "active" });
       },
     },
   );

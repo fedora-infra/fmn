@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 import { apiGet, showError } from "@/api";
 import type { APIError, Rule } from "@/api/types";
 import { CAlert, CSpinner } from "@coreui/bootstrap-vue";
-import { useQuery } from "vue-query";
+import { useQuery } from "@tanstack/vue-query";
 import AdminDisabledRulesList from "../components/AdminDisabledRulesList.vue";
 import AdminSubHeader from "../components/AdminSubHeader.vue";
 

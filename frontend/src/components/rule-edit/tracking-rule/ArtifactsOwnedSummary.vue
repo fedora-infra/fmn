@@ -8,8 +8,8 @@ SPDX-License-Identifier: MIT
 import { apiGet, showError } from "@/api";
 import type { APIError, Artifact } from "@/api/types";
 import { CSpinner } from "@coreui/bootstrap-vue";
+import { useQuery } from "@tanstack/vue-query";
 import { computed } from "vue";
-import { useQuery } from "vue-query";
 import TrackingRuleSummary from "./TrackingRuleSummary.vue";
 
 const props = defineProps<{

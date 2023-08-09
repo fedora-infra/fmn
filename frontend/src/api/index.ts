@@ -3,9 +3,9 @@
 // SPDX-License-Identifier: MIT
 
 import { useUserStore } from "@/stores/user";
+import type { QueryFunctionContext } from "@tanstack/query-core";
+import type { VueQueryPluginOptions } from "@tanstack/vue-query";
 import axios, { type AxiosRequestConfig } from "axios";
-import type { QueryFunctionContext } from "react-query/types/core";
-import type { VueQueryPluginOptions } from "vue-query";
 import pinia from "../stores";
 import type { APIError, Nullable, PostError } from "./types";
 

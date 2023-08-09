@@ -6,11 +6,11 @@ import { vueQueryPluginOptions } from "@/api";
 import type { UserInfoResponseJson } from "@/auth/userinfo_request";
 import { config as formkitConfig } from "@/forms/index";
 import { plugin as FormKitPlugin } from "@formkit/vue";
+import { VueQueryPlugin } from "@tanstack/vue-query";
 import type { RenderOptions } from "@testing-library/vue";
 import { getActivePinia, type Pinia } from "pinia";
 import { vi } from "vitest";
 import { createI18n } from "vue-i18n";
-import { VueQueryPlugin } from "vue-query";
 import router from "../router";
 
 export const getRenderOptions = (): RenderOptions => {

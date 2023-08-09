@@ -7,17 +7,18 @@ SPDX-License-Identifier: MIT
 <script setup lang="ts">
 import { apiGet } from "@/api";
 import type { User } from "@/api/types";
-import type { QueryFunction } from "react-query/types/core";
+// import type { QueryFunction } from "@tanstack/query-core/types";
 import { ref } from "vue";
 import AdminUserRulesList from "./AdminUserRulesList.vue";
 
-const apiGetUsers = apiGet as QueryFunction<User[]>;
+//const apiGetUsers = apiGet as QueryFunction<User[]>;
 
 const getUsers = async (query: string) => {
   if (!query) {
     return [];
   }
-  const results = await apiGetUsers({
+  // const results = await apiGetUsers({
+  const results = await apiGet<User[]>({
     queryKey: ["/api/v1/admin/users", { search: query }],
     meta: undefined,
   });

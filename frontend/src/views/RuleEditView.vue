@@ -9,7 +9,7 @@ import { apiGet, showError } from "@/api";
 import type { APIError, Rule } from "@/api/types";
 import { useUserStore } from "@/stores/user";
 import { CAlert, CSpinner } from "@coreui/bootstrap-vue";
-import { useQuery } from "vue-query";
+import { useQuery } from "@tanstack/vue-query";
 import { useRoute } from "vue-router";
 import RuleEditForm from "../components/RuleEditForm.vue";
 
@@ -18,7 +18,7 @@ const userStore = useUserStore();
 
 const url = `/api/v1/users/${userStore.username}/rules/${route.params.id}`;
 const { isLoading, isError, data, error } = useQuery<Rule, APIError>(
-  url,
+  [url],
   apiGet,
 );
 </script>

@@ -12,8 +12,8 @@ import { useToastStore } from "@/stores/toast";
 import { formDataToRuleMutation } from "@/util/forms";
 import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
+import { useQueryClient } from "@tanstack/vue-query";
 import type { AxiosError } from "axios";
-import { useQueryClient } from "vue-query";
 
 const props = defineProps<{
   rule: Rule;
