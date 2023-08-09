@@ -1,2 +1,0 @@
-API: Allow rule names to be None in the outgoing Fedora messages.
-Message schema: make rule.id and user.name required as well.

@@ -1,2 +1,0 @@
-Store how long rebuilding the cache took.
-Add a CLI to delete cache locks before they expire.

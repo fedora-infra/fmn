@@ -14,9 +14,38 @@ This project uses [*towncrier*](https://towncrier.readthedocs.io/) and the chang
 
 <!-- towncrier release notes start -->
 
+
+## [3.1.0](https://github.com/fedora-infra/fmn/tree/3.1.0) - 2023-08-09
+
+### Removed
+
+- Get rid of our support for synchronous DB [#870](https://github.com/fedora-infra/fmn/issues/870)
+
+### Added
+
+- Store how long rebuilding the cache took.
+  Add a CLI to delete cache locks before they expire. [#869](https://github.com/fedora-infra/fmn/issues/869)
+- Add a way to extend the email notification's body with, for example, a git patch [#916](https://github.com/fedora-infra/fmn/issues/916)
+
+### Changed
+
+- Use the new asyncio support in `sqlalchemy_helpers` [#PR933](https://github.com/fedora-infra/fmn/issues/PR933)
+- Adjust to recent changes in tinystage [#PR933](https://github.com/fedora-infra/fmn/issues/PR933)
+- Rebuild the cache instead of deleting it when a cache-invalidating message arrives [#869](https://github.com/fedora-infra/fmn/issues/869)
+
+### Fixed
+
+- Frontend: handle errors when querying destinations [#878](https://github.com/fedora-infra/fmn/issues/878)
+- API: Allow rule names to be None in the outgoing Fedora messages.
+  Message schema: make rule.id and user.name required as well. [#879](https://github.com/fedora-infra/fmn/issues/879)
+- IRC sender: handle libera.chat not sending us the `LOGGED_IN` response [#884](https://github.com/fedora-infra/fmn/issues/884)
+- Email sender: close the connection before reconnecting [#885](https://github.com/fedora-infra/fmn/issues/885)
+- Handle Ipsilon error on login [#890](https://github.com/fedora-infra/fmn/issues/890)
+- Avoid causing transaction serialization failures in the cache by making those transactions read-only [#922](https://github.com/fedora-infra/fmn/issues/922)
+
+
+
 ## [3.0.0](https://github.com/fedora-infra/fmn/tree/3.0.0) - 2023-04-14
-
-
 
 ### Changed
 

@@ -1,1 +1,0 @@
-Avoid causing transaction serialization failures in the cache by making those transactions read-only
