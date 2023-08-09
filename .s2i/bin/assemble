@@ -33,15 +33,6 @@ if [ -n "${OPENSHIFT_BUILD_COMMIT}" -a -n "${OPENSHIFT_BUILD_REFERENCE}" ]; then
 fi
 export VITE_VERSION
 
-# Add patches
-pip install unidiff
-pushd /opt/app-root/lib/python3.10/site-packages
-    # https://github.com/fedora-infra/bodhi/pull/5311
-    for commit in 74113b9 858fb08 7e47f23; do
-        curl https://github.com/fedora-infra/bodhi/commit/${commit}.patch | /opt/app-root/src/devel/filterdiff.py -p1 -i "bodhi-messages/bodhi/messages/*" | patch -p2
-    done
-popd
-
 # Install deployment-specific dependencies
 pip install redis
 
