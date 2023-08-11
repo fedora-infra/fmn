@@ -1,0 +1,2 @@
+Disable a user's rules when the user is disabled. This will happen only after the FASJSON cache
+expires, so there will be a delay. Disabled rules will not be re-enabled if the user is re-enabled.
