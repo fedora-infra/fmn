@@ -79,6 +79,22 @@ class TestFASJSONAsyncProxy(BaseTestAsyncProxy):
         assert route.called
         assert response == []
 
+    async def test_get_user_404(self, respx_mocker, proxy_unmocked_client):
+        route = respx_mocker.get(f"{self.expected_api_url}/users/boop/").mock(
+            side_effect=httpx.Response(status_code=404)
+        )
+        response = await proxy_unmocked_client.get_user(username="boop")
+        assert route.called
+        assert response is None
+
+    async def test_get_user_failure(self, respx_mocker, proxy_unmocked_client):
+        route = respx_mocker.get(f"{self.expected_api_url}/users/boop/").mock(
+            side_effect=httpx.Response(status_code=500)
+        )
+        with pytest.raises(httpx.HTTPStatusError):
+            await proxy_unmocked_client.get_user(username="boop")
+        assert route.called
+
     @pytest.mark.parametrize(
         "testcase",
         chain(

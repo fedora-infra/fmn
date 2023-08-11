@@ -17,7 +17,7 @@ from ..cache.rules import RulesCache
 from ..cache.tracked import TrackedCache
 from ..core import config
 from ..database import get_manager
-from ..database.model import Generated
+from ..database.model import Generated, User
 from ..rules.requester import Requester
 from .send_queue import SendQueue
 
@@ -79,6 +79,9 @@ class Consumer:
 
         notifications = set()
         for rule in await self._rules_cache.get_rules(db=db):
+            if await self._user_disabled(user=rule.user):
+                rule.disabled = True
+                continue
             async for notification in rule.handle(message, self._requester):
                 notifications.add(notification)
                 # Record that the rule generated a notification
@@ -86,6 +89,10 @@ class Consumer:
         # Send the deduplicated notifications
         for notification in notifications:
             await self._send(notification, message)
+
+    async def _user_disabled(self, user: User):
+        fasjson_user = await self._requester.fasjson.get_user(username=user.name)
+        return fasjson_user is None
 
     async def _send(self, notification, from_msg):
         log.debug(

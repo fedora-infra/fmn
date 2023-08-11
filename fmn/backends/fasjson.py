@@ -10,6 +10,7 @@ from functools import cached_property as ft_cached_property
 from itertools import chain
 from typing import TYPE_CHECKING, Any
 
+import httpx
 from cashews import cache
 from httpx_gssapi import HTTPSPNEGOAuth
 
@@ -65,8 +66,13 @@ class FASJSONAsyncProxy(APIClient):
         return [user async for user in self.get_paginated("/search/users/", params=params)]
 
     @cache(ttl=cache_ttl("fasjson"), prefix="v1")
-    async def get_user(self, *, username: str) -> dict:
-        return await self.get_payload(f"/users/{username}/")
+    async def get_user(self, *, username: str) -> dict | None:
+        try:
+            return await self.get_payload(f"/users/{username}/")
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == 404:
+                return None
+            raise
 
     @handle_http_error(list)
     @cache(ttl=cache_ttl("fasjson"), prefix="v1")

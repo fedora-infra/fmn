@@ -121,6 +121,7 @@ async def test_consumer_call_tracked(
     await db_async_session.commit()
 
     c._requester.distgit.get_project_users = AsyncMock(return_value=["dummy"])
+    c._requester.fasjson.get_user = AsyncMock(return_value=dict())
 
     # Filtered out because of my_actions
     message = make_mocked_message(
@@ -154,6 +155,51 @@ async def test_consumer_call_tracked(
     generated = list(result.scalars())
     assert len(generated) == 1
     assert generated[0].count == 1
+
+
+async def test_consumer_user_disabled(
+    mocker,
+    mocked_tracked_cache,
+    mocked_requester_class,
+    mocked_send_queue_class,
+    make_mocked_message,
+    db_model_initialized,
+    db_async_session,
+):
+    c = Consumer()
+    mocked_tracked_cache.get_value.return_value = Tracked(
+        packages={"pkg1"},
+        containers=set(),
+        modules=set(),
+        flatpaks=set(),
+        usernames=set(),
+        agent_name=set(),
+    )
+    await c._ready
+
+    user = model.User(name="dummy")
+    record = model.Rule(user=user, name="the name")
+    tr = model.TrackingRule(rule=record, name="artifacts-owned", params=["dummy"])
+    gr = model.GenerationRule(rule=record)
+    f = model.Filter(generation_rule=gr, name="my_actions", params=False)
+    d = model.Destination(generation_rule=gr, protocol="email", address="dummy@example.com")
+    db_async_session.add_all([user, record, tr, gr, f, d])
+    await db_async_session.commit()
+
+    c._requester.distgit.get_project_users = AsyncMock(return_value=["dummy"])
+    c._requester.fasjson.get_user = AsyncMock(return_value=None)
+
+    message = make_mocked_message(
+        topic="dummy.topic",
+        body={"packages": ["pkg1"], "agent_name": "someone"},
+    )
+    await c._handle(message, db_async_session)
+
+    c.send_queue.send.assert_not_called()
+    rule = (
+        await db_async_session.execute(select(model.Rule).where(model.Rule.name == "the name"))
+    ).scalar_one()
+    assert rule.disabled is True
 
 
 async def test_consumer_init_settings_file(
@@ -300,6 +346,8 @@ async def test_consumer_duplicate(
         rule.generation_rules.append(gr1)
 
     await db_async_session.commit()
+    # Pretend the user exists
+    c._requester.fasjson.get_user = AsyncMock(return_value=dict())
 
     # This should generate a single notification
     message = make_mocked_message(
