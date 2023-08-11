@@ -110,13 +110,15 @@ class TestFASJSONAsyncProxy(BaseTestAsyncProxy):
             cache.delete.side_effect = [object(), object(), object(), RuntimeError("BOO")]
 
         # basic (incomplete) message
-        message = mock.Mock(topic=f"org.fedoraproject.prod.fas.{topic}", body={"user": "testuser"})
+        message = mock.Mock(
+            topic=f"org.fedoraproject.prod.fas.{topic}", body={"msg": {"user": "testuser"}}
+        )
         body = message.body
-        user = body["user"]
+        user = body["msg"]["user"]
 
         # Complete the message or muck it up, depending on testcase.
         if "failure-missing-user" in testcase:
-            del body["user"]
+            del body["msg"]["user"]
 
         if "skip-other-topic" in testcase:
             message.topic = "this.is.not.the.message.you’re.looking.for"
