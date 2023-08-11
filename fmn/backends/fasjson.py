@@ -79,7 +79,7 @@ class FASJSONAsyncProxy(APIClient):
             log.debug("Skipping message with topic %s", message.topic)
             return
 
-        if not (msg_user := message.body.get("user")):
+        if not (msg_user := message.body.get("msg", {}).get("user")):
             log.warning("No information found about affected user")
             return
 
