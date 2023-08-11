@@ -61,7 +61,11 @@ class Consumer:
         # Get a database session
         async with self.db_manager.Session.begin() as db:
             # Process message
-            await self._handle(message, db)
+            try:
+                await self._handle(message, db)
+            except Exception:
+                log.exception(f"Handling of {message.id} failed!")
+                raise
 
     async def _handle(self, message: message.Message, db: AsyncSession):
         await self.refresh_cache_if_needed(message, db)
