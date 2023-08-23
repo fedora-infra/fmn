@@ -15,6 +15,7 @@ log = logging.getLogger(__name__)
 
 class MatrixHandler(Handler):
     async def setup(self):
+        self._dm_rooms_cache_refresh_task = None
         self._user_id = self._config["user_id"]
         self._client = AsyncClient(self._config["host"], self._user_id)
         # Token login
@@ -33,9 +34,11 @@ class MatrixHandler(Handler):
 
     async def stop(self):
         log.debug("Stopping Matrix handler...")
-        self._dm_rooms_cache_refresh_task.cancel()
-        with suppress(asyncio.TimeoutError, asyncio.CancelledError):
-            await asyncio.wait_for(self._dm_rooms_cache_refresh_task, 1)
+        if self._dm_rooms_cache_refresh_task is not None:
+            # It is None when the client timeouts connecting to the server
+            self._dm_rooms_cache_refresh_task.cancel()
+            with suppress(asyncio.TimeoutError, asyncio.CancelledError):
+                await asyncio.wait_for(self._dm_rooms_cache_refresh_task, 1)
         await self._client.disconnect()
 
     async def handle(self, message):
