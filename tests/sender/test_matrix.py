@@ -30,6 +30,23 @@ async def test_matrix_connect(mocker):
     handler._dm_rooms_cache_refresh_task.cancel()
 
 
+async def test_matrix_connect_timeout(mocker):
+    client = mocker.AsyncMock(name="client")
+    mocker.patch("fmn.sender.matrix.AsyncClient", return_value=client)
+    client.sync.side_effect = asyncio.exceptions.TimeoutError
+
+    handler = MatrixHandler(
+        {"host": "matrix.example.com", "user_id": "fmnuser", "token": "dummytoken"}
+    )
+    with pytest.raises(asyncio.exceptions.TimeoutError):
+        await handler.setup()
+
+    # The CLI calls stop() if the setup() timeouts
+    await handler.stop()
+
+    client.disconnect.assert_awaited_once_with()
+
+
 async def test_matrix_update_dm_rooms_cache(mocker):
     client = mocker.AsyncMock(name="client")
     client.joined_rooms.return_value = JoinedRoomsResponse(
