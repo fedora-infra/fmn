@@ -113,6 +113,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
     def test_get_user_destinations_other_format(
         self, fasjson_user_data, respx_mocker, fasjson_url, client
     ):
+        fasjson_user_data["emails"] = ["testuser+extension@example.com"]
         fasjson_user_data["ircnicks"] = [
             "irc:///testuser",
             "irc:/testuser",
@@ -124,6 +125,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
             "testuser",
         ]
         expected = [
+            {"protocol": "email", "address": "testuser+extension@example.com"},
             {"protocol": "irc", "address": "testuser"},
             {"protocol": "irc", "address": "testuser"},
             {"protocol": "irc", "address": "testuser"},
@@ -140,7 +142,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
 
         assert response.status_code == status.HTTP_200_OK
         destinations = response.json()
-        assert destinations[1:] == expected
+        assert destinations == expected
 
     @pytest.mark.parametrize("value", (None, []))
     def test_get_user_destinations_no_ircnicks(
@@ -391,7 +393,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
                 assert response.status_code == status.HTTP_403_FORBIDDEN
                 assert isinstance(response.json()["detail"], str)
 
-    async def test_create_user_rule_bad_matrix_dest(self, client, api_identity, db_rule):
+    async def test_create_user_rule_bad_matrix_dest(self, client, api_identity, db_rule, caplog):
         created_rule = {
             "name": "wrongrule",
             "tracking_rule": {"name": "users-followed", "params": ["dummy"]},
@@ -405,18 +407,22 @@ class TestUserHandler(BaseTestAPIV1Handler):
 
         response = client.post(f"{self.path}/{api_identity.name}/rules", json=created_rule)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        expected_message = (
+            "The Matrix address 'dummynick' should be in the form @username:server.tld"
+        )
         assert response.json()["detail"] == [
             {
                 "loc": ["body", "generation_rules", 0, "destinations", 0, "address"],
-                "msg": "Value error, The Matrix address should be in the form @username:server.tld",
+                "msg": f"Value error, {expected_message}",
                 "type": "value_error",
                 "input": "dummynick",
                 "ctx": {"error": {}},
                 "url": "https://errors.pydantic.dev/2.1/v/value_error",
             }
         ]
+        assert caplog.messages == [expected_message]
 
-    async def test_create_user_rule_bad_email_dest(self, client, api_identity, db_rule):
+    async def test_create_user_rule_bad_email_dest(self, client, api_identity, db_rule, caplog):
         created_rule = {
             "name": "wrongrule",
             "tracking_rule": {"name": "users-followed", "params": ["dummy"]},
@@ -430,13 +436,15 @@ class TestUserHandler(BaseTestAPIV1Handler):
 
         response = client.post(f"{self.path}/{api_identity.name}/rules", json=created_rule)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        expected_message = "The email address 'wrongvalue' does not look right"
         assert response.json()["detail"] == [
             {
                 "loc": ["body", "generation_rules", 0, "destinations", 0, "address"],
-                "msg": "Value error, The email address does not look right",
+                "msg": f"Value error, {expected_message}",
                 "type": "value_error",
                 "ctx": {"error": {}},
                 "input": "wrongvalue",
                 "url": "https://errors.pydantic.dev/2.1/v/value_error",
             }
         ]
+        assert caplog.messages == [expected_message]
