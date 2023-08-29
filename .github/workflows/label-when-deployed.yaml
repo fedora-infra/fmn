@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
+name: Apply label to deployed issues and PRs
+
+on:
+  push:
+    branches:
+      - staging
+      - stable
+
+jobs:
+  label:
+    name: Apply label
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Staging deployment
+        uses: abompard/label-when-in-branch
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: staging
+          label: deployed:staging
+      - name: Production deployment
+        uses: abompard/label-when-in-branch
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: stable
+          label: deployed:prod
