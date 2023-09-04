@@ -28,7 +28,7 @@
     "date-fns": "^2.29.3",
     "fedora-bootstrap": "^2.0.2",
     "install": "^0.13.0",
-    "npm": "^8.17.0 || ^9.0.0",
+    "npm": "^8.17.0 || ^9.0.0 || ^10.0.0",
     "pinia": "^2.0.14",
     "pinia-plugin-persistedstate": "^2.1.0 || ^3.0.0",
     "qs": "^6.11.0",
