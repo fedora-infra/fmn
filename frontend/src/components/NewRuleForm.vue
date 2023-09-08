@@ -72,13 +72,21 @@ const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
         <h4>Create a new Rule</h4>
       </CCol>
       <CCol xs="auto">
-        <FormKit
-          type="submit"
-          :class="['btn', 'btn-primary', 'form-control-lg']"
-          :disabled="!formReady"
+        <router-link
+          to="/"
+          class="btn btn-outline-secondary d-inline-block mx-2"
         >
-          Create Rule
-        </FormKit>
+          Cancel
+        </router-link>
+        <div class="d-inline-block mx-2">
+          <FormKit
+            type="submit"
+            :class="['btn', 'btn-primary', 'form-control-lg']"
+            :disabled="!formReady"
+          >
+            Create Rule
+          </FormKit>
+        </div>
       </CCol>
     </CRow>
 

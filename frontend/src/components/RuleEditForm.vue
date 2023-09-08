@@ -121,6 +121,9 @@ const formReady = computed(() => generationRulesCount.value > 0);
           >
             <CIcon :icon="cilTrash" /> Delete Rule
           </CButton>
+          <router-link to="/" class="btn btn-outline-secondary"
+            >Cancel changes</router-link
+          >
           <FormKit
             type="submit"
             :classes="{ input: 'rounded-0 rounded-end' }"
