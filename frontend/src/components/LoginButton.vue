@@ -11,6 +11,9 @@ SPDX-License-Identifier: MIT
         <img :alt="userStore.user.username!" :src="avatarURL" />
       </CDropdownToggle>
       <CDropdownMenu>
+        <CDropdownItem @click="() => router.push('/')">
+          {{ t("My rules") }}
+        </CDropdownItem>
         <CDropdownItem @click="doLogout()">{{ t("logout") }}</CDropdownItem>
       </CDropdownMenu>
     </CDropdown>
