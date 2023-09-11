@@ -448,3 +448,21 @@ class TestUserHandler(BaseTestAPIV1Handler):
             }
         ]
         assert caplog.messages == [expected_message]
+
+    async def test_create_user_rule_related_events(self, client, api_identity, db_rule, caplog):
+        created_rule = {
+            "name": None,
+            "tracking_rule": {"name": "related-events"},
+            "generation_rules": [
+                {
+                    "destinations": [{"protocol": "matrix", "address": "@dummy:example.com"}],
+                    "filters": {},
+                },
+            ],
+        }
+
+        response = client.post(f"{self.path}/{api_identity.name}/rules", json=created_rule)
+        assert response.status_code == status.HTTP_200_OK
+        rule = response.json()
+        assert rule["tracking_rule"]["name"] == "related-events"
+        assert rule["tracking_rule"]["params"] is None
