@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
+from importlib import metadata
 from unittest import mock
 
 import httpx
@@ -17,6 +18,8 @@ from fmn.database.model import Generated, Rule, User
 from fmn.messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
 
 from .base import BaseTestAPIV1Handler
+
+PYDANTIC_VER = ".".join(metadata.version("pydantic").split(".")[:2])
 
 
 @pytest.fixture
@@ -417,7 +420,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
                 "type": "value_error",
                 "input": "dummynick",
                 "ctx": {"error": {}},
-                "url": "https://errors.pydantic.dev/2.1/v/value_error",
+                "url": f"https://errors.pydantic.dev/{PYDANTIC_VER}/v/value_error",
             }
         ]
         assert caplog.messages == [expected_message]
@@ -444,7 +447,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
                 "type": "value_error",
                 "ctx": {"error": {}},
                 "input": "wrongvalue",
-                "url": "https://errors.pydantic.dev/2.1/v/value_error",
+                "url": f"https://errors.pydantic.dev/{PYDANTIC_VER}/v/value_error",
             }
         ]
         assert caplog.messages == [expected_message]
