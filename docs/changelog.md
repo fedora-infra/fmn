@@ -14,6 +14,21 @@ This project uses [*towncrier*](https://towncrier.readthedocs.io/) and the chang
 
 <!-- towncrier release notes start -->
 
+## [3.2.0](https://github.com/fedora-infra/fmn/tree/3.2.0) - 2023-09-21
+
+### Added
+
+- Send the cache building stats to collectd [#913](https://github.com/fedora-infra/fmn/issues/913)
+
+### Fixed
+
+- Disable a user's rules when the user is disabled. This will happen only after the FASJSON cache
+  expires, so there will be a delay. Disabled rules will not be re-enabled if the user is re-enabled. [#826](https://github.com/fedora-infra/fmn/issues/826)
+- Add a Cancel button when creating a rule and a link back to the rules list in the user dropdown [#877](https://github.com/fedora-infra/fmn/issues/877)
+- Allow address extentions (``+``) in email addresses [#912](https://github.com/fedora-infra/fmn/issues/912)
+- Don't crash when we timeout reaching the Matrix server [#971](https://github.com/fedora-infra/fmn/issues/971)
+- Fix the creation of the "My Events" tracking rule [#984](https://github.com/fedora-infra/fmn/issues/984)
+
 
 ## [3.1.0](https://github.com/fedora-infra/fmn/tree/3.1.0) - 2023-08-09
 
