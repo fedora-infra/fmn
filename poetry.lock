@@ -1599,18 +1599,18 @@ socks = ["socksio (==1.*)"]
 
 [[package]]
 name = "httpx-gssapi"
-version = "0.1.7"
+version = "0.2.1"
 description = "A Python GSSAPI authentication handler for HTTPX"
 optional = true
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 files = [
-    {file = "httpx-gssapi-0.1.7.tar.gz", hash = "sha256:7bdcbab8725bc15702dd756eec638e36d700e5f534af6f7584ec283c34c8dc69"},
-    {file = "httpx_gssapi-0.1.7-py3-none-any.whl", hash = "sha256:e2d4c595b39702d557bc6f0150186b3d040e04788875a759c92f959f2d0d09a3"},
+    {file = "httpx-gssapi-0.2.1.tar.gz", hash = "sha256:2841757366d274c9b0ea6630eab5b700340175e1438aab460c4ae30d0cf70b89"},
+    {file = "httpx_gssapi-0.2.1-py3-none-any.whl", hash = "sha256:35d3ef7ca7035ac1f3819bc7c1dac081ac05809f80271daf862db4467a5fbfe2"},
 ]
 
 [package.dependencies]
 gssapi = "*"
-httpx = ">=0.16,<0.24"
+httpx = ">=0.16,<0.26"
 
 [package.extras]
 all = ["k5test", "pytest"]
@@ -4515,4 +4515,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "beffe5e68ac8f7f8e6d79f564214c3168b7276080072c0bb4bb6e61548289f9e"
+content-hash = "e15ed675537ee18f8bc1a0812898e483fb8376d622a2303f7ec60ccb895a3407"
