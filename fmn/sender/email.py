@@ -28,7 +28,10 @@ class EmailHandler(Handler):
         notif["From"] = self._config["from"]
         for name, value in message["headers"].items():
             notif[name] = value
-        notif.set_content(message["body"])
+        body = message["body"]
+        if message.get("footer") is not None:
+            body = f"{body}\n\n-- \n{message['footer']}"
+        notif.set_content(body)
         log.info("Sending email to %s with subject %s", notif["To"], notif["Subject"])
         try:
             await self._smtp.send_message(notif)

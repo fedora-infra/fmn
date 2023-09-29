@@ -54,3 +54,25 @@ async def test_email_disconnected():
 
     assert smtp.send_message.call_count == 2
     smtp.connect.assert_called_once_with()
+
+
+async def test_email_handle_with_footer():
+    smtp = MagicMock(spec=SMTP)
+    handler = EmailHandler({"from": "FMN <fmn@example.com>"})
+    handler._smtp = smtp
+
+    await handler.handle(
+        {
+            "headers": {"To": "dest@example.com", "Subject": "Testing"},
+            "body": "This is a test",
+            "footer": "This is a footer.",
+        }
+    )
+
+    smtp.send_message.assert_called_once()
+
+    sent = smtp.send_message.call_args[0][0]
+    assert sent["To"] == "dest@example.com"
+    assert sent["Subject"] == "Testing"
+    assert sent.get_body().get_content() == "This is a test\n\n-- \nThis is a footer.\n"
+    assert sent.get_content_type() == "text/plain"

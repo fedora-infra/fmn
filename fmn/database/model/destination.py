@@ -6,9 +6,11 @@ import logging
 from typing import TYPE_CHECKING
 
 from httpx import AsyncClient, HTTPStatusError
-from sqlalchemy import Column, ForeignKey, Integer, String, UnicodeText
+from sqlalchemy import Column, ForeignKey, Integer, String, UnicodeText, select
+from sqlalchemy.ext.asyncio import async_object_session
 from sqlalchemy.orm import relationship
 
+from ...core.config import get_settings
 from ..main import Base
 from .generation_rule import GenerationRule
 
@@ -37,17 +39,26 @@ class Destination(Base):
     async def generate(self, message: "Message") -> "Notification.content":
         app_name = f"[{message.app_name}] " if message.app_name else ""
         url = message.url if message.url else ""
+        settings = get_settings()
         if self.protocol == "email":
             body = f"{message!s}\n{url}"
             extra = await get_extra(message)
             if extra:
                 body = f"{body}\n{extra}"
+
+            # Find the URL of the Rule that generated this notification
+            session = async_object_session(self)
+            result = await session.execute(
+                select(GenerationRule).where(GenerationRule.id == self.generation_rule_id)
+            )
+            rule_id = result.scalar_one().rule_id
             return {
                 "headers": {
                     "To": self.address,
                     "Subject": f"{app_name}{message.summary}",
                 },
                 "body": body,
+                "footer": f"Sent by Fedora Notifications: {settings.public_url}/rules/{rule_id}",
             }
         elif self.protocol == "irc":
             return {"to": self.address, "message": f"{app_name}{message.summary} {url}"}

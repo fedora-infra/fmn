@@ -60,6 +60,7 @@ class ServicesModel(BaseModel):
 
 
 class Settings(BaseSettings):
+    public_url: str = "https://notifications.fedoraproject.org"
     cors_origins: str = "https://notifications.fedoraproject.org"
     oidc_provider_url: str = "https://id.fedoraproject.org/openidc"
     oidc_conf_endpoint: str = "/.well-known/openid-configuration"
