@@ -19,6 +19,19 @@ class EmailNotificationHeaders(FrozenModel):
 class EmailNotificationContent(FrozenModel):
     headers: EmailNotificationHeaders
     body: str
+    footer: str | None = None
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.model_dump(exclude=["footer"]) == other.model_dump(exclude=["footer"])
+        return super().__eq__(other)
+
+    def __hash__(self):
+        # Don't include the footer in the hash to be able to use set() to de-duplicate
+        # notifications coming from different rules.
+        internal_dict = self.__dict__.copy()
+        del internal_dict["footer"]
+        return hash(self.__class__) + hash(tuple(internal_dict.values()))
 
 
 class EmailNotification(FrozenModel):

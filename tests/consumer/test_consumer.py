@@ -149,6 +149,7 @@ async def test_consumer_call_tracked(
     assert n.content == EmailNotificationContent(
         body="Body of message on dummy.topic\n",
         headers={"Subject": "Message on dummy.topic", "To": "dummy@example.com"},
+        footer="Sent by Fedora Notifications: https://notifications.fedoraproject.org/rules/1",
     )
 
     result = await db_async_session.execute(select(model.Generated))

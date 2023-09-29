@@ -49,7 +49,10 @@ async def test_send_queue_send(connection, notif):
     sq._exchange.publish.assert_called_once()
     assert sq._exchange.publish.call_args.kwargs.get("routing_key") == "send.email"
     sent_msg = sq._exchange.publish.call_args.args[0]
-    assert sent_msg.body == b'{"headers": {"To": "dummy", "Subject": "dummy"}, "body": "dummy"}'
+    assert (
+        sent_msg.body == b'{"headers": {"To": "dummy", "Subject": "dummy"}, '
+        b'"body": "dummy", "footer": null}'
+    )
 
 
 async def test_send_queue_close(connection):
