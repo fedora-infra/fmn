@@ -1377,16 +1377,6 @@ files = [
 ]
 
 [[package]]
-name = "future"
-version = "0.18.3"
-description = "Clean single-source support for Python 3 and 2"
-optional = true
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
-files = [
-    {file = "future-0.18.3.tar.gz", hash = "sha256:34a17436ed1e96697a86f9de3d15a3b0be01d8bc8de9c1dffd59fb8234ed5307"},
-]
-
-[[package]]
 name = "greenlet"
 version = "2.0.2"
 description = "Lightweight in-process concurrent programming"
@@ -2160,23 +2150,22 @@ files = [
 
 [[package]]
 name = "matrix-nio"
-version = "0.21.2"
+version = "0.22.1"
 description = "A Python Matrix client library, designed according to sans I/O principles."
 optional = true
 python-versions = ">=3.8.0,<4.0.0"
 files = [
-    {file = "matrix_nio-0.21.2-py3-none-any.whl", hash = "sha256:95bec84dd0d4eca4f0ce252d2f630d435edbc41bb405448d88916a3783479237"},
-    {file = "matrix_nio-0.21.2.tar.gz", hash = "sha256:414301fc25662af3e3436de5b955980474c03b0f3001f1b041c49743ede73232"},
+    {file = "matrix_nio-0.22.1-py3-none-any.whl", hash = "sha256:36a7175a41b145026db7f3bf004577aa8906d09ed8c53f276452ac06ed8635e4"},
+    {file = "matrix_nio-0.22.1.tar.gz", hash = "sha256:65956252c516f0b42b359d5816fbb66e2617a1f2c02ae45f2730257b815656d8"},
 ]
 
 [package.dependencies]
 aiofiles = ">=23.1.0,<24.0.0"
 aiohttp = ">=3.8.3,<4.0.0"
 aiohttp-socks = ">=0.7.0,<0.8.0"
-future = ">=0.18.2,<0.19.0"
 h11 = ">=0.14.0,<0.15.0"
 h2 = ">=4.0.0,<5.0.0"
-jsonschema = ">=4.4.0,<5.0.0"
+jsonschema = ">=4.14.0,<5.0.0"
 pycryptodome = ">=3.10.1,<4.0.0"
 unpaddedbase64 = ">=2.1.0,<3.0.0"
 
@@ -4515,4 +4504,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "a65d00c27eff01dec99403a45972e546911194f4176f6eb30f6a347830d7abb7"
+content-hash = "f9e042d9c5eda00aaca1f316d20b051acd993d80d94290a58585584b638bcdbb"
