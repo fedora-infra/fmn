@@ -181,18 +181,18 @@ frozenlist = ">=1.1.0"
 
 [[package]]
 name = "aiosmtplib"
-version = "2.0.2"
+version = "3.0.0"
 description = "asyncio SMTP client"
 optional = true
-python-versions = ">=3.7,<4.0"
+python-versions = ">=3.8,<4.0"
 files = [
-    {file = "aiosmtplib-2.0.2-py3-none-any.whl", hash = "sha256:1e631a7a3936d3e11c6a144fb8ffd94bb4a99b714f2cb433e825d88b698e37bc"},
-    {file = "aiosmtplib-2.0.2.tar.gz", hash = "sha256:138599a3227605d29a9081b646415e9e793796ca05322a78f69179f0135016a3"},
+    {file = "aiosmtplib-3.0.0-py3-none-any.whl", hash = "sha256:3b718f8a457fa3a986c4975f0cccb864a73070bc4809f83199b55e6251eeb254"},
+    {file = "aiosmtplib-3.0.0.tar.gz", hash = "sha256:857767879678edb5d188e9d38c16dbfe7b3045b535f45b26b349c6471fe8c234"},
 ]
 
 [package.extras]
-docs = ["sphinx (>=5.3.0,<6.0.0)", "sphinx_autodoc_typehints (>=1.7.0,<2.0.0)"]
-uvloop = ["uvloop (>=0.14,<0.15)", "uvloop (>=0.14,<0.15)", "uvloop (>=0.17,<0.18)"]
+docs = ["furo (>=2023.9.10,<2024.0.0)", "sphinx (>=7.0.0,<8.0.0)", "sphinx-copybutton (>=0.5.0,<0.6.0)", "sphinx_autodoc_typehints (>=1.24.0,<2.0.0)"]
+uvloop = ["uvloop (>=0.18,<0.19)"]
 
 [[package]]
 name = "aiosqlite"
@@ -4503,4 +4503,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "b96f55786c7acb363ab97c388d3c17cd06a0f659eca1ccdf27c63c2cd6842855"
+content-hash = "3008b4861ffdb466185191d1e29bfba9974d45d97e153664e795459e5ded17cd"
