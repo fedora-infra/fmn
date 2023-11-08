@@ -68,8 +68,12 @@ const handleSubmit = async (
     :actions="false"
     #default="{ disabled: formDisabled }"
   >
-    <FormKit type="hidden" name="id" :value="props.rule.id" />
-    <FormKit type="hidden" name="disabled" :value="!props.rule.disabled" />
+    <FormKit type="hidden" name="id" :value="props.rule.id.toString()" />
+    <FormKit
+      type="hidden"
+      name="disabled"
+      :value="(!props.rule.disabled).toString()"
+    />
     <template v-if="props.rule.disabled">
       <FormKit
         @click.stop=""
