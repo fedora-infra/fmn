@@ -17,7 +17,6 @@ const url = `/api/v1/users/${userStore.username}/groups`;
 const getUserGroups = async () => {
   const results = await apiGet<string[]>({
     queryKey: [url],
-    meta: undefined,
   });
   return results;
 };

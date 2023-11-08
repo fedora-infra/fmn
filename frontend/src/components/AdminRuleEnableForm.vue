@@ -36,12 +36,14 @@ const handleSubmit = async (
   try {
     const response = await editMutation(formDataToRuleMutation(data));
     // Success!
-    await queryClient.invalidateQueries([
-      "/api/v1/admin/rules",
-      {
-        username: props.rule.user.name,
-      },
-    ]);
+    await queryClient.invalidateQueries({
+      queryKey: [
+        "/api/v1/admin/rules",
+        {
+          username: props.rule.user.name,
+        },
+      ],
+    });
     toastStore.addToast({
       color: "success",
       title: "Rule enabled",
