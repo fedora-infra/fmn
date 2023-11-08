@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import type { FormKitFrameworkContext, FormKitProps } from "@formkit/core";
+import Multiselect from "@vueform/multiselect";
 
 export const msProps = [
   "placeholder",
@@ -23,6 +24,30 @@ export const msProps = [
   "noOptionsText",
   "clearOnSearch",
 ];
+
+interface FormKitMultiSelect extends Partial<Multiselect> {
+  type: "multiselect";
+  msOptions: Multiselect["options"];
+  msLabel?: Multiselect["label"];
+}
+interface FormKitMultiSelectAsyncDefault
+  extends Omit<FormKitMultiSelect, "type"> {
+  type: "multiselectasyncdefault";
+  msResultsToOptions?: (values: any[]) => Multiselect["options"][]; // eslint-disable-line @typescript-eslint/no-explicit-any
+  msValueToOptions?: (values: any) => Multiselect["options"]; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+
+declare module "@formkit/inputs" {
+  interface FormKitInputProps<Props extends FormKitInputs<Props>> {
+    multiselect: FormKitMultiSelect;
+    multiselectasyncdefault: FormKitMultiSelectAsyncDefault;
+  }
+
+  interface FormKitInputSlots<Props extends FormKitInputs<Props>> {
+    multiselect: FormKitSelectSlots<Props>;
+    multiselectasyncdefault: FormKitSelectSlots<Props>;
+  }
+}
 
 export const getBindableProps = (context: FormKitFrameworkContext) => {
   const val: Partial<FormKitProps> = Object.keys(context.node.props)

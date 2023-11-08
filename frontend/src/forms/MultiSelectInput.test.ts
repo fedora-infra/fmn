@@ -50,7 +50,7 @@ describe("MultiSelectInput", () => {
     });
     const submitButton = getByText("Submit");
 
-    await fireEvent.click(getByText("b"));
+    await fireEvent.mouseDown(getByText("b"));
     await fireEvent.click(submitButton);
     await waitFor(() => expect(submittedValues).toHaveLength(1));
     expect(submittedValues[0]).toMatchObject({ component: "b" });
@@ -88,7 +88,7 @@ describe("MultiSelectInput", () => {
     expect(options[1]).toHaveTextContent("b2");
 
     // Verify that we get the entire option object on submission
-    await fireEvent.click(getByText("b2"));
+    await fireEvent.mouseDown(getByText("b2"));
     await fireEvent.click(getByText("Submit"));
     await waitFor(() => expect(submittedValues).toHaveLength(1));
     expect(submittedValues[0]).toMatchObject({
@@ -131,7 +131,7 @@ describe("MultiSelectInput", () => {
       expect(selectInput).toHaveAttribute("aria-expanded", "true"),
     );
     // Choose an option
-    await fireEvent.click(getByText("b"));
+    await fireEvent.mouseDown(getByText("b"));
     // The select must not have closed
     expect(selectInput).toHaveAttribute("aria-expanded", "true");
     // Submit the form
