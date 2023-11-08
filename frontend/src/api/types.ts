@@ -18,11 +18,11 @@ export type Severity =
   | typeof ERROR;
 
 export type Destination = components["schemas"]["Destination"];
-export type Filters = components["schemas"]["FiltersOutput"];
-export type User = components["schemas"]["UserOutput"];
+export type Filters = components["schemas"]["Filters"];
+export type User = components["schemas"]["User"];
 export type Artifact = components["schemas"]["Artifact"];
-export type GenerationRule = components["schemas"]["GenerationRuleOutput"];
-export type Rule = components["schemas"]["RuleOutput"];
+export type GenerationRule = components["schemas"]["GenerationRule"];
+export type Rule = components["schemas"]["Rule-Output"];
 export type NewRule = components["schemas"]["NewRule"];
 export type RulePatch = components["schemas"]["RulePatch"];
 export type HTTPValidationError = components["schemas"]["HTTPValidationError"];
