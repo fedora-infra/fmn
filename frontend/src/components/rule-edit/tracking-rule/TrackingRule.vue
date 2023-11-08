@@ -6,7 +6,6 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import { TRACKING_RULES } from "@/api/constants";
-import { useUserStore } from "@/stores/user";
 import type { FormKitNode } from "@formkit/core";
 import { ref } from "vue";
 import TrackingRuleParams from "./TrackingRuleParams.vue";
@@ -14,31 +13,16 @@ const emit = defineEmits<{
   (e: "selected", name: string): void;
 }>();
 
-const userStore = useUserStore();
-const username = userStore.username;
-
 const ruleName = ref("");
 const oldRuleName = ref<string | null>("");
 
-const setParamsValue = (trValue: string, trNode: FormKitNode) => {
+const setParamsValue = (trValue: string) => {
   // console.log("tr name was", oldRuleName.value, ", changed to", trValue);
   if (trValue === oldRuleName.value) {
     return; // no change
   }
   oldRuleName.value = trValue;
   emit("selected", trValue);
-  // Pre-fill the parameters with sensible defaults
-  const paramsNode = trNode.at("params");
-  if (!paramsNode) {
-    return;
-  }
-
-  let initialValue: string[] = [];
-  if (trValue === "artifacts-owned" && username) {
-    initialValue = [username];
-  }
-  // console.log("Setting initial params value to", initialValue);
-  paramsNode.input(initialValue);
 };
 
 const onNode = (node: FormKitNode) => {
@@ -48,8 +32,8 @@ const onNode = (node: FormKitNode) => {
   // This seems necessary for unit tests, not sure why v-model is not sufficient
   ruleName.value = value;
 };
-const onInput = (value: string, node: FormKitNode) => {
-  return setParamsValue(value, node);
+const onInput = (value: unknown) => {
+  return setParamsValue(value as string);
 };
 </script>
 

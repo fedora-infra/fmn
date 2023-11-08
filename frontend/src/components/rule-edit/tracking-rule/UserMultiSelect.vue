@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 <script setup lang="ts">
 import { apiGet } from "@/api";
 import type { User } from "@/api/types";
+import type { FormKitNode } from "@formkit/core";
 import { ref } from "vue";
 import ArtifactsOwnedSummary from "./ArtifactsOwnedSummary.vue";
 
@@ -15,9 +16,16 @@ const props = defineProps<{
   showArtifactsOwnedSummary?: boolean;
   placeholder?: string;
   nooptionstext?: string;
+  initialValue?: string[];
 }>();
 
 const value = ref<string[]>([]);
+
+const onNode = (node: FormKitNode) => {
+  if (props.initialValue) {
+    node.input(props.initialValue);
+  }
+};
 
 const url = "/api/v1/users";
 
@@ -36,6 +44,7 @@ const getUsers = async (query: string) => {
 <template>
   <FormKit
     type="multiselectasyncdefault"
+    @node="onNode"
     name="params"
     :label="props.label"
     label-class="fw-bold"
