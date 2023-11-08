@@ -66,7 +66,7 @@ const handleSubmit = async (
     id="rule"
     @submit="handleSubmit"
     :actions="false"
-    #default="{ disabled: formDisabled }"
+    #default="{ state: { disabled: formDisabled } }"
   >
     <FormKit type="hidden" name="id" :value="props.rule.id.toString()" />
     <FormKit
