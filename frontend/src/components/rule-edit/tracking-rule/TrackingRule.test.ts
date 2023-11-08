@@ -39,7 +39,7 @@ const chooseOption = async (comboboxNumber: number, label: string) => {
     expect(combobox).toHaveAttribute("aria-expanded", "true"),
   );
   // Choose an option
-  await fireEvent.click(screen.getByText(label));
+  await fireEvent.mouseDown(screen.getByText(label));
 };
 
 describe("TrackingRule", () => {
@@ -101,7 +101,7 @@ describe("TrackingRule", () => {
     );
     await waitFor(() => {
       const results = getAllByText("dummy/artifact");
-      expect(results[0]).toHaveClass("multiselect-tag");
+      expect(results[0].parentNode).toHaveClass("multiselect-tag");
     });
   });
 
@@ -112,7 +112,7 @@ describe("TrackingRule", () => {
 
     await waitFor(() => {
       const results = getAllByText("dummy-user");
-      expect(results[0]).toHaveClass("multiselect-tag");
+      expect(results[0].parentNode).toHaveClass("multiselect-tag");
     });
   });
 
@@ -133,7 +133,7 @@ describe("TrackingRule", () => {
 
     await waitFor(() => {
       const results = getAllByText("dummy-user");
-      expect(results[0]).toHaveClass("multiselect-tag");
+      expect(results[0].parentNode).toHaveClass("multiselect-tag");
     });
   });
 

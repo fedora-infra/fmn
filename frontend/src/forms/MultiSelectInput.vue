@@ -7,12 +7,16 @@ SPDX-License-Identifier: MIT
 <script setup lang="ts">
 import type { FormKitFrameworkContext } from "@formkit/core";
 import Multiselect from "@vueform/multiselect";
+import type { VNode } from "vue";
 import { computed } from "vue";
 import { getBindableProps } from "./MultiSelectInputUtils";
 
 const props = defineProps<{ context: FormKitFrameworkContext }>();
 
 const bindableProps = computed(() => getBindableProps(props.context));
+const slots = computed(
+  () => props.context.slots as Partial<Multiselect["$slots"]>,
+);
 
 function handleChange(value: string) {
   props.context.node.input(value);
@@ -24,9 +28,9 @@ function handleChange(value: string) {
 <template>
   <Multiselect v-bind="bindableProps" @change="handleChange">
     <template
-      v-for="(slot, slotName) of props.context.slots as Multiselect['$slots']"
+      v-for="(slot, slotName) of slots"
       :key="slotName"
-      v-slot:[slotName]="slotParams"
+      v-slot:[slotName]="slotParams: VNode"
     >
       <component :is="slot" v-bind="slotParams" />
     </template>

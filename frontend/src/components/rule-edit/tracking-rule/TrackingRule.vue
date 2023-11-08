@@ -73,7 +73,7 @@ const onInput = (value: string, node: FormKitNode) => {
       @node="onNode"
       @input="onInput"
     >
-      <template v-slot:option="{ option }">
+      <template #option="{ option }">
         <div>
           <strong>{{ option.label }}</strong>
           <div>{{ option.description }}</div>
