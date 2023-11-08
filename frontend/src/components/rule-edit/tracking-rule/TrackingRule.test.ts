@@ -69,13 +69,13 @@ describe("TrackingRule", () => {
   });
 
   it("renders", async () => {
-    const { getByRole, findAllByRole } = render(Component, renderOptions);
-    const listElement = getByRole("listbox");
+    const { getAllByRole } = render(Component, renderOptions);
+    const listElements = getAllByRole("option");
 
-    expect(await findAllByRole("option")).toHaveLength(TRACKING_RULES.length);
-    TRACKING_RULES.forEach((tr) => {
-      expect(listElement).toHaveTextContent(tr.label);
-      expect(listElement).toHaveTextContent(tr.description);
+    expect(await getAllByRole("option")).toHaveLength(TRACKING_RULES.length);
+    TRACKING_RULES.forEach((tr, index) => {
+      expect(listElements[index]).toHaveTextContent(tr.label);
+      expect(listElements[index]).toHaveTextContent(tr.description);
     });
   });
 
