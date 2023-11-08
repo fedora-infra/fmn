@@ -53,10 +53,19 @@ export async function getApiClient() {
   });
 }
 
-export const apiGet = async <Data>({ queryKey }: QueryFunctionContext) => {
+interface QueryFunctionContextOrDirect
+  extends Omit<QueryFunctionContext, "signal" | "meta"> {
+  signal?: QueryFunctionContext["signal"];
+  meta?: QueryFunctionContext["meta"];
+}
+export const apiGet = async <Data>({
+  queryKey,
+  signal,
+}: QueryFunctionContextOrDirect) => {
   const axiosConfig = await getAxiosConfig();
   const url = queryKey[0] as string;
   axiosConfig["params"] = queryKey[1];
+  axiosConfig["signal"] = signal;
   const response = await http.get<Data>(url, axiosConfig);
   return response.data;
 };

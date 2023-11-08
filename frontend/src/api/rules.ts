@@ -3,103 +3,136 @@
 // SPDX-License-Identifier: MIT
 
 import { useUserStore } from "@/stores/user";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type UseMutationReturnType,
+  type UseQueryReturnType,
+} from "@tanstack/vue-query";
 import type { Ref } from "vue";
 import type { paths } from "./generated";
 import { apiDelete, apiGet, apiPatch, apiPost, apiPut } from "./index";
 
 // Get all rules
-export const useRulesQuery = () => {
+type RulesOpType = paths["/api/v1/users/{username}/rules"]["get"];
+type RulesOutputType =
+  RulesOpType["responses"][200]["content"]["application/json"];
+type RulesErrorType =
+  RulesOpType["responses"][422]["content"]["application/json"];
+export const useRulesQuery = (): UseQueryReturnType<
+  RulesOutputType,
+  RulesErrorType
+> => {
   const userStore = useUserStore();
   const url = `/api/v1/users/${userStore.username}/rules`;
-
-  type OpType = paths["/api/v1/users/{username}/rules"]["get"];
-  type OutputType = OpType["responses"][200]["content"]["application/json"];
-  type ErrorType = OpType["responses"][422]["content"]["application/json"];
-
-  return useQuery<OutputType, ErrorType>([url], apiGet<OutputType>, {
+  return useQuery({
+    queryKey: [url],
+    queryFn: apiGet<RulesOutputType>,
     enabled: userStore.loggedIn,
   });
 };
 
 // Get a rule
-export const useRuleQuery = (id: number) => {
+type RuleOpType = paths["/api/v1/users/{username}/rules/{id}"]["get"];
+type RuleOutputType =
+  RuleOpType["responses"][200]["content"]["application/json"];
+type RuleErrorType =
+  RuleOpType["responses"][422]["content"]["application/json"];
+export const useRuleQuery = (
+  id: number,
+): UseQueryReturnType<RuleOutputType, RuleErrorType> => {
   const userStore = useUserStore();
   const url = `/api/v1/users/${userStore.username}/rules/${id}`;
-
-  type OpType = paths["/api/v1/users/{username}/rules/{id}"]["get"];
-  type OutputType = OpType["responses"][200]["content"]["application/json"];
-  type ErrorType = OpType["responses"][422]["content"]["application/json"];
-
-  return useQuery<OutputType, ErrorType>([url], apiGet<OutputType>);
+  return useQuery({ queryKey: [url], queryFn: apiGet<RuleOutputType> });
 };
 
 // Add a new rule
-export const useAddRuleMutation = () => {
+type AddRuleOpType = paths["/api/v1/users/{username}/rules"]["post"];
+type AddRuleBodyType =
+  AddRuleOpType["requestBody"]["content"]["application/json"];
+type AddRuleOutputType =
+  AddRuleOpType["responses"][200]["content"]["application/json"];
+type AddRuleErrorType =
+  AddRuleOpType["responses"][422]["content"]["application/json"];
+export const useAddRuleMutation = (): UseMutationReturnType<
+  AddRuleOutputType,
+  AddRuleErrorType,
+  AddRuleBodyType,
+  unknown
+> => {
   const userStore = useUserStore();
   const client = useQueryClient();
-
-  type OpType = paths["/api/v1/users/{username}/rules"]["post"];
-  type BodyType = OpType["requestBody"]["content"]["application/json"];
-  type OutputType = OpType["responses"][200]["content"]["application/json"];
-  type ErrorType = OpType["responses"][422]["content"]["application/json"];
-
-  return useMutation<OutputType, ErrorType, BodyType>(
-    (data) =>
-      apiPost<OutputType, BodyType>(
+  return useMutation({
+    mutationFn: (data) =>
+      apiPost<AddRuleOutputType, AddRuleBodyType>(
         `/api/v1/users/${userStore.username}/rules`,
         data,
       ),
-    {
-      onSuccess: async () => {
-        await client.invalidateQueries([
-          `/api/v1/users/${userStore.username}/rules`,
-        ]);
-      },
+
+    onSuccess: async () => {
+      await client.invalidateQueries({
+        queryKey: [`/api/v1/users/${userStore.username}/rules`],
+      });
     },
-  );
+  });
 };
 
 // Edit a rule
-export const useEditRuleMutation = (id: number) => {
+type EditRuleOpType = paths["/api/v1/users/{username}/rules/{id}"]["put"];
+type EditRuleOutputType =
+  EditRuleOpType["responses"][200]["content"]["application/json"];
+type EditRuleErrorType =
+  EditRuleOpType["responses"][422]["content"]["application/json"];
+export const useEditRuleMutation = (
+  id: number,
+): UseMutationReturnType<
+  EditRuleOutputType,
+  EditRuleErrorType,
+  EditRuleOutputType,
+  unknown
+> => {
   const userStore = useUserStore();
   const client = useQueryClient();
   const url = `/api/v1/users/${userStore.username}/rules/${id}`;
+  return useMutation({
+    mutationFn: (data: EditRuleOutputType) =>
+      apiPut<EditRuleOutputType>(url, data),
 
-  type OpType = paths["/api/v1/users/{username}/rules/{id}"]["put"];
-  type OutputType = OpType["responses"][200]["content"]["application/json"];
-  type ErrorType = OpType["responses"][422]["content"]["application/json"];
-
-  return useMutation<OutputType, ErrorType, OutputType>(
-    (data: OutputType) => apiPut<OutputType>(url, data),
-    {
-      onSuccess: async () => {
-        await client.invalidateQueries([url]);
-        await client.invalidateQueries([
-          `/api/v1/users/${userStore.username}/rules`,
-        ]);
-      },
+    onSuccess: async () => {
+      await client.invalidateQueries({ queryKey: [url] });
+      await client.invalidateQueries({
+        queryKey: [`/api/v1/users/${userStore.username}/rules`],
+      });
     },
-  );
+  });
 };
 
 // Delete a rule
-export const useDeleteRuleMutation = () => {
+type DeleteRuleOpType = paths["/api/v1/users/{username}/rules/{id}"]["delete"];
+type DeleteRuleOutputType = DeleteRuleOpType["parameters"]["path"]["id"];
+type DeleteRuleErrorType =
+  DeleteRuleOpType["responses"][422]["content"]["application/json"];
+export const useDeleteRuleMutation = (): UseMutationReturnType<
+  void,
+  DeleteRuleErrorType,
+  DeleteRuleOutputType,
+  unknown
+> => {
   const userStore = useUserStore();
   const client = useQueryClient();
+  return useMutation({
+    mutationFn: (id) =>
+      apiDelete(`/api/v1/users/${userStore.username}/rules/${id}`),
 
-  type OpType = paths["/api/v1/users/{username}/rules/{id}"]["delete"];
-  type ErrorType = OpType["responses"][422]["content"]["application/json"];
-
-  return useMutation<void, ErrorType, OpType["parameters"]["path"]["id"]>(
-    (id) => apiDelete(`/api/v1/users/${userStore.username}/rules/${id}`),
-    {
-      onSuccess: async () => {
-        const url = `/api/v1/users/${userStore.username}/rules`;
-        await client.invalidateQueries([url], { refetchType: "active" });
-      },
+    onSuccess: async () => {
+      const url = `/api/v1/users/${userStore.username}/rules`;
+      await client.invalidateQueries({
+        queryKey: [url],
+        refetchType: "active",
+      });
     },
-  );
+  });
 };
 
 /*
@@ -107,58 +140,74 @@ export const useDeleteRuleMutation = () => {
  */
 
 // Get all rules
-export const useAdminRulesQuery = (username: Ref<string>) => {
+type AdminRulesOpType = paths["/api/v1/admin/rules"]["get"];
+type AdminRulesOutputType =
+  AdminRulesOpType["responses"][200]["content"]["application/json"];
+type AdminRulesErrorType =
+  AdminRulesOpType["responses"][422]["content"]["application/json"];
+export const useAdminRulesQuery = (
+  username: Ref<string>,
+): UseQueryReturnType<AdminRulesOutputType, AdminRulesErrorType> => {
   const url = `/api/v1/admin/rules`;
-
-  type OpType = paths["/api/v1/admin/rules"]["get"];
-  type OutputType = OpType["responses"][200]["content"]["application/json"];
-  type ErrorType = OpType["responses"][422]["content"]["application/json"];
-
-  return useQuery<OutputType, ErrorType>(
-    [url, { username }],
-    apiGet<OutputType>,
-  );
+  return useQuery({
+    queryKey: [url, { username }],
+    queryFn: apiGet<AdminRulesOutputType>,
+  });
 };
 
 // Get disabled rules
-export const useDisabledRulesQuery = () => {
+type DisabledRulesOpType = paths["/api/v1/admin/rules"]["get"];
+type DisabledRulesOutputType =
+  DisabledRulesOpType["responses"][200]["content"]["application/json"];
+type DisabledRulesErrorType =
+  DisabledRulesOpType["responses"][422]["content"]["application/json"];
+export const useDisabledRulesQuery = (): UseQueryReturnType<
+  DisabledRulesOutputType,
+  DisabledRulesErrorType
+> => {
   const url = "/api/v1/admin/rules";
-
-  type OpType = paths["/api/v1/admin/rules"]["get"];
-  type OutputType = OpType["responses"][200]["content"]["application/json"];
-  type ErrorType = OpType["responses"][422]["content"]["application/json"];
-  return useQuery<OutputType, ErrorType>(
-    [url, { disabled: true }],
-    apiGet<OutputType>,
-  );
+  return useQuery({
+    queryKey: [url, { disabled: true }],
+    queryFn: apiGet<DisabledRulesOutputType>,
+  });
 };
 
 // Patch an existing rule
-export const usePatchRuleMutation = () => {
+type PatchRuleOpType = paths["/api/v1/admin/rules/{id}"]["patch"];
+type PatchRuleBodyType =
+  PatchRuleOpType["requestBody"]["content"]["application/json"];
+type PatchRuleOutputType =
+  PatchRuleOpType["responses"][200]["content"]["application/json"];
+type PatchRuleFnOutputType = {
+  id: PatchRuleOpType["parameters"]["path"]["id"];
+  rule: PatchRuleBodyType;
+};
+type PatchRuleErrorType =
+  PatchRuleOpType["responses"][422]["content"]["application/json"];
+export const usePatchRuleMutation = (): UseMutationReturnType<
+  PatchRuleOutputType,
+  PatchRuleErrorType,
+  PatchRuleFnOutputType,
+  unknown
+> => {
   const client = useQueryClient();
-
-  type OpType = paths["/api/v1/admin/rules/{id}"]["patch"];
-  type BodyType = OpType["requestBody"]["content"]["application/json"];
-  type OutputType = OpType["responses"][200]["content"]["application/json"];
-  type ErrorType = OpType["responses"][422]["content"]["application/json"];
-
-  return useMutation<
-    OutputType,
-    ErrorType,
-    { id: OpType["parameters"]["path"]["id"]; rule: BodyType }
-  >(
-    ({ id, rule }) => {
-      return apiPatch<OutputType, BodyType>(`/api/v1/admin/rules/${id}`, rule);
+  return useMutation({
+    mutationFn: ({ id, rule }) => {
+      return apiPatch<PatchRuleOutputType, PatchRuleBodyType>(
+        `/api/v1/admin/rules/${id}`,
+        rule,
+      );
     },
-    {
-      onSuccess: async () => {
-        await client.invalidateQueries([
+
+    onSuccess: async () => {
+      await client.invalidateQueries({
+        queryKey: [
           "/api/v1/admin/rules",
           {
             disabled: true,
           },
-        ]);
-      },
+        ],
+      });
     },
-  );
+  });
 };

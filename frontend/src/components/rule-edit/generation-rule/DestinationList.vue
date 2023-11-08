@@ -27,7 +27,6 @@ const getDestinations = async () => {
   try {
     data = await apiGet<Destination[]>({
       queryKey: [url],
-      meta: undefined,
     });
   } catch (e) {
     const error = e as AxiosError;

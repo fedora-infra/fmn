@@ -20,7 +20,6 @@ const getUsers = async (query: string) => {
   // const results = await apiGetUsers({
   const results = await apiGet<User[]>({
     queryKey: ["/api/v1/admin/users", { search: query }],
-    meta: undefined,
   });
   const options = results.map((item) => item.name);
   return options;

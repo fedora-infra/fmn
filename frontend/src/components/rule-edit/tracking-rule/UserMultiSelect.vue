@@ -35,7 +35,6 @@ const getUsers = async (query: string) => {
   }
   const results = await apiGet<User[]>({
     queryKey: [url, { search: query }],
-    meta: undefined,
   });
   return results;
 };
