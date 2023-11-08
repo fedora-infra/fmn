@@ -55,7 +55,7 @@ const handleSubmit = async (
     :actions="false"
     #default="{ state: { valid } }"
   >
-    <FormKit type="hidden" name="disabled" :value="true" />
+    <FormKit type="hidden" name="disabled" value="true" />
     <CInputGroup>
       <FormKit
         type="text"
