@@ -5,7 +5,10 @@ SPDX-License-Identifier: MIT
 -->
 
 <script setup lang="ts">
+import { useUserStore } from "@/stores/user";
 import UserMultiSelect from "./UserMultiSelect.vue";
+const userStore = useUserStore();
+const username = userStore.username;
 </script>
 
 <template>
@@ -14,5 +17,6 @@ import UserMultiSelect from "./UserMultiSelect.vue";
     placeholder="Search by FAS Username"
     nooptionstext="No matches on that username found"
     showArtifactsOwnedSummary
+    :initialValue="username ? [username] : undefined"
   />
 </template>
