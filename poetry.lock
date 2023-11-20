@@ -2114,13 +2114,13 @@ files = [
 
 [[package]]
 name = "matrix-nio"
-version = "0.22.1"
+version = "0.23.0"
 description = "A Python Matrix client library, designed according to sans I/O principles."
 optional = true
 python-versions = ">=3.8.0,<4.0.0"
 files = [
-    {file = "matrix_nio-0.22.1-py3-none-any.whl", hash = "sha256:36a7175a41b145026db7f3bf004577aa8906d09ed8c53f276452ac06ed8635e4"},
-    {file = "matrix_nio-0.22.1.tar.gz", hash = "sha256:65956252c516f0b42b359d5816fbb66e2617a1f2c02ae45f2730257b815656d8"},
+    {file = "matrix_nio-0.23.0-py3-none-any.whl", hash = "sha256:0d0ee61158f8e88eab8707fc80a575d5d0ed6e4a2c1b02088eb44ad21958a139"},
+    {file = "matrix_nio-0.23.0.tar.gz", hash = "sha256:24a858b962801ba12d72daa29fa34e540c9a828442fb43a822d80d9872967918"},
 ]
 
 [package.dependencies]
@@ -4443,4 +4443,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "22dc2b9a192d0329763e98b6defeceb912f4adb3c96074d0ec3b0eb28309bb91"
+content-hash = "a24bfe994c19c00352a0f68387d21c5b896624a8a71ded070013a61b3a50c7d3"
