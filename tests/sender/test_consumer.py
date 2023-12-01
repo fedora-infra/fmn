@@ -70,7 +70,7 @@ async def test_connect(mocked_connection, mocked_channel, consumer):
     mocked_channel.mocked_queue.bind.assert_called_once_with("amq.direct", "send.testdest")
 
 
-async def test_consume(mocked_channel, consumer):
+async def test_consume(mocked_channel, consumer, mocker):
     consumer._queue = Queue(
         mocked_channel,
         name="testqueue",
@@ -81,7 +81,7 @@ async def test_consume(mocked_channel, consumer):
     )
     # Make sure we always return the same iterator instance
     iterator = QueueIterator(consumer._queue)
-    consumer._queue.iterator = Mock(return_value=iterator)
+    mocker.patch("aio_pika.queue.QueueIterator", Mock(return_value=iterator))
 
     future = consumer.start()
     await iterator.on_message(make_message(mocked_channel, {"foo": "bar"}))
