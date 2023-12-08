@@ -16,7 +16,7 @@ async def test_email_connect(mocker):
 
     await handler.setup()
 
-    smtp_class.assert_called_once_with("smtp.example.com", 487)
+    smtp_class.assert_called_once_with(hostname="smtp.example.com", port=487)
     smtp.connect.assert_called_once_with()
 
     await handler.stop()
