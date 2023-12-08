@@ -47,6 +47,9 @@ const getDestinations = async () => {
   });
   return result;
 };
+const FAS_URL = `${import.meta.env.VITE_FAS}/user/${
+  userStore.username
+}/settings/profile/`;
 </script>
 
 <template>
@@ -69,6 +72,13 @@ const getDestinations = async () => {
       validation="required"
       :errors="errors"
       :disabled="errors.length > 0"
-    />
+    >
+      <template #help>
+        <small class="text-secondary">
+          The destinations can be configured in the
+          <a target="_blank" :href="FAS_URL">Fedora Account System</a>.
+        </small>
+      </template>
+    </FormKit>
   </div>
 </template>
