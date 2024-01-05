@@ -20,6 +20,7 @@ import { useUserStore } from "../stores/user";
 import LoginButton from "./LoginButton.vue";
 import { loginUser, render } from "./test-utils";
 
+vi.mock("window.scrollTo");
 vi.mock("../auth");
 
 describe("LoginButton", () => {

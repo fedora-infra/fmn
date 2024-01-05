@@ -89,7 +89,7 @@ jobs:
           npm run type-check
           popd
 
-      - name: run type-check
+      - name: run unit tests
         run: |
           pushd frontend/
           npm run test:unit -- run

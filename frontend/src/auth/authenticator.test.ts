@@ -121,9 +121,16 @@ describe("authenticator", () => {
     });
     const state = await getStateFromStorage();
     // Now check the redirect
-    expect(window.location.assign).toHaveBeenCalledWith(
-      `https://id.example.test/auth?redirect_uri=%2Foidc-callback&client_id=dummy-client-id&response_type=code&state=${state}&scope=dummy-scope`,
-    );
+    const expected = `https://id.example.test/auth?redirect_uri=%2Foidc-callback&client_id=dummy-client-id&response_type=code&state=${state}&scope=dummy-scope`;
+    // We can't use toHaveBeenCalledWith() because depending on the platform's features the
+    // appauth library will or will not use PKCE and thus add a random code_challenge to the
+    // query string.
+    // expect(window.location.assign).toHaveBeenCalledWith(expected);
+    expect(window.location.assign).toHaveBeenCalledTimes(1);
+    const redirectCall = vi.mocked(window.location.assign).mock.lastCall;
+    expect(redirectCall).toBeDefined();
+    expect(redirectCall).toHaveLength(1);
+    expect(redirectCall![0]).toContain(expected);
   });
 
   it("throws on authorization requests without config", async () => {

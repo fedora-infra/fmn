@@ -29,6 +29,7 @@ import router from "../router";
 import LoginFedora from "./LoginFedora.vue";
 import type Authenticator from "./authenticator";
 
+vi.mock("window.scrollTo");
 vi.mock("@/api");
 
 describe("LoginFedora", () => {

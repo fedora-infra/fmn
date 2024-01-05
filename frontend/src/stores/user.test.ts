@@ -9,6 +9,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import router from "../router";
 import { useUserStore } from "./user";
 
+vi.mock("window.scrollTo");
+
 describe("User Store", () => {
   beforeEach(async () => {
     await router.replace("/");

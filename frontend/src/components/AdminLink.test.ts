@@ -11,6 +11,7 @@ import { useUserStore } from "../stores/user";
 import AdminLink from "./AdminLink.vue";
 import { loginAdmin, loginUser, render } from "./test-utils";
 
+vi.mock("window.scrollTo");
 vi.mock("../auth");
 
 describe("AdminLink", () => {

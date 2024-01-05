@@ -11,6 +11,8 @@ import { useUserStore } from "../stores/user";
 import type Authenticator from "./authenticator";
 import { login, logout, useAuth } from "./index";
 
+vi.mock("window.scrollTo");
+
 const loginUser = (userStore: ReturnType<typeof useUserStore>) => {
   userStore.$patch({
     accessToken: "testing",
