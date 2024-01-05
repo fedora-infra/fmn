@@ -6,12 +6,7 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import { useRulesQuery } from "@/api/rules";
-import {
-  CAlert,
-  CAlertHeading,
-  CAlertLink,
-  CSpinner,
-} from "@coreui/bootstrap-vue";
+import { CAlert, CSpinner } from "@coreui/bootstrap-vue";
 import RulesList from "../components/RulesList.vue";
 import { useUserStore } from "../stores/user";
 
@@ -19,8 +14,6 @@ const userStore = useUserStore();
 
 // Getting rules
 const { isLoading, isError, data, error } = useRulesQuery();
-
-const oldFmn = import.meta.env.VITE_OLD_FMN;
 </script>
 
 <template>
@@ -41,12 +34,6 @@ const oldFmn = import.meta.env.VITE_OLD_FMN;
           Centrally managed preferences for Fedora Infrastructure notifications
           to your inbox, chat client, and mobile device.
         </p>
-        <CAlert v-if="oldFmn" color="info" class="mt-5">
-          <CAlertHeading>This is the new FMN!</CAlertHeading>
-          If you are looking for the previous version of FMN, you'll find it
-          <CAlertLink :href="oldFmn">here</CAlertLink>. Please migrate your
-          rules to this new version as soon as you can!
-        </CAlert>
       </div>
     </div>
   </template>
