@@ -14,6 +14,25 @@ This project uses [*towncrier*](https://towncrier.readthedocs.io/) and the chang
 
 <!-- towncrier release notes start -->
 
+## [3.3.0](https://github.com/fedora-infra/fmn/tree/3.3.0) - 2024-01-10
+
+
+### Added
+
+- Add a footer to email notifications with a link to the rule that generated it [#895](https://github.com/fedora-infra/fmn/issues/895)
+
+
+### Changed
+
+- Remove the refence to the old FMN on the home page
+
+
+### Fixed
+
+- Explain where the destinations come from [#892](https://github.com/fedora-infra/fmn/issues/892)
+- Adjust to backwards-incompatible changes in aiosmtplib 3.x
+- Prevent selecting a destination from closing the modal
+
 ## [3.2.0](https://github.com/fedora-infra/fmn/tree/3.2.0) - 2023-09-21
 
 ### Added

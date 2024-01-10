@@ -13,13 +13,26 @@ This documents how a release is made.
 Unless otherwise noted, files are referenced relative to and commands should be executed from the
 top-level directory of the repository.
 
+### Bump the Version
+
+Use `poetry version (patch|minor|major|…)` to bump the version in `pyproject.toml`, e.g.:
+
+```
+$ poetry version patch
+```
+
+Depending on the nature of changes in the release, choose an appropriate “bump rule” (see `poetry
+version --help` for details).
+
+Run `poetry install --all-extras` to recreate the metadata files.
+
 ### Generate Changelog
 
 We want to document what changes between releases. To do that, we use `towncrier` which collates
 changelog snippets and adds them to `docs/changelog.md`:
 
 ```
-$ towncrier build
+$ poetry run towncrier build
 Loading template...
 Finding news fragments...
 Rendering news fragments...
@@ -36,17 +49,6 @@ Review the changes to `docs/changelog.md`, e.g. using `git diff`.
 
 Afterwards, commit the changes to git. The commit should contain the extended `docs/changelog.md`
 file as well as the snippet files which were removed in the previous step.
-
-### Bump the Version
-
-Use `poetry version (patch|minor|major|…)` to bump the version in `pyproject.toml`, e.g.:
-
-```
-$ poetry version patch
-```
-
-Depending on the nature of changes in the release, choose an appropriate “bump rule” (see `poetry
-version --help` for details).
 
 Commit the changes to git.
 
