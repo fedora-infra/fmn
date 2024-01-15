@@ -45,7 +45,9 @@ jobs:
 
       - name: Install base Python dependencies
         run: |
-          python3 -m pip install --upgrade tox poetry
+          python3 -m pip install --upgrade tox
+          python3 -m pip install --upgrade poetry>=1.5.0
+          poetry --version
 
       - name: execute tox
         run: tox -- -v
