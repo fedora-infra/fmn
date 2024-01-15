@@ -3,6 +3,8 @@
 # SPDX-License-Identifier: MIT
 
 import logging
+import sys
+import traceback
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator
 from copy import deepcopy
@@ -10,26 +12,57 @@ from functools import cached_property as ft_cached_property
 from functools import wraps
 from typing import Any
 
+import backoff
 from httpx import AsyncClient, HTTPStatusError
 
 log = logging.getLogger(__name__)
 
-NextPageParams = tuple[str, dict] | tuple[None, None]
-
 
 def handle_http_error(default_factory):
+    def backoff_hdlr(details):
+        log.warning(
+            "Request failed (try %s). Retrying in %ss. %s",
+            details["tries"],
+            "{:0.1f}".format(details["wait"]),
+            traceback.format_tb(sys.exc_info()[2]),
+        )
+
+    def giveup_hdlr(details):
+        log.warning(
+            "Request failed after %s tries. Giving up. %s",
+            details["tries"],
+            traceback.format_tb(sys.exc_info()[2]),
+        )
+
+    def is_fatal(e):
+        return e.response.status_code < 500
+
     def exception_handler(f):
         @wraps(f)
         async def wrapper(*args, **kw):
-            try:
+            @backoff.on_exception(
+                backoff.expo,
+                HTTPStatusError,
+                max_tries=3,
+                giveup=is_fatal,
+                on_backoff=backoff_hdlr,
+                on_giveup=giveup_hdlr,
+                logger=None,
+            )
+            async def _retrying_wrapper(*args, **kw):
                 return await f(*args, **kw)
-            except HTTPStatusError as e:
-                log.warning("Request failed: %s", e)
+
+            try:
+                return await _retrying_wrapper(*args, **kw)
+            except HTTPStatusError:
                 return default_factory()
 
         return wrapper
 
     return exception_handler
+
+
+NextPageParams = tuple[str, dict] | tuple[None, None]
 
 
 class PaginationRecursionError(RuntimeError):

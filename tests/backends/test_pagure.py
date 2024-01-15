@@ -199,7 +199,7 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
     async def test_get_projects_failure(self, respx_mocker, proxy_unmocked_client):
         route = respx_mocker.get(
             f"{self.expected_api_url}/projects", params={"fork": False, "short": True}
-        ).mock(side_effect=[httpx.Response(fastapi.status.HTTP_500_INTERNAL_SERVER_ERROR)])
+        ).mock(side_effect=httpx.Response(fastapi.status.HTTP_500_INTERNAL_SERVER_ERROR))
 
         response = await proxy_unmocked_client.get_projects()
         assert route.called
