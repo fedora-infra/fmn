@@ -203,3 +203,18 @@ async def test_handle_http_error(testcase, mocker):
         assert result == ["item"]
     else:
         assert result == []
+
+
+async def test_handle_http_error_retries(mocker, caplog):
+    fn_to_be_decorated = mocker.AsyncMock()
+    fn_to_be_decorated.side_effect = httpx.HTTPStatusError(
+        "Boo.", request=None, response=httpx.Response(status_code=500)
+    )
+    decorated_fn = base.handle_http_error(list)(fn_to_be_decorated)
+    result = await decorated_fn()
+    assert result == []
+    assert fn_to_be_decorated.call_count == 3
+    assert len(caplog.messages) == 3
+    assert caplog.messages[0].startswith("Request failed (try 1).")
+    assert caplog.messages[1].startswith("Request failed (try 2).")
+    assert caplog.messages[2].startswith("Request failed after 3 tries. Giving up.")
