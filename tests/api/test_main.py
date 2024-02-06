@@ -4,19 +4,32 @@
 
 from fmn.api import main
 
+EXPECTED_MIDDLEWARES = [
+    (
+        main.CORSMiddleware,
+        {
+            "allow_origins": ["https://notifications.fedoraproject.org"],
+            "allow_credentials": True,
+            "allow_methods": ["*"],
+            "allow_headers": ["*"],
+        },
+    ),
+    (main.ServerErrorMiddleware, {"handler": main.global_execution_handler}),
+]
+
 
 def test_add_middlewares():
-    mw = main.app.user_middleware
-    assert len(mw) == 2
-    assert mw[0].cls == main.CORSMiddleware
-    assert mw[0].options == dict(
-        allow_origins=["https://notifications.fedoraproject.org"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-    assert mw[1].cls == main.ServerErrorMiddleware
-    assert mw[1].options == dict(handler=main.global_execution_handler)
+    for mw, (exp_cls, exp_kwargs) in zip(
+        main.app.user_middleware, EXPECTED_MIDDLEWARES, strict=True
+    ):
+        # Middlewares in starlette < 0.35 only have `.options`, >= 0.35 they have `.args` and
+        # `.kwargs`. Casting the middleware into a tuple (via iter()) allows coping with both
+        # variants.
+        mwinfo = tuple(mw)
+        cls = mwinfo[0]
+        kwargs = mwinfo[-1]
+        assert cls == exp_cls
+        assert kwargs == exp_kwargs
 
 
 def test_configure_cache(mocker):
