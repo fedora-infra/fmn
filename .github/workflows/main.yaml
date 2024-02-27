@@ -31,6 +31,8 @@ jobs:
   backend-ci:
     strategy:
       fail-fast: false
+      matrix:
+        pyver: [310, 311]
     runs-on: ubuntu-latest
     container: fedorapython/fedora-python-tox:latest
     steps:
@@ -43,14 +45,8 @@ jobs:
         run: |
           dnf install -y krb5-devel libpq-devel gettext
 
-      - name: Install base Python dependencies
-        run: |
-          python3 -m pip install --upgrade tox
-          python3 -m pip install --upgrade "poetry>=1.5.0"
-          poetry --version
-
       - name: execute tox
-        run: tox -- -v
+        run: tox -e py${{ matrix.pyver }} -- -v
 
   frontend-ci:
     strategy:
