@@ -38,7 +38,7 @@ class Consumer:
     async def start(self):
         log.info("Starting consuming messages")
         async with self._queue.iterator() as self._queue_iter:
-            async for message in self._queue_iter:
+            async for message in self._queue_iter:  # pragma: no branch
                 if message == CLOSING:
                     log.debug("Got close message, breaking out of the loop")
                     break
