@@ -14,8 +14,7 @@ class Handler:
         # Here we connect to the destination server if relevant.
         ...
 
-    async def stop(self):
-        ...
+    async def stop(self): ...
 
     @cached_property
     def closed(self):
