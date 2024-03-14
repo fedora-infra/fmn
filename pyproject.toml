@@ -99,7 +99,7 @@ fedora-messaging-git-hook-messages = {version = "*", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 poetry = "^1.2.0b2"
-black = "^22.6.0 || ^23.0.0"
+black = "^22.6.0 || ^23.0.0 || ^24.0.0"
 pytest = "^7.1.2 || ^8.0.0"
 pytest-asyncio = "^0.18.3 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.23.0"
 pytest-cov = "^3.0.0 || ^4.0.0"
