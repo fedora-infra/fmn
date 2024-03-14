@@ -64,8 +64,10 @@ def test_get_pattern_for_cached_calls(with_self, with_arg):
     patterns = util.get_pattern_for_cached_calls(test_object.test_method, **kwargs)
 
     assert any(
-        f":self:{expected_self}:" in pattern
-        if with_arg == "with-arg"
-        else pattern.endswith(f":self:{expected_self}")
+        (
+            f":self:{expected_self}:" in pattern
+            if with_arg == "with-arg"
+            else pattern.endswith(f":self:{expected_self}")
+        )
         for pattern in patterns
     )
