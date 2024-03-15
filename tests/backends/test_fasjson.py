@@ -2,9 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-import asyncio
 import logging
-import re
 from itertools import chain
 from unittest import mock
 
@@ -12,7 +10,6 @@ import httpx
 import pytest
 
 from fmn.backends import fasjson
-from fmn.cache.util import get_pattern_for_cached_calls
 
 from .base import BaseTestAsyncProxy
 
@@ -111,10 +108,7 @@ class TestFASJSONAsyncProxy(BaseTestAsyncProxy):
     )
     async def test_invalidate_on_message(self, mocker, testcase, proxy, caplog):
         cache = mocker.patch("fmn.backends.fasjson.cache")
-        cache.delete = mock.AsyncMock()
-
-        asyncio_create_task = mocker.patch.object(asyncio, "create_task", wraps=asyncio.create_task)
-        asyncio_gather = mocker.patch.object(asyncio, "gather", wraps=asyncio.gather)
+        cache.delete_tags = mock.AsyncMock()
 
         if isinstance(testcase, tuple):
             testcase, topic = testcase
@@ -122,8 +116,7 @@ class TestFASJSONAsyncProxy(BaseTestAsyncProxy):
             topic = "user.create"
 
         if "with-exceptions" in testcase:
-            # 4 keys to delete, let's muck up the last
-            cache.delete.side_effect = [object(), object(), object(), RuntimeError("BOO")]
+            cache.delete_tags.side_effect = RuntimeError("BOO")
 
         # basic (incomplete) message
         message = mock.Mock(
@@ -139,64 +132,28 @@ class TestFASJSONAsyncProxy(BaseTestAsyncProxy):
         if "skip-other-topic" in testcase:
             message.topic = "this.is.not.the.message.you’re.looking.for"
 
-        # Make up cache keys to be deleted
-
-        async def mocked_cache_get_match(pattern):
-            kwargs = {"self": proxy}
-
-            if ".search_users:" in pattern:
-                func = proxy.search_users
-                kwargs["username__exact"] = None if ":username__exact::" in pattern else user
-            elif ".get_user:" in pattern:
-                func = proxy.get_user
-                kwargs["username"] = user
-            elif ".get_user_groups:" in pattern:
-                func = proxy.get_user_groups
-                kwargs["username"] = user
-
-            key = get_pattern_for_cached_calls(func, **kwargs)[0]
-
-            yield key, None
-
-        cache.get_match.side_effect = mocked_cache_get_match
-
         with caplog.at_level(logging.DEBUG):
             await proxy.invalidate_on_message(message, None)
 
         if "success" not in testcase:
-            asyncio_create_task.assert_not_called()
-            asyncio_gather.assert_not_called()
-            cache.delete.assert_not_called()
+            cache.delete_tags.assert_not_called()
 
             if "missing-user" in testcase:
                 assert "No information found about affected user" in caplog.text
             elif "other-topic" in testcase:
                 assert "Skipping message with topic" in caplog.text
         else:
-            assert any(
-                f":FASJSONAsyncProxy.search_users:self:{proxy}:" in call.args[0]
-                and ":username__exact::" in call.args[0]
-                for call in cache.delete.await_args_list
-            )
-            assert any(
-                f":FASJSONAsyncProxy.search_users:self:{proxy}:" in call.args[0]
-                and f":username__exact:{user}:" in call.args[0]
-                for call in cache.delete.await_args_list
-            )
-            assert any(
-                f":FASJSONAsyncProxy.get_user:self:{proxy}:" in call.args[0]
-                and re.search(rf":username:{user}(?::|$)", call.args[0])
-                for call in cache.delete.await_args_list
-            )
-            assert any(
-                f":FASJSONAsyncProxy.get_user_groups:self:{proxy}:" in call.args[0]
-                and re.search(rf":username:{user}(?::|$)", call.args[0])
-                for call in cache.delete.await_args_list
-            )
-            assert len(cache.delete.await_args_list) == 4
+            assert cache.delete_tags.awaited_once()
+            args, _ = cache.delete_tags.await_args
+            assert set(args) == {
+                "fasjson:search_users:username__exact=",
+                f"fasjson:search_users:username__exact={user}",
+                f"fasjson:get_user:username={user}",
+                f"fasjson:get_user_groups:username={user}",
+            }
 
             if "with-exceptions" in testcase:
-                assert "Deleting 4 cache entries yielded 1 exception(s):" in caplog.text
+                assert "Deleting cache entries yielded an exception:" in caplog.text
 
 
 @mock.patch("fmn.backends.fasjson.get_settings")
