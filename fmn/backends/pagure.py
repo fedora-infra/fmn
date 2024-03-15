@@ -2,20 +2,18 @@
 #
 # SPDX-License-Identifier: MIT
 
-import asyncio
 import bisect
 import logging
 import re
 from enum import IntFlag, auto
 from functools import cache as ft_cache
 from functools import cached_property as ft_cached_property
-from itertools import chain
 from typing import TYPE_CHECKING, Any
 
 from cashews import cache
 from httpx import URL, QueryParams
 
-from ..cache.util import cache_ttl, get_pattern_for_cached_calls
+from ..cache.util import cache_ttl
 from ..core.config import get_settings
 from .base import APIClient, NextPageParams, handle_http_error
 
@@ -82,7 +80,15 @@ class PagureAsyncProxy(APIClient):
         return None, None
 
     @handle_http_error(list)
-    @cache(ttl=cache_ttl("pagure"), prefix="v1")
+    @cache(
+        ttl=cache_ttl("pagure"),
+        prefix="v1",
+        tags=[
+            "pagure:get_projects:username={username}:owner={owner}",
+            "pagure:get_projects:username={username}",
+            "pagure:get_projects:owner={owner}",
+        ],
+    )
     async def get_projects(
         self,
         *,
@@ -123,7 +129,11 @@ class PagureAsyncProxy(APIClient):
         ]
 
     @handle_http_error(list)
-    @cache(ttl=cache_ttl("pagure"), prefix="v1")
+    @cache(
+        ttl=cache_ttl("pagure"),
+        prefix="v1",
+        tags=["pagure:get_project_users:project_path={project_path}"],
+    )
     async def get_project_users(
         self, *, project_path: str, roles: PagureRole = PagureRole.USER_ROLES_MAINTAINER
     ) -> list[str]:
@@ -138,7 +148,11 @@ class PagureAsyncProxy(APIClient):
         return sorted(usernames)
 
     @handle_http_error(list)
-    @cache(ttl=cache_ttl("pagure"), prefix="v1")
+    @cache(
+        ttl=cache_ttl("pagure"),
+        prefix="v1",
+        tags=["pagure:get_project_groups:project_path={project_path}"],
+    )
     async def get_project_groups(
         self, *, project_path: str, roles: PagureRole = PagureRole.GROUP_ROLES_MAINTAINER
     ) -> list[str]:
@@ -153,7 +167,7 @@ class PagureAsyncProxy(APIClient):
         return sorted(groupnames)
 
     @handle_http_error(list)
-    @cache(ttl=cache_ttl("pagure"), prefix="v1")
+    @cache(ttl=cache_ttl("pagure"), prefix="v1", tags=["pagure:get_group_projects:name={name}"])
     async def get_group_projects(
         self, *, name: str, acl: PagureRole | None = None
     ) -> list[dict[str, Any]]:
@@ -208,9 +222,6 @@ class PagureAsyncProxy(APIClient):
             log.debug("Skipping message for different Pagure instance %s", full_url)
             return
 
-        # These keys describe cache entries to be deleted
-        del_keys = []
-
         # Identify cache entries to be invalidated and create tasks for their deletion
 
         if usergroup == "user":
@@ -224,19 +235,11 @@ class PagureAsyncProxy(APIClient):
                 log.warning("No affected user found when processing message")
                 return
 
-            del_keys = [
-                key
-                for pattern in chain(
-                    get_pattern_for_cached_calls(
-                        self.get_project_users, self=self, project_path=fullname
-                    ),
-                    get_pattern_for_cached_calls(
-                        self.get_projects, self=self, username=None, owner=None
-                    ),
-                    get_pattern_for_cached_calls(self.get_projects, self=self, username=user),
-                    get_pattern_for_cached_calls(self.get_projects, self=self, owner=user),
-                )
-                async for key, _ in cache.get_match(pattern)
+            del_tags = [
+                f"pagure:get_project_users:project_path={fullname}",
+                "pagure:get_projects:username=:owner=",
+                f"pagure:get_projects:username={user}",
+                f"pagure:get_projects:owner={user}",
             ]
         else:  # usergroup == "group"
             # Messages about changes to project groups
@@ -251,33 +254,15 @@ class PagureAsyncProxy(APIClient):
                 log.warning("No affected group found when processing message")
                 return
 
-            del_keys = [
-                key
-                for pattern in chain(
-                    get_pattern_for_cached_calls(
-                        self.get_project_groups, self=self, project_path=fullname
-                    ),
-                    get_pattern_for_cached_calls(self.get_group_projects, self=self, name=group),
-                )
-                async for key, _ in cache.get_match(pattern)
+            del_tags = [
+                f"pagure:get_project_groups:project_path={fullname}",
+                f"pagure:get_group_projects:name={group}",
             ]
 
-        # Delete the things in parallel
-        del_tasks = [asyncio.create_task(cache.delete(key)) for key in del_keys]
-        del_results = await asyncio.gather(*del_tasks, return_exceptions=True)
-
-        # Follow-up care
-
-        if exceptions_in_results := [
-            result for result in del_results if isinstance(result, Exception)
-        ]:
-            log.warning(
-                "Deleting %d cache entries yielded %d exception(s):",
-                len(del_results),
-                len(exceptions_in_results),
-            )
-            for exc in exceptions_in_results:
-                log.warning("\t%r", exc)
+        try:
+            await cache.delete_tags(*del_tags)
+        except Exception as exc:
+            log.warning("Deleting cache entries yielded an exception: %s", exc)
 
 
 @ft_cache
