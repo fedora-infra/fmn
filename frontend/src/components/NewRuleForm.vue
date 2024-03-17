@@ -84,7 +84,7 @@ const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
             :class="['btn', 'btn-primary', 'form-control-lg']"
             :disabled="!formReady"
           >
-            Create Rule
+            Activate Rule
           </FormKit>
         </div>
       </CCol>
