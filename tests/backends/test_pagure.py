@@ -2,7 +2,6 @@
 #
 # SPDX-License-Identifier: MIT
 
-import asyncio
 import logging
 from itertools import chain
 from unittest import mock
@@ -12,7 +11,6 @@ import httpx
 import pytest
 
 from fmn.backends import PagureAsyncProxy, PagureRole, get_distgit_proxy
-from fmn.cache.util import get_pattern_for_cached_calls
 
 from .base import BaseTestAsyncProxy
 
@@ -320,10 +318,7 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
     )
     async def test_invalidate_on_message(self, mocker, testcase, proxy, caplog):
         cache = mocker.patch("fmn.backends.pagure.cache")
-        cache.delete = mock.AsyncMock()
-
-        asyncio_create_task = mocker.patch.object(asyncio, "create_task", wraps=asyncio.create_task)
-        asyncio_gather = mocker.patch.object(asyncio, "gather", wraps=asyncio.gather)
+        cache.delete_tags = mock.AsyncMock()
 
         if isinstance(testcase, tuple):
             testcase, usergroup, action = testcase
@@ -332,8 +327,7 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
             action = "access.updated"
 
         if "with-exceptions" in testcase:
-            # 4 keys to delete, let's muck up the last
-            cache.delete.side_effect = [object(), object(), object(), RuntimeError("BOO")]
+            cache.delete_tags.side_effect = RuntimeError("BOO")
 
         # basic (incomplete) message
         message = mock.Mock(
@@ -372,40 +366,11 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
             case "skip-other-pagure-instance":
                 project["full_url"] = "https://pagure.io/fedora-infra/ansible"
 
-        # Make up cache keys to be deleted
-
-        async def mocked_cache_get_match(pattern):
-            kwargs = {"self": proxy}
-
-            if ".get_project_users:" in pattern:
-                func = proxy.get_project_users
-                kwargs["project_path"] = "rpms/bash"
-                kwargs["roles"] = None
-            elif ".get_projects:" in pattern:
-                func = proxy.get_projects
-                kwargs["username"] = None if ":username::" in pattern else "the-user"
-                kwargs["owner"] = None if ":owner::" in pattern else "the-user"
-            elif ".get_project_groups:" in pattern:
-                func = proxy.get_project_groups
-                kwargs["project_path"] = "rpms/bash"
-                kwargs["roles"] = None
-            elif ".get_group_projects:" in pattern:
-                func = proxy.get_group_projects
-                kwargs["name"] = "the-group"
-
-            key = get_pattern_for_cached_calls(func, **kwargs)[0]
-
-            yield key, None
-
-        cache.get_match.side_effect = mocked_cache_get_match
-
         with caplog.at_level(logging.DEBUG):
             await proxy.invalidate_on_message(message, None)
 
         if "success" not in testcase:
-            asyncio_create_task.assert_not_called()
-            asyncio_gather.assert_not_called()
-            cache.delete.assert_not_called()
+            cache.delete_tags.assert_not_called()
 
             if "missing-affected" in testcase:
                 assert f"No affected {usergroup} found" in caplog.text
@@ -420,46 +385,23 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
             elif "other-pagure-instance" in testcase:
                 assert "Skipping message for different Pagure instance" in caplog.text
         else:
+            cache.delete_tags.assert_awaited_once()
+            args, _ = cache.delete_tags.await_args
             if usergroup == "user":
-                assert any(
-                    f":PagureAsyncProxy.get_project_users:self:{proxy}:" in call.args[0]
-                    and ":project_path:rpms/bash:" in call.args[0]
-                    for call in cache.delete.await_args_list
-                )
-                assert any(
-                    f":PagureAsyncProxy.get_projects:self:{proxy}:" in call.args[0]
-                    and ":username::"
-                    and ":owner::" in call.args[0]
-                    for call in cache.delete.await_args_list
-                )
-                assert any(
-                    f":PagureAsyncProxy.get_projects:self:{proxy}:" in call.args[0]
-                    and ":username:the-user:"
-                    and ":owner::" in call.args[0]
-                    for call in cache.delete.await_args_list
-                )
-                assert any(
-                    f":PagureAsyncProxy.get_projects:self:{proxy}:" in call.args[0]
-                    and ":username::"
-                    and ":owner:the-user:" in call.args[0]
-                    for call in cache.delete.await_args_list
-                )
-                assert len(cache.delete.await_args_list) == 4
+                assert set(args) == {
+                    "pagure:get_project_users:project_path=rpms/bash",
+                    "pagure:get_projects:username=:owner=",
+                    "pagure:get_projects:username=the-user",
+                    "pagure:get_projects:owner=the-user",
+                }
             elif usergroup == "group":
-                assert any(
-                    f":PagureAsyncProxy.get_project_groups:self:{proxy}:" in call.args[0]
-                    and ":project_path:rpms/bash:" in call.args[0]
-                    for call in cache.delete.await_args_list
-                )
-                assert any(
-                    f":PagureAsyncProxy.get_group_projects:self:{proxy}:" in call.args[0]
-                    and ":name:the-group:" in call.args[0]
-                    for call in cache.delete.await_args_list
-                )
-                assert len(cache.delete.await_args_list) == 2
+                assert set(args) == {
+                    "pagure:get_project_groups:project_path=rpms/bash",
+                    "pagure:get_group_projects:name=the-group",
+                }
 
             if "with-exceptions" in testcase:
-                assert "Deleting 4 cache entries yielded 1 exception(s):" in caplog.text
+                assert "Deleting cache entries yielded an exception:" in caplog.text
 
 
 @mock.patch("fmn.backends.pagure.get_settings")

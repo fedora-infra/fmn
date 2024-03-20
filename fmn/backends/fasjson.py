@@ -2,19 +2,17 @@
 #
 # SPDX-License-Identifier: MIT
 
-import asyncio
 import logging
 import re
 from functools import cache as ft_cache
 from functools import cached_property as ft_cached_property
-from itertools import chain
 from typing import TYPE_CHECKING, Any
 
 import httpx
 from cashews import cache
 from httpx_gssapi import HTTPSPNEGOAuth
 
-from ..cache.util import cache_ttl, get_pattern_for_cached_calls
+from ..cache.util import cache_ttl
 from ..core.config import get_settings
 from .base import APIClient, NextPageParams, handle_http_error
 
@@ -52,7 +50,11 @@ class FASJSONAsyncProxy(APIClient):
 
         return None, None
 
-    @cache(ttl=cache_ttl("fasjson"), prefix="v1")
+    @cache(
+        ttl=cache_ttl("fasjson"),
+        prefix="v1",
+        tags=["fasjson:search_users:username__exact={username__exact}"],
+    )
     async def search_users(
         self,
         username: str | None = None,
@@ -65,7 +67,7 @@ class FASJSONAsyncProxy(APIClient):
             params["username__exact"] = username__exact
         return [user async for user in self.get_paginated("/search/users/", params=params)]
 
-    @cache(ttl=cache_ttl("fasjson"), prefix="v1")
+    @cache(ttl=cache_ttl("fasjson"), prefix="v1", tags=["get_user:username={username}"])
     async def get_user(self, *, username: str) -> dict | None:
         try:
             return await self.get_payload(f"/users/{username}/")
@@ -89,35 +91,15 @@ class FASJSONAsyncProxy(APIClient):
             log.warning("No information found about affected user")
             return
 
-        del_keys = [
-            key
-            for pattern in chain(
-                get_pattern_for_cached_calls(self.search_users, self=self, username__exact=None),
-                get_pattern_for_cached_calls(
-                    self.search_users, self=self, username__exact=msg_user
-                ),
-                get_pattern_for_cached_calls(self.get_user, self=self, username=msg_user),
-                get_pattern_for_cached_calls(self.get_user_groups, self=self, username=msg_user),
+        try:
+            await cache.delete_tags(
+                "fasjson:search_users:username__exact=",
+                f"fasjson:search_users:username__exact={msg_user}",
+                f"fasjson:get_user:username={msg_user}",
+                f"fasjson:get_user_groups:username={msg_user}",
             )
-            async for key, _ in cache.get_match(pattern)
-        ]
-
-        # Delete the things in parallel
-        del_tasks = [asyncio.create_task(cache.delete(key)) for key in del_keys]
-        del_results = await asyncio.gather(*del_tasks, return_exceptions=True)
-
-        # Follow-up care
-
-        if exceptions_in_results := [
-            result for result in del_results if isinstance(result, Exception)
-        ]:
-            log.warning(
-                "Deleting %d cache entries yielded %d exception(s):",
-                len(del_results),
-                len(exceptions_in_results),
-            )
-            for exc in exceptions_in_results:
-                log.warning("\t%r", exc)
+        except Exception as exc:
+            log.warning("Deleting cache entries yielded an exception: %s", exc)
 
 
 @ft_cache
