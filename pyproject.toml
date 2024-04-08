@@ -80,6 +80,7 @@ matrix-nio = {version = "^0.20.1 || ^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0", o
 # Schema packages
 anitya-schema = {version = "*", optional = true}
 bodhi-messages = {version = "*", optional = true}
+bugzilla2fedmsg-schema = {version = "*", optional = true}
 ci-messages = {version = "*", optional = true}
 copr-messaging = {version = "*", optional = true}
 discourse2fedmsg-messages = {version = "*", optional = true}
@@ -157,6 +158,7 @@ postgresql = ["psycopg2", "asyncpg"]
 schemas = [
   "anitya-schema",
   "bodhi-messages",
+  "bugzilla2fedmsg-schema",
   "ci-messages",
   "copr-messaging",
   "discourse2fedmsg-messages",
