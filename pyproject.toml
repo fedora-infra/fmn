@@ -87,16 +87,17 @@ discourse2fedmsg-messages = {version = "*", optional = true}
 fedocal-messages = {version = "*", optional = true}
 fedorainfra-ansible-messages = {version = "*", optional = true}
 fedora-elections-messages = {version = "*", optional = true}
+fedora-messaging-git-hook-messages = {version = "*", optional = true}
 fedora-messaging-the-new-hotness-schema = {version = "*", optional = true}
 fedora-planet-messages = {version = "*", optional = true}
+kerneltest-messages = {version = "*", optional = true}
 koji-fedoramessaging-messages = {version = "*", optional = true}
+koschei-messages = {version = "*", optional = true}
+mediawiki-messages = {version = "*", optional = true}
 mdapi-messages = {version = "*", optional = true}
 noggin-messages = {version = "*", optional = true}
 nuancier-messages = {version = "*", optional = true}
 pagure-messages = {version = "*", optional = true}
-mediawiki-messages = {version = "*", optional = true}
-koschei-messages = {version = "*", optional = true}
-fedora-messaging-git-hook-messages = {version = "*", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 poetry = "^1.2.0b2"
@@ -165,16 +166,17 @@ schemas = [
   "fedocal-messages",
   "fedorainfra-ansible-messages",
   "fedora-elections-messages",
+  "fedora-messaging-git-hook-messages",
   "fedora-messaging-the-new-hotness-schema",
   "fedora-planet-messages",
+  "kerneltest-messages",
   "koji-fedoramessaging-messages",
+  "koschei-messages",
+  "mediawiki-messages",
   "mdapi-messages",
   "noggin-messages",
   "nuancier-messages",
   "pagure-messages",
-  "mediawiki-messages",
-  "koschei-messages",
-  "fedora-messaging-git-hook-messages",
 ]
 
 [tool.poetry.plugins."fmn.tracking_rules"]
