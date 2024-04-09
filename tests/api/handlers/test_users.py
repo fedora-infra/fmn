@@ -15,7 +15,7 @@ from sqlalchemy.exc import NoResultFound
 from fmn.api import api_models, auth
 from fmn.core.constants import DEFAULT_MATRIX_DOMAIN
 from fmn.database.model import Generated, Rule, User
-from fmn.messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
+from fmn_messages.rule import RuleCreateV1, RuleDeleteV1, RuleUpdateV1
 
 from .base import BaseTestAPIV1Handler
 
