@@ -99,6 +99,7 @@ mdapi-messages = {version = "*", optional = true}
 noggin-messages = {version = "*", optional = true}
 nuancier-messages = {version = "*", optional = true}
 pagure-messages = {version = "*", optional = true}
+tahrir-messages = {version = "*", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 poetry = "^1.2.0b2"
@@ -179,6 +180,7 @@ schemas = [
   "noggin-messages",
   "nuancier-messages",
   "pagure-messages",
+  "tahrir-messages",
 ]
 
 [tool.poetry.plugins."fmn.tracking_rules"]
