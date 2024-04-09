@@ -2305,6 +2305,21 @@ coverage = {version = ">=7.0.0", extras = ["toml"]}
 fedora-messaging = ">=3.3.0,<4.0.0"
 
 [[package]]
+name = "meetbot-messages"
+version = "1.0.1"
+description = "A schema package for messages sent by meetbot"
+optional = true
+python-versions = ">=3.8,<4.0"
+files = [
+    {file = "meetbot-messages-1.0.1.tar.gz", hash = "sha256:8f3f0f0a46ffc0408bb0805f0e608596eae848330fbb878c9ad9de21b77140c8"},
+    {file = "meetbot_messages-1.0.1-py3-none-any.whl", hash = "sha256:e5e16a3217a57750d9584199a16f7562c68594489bf6e37a69390d115bf302df"},
+]
+
+[package.dependencies]
+coverage = {version = ">=7.0.0", extras = ["toml"]}
+fedora-messaging = ">=3.3.0,<4.0.0"
+
+[[package]]
 name = "more-itertools"
 version = "10.2.0"
 description = "More routines for operating on iterables, beyond itertools"
@@ -4550,7 +4565,7 @@ api = ["SQLAlchemy", "backoff", "cashews", "fastapi", "fedora-messaging", "httpx
 consumer = ["SQLAlchemy", "aio-pika", "backoff", "cashews", "fedora-messaging", "sqlalchemy-helpers"]
 database = ["SQLAlchemy", "alembic", "sqlalchemy-helpers"]
 postgresql = ["asyncpg", "psycopg2"]
-schemas = ["anitya-schema", "bodhi-messages", "bugzilla2fedmsg-schema", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedora-elections-messages", "fedora-messaging-git-hook-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "fedorainfra-ansible-messages", "kerneltest-messages", "koji-fedoramessaging-messages", "koschei-messages", "mdapi-messages", "mediawiki-messages", "noggin-messages", "nuancier-messages", "pagure-messages"]
+schemas = ["anitya-schema", "bodhi-messages", "bugzilla2fedmsg-schema", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedora-elections-messages", "fedora-messaging-git-hook-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "fedorainfra-ansible-messages", "kerneltest-messages", "koji-fedoramessaging-messages", "koschei-messages", "mdapi-messages", "mediawiki-messages", "meetbot-messages", "noggin-messages", "nuancier-messages", "pagure-messages"]
 sender-email = ["aio-pika", "aiosmtplib", "tomli"]
 sender-irc = ["aio-pika", "irc", "tomli"]
 sender-matrix = ["aio-pika", "matrix-nio", "tomli"]
@@ -4559,4 +4574,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "a0f6cb2789abb61c1f93686ca06f9afaef430d00f23688b405d517ddfe56bdf7"
+content-hash = "22976b1a1d2d9b9b23b3bc183a59932951cb108084e65a671da40eb94c1333b1"
