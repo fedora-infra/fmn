@@ -6,7 +6,7 @@ import pytest
 from fastapi import status
 
 from fmn.api import api_models
-from fmn.messages.rule import RuleUpdateV1
+from fmn_messages.rule import RuleUpdateV1
 
 from .base import BaseTestAPIV1Handler
 

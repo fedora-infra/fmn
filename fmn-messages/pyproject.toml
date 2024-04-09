@@ -1,0 +1,62 @@
+# SPDX-FileCopyrightText: 2024 Contributors to the Fedora Project
+#
+# SPDX-License-Identifier: MIT
+
+[tool.poetry]
+name = "fmn-messages"
+version = "1.0.0"
+description = "A schema package for messages sent by FMN"
+authors = ["Fedora Infrastructure Team <infrastructure@lists.fedoraproject.org>"]
+license = "LGPL-3.0-or-later"
+readme = "README.md"
+homepage = "http://github.com/fedora-infra/fmn-messages"
+repository = "http://github.com/fedora-infra/fmn-messages"
+keywords = ["fedora-messaging"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: System Administrators",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: POSIX :: Linux",
+    "Topic :: Communications",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8.10"
+fedora-messaging = "^3.3.0"
+
+[tool.poetry.group.dev.dependencies]
+black = ">=22.6.0"
+pytest = ">=7.0.0"
+pytest-cov = ">=3.0.0"
+coverage = {extras = ["toml"], version = ">=7.0.0"}
+ruff = ">=0.0.253"
+reuse = ">=1.1.0"
+
+[tool.poetry.plugins."fedora.messages"]
+"fmn.rule.create.v1"="fmn_messages.rule:RuleCreateV1"
+"fmn.rule.update.v1"="fmn_messages.rule:RuleUpdateV1"
+"fmn.rule.delete.v1"="fmn_messages.rule:RuleDeleteV1"
+
+[tool.coverage.report]
+fail_under = 100
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "def __repr__",
+    "if TYPE_CHECKING:",
+    # Don't complain if tests don't hit defensive assertion code
+    "raise NotImplementedError",
+    "\\.\\.\\.",
+]
+omit = [
+    "tests/*",
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

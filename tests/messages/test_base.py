@@ -5,7 +5,7 @@
 import pytest
 from jsonschema.exceptions import ValidationError
 
-from fmn.messages.rule import RuleCreateV1
+from fmn_messages.rule import RuleCreateV1
 
 
 def test_messages_base():

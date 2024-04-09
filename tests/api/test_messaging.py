@@ -8,7 +8,7 @@ import pytest
 from fedora_messaging import exceptions as fm_exceptions
 
 from fmn.api import messaging
-from fmn.messages.rule import RuleCreateV1
+from fmn_messages.rule import RuleCreateV1
 
 
 def test__publish(mocker):

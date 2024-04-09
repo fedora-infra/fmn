@@ -90,6 +90,7 @@ fedora-elections-messages = {version = "*", optional = true}
 fedora-messaging-git-hook-messages = {version = "*", optional = true}
 fedora-messaging-the-new-hotness-schema = {version = "*", optional = true}
 fedora-planet-messages = {version = "*", optional = true}
+fmn-messages = {version = "*", optional = true}
 kerneltest-messages = {version = "*", optional = true}
 koji-fedoramessaging-messages = {version = "*", optional = true}
 koschei-messages = {version = "*", optional = true}
@@ -103,10 +104,12 @@ tahrir-messages = {version = "*", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 poetry = "^1.2.0b2"
+"fmn-messages" = {path = "./fmn-messages", develop = true}
 black = "^24.0.0"
 pytest = "^7.1.2 || ^8.0.0"
 pytest-asyncio = "^0.18.3 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.23.0"
 pytest-cov = "^3.0.0 || ^4.0.0"
+coverage = {extras = ["toml"], version = ">=7.0.0"}
 tox = "^3.25.1 || ^4.0.0"
 greenlet = "^1.1.2 || ^2.0.0 || ^3.0.0"
 toml = "^0.10.2"
@@ -171,6 +174,7 @@ schemas = [
   "fedora-messaging-git-hook-messages",
   "fedora-messaging-the-new-hotness-schema",
   "fedora-planet-messages",
+  "fmn-messages",
   "kerneltest-messages",
   "koji-fedoramessaging-messages",
   "koschei-messages",
@@ -196,17 +200,41 @@ schemas = [
 "my_actions" = "fmn.rules.filter:MyActions"
 "topic" = "fmn.rules.filter:Topic"
 
-[tool.poetry.plugins."fedora.messages"]
-"fmn.rule.create.v1"="fmn.messages.rule:RuleCreateV1"
-"fmn.rule.update.v1"="fmn.messages.rule:RuleUpdateV1"
-"fmn.rule.delete.v1"="fmn.messages.rule:RuleDeleteV1"
-
 
 [tool.pytest.ini_options]
-addopts = "--cov-config .coveragerc --cov=fmn --cov-report term --cov-report xml --cov-report html"
+addopts = "--cov=fmn --cov-report term --cov-report xml --cov-report html"
 asyncio_mode = "auto"
 timeout = 60
 markers = "alembic_table_deleted: When the alembic version table has been deleted in the test"
+
+[tool.coverage.run]
+branch = true
+source = ["fmn", "fmn-messages/fmn"]
+omit = [
+    "fmn/database/migrations/env.py",
+    "fmn/database/migrations/versions/*.py",
+]
+concurrency = [
+    "greenlet",
+    "thread",
+]
+
+[tool.coverage.report]
+precision = 2
+fail_under = 100
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "def __repr__",
+    "if TYPE_CHECKING:",
+    # Don't complain if tests don't hit defensive assertion code
+    "raise NotImplementedError",
+    "\\.\\.\\.",
+]
+omit = [
+    "tests/*",
+]
 
 [tool.black]
 line-length = 100
@@ -220,14 +248,18 @@ select = ["E", "F", "W", "I", "UP", "S", "B", "RUF"]
 ignore = ["UP038"]
 allowed-confusables = ["’"]
 
+[tool.ruff.lint.isort]
+known-first-party = ["fmn", "fmn_messages"]
+
 [tool.ruff.lint.per-file-ignores]
 "fmn/api/*" = ["B008", "RUF012"]
 "fmn/backends/__init__.py" = ["F401"]
 "fmn/core/config.py" = ["RUF012"]
 "fmn/database/__init__.py" = ["F401"]
 "fmn/database/model/__init__.py" = ["F401"]
-"fmn/messages/rule.py" = ["RUF012"]
 "tests/*" = ["S101", "RUF012"]
+"fmn-messages/fmn_messages/__init__.py" = ["F401"]
+"fmn-messages/fmn_messages/rule.py" = ["RUF012"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

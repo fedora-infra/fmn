@@ -8,8 +8,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from fmn_messages.rule import RuleUpdateV1
+
 from ...database.model import Rule, User
-from ...messages.rule import RuleUpdateV1
 from .. import api_models
 from ..auth import Identity, get_identity_admin
 from ..database import gen_db_session

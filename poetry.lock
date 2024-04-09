@@ -348,7 +348,7 @@ test = ["flake8 (>=6.1,<7.0)", "uvloop (>=0.15.3)"]
 name = "attrs"
 version = "23.2.0"
 description = "Classes Without Boilerplate"
-optional = true
+optional = false
 python-versions = ">=3.7"
 files = [
     {file = "attrs-23.2.0-py3-none-any.whl", hash = "sha256:99b87a485a5820b23b879f04c2305b44b951b502fd64be915879d77a7e8fc6f1"},
@@ -378,7 +378,7 @@ files = [
 name = "automat"
 version = "22.10.0"
 description = "Self-service finite-state machines for the programmer on the go."
-optional = true
+optional = false
 python-versions = "*"
 files = [
     {file = "Automat-22.10.0-py2.py3-none-any.whl", hash = "sha256:c3164f8742b9dc440f3682482d32aaff7bb53f71740dd018533f9de286b64180"},
@@ -496,7 +496,7 @@ uvloop = ["uvloop (>=0.15.2)"]
 name = "blinker"
 version = "1.7.0"
 description = "Fast, simple object-to-object and broadcast signaling"
-optional = true
+optional = false
 python-versions = ">=3.8"
 files = [
     {file = "blinker-1.7.0-py3-none-any.whl", hash = "sha256:c3f865d4d54db7abc53758a01601cf343fe55b84c1de4e3fa910e420b438d5b9"},
@@ -882,7 +882,7 @@ files = [
 name = "constantly"
 version = "23.10.4"
 description = "Symbolic constants in Python"
-optional = true
+optional = false
 python-versions = ">=3.8"
 files = [
     {file = "constantly-23.10.4-py3-none-any.whl", hash = "sha256:3fd9b4d1c3dc1ec9757f3c52aef7e53ad9323dbe39f51dfd4c43853b68dfa3f9"},
@@ -995,7 +995,7 @@ files = [
 name = "crochet"
 version = "2.1.1"
 description = "Use Twisted anywhere!"
-optional = true
+optional = false
 python-versions = ">=3.8.0"
 files = [
     {file = "crochet-2.1.1-py3-none-any.whl", hash = "sha256:87970cbd1b384a8d3b10152565283d76843d56ea7e087ea3239092a64ffaea0e"},
@@ -1284,7 +1284,7 @@ fedora-messaging = "*"
 name = "fedora-messaging"
 version = "3.5.0"
 description = "A set of tools for using Fedora's messaging infrastructure"
-optional = true
+optional = false
 python-versions = "<4.0,>=3.8"
 files = [
     {file = "fedora_messaging-3.5.0-py3-none-any.whl", hash = "sha256:47edb6951f979e0c0646905dcda1f6decff65b115eb98eed94cbc54e4eb6c6b5"},
@@ -1377,6 +1377,22 @@ files = [
 docs = ["furo (>=2023.9.10)", "sphinx (>=7.2.6)", "sphinx-autodoc-typehints (>=1.25.2)"]
 testing = ["covdefaults (>=2.3)", "coverage (>=7.3.2)", "diff-cover (>=8.0.1)", "pytest (>=7.4.3)", "pytest-cov (>=4.1)", "pytest-mock (>=3.12)", "pytest-timeout (>=2.2)"]
 typing = ["typing-extensions (>=4.8)"]
+
+[[package]]
+name = "fmn-messages"
+version = "1.0.0"
+description = "A schema package for messages sent by FMN"
+optional = false
+python-versions = "^3.8.10"
+files = []
+develop = true
+
+[package.dependencies]
+fedora-messaging = "^3.3.0"
+
+[package.source]
+type = "directory"
+url = "fmn-messages"
 
 [[package]]
 name = "frozenlist"
@@ -1687,7 +1703,7 @@ files = [
 name = "hyperlink"
 version = "21.0.0"
 description = "A featureful, immutable, and correct URL for Python."
-optional = true
+optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 files = [
     {file = "hyperlink-21.0.0-py2.py3-none-any.whl", hash = "sha256:e6b14c37ecb73e89c77d78cdb4c2cc8f3fb59a885c5b3f819ff4ed80f25af1b4"},
@@ -1994,7 +2010,7 @@ files = [
 name = "jsonschema"
 version = "4.21.1"
 description = "An implementation of JSON Schema validation for Python"
-optional = true
+optional = false
 python-versions = ">=3.8"
 files = [
     {file = "jsonschema-4.21.1-py3-none-any.whl", hash = "sha256:7996507afae316306f9e2290407761157c6f78002dcf7419acb99822143d1c6f"},
@@ -2015,7 +2031,7 @@ format-nongpl = ["fqdn", "idna", "isoduration", "jsonpointer (>1.13)", "rfc3339-
 name = "jsonschema-specifications"
 version = "2023.12.1"
 description = "The JSON Schema meta-schemas and vocabularies, exposed as a Registry"
-optional = true
+optional = false
 python-versions = ">=3.8"
 files = [
     {file = "jsonschema_specifications-2023.12.1-py3-none-any.whl", hash = "sha256:87e4fdf3a94858b8a2ba2778d9ba57d8a9cafca7c7489c46ba0d30a8bc6a9c3c"},
@@ -2626,7 +2642,7 @@ ptyprocess = ">=0.5"
 name = "pika"
 version = "1.3.2"
 description = "Pika Python AMQP Client Library"
-optional = true
+optional = false
 python-versions = ">=3.7"
 files = [
     {file = "pika-1.3.2-py3-none-any.whl", hash = "sha256:0779a7c1fafd805672796085560d290213a465e4f6f76a6fb19e378d8041a14f"},
@@ -2781,7 +2797,7 @@ files = [
 name = "pyasn1"
 version = "0.6.0"
 description = "Pure-Python implementation of ASN.1 types and DER/BER/CER codecs (X.208)"
-optional = true
+optional = false
 python-versions = ">=3.8"
 files = [
     {file = "pyasn1-0.6.0-py2.py3-none-any.whl", hash = "sha256:cca4bb0f2df5504f02f6f8a775b6e416ff9b0b3b16f7ee80b5a3153d9b804473"},
@@ -2792,7 +2808,7 @@ files = [
 name = "pyasn1-modules"
 version = "0.4.0"
 description = "A collection of ASN.1-based protocols modules"
-optional = true
+optional = false
 python-versions = ">=3.8"
 files = [
     {file = "pyasn1_modules-0.4.0-py3-none-any.whl", hash = "sha256:be04f15b66c206eed667e0bb5ab27e2b1855ea54a842e5037738099e8ca4ae0b"},
@@ -3002,7 +3018,7 @@ windows-terminal = ["colorama (>=0.4.6)"]
 name = "pyopenssl"
 version = "24.1.0"
 description = "Python wrapper module around the OpenSSL library"
-optional = true
+optional = false
 python-versions = ">=3.7"
 files = [
     {file = "pyOpenSSL-24.1.0-py3-none-any.whl", hash = "sha256:17ed5be5936449c5418d1cd269a1a9e9081bc54c17aed272b45856a3d3dc86ad"},
@@ -3204,7 +3220,7 @@ trio = ["trio (>=0.16.0)"]
 name = "pytz"
 version = "2024.1"
 description = "World timezone definitions, modern and historical"
-optional = true
+optional = false
 python-versions = "*"
 files = [
     {file = "pytz-2024.1-py2.py3-none-any.whl", hash = "sha256:328171f4e3623139da4983451950b28e95ac706e13f3f2630a879749e7a8b319"},
@@ -3405,7 +3421,7 @@ ocsp = ["cryptography (>=36.0.1)", "pyopenssl (==20.0.1)", "requests (>=2.26.0)"
 name = "referencing"
 version = "0.34.0"
 description = "JSON Referencing + Python"
-optional = true
+optional = false
 python-versions = ">=3.8"
 files = [
     {file = "referencing-0.34.0-py3-none-any.whl", hash = "sha256:d53ae300ceddd3169f1ffa9caf2cb7b769e92657e4fafb23d34b93679116dfd4"},
@@ -3487,7 +3503,7 @@ python-debian = ">=0.1.34,<0.1.45 || >0.1.45,<0.1.46 || >0.1.46,<0.1.47 || >0.1.
 name = "rpds-py"
 version = "0.18.0"
 description = "Python bindings to Rust's persistent data structures (rpds)"
-optional = true
+optional = false
 python-versions = ">=3.8"
 files = [
     {file = "rpds_py-0.18.0-cp310-cp310-macosx_10_12_x86_64.whl", hash = "sha256:5b4e7d8d6c9b2e8ee2d55c90b59c707ca59bc30058269b3db7b1f8df5763557e"},
@@ -3636,7 +3652,7 @@ jeepney = ">=0.6"
 name = "service-identity"
 version = "24.1.0"
 description = "Service identity verification for pyOpenSSL & cryptography."
-optional = true
+optional = false
 python-versions = ">=3.8"
 files = [
     {file = "service_identity-24.1.0-py3-none-any.whl", hash = "sha256:a28caf8130c8a5c1c7a6f5293faaf239bbfb7751e4862436920ee6f2616f568a"},
@@ -3660,7 +3676,7 @@ tests = ["coverage[toml] (>=5.0.2)", "pytest"]
 name = "setuptools"
 version = "69.2.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
-optional = true
+optional = false
 python-versions = ">=3.8"
 files = [
     {file = "setuptools-69.2.0-py3-none-any.whl", hash = "sha256:c21c49fb1042386df081cb5d86759792ab89efca84cf114889191cd09aacc80c"},
@@ -3687,7 +3703,7 @@ files = [
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
-optional = true
+optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 files = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
@@ -4095,7 +4111,7 @@ files = [
 name = "twisted"
 version = "24.3.0"
 description = "An asynchronous networking framework written in Python"
-optional = true
+optional = false
 python-versions = ">=3.8.0"
 files = [
     {file = "twisted-24.3.0-py3-none-any.whl", hash = "sha256:039f2e6a49ab5108abd94de187fa92377abe5985c7a72d68d0ad266ba19eae63"},
@@ -4131,7 +4147,7 @@ windows-platform = ["pywin32 (!=226)", "pywin32 (!=226)", "twisted[all-non-platf
 name = "twisted-iocpsupport"
 version = "1.0.4"
 description = "An extension for use in the twisted I/O Completion Ports reactor."
-optional = true
+optional = false
 python-versions = "*"
 files = [
     {file = "twisted-iocpsupport-1.0.4.tar.gz", hash = "sha256:858096c0d15e33f15ac157f455d8f86f2f2cdd223963e58c0f682a3af8362d89"},
@@ -4255,7 +4271,7 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 name = "wrapt"
 version = "1.16.0"
 description = "Module for decorators, wrappers and monkey patching."
-optional = true
+optional = false
 python-versions = ">=3.6"
 files = [
     {file = "wrapt-1.16.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:ffa565331890b90056c01db69c0fe634a776f8019c143a5ae265f9c6bc4bd6d4"},
@@ -4525,7 +4541,7 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 name = "zope-interface"
 version = "6.2"
 description = "Interfaces for Python"
-optional = true
+optional = false
 python-versions = ">=3.7"
 files = [
     {file = "zope.interface-6.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:506f5410b36e5ba494136d9fa04c548eaf1a0d9c442b0b0e7a0944db7620e0ab"},
@@ -4579,7 +4595,7 @@ api = ["SQLAlchemy", "backoff", "cashews", "fastapi", "fedora-messaging", "httpx
 consumer = ["SQLAlchemy", "aio-pika", "backoff", "cashews", "fedora-messaging", "sqlalchemy-helpers"]
 database = ["SQLAlchemy", "alembic", "sqlalchemy-helpers"]
 postgresql = ["asyncpg", "psycopg2"]
-schemas = ["anitya-schema", "bodhi-messages", "bugzilla2fedmsg-schema", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedora-elections-messages", "fedora-messaging-git-hook-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "fedorainfra-ansible-messages", "kerneltest-messages", "koji-fedoramessaging-messages", "koschei-messages", "mdapi-messages", "mediawiki-messages", "meetbot-messages", "noggin-messages", "nuancier-messages", "pagure-messages", "tahrir-messages"]
+schemas = ["anitya-schema", "bodhi-messages", "bugzilla2fedmsg-schema", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedora-elections-messages", "fedora-messaging-git-hook-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "fedorainfra-ansible-messages", "fmn-messages", "kerneltest-messages", "koji-fedoramessaging-messages", "koschei-messages", "mdapi-messages", "mediawiki-messages", "meetbot-messages", "noggin-messages", "nuancier-messages", "pagure-messages", "tahrir-messages"]
 sender-email = ["aio-pika", "aiosmtplib", "tomli"]
 sender-irc = ["aio-pika", "irc", "tomli"]
 sender-matrix = ["aio-pika", "matrix-nio", "tomli"]
@@ -4588,4 +4604,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "ac1aba572e3175d22d1663953f1ca78d91d0dfd7267a996f68bba952538b2e7f"
+content-hash = "dcc7b66e63d7e591c01ccdb1ba0948c3139a785bfcd3ad45d8fcf510955500ed"

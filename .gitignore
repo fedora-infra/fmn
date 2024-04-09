@@ -4,6 +4,7 @@
 
 # related to package installation
 /dist/
+/fmn-messages/dist/
 
 # byte-compiled / optimized Python files
 __pycache__/
