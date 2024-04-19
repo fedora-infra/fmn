@@ -31,7 +31,7 @@ def mocked_send_queue_class(mocker):
     send_queue = Mock(name="send_queue")
     send_queue.connect = AsyncMock()
     send_queue.send = AsyncMock()
-    return mocker.patch("fmn.consumer.consumer.SendQueue", return_value=send_queue)
+    return mocker.patch.object(Consumer, "_SEND_QUEUE_CLASS", return_value=send_queue)
 
 
 @pytest.fixture

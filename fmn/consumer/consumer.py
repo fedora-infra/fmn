@@ -25,6 +25,8 @@ log = logging.getLogger(__name__)
 
 
 class Consumer:
+    _SEND_QUEUE_CLASS = SendQueue
+
     def __init__(self):
         # Load the general config
         if fm_config["consumer_config"].get("settings_file"):
@@ -32,7 +34,7 @@ class Consumer:
         self._rules_cache = RulesCache()
         self._requester = Requester(config.get_settings().services)
         self._tracked_cache = TrackedCache(requester=self._requester, rules_cache=self._rules_cache)
-        self.send_queue = SendQueue(fm_config["consumer_config"]["send_queue"])
+        self.send_queue = self._SEND_QUEUE_CLASS(fm_config["consumer_config"]["send_queue"])
         self.loop = asyncio.get_event_loop()
         self._ready = self.loop.create_task(self.setup())
         if not self.loop.is_running():
