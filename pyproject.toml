@@ -95,6 +95,7 @@ fmn-messages = {version = "*", optional = true}
 kerneltest-messages = {version = "*", optional = true}
 koji-fedoramessaging-messages = {version = "*", optional = true}
 koschei-messages = {version = "*", optional = true}
+maubot-fedora-messages = {version = "*", optional = true}
 mediawiki-messages = {version = "*", optional = true}
 meetbot-messages = {version = "*", optional = true}
 mdapi-messages = {version = "*", optional = true}
@@ -179,6 +180,7 @@ schemas = [
   "kerneltest-messages",
   "koji-fedoramessaging-messages",
   "koschei-messages",
+  "maubot-fedora-messages",
   "mediawiki-messages",
   "meetbot-messages",
   "mdapi-messages",
