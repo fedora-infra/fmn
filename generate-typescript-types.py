@@ -6,6 +6,7 @@
 
 import os
 import shutil
+import signal
 import socket
 import time
 from contextlib import closing, contextmanager
@@ -39,9 +40,10 @@ def running(cmd):
     try:
         yield proc
     finally:
-        proc.terminate()
+        proc.send_signal(signal.SIGINT)
         proc.wait(timeout=10)
-    if proc.returncode != 0:
+    # The Uvicorn process now returns 1 when it recieves SIGINT
+    if proc.returncode not in (0, 1):
         raise CalledProcessError(proc.returncode, proc.args, proc.stdout, proc.stderr)
 
 
@@ -62,7 +64,7 @@ def main():
     os.environ["DATABASE__SQLALCHEMY__URL"] = "sqlite:///"
     print("Running API")
     with running([fmn_cmd, "api", "serve", "--port", str(port)]):
-        time.sleep(2)
+        time.sleep(3)
         with pushd("frontend"):
             print("Building Typescript types")
             call(
