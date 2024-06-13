@@ -4,7 +4,6 @@
 
 UPGRADE_PIP_TO_LATEST=true
 DISABLE_PYPROJECT_TOML_PROCESSING=true
-ENABLE_MICROPIPENV=true
 # APP_SCRIPT=.s2i/run-api.sh
 # APP_SCRIPT=.s2i/run-consumer.sh
 # APP_SCRIPT=.s2i/run-sender.sh

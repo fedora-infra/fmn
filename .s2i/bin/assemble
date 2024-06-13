@@ -13,11 +13,17 @@
 set -e
 set -x
 
-# Now install the root project too, micropipenv does not do that
-pip install . --no-deps
+echo "---> Installing poetry ..."
+install_tool poetry
+
+echo "---> Upgrade Poetry's pip to the latest version ..."
+$VENV_DIR/bin/pip install --upgrade pip
+
+echo "---> Installing application and dependencies ..."
+poetry install --only main --all-extras
 
 # Set the version in an environment variable for the frontend to pickup
-VITE_VERSION=$(pip show fmn | grep ^Version: | cut -d' ' -f2)
+VITE_VERSION=$(poetry version | cut -d' ' -f2)
 if [ -n "${OPENSHIFT_BUILD_COMMIT}" -a -n "${OPENSHIFT_BUILD_REFERENCE}" ]; then
     VITE_VERSION="${VITE_VERSION} (${OPENSHIFT_BUILD_REFERENCE}:${OPENSHIFT_BUILD_COMMIT:0:7})"
 fi
