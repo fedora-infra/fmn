@@ -14,7 +14,7 @@ import {
   CBadge,
   CListGroup,
   CListGroupItem,
-} from "@coreui/bootstrap-vue";
+} from "@coreui/vue";
 
 const props = defineProps<{
   tracked: Artifact[];

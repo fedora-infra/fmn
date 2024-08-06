@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import { useRulesQuery } from "@/api/rules";
-import { CAlert, CSpinner } from "@coreui/bootstrap-vue";
+import { CAlert, CSpinner } from "@coreui/vue";
 import RulesList from "../components/RulesList.vue";
 import { useUserStore } from "../stores/user";
 

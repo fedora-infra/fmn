@@ -8,12 +8,7 @@ SPDX-License-Identifier: MIT
 import { TRACKING_RULES } from "@/api/constants";
 import type { Rule } from "@/api/types";
 import { isDefined } from "@/util";
-import {
-  CCard,
-  CCardBody,
-  CListGroup,
-  CListGroupItem,
-} from "@coreui/bootstrap-vue";
+import { CCard, CCardBody, CListGroup, CListGroupItem } from "@coreui/vue";
 import { computed, ref } from "vue";
 import RuleListItem from "../components/RuleListItem.vue";
 

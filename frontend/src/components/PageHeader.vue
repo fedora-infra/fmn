@@ -5,9 +5,9 @@ SPDX-License-Identifier: MIT
 -->
 
 <script setup lang="ts">
-import { CContainer, CNavbar, CNavbarNav } from "@coreui/bootstrap-vue";
-import LoginButton from "./LoginButton.vue";
+import { CContainer, CNavbar, CNavbarNav } from "@coreui/vue";
 import AdminLink from "./AdminLink.vue";
+import LoginButton from "./LoginButton.vue";
 </script>
 
 <template>

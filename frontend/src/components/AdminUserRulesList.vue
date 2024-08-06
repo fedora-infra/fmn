@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import { useAdminRulesQuery } from "@/api/rules";
-import { CAccordion, CCard, CCardBody } from "@coreui/bootstrap-vue";
+import { CAccordion, CCard, CCardBody } from "@coreui/vue";
 import { toRefs } from "vue";
 import AdminRuleListItem from "./AdminRuleListItem.vue";
 

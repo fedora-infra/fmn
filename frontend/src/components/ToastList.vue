@@ -29,7 +29,7 @@ import {
   CToastClose,
   CToaster,
   CToastHeader,
-} from "@coreui/bootstrap-vue";
+} from "@coreui/vue";
 import { useToastStore } from "../stores/toast";
 
 const toastStore = useToastStore();

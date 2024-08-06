@@ -6,9 +6,9 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import type { GenerationRule } from "@/api/types";
-import { CButton, CButtonGroup, CListGroupItem } from "@coreui/bootstrap-vue";
 import { cilPen, cilTrash } from "@coreui/icons";
 import { CIcon } from "@coreui/icons-vue";
+import { CButton, CButtonGroup, CListGroupItem } from "@coreui/vue";
 import DestinationTag from "../../DestinationTag.vue";
 
 const props = defineProps<{

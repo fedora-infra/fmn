@@ -25,7 +25,7 @@ SPDX-License-Identifier: MIT
 import { getApiClient } from "@/api";
 import type { APIError, User } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
-import { CAlert, CAlertHeading, CSpinner } from "@coreui/bootstrap-vue";
+import { CAlert, CAlertHeading, CSpinner } from "@coreui/vue";
 import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from ".";

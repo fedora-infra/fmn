@@ -5,7 +5,7 @@ SPDX-License-Identifier: MIT
 -->
 
 <script setup lang="ts">
-import { CNav, CNavItem } from "@coreui/bootstrap-vue";
+import { CNav, CNavItem } from "@coreui/vue";
 </script>
 
 <template>

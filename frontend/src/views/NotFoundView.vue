@@ -5,12 +5,7 @@ SPDX-License-Identifier: MIT
 -->
 
 <script setup lang="ts">
-import {
-  CAlert,
-  CAlertHeading,
-  CAlertLink,
-  CSpinner,
-} from "@coreui/bootstrap-vue";
+import { CAlert, CAlertHeading, CAlertLink, CSpinner } from "@coreui/vue";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 const router = useRouter();

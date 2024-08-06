@@ -9,7 +9,7 @@ import { validationErrorToFormErrors } from "@/api";
 import { useAddRuleMutation } from "@/api/rules";
 import type { GenerationRule, HTTPValidationError, Rule } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
-import { CCol, CRow } from "@coreui/bootstrap-vue";
+import { CCol, CRow } from "@coreui/vue";
 import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";
