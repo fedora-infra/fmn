@@ -9,15 +9,9 @@ import { validationErrorToFormErrors } from "@/api";
 import { useDeleteRuleMutation, useEditRuleMutation } from "@/api/rules";
 import type { GenerationRule, HTTPValidationError, Rule } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
-import {
-  CAlert,
-  CButton,
-  CButtonGroup,
-  CCol,
-  CRow,
-} from "@coreui/bootstrap-vue";
 import { cilTrash } from "@coreui/icons";
 import { CIcon } from "@coreui/icons-vue";
+import { CAlert, CButton, CButtonGroup, CCol, CRow } from "@coreui/vue";
 import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";

@@ -7,12 +7,7 @@ SPDX-License-Identifier: MIT
 <script setup lang="ts">
 import { SEVERITIES } from "@/api/constants";
 import type { GenerationRule } from "@/api/types";
-import {
-  CModal,
-  CModalBody,
-  CModalHeader,
-  CModalTitle,
-} from "@coreui/bootstrap-vue";
+import { CModal, CModalBody, CModalHeader, CModalTitle } from "@coreui/vue";
 import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
 import { computed, ref } from "vue";
 import DestinationList from "./DestinationList.vue";

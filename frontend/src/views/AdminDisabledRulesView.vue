@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import { useDisabledRulesQuery } from "@/api/rules";
-import { CAlert, CSpinner } from "@coreui/bootstrap-vue";
+import { CAlert, CSpinner } from "@coreui/vue";
 import AdminDisabledRulesList from "../components/AdminDisabledRulesList.vue";
 import AdminSubHeader from "../components/AdminSubHeader.vue";
 

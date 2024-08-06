@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import { useArtifactsQuery } from "@/api/artifacts";
-import { CSpinner } from "@coreui/bootstrap-vue";
+import { CSpinner } from "@coreui/vue";
 import { computed, toRefs } from "vue";
 import TrackingRuleSummary from "./TrackingRuleSummary.vue";
 

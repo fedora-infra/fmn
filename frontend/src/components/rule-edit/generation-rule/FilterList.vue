@@ -5,7 +5,7 @@ SPDX-License-Identifier: MIT
 -->
 
 <script setup lang="ts">
-import { CCol, CRow } from "@coreui/bootstrap-vue";
+import { CCol, CRow } from "@coreui/vue";
 import FilterApplication from "./FilterApplication.vue";
 import FilterMyActions from "./FilterMyActions.vue";
 import FilterSeverity from "./FilterSeverity.vue";

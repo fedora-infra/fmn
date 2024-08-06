@@ -6,9 +6,9 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import type { GenerationRule } from "@/api/types";
-import { CButton, CListGroup, CListGroupItem } from "@coreui/bootstrap-vue";
 import { cilPlus } from "@coreui/icons";
 import { CIcon } from "@coreui/icons-vue";
+import { CButton, CListGroup, CListGroupItem } from "@coreui/vue";
 import type { FormKitNode } from "@formkit/core";
 import { computed, ref, toRefs } from "vue";
 import GenerationRuleListItem from "./GenerationRuleListItem.vue";

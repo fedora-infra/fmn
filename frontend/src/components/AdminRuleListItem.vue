@@ -5,11 +5,7 @@ SPDX-License-Identifier: MIT
 -->
 
 <script setup lang="ts">
-import {
-  CAccordionBody,
-  CAccordionHeader,
-  CAccordionItem,
-} from "@coreui/bootstrap-vue";
+import { CAccordionBody, CAccordionHeader, CAccordionItem } from "@coreui/vue";
 
 import AdminRuleEnableForm from "../components/AdminRuleEnableForm.vue";
 

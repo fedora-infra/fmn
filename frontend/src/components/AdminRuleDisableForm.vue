@@ -10,7 +10,7 @@ import { usePatchRuleMutation } from "@/api/rules";
 import type { HTTPValidationError } from "@/api/types";
 import { useToastStore } from "@/stores/toast";
 import { formDataToRuleMutation } from "@/util/forms";
-import { CInputGroup } from "@coreui/bootstrap-vue";
+import { CInputGroup } from "@coreui/vue";
 import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";

@@ -10,11 +10,11 @@ SPDX-License-Identifier: MIT
 </script>
 
 <template>
-  <p class="mb-0 fw-bold">Topic pattern:</p>
+  <p class="mb-0 fw-bold">Fedora Message topic pattern:</p>
   <FormKit
     type="text"
     name="topic"
-    placeholder="Filter by topic pattern"
+    placeholder="Filter by message topic pattern"
     help="Wildcards: * and ?"
   />
 </template>

@@ -6,9 +6,9 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import type { Rule } from "@/api/types";
-import { CAccordion, CCard, CCardBody } from "@coreui/bootstrap-vue";
-import AdminRuleListItem from "./AdminRuleListItem.vue";
+import { CAccordion, CCard, CCardBody } from "@coreui/vue";
 import AdminRuleDisableForm from "./AdminRuleDisableForm.vue";
+import AdminRuleListItem from "./AdminRuleListItem.vue";
 
 const props = defineProps<{
   rules: Rule[];

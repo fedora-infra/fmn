@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 <script setup lang="ts">
 import { useRuleQuery } from "@/api/rules";
-import { CAlert, CSpinner } from "@coreui/bootstrap-vue";
+import { CAlert, CSpinner } from "@coreui/vue";
 import { useRoute } from "vue-router";
 import RuleEditForm from "../components/RuleEditForm.vue";
 

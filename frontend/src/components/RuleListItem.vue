@@ -5,7 +5,7 @@ SPDX-License-Identifier: MIT
 -->
 
 <script setup lang="ts">
-import { CListGroupItem } from "@coreui/bootstrap-vue";
+import { CListGroupItem } from "@coreui/vue";
 
 import { TRACKING_RULES } from "../api/constants";
 
