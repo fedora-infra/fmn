@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import type { FormKitFrameworkContext, FormKitProps } from "@formkit/core";
+import type { FormKitInputs, FormKitSelectSlots } from "@formkit/inputs";
 import Multiselect from "@vueform/multiselect";
 
 export const msProps = [

@@ -21,7 +21,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { defineComponent } from "vue";
 import TrackingRule from "./TrackingRule.vue";
 
-const renderOptions: RenderOptions = {
+const genericRenderOptions = {
   global: {
     plugins: [
       [FormKitPlugin, formkitConfig],
@@ -39,7 +39,7 @@ const chooseOption = async (comboboxNumber: number, label: string) => {
     expect(combobox).toHaveAttribute("aria-expanded", "true"),
   );
   // Choose an option
-  await fireEvent.mouseDown(screen.getByText(label));
+  await fireEvent.click(screen.getByText(label));
 };
 
 describe("TrackingRule", () => {
@@ -68,11 +68,13 @@ describe("TrackingRule", () => {
       </FormKit>`,
   });
 
+  const renderOptions = genericRenderOptions as RenderOptions<typeof Component>;
+
   it("renders", async () => {
     const { getAllByRole } = render(Component, renderOptions);
     const listElements = getAllByRole("option");
 
-    expect(await getAllByRole("option")).toHaveLength(TRACKING_RULES.length);
+    expect(getAllByRole("option")).toHaveLength(TRACKING_RULES.length);
     TRACKING_RULES.forEach((tr, index) => {
       expect(listElements[index]).toHaveTextContent(tr.label);
       expect(listElements[index]).toHaveTextContent(tr.description);

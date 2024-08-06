@@ -7,7 +7,6 @@ SPDX-License-Identifier: MIT
 <script setup lang="ts">
 import type { FormKitFrameworkContext } from "@formkit/core";
 import Multiselect from "@vueform/multiselect";
-import type { VNode } from "vue";
 import { computed } from "vue";
 import { getBindableProps } from "./MultiSelectInputUtils";
 
@@ -62,7 +61,7 @@ function handleChange(value: Option[]) {
     <template
       v-for="(slot, slotName) in slots"
       :key="slotName"
-      v-slot:[slotName]="slotParams: VNode"
+      v-slot:[slotName]="slotParams"
     >
       <component :is="slot" v-bind="slotParams" />
     </template>
