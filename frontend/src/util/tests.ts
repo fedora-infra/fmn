@@ -13,7 +13,7 @@ import { vi } from "vitest";
 import { createI18n } from "vue-i18n";
 import router from "../router";
 
-export const getRenderOptions = (): RenderOptions => {
+export const getRenderOptions = <C>(): RenderOptions<C> => {
   const pinia = getActivePinia() as Pinia;
   const i18n = createI18n({
     legacy: false,

@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: MIT
 
-import { vctooltip } from "@coreui/bootstrap-vue";
 import { plugin as FormKitPlugin } from "@formkit/vue";
 import { VueQueryPlugin } from "@tanstack/vue-query";
 import { createApp } from "vue";
@@ -28,7 +27,5 @@ app.use(FormKitPlugin, formkitConfig);
 app.use(i18n);
 // Avoid a warning about the icons object not being provided.
 app.provide("icons", {});
-
-app.directive("c-tooltip", vctooltip);
 
 app.mount("#app");

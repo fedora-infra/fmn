@@ -15,7 +15,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { defineComponent } from "vue";
 import { config as formkitConfig } from "./index";
 
-const renderOptions: RenderOptions = {
+const renderOptions = {
   global: {
     plugins: [[FormKitPlugin, formkitConfig]],
   },
@@ -46,11 +46,11 @@ describe("MultiSelectInput", () => {
 
     const { getByText } = render(Component, {
       props: { handler },
-      ...renderOptions,
+      ...(renderOptions as RenderOptions<typeof Component>),
     });
     const submitButton = getByText("Submit");
 
-    await fireEvent.mouseDown(getByText("b"));
+    await fireEvent.click(getByText("b"));
     await fireEvent.click(submitButton);
     await waitFor(() => expect(submittedValues).toHaveLength(1));
     expect(submittedValues[0]).toMatchObject({ component: "b" });
@@ -78,7 +78,7 @@ describe("MultiSelectInput", () => {
 
     const { getByText, findAllByRole } = render(Component, {
       props: { handler },
-      ...renderOptions,
+      ...(renderOptions as RenderOptions<typeof Component>),
     });
 
     // Verify that the attr2 values have been used as option labels
@@ -88,7 +88,7 @@ describe("MultiSelectInput", () => {
     expect(options[1]).toHaveTextContent("b2");
 
     // Verify that we get the entire option object on submission
-    await fireEvent.mouseDown(getByText("b2"));
+    await fireEvent.click(getByText("b2"));
     await fireEvent.click(getByText("Submit"));
     await waitFor(() => expect(submittedValues).toHaveLength(1));
     expect(submittedValues[0]).toMatchObject({
@@ -118,7 +118,7 @@ describe("MultiSelectInput", () => {
 
     const { getByText, getByRole } = render(Component, {
       props: { options: ["a", "b", "c"], handler },
-      ...renderOptions,
+      ...(renderOptions as RenderOptions<typeof Component>),
     });
 
     const submitButton = getByText("Submit");
@@ -131,7 +131,7 @@ describe("MultiSelectInput", () => {
       expect(selectInput).toHaveAttribute("aria-expanded", "true"),
     );
     // Choose an option
-    await fireEvent.mouseDown(getByText("b"));
+    await fireEvent.click(getByText("b"));
     // The select must not have closed
     expect(selectInput).toHaveAttribute("aria-expanded", "true");
     // Submit the form

@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: MIT
 
 import type { Destination } from "@/api/types";
-import { vctooltip } from "@coreui/bootstrap-vue";
 import { render as baseRender } from "@testing-library/vue";
 import { getActivePinia, type Pinia } from "pinia";
 import { vi } from "vitest";
@@ -50,9 +49,9 @@ export const render = (
         auth: vi.fn(),
         icons: {},
       },
-      directives: {
-        "c-tooltip": vctooltip,
-      },
+      // directives: {
+      //   "c-tooltip": vctooltip,
+      // },
     },
   });
 };

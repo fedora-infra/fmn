@@ -34,14 +34,14 @@ vi.mock("@/api");
 
 describe("LoginFedora", () => {
   let tokenResponse: TokenResponse;
-  let renderOptions: RenderOptions;
   let auth: Mocked<Authenticator>;
+  let renderOptions: RenderOptions<typeof LoginFedora>;
 
   beforeEach(async () => {
     await router.replace("/login/fedora");
     await router.isReady();
     setActivePinia(createPinia());
-    renderOptions = getRenderOptions();
+    renderOptions = getRenderOptions<typeof LoginFedora>();
     auth = renderOptions.global?.provide?.auth;
     auth.handleAuthorizationRedirect.mockImplementation(
       async () => tokenResponse,
