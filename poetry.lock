@@ -1335,6 +1335,24 @@ files = [
 fedora-messaging = "*"
 
 [[package]]
+name = "fedora-image-uploader-messages"
+version = "1.1.0"
+description = "A schema package for messages sent by fedora-image-uploader"
+optional = true
+python-versions = ">=3.8"
+files = [
+    {file = "fedora_image_uploader_messages-1.1.0-py3-none-any.whl", hash = "sha256:fe6d43893a7abe0d9e0f0fdd6e7f4193973c7beebccec07129a6e8b7e13addbf"},
+    {file = "fedora_image_uploader_messages-1.1.0.tar.gz", hash = "sha256:dc2d7fee3506c4e3c92cd9d16250b557ca7f08a489b20aef60cdb73b43c77a60"},
+]
+
+[package.dependencies]
+fedora-messaging = "*"
+
+[package.extras]
+dev = ["black", "flake8", "isort"]
+test = ["coverage", "pytest", "pytest-cov"]
+
+[[package]]
 name = "fedora-messaging"
 version = "3.6.0"
 description = "A set of tools for using Fedora's messaging infrastructure"
@@ -4667,7 +4685,7 @@ api = ["SQLAlchemy", "backoff", "cashews", "fastapi", "fedora-messaging", "httpx
 consumer = ["SQLAlchemy", "aio-pika", "backoff", "cashews", "fedora-messaging", "sqlalchemy-helpers"]
 database = ["SQLAlchemy", "alembic", "sqlalchemy-helpers"]
 postgresql = ["asyncpg", "psycopg2"]
-schemas = ["anitya-schema", "bodhi-messages", "bugzilla2fedmsg-schema", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedora-elections-messages", "fedora-messaging-git-hook-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "fedorainfra-ansible-messages", "fmn-messages", "kerneltest-messages", "koji-fedoramessaging-messages", "koschei-messages", "maubot-fedora-messages", "mdapi-messages", "mediawiki-messages", "meetbot-messages", "noggin-messages", "nuancier-messages", "pagure-messages", "tahrir-messages"]
+schemas = ["anitya-schema", "bodhi-messages", "bugzilla2fedmsg-schema", "ci-messages", "copr-messaging", "discourse2fedmsg-messages", "fedocal-messages", "fedora-elections-messages", "fedora-image-uploader-messages", "fedora-messaging-git-hook-messages", "fedora-messaging-the-new-hotness-schema", "fedora-planet-messages", "fedorainfra-ansible-messages", "fmn-messages", "kerneltest-messages", "koji-fedoramessaging-messages", "koschei-messages", "maubot-fedora-messages", "mdapi-messages", "mediawiki-messages", "meetbot-messages", "noggin-messages", "nuancier-messages", "pagure-messages", "tahrir-messages"]
 sender-email = ["aio-pika", "aiosmtplib", "tomli"]
 sender-irc = ["aio-pika", "irc", "tomli"]
 sender-matrix = ["aio-pika", "matrix-nio", "tomli"]
@@ -4676,4 +4694,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "8dda7a5d9582ed7cdd0ba2bf94b0f7d1ddc08cb33ed2d9f921eefff44444b366"
+content-hash = "f1f2525906a5c4b9430b9abab2b0d9a7cb41395153a43a62f3cdf242bff06694"
