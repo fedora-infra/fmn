@@ -124,7 +124,7 @@ class APIClient(ABC):
 
     async def get(self, url: str, **kwargs) -> Any:
         """Query the API for a single result."""
-        response = await self.client.get(url, **kwargs)
+        response = await self.client.get(url, follow_redirects=True, **kwargs)
         response.raise_for_status()
         return response.json()
 

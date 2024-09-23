@@ -132,7 +132,7 @@ class TestAPIClient:
 
         result = await client.get("url", foo="bar")
 
-        client.client.get.assert_awaited_once_with("url", foo="bar")
+        client.client.get.assert_awaited_once_with("url", follow_redirects=True, foo="bar")
         response.raise_for_status.assert_called_once_with()
         assert result is sentinel
 
