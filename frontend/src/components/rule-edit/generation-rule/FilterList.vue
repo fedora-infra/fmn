@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 <script setup lang="ts">
 import { CCol, CRow } from "@coreui/vue";
 import FilterApplication from "./FilterApplication.vue";
+import FilterExcludedApplication from "./FilterExcludedApplication.vue";
 import FilterMyActions from "./FilterMyActions.vue";
 import FilterSeverity from "./FilterSeverity.vue";
 import FilterTopic from "./FilterTopic.vue";
@@ -37,10 +38,13 @@ const props = defineProps<{
         <FilterSeverity />
       </CCol>
       <CCol xs="12" sm="6">
+        <FilterMyActions />
+      </CCol>
+      <CCol xs="12" sm="6">
         <FilterApplication />
       </CCol>
       <CCol xs="12" sm="6">
-        <FilterMyActions />
+        <FilterExcludedApplication />
       </CCol>
       <CCol xs="12" sm="6">
         <FilterTopic />

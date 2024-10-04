@@ -10,8 +10,8 @@ import BaseFilterApplication from "./BaseFilterApplication.vue";
 
 <template>
   <BaseFilterApplication
-    name="applications"
-    label="Applications"
-    placeholder="Choose applications"
+    name="excluded_applications"
+    label="Excluded Applications"
+    placeholder="Choose applications to ignore"
   />
 </template>

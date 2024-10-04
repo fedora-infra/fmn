@@ -35,6 +35,15 @@ class Applications(Filter):
         return message.app_name.lower() in self.params
 
 
+class ExcludedApplications(Applications):
+    name = "excluded_applications"
+
+    def matches(self, message):
+        if not self.params:
+            return True
+        return message.app_name.lower() not in self.params
+
+
 class Severities(Filter):
     name = "severities"
     default = (message.INFO, message.WARNING, message.ERROR)
