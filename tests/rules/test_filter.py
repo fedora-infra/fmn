@@ -7,7 +7,7 @@ from unittest.mock import Mock
 import pytest
 from fedora_messaging import message
 
-from fmn.rules.filter import Applications, MyActions, Severities, Topic
+from fmn.rules.filter import Applications, ExcludedApplications, MyActions, Severities, Topic
 
 
 @pytest.fixture
@@ -27,6 +27,21 @@ def requester():
 def test_applications(requester, make_mocked_message, received, filtered, expected):
     msg = make_mocked_message(topic="dummy", body={"app": received})
     f = Applications(requester, filtered, username="testuser")
+    assert f.matches(msg) is expected
+
+
+@pytest.mark.parametrize(
+    "received,filtered,expected",
+    [
+        ("app1", ["app1", "app2"], False),
+        ("app3", ["app1", "app2"], True),
+        ("app1", None, True),
+        ("App1", ["aPP1"], False),
+    ],
+)
+def test_excluded_applications(requester, make_mocked_message, received, filtered, expected):
+    msg = make_mocked_message(topic="dummy", body={"app": received})
+    f = ExcludedApplications(requester, filtered, username="testuser")
     assert f.matches(msg) is expected
 
 

@@ -381,6 +381,7 @@ class TestUserHandler(BaseTestAPIV1Handler):
                     "destinations": [{"protocol": "irc", "address": "dummynick"}],
                     "filters": {
                         "applications": [],
+                        "excluded_applications": [],
                         "severities": [],
                         "topic": None,
                         "my_actions": False,

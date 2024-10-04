@@ -5,83 +5,260 @@
 
 export interface paths {
   "/api/v1/users/me": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get Me */
     get: operations["get_me_api_v1_users_me_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/api/v1/users": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get Users */
     get: operations["get_users_api_v1_users_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/api/v1/users/{username}/info": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get User Info */
     get: operations["get_user_info_api_v1_users__username__info_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/api/v1/users/{username}/groups": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get User Groups */
     get: operations["get_user_groups_api_v1_users__username__groups_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/api/v1/users/{username}/destinations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get User Destinations */
     get: operations["get_user_destinations_api_v1_users__username__destinations_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/api/v1/users/{username}/rules": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get User Rules */
     get: operations["get_user_rules_api_v1_users__username__rules_get"];
+    put?: never;
     /** Create User Rule */
     post: operations["create_user_rule_api_v1_users__username__rules_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/api/v1/users/{username}/rules/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get User Rule */
     get: operations["get_user_rule_api_v1_users__username__rules__id__get"];
     /** Edit User Rule */
     put: operations["edit_user_rule_api_v1_users__username__rules__id__put"];
+    post?: never;
     /** Delete User Rule */
     delete: operations["delete_user_rule_api_v1_users__username__rules__id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/api/v1/applications": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get Applications */
     get: operations["get_applications_api_v1_applications_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/api/v1/artifacts": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Artifacts
      * @description This handler queries artifacts from Pagure
      *
-     * Proxying Pagure queries lets the API cache results to reduce load on the
-     * backend service.
+     *     Proxying Pagure queries lets the API cache results to reduce load on the
+     *     backend service.
      *
-     * :param names: Name patterns of artifacts which should be returned
+     *     :param names: Name patterns of artifacts which should be returned
      *
-     * :param users: Names of users whose artifacts should be returned
+     *     :param users: Names of users whose artifacts should be returned
      *
-     * :param groups: Names of groups whose artifacts should be returned
+     *     :param groups: Names of groups whose artifacts should be returned
      */
     get: operations["get_artifacts_api_v1_artifacts_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/api/v1/healthz/live": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Liveness Check */
     get: operations["liveness_check_api_v1_healthz_live_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/api/v1/healthz/ready": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Readiness Check */
     get: operations["readiness_check_api_v1_healthz_ready_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/api/v1/admin/rules": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get Rules */
     get: operations["get_rules_api_v1_admin_rules_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/api/v1/admin/users": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get Users */
     get: operations["get_users_api_v1_admin_users_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/api/v1/admin/rules/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
     /** Patch Rule */
     patch: operations["patch_rule_api_v1_admin_rules__id__patch"];
+    trace?: never;
   };
 }
-
 export type webhooks = Record<string, never>;
-
 export interface components {
   schemas: {
     /** Artifact */
@@ -98,8 +275,8 @@ export interface components {
     /** ArtifactsFollowedTrackingRule */
     ArtifactsFollowedTrackingRule: {
       /**
-       * Name
-       * @constant
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
        */
       name: "artifacts-followed";
       /** Params */
@@ -120,19 +297,24 @@ export interface components {
        * Applications
        * @default []
        */
-      applications?: string[];
+      applications: string[];
+      /**
+       * Excluded Applications
+       * @default []
+       */
+      excluded_applications: string[];
       /**
        * Severities
        * @default []
        */
-      severities?: string[];
+      severities: string[];
       /** Topic */
       topic?: string | null;
       /**
        * My Actions
        * @default false
        */
-      my_actions?: boolean;
+      my_actions: boolean;
     };
     /** GenerationRule */
     GenerationRule: {
@@ -150,10 +332,10 @@ export interface components {
     /** ListParamTrackingRule */
     ListParamTrackingRule: {
       /**
-       * Name
+       * @description discriminator enum property added by openapi-typescript
        * @enum {string}
        */
-      name: "artifacts-owned" | "artifacts-group-owned" | "users-followed";
+      name: "artifacts-group-owned" | "artifacts-owned" | "users-followed";
       /** Params */
       params: string[];
     };
@@ -165,7 +347,7 @@ export interface components {
        * Disabled
        * @default false
        */
-      disabled?: boolean;
+      disabled: boolean;
       /** Tracking Rule */
       tracking_rule:
         | components["schemas"]["ListParamTrackingRule"]
@@ -177,8 +359,8 @@ export interface components {
     /** NoParamTrackingRule */
     NoParamTrackingRule: {
       /**
-       * Name
-       * @constant
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
        */
       name: "related-events";
       /** Params */
@@ -192,7 +374,7 @@ export interface components {
        * Disabled
        * @default false
        */
-      disabled?: boolean;
+      disabled: boolean;
       /** Tracking Rule */
       tracking_rule:
         | components["schemas"]["ListParamTrackingRule"]
@@ -207,7 +389,7 @@ export interface components {
        * Generated Last Week
        * @default 0
        */
-      generated_last_week?: number;
+      generated_last_week: number;
     };
     /** Rule */
     "Rule-Output": {
@@ -217,7 +399,7 @@ export interface components {
        * Disabled
        * @default false
        */
-      disabled?: boolean;
+      disabled: boolean;
       /** Tracking Rule */
       tracking_rule:
         | components["schemas"]["ListParamTrackingRule"]
@@ -232,7 +414,7 @@ export interface components {
        * Generated Last Week
        * @default 0
        */
-      generated_last_week?: number;
+      generated_last_week: number;
     };
     /** RulePatch */
     RulePatch: {
@@ -249,7 +431,7 @@ export interface components {
        * Is Admin
        * @default false
        */
-      is_admin?: boolean;
+      is_admin: boolean;
     };
     /** ValidationError */
     ValidationError: {
@@ -267,139 +449,191 @@ export interface components {
   headers: never;
   pathItems: never;
 }
-
 export type $defs = Record<string, never>;
-
-export type external = Record<string, never>;
-
 export interface operations {
-  /** Get Me */
   get_me_api_v1_users_me_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["User"];
         };
       };
     };
   };
-  /** Get Users */
   get_users_api_v1_users_get: {
     parameters: {
       query?: {
         search?: string | null;
       };
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": string[];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
-  /** Get User Info */
   get_user_info_api_v1_users__username__info_get: {
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         username: unknown;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
-  /** Get User Groups */
   get_user_groups_api_v1_users__username__groups_get: {
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         username: unknown;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": string[];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
-  /** Get User Destinations */
   get_user_destinations_api_v1_users__username__destinations_get: {
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         username: unknown;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["Destination"][];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
-  /** Get User Rules */
   get_user_rules_api_v1_users__username__rules_get: {
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         username: unknown;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["Rule-Output"][];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
-  /** Create User Rule */
   create_user_rule_api_v1_users__username__rules_post: {
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         username: unknown;
       };
+      cookie?: never;
     };
     requestBody: {
       content: {
@@ -409,48 +643,65 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["Rule-Output"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
-  /** Get User Rule */
   get_user_rule_api_v1_users__username__rules__id__get: {
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         username: string;
         id: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["Rule-Output"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
-  /** Edit User Rule */
   edit_user_rule_api_v1_users__username__rules__id__put: {
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         username: string;
         id: number;
       };
+      cookie?: never;
     };
     requestBody: {
       content: {
@@ -460,65 +711,76 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["Rule-Output"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
-  /** Delete User Rule */
   delete_user_rule_api_v1_users__username__rules__id__delete: {
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         username: string;
         id: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
-  /** Get Applications */
   get_applications_api_v1_applications_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": string[];
         };
       };
     };
   };
-  /**
-   * Get Artifacts
-   * @description This handler queries artifacts from Pagure
-   *
-   * Proxying Pagure queries lets the API cache results to reduce load on the
-   * backend service.
-   *
-   * :param names: Name patterns of artifacts which should be returned
-   *
-   * :param users: Names of users whose artifacts should be returned
-   *
-   * :param groups: Names of groups whose artifacts should be returned
-   */
   get_artifacts_api_v1_artifacts_get: {
     parameters: {
       query?: {
@@ -526,95 +788,143 @@ export interface operations {
         users?: string[];
         groups?: string[];
       };
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["Artifact"][];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
-  /** Liveness Check */
   liveness_check_api_v1_healthz_live_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": unknown;
         };
       };
     };
   };
-  /** Readiness Check */
   readiness_check_api_v1_healthz_ready_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": unknown;
         };
       };
     };
   };
-  /** Get Rules */
   get_rules_api_v1_admin_rules_get: {
     parameters: {
       query?: {
         disabled?: boolean | null;
         username?: string | null;
       };
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["Rule-Output"][];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
-  /** Get Users */
   get_users_api_v1_admin_users_get: {
     parameters: {
       query?: {
         search?: string | null;
       };
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["User"][];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
-  /** Patch Rule */
   patch_rule_api_v1_admin_rules__id__patch: {
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         id: number;
       };
+      cookie?: never;
     };
     requestBody: {
       content: {
@@ -624,12 +934,18 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["Rule-Output"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };

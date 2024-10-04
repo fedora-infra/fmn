@@ -55,6 +55,7 @@ class TestAdmin(BaseTestAPIV1Handler):
                     "destinations": [{"protocol": "email", "address": "dude@mcpants"}],
                     "filters": {
                         "applications": [],
+                        "excluded_applications": [],
                         "severities": [],
                         "topic": None,
                         "my_actions": False,
@@ -86,6 +87,7 @@ class TestAdmin(BaseTestAPIV1Handler):
                     "destinations": [{"protocol": "email", "address": "dude@mcpants"}],
                     "filters": {
                         "applications": [],
+                        "excluded_applications": [],
                         "severities": [],
                         "topic": None,
                         "my_actions": False,

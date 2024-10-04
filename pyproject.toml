@@ -201,6 +201,7 @@ schemas = [
 
 [tool.poetry.plugins."fmn.filters"]
 "applications" = "fmn.rules.filter:Applications"
+"excluded_applications" = "fmn.rules.filter:ExcludedApplications"
 "severities" = "fmn.rules.filter:Severities"
 "my_actions" = "fmn.rules.filter:MyActions"
 "topic" = "fmn.rules.filter:Topic"

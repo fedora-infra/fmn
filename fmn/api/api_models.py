@@ -68,6 +68,7 @@ class Destination(BaseModel):
 
 class Filters(BaseModel):
     applications: list[str] = []
+    excluded_applications: list[str] = []
     severities: list[str] = []
     topic: str | None = None
     my_actions: bool = False
