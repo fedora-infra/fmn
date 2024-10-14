@@ -63,7 +63,7 @@ const doLogin = async () => {
   loading.value = true;
   try {
     await login(auth, router.currentRoute.value.fullPath);
-  } catch (err) {
+  } catch {
     loading.value = false;
   }
 };
