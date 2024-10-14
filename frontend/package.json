@@ -33,7 +33,7 @@
     "install": "^0.13.0",
     "npm": "^10.5.2",
     "pinia": "^2.0.14",
-    "pinia-plugin-persistedstate": "^2.1.0 || ^3.0.0",
+    "pinia-plugin-persistedstate": "^2.1.0 || ^3.0.0 || ^4.0.0",
     "qs": "^6.11.0",
     "vue": "^3.2.37",
     "vue-i18n": "^9.2.2",
