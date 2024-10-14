@@ -63,7 +63,8 @@ function handleChange(value: Option[]) {
       :key="slotName"
       v-slot:[slotName]="slotParams"
     >
-      <component :is="slot" v-bind="slotParams" />
+      <!-- Not sure how to type slotParams properly -->
+      <component :is="slot" v-bind="slotParams as any" />
     </template>
   </Multiselect>
 </template>

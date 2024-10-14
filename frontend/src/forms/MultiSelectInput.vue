@@ -14,7 +14,11 @@ const props = defineProps<{ context: FormKitFrameworkContext }>();
 
 const bindableProps = computed(() => getBindableProps(props.context));
 const slots = computed(
-  () => props.context.slots as Partial<Multiselect["$slots"]>,
+  () =>
+    props.context.slots as Omit<
+      Partial<Multiselect["$slots"]>,
+      "multiplelabel" | "singlelabel"
+    >,
 );
 
 function handleChange(value: string) {
@@ -31,7 +35,8 @@ function handleChange(value: string) {
       :key="slotName"
       v-slot:[slotName]="slotParams"
     >
-      <component :is="slot" v-bind="slotParams" />
+      <!-- Not sure how to type slotParams properly -->
+      <component :is="slot" v-bind="slotParams as any" />
     </template>
   </Multiselect>
 </template>
