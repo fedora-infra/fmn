@@ -4,6 +4,7 @@
 
 import logging
 from email.message import EmailMessage
+from email.utils import localtime
 
 from aiosmtplib import SMTP, SMTPServerDisconnected
 
@@ -27,6 +28,7 @@ class EmailHandler(Handler):
         # Test with `python -m smtpd -c DebuggingServer -n`
         notif = EmailMessage()
         notif["From"] = self._config["from"]
+        notif["Date"] = localtime()
         for name, value in message["headers"].items():
             notif[name] = value
         body = message["body"]
