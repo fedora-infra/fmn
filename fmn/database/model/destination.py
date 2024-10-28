@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 import logging
+from datetime import datetime, timezone
 from email.utils import format_datetime
 from typing import TYPE_CHECKING
 
@@ -11,7 +12,6 @@ from sqlalchemy import Column, ForeignKey, Integer, String, UnicodeText, select
 from sqlalchemy.ext.asyncio import async_object_session
 from sqlalchemy.orm import relationship
 
-from ...core.amqp import get_sent_datetime
 from ...core.config import get_settings
 from ..main import Base
 from .generation_rule import GenerationRule
@@ -82,3 +82,16 @@ async def get_extra(message: "Message"):
         else:
             return f"\n{response.text}\n"
     return ""
+
+
+def get_sent_datetime(message: "Message") -> datetime:
+    sent_at = message._headers.get("sent-at", None)
+    if sent_at:
+        # fromisoformat doesn't parse Z suffix (yet) see:
+        # https://discuss.python.org/t/parse-z-timezone-suffix-in-datetime/2220
+        try:
+            return datetime.fromisoformat(sent_at.replace("Z", "+00:00"))
+        except ValueError:
+            log.exception("Failed to parse sent-at timestamp value")
+    # Default to now
+    return datetime.now(tz=timezone.utc)
