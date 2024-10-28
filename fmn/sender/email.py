@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 import logging
+import socket
 from email.message import EmailMessage
 from email.utils import localtime
 
@@ -28,7 +29,9 @@ class EmailHandler(Handler):
         # Test with `python -m smtpd -c DebuggingServer -n`
         notif = EmailMessage()
         notif["From"] = self._config["from"]
-        notif["Date"] = localtime()
+        notif.add_header(
+            "Received", f"from fedora-messaging by FMN ({socket.getfqdn()}) ; {localtime()}"
+        )
         for name, value in message["headers"].items():
             notif[name] = value
         body = message["body"]

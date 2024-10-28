@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: MIT
 
+from datetime import datetime
+from email.utils import format_datetime
 from unittest import mock
 
 import httpx
@@ -42,8 +44,13 @@ async def test_email(make_mocked_message, db_async_session, rule_obj):
         },
     )
     result = await d.generate(message)
+    date_header = format_datetime(datetime.fromisoformat(message._headers["sent-at"]))
     assert result == {
-        "headers": {"To": "dummy@example.com", "Subject": "[dummy] dummy summary"},
+        "headers": {
+            "To": "dummy@example.com",
+            "Subject": "[dummy] dummy summary",
+            "Date": date_header,
+        },
         "body": "dummy content\nhttps://dummy.org/dummylink",
         "footer": "Sent by Fedora Notifications: https://notifications.fedoraproject.org/rules/1",
     }
@@ -72,8 +79,13 @@ async def test_email_with_extra(make_mocked_message, mocker, db_async_session, r
 
     result = await d.generate(message)
 
+    date_header = format_datetime(datetime.fromisoformat(message._headers["sent-at"]))
     assert result == {
-        "headers": {"To": "dummy@example.com", "Subject": "[dummy] dummy summary"},
+        "headers": {
+            "To": "dummy@example.com",
+            "Subject": "[dummy] dummy summary",
+            "Date": date_header,
+        },
         "body": "dummy content\nhttps://dummy.org/dummylink\nDUMMY EXTRA",
         "footer": "Sent by Fedora Notifications: https://notifications.fedoraproject.org/rules/1",
     }
