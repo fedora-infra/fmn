@@ -2,8 +2,6 @@
 #
 # SPDX-License-Identifier: MIT
 
-from datetime import date
-from email.utils import parsedate_to_datetime
 from unittest.mock import MagicMock
 
 from aiosmtplib import SMTP, SMTPServerDisconnected
@@ -40,9 +38,8 @@ async def test_email_handle():
     sent = smtp.send_message.call_args[0][0]
     assert sent["To"] == "dest@example.com"
     assert sent["Subject"] == "Testing"
-    assert "Date" in sent
-    sent_date = parsedate_to_datetime(sent["Date"])
-    assert sent_date.date() == date.today()
+    assert "Received" in sent
+    assert sent["Received"].startswith("from fedora-messaging by FMN")
     assert sent.get_body().get_content() == "This is a test\n"
     assert sent.get_content_type() == "text/plain"
 

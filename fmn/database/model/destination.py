@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 import logging
+from email.utils import format_datetime
 from typing import TYPE_CHECKING
 
 from httpx import AsyncClient, HTTPStatusError
@@ -10,6 +11,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, UnicodeText, select
 from sqlalchemy.ext.asyncio import async_object_session
 from sqlalchemy.orm import relationship
 
+from ...core.amqp import get_sent_datetime
 from ...core.config import get_settings
 from ..main import Base
 from .generation_rule import GenerationRule
@@ -56,6 +58,7 @@ class Destination(Base):
                 "headers": {
                     "To": self.address,
                     "Subject": f"{app_name}{message.summary}",
+                    "Date": format_datetime(get_sent_datetime(message)),
                 },
                 "body": body,
                 "footer": f"Sent by Fedora Notifications: {settings.public_url}/rules/{rule_id}",
