@@ -32,6 +32,7 @@ class CacheScopedArgsModel(BaseModel):
 class CacheModel(BaseModel):
     url: str = "mem://"
     setup_args: dict[str, Any] | None = None
+    backoff_max_tries: int = 5
 
     default_args: CacheArgsModel = CacheArgsModel(ttl="1h")
     scoped_args: CacheScopedArgsModel = CacheScopedArgsModel()

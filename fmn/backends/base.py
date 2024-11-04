@@ -6,7 +6,7 @@ import logging
 import sys
 import traceback
 from abc import ABC, abstractmethod
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Callable
 from copy import deepcopy
 from functools import cached_property as ft_cached_property
 from functools import wraps
@@ -15,27 +15,33 @@ from typing import Any
 import backoff
 from httpx import AsyncClient, HTTPStatusError
 
+from ..core.config import get_settings
+
 log = logging.getLogger(__name__)
 
 
 def handle_http_error(default_factory):
     def backoff_hdlr(details):
         log.warning(
-            "Request failed (try %s). Retrying in %ss. %s",
+            "Request failed (try %s). Retrying in %ss. %s. %s",
             details["tries"],
             "{:0.1f}".format(details["wait"]),
+            sys.exc_info()[1],
             traceback.format_tb(sys.exc_info()[2]),
         )
 
     def giveup_hdlr(details):
         log.warning(
-            "Request failed after %s tries. Giving up. %s",
+            "Request failed after %s tries. Giving up. %s. %s",
             details["tries"],
+            sys.exc_info()[1],
             traceback.format_tb(sys.exc_info()[2]),
         )
 
     def is_fatal(e):
         return e.response.status_code < 500
+
+    settings = get_settings()
 
     def exception_handler(f):
         @wraps(f)
@@ -43,7 +49,7 @@ def handle_http_error(default_factory):
             @backoff.on_exception(
                 backoff.expo,
                 HTTPStatusError,
-                max_tries=3,
+                max_tries=settings.cache.backoff_max_tries,
                 giveup=is_fatal,
                 on_backoff=backoff_hdlr,
                 on_giveup=giveup_hdlr,
@@ -55,6 +61,7 @@ def handle_http_error(default_factory):
             try:
                 return await _retrying_wrapper(*args, **kw)
             except HTTPStatusError:
+                log.exception("HTTP Error! args: %r, kwargs: %r", args, kw)
                 return default_factory()
 
         return wrapper
@@ -99,10 +106,13 @@ class APIClient(ABC):
             self._str = f"{clsname}({self.base_url})"
             return self._str
 
-    def extract_payload(self, result: dict, payload_field: str | None = None) -> Any:
+    def _get_payload_field(self, payload_field: str | None = None) -> Any:
         if payload_field is None:
             payload_field = getattr(self, "payload_field", None)
+        return payload_field
 
+    def extract_payload(self, result: dict, payload_field: str | None = None) -> Any:
+        payload_field = self._get_payload_field(payload_field)
         if payload_field is not None:
             return result[payload_field]
 
@@ -132,7 +142,13 @@ class APIClient(ABC):
         return self.extract_payload(await self.get(url, **kwargs), payload_field=payload_field)
 
     async def get_paginated(
-        self, url: str, *, params: dict | None = None, payload_field: str | None = None, **kwargs
+        self,
+        url: str,
+        *,
+        params: dict | None = None,
+        payload_field: str | None = None,
+        default_factory: Callable[[], list] = list,
+        **kwargs,
     ) -> AsyncIterator:
         """Query the API and iterate over paginated results if applicable."""
         if params is None:
@@ -141,10 +157,14 @@ class APIClient(ABC):
             # determine_next_page_params may modify this, ensure original object stays untouched
             params = deepcopy(params)
 
+        payload_field = self._get_payload_field(payload_field)
+        default_result = {payload_field: default_factory()}
         visited_urls_params = set()
 
         while url:
-            result = await self.get(url, params=params, **kwargs)
+            result = await handle_http_error(lambda: default_result)(self.get)(
+                url, params=params, **kwargs
+            )
 
             visited_urls_params.add((url, repr(params)))
 

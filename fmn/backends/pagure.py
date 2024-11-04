@@ -79,7 +79,6 @@ class PagureAsyncProxy(APIClient):
 
         return None, None
 
-    @handle_http_error(list)
     @cache(
         ttl=cache_ttl("pagure"),
         prefix="v1",
@@ -116,7 +115,6 @@ class PagureAsyncProxy(APIClient):
             )
         ]
 
-    @handle_http_error(list)
     @cache(ttl=cache_ttl("pagure"), prefix="v1")
     async def get_user_projects(self, *, username: str) -> list[dict[str, Any]]:
         return [
@@ -166,7 +164,6 @@ class PagureAsyncProxy(APIClient):
         }
         return sorted(groupnames)
 
-    @handle_http_error(list)
     @cache(ttl=cache_ttl("pagure"), prefix="v1", tags=["pagure:get_group_projects:name={name}"])
     async def get_group_projects(
         self, *, name: str, acl: PagureRole | None = None
