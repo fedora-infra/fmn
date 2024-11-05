@@ -83,7 +83,7 @@ class ArtifactsGroupOwned(TrackingRule):
             for role in PagureRole.GROUP_ROLES_MAINTAINER_SET:
                 for artifact_type in ArtifactType:
                     getattr(cache, artifact_type.name).update(
-                        p["fullname"]
+                        p["name"]
                         for p in owned
                         if p["namespace"] == artifact_type.value
                         and group in p["access_groups"].get(role.name.lower(), ())
