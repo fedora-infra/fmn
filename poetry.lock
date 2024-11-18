@@ -3776,19 +3776,20 @@ httpx = ">=0.21.0"
 
 [[package]]
 name = "reuse"
-version = "4.0.3"
+version = "5.0.2"
 description = "reuse is a tool for compliance with the REUSE recommendations."
 optional = false
-python-versions = "<4.0,>=3.8"
+python-versions = "<4.0,>=3.9"
 files = [
-    {file = "reuse-4.0.3-cp311-cp311-manylinux_2_36_x86_64.whl", hash = "sha256:b33e26ec1d105cfcfc2e904d103faec0d758994278feb95a4f4290a864562243"},
-    {file = "reuse-4.0.3.tar.gz", hash = "sha256:4f2c3e1213ec644e5febc50d8322d18982e4e1102af8a51d9493bfc2164a0eac"},
+    {file = "reuse-5.0.2-cp313-cp313-manylinux_2_40_x86_64.whl", hash = "sha256:7a680f00324e87a72061677a892d8cbabfddf7adcf7a5376aeeed2d78995bbbb"},
+    {file = "reuse-5.0.2.tar.gz", hash = "sha256:878016ae5dd29c10bad4606d6676c12a268c12aa9fcfea66403598e16eed085c"},
 ]
 
 [package.dependencies]
 attrs = ">=21.3"
 binaryornot = ">=0.4.4"
 "boolean.py" = ">=3.8"
+click = ">=8.0"
 Jinja2 = ">=3.0.0"
 license-expression = ">=1.0"
 python-debian = ">=0.1.34,<0.1.45 || >0.1.45,<0.1.46 || >0.1.46,<0.1.47 || >0.1.47"
@@ -4954,4 +4955,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "95d7bfede84ffe11fbf604ffb0de63d101caad5d697779067d1daa35f6c39bae"
+content-hash = "497008d2831bc70f7e735d748b3cb0b744b49d482c7393dd06d485de423e5dad"
