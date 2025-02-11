@@ -182,13 +182,13 @@ frozenlist = ">=1.1.0"
 
 [[package]]
 name = "aiosmtplib"
-version = "3.0.2"
+version = "4.0.0"
 description = "asyncio SMTP client"
 optional = true
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 files = [
-    {file = "aiosmtplib-3.0.2-py3-none-any.whl", hash = "sha256:8783059603a34834c7c90ca51103c3aa129d5922003b5ce98dbaa6d4440f10fc"},
-    {file = "aiosmtplib-3.0.2.tar.gz", hash = "sha256:08fd840f9dbc23258025dca229e8a8f04d2ccf3ecb1319585615bfc7933f7f47"},
+    {file = "aiosmtplib-4.0.0-py3-none-any.whl", hash = "sha256:33c72021cd9e9da495823952751e2dd927014a04a0eca711ee4af9812f2f04af"},
+    {file = "aiosmtplib-4.0.0.tar.gz", hash = "sha256:9629a0d8786ab1e5f790ebbbf5cbe7886fedf949a3f52fd7b27a0360f6233422"},
 ]
 
 [package.extras]
@@ -4961,4 +4961,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "321e4847284ccda750fbae989fa228e9651c19ad6f9a6149f81a075bc03b3a8a"
+content-hash = "e08fa3690ca7fc96c74deb2d659eb4c9110448278b55d7a8b692dbc01b6166b8"
