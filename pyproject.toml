@@ -104,6 +104,7 @@ noggin-messages = {version = "*", optional = true}
 nuancier-messages = {version = "*", optional = true}
 pagure-messages = {version = "*", optional = true}
 tahrir-messages = {version = "*", optional = true}
+webhook-to-fedora-messaging-messages = {version = "*", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 poetry = "^1.2.0b2"
@@ -190,6 +191,7 @@ schemas = [
   "nuancier-messages",
   "pagure-messages",
   "tahrir-messages",
+  "webhook-to-fedora-messaging-messages",
 ]
 
 [tool.poetry.plugins."fmn.tracking_rules"]
