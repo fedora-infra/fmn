@@ -12,8 +12,7 @@ export interface Toast {
   date: Date;
 }
 
-export const useToastStore = defineStore({
-  id: "toast",
+export const useToastStore = defineStore("toast", {
   state: () => ({
     toasts: [] as Toast[],
   }),
