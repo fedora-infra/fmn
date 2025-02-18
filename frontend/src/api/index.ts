@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import { useUserStore } from "@/stores/user";
-import type { QueryFunctionContext } from "@tanstack/query-core";
+import type { QueryKey } from "@tanstack/query-core";
 import type { VueQueryPluginOptions } from "@tanstack/vue-query";
 import axios, { type AxiosRequestConfig } from "axios";
 import pinia from "../stores";
@@ -53,15 +53,11 @@ export async function getApiClient() {
   });
 }
 
-interface QueryFunctionContextOrDirect
-  extends Omit<QueryFunctionContext, "signal" | "meta"> {
-  signal?: QueryFunctionContext["signal"];
-  meta?: QueryFunctionContext["meta"];
+interface ApiGetArgs {
+  queryKey: QueryKey;
+  signal?: AxiosRequestConfig["signal"];
 }
-export const apiGet = async <Data>({
-  queryKey,
-  signal,
-}: QueryFunctionContextOrDirect) => {
+export const apiGet = async <Data>({ queryKey, signal }: ApiGetArgs) => {
   const axiosConfig = await getAxiosConfig();
   const url = queryKey[0] as string;
   axiosConfig["params"] = queryKey[1];
