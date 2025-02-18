@@ -9,8 +9,7 @@ import { login } from "../auth";
 import type { UserInfoResponseJson } from "../auth/userinfo_request";
 import { useToastStore } from "./toast";
 
-export const useUserStore = defineStore({
-  id: "user",
+export const useUserStore = defineStore("user", {
   state: () => ({
     accessToken: null as string | null,
     refreshToken: null as string | null,
