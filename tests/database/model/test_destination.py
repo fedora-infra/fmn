@@ -50,6 +50,11 @@ async def test_email(make_mocked_message, db_async_session, rule_obj):
             "To": "dummy@example.com",
             "Subject": "[dummy] dummy summary",
             "Date": date_header,
+            "X-FMN-Message-Id": (
+                f"{message.id} <https://apps.fedoraproject.org/datagrepper/"
+                f"v2/id?id={message.id}&size=extra-large>"
+            ),
+            "X-FMN-Message-Topic": message.topic,
         },
         "body": "dummy content\nhttps://dummy.org/dummylink",
         "footer": "Sent by Fedora Notifications: https://notifications.fedoraproject.org/rules/1",
@@ -85,6 +90,11 @@ async def test_email_with_extra(make_mocked_message, mocker, db_async_session, r
             "To": "dummy@example.com",
             "Subject": "[dummy] dummy summary",
             "Date": date_header,
+            "X-FMN-Message-Id": (
+                f"{message.id} <https://apps.fedoraproject.org/datagrepper/"
+                f"v2/id?id={message.id}&size=extra-large>"
+            ),
+            "X-FMN-Message-Topic": message.topic,
         },
         "body": "dummy content\nhttps://dummy.org/dummylink\nDUMMY EXTRA",
         "footer": "Sent by Fedora Notifications: https://notifications.fedoraproject.org/rules/1",

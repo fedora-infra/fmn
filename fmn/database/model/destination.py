@@ -59,6 +59,11 @@ class Destination(Base):
                     "To": self.address,
                     "Subject": f"{app_name}{message.summary}",
                     "Date": format_datetime(get_sent_datetime(message)),
+                    "X-FMN-Message-Id": (
+                        f"{message.id} <{settings.services.datagrepper_url}"
+                        f"/v2/id?id={message.id}&size=extra-large>"
+                    ),
+                    "X-FMN-Message-Topic": message.topic,
                 },
                 "body": body,
                 "footer": f"Sent by Fedora Notifications: {settings.public_url}/rules/{rule_id}",
