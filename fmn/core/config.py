@@ -65,10 +65,10 @@ class Settings(BaseSettings):
     cors_origins: str = "https://notifications.fedoraproject.org"
     oidc_provider_url: str = "https://id.fedoraproject.org/openidc"
     oidc_conf_endpoint: str = "/.well-known/openid-configuration"
-    oidc_token_info_endpoint: str = "/TokenInfo"
+    oidc_token_info_endpoint: str = "/TokenInfo"  # noqa: S105
     oidc_user_info_endpoint: str = "/UserInfo"
     oidc_client_id: str = "0123456789abcdef0123456789abcdef"
-    oidc_client_secret: str = "0123456789abcdef0123456789abcdef"
+    oidc_client_secret: str = "0123456789abcdef0123456789abcdef"  # noqa: S105
 
     admin_groups: list[str] = ["sysadmin-main"]
 
