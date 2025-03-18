@@ -448,7 +448,9 @@ class TestUserHandler(BaseTestAPIV1Handler):
         ]
         assert caplog.messages == [expected_message]
 
-    async def test_create_user_rule_related_events(self, client, api_identity, db_rule, caplog):
+    async def test_create_user_rule_related_events(
+        self, client, api_identity, db_rule, caplog, publish
+    ):
         created_rule = {
             "name": None,
             "tracking_rule": {"name": "related-events"},
@@ -465,3 +467,10 @@ class TestUserHandler(BaseTestAPIV1Handler):
         rule = response.json()
         assert rule["tracking_rule"]["name"] == "related-events"
         assert rule["tracking_rule"]["params"] is None
+        success_message = RuleCreateV1(
+            body={
+                "rule": rule,
+                "user": api_models.User.model_validate(db_rule.user).model_dump(),
+            }
+        )
+        publish.assert_awaited_once_with(success_message)
