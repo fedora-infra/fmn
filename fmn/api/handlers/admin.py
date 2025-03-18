@@ -67,17 +67,22 @@ async def patch_rule(
     if not rule_db:
         raise HTTPException(status_code=404, detail=f"Rule with ID: {id} not found")
 
+    rule_dict_old = api_models.Rule.model_validate(rule_db).model_dump()
+
     if rule.disabled is not None:
         rule_db.disabled = rule.disabled
 
     await db_session.commit()
 
-    message = RuleUpdateV1(
-        body={
-            "rule": api_models.Rule.model_validate(rule_db).model_dump(),
-            "user": api_models.User.model_validate(rule_db.user).model_dump(),
-        }
-    )
-    await publish(message)
+    rule_dict_new = api_models.Rule.model_validate(rule_db).model_dump()
+
+    if rule_dict_old != rule_dict_new:
+        message = RuleUpdateV1(
+            body={
+                "rule": rule_dict_new,
+                "user": api_models.User.model_validate(rule_db.user).model_dump(),
+            }
+        )
+        await publish(message)
 
     return rule_db

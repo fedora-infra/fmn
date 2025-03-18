@@ -183,7 +183,7 @@ class TestAdmin(BaseTestAPIV1Handler):
         response = client.patch(f"{self.path}/rules/233", json={"disabled": True})
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_rule_patch_nothing(self, client, api_identity, db_rule):
+    def test_rule_patch_nothing(self, client, api_identity, db_rule, publish):
         api_identity.admin = True
 
         response = client.get(f"{self.path}/rules")
@@ -196,3 +196,4 @@ class TestAdmin(BaseTestAPIV1Handler):
         assert response.status_code == status.HTTP_200_OK
         patched_rule = response.json()
         assert patched_rule == rule
+        publish.assert_not_awaited()
