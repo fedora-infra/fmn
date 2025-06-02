@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-from sqlalchemy_helpers import Base
+from sqlalchemy_helpers.aio import Base
 from sqlalchemy_helpers.fastapi import manager_from_config
 
 from ..core.config import get_settings
