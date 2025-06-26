@@ -13,7 +13,7 @@ from functools import wraps
 from typing import Any
 
 import backoff
-from httpx import AsyncClient, HTTPStatusError
+from httpx import AsyncClient, HTTPError, HTTPStatusError
 
 from ..core.config import get_settings
 
@@ -39,7 +39,7 @@ def handle_http_error(default_factory):
         )
 
     def is_fatal(e):
-        return e.response.status_code < 500
+        return isinstance(e, HTTPStatusError) and e.response.status_code < 500
 
     settings = get_settings()
 
@@ -48,7 +48,7 @@ def handle_http_error(default_factory):
         async def wrapper(*args, **kw):
             @backoff.on_exception(
                 backoff.expo,
-                HTTPStatusError,
+                HTTPError,
                 max_tries=settings.cache.backoff_max_tries,
                 giveup=is_fatal,
                 on_backoff=backoff_hdlr,
@@ -60,7 +60,7 @@ def handle_http_error(default_factory):
 
             try:
                 return await _retrying_wrapper(*args, **kw)
-            except HTTPStatusError:
+            except HTTPError:
                 log.exception("HTTP Error! args: %r, kwargs: %r", args, kw)
                 return default_factory()
 
