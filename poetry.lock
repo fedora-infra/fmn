@@ -3727,7 +3727,7 @@ description = "Extensions to the standard Python datetime module"
 optional = true
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 groups = ["main"]
-markers = "extra == \"schemas\" or extra == \"sender-irc\""
+markers = "extra == \"sender-irc\" or extra == \"schemas\""
 files = [
     {file = "python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3"},
     {file = "python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"},
@@ -4447,7 +4447,7 @@ description = "Python 2 and 3 compatibility utilities"
 optional = true
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 groups = ["main"]
-markers = "extra == \"schemas\" or extra == \"sender-irc\""
+markers = "extra == \"sender-irc\" or extra == \"schemas\""
 files = [
     {file = "six-1.17.0-py2.py3-none-any.whl", hash = "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"},
     {file = "six-1.17.0.tar.gz", hash = "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"},
@@ -4621,7 +4621,7 @@ description = "Database Abstraction Library"
 optional = true
 python-versions = ">=3.7"
 groups = ["main"]
-markers = "extra == \"api\" or extra == \"consumer\" or extra == \"database\""
+markers = "extra == \"database\" or extra == \"api\" or extra == \"consumer\""
 files = [
     {file = "SQLAlchemy-2.0.41-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:6854175807af57bdb6425e47adbce7d20a4d79bbfd6f6d6519cd10bb7109a7f8"},
     {file = "SQLAlchemy-2.0.41-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:05132c906066142103b83d9c250b60508af556982a385d96c4eaa9fb9720ac2b"},
@@ -5015,15 +5015,15 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "uvicorn"
-version = "0.34.3"
+version = "0.35.0"
 description = "The lightning-fast ASGI server."
 optional = true
 python-versions = ">=3.9"
 groups = ["main"]
 markers = "extra == \"api\""
 files = [
-    {file = "uvicorn-0.34.3-py3-none-any.whl", hash = "sha256:16246631db62bdfbf069b0645177d6e8a77ba950cfedbfd093acef9444e4d885"},
-    {file = "uvicorn-0.34.3.tar.gz", hash = "sha256:35919a9a979d7a59334b6b10e05d77c1d0d574c50e0fc98b8b1a0f165708b55a"},
+    {file = "uvicorn-0.35.0-py3-none-any.whl", hash = "sha256:197535216b25ff9b785e29a0b79199f55222193d47f820816e7da751e9bc8d4a"},
+    {file = "uvicorn-0.35.0.tar.gz", hash = "sha256:bc662f087f7cf2ce11a1d7fd70b90c9f98ef2e2831556dd078d131b96cc94a01"},
 ]
 
 [package.dependencies]
@@ -5570,4 +5570,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "58d1c0118cec84548f6853735f848d44a5314ab6b4d4761a6aed4c110c362ca8"
+content-hash = "0f5db5353fcb04c62f4938b8cc4b362883cf635012f73da18458284bd75bbf2c"
