@@ -75,7 +75,10 @@ def delete_locks():
 
 
 @cache_cmd.command("refresh")
-def refresh():
+@click.option(
+    "--force", is_flag=True, help="refresh even if the early refresh threshold has not been reached"
+)
+def refresh(force):
     """Refresh the cached values if they have reached their early_ttl."""
 
     async def _doit():
@@ -86,7 +89,7 @@ def refresh():
         async with requester:
             for cache_value in (rules_cache, tracked_cache):
                 before = monotonic()
-                refreshed = await cache_value.refresh()
+                refreshed = await cache_value.refresh(ignore_early=force)
                 after = monotonic()
                 duration = after - before
                 if refreshed is None:
