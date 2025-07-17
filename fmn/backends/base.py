@@ -89,6 +89,12 @@ class APIClient(ABC):
 
         self.client = AsyncClient(**kwargs)
 
+    async def start(self):  # noqa: B027
+        pass
+
+    async def stop(self):  # noqa: B027
+        pass
+
     @ft_cached_property
     def base_url_with_trailing_slash(self) -> str:
         return self.base_url.rstrip("/") + "/"

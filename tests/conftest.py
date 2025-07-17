@@ -22,6 +22,7 @@ from sqlalchemy_helpers.fastapi import make_db_session
 import fmn.api.handlers.misc
 from fmn.api import main
 from fmn.backends import FASJSONAsyncProxy, get_distgit_proxy, get_fasjson_proxy
+from fmn.backends.pagure_models import BASE as PagureBase
 from fmn.cache.tracked import Tracked, TrackedCache
 from fmn.cache.util import cache_arg
 from fmn.core.config import get_settings
@@ -92,17 +93,6 @@ async def respx_mocker():
 def fasjson_url() -> str:
     settings = get_settings()
     return settings.services.fasjson_url
-
-
-@pytest.fixture
-def distgit_url() -> str:
-    settings = get_settings()
-    return settings.services.distgit_url
-
-
-@pytest.fixture
-def distgit_proxy():
-    return get_distgit_proxy()
 
 
 @pytest.fixture
@@ -271,6 +261,22 @@ def fasjson_groups(respx_mocker, fasjson_user_data, fasjson_group_data, fasjson_
     )
 
     return fasjson_group_data
+
+
+# DistGit
+
+
+@pytest.fixture()
+async def distgit_proxy(tmp_path):
+    settings = get_settings()
+    settings.services.distgit_url = "https://distgit.test"
+    settings.services.distgit_db_url = f"sqlite+aiosqlite:///{tmp_path.as_posix()}/distgit.sqlite"
+    proxy = get_distgit_proxy()
+    async with proxy._engine.begin() as conn:
+        await conn.run_sync(PagureBase.metadata.drop_all)
+        await conn.run_sync(PagureBase.metadata.create_all)
+    yield proxy
+    await proxy._engine.dispose()
 
 
 # Database test data

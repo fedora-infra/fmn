@@ -6,23 +6,25 @@ import logging
 from itertools import chain
 from unittest import mock
 
-import fastapi
-import httpx
 import pytest
 
-from fmn.backends import PagureAsyncProxy, PagureRole, get_distgit_proxy
+from fmn.backends import PagureRole, get_distgit_proxy
+from fmn.backends.pagure_models import Project, User
 
-from .base import BaseTestAsyncProxy
+from ..distgit_utils import distgit_load_projects
 
 
-class TestPagureAsyncProxy(BaseTestAsyncProxy):
-    CLS = PagureAsyncProxy
-    URL = "https://pagure.test"
-    EXPECTED_API_URL = f"{URL}/api/0"
+def _get_expected(distgit_projects):
+    return [
+        {key: value for key, value in project.items() if not key.startswith("access_")}
+        for project in distgit_projects
+    ]
 
+
+@pytest.fixture()
+async def distgit_projects(distgit_proxy):
     MOCKED_PROJECTS = [
         {
-            "description": "0ad-data containers",
             "fullname": "containers/0ad-data",
             "name": "0ad-data",
             "namespace": "containers",
@@ -41,7 +43,6 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
             },
         },
         {
-            "description": "0install rpms",
             "fullname": "rpms/0install",
             "name": "0install",
             "namespace": "rpms",
@@ -60,7 +61,6 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
             },
         },
         {
-            "description": "GIMP rpms",
             "fullname": "rpms/gimp",
             "name": "gimp",
             "namespace": "rpms",
@@ -79,58 +79,39 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
             },
         },
     ]
+    await distgit_load_projects(distgit_proxy, MOCKED_PROJECTS)
+    return MOCKED_PROJECTS
 
-    @pytest.mark.parametrize("testcase", ("normal", "last-page", "pagination-missing"))
-    def test_determine_next_page_params(self, testcase, proxy):
-        if "normal" in testcase:
-            expected_next_url = "/boo"
-        else:
-            expected_next_url = None
 
-        if "pagination-missing" in testcase:
-            result = {}
-        elif "last-page" in testcase:
-            result = {"pagination": {"next": None}}
-        else:
-            result = {"pagination": {"next": "/boo?page=2"}}
-
-        params = {}
-
-        next_url, next_params = proxy.determine_next_page_params(
-            "/boo", params=params, result=result
-        )
-
-        if "normal" in testcase:
-            assert next_url == expected_next_url
-            assert next_params == params | {"page": "2"}
-        else:
-            assert next_url is None
-            assert next_params is None
+class TestPagureDBProxy:
 
     @pytest.mark.parametrize(
         "testcase",
         (
             "filter-by-namespace",
             "filter-by-pattern",
+            "filter-by-name",
             "filter-by-username",
             "filter-by-owner",
             "no-filter",
         ),
     )
-    async def test_get_projects(self, testcase, respx_mocker, proxy_unmocked_client):
+    async def test_get_projects(self, testcase, distgit_proxy, distgit_projects):
         kwargs = {}
-        mocked_projects = list(self.MOCKED_PROJECTS)
         if "filter-by-namespace" in testcase:
             kwargs["namespace"] = "rpms"
-            mocked_projects = [p for p in mocked_projects if p["namespace"] == "rpms"]
+            distgit_projects = [p for p in distgit_projects if p["namespace"] == "rpms"]
         if "filter-by-pattern" in testcase:
             kwargs["pattern"] = "*0*"
-            mocked_projects = [p for p in mocked_projects if "0" in p["name"]]
+            distgit_projects = [p for p in distgit_projects if "0" in p["name"]]
+        if "filter-by-name" in testcase:
+            kwargs["pattern"] = "gimp"
+            distgit_projects = [p for p in distgit_projects if p["name"] == "gimp"]
         if "filter-by-username" in testcase:
-            kwargs["username"] = "dudemcpants"
-            mocked_projects = [
+            kwargs["maintainer"] = "dudemcpants"
+            distgit_projects = [
                 p
-                for p in mocked_projects
+                for p in distgit_projects
                 if any(
                     "dudemcpants" in p["access_users"][acl]
                     for acl in ("admin", "collaborator", "commit", "owner")
@@ -138,164 +119,78 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
             ]
         if "filter-by-owner" in testcase:
             kwargs["owner"] = "dudemcpants"
-            mocked_projects = [
-                p for p in mocked_projects if "dudemcpants" in p["access_users"]["owner"]
+            distgit_projects = [
+                p for p in distgit_projects if "dudemcpants" in p["access_users"]["owner"]
             ]
 
-        params = {"fork": False, "short": True} | kwargs
+        artifacts = await distgit_proxy.get_projects(**kwargs)
+        assert artifacts == _get_expected(distgit_projects)
 
-        route = respx_mocker.get(f"{self.expected_api_url}/projects", params=params).mock(
-            side_effect=[
-                httpx.Response(fastapi.status.HTTP_200_OK, json={"projects": mocked_projects})
-            ]
-        )
-
-        artifacts = await proxy_unmocked_client.get_projects(**kwargs)
-
-        assert route.called
-        assert artifacts == mocked_projects
-
-        if "filter-by-namespace" in testcase:
-            assert all(p["namespace"] == "rpms" for p in mocked_projects)
-        if "filter-by-pattern" in testcase:
-            assert all("0" in p["name"] for p in mocked_projects)
-        if "filter-by-username" in testcase:
-            assert all(
-                any(
-                    "dudemcpants" in users
+    async def test_get_user_projects(self, distgit_proxy, distgit_projects):
+        expected_projects = _get_expected(
+            [
+                p
+                for p in distgit_projects
+                if any(
+                    "dudemcpants" in p["access_users"][acl]
                     for acl in ("admin", "collaborator", "commit", "owner")
-                    for users in p["access_users"][acl]
                 )
-                for p in mocked_projects
-            )
-        if "filter-by-owner" in testcase:
-            assert all("dudemcpants" in p["access_users"]["owner"] for p in mocked_projects)
-
-    async def test_get_user_projects(self, respx_mocker, proxy_unmocked_client):
-        expected_projects = [
-            p
-            for p in self.MOCKED_PROJECTS
-            if any(
-                "dudemcpants" in p["access_users"][acl]
-                for acl in ("admin", "collaborator", "commit", "owner")
-            )
-        ]
-
-        params = {"fork": False, "short": False, "username": "dudemcpants"}
-
-        route = respx_mocker.get(f"{self.expected_api_url}/projects", params=params).mock(
-            side_effect=[
-                httpx.Response(fastapi.status.HTTP_200_OK, json={"projects": self.MOCKED_PROJECTS})
             ]
         )
-
-        artifacts = await proxy_unmocked_client.get_user_projects(username="dudemcpants")
-
-        assert route.called
+        artifacts = await distgit_proxy.get_user_projects(username="dudemcpants")
         assert artifacts == expected_projects
 
-    async def test_get_projects_failure(self, respx_mocker, proxy_unmocked_client):
-        route = respx_mocker.get(
-            f"{self.expected_api_url}/projects", params={"fork": False, "short": True}
-        ).mock(side_effect=httpx.Response(fastapi.status.HTTP_500_INTERNAL_SERVER_ERROR))
-
-        response = await proxy_unmocked_client.get_projects()
-        assert route.called
-        assert response == []
-
     @pytest.mark.parametrize("access_role", ("owner", "commit"))
-    async def test_get_project_users(self, access_role, respx_mocker, proxy_unmocked_client):
-        mocked_project = next(p for p in self.MOCKED_PROJECTS if p["fullname"] == "rpms/gimp")
+    async def test_get_project_users(self, access_role, distgit_proxy, distgit_projects):
+        mocked_project = next(p for p in distgit_projects if p["fullname"] == "rpms/gimp")
 
-        route = respx_mocker.get(f"{self.expected_api_url}/rpms/gimp").mock(
-            side_effect=[httpx.Response(fastapi.status.HTTP_200_OK, json=mocked_project)]
-        )
-
-        users = await proxy_unmocked_client.get_project_users(
+        users = await distgit_proxy.get_project_users(
             project_path="rpms/gimp", roles=PagureRole[access_role.upper()]
         )
-
-        assert route.called
         assert users == mocked_project["access_users"].get(access_role, [])
 
-    async def test_get_project_users_failure(self, respx_mocker, proxy_unmocked_client):
-        route = respx_mocker.get(f"{self.expected_api_url}/rpms/gimp").mock(
-            side_effect=[httpx.Response(fastapi.status.HTTP_404_NOT_FOUND)]
-        )
-
-        response = await proxy_unmocked_client.get_project_users(project_path="/rpms/gimp")
+    async def test_get_project_users_failure(self, distgit_proxy, distgit_projects):
+        response = await distgit_proxy.get_project_users(project_path="/rpms/does-not-exist")
         assert response == []
-        assert route.called
 
     @pytest.mark.parametrize("access_role", ("owner", "commit"))
-    async def test_get_project_groups(self, access_role, respx_mocker, proxy_unmocked_client):
-        mocked_project = next(p for p in self.MOCKED_PROJECTS if p["fullname"] == "rpms/gimp")
+    async def test_get_project_groups(self, access_role, distgit_proxy, distgit_projects):
+        mocked_project = next(p for p in distgit_projects if p["fullname"] == "rpms/gimp")
 
-        route = respx_mocker.get(f"{self.expected_api_url}/rpms/gimp").mock(
-            side_effect=[httpx.Response(fastapi.status.HTTP_200_OK, json=mocked_project)]
-        )
-
-        groups = await proxy_unmocked_client.get_project_groups(
+        groups = await distgit_proxy.get_project_groups(
             project_path="rpms/gimp", roles=PagureRole[access_role.upper()]
         )
-
-        assert route.called
         assert groups == mocked_project["access_groups"].get(access_role, [])
 
-    async def test_get_project_groups_failure(self, respx_mocker, proxy_unmocked_client):
-        route = respx_mocker.get(f"{self.expected_api_url}/rpms/gimp").mock(
-            side_effect=[httpx.Response(fastapi.status.HTTP_404_NOT_FOUND)]
-        )
-
-        response = await proxy_unmocked_client.get_project_groups(project_path="/rpms/gimp")
+    async def test_get_project_groups_failure(self, distgit_proxy, distgit_projects):
+        response = await distgit_proxy.get_project_groups(project_path="/rpms/does-not-exist")
         assert response == []
-        assert route.called
 
     @pytest.mark.parametrize("access_role", (None, "commit", "ticket"))
-    async def test_get_group_projects(self, access_role, respx_mocker, proxy_unmocked_client):
-        non_duplicate_projects = [
-            p
-            for p in self.MOCKED_PROJECTS
-            if any(
-                "provenpackager" in grouplist
-                for groupacl, grouplist in p["access_groups"].items()
-                if not access_role or access_role == groupacl
-            )
-        ]
-        if non_duplicate_projects:
-            # Ensure there is a duplicate result (due to pagination) to skip over.
-            mocked_projects = [*non_duplicate_projects, non_duplicate_projects[-1]]
-        else:
-            mocked_projects = []
-
-        mocked_group_result = {
-            "projects": mocked_projects,
-            "pagination": {"prev": None, "next": None, "page": 1, "pages": 1},
-        }
-
-        kwargs = {}
-        mocked_route_params = {"projects": True}
-        if access_role:
-            kwargs["acl"] = PagureRole[access_role.upper()]
-            mocked_route_params["acl"] = access_role
-
-        route = respx_mocker.get(
-            f"{self.expected_api_url}/group/provenpackager", params=mocked_route_params
-        ).mock(side_effect=[httpx.Response(fastapi.status.HTTP_200_OK, json=mocked_group_result)])
-
-        projects = await proxy_unmocked_client.get_group_projects(name="provenpackager", **kwargs)
-
-        assert route.called
-        assert projects == non_duplicate_projects
-
-    async def test_get_group_projects_failure(self, respx_mocker, proxy_unmocked_client):
-        route = respx_mocker.get(f"{self.expected_api_url}/group/provenpackager").mock(
-            side_effect=[httpx.Response(fastapi.status.HTTP_404_NOT_FOUND)]
+    async def test_get_group_projects(self, access_role, distgit_proxy, distgit_projects):
+        non_duplicate_projects = _get_expected(
+            [
+                p
+                for p in distgit_projects
+                if any(
+                    "provenpackager" in grouplist
+                    for groupacl, grouplist in p["access_groups"].items()
+                    if not access_role or access_role == groupacl
+                )
+            ]
         )
 
-        response = await proxy_unmocked_client.get_group_projects(name="provenpackager")
+        kwargs = {}
+        if access_role:
+            kwargs["acl"] = PagureRole[access_role.upper()]
+
+        projects = await distgit_proxy.get_group_projects(name="provenpackager", **kwargs)
+
+        assert projects == non_duplicate_projects
+
+    async def test_get_group_projects_failure(self, distgit_proxy, distgit_projects):
+        response = await distgit_proxy.get_group_projects(name="does-not-exist")
         assert response == []
-        assert route.called
 
     @pytest.mark.parametrize(
         "testcase",
@@ -316,7 +211,9 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
             ),
         ),
     )
-    async def test_invalidate_on_message(self, mocker, testcase, proxy, caplog):
+    async def test_invalidate_on_message(
+        self, mocker, testcase, caplog, distgit_proxy, distgit_projects
+    ):
         cache = mocker.patch("fmn.backends.pagure.cache")
         cache.delete_tags = mock.AsyncMock()
 
@@ -335,7 +232,7 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
             body={
                 "project": {
                     "fullname": "rpms/bash",
-                    "full_url": "https://pagure.test/rpms/bash",
+                    "full_url": "https://distgit.test/rpms/bash",
                 },
             },
         )
@@ -367,7 +264,7 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
                 project["full_url"] = "https://pagure.io/fedora-infra/ansible"
 
         with caplog.at_level(logging.DEBUG):
-            await proxy.invalidate_on_message(message, None)
+            await distgit_proxy.invalidate_on_message(message, None)
 
         if "success" not in testcase:
             cache.delete_tags.assert_not_called()
@@ -403,18 +300,40 @@ class TestPagureAsyncProxy(BaseTestAsyncProxy):
             if "with-exceptions" in testcase:
                 assert "Deleting cache entries yielded an exception:" in caplog.text
 
+    async def test_start_stop(self, distgit_proxy):
+        await distgit_proxy.start()
+        await distgit_proxy._engine.dispose()
+        distgit_proxy._engine = mock.AsyncMock()
+        await distgit_proxy.stop()
+        distgit_proxy._engine.dispose.assert_awaited_once_with()
+
 
 @mock.patch("fmn.backends.pagure.get_settings")
 def test_get_distgit_proxy(get_settings):
     settings = mock.Mock()
-    settings.services.distgit_url = "http://foo"
-    settings.services.distgit_db_url = None
+    settings.services.distgit_db_url = "sqlite+aiosqlite:////foo"
+    settings.services.distgit_url = "https://distgit.test"
     get_settings.return_value = settings
 
     proxy = get_distgit_proxy()
-    assert str(proxy.client.base_url).rstrip("/") == "http://foo/api/0"
+    assert str(proxy.Session().get_bind().url) == "sqlite+aiosqlite:////foo"
 
     cached_proxy = get_distgit_proxy()
     assert cached_proxy is proxy
 
     get_settings.assert_called_once_with()
+
+
+@pytest.mark.parametrize(
+    ["namespace", "is_fork", "expected"],
+    [
+        (None, False, "dummy-name"),
+        ("ns", False, "ns/dummy-name"),
+        (None, True, "forks/dummy-user/dummy-name"),
+        ("ns", True, "forks/dummy-user/dummy-name"),
+    ],
+)
+def test_pagure_model_project_fullname(namespace, is_fork, expected):
+    user = User(user="dummy-user")
+    project = Project(name="dummy-name", user=user, namespace=namespace, is_fork=is_fork)
+    assert project.fullname == expected

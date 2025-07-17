@@ -32,7 +32,7 @@ class Consumer:
         if fm_config["consumer_config"].get("settings_file"):
             config.set_settings_file(fm_config["consumer_config"]["settings_file"])
         self._rules_cache = RulesCache()
-        self._requester = Requester(config.get_settings().services)
+        self._requester = Requester()
         self._tracked_cache = TrackedCache(requester=self._requester, rules_cache=self._rules_cache)
         self.send_queue = self._SEND_QUEUE_CLASS(fm_config["consumer_config"]["send_queue"])
         self.loop = asyncio.get_event_loop()
