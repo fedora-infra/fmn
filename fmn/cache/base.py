@@ -80,7 +80,7 @@ class CachedValue:
     async def _compute_value(self, db: "AsyncSession"):
         raise NotImplementedError
 
-    async def refresh(self):
+    async def refresh(self, ignore_early=False):
         """Rebuild the cache if it is not recent enough."""
         ttl_early = cache_arg("early_ttl", self.name)()
         if not ttl_early:
@@ -88,7 +88,7 @@ class CachedValue:
         ttl_early = ttl_to_seconds(ttl_early)
         refreshed = False
         expire = await cache.get_expire(self._cache_key)
-        if expire <= ttl_to_seconds(ttl_early):
+        if ignore_early or expire <= ttl_to_seconds(ttl_early):
             await self.rebuild()
             refreshed = True
         return refreshed
