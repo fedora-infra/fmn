@@ -7,18 +7,16 @@ from unittest.mock import AsyncMock
 import pytest
 
 from fmn.backends import FASJSONAsyncProxy, PagureAsyncProxy
-from fmn.core.config import get_settings
 from fmn.rules.requester import Requester
 
 
 @pytest.fixture
 def requester(mocked_fasjson_proxy):
-    settings = get_settings()
-    return Requester(settings.services)
+    return Requester()
 
 
 def test_requester_attributes(mocked_fasjson_proxy):
-    requester = Requester(get_settings().services)
+    requester = Requester()
     assert hasattr(requester, "distgit")
     assert isinstance(requester.distgit, PagureAsyncProxy)
     assert hasattr(requester, "fasjson")
@@ -26,7 +24,7 @@ def test_requester_attributes(mocked_fasjson_proxy):
 
 
 async def test_requester_invalidate(mocked_fasjson_proxy):
-    requester = Requester(get_settings().services)
+    requester = Requester()
     requester.distgit = AsyncMock()
     requester.fasjson = AsyncMock()
     message = object()

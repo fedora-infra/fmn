@@ -90,6 +90,7 @@ myst_heading_anchors = 3
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "fedora-messaging": ("https://fedora-messaging.readthedocs.io/en/latest/", None),
+    "sqlalchemy": ("https://docs.sqlalchemy.org/en/20/", None),
 }
 
 extlinks = {

@@ -10,7 +10,6 @@ from time import monotonic
 import click
 from cashews import cache
 
-from ..core.config import get_settings
 from ..database import get_manager
 from ..rules.requester import Requester
 from . import configure_cache
@@ -30,11 +29,12 @@ def get_tracked():
     async def _get_tracked():
         db_manager = get_manager()
         configure_cache(db_manager=db_manager)
-        requester = Requester(get_settings().services)
+        requester = Requester()
         rules_cache = RulesCache()
         tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
-        async with db_manager.Session.begin() as db:
-            return await tracked_cache.get_value(db=db)
+        async with requester:
+            async with db_manager.Session.begin() as db:
+                return await tracked_cache.get_value(db=db)
 
     result = asyncio.run(_get_tracked())
     click.echo(pformat(result))
@@ -43,11 +43,16 @@ def get_tracked():
 @cache_cmd.command("delete-tracked")
 def delete_tracked():
     """Invalidate the current tracked value."""
-    configure_cache()
-    requester = Requester(get_settings().services)
-    rules_cache = RulesCache()
-    tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
-    asyncio.run(tracked_cache.delete())
+
+    async def _do_it():
+        configure_cache()
+        requester = Requester()
+        rules_cache = RulesCache()
+        tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
+        async with requester:
+            await tracked_cache.delete()
+
+    asyncio.run(_do_it())
     click.echo("Tracked cache deleted.")
 
 
@@ -75,20 +80,21 @@ def refresh():
 
     async def _doit():
         configure_cache()
-        requester = Requester(get_settings().services)
+        requester = Requester()
         rules_cache = RulesCache()
         tracked_cache = TrackedCache(requester=requester, rules_cache=rules_cache)
-        for cache_value in (rules_cache, tracked_cache):
-            before = monotonic()
-            refreshed = await cache_value.refresh()
-            after = monotonic()
-            duration = after - before
-            if refreshed is None:
-                click.echo(f"The {cache_value.name} cache has no early refresh configured.")
-            elif refreshed:
-                click.echo(f"Refreshed the {cache_value.name} cache in {duration:.0f}s.")
-            else:
-                click.echo(f"The {cache_value.name} cache is recent enough.")
+        async with requester:
+            for cache_value in (rules_cache, tracked_cache):
+                before = monotonic()
+                refreshed = await cache_value.refresh()
+                after = monotonic()
+                duration = after - before
+                if refreshed is None:
+                    click.echo(f"The {cache_value.name} cache has no early refresh configured.")
+                elif refreshed:
+                    click.echo(f"Refreshed the {cache_value.name} cache in {duration:.0f}s.")
+                else:
+                    click.echo(f"The {cache_value.name} cache is recent enough.")
 
     asyncio.run(_doit())
 

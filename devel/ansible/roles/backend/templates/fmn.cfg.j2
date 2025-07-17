@@ -11,5 +11,6 @@ OIDC_CLIENT_ID="{{ oidc_client_id }}"
 OIDC_CLIENT_SECRET="{{ oidc_client_secret }}"
 SERVICES__FASJSON_URL=https://{{ fasjson_hostname }}/fasjson
 SERVICES__DISTGIT_URL=https://src.tinystage.test
+SERVICES__DISTGIT_DB_URL=postgresql+asyncpg://pagure:pagure@src.tinystage.test/pagure
 SERVICES__DATAGREPPER_URL=https://datagrepper.tinystage.test
 ADMIN_GROUPS=["developers"]

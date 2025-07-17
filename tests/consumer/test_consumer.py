@@ -53,7 +53,7 @@ async def test_consumer_init(
     c = Consumer()
     await c._ready
     configure_cache.assert_called_once_with(db_manager=c.db_manager)
-    mocked_requester_class.assert_called_once_with(config.get_settings().services)
+    mocked_requester_class.assert_called_once_with()
     mocked_send_queue_class.assert_called_once_with("SEND_QUEUE_CONFIG")
 
 

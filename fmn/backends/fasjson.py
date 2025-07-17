@@ -13,7 +13,7 @@ from cashews import cache
 from httpx_gssapi import HTTPSPNEGOAuth
 
 from ..cache.util import cache_ttl
-from ..core.config import get_settings
+from ..core.config import Settings, get_settings
 from .base import APIClient, NextPageParams, handle_http_error
 
 if TYPE_CHECKING:
@@ -103,5 +103,6 @@ class FASJSONAsyncProxy(APIClient):
 
 
 @ft_cache
-def get_fasjson_proxy() -> FASJSONAsyncProxy:
-    return FASJSONAsyncProxy(get_settings().services.fasjson_url)
+def get_fasjson_proxy(settings: Settings | None = None) -> FASJSONAsyncProxy:
+    settings = settings or get_settings()
+    return FASJSONAsyncProxy(settings.services.fasjson_url)
