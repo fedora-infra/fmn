@@ -84,52 +84,6 @@ async def cashews_cache(monkeypatch: pytest.MonkeyPatch, request: pytest.Fixture
 
 
 @pytest.fixture
-async def respx_mocker():
-    async with respx.mock as rxm:
-        yield rxm
-
-
-@pytest.fixture
-def fasjson_url() -> str:
-    settings = get_settings()
-    return settings.services.fasjson_url
-
-
-@pytest.fixture
-def mocked_fasjson(fasjson_url):
-    spec_v1_url = fasjson_url + "/specs/v1.json"
-
-    with (
-        FASJSON_V1_SPEC_JSON.open("r") as fasjson_v1_spec,
-        JSONSCHEMA_LINKS_JSON.open("r") as jsonschema_links_spec,
-        JSONSCHEMA_HYPERSCHEMA_JSON.open("r") as jsonschema_hyperschema_spec,
-    ):
-        fasjson_v1 = fasjson_v1_spec.read()
-        jsonschema_links = jsonschema_links_spec.read()
-        jsonschema_hyperschema = jsonschema_hyperschema_spec.read()
-
-    respx.get(spec_v1_url).mock(return_value=httpx.Response(status.HTTP_200_OK, json=fasjson_v1))
-    respx.get(JSONSCHEMA_LINKS_URL).mock(
-        return_value=httpx.Response(status.HTTP_200_OK, json=jsonschema_links)
-    )
-    respx.get(JSONSCHEMA_HYPERSCHEMA_URL).mock(
-        return_value=httpx.Response(status.HTTP_200_OK, json=jsonschema_hyperschema)
-    )
-
-
-@pytest.fixture
-def mocked_fasjson_proxy(mocker, mocked_fasjson):
-    """This disables authentication in the FASJSON proxy."""
-    real_init = FASJSONAsyncProxy.__init__
-
-    def unauth_init(self, *args, **kwargs):
-        real_init(self, *args, **kwargs)
-        self.client.auth = None
-
-    mocker.patch.object(FASJSONAsyncProxy, "__init__", unauth_init)
-
-
-@pytest.fixture
 def cli_runner():
     return CliRunner()
 
@@ -217,6 +171,52 @@ async def db_obj(request, db_async_session):
 
 
 # FASJSON
+
+
+@pytest.fixture
+async def respx_mocker():
+    async with respx.mock as rxm:
+        yield rxm
+
+
+@pytest.fixture
+def fasjson_url() -> str:
+    settings = get_settings()
+    return settings.services.fasjson_url
+
+
+@pytest.fixture
+def mocked_fasjson(fasjson_url):
+    spec_v1_url = fasjson_url + "/specs/v1.json"
+
+    with (
+        FASJSON_V1_SPEC_JSON.open("r") as fasjson_v1_spec,
+        JSONSCHEMA_LINKS_JSON.open("r") as jsonschema_links_spec,
+        JSONSCHEMA_HYPERSCHEMA_JSON.open("r") as jsonschema_hyperschema_spec,
+    ):
+        fasjson_v1 = fasjson_v1_spec.read()
+        jsonschema_links = jsonschema_links_spec.read()
+        jsonschema_hyperschema = jsonschema_hyperschema_spec.read()
+
+    respx.get(spec_v1_url).mock(return_value=httpx.Response(status.HTTP_200_OK, json=fasjson_v1))
+    respx.get(JSONSCHEMA_LINKS_URL).mock(
+        return_value=httpx.Response(status.HTTP_200_OK, json=jsonschema_links)
+    )
+    respx.get(JSONSCHEMA_HYPERSCHEMA_URL).mock(
+        return_value=httpx.Response(status.HTTP_200_OK, json=jsonschema_hyperschema)
+    )
+
+
+@pytest.fixture
+def mocked_fasjson_proxy(mocker, mocked_fasjson):
+    """This disables authentication in the FASJSON proxy."""
+    real_init = FASJSONAsyncProxy.__init__
+
+    def unauth_init(self, *args, **kwargs):
+        real_init(self, *args, **kwargs)
+        self.client.auth = None
+
+    mocker.patch.object(FASJSONAsyncProxy, "__init__", unauth_init)
 
 
 @pytest.fixture
