@@ -6,11 +6,9 @@ from unittest import mock
 
 import pytest
 from fastapi import status
-from httpx import Response
 from sqlalchemy.sql import text
 
-from fmn.core.config import get_settings
-
+from ...distgit_utils import distgit_load_projects
 from .base import BaseTestAPIV1Handler
 
 
@@ -84,65 +82,41 @@ class TestMisc(BaseTestAPIV1Handler):
         assert result == ["abc", "Blub"]
 
     @staticmethod
-    def mock_distgit_owned_projects(respx_mocker, settings, ownertype):
-        if ownertype == "user":
-            distgit_endpoint = f"{settings.services.distgit_url}/api/0/projects"
-            params = {"fork": False, "short": False, "username": "dudemcpants"}
-        elif ownertype == "group":
-            name = "dudegroup"
-            distgit_endpoint = f"{settings.services.distgit_url}/api/0/group/{name}"
-            params = {"projects": True}
-
-        distgit_json_response = {
-            "pagination": {
-                "pages": 1,
+    async def mock_distgit_owned_projects(distgit_proxy):
+        mocked_projects = [
+            {
+                "description": "pants containers",
+                "fullname": "containers/pants",
+                "name": "pants",
+                "namespace": "containers",
+                "access_users": {"admin": ["dudemcpants"]},
+                "access_groups": {"admin": ["dudegroup"]},
             },
-            "projects": [
-                {
-                    "description": "pants containers",
-                    "fullname": "containers/pants",
-                    "name": "pants",
-                    "namespace": "containers",
-                    "access_users": {"admin": ["dudemcpants"]},
-                },
-                {
-                    "description": "trousers rpms",
-                    "fullname": "rpms/trousers",
-                    "name": "trousers",
-                    "namespace": "rpms",
-                    "access_users": {"admin": ["dudemcpants"]},
-                },
-                # Some garbage for the handler to cope with:
-                {
-                    "description": "Hahahhaha!!!",
-                    "fullname": "i-don’t-exist/hahaha",
-                    "name": "hahaha",
-                    "namespace": "i-don’t-exist",
-                    "access_users": {"admin": ["dudemcpants"]},
-                },
-            ],
-        }
-
-        route = respx_mocker.get(distgit_endpoint, params=params).mock(
-            side_effect=[
-                Response(
-                    status.HTTP_200_OK,
-                    json=distgit_json_response,
-                )
-            ]
-        )
-
-        return route
+            {
+                "description": "trousers rpms",
+                "fullname": "rpms/trousers",
+                "name": "trousers",
+                "namespace": "rpms",
+                "access_users": {"admin": ["dudemcpants"]},
+                "access_groups": {"admin": ["dudegroup"]},
+            },
+            # Some garbage for the handler to cope with:
+            {
+                "description": "Hahahhaha!!!",
+                "fullname": "i-don’t-exist/hahaha",
+                "name": "hahaha",
+                "namespace": "i-don’t-exist",
+                "access_users": {"admin": ["dudemcpants"]},
+                "access_groups": {"admin": ["dudegroup"]},
+            },
+        ]
+        await distgit_load_projects(distgit_proxy, mocked_projects)
 
     @staticmethod
-    def mock_distgit_projects(respx_mocker, settings):
-        distgit_endpoint = f"{settings.services.distgit_url}/api/0/projects"
-        params = {"pattern": "*foobar*"}
-        distgit_json_response = {
-            "pagination": {
-                "pages": 1,
-            },
-            "projects": [
+    async def mock_distgit_projects(distgit_proxy):
+        await distgit_load_projects(
+            distgit_proxy,
+            [
                 {
                     "description": "foobar containers",
                     "fullname": "containers/foobar",
@@ -164,45 +138,26 @@ class TestMisc(BaseTestAPIV1Handler):
                     "access_users": {"admin": ["dudemcpants"]},
                 },
             ],
-        }
-
-        route = respx_mocker.get(distgit_endpoint, params=params).mock(
-            side_effect=[
-                Response(
-                    status.HTTP_200_OK,
-                    json=distgit_json_response,
-                )
-            ]
         )
 
-        return route
-
     @pytest.mark.parametrize("testcase", ("user", "group", "user-group", "name", "nothing"))
-    async def test_get_artifacts(self, client, respx_mocker, testcase):
-        settings = get_settings()
-        settings.services.distgit_url = "http://distgit.test"
-
-        routes = {}
+    async def test_get_artifacts(self, client, distgit_proxy, testcase):
         query_params = {}
 
         if "user" in testcase:
-            routes["user"] = self.mock_distgit_owned_projects(respx_mocker, settings, "user")
+            await self.mock_distgit_owned_projects(distgit_proxy)
             query_params["users"] = ["dudemcpants"]
 
         if "group" in testcase:
-            routes["group"] = self.mock_distgit_owned_projects(respx_mocker, settings, "group")
+            await self.mock_distgit_owned_projects(distgit_proxy)
             query_params["groups"] = ["dudegroup"]
 
         if "name" in testcase:
-            routes["name"] = self.mock_distgit_projects(respx_mocker, settings)
+            await self.mock_distgit_projects(distgit_proxy)
             query_params["names"] = ["*foobar*"]
 
         response = client.get(f"{self.path}/artifacts", params=query_params)
         result = response.json()
-
-        for what in ("user", "group", "name"):
-            if what in testcase:
-                assert routes[what].called
 
         if "user" in testcase or "group" in testcase:
             assert {"name": "pants", "type": "containers"} in result
