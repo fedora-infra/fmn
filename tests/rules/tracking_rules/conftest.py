@@ -40,7 +40,6 @@ class MockPagureAsyncProxy:
                 "name": f"{artifact_type.value}-{num}",
                 "namespace": artifact_type.value,
                 "fullname": f"{artifact_type.value}/{artifact_type.value}-{num}",
-                "access_groups": {role.name.lower(): [name] for role in PagureRole.GROUP_ROLES_SET},
             }
             for artifact_type in ArtifactType
             for num in range(1, 3)
