@@ -45,23 +45,6 @@ class PagureRole(IntFlag):
     GROUP_ROLES = GROUP_ROLES_MAINTAINER | TICKET
 
 
-# Python < 3.11 doesn’t allow iterating over combined flag values
-PagureRole.USER_ROLES_MAINTAINER_SET = {
-    role for role in PagureRole if role.bit_count() == 1 and role & PagureRole.USER_ROLES_MAINTAINER
-}
-PagureRole.USER_ROLES_SET = {
-    role for role in PagureRole if role.bit_count() == 1 and role & PagureRole.USER_ROLES
-}
-PagureRole.GROUP_ROLES_MAINTAINER_SET = {
-    role
-    for role in PagureRole
-    if role.bit_count() == 1 and role & PagureRole.GROUP_ROLES_MAINTAINER
-}
-PagureRole.GROUP_ROLES_SET = {
-    role for role in PagureRole if role.bit_count() == 1 and role & PagureRole.GROUP_ROLES
-}
-
-
 class PagureAsyncProxy(APIClient):
     """Proxy for the Pagure API endpoints used in FMN.
 
@@ -134,7 +117,7 @@ class PagureAsyncProxy(APIClient):
             for p in await self.get_projects(username=username, short=False)
             if any(
                 username in p.get("access_users", {}).get(role.name.lower(), [])
-                for role in PagureRole.USER_ROLES_MAINTAINER_SET
+                for role in PagureRole.USER_ROLES_MAINTAINER
             )
         ]
 
@@ -185,7 +168,7 @@ class PagureAsyncProxy(APIClient):
         else:
             params_seq = [
                 {"projects": True, "acl": role.name.lower()}
-                for role in PagureRole.GROUP_ROLES_SET
+                for role in PagureRole.GROUP_ROLES
                 if role & acl
             ]
 
@@ -324,7 +307,7 @@ class PagureDBProxy:
         if maintainer:
             # User created the project
             query = query.join(User, User.id == Project.user_id).where(User.user == maintainer)
-            permissions = [r.name.lower() for r in PagureRole.USER_ROLES_MAINTAINER_SET]
+            permissions = [r.name.lower() for r in PagureRole.USER_ROLES_MAINTAINER]
             # User got admin or commit right
             sub_q2 = (
                 sa.select(Project.id)
@@ -428,7 +411,7 @@ class PagureDBProxy:
             .order_by(Project.namespace, Project.name)
         )
         if acl:
-            permissions = [role.name.lower() for role in PagureRole.GROUP_ROLES_SET if role & acl]
+            permissions = [role.name.lower() for role in PagureRole.GROUP_ROLES if role & acl]
             query = query.where(
                 ProjectGroup.access.in_(permissions),
             )

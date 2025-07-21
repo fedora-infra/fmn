@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: MIT
 
 import asyncio
-import sys
 from unittest.mock import AsyncMock, Mock, call
 
 import pytest
@@ -107,10 +106,7 @@ async def test_irc_error_no_arg(handler, transport):
     handler._client._dispatcher(transport, Event("error", "server", "dummy target", []))
     with pytest.raises(asyncio.exceptions.CancelledError) as error_handler:
         await setup_future
-    if sys.version_info >= (3, 11):
-        # Before 3.11, a new CancelledError is raised by the task
-        # https://bugs.python.org/issue45390
-        assert str(error_handler.value) == "dummy target"
+    assert str(error_handler.value) == "dummy target"
     transport.write.assert_called_with(b"QUIT :Connection cancelled\r\n")
     transport.close.assert_called_with()
 
