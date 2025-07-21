@@ -35,7 +35,7 @@ class Collector:
 
     def shutdown(self):
         self._loop.run_until_complete(cache.close())
-        # Now shutdown the asyncio loop. Use a Runner when Python 3.11 is more widespread
+        # Now shutdown the asyncio loop. TODO: use a Runner (available since 3.11)
         to_cancel = asyncio.all_tasks(self._loop)
         for task in to_cancel:
             task.cancel()
