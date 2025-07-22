@@ -22,6 +22,7 @@ def requester():
         ("app3", ["app1", "app2"], False),
         ("app1", None, True),
         ("App1", ["aPP1"], True),
+        (None, ["app"], False),
     ],
 )
 def test_applications(requester, make_mocked_message, received, filtered, expected):

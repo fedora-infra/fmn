@@ -32,7 +32,7 @@ class Applications(Filter):
     def matches(self, message):
         if not self.params:
             return True
-        return message.app_name.lower() in self.params
+        return bool(message.app_name) and message.app_name.lower() in self.params
 
 
 class ExcludedApplications(Applications):
