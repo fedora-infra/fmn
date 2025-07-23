@@ -287,8 +287,8 @@ class TestPagureDBProxy:
             if usergroup == "user":
                 assert set(args) == {
                     "pagure:get_project_users:project_path=rpms/bash",
-                    "pagure:get_projects:username=:owner=",
-                    "pagure:get_projects:username=the-user",
+                    "pagure:get_projects:maintainer=:owner=",
+                    "pagure:get_projects:maintainer=the-user",
                     "pagure:get_projects:owner=the-user",
                 }
             elif usergroup == "group":

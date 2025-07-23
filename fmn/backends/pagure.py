@@ -279,8 +279,8 @@ class PagureDBProxy:
         ttl=cache_ttl("pagure"),
         prefix="v1",
         tags=[
-            "pagure:get_projects:username={username}:owner={owner}",
-            "pagure:get_projects:username={username}",
+            "pagure:get_projects:maintainer={maintainer}:owner={owner}",
+            "pagure:get_projects:maintainer={maintainer}",
             "pagure:get_projects:owner={owner}",
         ],
     )
@@ -464,8 +464,8 @@ class PagureDBProxy:
 
             del_tags = [
                 f"pagure:get_project_users:project_path={fullname}",
-                "pagure:get_projects:username=:owner=",
-                f"pagure:get_projects:username={user}",
+                "pagure:get_projects:maintainer=:owner=",
+                f"pagure:get_projects:maintainer={user}",
                 f"pagure:get_projects:owner={user}",
             ]
         else:  # usergroup == "group"
