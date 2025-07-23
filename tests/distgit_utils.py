@@ -41,6 +41,7 @@ async def distgit_load_projects(distgit_proxy, projects):
             dict(
                 name=mocked_project["name"],
                 namespace=mocked_project["namespace"],
+                is_fork=mocked_project.get("is_fork", False),
                 user_id=owner.id,
             ),
         )
@@ -55,7 +56,7 @@ async def distgit_load_projects(distgit_proxy, projects):
         for perm, names in mocked_project.get("access_groups", {}).items():
             for name in names:
                 group = await get_or_create(
-                    distgit_proxy, PagureGroup, dict(group_name=name, user_id=owner.id)
+                    distgit_proxy, PagureGroup, dict(group_name=name), dict(user_id=owner.id)
                 )
                 await get_or_create(
                     distgit_proxy,

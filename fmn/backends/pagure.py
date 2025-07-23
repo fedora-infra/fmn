@@ -358,7 +358,11 @@ class PagureDBProxy:
         self, *, project_path: str, roles: PagureRole = PagureRole.USER_ROLES_MAINTAINER
     ) -> list[str]:
         namespace, name = project_path.split("/", 1)
-        project_condition = (Project.namespace == namespace, Project.name == name)
+        project_condition = (
+            Project.namespace == namespace,
+            Project.name == name,
+            Project.is_fork.is_(False),
+        )
         permissions = [r.name.lower() for r in roles]
         query = (
             sa.select(User.user)
@@ -386,7 +390,11 @@ class PagureDBProxy:
         self, *, project_path: str, roles: PagureRole = PagureRole.GROUP_ROLES_MAINTAINER
     ) -> list[str]:
         namespace, name = project_path.split("/", 1)
-        project_condition = (Project.namespace == namespace, Project.name == name)
+        project_condition = (
+            Project.namespace == namespace,
+            Project.name == name,
+            Project.is_fork.is_(False),
+        )
         permissions = [r.name.lower() for r in roles]
         query = (
             sa.select(PagureGroup.group_name)
@@ -407,7 +415,7 @@ class PagureDBProxy:
             sa.select(Project)
             .join(ProjectGroup, ProjectGroup.project_id == Project.id)
             .join(PagureGroup, PagureGroup.id == ProjectGroup.group_id)
-            .where(PagureGroup.group_name == name)
+            .where(PagureGroup.group_name == name, Project.is_fork.is_(False))
             .order_by(Project.namespace, Project.name)
         )
         if acl:

@@ -78,6 +78,26 @@ async def distgit_projects(distgit_proxy):
                 "ticket": [],
             },
         },
+        # A fork of rpms/gimp
+        {
+            "fullname": "rpms/gimp",
+            "name": "gimp",
+            "namespace": "rpms",
+            "is_fork": True,
+            "access_users": {
+                "admin": [],
+                "collaborator": [],
+                "commit": [],
+                "owner": ["dummy-fork-owner"],
+                "ticket": [],
+            },
+            "access_groups": {
+                "admin": [],
+                "collaborator": [],
+                "commit": ["provenpackager"],
+                "ticket": [],
+            },
+        },
     ]
     await distgit_load_projects(distgit_proxy, MOCKED_PROJECTS)
     return MOCKED_PROJECTS
@@ -98,6 +118,7 @@ class TestPagureDBProxy:
     )
     async def test_get_projects(self, testcase, distgit_proxy, distgit_projects):
         kwargs = {}
+        distgit_projects = [p for p in distgit_projects if not p.get("is_fork", False)]
         if "filter-by-namespace" in testcase:
             kwargs["namespace"] = "rpms"
             distgit_projects = [p for p in distgit_projects if p["namespace"] == "rpms"]
@@ -153,6 +174,27 @@ class TestPagureDBProxy:
         response = await distgit_proxy.get_project_users(project_path="/rpms/does-not-exist")
         assert response == []
 
+    # async def test_get_project_users_forks(self, distgit_proxy, distgit_projects):
+    #     forked_repo = {
+    #         "fullname": "rpms/gimp",
+    #         "name": "gimp",
+    #         "namespace": "rpms",
+    #         "is_fork": True,
+    #         "access_users": {
+    #             "admin": [],
+    #             "collaborator": [],
+    #             "commit": [],
+    #             "owner": ["dummy-fork-owner"],
+    #             "ticket": [],
+    #         },
+    #     }
+    #     await distgit_load_projects(distgit_proxy, [forked_repo])
+    #     mocked_project = next(p for p in distgit_projects if p["fullname"] == "rpms/gimp")
+    #     users = await distgit_proxy.get_project_users(
+    #         project_path="rpms/gimp", roles=PagureRole.OWNER
+    #     )
+    #     assert users == mocked_project["access_users"].get("owner", [])
+
     @pytest.mark.parametrize("access_role", ("owner", "commit"))
     async def test_get_project_groups(self, access_role, distgit_proxy, distgit_projects):
         mocked_project = next(p for p in distgit_projects if p["fullname"] == "rpms/gimp")
@@ -166,13 +208,22 @@ class TestPagureDBProxy:
         response = await distgit_proxy.get_project_groups(project_path="/rpms/does-not-exist")
         assert response == []
 
+    async def test_get_project_groups_fork(self, distgit_proxy, distgit_projects):
+        mocked_project = next(p for p in distgit_projects if p["fullname"] == "rpms/gimp")
+
+        groups = await distgit_proxy.get_project_groups(
+            project_path="rpms/gimp", roles=PagureRole.OWNER
+        )
+        assert groups == mocked_project["access_groups"].get("owner", [])
+
     @pytest.mark.parametrize("access_role", (None, "commit", "ticket"))
     async def test_get_group_projects(self, access_role, distgit_proxy, distgit_projects):
         non_duplicate_projects = _get_expected(
             [
                 p
                 for p in distgit_projects
-                if any(
+                if not p.get("is_fork", False)
+                and any(
                     "provenpackager" in grouplist
                     for groupacl, grouplist in p["access_groups"].items()
                     if not access_role or access_role == groupacl
