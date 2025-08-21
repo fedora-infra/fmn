@@ -17,7 +17,7 @@ SPDX-License-Identifier: MIT
         <CDropdownItem @click="doLogout()">{{ t("logout") }}</CDropdownItem>
       </CDropdownMenu>
     </CDropdown>
-    <CNavItem as="li" v-else>
+    <CNavItem class="" v-else>
       <CButton
         @click.prevent="doLogin()"
         component="a"
