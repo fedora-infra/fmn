@@ -11,7 +11,7 @@ export const getLocale = (i18n: Composer) => {
   const selectedLocales = navigator.languages.filter((name) =>
     i18n.availableLocales.includes(name),
   );
-  return selectedLocales ? selectedLocales[0] : navigator.language;
+  return selectedLocales.length > 0 ? selectedLocales[0] : navigator.language;
 };
 
 export const setLocale = (i18n: Composer) => {
