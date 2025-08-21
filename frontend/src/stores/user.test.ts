@@ -152,7 +152,7 @@ describe("User Store", () => {
       .getRoutes()
       .filter((r) => r.name === "new-rule")[0];
     await store.$router.isReady();
-    await store.$router.replace(newruleRoute.path);
+    await store.$router.replace(newruleRoute!.path);
 
     await store.logoutAndLogin();
     expect(store.loggedIn).toBeFalsy();

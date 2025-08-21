@@ -114,9 +114,9 @@ describe("LoginFedora", () => {
     });
     const toastStore = useToastStore();
     expect(toastStore.toasts).toHaveLength(1);
-    expect(toastStore.toasts[0].title).toBe("Login successful!");
-    expect(toastStore.toasts[0].content).toBe("Welcome, dummy-username.");
-    expect(toastStore.toasts[0].color).toBe("success");
+    expect(toastStore.toasts[0]!.title).toBe("Login successful!");
+    expect(toastStore.toasts[0]!.content).toBe("Welcome, dummy-username.");
+    expect(toastStore.toasts[0]!.color).toBe("success");
   });
 
   it("handles the incoming OIDC data about an admin", async () => {

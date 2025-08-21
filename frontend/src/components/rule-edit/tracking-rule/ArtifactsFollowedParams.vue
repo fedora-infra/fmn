@@ -26,7 +26,7 @@ const resultsToOptions = (results: Artifact[]) => {
     const category = options.filter(
       (o) => o.label === ARTIFACT_CATEGORY_LABELS[artifact.type],
     )[0];
-    category.options.push({
+    category?.options.push({
       label: `${artifact.type}/${artifact.name}`,
       value: artifact,
     });

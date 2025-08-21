@@ -88,7 +88,8 @@ describe("LoginButton", () => {
 
     const { getByText } = render(LoginButton);
     await router.isReady();
-    await router.replace(newruleRoute.path);
+    expect(newruleRoute).toBeDefined();
+    await router.replace(newruleRoute!.path);
 
     const logoutLink = getByText("Logout");
     await fireEvent.click(logoutLink);
