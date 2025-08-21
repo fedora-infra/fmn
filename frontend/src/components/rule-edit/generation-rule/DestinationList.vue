@@ -43,7 +43,9 @@ const getDestinations = async () => {
   ];
   (data || []).forEach((d: Destination) => {
     const group = result.filter((g) => g.name === d.protocol)[0];
-    group.options.push(d);
+    if (group) {
+      group.options.push(d);
+    }
   });
   return result;
 };

@@ -108,7 +108,7 @@ export default class Authenticator {
       throw new AppAuthError("Configuration is not initialized");
     }
     let extras: StringMap | undefined = undefined;
-    if (request && request.internal) {
+    if (request && request.internal && request.internal["code_verifier"]) {
       extras = {};
       extras["code_verifier"] = request.internal["code_verifier"];
     }

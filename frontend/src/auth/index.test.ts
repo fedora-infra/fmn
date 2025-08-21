@@ -86,9 +86,10 @@ describe("auth", () => {
 
     expect(toastStore.$state.toasts).toHaveLength(1);
     const toast = toastStore.$state.toasts[0];
-    expect(toast.title).toBe("Authentication is impossible");
-    expect(toast.content).toBe("Could not connect to Ipsilon: dummy error");
-    expect(toast.color).toBe("danger");
+    expect(toast).toBeDefined();
+    expect(toast!.title).toBe("Authentication is impossible");
+    expect(toast!.content).toBe("Could not connect to Ipsilon: dummy error");
+    expect(toast!.color).toBe("danger");
   });
 
   it("throws if authentication is not ready when useAuth is called", async () => {

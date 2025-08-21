@@ -33,8 +33,9 @@ const genericRenderOptions = {
 const chooseOption = async (comboboxNumber: number, label: string) => {
   // Open the select
   const combobox = screen.getAllByRole("combobox")[comboboxNumber];
-  combobox.focus();
-  await fireEvent.mouseDown(combobox);
+  expect(combobox).toBeDefined();
+  combobox!.focus();
+  await fireEvent.mouseDown(combobox!);
   await waitFor(() =>
     expect(combobox).toHaveAttribute("aria-expanded", "true"),
   );
@@ -86,7 +87,7 @@ describe("TrackingRule", () => {
       props: {
         initialValue: {
           tracking_rule: {
-            name: TRACKING_RULES[2].name,
+            name: TRACKING_RULES[2]!.name,
             params: [{ type: "dummy", name: "artifact" }],
           },
         },
@@ -103,18 +104,20 @@ describe("TrackingRule", () => {
     );
     await waitFor(() => {
       const results = getAllByText("dummy/artifact");
-      expect(results[0].parentNode).toHaveClass("multiselect-tag");
+      expect(results.length).toBeGreaterThan(0);
+      expect(results[0]!.parentNode).toHaveClass("multiselect-tag");
     });
   });
 
   it("sets a default param value for artifact-owned", async () => {
     const { getAllByText } = render(Component, renderOptions);
 
-    await chooseOption(0, TRACKING_RULES[0].label);
+    await chooseOption(0, TRACKING_RULES[0]!.label);
 
     await waitFor(() => {
       const results = getAllByText("dummy-user");
-      expect(results[0].parentNode).toHaveClass("multiselect-tag");
+      expect(results.length).toBeGreaterThan(0);
+      expect(results[0]!.parentNode).toHaveClass("multiselect-tag");
     });
   });
 
@@ -123,7 +126,7 @@ describe("TrackingRule", () => {
       props: {
         initialValue: {
           tracking_rule: {
-            name: TRACKING_RULES[2].name,
+            name: TRACKING_RULES[2]!.name,
             params: [{ type: "dummy", name: "artifact" }],
           },
         },
@@ -131,11 +134,12 @@ describe("TrackingRule", () => {
       ...renderOptions,
     });
 
-    await chooseOption(0, TRACKING_RULES[0].label);
+    await chooseOption(0, TRACKING_RULES[0]!.label);
 
     await waitFor(() => {
       const results = getAllByText("dummy-user");
-      expect(results[0].parentNode).toHaveClass("multiselect-tag");
+      expect(results.length).toBeGreaterThan(0);
+      expect(results[0]!.parentNode).toHaveClass("multiselect-tag");
     });
   });
 
@@ -144,7 +148,7 @@ describe("TrackingRule", () => {
       props: {
         initialValue: {
           tracking_rule: {
-            name: TRACKING_RULES[2].name,
+            name: TRACKING_RULES[2]!.name,
             params: [{ type: "dummy", name: "artifact" }],
           },
         },
@@ -156,13 +160,14 @@ describe("TrackingRule", () => {
       screen.getAllByText("dummy/artifact");
     });
     // Select another tracking rule
-    await chooseOption(0, TRACKING_RULES[4].label);
+    await chooseOption(0, TRACKING_RULES[4]!.label);
     await waitFor(async () => {
       // Previous values should have been removed
       expect(queryAllByText("dummy/artifact")).toHaveLength(0);
       // The params box should be empty
       const comboboxes = screen.getAllByRole("combobox");
-      const parentBox = comboboxes[1].parentNode?.parentNode;
+      expect(comboboxes.length).toBeGreaterThan(0);
+      const parentBox = comboboxes[1]!.parentNode?.parentNode;
       expect(parentBox).toHaveClass("multiselect-tags");
       expect(parentBox).toHaveTextContent(/^$/);
     });
