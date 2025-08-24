@@ -13,8 +13,8 @@ import { CCol, CRow } from "@coreui/vue";
 import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";
-import { computed, ref } from "vue";
-import { useRouter } from "vue-router";
+import { computed, ref, onMounted, onBeforeUnmount } from "vue";
+import { useRouter, onBeforeRouteLeave } from "vue-router";
 import GenerationRuleList from "./rule-edit/generation-rule/GenerationRuleList.vue";
 import TrackingRule from "./rule-edit/tracking-rule/TrackingRule.vue";
 
@@ -26,6 +26,13 @@ const { mutateAsync } = useAddRuleMutation();
 const trackingRuleName = ref("");
 
 const generationRulesCount = ref(0);
+
+// Dirty state to track unsaved changes
+const isDirty = ref(false)
+const markDirty = () => {
+  isDirty.value = true
+}
+
 const formReady = computed(
   () => trackingRuleName.value !== "" && generationRulesCount.value > 0,
 );
@@ -41,6 +48,7 @@ const handleSubmit = async (
   try {
     await mutateAsync(data as Rule);
     // Success!
+    isDirty.value = false;
     toastStore.addToast({
       color: "success",
       title: "Rule created",
@@ -57,36 +65,55 @@ const handleSubmit = async (
   }
 };
 
+// Mark form to have unsaved changes on input
 const handleTrackingRuleSelected = (name: string) => {
   trackingRuleName.value = name;
+  markDirty();
 };
 const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
   generationRulesCount.value = rules.length;
+  markDirty();
 };
+
+// Add a a guarded cancel button to avoid losing unsaved changes
+const onCancel = async () => {
+  if (!isDirty.value || window.confirm("Discard the unsaved changes?")) {
+    isDirty.value = false;
+    router.push("/");
+  }
+};
+
+// Warning on tab close or hard navigation away
+const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
+  if (!isDirty.value) return;
+  e.preventDefault();
+};
+onMounted(() => {
+  window.addEventListener("beforeunload", beforeUnloadHandler);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("beforeunload", beforeUnloadHandler);
+});
+
+// Warn on in-app navigation away/route changes
+onBeforeRouteLeave((_to, _from, next) => {
+  if (!isDirty.value) {
+    next();
+    return;
+  }
+  if (window.confirm("You have in-app unsaved changes. Discard them?")) next();
+  else next(false)
+});
+
 </script>
 
 <template>
-  <FormKit type="form" id="new-rule" @submit="handleSubmit" :actions="false">
+  <FormKit type="form" id="new-rule" @submit="handleSubmit" :actions="false" @input="markDirty">
+    <!-- Track if the user has made changes in the form-->  
+
     <CRow class="mb-2 align-items-center">
       <CCol xs="auto" class="flex-fill">
         <h4>Create a new Rule</h4>
-      </CCol>
-      <CCol xs="auto">
-        <router-link
-          to="/"
-          class="btn btn-outline-secondary d-inline-block mx-2"
-        >
-          Cancel
-        </router-link>
-        <div class="d-inline-block mx-2">
-          <FormKit
-            type="submit"
-            :class="['btn', 'btn-primary', 'form-control-lg']"
-            :disabled="!formReady"
-          >
-            Create Rule
-          </FormKit>
-        </div>
       </CCol>
     </CRow>
 
@@ -99,6 +126,7 @@ const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
           label-class="fw-bold mb-0"
           placeholder="Optional Rule Title"
           input-class="form-control"
+          @input="markDirty"
         />
         <TrackingRule @selected="handleTrackingRuleSelected" />
       </CCol>
@@ -110,5 +138,28 @@ const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
         />
       </CCol>
     </CRow>
+    
+    <!-- Moved the primary action button from the top-right to the bottom -->
+    <CRow class="mt-3">
+      <CCol class="d-flex justify-content-end gap-3">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          @click="onCancel"
+          aria-label="Cancel rule creation"
+        >
+          Cancel
+        </button>
+        <FormKit
+          type="submit"
+          :class="['btn', 'btn-primary', 'form-control-lg']"
+          :disabled="!formReady"
+          aria-label="Save rule"
+        >
+          Save Rule
+        </FormKit>
+      </CCol>
+    </CRow>
+
   </FormKit>
 </template>
