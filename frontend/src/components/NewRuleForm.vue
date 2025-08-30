@@ -27,11 +27,10 @@ const trackingRuleName = ref("");
 
 const generationRulesCount = ref(0);
 
-// Dirty state to track unsaved changes
-const isDirty = ref(false)
-const markDirty = () => {
-  isDirty.value = true
-}
+const newRuleForm = ref<{ node: FormKitNode } | null>(null);
+const isDirty = computed(
+  () => newRuleForm.value?.node.context?.state.dirty === true,
+);
 
 const formReady = computed(
   () => trackingRuleName.value !== "" && generationRulesCount.value > 0,
@@ -48,7 +47,6 @@ const handleSubmit = async (
   try {
     await mutateAsync(data as Rule);
     // Success!
-    isDirty.value = false;
     toastStore.addToast({
       color: "success",
       title: "Rule created",
@@ -65,28 +63,22 @@ const handleSubmit = async (
   }
 };
 
-// Mark form to have unsaved changes on input
 const handleTrackingRuleSelected = (name: string) => {
   trackingRuleName.value = name;
-  markDirty();
 };
 const handleGenerationRulesChanged = (rules: GenerationRule[]) => {
   generationRulesCount.value = rules.length;
-  markDirty();
 };
 
-// Add a a guarded cancel button to avoid losing unsaved changes
-const onCancel = async () => {
-  if (!isDirty.value || window.confirm("Discard the unsaved changes?")) {
-    isDirty.value = false;
-    router.push("/");
-  }
+const onCancel = () => {
+  router.push("/");
 };
 
 // Warning on tab close or hard navigation away
 const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
   if (!isDirty.value) return;
   e.preventDefault();
+  e.returnValue = "";
 };
 onMounted(() => {
   window.addEventListener("beforeunload", beforeUnloadHandler);
@@ -101,14 +93,14 @@ onBeforeRouteLeave((_to, _from, next) => {
     next();
     return;
   }
-  if (window.confirm("You have in-app unsaved changes. Discard them?")) next();
+  if (window.confirm("You have not saved the new rule yet. Discard new rule?")) next();
   else next(false)
 });
 
 </script>
 
 <template>
-  <FormKit type="form" id="new-rule" @submit="handleSubmit" :actions="false" @input="markDirty">
+  <FormKit type="form" id="new-rule" @submit="handleSubmit" :actions="false" ref="newRuleForm">
     <!-- Track if the user has made changes in the form-->  
 
     <CRow class="mb-2 align-items-center">
@@ -126,7 +118,6 @@ onBeforeRouteLeave((_to, _from, next) => {
           label-class="fw-bold mb-0"
           placeholder="Optional Rule Title"
           input-class="form-control"
-          @input="markDirty"
         />
         <TrackingRule @selected="handleTrackingRuleSelected" />
       </CCol>
