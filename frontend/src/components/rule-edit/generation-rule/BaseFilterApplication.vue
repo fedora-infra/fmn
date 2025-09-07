@@ -11,6 +11,7 @@ const props = defineProps<{
   name: string;
   label: string;
   placeholder?: string;
+  help?: string;
 }>();
 
 const url = "/api/v1/applications";
@@ -33,5 +34,6 @@ const getApplications = async () => {
     :msOptions="getApplications"
     searchable
     :close-on-select="false"
+    :help="props.help"
   />
 </template>

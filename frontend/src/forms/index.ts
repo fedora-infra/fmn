@@ -53,6 +53,12 @@ export const config = defaultConfig({
         input: "form-check-input",
         help: "text-muted",
       },
+      multiselect: {
+        help: "text-muted",
+      },
+      multiselectasyncdefault: {
+        help: "text-muted",
+      },
     }),
   },
 });
