@@ -13,5 +13,6 @@ import BaseFilterApplication from "./BaseFilterApplication.vue";
     name="applications"
     label="Applications"
     placeholder="Choose applications"
+    help="If you leave this field empty, the rule applies to all applications (including new ones added later)"
   />
 </template>
