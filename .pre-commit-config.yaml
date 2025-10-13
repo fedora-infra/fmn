@@ -16,7 +16,7 @@ repos:
 
   # License headers
   - repo: https://github.com/fsfe/reuse-tool
-    rev: v6.1.0
+    rev: v6.1.2
     hooks:
       - id: reuse
 
@@ -29,6 +29,6 @@ repos:
   # Ruff
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     # Ruff version.
-    rev: v0.13.3
+    rev: v0.14.0
     hooks:
       - id: ruff
