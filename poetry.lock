@@ -481,20 +481,6 @@ docs = ["furo", "jaraco.packaging (>=9.3)", "rst.linker (>=1.9)", "sphinx (>=3.5
 testing = ["jaraco.test", "pytest (!=8.0.*)", "pytest (>=6,!=8.1.*)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)"]
 
 [[package]]
-name = "binaryornot"
-version = "0.4.4"
-description = "Ultra-lightweight pure Python package to check if a file is binary or text."
-optional = false
-python-versions = "*"
-files = [
-    {file = "binaryornot-0.4.4-py2.py3-none-any.whl", hash = "sha256:b8b71173c917bddcd2c16070412e369c3ed7f0528926f70cac18a6c97fd563e4"},
-    {file = "binaryornot-0.4.4.tar.gz", hash = "sha256:359501dfc9d40632edc9fac890e19542db1a287bbcfa58175b66658392018061"},
-]
-
-[package.dependencies]
-chardet = ">=3.0.2"
-
-[[package]]
 name = "black"
 version = "25.9.0"
 description = "The uncompromising code formatter."
@@ -3695,6 +3681,17 @@ files = [
 cli = ["click (>=5.0)"]
 
 [[package]]
+name = "python-magic"
+version = "0.4.27"
+description = "File type identification using libmagic"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+files = [
+    {file = "python-magic-0.4.27.tar.gz", hash = "sha256:c1ba14b08e4a5f5c31a302b7721239695b2f0f058d125bd5ce1ee36b9d9d3c3b"},
+    {file = "python_magic-0.4.27-py2.py3-none-any.whl", hash = "sha256:c212960ad306f700aa0d01e5d7a325d20548ff97eb9920dcd29513174f0294d3"},
+]
+
+[[package]]
 name = "python-socks"
 version = "2.7.2"
 description = "Proxy (SOCKS4, SOCKS5, HTTP CONNECT) client for Python"
@@ -4019,24 +4016,27 @@ httpx = ">=0.25.0"
 
 [[package]]
 name = "reuse"
-version = "5.1.1"
+version = "6.1.2"
 description = "reuse is a tool for compliance with the REUSE recommendations."
 optional = false
-python-versions = "<4.0,>=3.9"
+python-versions = ">=3.10"
 files = [
-    {file = "reuse-5.1.1-cp313-cp313-manylinux_2_41_x86_64.whl", hash = "sha256:15a68341949b7ddb3630d8d3a49d9537bbc143ee235dca77cc3f4047237c8299"},
-    {file = "reuse-5.1.1.tar.gz", hash = "sha256:a13914ed8b66b8e5956e96c63203c63d72b55280d348849ccc0eb314c73248cb"},
+    {file = "reuse-6.1.2-cp310-cp310-manylinux_2_41_x86_64.whl", hash = "sha256:7185058ea5f0bb8043f2db0383078ee7d0be6129ebafcb88e80da5f74e7f4b32"},
+    {file = "reuse-6.1.2.tar.gz", hash = "sha256:6019a75f4ca18ad5b2506e0f3ec1b926b27ba6cdc9da88492e7fc65e3ff12c39"},
 ]
 
 [package.dependencies]
-attrs = ">=21.3"
-binaryornot = ">=0.4.4"
-"boolean.py" = ">=3.8"
-click = ">=8.0"
+attrs = ">=23.2"
+click = ">=8.1"
 Jinja2 = ">=3.0.0"
-license-expression = ">=1.0"
-python-debian = ">=0.1.34,<0.1.45 || >0.1.45,<0.1.46 || >0.1.46,<0.1.47 || >0.1.47"
+license-expression = ">=21.6.14"
+python-debian = ">=0.1.48"
+python-magic = ">=0.4.12"
 tomlkit = ">=0.8"
+
+[package.extras]
+chardet = ["chardet (>=3.0.2)"]
+charset-normalizer = ["charset-normalizer (>=2.0.5)"]
 
 [[package]]
 name = "roman-numerals-py"
@@ -5529,4 +5529,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "5ec9fd5ca1ce554558e95fe10410d9a4d02976e7019f3d227658668895a96bfe"
+content-hash = "e6b5a6ef2c3ddb186c51f18c304ce8391fa76aa20ce7391cb4c4216fa2ec4edf"
