@@ -15,6 +15,7 @@ export const config: UserConfig = {
     vue(),
     VueI18nPlugin({
       globalSFCScope: true,
+      include: [],
     }),
   ],
   resolve: {
