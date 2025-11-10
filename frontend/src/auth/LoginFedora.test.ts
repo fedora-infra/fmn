@@ -25,6 +25,7 @@ import {
   vi,
   type Mocked,
 } from "vitest";
+import { flushPromises } from '@vue/test-utils'
 import router from "../router";
 import LoginFedora from "./LoginFedora.vue";
 import type Authenticator from "./authenticator";
@@ -138,6 +139,9 @@ describe("LoginFedora", () => {
     await waitFor(() => {
       expect(vi.mocked(apiClient.get)).toHaveBeenCalled();
     });
+    // Wait until DOM updates
+    await flushPromises();
+
     expect(store.loggedIn).toBe(true);
     expect(store.isAdmin).toBe(true);
   });
@@ -199,6 +203,8 @@ describe("LoginFedora", () => {
     });
     // We must not have been redirected
     expect(router.currentRoute.value.path).toBe("/login/fedora");
+    // Wait until DOM updates
+    await flushPromises();
     // There should be a "login failed" alert.
     screen.getByText("Login failed!");
     screen.getByText(

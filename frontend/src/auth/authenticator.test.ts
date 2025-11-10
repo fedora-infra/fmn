@@ -88,6 +88,7 @@ describe("authenticator", () => {
       }
       throw new Error(`Unmocked URL: ${url}`);
     });
+    requestor.xhr.mockClear();
   });
   // Unmount components after tests
   afterEach(() => {
