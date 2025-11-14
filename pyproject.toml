@@ -4,7 +4,7 @@
 
 [tool.poetry]
 name = "fmn"
-version = "3.3.0"
+version = "3.4.0"
 description = "Fedora Messaging Notifications"
 authors = [
     "Aurélien Bompard <aurelien@bompard.org>",

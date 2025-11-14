@@ -10,6 +10,7 @@ on:
       - develop
       - stable
     tags:
+      - "*"
   pull_request:
     branches:
       - develop
