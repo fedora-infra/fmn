@@ -2503,15 +2503,15 @@ type = ["pygobject-stubs", "pytest-mypy (>=1.0.1)", "shtab", "types-pywin32"]
 
 [[package]]
 name = "koji-fedoramessaging-messages"
-version = "1.2.6"
+version = "1.3.0"
 description = "A schema package for messages sent by the koji-fedoramessaging plugin"
 optional = true
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 markers = "extra == \"schemas\""
 files = [
-    {file = "koji_fedoramessaging_messages-1.2.6-py3-none-any.whl", hash = "sha256:d6e1031792390e84eb00422ee52eb55e47a329ba85a68de22a0cd1ed70883676"},
-    {file = "koji_fedoramessaging_messages-1.2.6.tar.gz", hash = "sha256:6c06630a416ce1a891656a4d67768019391fe03306cd43522cdfb27cd98e9a65"},
+    {file = "koji_fedoramessaging_messages-1.3.0-py3-none-any.whl", hash = "sha256:93c6a3fec5f882194f2cafee6d749010031100b62e3f7f08e2390875746dc351"},
+    {file = "koji_fedoramessaging_messages-1.3.0.tar.gz", hash = "sha256:27d56098bf513b6930daa914c977a68d6fc96b440bda69c9aade816557a3125c"},
 ]
 
 [package.dependencies]
