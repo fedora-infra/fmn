@@ -15,18 +15,13 @@ keywords = ["fedora-messaging"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: System Administrators",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Operating System :: POSIX :: Linux",
     "Topic :: Communications",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8.10"
+python = "^3.11"
 fedora-messaging = "^3.3.0"
 
 [tool.poetry.group.dev.dependencies]
