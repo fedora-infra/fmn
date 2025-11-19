@@ -3166,14 +3166,15 @@ files = [
 
 [[package]]
 name = "pagure-messages"
-version = "1.2.1"
+version = "1.3.0"
 description = "A schema package for messages sent by pagure"
 optional = true
 python-versions = "*"
 groups = ["main"]
 markers = "extra == \"schemas\""
 files = [
-    {file = "pagure_messages-1.2.1.tar.gz", hash = "sha256:f6fa364b0fc244380002d2f6058bcece3d2d5866aae0c80ed5bc160ff2c97101"},
+    {file = "pagure_messages-1.3.0-py2.py3-none-any.whl", hash = "sha256:d1d4402aecc6a5aabafa77f6c909712032658fa26ae74b01f7213f86de4ca25b"},
+    {file = "pagure_messages-1.3.0.tar.gz", hash = "sha256:1b92e436576b85a8b8fc3e50eecb50c8fde112d7e63b0130a32a741cbf8961ed"},
 ]
 
 [package.dependencies]
