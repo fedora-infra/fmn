@@ -701,15 +701,15 @@ files = [
 
 [[package]]
 name = "cashews"
-version = "7.4.3"
+version = "7.4.1"
 description = "cache tools with async power"
 optional = true
 python-versions = ">=3.9"
 groups = ["main"]
 markers = "extra == \"api\" or extra == \"consumer\""
 files = [
-    {file = "cashews-7.4.3-py3-none-any.whl", hash = "sha256:33449b26b44c36d3ab6e73f91f71ade1e29e918e85a820238f1947beaae26322"},
-    {file = "cashews-7.4.3.tar.gz", hash = "sha256:72cc1931b558e1bbe1e80395f9be6707131ffe21768f55e359d3e760c802fbb1"},
+    {file = "cashews-7.4.1-py3-none-any.whl", hash = "sha256:868019e9c8b0a75f345ea58b71197640b20dc2fe0892eb5ef6537f5652299ba4"},
+    {file = "cashews-7.4.1.tar.gz", hash = "sha256:9d4ac7b0d0e20ec96680af60ae15dc26c19ccc267baa84a472c54bef86a93a8a"},
 ]
 
 [package.dependencies]
@@ -721,7 +721,7 @@ diskcache = ["diskcache (>=5.0.0)"]
 lint = ["mypy (>=1.5.0)", "types-redis"]
 redis = ["redis (>=4.3.1,!=5.0.1)"]
 speedup = ["bitarray (<4.0.0)", "hiredis", "xxhash (<4.0.0)"]
-tests = ["hypothesis (==6.139.2)", "pytest (==8.4.2)", "pytest-asyncio (==1.1.0)", "pytest-cov (==6.2.1)", "pytest-randomly (==3.16.0)", "pytest-rerunfailures (==16.0.1)"]
+tests = ["hypothesis (==6.135.29)", "pytest (==8.3.3)", "pytest-asyncio (==0.24.0)", "pytest-cov (==6.0.0)", "pytest-randomly (==3.16.0)", "pytest-rerunfailures (==15.1)"]
 
 [[package]]
 name = "certifi"
@@ -1638,7 +1638,7 @@ name = "fmn-messages"
 version = "1.0.0"
 description = "A schema package for messages sent by FMN"
 optional = false
-python-versions = "^3.8.10"
+python-versions = "^3.11"
 groups = ["main", "dev"]
 files = []
 develop = true
@@ -5861,4 +5861,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "88d895dc9e540ccb36cd9d8bdc600f6bc7cd4d21ff61e829acf31ac086ebd1b5"
+content-hash = "637ec4cd8b354d27fec7da124c3ffb3be4ee98cd844ac1057a5ede265b640376"
