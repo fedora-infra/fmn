@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     container: fedorapython/fedora-python-tox:latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Install absolufy
         run: |
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     container: fedorapython/fedora-python-tox:latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Mark the directory as safe for git
         run: git config --global --add safe.directory $PWD
@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     container: fedorapython/fedora-python-tox:latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Install the API
         run: |
@@ -127,7 +127,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
