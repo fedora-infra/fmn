@@ -41,7 +41,7 @@ class ExcludedApplications(Applications):
     def matches(self, message):
         if not self.params:
             return True
-        return message.app_name.lower() not in self.params
+        return (not message.app_name) or (message.app_name.lower() not in self.params)
 
 
 class Severities(Filter):

@@ -38,6 +38,7 @@ def test_applications(requester, make_mocked_message, received, filtered, expect
         ("app3", ["app1", "app2"], True),
         ("app1", None, True),
         ("App1", ["aPP1"], False),
+        (None, ["app1"], True),
     ],
 )
 def test_excluded_applications(requester, make_mocked_message, received, filtered, expected):
