@@ -28,7 +28,7 @@ class TestMisc(BaseTestAPIV1Handler):
                 "FAS",
                 "fedocal",
                 "FMN",
-                "hotness",
+                "The New Hotness",
                 "Koji",
                 "mdapi",
                 "nuancier",
