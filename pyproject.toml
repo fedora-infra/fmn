@@ -257,7 +257,6 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "S", "B", "RUF"]
-ignore = ["UP038"]
 allowed-confusables = ["’"]
 
 [tool.ruff.lint.isort]
