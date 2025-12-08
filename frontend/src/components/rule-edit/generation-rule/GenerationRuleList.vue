@@ -73,7 +73,7 @@ const editedRule = computed(() =>
       v-model="generation_rules"
       ref="generationRulesInput"
     >
-      <template v-for="(gr, index) in generation_rules" :key="gr.id">
+      <template v-for="(gr, index) in generation_rules" :key="gr.id || 0">
         <GenerationRuleListItem
           :rule="gr"
           @edit="() => handleButtonClicked(index)"
