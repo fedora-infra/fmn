@@ -31,7 +31,7 @@ USER_SCHEMA = {
 
 
 class RuleCreateV1(BaseMessage):
-    topic = "fmn.rule.update.v1"
+    topic = "fmn.rule.create.v1"
     body_schema = {
         "id": "http://fedoraproject.org/message-schema/fmn",
         "$schema": "http://json-schema.org/draft-04/schema#",
