@@ -18,9 +18,7 @@ from fmn.sender.handler import Handler, HandlerError
 def config_file(tmp_path):
     config_path = tmp_path.joinpath("config.toml")
     with open(config_path, "w") as config_fh:
-        config_fh.write(
-            dedent(
-                """
+        config_fh.write(dedent("""
         amqp_url = "amqp://localhost/%2Ffmn"
         queue = "email"
 
@@ -29,9 +27,7 @@ def config_file(tmp_path):
         from = "Test <test@example.com>"
         smtp_host = "smtp.example.com"
         smtp_port = 487
-        """
-            )
-        )
+        """))
     return config_path
 
 
