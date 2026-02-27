@@ -1419,15 +1419,15 @@ pgp = ["gpg"]
 
 [[package]]
 name = "fastapi"
-version = "0.131.0"
+version = "0.132.1"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 optional = true
 python-versions = ">=3.10"
 groups = ["main"]
 markers = "extra == \"api\""
 files = [
-    {file = "fastapi-0.131.0-py3-none-any.whl", hash = "sha256:ed0e53decccf4459de78837ce1b867cd04fa9ce4579497b842579755d20b405a"},
-    {file = "fastapi-0.131.0.tar.gz", hash = "sha256:6531155e52bee2899a932c746c9a8250f210e3c3303a5f7b9f8a808bfe0548ff"},
+    {file = "fastapi-0.132.1-py3-none-any.whl", hash = "sha256:0f50df9aed7cfa379b0f4a7dbe798d3dfc2c6bfb05362fe5c7cc4795fa6d1b7a"},
+    {file = "fastapi-0.132.1.tar.gz", hash = "sha256:e5b224024e20ac2aa0141f1ca2c6014cf88b87dc447e31b4c8527c5cf403ce30"},
 ]
 
 [package.dependencies]
@@ -5887,4 +5887,4 @@ sqlite = ["aiosqlite"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "a1901746ab60582f68b6dada05de48c6e062563a19b2ca84f38996aabf1a0ef5"
+content-hash = "fdb2be0b0a386ad8269bd28d760a1fda2c8bdc676fc031e89d2a63cde0152f38"
