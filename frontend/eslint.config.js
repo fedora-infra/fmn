@@ -3,25 +3,20 @@
 //
 // SPDX-License-Identifier: MIT
 
-import js from "@eslint/js";
-import pluginVue from 'eslint-plugin-vue'
-import vueTsEslintConfig from "@vue/eslint-config-typescript";
-import prettierConfig from "@vue/eslint-config-prettier";
-//import skipFormattingConfig from "@vue/eslint-config-prettier/skip-formatting";
+import pluginVue from "eslint-plugin-vue";
+import {
+  defineConfigWithVueTs,
+  vueTsConfigs,
+} from "@vue/eslint-config-typescript";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 
-export default [
-    js.configs.recommended,
-    ...pluginVue.configs['flat/essential'],
-    //...pluginVue.configs['flat/strongly-recommended'],
-    //...pluginVue.configs['flat/recommended'],
-    ...vueTsEslintConfig(),
-    {
-        plugins: {
-            prettier: prettierConfig,
-            //prettier: skipFormattingConfig,
-        },
-    },
-    {
-        ignores: ["src/api/generated.ts", "dist/*"],
-    },
-];
+export default defineConfigWithVueTs(
+  pluginVue.configs["flat/essential"],
+  //pluginVue.configs['flat/strongly-recommended'],
+  //pluginVue.configs['flat/recommended'],
+  vueTsConfigs.recommended,
+  eslintPluginPrettierRecommended,
+  {
+    ignores: ["src/api/generated.ts", "dist/*"],
+  },
+);

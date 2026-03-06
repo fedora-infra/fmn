@@ -14,6 +14,7 @@ import {
   waitFor,
   type RenderOptions,
 } from "@testing-library/vue";
+import { flushPromises } from "@vue/test-utils";
 import { AxiosError, AxiosHeaders, type AxiosResponse } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import {
@@ -25,7 +26,6 @@ import {
   vi,
   type Mocked,
 } from "vitest";
-import { flushPromises } from '@vue/test-utils'
 import router from "../router";
 import LoginFedora from "./LoginFedora.vue";
 import type Authenticator from "./authenticator";
