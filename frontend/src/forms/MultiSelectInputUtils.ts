@@ -31,8 +31,10 @@ interface FormKitMultiSelect extends Partial<Multiselect> {
   msOptions: Multiselect["options"];
   msLabel?: Multiselect["label"];
 }
-interface FormKitMultiSelectAsyncDefault
-  extends Omit<FormKitMultiSelect, "type"> {
+interface FormKitMultiSelectAsyncDefault extends Omit<
+  FormKitMultiSelect,
+  "type"
+> {
   type: "multiselectasyncdefault";
   msResultsToOptions?: (values: any[]) => Multiselect["options"][]; // eslint-disable-line @typescript-eslint/no-explicit-any
   msValueToOptions?: (values: any) => Multiselect["options"]; // eslint-disable-line @typescript-eslint/no-explicit-any

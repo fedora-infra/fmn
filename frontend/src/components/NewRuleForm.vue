@@ -13,8 +13,8 @@ import { CCol, CRow } from "@coreui/vue";
 import type { FormKitGroupValue, FormKitNode } from "@formkit/core";
 import { FormKit } from "@formkit/vue";
 import type { AxiosError } from "axios";
-import { computed, ref, onMounted, onBeforeUnmount } from "vue";
-import { useRouter, onBeforeRouteLeave } from "vue-router";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeRouteLeave, useRouter } from "vue-router";
 import GenerationRuleList from "./rule-edit/generation-rule/GenerationRuleList.vue";
 import TrackingRule from "./rule-edit/tracking-rule/TrackingRule.vue";
 
@@ -93,15 +93,21 @@ onBeforeRouteLeave((_to, _from, next) => {
     next();
     return;
   }
-  if (window.confirm("You have not saved the new rule yet. Discard new rule?")) next();
-  else next(false)
+  if (window.confirm("You have not saved the new rule yet. Discard new rule?"))
+    next();
+  else next(false);
 });
-
 </script>
 
 <template>
-  <FormKit type="form" id="new-rule" @submit="handleSubmit" :actions="false" ref="newRuleForm">
-    <!-- Track if the user has made changes in the form-->  
+  <FormKit
+    type="form"
+    id="new-rule"
+    @submit="handleSubmit"
+    :actions="false"
+    ref="newRuleForm"
+  >
+    <!-- Track if the user has made changes in the form-->
 
     <CRow class="mb-2 align-items-center">
       <CCol xs="auto" class="flex-fill">
@@ -129,7 +135,7 @@ onBeforeRouteLeave((_to, _from, next) => {
         />
       </CCol>
     </CRow>
-    
+
     <!-- Moved the primary action button from the top-right to the bottom -->
     <CRow class="mt-3">
       <CCol class="d-flex justify-content-end gap-3">
@@ -151,6 +157,5 @@ onBeforeRouteLeave((_to, _from, next) => {
         </FormKit>
       </CCol>
     </CRow>
-
   </FormKit>
 </template>
